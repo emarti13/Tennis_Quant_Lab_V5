@@ -25,15 +25,13 @@ class OddsPapiClient:
         self.api_key = api_key or os.getenv("ODDSPAPI_KEY")
         if not self.api_key:
             raise OddsPapiError("ODDSPAPI_KEY is not set.")
-
         self.timeout = timeout
 
         try:
             import truststore
             truststore.inject_into_ssl()
-            self.using_system_trust = True
         except Exception:
-            self.using_system_trust = False
+            pass
 
         self.session = requests.Session()
 
@@ -54,15 +52,41 @@ class OddsPapiClient:
                 _redact(f"OddsPapi request failed: {exc}", self.api_key)
             ) from None
 
+        body = r.text or ""
+        content_type = (r.headers.get("content-type") or "").lower()
+
+        # Corporate proxies sometimes return an HTTP 200 HTML block page.
+        # Treat HTML as a hard failure rather than pretending it is API data.
+        looks_html = (
+            "text/html" in content_type
+            or body.lstrip().lower().startswith("<!doctype html")
+            or "<html" in body[:500].lower()
+        )
+
+        if looks_html:
+            lower = body.lower()
+            if "site blocked" in lower or "content filtering" in lower or "cisco secure access" in lower:
+                raise OddsPapiError(
+                    "NETWORK_BLOCKED: api.oddspapi.io is being blocked by the current network/content filter. "
+                    "Use a personal network/mobile hotspot or run the integration from the deployed cloud app."
+                )
+            raise OddsPapiError(
+                "OddsPapi returned HTML instead of JSON. "
+                "The request likely did not reach the API."
+            )
+
         try:
             payload = r.json()
         except Exception:
-            payload = r.text
+            raise OddsPapiError(
+                f"OddsPapi returned non-JSON content: {_redact(body[:800], self.api_key)}"
+            ) from None
 
         if not r.ok:
             raise OddsPapiError(
                 f"OddsPapi HTTP {r.status_code}: {_redact(payload, self.api_key)}"
             )
+
         return payload
 
     def account(self):
@@ -73,12 +97,6 @@ class OddsPapiClient:
 
     def tournaments(self, sport_id, language="en"):
         return self._get("tournaments", sportId=sport_id, language=language)
-
-    def fixtures(self, **params):
-        return self._get("fixtures", **params)
-
-    def participants(self, sport_id, language="en"):
-        return self._get("participants", sportId=sport_id, language=language)
 
     def odds_by_tournaments(
         self,
@@ -101,14 +119,3 @@ class OddsPapiClient:
             verbosity=verbosity,
             oddsFormat=odds_format,
         )
-
-    def save_snapshot(self, payload, destination):
-        p = Path(destination)
-        p.parent.mkdir(parents=True, exist_ok=True)
-        envelope = {
-            "captured_at_utc": datetime.now(timezone.utc).isoformat(),
-            "source": "OddsPapi",
-            "payload": payload,
-        }
-        p.write_text(json.dumps(envelope, indent=2, default=str), encoding="utf-8")
-        return p
