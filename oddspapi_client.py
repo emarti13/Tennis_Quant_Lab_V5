@@ -18,7 +18,11 @@ class OddsPapiClient:
     def _get(self, endpoint, **params):
         params = {k:v for k,v in params.items() if v is not None}
         params["apiKey"] = self.api_key
-        r = self.session.get(f"{BASE_URL}/{endpoint.lstrip('/')}", params=params, timeout=self.timeout)
+        r = self.session.get(
+            f"{BASE_URL}/{endpoint.lstrip('/')}",
+            params=params,
+            timeout=self.timeout
+        )
         try:
             payload = r.json()
         except Exception:
@@ -27,23 +31,15 @@ class OddsPapiClient:
             raise OddsPapiError(f"OddsPapi HTTP {r.status_code}: {payload}")
         return payload
 
-    def account(self):
-        return self._get("account")
-
-    def sports(self, language="en"):
-        return self._get("sports", language=language)
-
-    def tournaments(self, sport_id, language="en"):
-        return self._get("tournaments", sportId=sport_id, language=language)
-
-    def odds_by_tournaments(self, tournament_ids, bookmaker, language="en", verbosity=3, odds_format="american"):
-        if isinstance(tournament_ids,(list,tuple,set)):
-            tournament_ids=",".join(str(x) for x in tournament_ids)
+    def fixtures(self, sport_id, date_from, date_to, status_id=0, has_odds=True, language="en"):
         return self._get(
-            "odds-by-tournaments",
-            tournamentIds=tournament_ids,
-            bookmaker=bookmaker,
-            language=language,
-            verbosity=verbosity,
-            oddsFormat=odds_format,
+            "fixtures",
+            sportId=sport_id,
+            **{
+                "from": date_from,
+                "to": date_to,
+                "statusId": status_id,
+                "hasOdds": str(bool(has_odds)).lower(),
+                "language": language,
+            }
         )
