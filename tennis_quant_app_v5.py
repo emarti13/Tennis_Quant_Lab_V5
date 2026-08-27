@@ -9,7 +9,7 @@ import pandas as pd
 import streamlit as st
 
 from v5_core import logistic, logit, simulate_match, american_from_prob
-from v5_live_market import load_market_board, find_match_rows, add_model_pricing, signal_row
+from v5_live_market import load_market_board, find_match_rows, add_model_pricing, signal_row, canonical_name
 
 BASE = Path(__file__).resolve().parent
 
@@ -421,6 +421,26 @@ def matchup_lab():
             "No current OddsPapi snapshot matches this matchup. "
             "This does not affect the V5 projection."
         )
+        with st.expander("Market feed diagnostic"):
+            st.write({
+                "market_rows_loaded": int(len(live_market_board)),
+                "market_source": live_market_board.attrs.get("source_path") if not live_market_board.empty else None,
+                "selected_player_1": p1,
+                "selected_player_2": p2,
+                "selected_player_1_key": canonical_name(p1),
+                "selected_player_2_key": canonical_name(p2),
+            })
+            if not live_market_board.empty:
+                debug_mask = (
+                    live_market_board["player1"].astype(str).str.contains("Dougaz|Guerrieri", case=False, regex=True, na=False)
+                    | live_market_board["player2"].astype(str).str.contains("Dougaz|Guerrieri", case=False, regex=True, na=False)
+                )
+                debug_rows = live_market_board.loc[
+                    debug_mask,
+                    ["player1","player2","market_group","selection","best_bookmaker","best_american_odds"]
+                ].copy()
+                if not debug_rows.empty:
+                    st.dataframe(debug_rows, use_container_width=True, hide_index=True)
     else:
         priced_live = add_model_pricing(live_rows, result, p1, p2)
         priced_live["Signal"] = priced_live.apply(
