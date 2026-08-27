@@ -6,20 +6,28 @@ on:
     workflows: ["OddsPapi Normalized Daily v2"]
     types: [completed]
 
+permissions:
+  contents: read
+  actions: read
+
 jobs:
   build:
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Download latest normalized OddsPapi artifact
         uses: dawidd6/action-download-artifact@v6
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           workflow: oddspapi_normalized_daily_v2.yml
           name: v5-normalized-market-snapshot
           path: .
           workflow_conclusion: success
+          if_no_artifact_found: fail
 
       - name: Build V5-ready market feed
         run: python build_v5_market_board_input.py
@@ -29,3 +37,4 @@ jobs:
         with:
           name: v5-market-ready
           path: v5_market_ready/
+          if-no-files-found: error
