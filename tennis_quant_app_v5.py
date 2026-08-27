@@ -1201,13 +1201,98 @@ def _blank_daily_template(rows=20):
 def _norm_name(x):
     return canonical_name(x)
 
+# Verified provider -> V5 rating-name aliases.
+# These are explicit identity mappings, not fuzzy guesses.
+VERIFIED_PLAYER_ALIASES = {
+    canonical_name("Barrios Vera, Marcelo Tomas"): "Tomas Barrios Vera",
+    canonical_name("Cretu, Cezar (2001)"): "Cezar Cretu",
+    canonical_name("Knutson, Gabriela"): "Gabriela Andrea Knutson",
+}
+
 def _player_lookup(ratings):
     return {_norm_name(x): x for x in ratings.player.dropna().unique()}
 
 def _resolve_player(name, lookup):
-    if pd.isna(name) or not str(name).strip():
+    """
+    Resolve an external player name against V5's canonical ratings names.
+
+    Order:
+    1) exact canonical match
+    2) unique token-subset match (handles middle names)
+    3) unique first-name + surname match
+    4) conservative fuzzy match
+
+    If a match is ambiguous, return None rather than guessing.
+    """
+    target = _norm_name(name)
+    if not target:
         return None
-    return lookup.get(_norm_name(name))
+
+    # Use only identities we have explicitly verified against V5's ratings names.
+    verified = VERIFIED_PLAYER_ALIASES.get(target)
+    if verified is not None:
+        verified_key = _norm_name(verified)
+        resolved = lookup.get(verified_key)
+        if resolved is not None:
+            return resolved
+
+    # Exact normalized match.
+    exact = lookup.get(target)
+    if exact is not None:
+        return exact
+
+    target_tokens = target.split()
+    target_set = set(target_tokens)
+
+    candidates = []
+    for key, actual in lookup.items():
+        key_tokens = key.split()
+        key_set = set(key_tokens)
+
+        # One form contains all tokens of the other.
+        if target_set.issubset(key_set) or key_set.issubset(target_set):
+            candidates.append(actual)
+
+    if len(set(candidates)) == 1:
+        return candidates[0]
+
+    # First token + surname token agreement, allowing omitted middle names.
+    if len(target_tokens) >= 2:
+        first = target_tokens[0]
+        surname = target_tokens[-1]
+        candidates = []
+        for key, actual in lookup.items():
+            toks = key.split()
+            if len(toks) >= 2 and toks[0] == first and toks[-1] == surname:
+                candidates.append(actual)
+        if len(set(candidates)) == 1:
+            return candidates[0]
+
+    # Conservative fuzzy fallback. Require a strong best match and meaningful
+    # separation from runner-up so we do not silently attach the wrong player.
+    scored = []
+    for key, actual in lookup.items():
+        score = SequenceMatcher(None, target, key).ratio()
+
+        # Give a small boost when surname is identical.
+        kt = key.split()
+        if target_tokens and kt and target_tokens[-1] == kt[-1]:
+            score += 0.04
+
+        scored.append((score, actual, key))
+
+    scored.sort(reverse=True, key=lambda x: x[0])
+    if not scored:
+        return None
+
+    best = scored[0]
+    second = scored[1] if len(scored) > 1 else (0.0, None, None)
+
+    if best[0] >= 0.90 and (best[0] - second[0]) >= 0.04:
+        return best[1]
+
+    return None
+
 
 def _batch_one_match(row, ratings_by_tour, summary, sims):
     tour = str(row.get("Tour", "MEN")).upper().strip()
