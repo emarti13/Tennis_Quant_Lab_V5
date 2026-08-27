@@ -1,0 +1,35 @@
+name: OddsPapi Quota-Aware Daily
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 12 * * *"
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Pull quota-aware tennis market snapshot
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: python pull_oddspapi_quota_aware.py
+
+      - name: Upload snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: oddspapi-quota-aware-daily
+          path: oddspapi_daily/
+          if-no-files-found: warn
