@@ -12,6 +12,14 @@ OUTDIR.mkdir(exist_ok=True)
 def main():
     rows=load_market_rows(INFILE)
 
+    # Preserve every bookmaker price for UI comparison, not only the best price.
+    all_fields = list(rows[0].keys()) if rows else []
+    all_price_path = OUTDIR / "all_book_prices.csv"
+    with all_price_path.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=all_fields)
+        w.writeheader()
+        w.writerows(rows)
+
     # Market coverage / QC
     books=sorted({r["bookmaker"] for r in rows})
     fixtures=sorted({r["fixture_id"] for r in rows})
@@ -84,6 +92,7 @@ def main():
         "books":books,
         "coverage_by_book":coverage,
         "best_price_rows":len(output),
+        "all_book_price_rows":len(rows),
         "paired_market_integrity":"verified upstream: each market_id had 2 outcomes in uploaded snapshot",
         "integration_status":"READY_FOR_V5_PREDICTION_JOIN"
     }
