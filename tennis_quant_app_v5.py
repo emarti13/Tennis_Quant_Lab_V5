@@ -9,7 +9,10 @@ import pandas as pd
 import streamlit as st
 
 from v5_core import logistic, logit, simulate_match, american_from_prob
-from v5_live_market import load_market_board, find_match_rows, add_model_pricing, signal_row, canonical_name
+from v5_live_market import (
+    load_market_board, find_match_rows, add_model_pricing, signal_row,
+    canonical_name, load_all_book_prices, find_all_match_prices,
+)
 
 BASE = Path(__file__).resolve().parent
 
@@ -1196,7 +1199,7 @@ def _blank_daily_template(rows=20):
     return df
 
 def _norm_name(x):
-    return " ".join(str(x).strip().split()).casefold()
+    return canonical_name(x)
 
 def _player_lookup(ratings):
     return {_norm_name(x): x for x in ratings.player.dropna().unique()}
@@ -1360,11 +1363,221 @@ def _batch_one_match(row, ratings_by_tour, summary, sims):
 
     return out
 
+
+def _market_tour_to_v5(category, tournament):
+    text = f"{category} {tournament}".lower()
+    if "wta" in text:
+        return "WTA"
+    return "MEN"
+
+
+def _infer_surface_from_tournament(tournament):
+    """
+    OddsPapi fixture metadata does not currently provide court surface.
+    Use conservative tournament-name inference and keep the field editable.
+    """
+    t = str(tournament or "").lower()
+
+    grass = (
+        "wimbledon", "queen", "halle", "eastbourne", "nottingham",
+        "s-hertogenbosch", "hertogenbosch", "newport"
+    )
+    clay = (
+        "augsburg", "roland garros", "french open", "rome", "madrid",
+        "monte carlo", "barcelona", "munich", "hamburg", "bastad",
+        "gstaad", "kitzbuhel", "bucharest", "marrakech", "geneva",
+        "estoril", "rio", "buenos aires", "santiago"
+    )
+
+    if any(x in t for x in grass):
+        return "Grass", "Auto — tournament map"
+    if any(x in t for x in clay):
+        return "Clay", "Auto — tournament map"
+    return "Hard", "Auto default — review"
+
+
+def _moneyline_pair_from_feed(g, p1, p2):
+    out = {"P1 ML": np.nan, "P2 ML": np.nan, "P1 ML Book": "", "P2 ML Book": ""}
+    ml = g[g["market_group"] == "moneyline"].copy()
+    if ml.empty:
+        return out
+
+    p1k = canonical_name(p1)
+    p2k = canonical_name(p2)
+
+    for _, r in ml.iterrows():
+        sel = canonical_name(r.get("selection"))
+        if sel == p1k:
+            out["P1 ML"] = r.get("best_american_odds")
+            out["P1 ML Book"] = r.get("best_bookmaker")
+        elif sel == p2k:
+            out["P2 ML"] = r.get("best_american_odds")
+            out["P2 ML Book"] = r.get("best_bookmaker")
+    return out
+
+
+def _primary_spread_pair_from_feed(g, p1, p2):
+    out = {
+        "P1 Spread": np.nan,
+        "P1 Spread Odds": np.nan,
+        "P2 Spread Odds": np.nan,
+        "P1 Spread Book": "",
+        "P2 Spread Book": "",
+    }
+    sp = g[g["market_group"] == "game_spread"].copy()
+    if sp.empty:
+        return out
+
+    # Prefer rows explicitly tagged main line.
+    if "main_line" in sp.columns:
+        main = sp[sp["main_line"].astype(str).str.lower().isin(["true", "1"])]
+        if not main.empty:
+            sp = main
+
+    p1k = canonical_name(p1)
+    p2k = canonical_name(p2)
+
+    p1rows = sp[sp["selection"].map(canonical_name) == p1k].copy()
+    if p1rows.empty:
+        return out
+
+    # If several books/lines survive, prefer line closest to zero.
+    p1rows["abs_line"] = pd.to_numeric(p1rows["line"], errors="coerce").abs()
+    p1r = p1rows.sort_values(["abs_line"]).iloc[0]
+    line = float(p1r["line"])
+
+    p2rows = sp[
+        (sp["selection"].map(canonical_name) == p2k)
+        & (pd.to_numeric(sp["line"], errors="coerce") == -line)
+    ]
+    if p2rows.empty:
+        return out
+
+    p2r = p2rows.iloc[0]
+    out.update({
+        "P1 Spread": line,
+        "P1 Spread Odds": p1r.get("best_american_odds"),
+        "P2 Spread Odds": p2r.get("best_american_odds"),
+        "P1 Spread Book": p1r.get("best_bookmaker"),
+        "P2 Spread Book": p2r.get("best_bookmaker"),
+    })
+    return out
+
+
+def _primary_total_pair_from_feed(g):
+    out = {
+        "Total": np.nan,
+        "Over Odds": np.nan,
+        "Under Odds": np.nan,
+        "Over Book": "",
+        "Under Book": "",
+    }
+    tg = g[g["market_group"] == "total_games"].copy()
+    if tg.empty:
+        return out
+
+    if "main_line" in tg.columns:
+        main = tg[tg["main_line"].astype(str).str.lower().isin(["true", "1"])]
+        if not main.empty:
+            tg = main
+
+    overs = tg[tg["selection"].astype(str).str.lower() == "over"].copy()
+    if overs.empty:
+        return out
+
+    # Prefer a line near the middle of the currently offered ladder.
+    lines = pd.to_numeric(overs["line"], errors="coerce").dropna()
+    if lines.empty:
+        return out
+    target = float(lines.median())
+    overs["dist"] = (pd.to_numeric(overs["line"], errors="coerce") - target).abs()
+    orow = overs.sort_values("dist").iloc[0]
+    line = float(orow["line"])
+
+    unders = tg[
+        (tg["selection"].astype(str).str.lower() == "under")
+        & (pd.to_numeric(tg["line"], errors="coerce") == line)
+    ]
+    if unders.empty:
+        return out
+
+    urow = unders.iloc[0]
+    out.update({
+        "Total": line,
+        "Over Odds": orow.get("best_american_odds"),
+        "Under Odds": urow.get("best_american_odds"),
+        "Over Book": orow.get("best_bookmaker"),
+        "Under Book": urow.get("best_bookmaker"),
+    })
+    return out
+
+
+def _oddspapi_daily_slate():
+    feed = load_market_board()
+    if feed.empty:
+        return pd.DataFrame()
+
+    rows = []
+    for fixture_id, g in feed.groupby("fixture_id", sort=False):
+        first = g.iloc[0]
+        p1 = first.get("player1")
+        p2 = first.get("player2")
+        tournament = first.get("tournament")
+        category = first.get("tour")
+        surface, surface_source = _infer_surface_from_tournament(tournament)
+
+        row = {
+            "Fixture ID": fixture_id,
+            "Start": first.get("start_time_utc"),
+            "Tournament": tournament,
+            "Tour": _market_tour_to_v5(category, tournament),
+            "Surface": surface,
+            "Surface Source": surface_source,
+            "Player 1": p1,
+            "Player 2": p2,
+            "Best Of": 3,
+        }
+        row.update(_moneyline_pair_from_feed(g, p1, p2))
+        row.update(_primary_spread_pair_from_feed(g, p1, p2))
+        row.update(_primary_total_pair_from_feed(g))
+        rows.append(row)
+
+    slate = pd.DataFrame(rows)
+    if not slate.empty:
+        slate = slate.sort_values(["Start", "Tournament", "Player 1"], na_position="last")
+    return slate.reset_index(drop=True)
+
+
+def _all_books_summary_for_fixture(all_prices, fixture_id):
+    if all_prices.empty:
+        return ""
+    g = all_prices[all_prices["fixture_id"].astype(str) == str(fixture_id)].copy()
+    if g.empty:
+        return ""
+
+    ml = g[g["market_group"] == "moneyline"].copy()
+    if ml.empty:
+        return ""
+
+    parts = []
+    for book, bg in ml.groupby("bookmaker"):
+        vals = []
+        for _, r in bg.iterrows():
+            try:
+                odds = int(float(r.get("american_odds")))
+                vals.append(f"{r.get('selection')} {odds:+d}")
+            except Exception:
+                continue
+        if vals:
+            parts.append(f"{book}: " + " | ".join(vals))
+    return " • ".join(parts)
+
+
 def daily_board():
     st.title("Tennis Quant Lab V5 — Daily Board")
     st.caption(
-        "Batch an entire slate through the same V5 engine. "
-        "Use Matchup Lab for deeper one-on-one analysis."
+        "Today's professional slate is loaded automatically from the OddsPapi market feed. "
+        "V5 simulations remain independent; market prices are joined only after modeling."
     )
 
     summary = {}
@@ -1381,7 +1594,7 @@ def daily_board():
         "Batch Simulation Precision",
         ["Fast — 2,000 per match", "Standard — 5,000 per match", "High — 10,000 per match"],
         index=1,
-        help="Daily Board uses fewer simulations per match for speed. Shortlisted matches can be rerun at 20k–50k in Matchup Lab."
+        help="Use Daily Board for the slate-wide first pass. Re-run shortlisted matches at higher precision in Matchup Lab."
     )
     sims = {
         "Fast — 2,000 per match": 2000,
@@ -1389,118 +1602,83 @@ def daily_board():
         "High — 10,000 per match": 10000,
     }[precision]
 
-    st.markdown("### Load today's slate")
+    market_feed = load_market_board()
+    all_prices = load_all_book_prices()
+    slate = _oddspapi_daily_slate()
 
-    source_mode=st.radio(
-        "Slate Source",
-        ["Pull from TNNS Live","Upload CSV","Manual Entry"],
-        horizontal=True,
-        index=0,
+    if slate.empty:
+        st.error(
+            "No repository OddsPapi market feed is available. "
+            "Run the normalized OddsPapi workflow and V5 Market Feed Build."
+        )
+        return
+
+    snapshot = market_feed["snapshot_utc"].dropna().iloc[0] if "snapshot_utc" in market_feed.columns and not market_feed["snapshot_utc"].dropna().empty else "Unknown"
+    st.markdown("### Current Market Slate")
+    st.caption(
+        f"Market snapshot: {snapshot} • {len(slate)} fixtures with at least one tracked market. "
+        "Scope: ATP Challenger and above; WTA 125 and above; qualifying included."
     )
 
-    slate=None
-
-    if source_mode=="Pull from TNNS Live":
-        cdate,cbutton=st.columns([2,1])
-        target_date=cdate.date_input(
-            "TNNS Date",
-            value=date.today(),
-            help="The app calls the TNNS matches endpoint for this date."
-        )
-
-        if cbutton.button("PULL TNNS SLATE",type="primary",use_container_width=True):
-            try:
-                with st.spinner("Pulling matches from TNNS Live..."):
-                    matches,raw_payload=pull_tnns_slate(target_date)
-
-                if not matches:
-                    st.error(
-                        "TNNS responded, but no singles matches were recognized. "
-                        "Download the raw TNNS response below so the parser can be adjusted without redoing browser developer tools."
-                    )
-                    st.download_button(
-                        "Download Raw TNNS Response",
-                        json.dumps(raw_payload,indent=2,default=str).encode("utf-8"),
-                        file_name=f"tnns_raw_{target_date}.json",
-                        mime="application/json",
-                    )
-                else:
-                    pulled=pd.DataFrame(matches)
-                    for c in DAILY_TEMPLATE_COLUMNS:
-                        if c not in pulled.columns:
-                            pulled[c]=np.nan
-                    pulled=pulled[DAILY_TEMPLATE_COLUMNS+([c for c in ["Tournament","Round","Start","TNNS Match ID","TNNS Status"] if c in pulled.columns])]
-                    st.session_state["tnns_slate"]=pulled
-                    st.success(f"Pulled {len(pulled)} supported singles matches from TNNS Live — including TNNS moneyline prices where available.")
-
-            except Exception as exc:
-                st.error(f"TNNS pull failed: {exc}")
-                st.caption(
-                    "TNNS uses browser/TLS checks. V5 now tries Chrome impersonation first and Windows curl.exe second. "
-                    "If the error mentions curl_cffi is unavailable, install it once with: "
-                    "python -m pip install curl_cffi"
-                )
-
-        slate=st.session_state.get("tnns_slate")
-        if slate is None:
-            slate=_blank_daily_template()
-
-    elif source_mode=="Upload CSV":
-        uploaded=st.file_uploader(
-            "Upload CSV",
-            type=["csv"],
-            help="Use the downloadable template below or a file with matching column names."
-        )
-        if uploaded is not None:
-            try:
-                slate=pd.read_csv(uploaded)
-                for c in DAILY_TEMPLATE_COLUMNS:
-                    if c not in slate.columns:
-                        slate[c]=np.nan
-                slate=slate[DAILY_TEMPLATE_COLUMNS]
-            except Exception as exc:
-                st.error(f"Could not read slate CSV: {exc}")
-                slate=_blank_daily_template()
-        else:
-            slate=_blank_daily_template()
-
-    else:
-        slate=_blank_daily_template()
-
-    if source_mode=="Pull from TNNS Live" and slate is not None and not slate.empty:
-        extra_cols=[c for c in ["Tournament","Round","Start"] if c in slate.columns]
-        if extra_cols:
-            st.markdown("#### TNNS Matches Found")
-            st.caption("ATP, ATP qualifying, Challenger, WTA and WTA125 are loaded. ITF and UTR are intentionally excluded until V5 has equivalent historical state coverage for those tours.")
-            show_cols=extra_cols+["Tour","Surface","Player 1","Player 2"]
-            st.dataframe(slate[show_cols],use_container_width=True,hide_index=True)
-
-        # The pricing editor only needs the Daily Board input columns.
-        for c in DAILY_TEMPLATE_COLUMNS:
-            if c not in slate.columns:
-                slate[c]=np.nan
-        slate=slate[DAILY_TEMPLATE_COLUMNS]
-
-    template_csv = _blank_daily_template(1).to_csv(index=False).encode("utf-8")
-    st.download_button(
-        "Download Daily Board CSV Template",
-        template_csv,
-        file_name="v5_daily_board_template.csv",
-        mime="text/csv",
+    # Show useful market coverage before running model.
+    coverage_cols = [
+        "Start", "Tournament", "Tour", "Surface", "Surface Source",
+        "Player 1", "Player 2",
+        "P1 ML", "P1 ML Book", "P2 ML", "P2 ML Book",
+        "P1 Spread", "P1 Spread Odds", "P1 Spread Book",
+        "Total", "Over Odds", "Over Book",
+    ]
+    st.dataframe(
+        slate[[c for c in coverage_cols if c in slate.columns]],
+        use_container_width=True,
+        hide_index=True,
     )
+
+    st.caption(
+        "Surface is not supplied by the current OddsPapi fixture response. "
+        "V5 infers obvious tournaments and leaves the Surface field editable below. "
+        "Rows marked 'Auto default — review' should be checked before running."
+    )
+
+    editor_cols = DAILY_TEMPLATE_COLUMNS
+    editable = slate.copy()
+    for c in editor_cols:
+        if c not in editable.columns:
+            editable[c] = np.nan
 
     edited = st.data_editor(
-        slate,
-        num_rows="dynamic",
+        editable[["Fixture ID","Tournament","Start","Surface Source"] + editor_cols],
+        num_rows="fixed",
         hide_index=True,
         use_container_width=True,
-        key="daily_board_editor",
+        key="oddspapi_daily_board_editor",
+        disabled=["Fixture ID","Tournament","Start","Surface Source","Player 1","Player 2","P1 ML","P2 ML"],
         column_config={
             "Tour": st.column_config.SelectboxColumn(options=["MEN","WTA"]),
             "Surface": st.column_config.SelectboxColumn(options=["Hard","Clay","Grass"]),
             "Best Of": st.column_config.SelectboxColumn(options=[3,5]),
         }
     )
+
+    with st.expander("All available moneyline books"):
+        if all_prices.empty:
+            st.caption(
+                "The current repository does not yet contain all_book_prices.csv. "
+                "After the updated Market Feed Build runs once, this section will show every book rather than only the best price."
+            )
+        else:
+            summaries = []
+            for _, rr in slate.iterrows():
+                text = _all_books_summary_for_fixture(all_prices, rr["Fixture ID"])
+                if text:
+                    summaries.append({
+                        "Match": f"{rr['Player 1']} vs {rr['Player 2']}",
+                        "Books": text,
+                    })
+            if summaries:
+                st.dataframe(pd.DataFrame(summaries), use_container_width=True, hide_index=True)
+            else:
+                st.caption("No moneyline book comparisons are available in this snapshot.")
 
     if st.button("RUN ENTIRE DAILY BOARD", type="primary"):
         valid = edited[
@@ -1510,62 +1688,62 @@ def daily_board():
             & (edited["Player 2"].astype(str).str.strip() != "")
         ].copy()
 
-        if valid.empty:
-            st.warning("Enter at least one matchup.")
-        else:
-            # Preflight player-name matching against the V5 ratings database.
-            unmatched=[]
-            for _,rr in valid.iterrows():
-                t=str(rr.get("Tour","MEN")).upper()
-                if t not in ratings_by_tour:
-                    continue
-                lookup=_player_lookup(ratings_by_tour[t])
-                for side in ("Player 1","Player 2"):
-                    nm=rr.get(side)
-                    if nm and _resolve_player(nm,lookup) is None:
-                        unmatched.append(str(nm))
+        unmatched = []
+        for _, rr in valid.iterrows():
+            t = str(rr.get("Tour","MEN")).upper()
+            if t not in ratings_by_tour:
+                continue
+            lookup = _player_lookup(ratings_by_tour[t])
+            for side in ("Player 1","Player 2"):
+                nm = rr.get(side)
+                if nm and _resolve_player(nm, lookup) is None:
+                    unmatched.append(str(nm))
 
-            if unmatched:
-                st.warning(
-                    f"{len(set(unmatched))} TNNS/player names are not an exact V5 database match. "
-                    "Those rows will be flagged ERROR so they can be mapped rather than silently guessed."
-                )
-                st.write(sorted(set(unmatched)))
+        if unmatched:
+            st.warning(
+                f"{len(set(unmatched))} OddsPapi player names could not be matched to the V5 ratings database. "
+                "Those rows will be flagged rather than guessed."
+            )
+            st.write(sorted(set(unmatched)))
 
-            results = []
-            progress = st.progress(0)
-            status = st.empty()
+        results = []
+        progress = st.progress(0)
+        status = st.empty()
 
-            for j, (_, row) in enumerate(valid.iterrows(), start=1):
-                status.write(
-                    f"Running {j}/{len(valid)}: "
-                    f"{row.get('Player 1')} vs {row.get('Player 2')}"
-                )
-                try:
-                    results.append(_batch_one_match(row, ratings_by_tour, summary, sims))
-                except Exception as exc:
-                    results.append({
-                        "Status":"ERROR",
-                        "Player 1":row.get("Player 1"),
-                        "Player 2":row.get("Player 2"),
-                        "Note":str(exc),
-                    })
-                progress.progress(j / len(valid))
+        for j, (_, row) in enumerate(valid.iterrows(), start=1):
+            status.write(
+                f"Running {j}/{len(valid)}: "
+                f"{row.get('Player 1')} vs {row.get('Player 2')}"
+            )
+            try:
+                result_row = _batch_one_match(row, ratings_by_tour, summary, sims)
+                # Preserve fixture metadata for downstream all-book displays.
+                result_row["Fixture ID"] = row.get("Fixture ID")
+                result_row["Tournament"] = row.get("Tournament")
+                result_row["Start"] = row.get("Start")
+                results.append(result_row)
+            except Exception as exc:
+                results.append({
+                    "Status":"ERROR",
+                    "Fixture ID":row.get("Fixture ID"),
+                    "Tournament":row.get("Tournament"),
+                    "Player 1":row.get("Player 1"),
+                    "Player 2":row.get("Player 2"),
+                    "Note":str(exc),
+                })
+            progress.progress(j / len(valid))
 
-            status.empty()
-            progress.empty()
-            board = pd.DataFrame(results)
-            st.session_state["v5_daily_results"] = board
+        status.empty()
+        progress.empty()
+        board = pd.DataFrame(results)
+        st.session_state["v5_daily_results"] = board
 
     board = st.session_state.get("v5_daily_results")
 
     if board is not None and not board.empty:
         st.markdown("### Daily Board Results")
 
-        # Compute one consolidated best signal per match.
         signal_cols = [c for c in board.columns if c.endswith("Signal")]
-        ev_cols = [c for c in board.columns if c.endswith("EV")]
-
         if signal_cols:
             priority = {"BET":0,"LEAN":1,"REVIEW":2,"PASS":3,"NO PRICE":4}
             best_signals = []
@@ -1580,7 +1758,7 @@ def daily_board():
 
         display_cols = [
             c for c in [
-                "Status","Tour","Surface","Player 1","Player 2",
+                "Status","Tournament","Start","Tour","Surface","Player 1","Player 2",
                 "P1 V5 %","P1 Fair","P2 V5 %","P2 Fair",
                 "Expected Margin","Expected Total","Agreement","Model Gap",
                 "P1 ML EV","P1 ML Signal","P2 ML EV","P2 ML Signal",
@@ -1591,7 +1769,6 @@ def daily_board():
         ]
 
         shown = board[display_cols].copy()
-
         fmt = {}
         for c in shown.columns:
             if c.endswith("%") or c.endswith("EV") or c == "Model Gap":
@@ -1605,19 +1782,21 @@ def daily_board():
             hide_index=True
         )
 
-        # Actionable shortlists
-        for signal, title in [("BET","BET Shortlist"),("LEAN","LEAN Shortlist"),("REVIEW","REVIEW Queue")]:
+        for signal, title in [
+            ("BET","BET Shortlist"),
+            ("LEAN","LEAN Shortlist"),
+            ("REVIEW","REVIEW Queue"),
+        ]:
             if "Best Signal" in board.columns:
                 subset = board[board["Best Signal"] == signal]
                 if not subset.empty:
                     st.markdown(f"#### {title}")
                     shortlist_cols = [
                         c for c in [
-                            "Player 1","Player 2","P1 V5 %","P2 V5 %",
-                            "Expected Margin","Expected Total","Agreement",
-                            "P1 ML EV","P1 ML Signal","P2 ML EV","P2 ML Signal",
-                            "P1 Spread EV","P1 Spread Signal",
-                            "P2 Spread EV","P2 Spread Signal",
+                            "Tournament","Player 1","Player 2",
+                            "P1 V5 %","P2 V5 %","Expected Margin","Expected Total",
+                            "Agreement","P1 ML EV","P1 ML Signal","P2 ML EV","P2 ML Signal",
+                            "P1 Spread EV","P1 Spread Signal","P2 Spread EV","P2 Spread Signal",
                             "Over EV","Over Signal","Under EV","Under Signal",
                         ] if c in subset.columns
                     ]
@@ -1629,17 +1808,16 @@ def daily_board():
                         hide_index=True
                     )
 
-        csv = board.to_csv(index=False).encode("utf-8")
         st.download_button(
             "Download Daily Board Results",
-            csv,
+            board.to_csv(index=False).encode("utf-8"),
             file_name="v5_daily_board_results.csv",
             mime="text/csv"
         )
 
         st.caption(
-            "Workflow: batch the slate here first, then move only BET/LEAN/REVIEW matches "
-            "into Matchup Lab when you want the full spread/total ladder and detailed diagnostics."
+            "Daily Board is now the slate triage screen: automatically load the market slate, "
+            "run every match, rank the opportunities, then open only BET/LEAN/REVIEW matches in Matchup Lab."
         )
 
 
@@ -1649,7 +1827,7 @@ def app():
         "V5 Mode",
         ["Daily Board", "Matchup Lab"],
         index=0,
-        help="Daily Board batches the slate. Matchup Lab keeps the detailed one-on-one feature."
+        help="Daily Board automatically models the OddsPapi market slate. Matchup Lab keeps the detailed one-on-one feature."
     )
 
     if mode == "Daily Board":
