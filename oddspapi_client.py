@@ -43,3 +43,15 @@ class OddsPapiClient:
                 "language": language,
             }
         )
+
+    def odds_by_tournaments(self, tournament_ids, bookmaker, language="en", verbosity=3, odds_format="american"):
+        if isinstance(tournament_ids,(list,tuple,set)):
+            tournament_ids=",".join(str(x) for x in tournament_ids)
+        return self._get(
+            "odds-by-tournaments",
+            tournamentIds=tournament_ids,
+            bookmaker=bookmaker,
+            language=language,
+            verbosity=verbosity,
+            oddsFormat=odds_format,
+        )
