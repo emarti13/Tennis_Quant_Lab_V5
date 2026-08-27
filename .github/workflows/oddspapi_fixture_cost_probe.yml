@@ -1,0 +1,35 @@
+name: OddsPapi Fixture Cost Probe
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run fixture cost probe
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: python probe_fixture_cost.py
+
+      - name: Upload fixture cost results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: oddspapi-fixture-cost-probe
+          path: |
+            oddspapi_fixtures_24h.json
+            oddspapi_fixture_cost_report.json
+          if-no-files-found: warn
