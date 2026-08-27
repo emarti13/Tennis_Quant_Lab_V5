@@ -1,0 +1,135 @@
+name: V5 Player Ratings Refresh
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 1:00 AM Eastern is 05:00 UTC during EDT and 06:00 UTC during EST.
+    # Both fire; should_run_1am_eastern.py allows only the correct one through.
+    - cron: "0 5 * * *"
+    - cron: "0 6 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v5-player-ratings-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Decide whether this is the active 1 AM Eastern run
+        id: gate
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_SCHEDULE: ${{ github.event.schedule }}
+        shell: bash
+        run: |
+          set +e
+          python should_run_1am_eastern.py
+          code=$?
+          if [ "$code" -eq 78 ]; then
+            echo "run_refresh=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$code" -ne 0 ]; then
+            exit "$code"
+          fi
+          echo "run_refresh=true" >> "$GITHUB_OUTPUT"
+
+      - name: Install Python dependencies
+        if: steps.gate.outputs.run_refresh == 'true'
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+          pip install pandas numpy requests
+
+      - name: Preflight V5 build files
+        if: steps.gate.outputs.run_refresh == 'true'
+        shell: bash
+        run: |
+          test -f build_v5_states.py || {
+            echo "::error::build_v5_states.py is missing from the repository root."
+            exit 1
+          }
+          test -f ATP.csv || {
+            echo "::error::ATP.csv historical file is missing from the repository root."
+            exit 1
+          }
+          test -f WTA.csv || {
+            echo "::error::WTA.csv historical file is missing from the repository root."
+            exit 1
+          }
+          echo "V5 historical/build inputs found."
+
+      - name: Refresh TennisMyLife data and rebuild V5 ratings
+        if: steps.gate.outputs.run_refresh == 'true'
+        run: python refresh_tennismylife_cloud.py --dir .
+
+      - name: Show refresh summary
+        if: steps.gate.outputs.run_refresh == 'true' && always()
+        shell: bash
+        run: |
+          if [ -f v5_refresh_last.json ]; then
+            cat v5_refresh_last.json
+          fi
+
+      - name: Commit refreshed player data and V5 ratings
+        if: steps.gate.outputs.run_refresh == 'true' && success()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Stage modified tracked files (current-season source CSVs + rebuilt outputs).
+          git add -u
+
+          # Stage refresh metadata/new outputs if they are not tracked yet.
+          for f in \
+            v5_refresh_last.json \
+            v5_refresh_log.jsonl \
+            v5_men_ratings.csv \
+            v5_wta_ratings.csv \
+            v5_build_summary.json
+          do
+            [ -e "$f" ] && git add "$f"
+          done
+
+          # Capture any additional root-level V5 CSV outputs produced by the builder.
+          for f in v5_*.csv; do
+            [ -e "$f" ] && git add "$f"
+          done
+
+          if git diff --cached --quiet; then
+            echo "No player-data changes to commit."
+          else
+            git commit -m "Daily V5 player ratings refresh"
+            git push
+          fi
+
+      - name: Upload refresh audit artifact
+        if: steps.gate.outputs.run_refresh == 'true' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v5-player-refresh-audit
+          path: |
+            v5_refresh_last.json
+            v5_refresh_log.jsonl
+          if-no-files-found: warn
+          retention-days: 14
