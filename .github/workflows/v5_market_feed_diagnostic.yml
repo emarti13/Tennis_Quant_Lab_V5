@@ -6,8 +6,17 @@ on:
 jobs:
   diagnose:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install diagnostic dependency
+        run: pip install pandas
 
       - name: Inspect repository market feed
         run: python diagnose_market_feed.py
