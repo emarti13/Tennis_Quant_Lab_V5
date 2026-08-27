@@ -1,0 +1,61 @@
+name: OddsPapi Normalized Daily v2
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 12 * * *"
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Restore cached Tennis market dictionary
+        id: market-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: oddspapi_markets_tennis.json
+          key: oddspapi-tennis-markets-v1
+
+      - name: Fetch Tennis market dictionary on cache miss
+        if: steps.market-cache.outputs.cache-hit != 'true'
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: python fetch_oddspapi_markets.py
+
+      - name: Cache Tennis market dictionary
+        if: steps.market-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: oddspapi_markets_tennis.json
+          key: oddspapi-tennis-markets-v1
+
+      - name: Pull quota-aware odds
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: python pull_oddspapi_quota_aware.py
+
+      - name: Normalize ML, game spreads and total games
+        run: python normalize_oddspapi_snapshot.py
+
+      - name: Upload normalized snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v5-normalized-market-snapshot
+          path: |
+            oddspapi_daily/
+            oddspapi_normalized/
+            oddspapi_markets_tennis.json
+          if-no-files-found: warn
