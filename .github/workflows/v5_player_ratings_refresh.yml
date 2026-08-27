@@ -43,19 +43,15 @@ jobs:
             echo "run_refresh=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          if [ "$code" -ne 0 ]; then
-            exit "$code"
-          fi
+          if [ "$code" -ne 0 ]; then exit "$code"; fi
           echo "run_refresh=true" >> "$GITHUB_OUTPUT"
 
       - name: Install Python dependencies
         if: steps.gate.outputs.run_refresh == 'true'
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          fi
-          pip install pandas numpy requests
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pandas numpy requests scikit-learn
 
       - name: Preflight builder
         if: steps.gate.outputs.run_refresh == 'true'
@@ -64,7 +60,11 @@ jobs:
             echo "::error::build_v5_states.py is missing from the repository root."
             exit 1
           }
-          echo "V5 builder found."
+          test -f v5_core.py || {
+            echo "::error::v5_core.py is missing from the repository root."
+            exit 1
+          }
+          echo "V5 builder/runtime found."
 
       - name: Restore historical TennisMyLife cache
         if: steps.gate.outputs.run_refresh == 'true'
@@ -72,9 +72,9 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: .v5_history_cache
-          key: v5-tennis-history-v1
+          key: v5-tennis-history-2010-2025-v3
 
-      - name: Bootstrap historical files when cache is empty
+      - name: Build or restore historical V5 inputs
         if: steps.gate.outputs.run_refresh == 'true'
         run: python bootstrap_v5_history.py
 
@@ -83,7 +83,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: .v5_history_cache
-          key: v5-tennis-history-v1
+          key: v5-tennis-history-2010-2025-v3
 
       - name: Refresh current TennisMyLife data and rebuild V5 ratings
         if: steps.gate.outputs.run_refresh == 'true'
@@ -91,23 +91,19 @@ jobs:
 
       - name: Remove ephemeral historical root copies before commit
         if: steps.gate.outputs.run_refresh == 'true' && always()
-        run: |
-          rm -f ATP.csv ATPQualifiers.csv Challenger.csv WTA.csv
+        run: rm -f ATP.csv ATPQualifiers.csv Challenger.csv WTA.csv
 
       - name: Show refresh summary
         if: steps.gate.outputs.run_refresh == 'true' && always()
         run: |
-          if [ -f v5_refresh_last.json ]; then
-            cat v5_refresh_last.json
-          fi
+          if [ -f v5_refresh_last.json ]; then cat v5_refresh_last.json; fi
 
-      - name: Commit refreshed current data and V5 ratings
+      - name: Commit refreshed player data and V5 ratings
         if: steps.gate.outputs.run_refresh == 'true' && success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Only tracked/current outputs and lightweight V5 artifacts.
           git add -u
 
           for f in \
@@ -122,7 +118,6 @@ jobs:
             [ -e "$f" ] && git add "$f"
           done
 
-          # Explicitly prevent huge historical sources/cache from being committed.
           git reset -- ATP.csv ATPQualifiers.csv Challenger.csv WTA.csv .v5_history_cache 2>/dev/null || true
 
           if git diff --cached --quiet; then
