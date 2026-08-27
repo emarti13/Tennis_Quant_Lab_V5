@@ -3,8 +3,6 @@ name: V5 Player Ratings Refresh
 on:
   workflow_dispatch:
   schedule:
-    # 1:00 AM Eastern is 05:00 UTC during EDT and 06:00 UTC during EST.
-    # Both fire; should_run_1am_eastern.py allows only the correct one through.
     - cron: "0 5 * * *"
     - cron: "0 6 * * *"
 
@@ -18,7 +16,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - name: Checkout repository
@@ -52,7 +50,6 @@ jobs:
 
       - name: Install Python dependencies
         if: steps.gate.outputs.run_refresh == 'true'
-        shell: bash
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then
@@ -60,61 +57,73 @@ jobs:
           fi
           pip install pandas numpy requests
 
-      - name: Preflight V5 build files
+      - name: Preflight builder
         if: steps.gate.outputs.run_refresh == 'true'
-        shell: bash
         run: |
           test -f build_v5_states.py || {
             echo "::error::build_v5_states.py is missing from the repository root."
             exit 1
           }
-          test -f ATP.csv || {
-            echo "::error::ATP.csv historical file is missing from the repository root."
-            exit 1
-          }
-          test -f WTA.csv || {
-            echo "::error::WTA.csv historical file is missing from the repository root."
-            exit 1
-          }
-          echo "V5 historical/build inputs found."
+          echo "V5 builder found."
 
-      - name: Refresh TennisMyLife data and rebuild V5 ratings
+      - name: Restore historical TennisMyLife cache
+        if: steps.gate.outputs.run_refresh == 'true'
+        id: history-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .v5_history_cache
+          key: v5-tennis-history-v1
+
+      - name: Bootstrap historical files when cache is empty
+        if: steps.gate.outputs.run_refresh == 'true'
+        run: python bootstrap_v5_history.py
+
+      - name: Save historical TennisMyLife cache
+        if: steps.gate.outputs.run_refresh == 'true' && steps.history-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .v5_history_cache
+          key: v5-tennis-history-v1
+
+      - name: Refresh current TennisMyLife data and rebuild V5 ratings
         if: steps.gate.outputs.run_refresh == 'true'
         run: python refresh_tennismylife_cloud.py --dir .
 
+      - name: Remove ephemeral historical root copies before commit
+        if: steps.gate.outputs.run_refresh == 'true' && always()
+        run: |
+          rm -f ATP.csv ATPQualifiers.csv Challenger.csv WTA.csv
+
       - name: Show refresh summary
         if: steps.gate.outputs.run_refresh == 'true' && always()
-        shell: bash
         run: |
           if [ -f v5_refresh_last.json ]; then
             cat v5_refresh_last.json
           fi
 
-      - name: Commit refreshed player data and V5 ratings
+      - name: Commit refreshed current data and V5 ratings
         if: steps.gate.outputs.run_refresh == 'true' && success()
-        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Stage modified tracked files (current-season source CSVs + rebuilt outputs).
+          # Only tracked/current outputs and lightweight V5 artifacts.
           git add -u
 
-          # Stage refresh metadata/new outputs if they are not tracked yet.
           for f in \
             v5_refresh_last.json \
             v5_refresh_log.jsonl \
             v5_men_ratings.csv \
             v5_wta_ratings.csv \
+            v5_men_walkforward.csv \
+            v5_wta_walkforward.csv \
             v5_build_summary.json
           do
             [ -e "$f" ] && git add "$f"
           done
 
-          # Capture any additional root-level V5 CSV outputs produced by the builder.
-          for f in v5_*.csv; do
-            [ -e "$f" ] && git add "$f"
-          done
+          # Explicitly prevent huge historical sources/cache from being committed.
+          git reset -- ATP.csv ATPQualifiers.csv Challenger.csv WTA.csv .v5_history_cache 2>/dev/null || true
 
           if git diff --cached --quiet; then
             echo "No player-data changes to commit."
