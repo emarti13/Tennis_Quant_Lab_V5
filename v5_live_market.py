@@ -11,10 +11,16 @@ MARKET_FILE = BASE / "v5_market_ready" / "market_board_input.csv"
 
 def canonical_name(name):
     s = "" if name is None else str(name).strip()
+
+    # Remove disambiguators commonly appended by odds providers, e.g.
+    # "Cretu, Cezar (2001)".
+    s = re.sub(r"\s*\([^)]*\)\s*$", "", s).strip()
+
     if "," in s:
         parts=[x.strip() for x in s.split(",",1)]
         if len(parts)==2 and parts[0] and parts[1]:
             s=f"{parts[1]} {parts[0]}"
+
     s=unicodedata.normalize("NFKD",s)
     s="".join(ch for ch in s if not unicodedata.combining(ch))
     s=s.lower()
