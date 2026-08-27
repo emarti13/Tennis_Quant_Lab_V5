@@ -7,7 +7,7 @@ on:
     types: [completed]
 
 permissions:
-  contents: read
+  contents: write
   actions: read
 
 jobs:
@@ -31,6 +31,18 @@ jobs:
 
       - name: Build V5-ready market feed
         run: python build_v5_market_board_input.py
+
+      - name: Commit current market feed for Streamlit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add v5_market_ready/market_board_input.csv v5_market_ready/market_feed_qc.json
+          if git diff --cached --quiet; then
+            echo "No market-feed changes to commit."
+          else
+            git commit -m "Update V5 market feed"
+            git push
+          fi
 
       - name: Upload V5-ready market feed
         uses: actions/upload-artifact@v4
