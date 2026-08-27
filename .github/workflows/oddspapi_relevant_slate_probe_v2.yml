@@ -1,0 +1,37 @@
+name: OddsPapi Relevant Slate Probe v2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run required-level slate probe
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: python probe_relevant_slate.py
+
+      - name: Upload relevant-slate results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: oddspapi-relevant-slate-v2
+          path: |
+            oddspapi_relevant_fixture_report.json
+            oddspapi_relevant_fixtures_24h.json
+            oddspapi_relevant_core6_manifest.json
+            oddspapi_relevant_slate/
+          if-no-files-found: warn
