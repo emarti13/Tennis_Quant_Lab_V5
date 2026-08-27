@@ -18,11 +18,7 @@ class OddsPapiClient:
     def _get(self, endpoint, **params):
         params = {k:v for k,v in params.items() if v is not None}
         params["apiKey"] = self.api_key
-        r = self.session.get(
-            f"{BASE_URL}/{endpoint.lstrip('/')}",
-            params=params,
-            timeout=self.timeout
-        )
+        r = self.session.get(f"{BASE_URL}/{endpoint.lstrip('/')}", params=params, timeout=self.timeout)
         try:
             payload = r.json()
         except Exception:
