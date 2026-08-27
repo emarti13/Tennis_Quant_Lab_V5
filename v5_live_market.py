@@ -132,3 +132,32 @@ def signal_row(row, disagreement_level=None, state_confidence=None):
     if ev>=0.02 and edge>=0.01:
         return "LEAN"
     return "PASS"
+
+
+# ============================================================
+# ALL-BOOK PRICE FEED
+# ============================================================
+
+ALL_PRICE_CANDIDATES = [
+    BASE / "v5_market_ready" / "all_book_prices.csv",
+    BASE / "all_book_prices.csv",
+]
+
+def load_all_book_prices():
+    for p in ALL_PRICE_CANDIDATES:
+        if p.exists():
+            df = pd.read_csv(p, low_memory=False)
+            df.attrs["source_path"] = str(p)
+            return df
+    return pd.DataFrame()
+
+def find_all_match_prices(df, p1, p2):
+    if df.empty:
+        return df
+    a, b = canonical_name(p1), canonical_name(p2)
+    if "player1" not in df.columns or "player2" not in df.columns:
+        return pd.DataFrame()
+    c1 = df["player1"].map(canonical_name)
+    c2 = df["player2"].map(canonical_name)
+    mask = ((c1 == a) & (c2 == b)) | ((c1 == b) & (c2 == a))
+    return df[mask].copy()
