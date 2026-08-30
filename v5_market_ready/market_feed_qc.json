@@ -1,24 +1,30 @@
 {
-  "normalized_rows": 800,
-  "fixtures_with_any_market": 25,
+  "normalized_rows": 1640,
+  "fixtures_with_any_market": 55,
   "books": [
     "betrivers",
+    "kalshi",
     "pinnacle"
   ],
   "coverage_by_book": {
     "betrivers": {
-      "moneyline": 24,
-      "game_spread": 24,
-      "total_games": 13
+      "moneyline": 46,
+      "game_spread": 46,
+      "total_games": 27
+    },
+    "kalshi": {
+      "moneyline": 34,
+      "game_spread": 10,
+      "total_games": 16
     },
     "pinnacle": {
-      "moneyline": 25,
-      "game_spread": 25,
-      "total_games": 14
+      "moneyline": 46,
+      "game_spread": 46,
+      "total_games": 26
     }
   },
-  "best_price_rows": 576,
-  "all_book_price_rows": 800,
+  "best_price_rows": 1104,
+  "all_book_price_rows": 1640,
   "paired_market_integrity": "verified upstream: each market_id had 2 outcomes in uploaded snapshot",
   "integration_status": "READY_FOR_V5_PREDICTION_JOIN"
 }
