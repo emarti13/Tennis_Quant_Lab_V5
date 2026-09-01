@@ -2,9 +2,6 @@ name: V5 Market Feed Build
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: ["OddsPapi Normalized Daily v2"]
-    types: [completed]
 
 permissions:
   contents: write
@@ -12,7 +9,6 @@ permissions:
 
 jobs:
   build:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -44,7 +40,8 @@ jobs:
             echo "No market-feed changes to commit."
           else
             git commit -m "Update V5 market feed"
-            git push
+            git pull --rebase origin main
+            git push origin HEAD:main
           fi
 
       - name: Upload V5-ready market feed
