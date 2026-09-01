@@ -25,9 +25,15 @@ def test_first_match_has_no_prior_stat_state_and_second_uses_only_first():
 
 def test_surface_state_uses_only_prior_matches_on_that_surface():
     out = build_rolling_stats(_rows())
-    third = out.iloc[2]
-    assert np.isclose(third["surface_ace_rate"], 15 / 130)
-    assert third["surface_effective_service_points"] == 130
+    # First Clay appearance must not inherit Hard statistics as Clay history.
+    assert pd.isna(out.iloc[2]["surface_ace_rate"])
+    assert out.iloc[2]["surface_effective_service_points"] == 0
+
+    hard_fourth = pd.DataFrame([{"match_id":"m4","player_name":"A","opponent_name":"E","match_date":"2026-01-22","surface":"Hard","stat_aces":4,"stat_double_faults":1,"stat_service_points":55,"stat_first_serves_in":34,"stat_first_serve_points_won":25,"stat_second_serve_points_won":10,"stat_break_points_saved":2,"stat_break_points_faced":4}])
+    extended = build_rolling_stats(pd.concat([_rows(), hard_fourth], ignore_index=True))
+    fourth = extended.iloc[3]
+    assert np.isclose(fourth["surface_ace_rate"], 15 / 130)
+    assert fourth["surface_effective_service_points"] == 130
 
 
 def test_appending_future_match_does_not_change_earlier_rolling_features():
