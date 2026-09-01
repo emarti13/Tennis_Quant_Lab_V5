@@ -1,29 +1,15 @@
 {
-  "updated_at_utc": "2026-09-01T18:49:00.515974+00:00",
+  "updated_at_utc": "2026-09-01T18:49:02.445282+00:00",
   "fixture_index_rows": 0,
   "historical_completed": 0,
   "historical_remaining": 0,
   "historical_failed_pending": 0,
-  "discovery_run": {
-    "windows": 28,
-    "raw_fixture_rows": 0,
-    "relevant_fixture_rows_seen": 0,
-    "unique_relevant_fixtures": 0,
-    "quota_before": {
-      "limit": 250,
-      "used": 87,
-      "remaining": 163,
-      "valid_from": "2026-08-26T14:33:08.55076+00:00",
-      "valid_until": null
-    },
-    "quota_after": {
-      "limit": 250,
-      "used": 115,
-      "remaining": 135,
-      "valid_from": "2026-08-26T14:33:08.55076+00:00",
-      "valid_until": null
-    },
-    "billable_calls_observed": 28
-  },
-  "history_run": null
+  "discovery_run": null,
+  "history_run": {
+    "selected": 0,
+    "completed_total": 0,
+    "fixture_total": 0,
+    "remaining": 0,
+    "done": true
+  }
 }
