@@ -62,7 +62,9 @@ class TournamentRegistry:
             for name in names:
                 key = normalize_event_name(name)
                 if key:
-                    self._index.setdefault(key, []).append(idx)
+                    bucket = self._index.setdefault(key, [])
+                    if idx not in bucket:
+                        bucket.append(idx)
 
     @classmethod
     def from_csv(cls, path: str | Path = "context_registry/tournaments.csv") -> "TournamentRegistry":
