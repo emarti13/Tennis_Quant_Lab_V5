@@ -27,6 +27,10 @@ class OddsPapiClient:
             raise OddsPapiError(f"OddsPapi HTTP {r.status_code}: {payload}")
         return payload
 
+    def account(self):
+        # /v4/account is unmetered and remains available even when quota is exhausted.
+        return self._get("account")
+
     def fixtures(self, sport_id, date_from, date_to, status_id=0, has_odds=True, language="en"):
         return self._get(
             "fixtures",
