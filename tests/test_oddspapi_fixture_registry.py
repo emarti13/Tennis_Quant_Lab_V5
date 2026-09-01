@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import csv
 import json
 import tempfile
 import unittest
@@ -80,6 +79,26 @@ class OddsPapiFixtureRegistryTests(unittest.TestCase):
             self.assertEqual(row["historical_status"], "CACHED")
             self.assertEqual(row["historical_books"], "betrivers|pinnacle")
             self.assertEqual(row["historical_checked_utc"], "2026-09-01T12:00:00Z")
+
+    def test_bulk_historical_status_update_is_single_pass_and_preserves_rows(self):
+        from oddspapi_fixture_registry import FixtureRegistry
+
+        with tempfile.TemporaryDirectory() as td:
+            reg = FixtureRegistry(Path(td) / "fixtures.csv")
+            reg.upsert([
+                {"fixtureId": "fx1", "participant1Name": "A", "participant2Name": "B"},
+                {"fixtureId": "fx2", "participant1Name": "C", "participant2Name": "D"},
+            ], observed_at="2026-01-01T00:00:00Z", source="seed")
+            reg.mark_historical_many(
+                {"fx1": "CACHED", "fx2": "NOT_FOUND"},
+                books=["pinnacle", "betrivers", "draftkings"],
+                observed_at="2026-09-01T13:00:00Z",
+            )
+            rows = {r["fixture_id"]: r for r in reg.read_rows()}
+            self.assertEqual(rows["fx1"]["historical_status"], "CACHED")
+            self.assertEqual(rows["fx2"]["historical_status"], "NOT_FOUND")
+            self.assertEqual(rows["fx2"]["historical_books"], "betrivers|draftkings|pinnacle")
+            self.assertEqual(len(rows), 2)
 
     def test_seed_jsonl_is_idempotent(self):
         from oddspapi_fixture_registry import FixtureRegistry, seed_from_jsonl
