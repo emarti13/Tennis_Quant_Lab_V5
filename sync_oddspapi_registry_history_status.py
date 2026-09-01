@@ -9,13 +9,28 @@ from oddspapi_fixture_registry import FixtureRegistry, seed_from_jsonl, utc_now_
 DEFAULT_CHECKPOINT = Path("oddspapi_history/historical_checkpoint.json")
 DEFAULT_FIXTURE_INDEX = Path("oddspapi_history/fixtures_2026.jsonl")
 HISTORY_BOOKS = ["pinnacle", "betrivers", "draftkings"]
+HISTORY_BOOKSET_KEY = ",".join(HISTORY_BOOKS)
 
 
 def checkpoint_statuses(checkpoint: dict) -> dict[str, str]:
-    statuses = {str(fid): "CACHED" for fid in checkpoint.get("completed_fixture_ids", [])}
+    statuses: dict[str, str] = {}
+
+    # New checkpoint format: NOT_FOUND is terminal only for the exact bookmaker
+    # set that was queried. Preserve that distinction in the registry metadata.
+    terminal = checkpoint.get("terminal_not_found_by_bookset") or {}
+    for fixture_id in terminal.get(HISTORY_BOOKSET_KEY, []):
+        statuses[str(fixture_id)] = "NOT_FOUND"
+
+    # Backward compatibility for checkpoints created before terminal statuses had
+    # their own field.
     for fixture_id, error in (checkpoint.get("failed") or {}).items():
         text = str(error).lower()
         statuses[str(fixture_id)] = "NOT_FOUND" if "no historical odds found" in text else "ERROR"
+
+    # A successfully cached response is authoritative if stale error metadata also
+    # exists from an earlier attempt.
+    for fixture_id in checkpoint.get("completed_fixture_ids", []):
+        statuses[str(fixture_id)] = "CACHED"
     return statuses
 
 
