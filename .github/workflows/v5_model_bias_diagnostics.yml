@@ -1,0 +1,24 @@
+name: V5 Model Bias Diagnostics
+
+on:
+  push:
+    branches:
+      - diagnostics/v5-bias-audit
+    paths:
+      - "diagnose_v5_selection_bias.py"
+      - ".github/workflows/v5_model_bias_diagnostics.yml"
+      - "v5_daily_ready/latest_board.csv"
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run board bias audit
+        run: python diagnose_v5_selection_bias.py
+      - name: Show audit output
+        run: cat v5_daily_ready/model_bias_diagnostic.json
