@@ -131,8 +131,6 @@ class FixtureRegistry:
                 inserted += 1
                 continue
 
-            # Identity key and first-seen timestamp are immutable. All non-empty
-            # upstream metadata may be refreshed as OddsPapi learns more.
             for field, value in incoming.items():
                 if field != "fixture_id" and value != "":
                     current[field] = value
@@ -155,15 +153,32 @@ class FixtureRegistry:
         books: Iterable[str] | str | None = None,
         observed_at: str | None = None,
     ) -> None:
-        rows = self.read_rows()
-        by_id = {row.get("fixture_id", ""): row for row in rows if row.get("fixture_id")}
-        if fixture_id not in by_id:
-            raise KeyError(f"Fixture {fixture_id} is not present in registry")
-        row = by_id[fixture_id]
-        row["historical_status"] = status
-        row["historical_books"] = _merge_pipe_values(row.get("historical_books", ""), books)
-        row["historical_checked_utc"] = observed_at or utc_now_z()
+        self.mark_historical_many(
+            {fixture_id: status},
+            books=books,
+            observed_at=observed_at,
+        )
+
+    def mark_historical_many(
+        self,
+        statuses: dict[str, str],
+        books: Iterable[str] | str | None = None,
+        observed_at: str | None = None,
+    ) -> dict:
+        checked_at = observed_at or utc_now_z()
+        by_id = {row.get("fixture_id", ""): row for row in self.read_rows() if row.get("fixture_id")}
+        missing = [fid for fid in statuses if fid not in by_id]
+        if missing:
+            raise KeyError(f"Fixture(s) not present in registry: {', '.join(sorted(missing)[:10])}")
+
+        for fixture_id, status in statuses.items():
+            row = by_id[fixture_id]
+            row["historical_status"] = status
+            row["historical_books"] = _merge_pipe_values(row.get("historical_books", ""), books)
+            row["historical_checked_utc"] = checked_at
+
         self._write_rows(by_id.values())
+        return {"updated": len(statuses), "registry_rows": len(by_id)}
 
 
 def seed_from_jsonl(
