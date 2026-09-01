@@ -6,6 +6,7 @@ on:
       - diagnostics/v5-bias-audit
     paths:
       - "diagnose_v5_selection_bias.py"
+      - "diagnose_slam_market_ranges.py"
       - "v5_daily_batch.py"
       - "tests/test_v5_daily_batch.py"
       - ".github/workflows/v5_model_bias_diagnostics.yml"
@@ -26,5 +27,9 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_v5_daily_batch.py' -v
       - name: Run board bias audit
         run: python diagnose_v5_selection_bias.py
+      - name: Audit mens Slam market line ranges
+        run: python diagnose_slam_market_ranges.py
       - name: Show audit output
-        run: cat v5_daily_ready/model_bias_diagnostic.json
+        run: |
+          cat v5_daily_ready/model_bias_diagnostic.json
+          cat v5_daily_ready/slam_market_range_diagnostic.json
