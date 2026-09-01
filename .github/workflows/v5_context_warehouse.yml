@@ -1,0 +1,32 @@
+name: V5 Context Warehouse
+
+on:
+  push:
+    branches:
+      - feature/v5-full-context-model
+    paths:
+      - 'build_v5_context_warehouse.py'
+      - 'v5_context_schema.py'
+      - 'tests/test_v5_context_warehouse.py'
+      - '.github/workflows/v5_context_warehouse.yml'
+  workflow_dispatch:
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - name: Test warehouse contract
+        run: pytest tests/test_v5_context_warehouse.py -v
+      - name: Build warehouse
+        run: python build_v5_context_warehouse.py
+      - name: Verify outputs
+        run: |
+          test -f context_warehouse/matches.parquet
+          test -f context_warehouse/player_match_rows.parquet
+          test -f context_warehouse/source_manifest.json
+          test -f context_warehouse/schema.json
