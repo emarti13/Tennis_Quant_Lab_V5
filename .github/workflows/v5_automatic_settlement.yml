@@ -6,7 +6,10 @@ on:
     branches: [main]
     paths:
       - "v5_settlement.py"
+      - "results_accuracy_page.py"
+      - "pages/**"
       - "tests/test_v5_settlement.py"
+      - "tests/test_results_accuracy.py"
       - ".github/workflows/v5_automatic_settlement.yml"
   workflow_run:
     workflows: ["V5 Player Ratings Refresh"]

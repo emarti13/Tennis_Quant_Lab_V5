@@ -1,103 +1,158 @@
-
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import streamlit as st
 
-from prediction_store import PredictionStore
+BASE = Path(__file__).resolve().parent
+DEFAULT_LEDGER = BASE / "v5_daily_ready" / "frozen_predictions.csv"
 
 
 def _safe_div(a, b):
     return float(a / b) if b else np.nan
 
 
-def render_results_accuracy(db_path="v5_predictions.sqlite3"):
+def load_accuracy_ledger(path=DEFAULT_LEDGER):
+    path = Path(path)
+    if not path.exists():
+        return pd.DataFrame()
+    df = pd.read_csv(path, low_memory=False)
+    for col in ("frozen_at_utc", "start_time_utc", "settled_at_utc"):
+        if col in df.columns:
+            df[col] = pd.to_datetime(df[col], errors="coerce", utc=True)
+    for col in (
+        "model_probability", "edge_vs_consensus", "expected_value",
+        "state_confidence", "profit_units", "best_american_odds",
+        "model_fair_american", "line",
+    ):
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+    return df
+
+
+def accuracy_metrics(df):
+    if df is None or df.empty:
+        return {
+            "frozen": 0, "settled": 0, "decisions": 0, "wins": 0,
+            "losses": 0, "pushes": 0, "voids": 0, "win_rate": np.nan,
+            "units": 0.0, "roi": np.nan,
+        }
+    status = df.get("result_status", pd.Series(index=df.index, dtype=object)).fillna("").astype(str).str.upper()
+    result = df.get("settled_result", pd.Series(index=df.index, dtype=object)).fillna("").astype(str).str.upper()
+    settled_mask = status.eq("SETTLED")
+    decision_mask = settled_mask & result.isin(["WIN", "LOSS"])
+    wins = int((decision_mask & result.eq("WIN")).sum())
+    losses = int((decision_mask & result.eq("LOSS")).sum())
+    decisions = wins + losses
+    units = pd.to_numeric(df.loc[decision_mask, "profit_units"], errors="coerce").sum() if "profit_units" in df.columns else 0.0
+    return {
+        "frozen": int(len(df)),
+        "settled": int(settled_mask.sum()),
+        "decisions": decisions,
+        "wins": wins,
+        "losses": losses,
+        "pushes": int((settled_mask & result.eq("PUSH")).sum()),
+        "voids": int((settled_mask & result.eq("VOID")).sum()),
+        "win_rate": _safe_div(wins, decisions),
+        "units": float(units),
+        "roi": _safe_div(units, decisions),
+    }
+
+
+def _performance_table(decisions, group_col, label):
+    if decisions.empty or group_col not in decisions.columns:
+        return pd.DataFrame()
+    rows = []
+    for key, g in decisions.groupby(group_col, dropna=False):
+        result = g["settled_result"].astype(str).str.upper()
+        wins = int((result == "WIN").sum())
+        losses = int((result == "LOSS").sum())
+        n = wins + losses
+        units = pd.to_numeric(g["profit_units"], errors="coerce").sum()
+        rows.append({
+            label: key,
+            "Decisions": n,
+            "Wins": wins,
+            "Losses": losses,
+            "Win Rate": _safe_div(wins, n),
+            "Units": units,
+            "ROI": _safe_div(units, n),
+            "Avg Model Edge": pd.to_numeric(g.get("edge_vs_consensus"), errors="coerce").mean(),
+            "Avg Model EV": pd.to_numeric(g.get("expected_value"), errors="coerce").mean(),
+        })
+    return pd.DataFrame(rows).sort_values(["Decisions", "ROI"], ascending=[False, False])
+
+
+def render_results_accuracy(ledger_path=DEFAULT_LEDGER):
     st.title("Results & Accuracy")
     st.caption(
-        "Frozen V5 predictions only. This page is designed to prevent hindsight "
-        "editing and to measure actual out-of-sample performance."
+        "Frozen pre-match V5 predictions only. Results are settled automatically from "
+        "TennisMyLife and the original model probabilities and sportsbook prices are never rewritten."
     )
 
-    store = PredictionStore(db_path)
-    df = store.predictions_df()
-
+    df = load_accuracy_ledger(ledger_path)
     if df.empty:
         st.info("No frozen predictions have been logged yet.")
         return
 
-    df["created_at_utc"] = pd.to_datetime(df["created_at_utc"], errors="coerce")
-    df["start_time_utc"] = pd.to_datetime(df["start_time_utc"], errors="coerce")
-
+    metrics = accuracy_metrics(df)
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Frozen Predictions", f"{len(df):,}")
-
-    settled = df[df.result_status == "SETTLED"].copy()
-    wins = int((settled.settled_result == "WIN").sum())
-    losses = int((settled.settled_result == "LOSS").sum())
-    decisions = wins + losses
-
+    c1.metric("Frozen Markets", f"{metrics['frozen']:,}")
     c2.metric(
-        "Win Rate",
-        "—" if not decisions else f"{wins / decisions:.1%}",
+        "Decision Win Rate",
+        "—" if pd.isna(metrics["win_rate"]) else f"{metrics['win_rate']:.1%}",
+        help="WIN/(WIN+LOSS). Pushes and voids are excluded.",
+    )
+    c3.metric(
+        "Tracked ROI",
+        "—" if pd.isna(metrics["roi"]) else f"{metrics['roi']:+.1%}",
+        help="Profit units divided by settled WIN/LOSS decisions. Pushes and voids are excluded.",
+    )
+    c4.metric("Units", f"{metrics['units']:+.2f}")
+
+    st.caption(
+        f"Settled: {metrics['settled']:,} • Decisions: {metrics['decisions']:,} • "
+        f"Pushes: {metrics['pushes']:,} • Voids: {metrics['voids']:,} • "
+        f"Open: {metrics['frozen'] - metrics['settled']:,}"
     )
 
-    units = pd.to_numeric(settled.profit_units, errors="coerce").sum()
-    risked = int(settled.profit_units.notna().sum())
-    roi = _safe_div(units, risked)
-    c3.metric("Tracked ROI", "—" if pd.isna(roi) else f"{roi:+.1%}")
-    c4.metric("Units", f"{units:+.2f}")
+    result = df.get("settled_result", pd.Series(index=df.index, dtype=object)).fillna("").astype(str).str.upper()
+    status = df.get("result_status", pd.Series(index=df.index, dtype=object)).fillna("").astype(str).str.upper()
+    decisions = df[status.eq("SETTLED") & result.isin(["WIN", "LOSS"])].copy()
 
     st.subheader("Performance by Signal")
-    if not settled.empty:
-        grouped = []
-        for signal, g in settled.groupby("signal", dropna=False):
-            gw = int((g.settled_result == "WIN").sum())
-            gl = int((g.settled_result == "LOSS").sum())
-            n = gw + gl
-            u = pd.to_numeric(g.profit_units, errors="coerce").sum()
-            grouped.append({
-                "Signal": signal,
-                "N": len(g),
-                "Decisions": n,
-                "Win Rate": _safe_div(gw, n),
-                "Units": u,
-                "ROI": _safe_div(u, int(g.profit_units.notna().sum())),
-                "Avg Model Edge": pd.to_numeric(
-                    g.probability_edge, errors="coerce"
-                ).mean(),
-                "Avg Model EV": pd.to_numeric(
-                    g.expected_roi, errors="coerce"
-                ).mean(),
-                "Avg CLV (prob)": pd.to_numeric(
-                    g.clv_probability, errors="coerce"
-                ).mean(),
-            })
-
-        perf = pd.DataFrame(grouped)
+    perf_signal = _performance_table(decisions, "signal", "Signal")
+    if perf_signal.empty:
+        st.info("Performance tables populate after settled WIN/LOSS decisions are available.")
+    else:
         st.dataframe(
-            perf.style.format({
-                "Win Rate": "{:.1%}",
-                "Units": "{:+.2f}",
-                "ROI": "{:+.1%}",
-                "Avg Model Edge": "{:+.1%}",
-                "Avg Model EV": "{:+.1%}",
-                "Avg CLV (prob)": "{:+.1%}",
+            perf_signal.style.format({
+                "Win Rate": "{:.1%}", "Units": "{:+.2f}", "ROI": "{:+.1%}",
+                "Avg Model Edge": "{:+.1%}", "Avg Model EV": "{:+.1%}",
+            }),
+            use_container_width=True,
+            hide_index=True,
+        )
+
+    st.subheader("Performance by Market")
+    perf_market = _performance_table(decisions, "market_group", "Market")
+    if not perf_market.empty:
+        st.dataframe(
+            perf_market.style.format({
+                "Win Rate": "{:.1%}", "Units": "{:+.2f}", "ROI": "{:+.1%}",
+                "Avg Model Edge": "{:+.1%}", "Avg Model EV": "{:+.1%}",
             }),
             use_container_width=True,
             hide_index=True,
         )
 
     st.subheader("Calibration")
-    calibration = df[
-        df.model_probability.notna()
-        & df.settled_result.isin(["WIN", "LOSS"])
-    ].copy()
-
+    calibration = decisions[pd.to_numeric(decisions.get("model_probability"), errors="coerce").notna()].copy()
     if len(calibration) >= 20:
-        calibration["actual"] = (calibration.settled_result == "WIN").astype(int)
+        calibration["actual"] = (calibration["settled_result"].astype(str).str.upper() == "WIN").astype(int)
+        calibration["model_probability"] = pd.to_numeric(calibration["model_probability"], errors="coerce")
         calibration["bucket"] = pd.cut(
-            calibration.model_probability,
+            calibration["model_probability"],
             bins=[0, .4, .45, .5, .55, .6, .65, .7, .75, .8, 1.0],
             include_lowest=True,
         )
@@ -106,9 +161,7 @@ def render_results_accuracy(db_path="v5_predictions.sqlite3"):
             Avg_Prediction=("model_probability", "mean"),
             Actual_Win_Rate=("actual", "mean"),
         ).reset_index()
-        cal["Calibration_Error"] = (
-            cal.Actual_Win_Rate - cal.Avg_Prediction
-        )
+        cal["Calibration_Error"] = cal["Actual_Win_Rate"] - cal["Avg_Prediction"]
         st.dataframe(
             cal.style.format({
                 "Avg_Prediction": "{:.1%}",
@@ -119,45 +172,31 @@ def render_results_accuracy(db_path="v5_predictions.sqlite3"):
             hide_index=True,
         )
     else:
-        st.info("Calibration table begins after at least 20 settled predictions.")
+        st.info(f"Calibration table begins at 20 WIN/LOSS decisions. Current: {len(calibration)}.")
 
-    st.subheader("Prediction Ledger")
-    cols = [
-        c for c in [
-            "created_at_utc",
-            "fixture_id",
-            "tour",
-            "tournament",
-            "player1",
-            "player2",
-            "market_type",
-            "selection",
-            "line",
-            "model_probability",
-            "model_fair_odds",
-            "bookmaker",
-            "book_odds",
-            "probability_edge",
-            "expected_roi",
-            "agreement",
-            "state_confidence",
-            "signal",
-            "result_status",
-            "settled_result",
-            "profit_units",
-            "closing_odds",
-            "clv_probability",
-        ] if c in df.columns
-    ]
-    st.dataframe(
-        df[cols].style.format({
-            "model_probability": "{:.1%}",
-            "probability_edge": "{:+.1%}",
-            "expected_roi": "{:+.1%}",
-            "state_confidence": "{:.0%}",
-            "profit_units": "{:+.2f}",
-            "clv_probability": "{:+.1%}",
-        }),
-        use_container_width=True,
-        hide_index=True,
-    )
+    st.subheader("Settled Prediction Ledger")
+    settled = df[status.eq("SETTLED")].copy()
+    if settled.empty:
+        st.info("No predictions have settled yet.")
+    else:
+        display_cols = [
+            c for c in [
+                "settled_at_utc", "start_time_utc", "tournament", "tour_v5", "surface",
+                "resolved_player1", "resolved_player2", "market_group", "selection", "line",
+                "model_probability", "model_fair_american", "best_bookmaker", "best_american_odds",
+                "edge_vs_consensus", "expected_value", "signal", "result_winner", "result_loser",
+                "result_score", "settled_result", "profit_units",
+            ] if c in settled.columns
+        ]
+        st.dataframe(
+            settled.sort_values("settled_at_utc", ascending=False)[display_cols].style.format({
+                "model_probability": "{:.1%}",
+                "edge_vs_consensus": "{:+.1%}",
+                "expected_value": "{:+.1%}",
+                "profit_units": "{:+.2f}",
+                "model_fair_american": "{:+.0f}",
+                "best_american_odds": "{:+.0f}",
+            }),
+            use_container_width=True,
+            hide_index=True,
+        )
