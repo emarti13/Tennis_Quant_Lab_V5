@@ -9,7 +9,7 @@ on:
   schedule:
     - cron: "7 * * * *"
 
-# This workflow is intentionally resumable and becomes a no-op after BACKFILL_COMPLETE exists.
+# Resumable one-time bootstrap. After BACKFILL_COMPLETE exists, scheduled runs are no-ops.
 permissions:
   contents: write
 
@@ -39,10 +39,23 @@ jobs:
       - name: Run backfill tests
         run: python -m unittest tests.test_oddspapi_2026_backfill -v
 
-      - name: Discover fixtures once and fetch next historical chunk
+      - name: Discover and permanently checkpoint 2026 fixture index
+        if: ${{ hashFiles('oddspapi_history/fixtures_2026.jsonl') == '' }}
         env:
           ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
-        run: python backfill_oddspapi_2026.py --history-batch 500
+        run: |
+          python backfill_oddspapi_2026.py --discover
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add oddspapi_history/fixtures_2026.jsonl oddspapi_history/backfill_summary.json
+          git commit -m "Cache OddsPapi 2026 fixture index"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Fetch next free historical-odds chunk
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: python backfill_oddspapi_2026.py --history --history-batch 500
 
       - name: Show backfill summary
         if: always()
@@ -51,7 +64,7 @@ jobs:
             cat oddspapi_history/backfill_summary.json
           fi
 
-      - name: Commit permanent fixture index and historical chunks
+      - name: Commit historical checkpoint and chunk
         if: success()
         run: |
           if [ ! -d oddspapi_history ]; then
