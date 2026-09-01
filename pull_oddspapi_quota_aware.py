@@ -7,7 +7,8 @@ from oddspapi_client import OddsPapiClient
 SPORT_ID = 12
 PRIMARY_BOOK = "pinnacle"
 SECONDARY_BOOK = "betrivers"
-SECONDARY_EVERY_N_DAYS = 3
+PROTECTED_RESERVE = 50
+SECONDARY_MIN_REMAINING = 100
 OUTDIR = Path("oddspapi_daily")
 OUTDIR.mkdir(exist_ok=True)
 
@@ -33,17 +34,45 @@ def relevant_fixture(fx):
     return men or women or slam
 
 
-def chunks(x, n=5):
-    for i in range(0, len(x), n):
-        yield x[i:i+n]
+def quota_state(account):
+    subscriptions = account.get("subscriptions") or []
+    current_id = account.get("current_subscription_id")
+    current = None
+    for sub in subscriptions:
+        if current_id and sub.get("subscription_id") == current_id:
+            current = sub
+            break
+    if current is None:
+        current = next((s for s in subscriptions if s.get("is_active")), None)
+    if current is None:
+        raise RuntimeError("No active OddsPapi subscription found in /v4/account response.")
+    limit = int(current.get("request_limit") or 0)
+    used = int(current.get("request_count") or 0)
+    return {
+        "limit": limit,
+        "used": used,
+        "remaining": max(0, limit - used),
+        "valid_from": current.get("valid_from"),
+        "valid_until": current.get("valid_until"),
+    }
 
 
-def books_for_today(now):
-    # Free-tier budget target: one primary book every day, a second book every
-    # third UTC day. With four tournament batches this averages ~6.3 API calls/day
-    # (1 fixtures call + 4 primary calls + 4 secondary calls every third day).
+def tournament_request_groups(tournament_ids):
+    # OddsPapi charges per endpoint call, not by number of tournament IDs returned.
+    # Their v4 docs accept a comma-separated tournamentIds parameter and do not
+    # document a 5-ID cap, so send the entire relevant slate in one request.
+    tids = list(tournament_ids)
+    return [tids] if tids else []
+
+
+def books_for_today(now, remaining):
+    # Keep a hard reserve so historical-odds remains usable (OddsPapi blocks even
+    # free endpoints after the request limit is exhausted). Primary live data is
+    # daily while above reserve; secondary validation is only weekly with ample headroom.
+    if remaining <= PROTECTED_RESERVE:
+        return []
     books = [PRIMARY_BOOK]
-    if now.date().toordinal() % SECONDARY_EVERY_N_DAYS == 0:
+    if now.weekday() == 6 and remaining >= SECONDARY_MIN_REMAINING:  # Sunday UTC
         books.append(SECONDARY_BOOK)
     return books
 
@@ -56,17 +85,35 @@ def main():
     f0 = now.strftime("%Y-%m-%dT%H:%M:%SZ")
     f1 = end.strftime("%Y-%m-%dT%H:%M:%SZ")
 
+    # /v4/account is unmetered. Check quota before spending anything billable.
+    quota_before = quota_state(c.account())
+    books = books_for_today(now, quota_before["remaining"])
+
+    if not books:
+        manifest = {
+            "captured_at_utc": now.isoformat(),
+            "status": "SKIPPED_QUOTA_RESERVE",
+            "quota_before": quota_before,
+            "protected_reserve": PROTECTED_RESERVE,
+            "estimated_billable_calls_today": 0,
+        }
+        (OUTDIR / f"{stamp}_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+        print(json.dumps(manifest, indent=2))
+        return
+
+    # One billable /fixtures request for the whole 24-hour tennis slate.
     fixtures = c.fixtures(SPORT_ID, f0, f1, status_id=0, has_odds=True)
     relevant = [f for f in fixtures if relevant_fixture(f)]
     tids = sorted({f.get("tournamentId") for f in relevant if f.get("tournamentId") is not None})
-    batches = list(chunks(tids, 5))
-    books = books_for_today(now)
+    groups = tournament_request_groups(tids)
 
     (OUTDIR / f"{stamp}_fixtures.json").write_text(
         json.dumps(relevant, indent=2, default=str), encoding="utf-8"
     )
 
-    estimated_calls = 1 + len(batches) * len(books)
+    # Normal day: 1 fixtures + 1 Pinnacle = 2 billable calls.
+    # Weekly secondary day: +1 BetRivers = 3 billable calls.
+    estimated_calls = 1 + len(groups) * len(books)
     manifest = {
         "captured_at_utc": now.isoformat(),
         "window_from_utc": f0,
@@ -77,41 +124,50 @@ def main():
             "excluded": "ITF, UTR, SRL, exhibitions, juniors, doubles, lower levels",
         },
         "quota_policy": {
-            "plan_cap": 250,
+            "billing_rule": "one billable endpoint call = one request regardless of response size",
+            "historical_odds": "free but blocked if total quota is exhausted",
+            "protected_reserve": PROTECTED_RESERVE,
             "primary_book": PRIMARY_BOOK,
             "secondary_book": SECONDARY_BOOK,
-            "secondary_every_n_days": SECONDARY_EVERY_N_DAYS,
-            "target_average_calls_per_day_with_4_batches": 6.33,
+            "secondary_schedule": "Sunday UTC only when remaining quota >= 100",
+            "normal_live_cost": 2,
+            "weekly_secondary_cost": 3,
         },
+        "quota_before": quota_before,
         "fixture_count_relevant": len(relevant),
         "tournament_ids": tids,
-        "batches_per_book": len(batches),
+        "odds_requests_per_book": len(groups),
         "books_today": books,
-        "estimated_api_calls_today": estimated_calls,
+        "estimated_billable_calls_today": estimated_calls,
         "books": {}
     }
 
     for book in books:
         manifest["books"][book] = []
-        for i, batch in enumerate(batches, 1):
+        for i, group in enumerate(groups, 1):
             try:
-                payload = c.odds_by_tournaments(batch, bookmaker=book)
+                payload = c.odds_by_tournaments(group, bookmaker=book)
                 fn = OUTDIR / f"{stamp}_{book.replace('.', '_')}_batch{i}.json"
                 fn.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
                 manifest["books"][book].append({
-                    "batch": i,
+                    "request": i,
                     "status": "SUCCESS",
                     "file": str(fn),
-                    "tournamentIds": batch,
+                    "tournamentIds": group,
                 })
             except Exception as e:
+                # Errors count against quota too, so record and do not retry automatically.
                 manifest["books"][book].append({
-                    "batch": i,
-                    "status": "FAILED",
+                    "request": i,
+                    "status": "FAILED_NO_RETRY",
                     "error": str(e),
-                    "tournamentIds": batch,
+                    "tournamentIds": group,
                 })
             time.sleep(1.25)
+
+    quota_after = quota_state(c.account())
+    manifest["quota_after"] = quota_after
+    manifest["billable_calls_observed"] = quota_after["used"] - quota_before["used"]
 
     (OUTDIR / f"{stamp}_manifest.json").write_text(
         json.dumps(manifest, indent=2, default=str), encoding="utf-8"
@@ -120,7 +176,9 @@ def main():
         "relevant_fixtures": len(relevant),
         "tournaments": len(tids),
         "books": books,
-        "estimated_api_calls": estimated_calls,
+        "estimated_billable_calls": estimated_calls,
+        "billable_calls_observed": manifest["billable_calls_observed"],
+        "quota_remaining": quota_after["remaining"],
     }, indent=2))
 
 
