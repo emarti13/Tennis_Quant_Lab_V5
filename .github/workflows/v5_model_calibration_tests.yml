@@ -1,0 +1,32 @@
+name: V5 Independent Calibration Tests
+
+on:
+  push:
+    branches:
+      - feature/v5-independent-calibration
+    paths:
+      - "v5_model_calibration.py"
+      - "v5_core.py"
+      - "v5_daily_batch.py"
+      - "v5_live_market.py"
+      - "tests/test_v5_independent_calibration.py"
+      - "tests/test_v5_daily_batch.py"
+      - "tests/test_v5_market_line_pricing.py"
+      - ".github/workflows/v5_model_calibration_tests.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Independent calibration tests
+        run: python -m unittest discover -s tests -p 'test_v5_independent_calibration.py' -v
+      - name: Daily batch regression tests
+        run: python -m unittest discover -s tests -p 'test_v5_daily_batch.py' -v
+      - name: Compile production modules
+        run: python -m py_compile v5_model_calibration.py v5_core.py v5_live_market.py v5_daily_batch.py
