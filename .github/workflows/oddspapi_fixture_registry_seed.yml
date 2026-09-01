@@ -9,6 +9,7 @@ on:
       - "oddspapi_fixture_registry.py"
       - "sync_oddspapi_registry_history_status.py"
 
+# One-time bootstrap from the retained 2026 fixture archive. Safe to rerun: upserts are idempotent.
 permissions:
   contents: write
 
