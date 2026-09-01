@@ -112,6 +112,20 @@ def _tournament_overlap(a, b):
     return bool(ta & tb)
 
 
+def build_result_index(results):
+    index = {}
+    if results is None or results.empty:
+        return index
+    for idx, r in results.iterrows():
+        w = canonical_name(r.get("winner_name"))
+        l = canonical_name(r.get("loser_name"))
+        if not w or not l:
+            continue
+        key = tuple(sorted((w, l)))
+        index.setdefault(key, []).append(idx)
+    return index
+
+
 def match_result_row(prediction, results):
     if results is None or results.empty:
         return None
@@ -156,12 +170,17 @@ def settle_ledger(ledger, results, settled_at=None):
     for c in text_columns:
         if c in out.columns:
             out[c] = out[c].astype(object)
+    result_index = build_result_index(results)
     settled_count = 0
     missing = 0
     for idx, pred in out.iterrows():
         if str(pred.get("result_status", "OPEN")).upper() != "OPEN":
             continue
-        r = match_result_row(pred, results)
+        p1 = canonical_name(pred.get("resolved_player1") or pred.get("player1"))
+        p2 = canonical_name(pred.get("resolved_player2") or pred.get("player2"))
+        candidate_ids = result_index.get(tuple(sorted((p1, p2))), [])
+        candidates = results.loc[candidate_ids] if candidate_ids else results.iloc[0:0]
+        r = match_result_row(pred, candidates)
         if r is None:
             missing += 1
             continue
