@@ -9,6 +9,7 @@ on:
   schedule:
     - cron: "7 * * * *"
 
+# This workflow is intentionally resumable and becomes a no-op after BACKFILL_COMPLETE exists.
 permissions:
   contents: write
 
