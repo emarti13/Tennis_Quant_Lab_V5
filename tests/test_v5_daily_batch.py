@@ -81,6 +81,17 @@ class DailyBatchModuleTests(unittest.TestCase):
         self.assertEqual(v5_daily_batch.infer_surface("Wimbledon Men Singles"), ("Grass", "Auto — tournament map"))
         self.assertEqual(v5_daily_batch.infer_surface("Mystery Open"), ("Hard", "Auto default — review"))
 
+    def test_infer_best_of_uses_five_sets_only_for_mens_slam_main_draw(self):
+        self.assertEqual(v5_daily_batch.infer_best_of("US Open Men Singles", "MEN"), 5)
+        self.assertEqual(v5_daily_batch.infer_best_of("Wimbledon Men Singles", "ATP"), 5)
+        self.assertEqual(v5_daily_batch.infer_best_of("Australian Open Men Singles", "MEN"), 5)
+        self.assertEqual(v5_daily_batch.infer_best_of("Roland Garros Men Singles", "ATP"), 5)
+        self.assertEqual(v5_daily_batch.infer_best_of("French Open Men Singles", "MEN"), 5)
+        self.assertEqual(v5_daily_batch.infer_best_of("US Open Men Qualifying", "MEN"), 3)
+        self.assertEqual(v5_daily_batch.infer_best_of("Wimbledon Men Qualification", "ATP"), 3)
+        self.assertEqual(v5_daily_batch.infer_best_of("US Open Women Singles", "WTA"), 3)
+        self.assertEqual(v5_daily_batch.infer_best_of("ATP Challenger Como, Italy Men Singles", "MEN"), 3)
+
     def test_build_fixture_board_prices_all_moneyline_selections(self):
         ratings = pd.DataFrame([
             {"player":"Alice Alpha","surface":"Hard","serve_global":0.02,"return_global":0.01,"surface_points":1000,"serve_surface":0.01,"return_surface":0.01,"elo":1600,"surface_elo":1600,"form_logit":0.0,"day_vol_logit":0.10,"state_confidence":0.9},
@@ -98,6 +109,20 @@ class DailyBatchModuleTests(unittest.TestCase):
         self.assertEqual(set(out["surface_source"]),{"Auto — tournament map"})
         self.assertEqual(set(out["resolved_player1"]),{"Alice Alpha"})
         self.assertEqual(set(out["resolved_player2"]),{"Bob Beta"})
+
+    def test_build_fixture_board_records_best_of_five_for_mens_us_open(self):
+        ratings = pd.DataFrame([
+            {"player":"Alice Alpha","surface":"Hard","serve_global":0.02,"return_global":0.01,"surface_points":1000,"serve_surface":0.01,"return_surface":0.01,"elo":1600,"surface_elo":1600,"form_logit":0.0,"day_vol_logit":0.10,"state_confidence":0.9},
+            {"player":"Bob Beta","surface":"Hard","serve_global":-0.01,"return_global":-0.01,"surface_points":1000,"serve_surface":-0.01,"return_surface":-0.01,"elo":1500,"surface_elo":1500,"form_logit":0.0,"day_vol_logit":0.10,"state_confidence":0.8},
+        ])
+        rows = pd.DataFrame([
+            {"snapshot_utc":"2026-09-01T05:00:00Z","fixture_id":"fx1","start_time_utc":"2026-09-01T07:00:00Z","tournament":"US Open Men Singles","tour":"ATP","player1":"Alpha, Alice","player2":"Beta, Bob","market_group":"moneyline","selection":"Alpha, Alice","line":None,"best_bookmaker":"pinnacle","best_decimal_odds":1.8,"best_american_odds":-125,"consensus_no_vig_prob":0.55},
+            {"snapshot_utc":"2026-09-01T05:00:00Z","fixture_id":"fx1","start_time_utc":"2026-09-01T07:00:00Z","tournament":"US Open Men Singles","tour":"ATP","player1":"Alpha, Alice","player2":"Beta, Bob","market_group":"moneyline","selection":"Beta, Bob","line":None,"best_bookmaker":"pinnacle","best_decimal_odds":2.2,"best_american_odds":120,"consensus_no_vig_prob":0.45},
+        ])
+        summary={"MEN":{"baseline":{"Hard":0.62,"Clay":0.60,"Grass":0.65}}}
+        out=v5_daily_batch.build_fixture_board(rows,{"MEN":ratings},summary,sims=200)
+        self.assertEqual(set(out["best_of"]), {5})
+        self.assertTrue((out["expected_total"] > 25).all())
 
     def test_build_daily_outputs_skips_started_fixtures_and_freezes_future_rows(self):
         ratings = pd.DataFrame([
