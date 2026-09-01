@@ -8,6 +8,7 @@ on:
       - "diagnose_v5_selection_bias.py"
       - "diagnose_slam_market_ranges.py"
       - "diagnose_walkforward_model_scale.py"
+      - "diagnose_state_variation_effect.py"
       - "v5_core.py"
       - "v5_live_market.py"
       - "v5_daily_batch.py"
@@ -39,8 +40,11 @@ jobs:
         run: python diagnose_slam_market_ranges.py
       - name: Evaluate walk-forward model scale
         run: python diagnose_walkforward_model_scale.py
+      - name: Measure state volatility effect
+        run: python diagnose_state_variation_effect.py
       - name: Show audit output
         run: |
           cat v5_daily_ready/model_bias_diagnostic.json
           cat v5_daily_ready/slam_market_range_diagnostic.json
           cat v5_daily_ready/walkforward_model_scale_diagnostic.json
+          cat v5_daily_ready/state_variation_diagnostic.json
