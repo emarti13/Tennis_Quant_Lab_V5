@@ -2,15 +2,10 @@ name: OddsPapi Normalized Daily v2
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/oddspapi_normalized_daily_v2.yml"
   schedule:
     # One quota-budgeted pull per day. During EDT this is 8:15 AM Eastern.
     - cron: "15 12 * * *"
 
-# A committed edit to this workflow intentionally triggers an immediate refresh.
 permissions:
   contents: write
 
