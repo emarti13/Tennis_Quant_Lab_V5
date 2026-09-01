@@ -25,6 +25,10 @@ def _mean(values):
     return None if not values else sum(values) / len(values)
 
 
+def _is_main(value):
+    return str(value).strip().lower() in {"true", "1", "yes"}
+
+
 def _side(q):
     if q is None: return "unknown"
     if q < 0.5: return "underdog"
@@ -51,17 +55,15 @@ def main():
         raise RuntimeError("No valid market snapshot timestamp")
 
     board, _, errors = build_daily_outputs(
-        feed,
-        _load_ratings(),
-        _load_summary(),
-        existing_ledger=pd.DataFrame(),
-        now=snapshot,
-        sims=1500,
+        feed, _load_ratings(), _load_summary(), existing_ledger=pd.DataFrame(), now=snapshot, sims=1500
     )
 
     bets = board[board["signal"] == "BET"].copy()
     actionable = board[board["signal"].isin(["BET", "LEAN"])].copy()
     ml = board[(board["market_group"] == "moneyline") & board["model_probability"].notna()].copy()
+    main_board = board[board["main_line"].map(_is_main)].copy() if "main_line" in board.columns else board.iloc[0:0].copy()
+    main_bets = main_board[main_board["signal"] == "BET"].copy()
+    main_actionable = main_board[main_board["signal"].isin(["BET", "LEAN"])].copy()
 
     ml_market = {}
     for _, r in ml.iterrows():
@@ -79,10 +81,12 @@ def main():
             counts[_side(q)] += 1
         return dict(counts)
 
-    dog_delta=[]; fav_delta=[]; compression=[]; raw_dog_delta=[]; calibrated_minus_raw=[]
+    dog_delta=[]; fav_delta=[]; compression=[]; raw_dog_delta=[]; calibrated_minus_raw=[]; conditioning_miss=[]
     for _, r in ml.iterrows():
         q=_num(r.get("consensus_no_vig_prob")); p=_num(r.get("model_probability"))
         raw=_selection_probability(r,"raw_sim_probability_p1")
+        target=_num(r.get("strength_conditioning_target_p1")); achieved=_num(r.get("strength_conditioning_achieved_p1"))
+        if target is not None and achieved is not None: conditioning_miss.append(abs(target-achieved))
         if q is None or p is None: continue
         compression.append(abs(q-0.5)-abs(p-0.5))
         if q < 0.5:
@@ -95,15 +99,14 @@ def main():
     total_rows=board[(board["market_group"]=="total_games") & board["model_probability"].notna()].copy()
     total_bets=bets[bets["market_group"]=="total_games"]
     total_actionable=actionable[actionable["market_group"]=="total_games"]
-    total_bet_counts=Counter(total_bets["selection"].astype(str).str.lower())
-    total_action_counts=Counter(total_actionable["selection"].astype(str).str.lower())
+    total_main_bets=main_bets[main_bets["market_group"]=="total_games"]
+    total_main_actionable=main_actionable[main_actionable["market_group"]=="total_games"]
 
     main_delta=[]
     if not total_rows.empty:
         seen=set()
         for _, r in total_rows.iterrows():
-            main=str(r.get("main_line","")).lower() in {"true","1","yes"}
-            if not main: continue
+            if not _is_main(r.get("main_line")): continue
             line=_num(r.get("line")); exp=_num(r.get("expected_total"))
             key=(str(r.get("fixture_id")),line)
             if line is None or exp is None or key in seen: continue
@@ -114,6 +117,7 @@ def main():
         "market_snapshot_utc":snapshot.isoformat(),
         "fixture_count":int(board["fixture_id"].nunique()) if not board.empty else 0,
         "board_rows":int(len(board)),
+        "main_line_rows":int(len(main_board)),
         "errors":errors,
         "model_version":sorted(board["model_version"].dropna().unique().tolist()) if not board.empty else [],
         "best_of_counts":{str(k):int(v) for k,v in board.groupby("fixture_id")["best_of"].first().value_counts().items()} if not board.empty else {},
@@ -126,15 +130,22 @@ def main():
             "mean_raw_sim_minus_market_underdog_pp":None if _mean(raw_dog_delta) is None else 100*_mean(raw_dog_delta),
             "mean_calibrated_minus_raw_selected_probability_pp":None if _mean(calibrated_minus_raw) is None else 100*_mean(calibrated_minus_raw),
             "mean_compression_toward_50_pp":None if _mean(compression) is None else 100*_mean(compression),
+            "mean_strength_conditioning_target_miss_pp":None if _mean(conditioning_miss) is None else 100*_mean(conditioning_miss),
         },
         "spreads":{
-            "bet_side_counts_via_moneyline":selected_side_counts(bets,"game_spread"),
-            "actionable_side_counts_via_moneyline":selected_side_counts(actionable,"game_spread"),
+            "all_lines_bet_side_counts_via_moneyline":selected_side_counts(bets,"game_spread"),
+            "all_lines_actionable_side_counts_via_moneyline":selected_side_counts(actionable,"game_spread"),
+            "main_line_bet_side_counts_via_moneyline":selected_side_counts(main_bets,"game_spread"),
+            "main_line_actionable_side_counts_via_moneyline":selected_side_counts(main_actionable,"game_spread"),
+            "main_line_bet_fixtures":int(main_bets.loc[main_bets["market_group"]=="game_spread","fixture_id"].nunique()),
         },
         "totals":{
             "priced_rows":int(len(total_rows)),
-            "bet_side_counts":dict(total_bet_counts),
-            "actionable_side_counts":dict(total_action_counts),
+            "all_lines_bet_side_counts":dict(Counter(total_bets["selection"].astype(str).str.lower())),
+            "all_lines_actionable_side_counts":dict(Counter(total_actionable["selection"].astype(str).str.lower())),
+            "main_line_bet_side_counts":dict(Counter(total_main_bets["selection"].astype(str).str.lower())),
+            "main_line_actionable_side_counts":dict(Counter(total_main_actionable["selection"].astype(str).str.lower())),
+            "main_line_bet_fixtures":int(total_main_bets["fixture_id"].nunique()),
             "mean_expected_total_minus_market_main_line_games":_mean(main_delta),
             "main_line_fixture_count":len(main_delta),
         },
