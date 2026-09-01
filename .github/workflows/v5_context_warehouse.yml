@@ -21,7 +21,7 @@ jobs:
           python-version: '3.12'
       - run: pip install -r requirements.txt pytest
       - name: Test warehouse contract
-        run: pytest tests/test_v5_context_warehouse.py -v
+        run: python -m pytest tests/test_v5_context_warehouse.py -v
       - name: Build warehouse
         run: python build_v5_context_warehouse.py
       - name: Verify outputs
