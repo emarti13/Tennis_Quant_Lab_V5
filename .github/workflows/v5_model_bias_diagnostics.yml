@@ -9,6 +9,7 @@ on:
       - "diagnose_slam_market_ranges.py"
       - "diagnose_walkforward_model_scale.py"
       - "diagnose_state_variation_effect.py"
+      - "diagnose_fixture_result_fields.py"
       - "v5_core.py"
       - "v5_live_market.py"
       - "v5_daily_batch.py"
@@ -42,6 +43,8 @@ jobs:
         run: python diagnose_walkforward_model_scale.py
       - name: Measure state volatility effect
         run: python diagnose_state_variation_effect.py
+      - name: Inspect retained fixture result fields
+        run: python diagnose_fixture_result_fields.py
       - name: Show audit output
         run: |
           cat v5_daily_ready/model_bias_diagnostic.json
