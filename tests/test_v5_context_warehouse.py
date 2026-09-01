@@ -1,0 +1,53 @@
+import pandas as pd
+
+from build_v5_context_warehouse import normalize_results, build_player_match_rows
+
+
+def _sample_results():
+    return pd.DataFrame([
+        {
+            "tourney_id": "2026-001",
+            "tourney_name": "Example Open",
+            "surface": "Hard",
+            "tourney_date": 20260105,
+            "match_num": 1,
+            "winner_name": "Alpha, Ann",
+            "loser_name": "Beta Bea",
+            "score": "6-4 6-3",
+            "best_of": 3,
+            "round": "R32",
+            "winner_rank": 12,
+            "loser_rank": 48,
+            "result_file": "2026_wta.csv",
+        }
+    ])
+
+
+def test_normalize_results_produces_deterministic_match_id_and_typed_date():
+    first = normalize_results(_sample_results())
+    second = normalize_results(_sample_results())
+    assert len(first) == 1
+    assert first.loc[0, "match_id"] == second.loc[0, "match_id"]
+    assert first.loc[0, "tour"] == "WTA"
+    assert first.loc[0, "surface"] == "Hard"
+    assert int(first.loc[0, "best_of"]) == 3
+    assert pd.api.types.is_datetime64_any_dtype(first["match_date"])
+
+
+def test_player_match_rows_have_exactly_two_rows_and_no_target_outcome_in_feature_namespace():
+    matches = normalize_results(_sample_results())
+    rows = build_player_match_rows(matches)
+    assert len(rows) == 2
+    assert rows["match_id"].nunique() == 1
+    assert set(rows["player_role"]) == {"winner", "loser"}
+    assert rows["player_name"].notna().all()
+    feature_cols = [c for c in rows.columns if c.startswith("feature_")]
+    forbidden = {"feature_winner", "feature_score", "feature_result", "feature_games_won"}
+    assert not forbidden.intersection(feature_cols)
+
+
+def test_result_file_drives_tour_without_guessing_from_player_names():
+    men = _sample_results().copy()
+    men["result_file"] = "2026_challenger.csv"
+    out = normalize_results(men)
+    assert out.loc[0, "tour"] == "MEN"
