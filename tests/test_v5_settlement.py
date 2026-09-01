@@ -27,6 +27,13 @@ class SettlementTests(unittest.TestCase):
         r=match_result_row(pred,results)
         self.assertEqual(r['winner_name'],'A')
 
+    def test_settle_ledger_handles_csv_inferred_float_text_columns(self):
+        ledger=pd.DataFrame([{'freeze_key':'x','result_status':'OPEN','settled_result':float('nan'),'resolved_player1':'A','resolved_player2':'B','start_time_utc':'2026-09-01T17:00:00Z','tournament':'US Open Men Singles','market_group':'moneyline','selection':'A','line':None,'best_decimal_odds':2.0}])
+        results=pd.DataFrame([{'winner_name':'A','loser_name':'B','tourney_date':20260901,'tourney_name':'US Open','score':'6-4 6-4'}])
+        settled,_=settle_ledger(ledger,results,settled_at='2026-09-01T20:00:00+00:00')
+        self.assertEqual(settled.loc[0,'settled_result'],'WIN')
+        self.assertEqual(str(settled['settled_result'].dtype),'object')
+
     def test_settle_ledger_is_idempotent(self):
         ledger=pd.DataFrame([{'freeze_key':'x','result_status':'OPEN','resolved_player1':'A','resolved_player2':'B','start_time_utc':'2026-09-01T17:00:00Z','tournament':'US Open Men Singles','market_group':'moneyline','selection':'A','line':None,'best_decimal_odds':2.0}])
         results=pd.DataFrame([{'winner_name':'A','loser_name':'B','tourney_date':20260901,'tourney_name':'US Open','score':'6-4 6-4'}])
