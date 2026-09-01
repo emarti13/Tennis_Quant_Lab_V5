@@ -46,6 +46,39 @@ class HistoricalOddsNormalizerTests(unittest.TestCase):
         self.assertEqual(close[0]["price_decimal"], 1.72)
 
 
+class HistoricalMarketMapperTests(unittest.TestCase):
+    def test_maps_same_market_schema_as_live_feed_and_devigs_pair(self):
+        from historical_market_mapper import map_snapshot_rows
+
+        fixture = {
+            "fixtureId": "fx1",
+            "participant1Name": "Carlos Alcaraz",
+            "participant2Name": "Jannik Sinner",
+            "startTime": "2026-08-31T20:00:00Z",
+            "tournamentName": "ATP Test",
+            "categoryName": "ATP",
+        }
+        metadata = [{
+            "marketId": 121,
+            "marketName": "Moneyline",
+            "period": "Full Match",
+            "marketType": "moneyline",
+            "outcomes": [
+                {"outcomeId": 121, "outcomeName": "Player 1"},
+                {"outcomeId": 122, "outcomeName": "Player 2"},
+            ],
+        }]
+        rows = [
+            {"fixture_id": "fx1", "bookmaker": "pinnacle", "market_id": "121", "outcome_id": "121", "player_id": "0", "created_at": datetime(2026, 8, 31, 19, 0, tzinfo=timezone.utc), "price_decimal": 1.80, "snapshot_label": "t-1h", "limit": 100},
+            {"fixture_id": "fx1", "bookmaker": "pinnacle", "market_id": "121", "outcome_id": "122", "player_id": "0", "created_at": datetime(2026, 8, 31, 19, 0, tzinfo=timezone.utc), "price_decimal": 2.10, "snapshot_label": "t-1h", "limit": 100},
+        ]
+        mapped = map_snapshot_rows(rows, fixture, metadata)
+        self.assertEqual(len(mapped), 2)
+        self.assertEqual(mapped[0]["market_group"], "moneyline")
+        self.assertEqual({r["selection"] for r in mapped}, {"Carlos Alcaraz", "Jannik Sinner"})
+        self.assertAlmostEqual(sum(r["no_vig_prob"] for r in mapped), 1.0)
+
+
 class HistoricalFixtureMatcherTests(unittest.TestCase):
     def test_matches_reversed_player_order_by_pair_and_date(self):
         from historical_fixture_matcher import match_fixture
