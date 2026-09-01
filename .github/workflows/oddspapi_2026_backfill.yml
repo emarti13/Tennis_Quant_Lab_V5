@@ -10,6 +10,7 @@ on:
     - cron: "7 * * * *"
 
 # Resumable one-time bootstrap. After BACKFILL_COMPLETE exists, scheduled runs are no-ops.
+# Empty fixture windows are valid and must not abort discovery.
 permissions:
   contents: write
 
