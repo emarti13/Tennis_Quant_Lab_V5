@@ -10,8 +10,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: oddspapi-normalized-daily-v2
-  cancel-in-progress: true
+  group: oddspapi-fixture-registry-writer
+  cancel-in-progress: false
 
 jobs:
   pull:
