@@ -26,6 +26,8 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Independent calibration tests
         run: python -m unittest discover -s tests -p 'test_v5_independent_calibration.py' -v
+      - name: Exact market line pricing tests
+        run: python -m unittest discover -s tests -p 'test_v5_market_line_pricing.py' -v
       - name: Daily batch regression tests
         run: python -m unittest discover -s tests -p 'test_v5_daily_batch.py' -v
       - name: Compile production modules
