@@ -1,0 +1,25 @@
+name: V5 Calibrated Board Diagnostic
+
+on:
+  push:
+    branches:
+      - feature/v5-independent-calibration
+    paths:
+      - "diagnose_calibrated_live_board.py"
+      - ".github/workflows/v5_calibrated_board_diagnostic.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Reprice snapshot with independent calibrated model
+        run: python diagnose_calibrated_live_board.py
+      - name: Show diagnostic
+        run: cat v5_daily_ready/calibrated_live_board_diagnostic.json
