@@ -27,25 +27,21 @@ class OddsPapiClient:
         return payload
 
     def account(self):
-        # /v4/account is unmetered and remains available even when quota is exhausted.
         return self._get("account")
 
     def fixtures(self, sport_id, date_from, date_to, status_id=0, has_odds=True, language="en"):
+        params = {
+            "from": date_from,
+            "to": date_to,
+            "statusId": status_id,
+            "language": language,
+        }
+        # Historical finished-fixture discovery must be able to omit hasOdds.
+        if has_odds is not None:
+            params["hasOdds"] = str(bool(has_odds)).lower()
         try:
-            return self._get(
-                "fixtures",
-                sportId=sport_id,
-                **{
-                    "from": date_from,
-                    "to": date_to,
-                    "statusId": status_id,
-                    "hasOdds": str(bool(has_odds)).lower(),
-                    "language": language,
-                }
-            )
+            return self._get("fixtures", sportId=sport_id, **params)
         except OddsPapiError as exc:
-            # OddsPapi uses HTTP 404/FIXTURE_NOT_FOUND to represent a valid
-            # date window with zero matching fixtures. That is not a pipeline failure.
             if "FIXTURE_NOT_FOUND" in str(exc):
                 return []
             raise
