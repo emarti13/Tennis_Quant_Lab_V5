@@ -3,6 +3,7 @@ import json, time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from oddspapi_client import OddsPapiClient
+from oddspapi_fixture_registry import FixtureRegistry
 
 SPORT_ID = 12
 PRIMARY_BOOK = "pinnacle"
@@ -58,21 +59,15 @@ def quota_state(account):
 
 
 def tournament_request_groups(tournament_ids):
-    # OddsPapi charges per endpoint call, not by number of tournament IDs returned.
-    # Their v4 docs accept a comma-separated tournamentIds parameter and do not
-    # document a 5-ID cap, so send the entire relevant slate in one request.
     tids = list(tournament_ids)
     return [tids] if tids else []
 
 
 def books_for_today(now, remaining):
-    # Keep a hard reserve so historical-odds remains usable (OddsPapi blocks even
-    # free endpoints after the request limit is exhausted). Primary live data is
-    # daily while above reserve; secondary validation is only weekly with ample headroom.
     if remaining <= PROTECTED_RESERVE:
         return []
     books = [PRIMARY_BOOK]
-    if now.weekday() == 6 and remaining >= SECONDARY_MIN_REMAINING:  # Sunday UTC
+    if now.weekday() == 6 and remaining >= SECONDARY_MIN_REMAINING:
         books.append(SECONDARY_BOOK)
     return books
 
@@ -85,7 +80,6 @@ def main():
     f0 = now.strftime("%Y-%m-%dT%H:%M:%SZ")
     f1 = end.strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    # /v4/account is unmetered. Check quota before spending anything billable.
     quota_before = quota_state(c.account())
     books = books_for_today(now, quota_before["remaining"])
 
@@ -101,9 +95,17 @@ def main():
         print(json.dumps(manifest, indent=2))
         return
 
-    # One billable /fixtures request for the whole 24-hour tennis slate.
     fixtures = c.fixtures(SPORT_ID, f0, f1, status_id=0, has_odds=True)
     relevant = [f for f in fixtures if relevant_fixture(f)]
+
+    # Permanent invariant: every relevant OddsPapi fixture ID we ever see is
+    # persisted before any downstream pricing/normalization work happens.
+    registry_result = FixtureRegistry().upsert(
+        relevant,
+        observed_at=now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        source="live_daily",
+    )
+
     tids = sorted({f.get("tournamentId") for f in relevant if f.get("tournamentId") is not None})
     groups = tournament_request_groups(tids)
 
@@ -111,8 +113,6 @@ def main():
         json.dumps(relevant, indent=2, default=str), encoding="utf-8"
     )
 
-    # Normal day: 1 fixtures + 1 Pinnacle = 2 billable calls.
-    # Weekly secondary day: +1 BetRivers = 3 billable calls.
     estimated_calls = 1 + len(groups) * len(books)
     manifest = {
         "captured_at_utc": now.isoformat(),
@@ -134,6 +134,7 @@ def main():
             "weekly_secondary_cost": 3,
         },
         "quota_before": quota_before,
+        "fixture_registry": registry_result,
         "fixture_count_relevant": len(relevant),
         "tournament_ids": tids,
         "odds_requests_per_book": len(groups),
@@ -156,7 +157,6 @@ def main():
                     "tournamentIds": group,
                 })
             except Exception as e:
-                # Errors count against quota too, so record and do not retry automatically.
                 manifest["books"][book].append({
                     "request": i,
                     "status": "FAILED_NO_RETRY",
@@ -174,6 +174,8 @@ def main():
     )
     print(json.dumps({
         "relevant_fixtures": len(relevant),
+        "registry_rows": registry_result["registry_rows"],
+        "registry_inserted": registry_result["inserted"],
         "tournaments": len(tids),
         "books": books,
         "estimated_billable_calls": estimated_calls,
