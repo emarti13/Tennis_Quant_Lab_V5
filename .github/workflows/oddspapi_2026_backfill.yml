@@ -13,7 +13,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: oddspapi-2026-historical-backfill
+  group: oddspapi-fixture-registry-writer
   cancel-in-progress: false
 
 jobs:
