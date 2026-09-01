@@ -172,8 +172,24 @@ def _sim_set(rng,pa,pb,firstA=True):
         serverA=not serverA
         if (ga>=6 or gb>=6) and abs(ga-gb)>=2:return ga,gb,serverA
 
+def _clean_market_lines(lines, default):
+    source=default if lines is None else lines
+    out=[]
+    for value in source:
+        try:v=float(value)
+        except Exception:continue
+        if math.isfinite(v) and v not in out:out.append(v)
+    return sorted(out)
+
+def _spread_key(line):
+    return f"{float(line):+.1f}"
+
+def _total_key(line):
+    return f"{float(line):.1f}"
+
 def simulate_match(pAserve,pBserve,best_of=3,n=20000,seed=42,
-                   formA=0.0,formB=0.0,volA=0.0,volB=0.0,state_variation=True):
+                   formA=0.0,formB=0.0,volA=0.0,volB=0.0,state_variation=True,
+                   spread_lines=None,total_lines=None):
     rng=np.random.default_rng(seed); need=best_of//2+1
     wins=0;marg=[];tot=[];score=Counter();tbs=0; sas=[];sbs=[]
     ea=logit(pAserve); eb=logit(pBserve)
@@ -195,13 +211,20 @@ def simulate_match(pAserve,pBserve,best_of=3,n=20000,seed=42,
             else:sb+=1
         wins+=sa>sb;marg.append(ga-gb);tot.append(ga+gb);score[f"{sa}-{sb}"]+=1;tbs+=tb
     m=np.asarray(marg);t=np.asarray(tot);sas=np.asarray(sas);sbs=np.asarray(sbs)
+    default_spreads=[-6.5,-5.5,-4.5,-3.5,-2.5,-1.5,1.5,2.5,3.5,4.5,5.5,6.5]
+    default_totals=[18.5,19.5,20.5,21.5,22.5,23.5,24.5,25.5,26.5]
+    spread_lines=_clean_market_lines(spread_lines,default_spreads)
+    total_lines=_clean_market_lines(total_lines,default_totals)
+    spread={_spread_key(line):float(np.mean(m+line>0)) for line in spread_lines}
+    spread_push={_spread_key(line):float(np.mean(np.isclose(m+line,0.0))) for line in spread_lines}
+    over={_total_key(line):float(np.mean(t>line)) for line in total_lines}
+    total_push={_total_key(line):float(np.mean(np.isclose(t-line,0.0))) for line in total_lines}
     return {
         "pA_win":wins/n,"fair_A":american_from_prob(wins/n),"fair_B":american_from_prob(1-wins/n),
         "expected_margin":float(m.mean()),"expected_total":float(t.mean()),
         "score_probs":{k:v/n for k,v in score.items()},"tiebreak_prob":tbs/n,
-        "spread":{f"{sgn}{x:.1f}":float(np.mean(m>x if sgn=="-" else m>-x))
-                  for sgn in ["-","+"] for x in [1.5,2.5,3.5,4.5,5.5,6.5]},
-        "over":{str(x):float(np.mean(t>x)) for x in [18.5,19.5,20.5,21.5,22.5,23.5,24.5,25.5,26.5]},
+        "spread":spread,"spread_push":spread_push,
+        "over":over,"total_push":total_push,
         "margin_sd":float(m.std()),"total_sd":float(t.std()),
         "sampled_serve_A_mean":float(sas.mean()),"sampled_serve_B_mean":float(sbs.mean()),
         "sampled_serve_A_sd":float(sas.std()),"sampled_serve_B_sd":float(sbs.std()),
