@@ -17,7 +17,7 @@ permissions:
 
 concurrency:
   group: v5-automatic-settlement
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   settle:
