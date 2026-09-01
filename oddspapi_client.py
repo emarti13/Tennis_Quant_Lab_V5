@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 import os, requests
 
@@ -18,7 +17,7 @@ class OddsPapiClient:
     def _get(self, endpoint, **params):
         params = {k:v for k,v in params.items() if v is not None}
         params["apiKey"] = self.api_key
-        r = self.session.get(f"{BASE_URL}/{endpoint.lstrip('/')}", params=params, timeout=self.timeout)
+        r = self.session.get(f"{BASE_URL}/{endpoint.lstrip('/')}" , params=params, timeout=self.timeout)
         try:
             payload = r.json()
         except Exception:
@@ -57,4 +56,13 @@ class OddsPapiClient:
             language=language,
             verbosity=verbosity,
             oddsFormat=odds_format,
+        )
+
+    def historical_odds(self, fixture_id, bookmakers):
+        if isinstance(bookmakers, (list, tuple, set)):
+            bookmakers = ",".join(str(x) for x in bookmakers)
+        return self._get(
+            "historical-odds",
+            fixtureId=fixture_id,
+            bookmakers=bookmakers,
         )
