@@ -2,6 +2,12 @@ name: V5 Automatic Settlement
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "v5_settlement.py"
+      - "tests/test_v5_settlement.py"
+      - ".github/workflows/v5_automatic_settlement.yml"
   workflow_run:
     workflows: ["V5 Player Ratings Refresh"]
     types: [completed]
@@ -15,7 +21,7 @@ concurrency:
 
 jobs:
   settle:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
