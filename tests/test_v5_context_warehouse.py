@@ -1,6 +1,6 @@
 import pandas as pd
 
-from build_v5_context_warehouse import normalize_results, build_player_match_rows
+from build_v5_context_warehouse import normalize_results, build_player_match_rows, resolve_history_targets
 
 
 def _sample_results():
@@ -51,3 +51,18 @@ def test_result_file_drives_tour_without_guessing_from_player_names():
     men["result_file"] = "2026_challenger.csv"
     out = normalize_results(men)
     assert out.loc[0, "tour"] == "MEN"
+
+
+def test_history_target_resolution_includes_prior_and_current_season_all_tours():
+    files = []
+    for year in (2025, 2026):
+        for suffix in ("", "_atp_quali", "_challenger", "_wta"):
+            name = f"{year}{suffix}.csv"
+            files.append({"name": name, "url": f"https://example.test/{name}"})
+    files.append({"name": "ongoing_tourneys.csv", "url": "https://example.test/ongoing.csv"})
+    resolved = resolve_history_targets(files, years=(2025, 2026))
+    assert len(resolved) == 8
+    assert set(resolved) == {
+        "2025.csv", "2025_atp_quali.csv", "2025_challenger.csv", "2025_wta.csv",
+        "2026.csv", "2026_atp_quali.csv", "2026_challenger.csv", "2026_wta.csv",
+    }
