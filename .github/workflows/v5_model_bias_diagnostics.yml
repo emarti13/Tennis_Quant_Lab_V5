@@ -8,8 +8,11 @@ on:
       - "diagnose_v5_selection_bias.py"
       - "diagnose_slam_market_ranges.py"
       - "diagnose_walkforward_model_scale.py"
+      - "v5_core.py"
+      - "v5_live_market.py"
       - "v5_daily_batch.py"
       - "tests/test_v5_daily_batch.py"
+      - "tests/test_v5_market_line_pricing.py"
       - ".github/workflows/v5_model_bias_diagnostics.yml"
       - "v5_daily_ready/latest_board.csv"
       - "v5_men_walkforward.csv"
@@ -28,6 +31,8 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run daily batch regression tests
         run: python -m unittest discover -s tests -p 'test_v5_daily_batch.py' -v
+      - name: Run exact market line pricing tests
+        run: python -m unittest discover -s tests -p 'test_v5_market_line_pricing.py' -v
       - name: Run board bias audit
         run: python diagnose_v5_selection_bias.py
       - name: Audit mens Slam market line ranges
