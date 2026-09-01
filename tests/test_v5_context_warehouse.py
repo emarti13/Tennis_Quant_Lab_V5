@@ -18,6 +18,22 @@ def _sample_results():
             "round": "R32",
             "winner_rank": 12,
             "loser_rank": 48,
+            "w_ace": 8,
+            "w_df": 2,
+            "w_svpt": 62,
+            "w_1stIn": 38,
+            "w_1stWon": 30,
+            "w_2ndWon": 13,
+            "w_bpSaved": 4,
+            "w_bpFaced": 5,
+            "l_ace": 3,
+            "l_df": 5,
+            "l_svpt": 68,
+            "l_1stIn": 40,
+            "l_1stWon": 26,
+            "l_2ndWon": 10,
+            "l_bpSaved": 6,
+            "l_bpFaced": 9,
             "result_file": "2026_wta.csv",
         }
     ])
@@ -44,6 +60,23 @@ def test_player_match_rows_have_exactly_two_rows_and_no_target_outcome_in_featur
     feature_cols = [c for c in rows.columns if c.startswith("feature_")]
     forbidden = {"feature_winner", "feature_score", "feature_result", "feature_games_won"}
     assert not forbidden.intersection(feature_cols)
+
+
+def test_player_match_rows_orient_raw_match_stats_to_player():
+    rows = build_player_match_rows(normalize_results(_sample_results()))
+    winner = rows.loc[rows.player_role == "winner"].iloc[0]
+    loser = rows.loc[rows.player_role == "loser"].iloc[0]
+    assert winner["stat_aces"] == 8
+    assert winner["stat_double_faults"] == 2
+    assert winner["stat_service_points"] == 62
+    assert winner["stat_first_serves_in"] == 38
+    assert winner["stat_first_serve_points_won"] == 30
+    assert winner["stat_second_serve_points_won"] == 13
+    assert winner["stat_break_points_saved"] == 4
+    assert winner["stat_break_points_faced"] == 5
+    assert loser["stat_aces"] == 3
+    assert loser["stat_double_faults"] == 5
+    assert loser["stat_service_points"] == 68
 
 
 def test_result_file_drives_tour_without_guessing_from_player_names():
