@@ -9,8 +9,6 @@ on:
   schedule:
     - cron: "7 * * * *"
 
-# Resumable one-time bootstrap. After BACKFILL_COMPLETE exists, scheduled runs are no-ops.
-# Historical discovery filter verified on Aug 24-31 before full-year run.
 permissions:
   contents: write
 
@@ -58,6 +56,9 @@ jobs:
           ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
         run: python backfill_oddspapi_2026.py --history --history-batch 500
 
+      - name: Sync permanent fixture registry and historical cache status
+        run: python sync_oddspapi_registry_history_status.py
+
       - name: Show backfill summary
         if: always()
         run: |
@@ -65,7 +66,7 @@ jobs:
             cat oddspapi_history/backfill_summary.json
           fi
 
-      - name: Commit historical checkpoint and chunk
+      - name: Commit historical checkpoint, chunk, and fixture registry
         if: success()
         run: |
           if [ ! -d oddspapi_history ]; then
@@ -74,11 +75,11 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add oddspapi_history/
+          git add oddspapi_history/ oddspapi_registry/fixtures.csv
           if git diff --cached --quiet; then
-            echo "No new historical data to commit."
+            echo "No new historical data or registry changes to commit."
           else
-            git commit -m "Backfill OddsPapi 2026 historical odds"
+            git commit -m "Backfill OddsPapi history and update fixture registry"
             git pull --rebase origin main
             git push origin HEAD:main
           fi
