@@ -16,7 +16,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: v5-automatic-settlement
+  group: v5-automatic-settlement-v2
   cancel-in-progress: true
 
 jobs:
