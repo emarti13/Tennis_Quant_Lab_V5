@@ -1,29 +1,18 @@
 {
-  "updated_at_utc": "2026-09-01T19:23:36.659183+00:00",
+  "updated_at_utc": "2026-09-01T20:08:05.490089+00:00",
   "fixture_index_rows": 15993,
-  "historical_completed": 0,
-  "historical_remaining": 15993,
-  "historical_failed_pending": 0,
-  "discovery_run": {
-    "windows": 28,
-    "raw_fixture_rows": 37530,
-    "relevant_fixture_rows_seen": 16007,
-    "unique_relevant_fixtures": 15993,
-    "quota_before": {
-      "limit": 250,
-      "used": 116,
-      "remaining": 134,
-      "valid_from": "2026-08-26T14:33:08.55076+00:00",
-      "valid_until": null
-    },
-    "quota_after": {
-      "limit": 250,
-      "used": 144,
-      "remaining": 106,
-      "valid_from": "2026-08-26T14:33:08.55076+00:00",
-      "valid_until": null
-    },
-    "billable_calls_observed": 28
-  },
-  "history_run": null
+  "historical_completed": 5,
+  "historical_remaining": 15988,
+  "historical_failed_pending": 495,
+  "discovery_run": null,
+  "history_run": {
+    "selected": 500,
+    "succeeded": 5,
+    "failed": 495,
+    "completed_total": 5,
+    "fixture_total": 15993,
+    "remaining": 15988,
+    "chunk": "oddspapi_history/chunks/history_chunk_0001.jsonl.gz",
+    "done": false
+  }
 }
