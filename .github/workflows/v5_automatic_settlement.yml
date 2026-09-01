@@ -54,17 +54,25 @@ jobs:
             cat v5_daily_ready/settlement_summary.json
           fi
 
-      - name: Commit settlement updates
+      - name: Commit settlement updates safely
         if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin main
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo "main advanced during settlement; rerunning against the latest ledger."
+            git reset --hard origin/main
+            python -m unittest discover -s tests -v
+            python v5_settlement.py
+          fi
+
           git add v5_daily_ready/frozen_predictions.csv \
                   v5_daily_ready/settlement_summary.json
           if git diff --cached --quiet; then
             echo "No settlement changes to commit."
           else
             git commit -m "Settle V5 frozen predictions"
-            git pull --rebase origin main
             git push origin HEAD:main
           fi
