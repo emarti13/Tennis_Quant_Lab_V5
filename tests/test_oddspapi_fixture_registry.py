@@ -13,39 +13,10 @@ class OddsPapiFixtureRegistryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             path = Path(td) / "fixtures.csv"
             reg = FixtureRegistry(path)
+            reg.upsert([{"fixtureId": "fx-old", "startTime": "2026-01-01T12:00:00Z", "participant1Name": "Player A", "participant2Name": "Player B", "tournamentId": 1, "tournamentName": "ATP Test", "categoryName": "ATP", "statusId": 0}], observed_at="2026-01-01T10:00:00Z", source="live")
             reg.upsert([
-                {
-                    "fixtureId": "fx-old",
-                    "startTime": "2026-01-01T12:00:00Z",
-                    "participant1Name": "Player A",
-                    "participant2Name": "Player B",
-                    "tournamentId": 1,
-                    "tournamentName": "ATP Test",
-                    "categoryName": "ATP",
-                    "statusId": 0,
-                }
-            ], observed_at="2026-01-01T10:00:00Z", source="live")
-            reg.upsert([
-                {
-                    "fixtureId": "fx-new",
-                    "startTime": "2026-01-02T12:00:00Z",
-                    "participant1Name": "Player C",
-                    "participant2Name": "Player D",
-                    "tournamentId": 2,
-                    "tournamentName": "WTA Test",
-                    "categoryName": "WTA",
-                    "statusId": 0,
-                },
-                {
-                    "fixtureId": "fx-old",
-                    "startTime": "2026-01-01T12:05:00Z",
-                    "participant1Name": "Player A",
-                    "participant2Name": "Player B",
-                    "tournamentId": 1,
-                    "tournamentName": "ATP Test Updated",
-                    "categoryName": "ATP",
-                    "statusId": 2,
-                },
+                {"fixtureId": "fx-new", "startTime": "2026-01-02T12:00:00Z", "participant1Name": "Player C", "participant2Name": "Player D", "tournamentId": 2, "tournamentName": "WTA Test", "categoryName": "WTA", "statusId": 0},
+                {"fixtureId": "fx-old", "startTime": "2026-01-01T12:05:00Z", "participant1Name": "Player A", "participant2Name": "Player B", "tournamentId": 1, "tournamentName": "ATP Test Updated", "categoryName": "ATP", "statusId": 2},
             ], observed_at="2026-01-02T10:00:00Z", source="historical_discovery")
 
             rows = {r["fixture_id"]: r for r in reg.read_rows()}
@@ -62,17 +33,7 @@ class OddsPapiFixtureRegistryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             path = Path(td) / "fixtures.csv"
             reg = FixtureRegistry(path)
-            reg.upsert([{
-                "fixtureId": "fx1",
-                "startTime": "2026-02-01T12:00:00Z",
-                "participant1Name": "A",
-                "participant2Name": "B",
-                "tournamentId": 4,
-                "tournamentName": "ATP Example",
-                "categoryName": "ATP",
-                "statusId": 2,
-            }], observed_at="2026-02-02T00:00:00Z", source="seed")
-
+            reg.upsert([{"fixtureId": "fx1", "startTime": "2026-02-01T12:00:00Z", "participant1Name": "A", "participant2Name": "B", "tournamentId": 4, "tournamentName": "ATP Example", "categoryName": "ATP", "statusId": 2}], observed_at="2026-02-02T00:00:00Z", source="seed")
             reg.mark_historical("fx1", status="CACHED", books=["pinnacle", "betrivers"], observed_at="2026-09-01T12:00:00Z")
             row = reg.read_rows()[0]
             self.assertEqual(row["fixture_id"], "fx1")
@@ -89,16 +50,25 @@ class OddsPapiFixtureRegistryTests(unittest.TestCase):
                 {"fixtureId": "fx1", "participant1Name": "A", "participant2Name": "B"},
                 {"fixtureId": "fx2", "participant1Name": "C", "participant2Name": "D"},
             ], observed_at="2026-01-01T00:00:00Z", source="seed")
-            reg.mark_historical_many(
-                {"fx1": "CACHED", "fx2": "NOT_FOUND"},
-                books=["pinnacle", "betrivers", "draftkings"],
-                observed_at="2026-09-01T13:00:00Z",
-            )
+            reg.mark_historical_many({"fx1": "CACHED", "fx2": "NOT_FOUND"}, books=["pinnacle", "betrivers", "draftkings"], observed_at="2026-09-01T13:00:00Z")
             rows = {r["fixture_id"]: r for r in reg.read_rows()}
             self.assertEqual(rows["fx1"]["historical_status"], "CACHED")
             self.assertEqual(rows["fx2"]["historical_status"], "NOT_FOUND")
             self.assertEqual(rows["fx2"]["historical_books"], "betrivers|draftkings|pinnacle")
             self.assertEqual(len(rows), 2)
+
+    def test_checkpoint_statuses_distinguish_cached_not_found_and_error(self):
+        from sync_oddspapi_registry_history_status import checkpoint_statuses
+
+        checkpoint = {
+            "completed_fixture_ids": ["fx1"],
+            "failed": {
+                "fx2": "OddsPapi HTTP 404: No historical odds found.",
+                "fx3": "timeout",
+            },
+        }
+        statuses = checkpoint_statuses(checkpoint)
+        self.assertEqual(statuses, {"fx1": "CACHED", "fx2": "NOT_FOUND", "fx3": "ERROR"})
 
     def test_seed_jsonl_is_idempotent(self):
         from oddspapi_fixture_registry import FixtureRegistry, seed_from_jsonl
