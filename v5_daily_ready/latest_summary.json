@@ -1,20 +1,20 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-09-01T06:13:41.419338+00:00",
-  "market_snapshot_utc": "2026-08-31T19:08:17.886598+00:00",
+  "built_at_utc": "2026-09-01T15:37:16.886503+00:00",
+  "market_snapshot_utc": "2026-09-01T15:34:59.912475+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 2278,
-  "eligible_pre_match_fixtures": 63,
-  "priced_rows": 872,
-  "board_rows": 1507,
-  "frozen_ledger_rows": 872,
-  "new_frozen_rows": 872,
+  "market_rows_input": 2508,
+  "eligible_pre_match_fixtures": 94,
+  "priced_rows": 1637,
+  "board_rows": 2480,
+  "frozen_ledger_rows": 2049,
+  "new_frozen_rows": 1177,
   "signal_counts": {
-    "N/A": 638,
-    "REVIEW": 510,
-    "PASS": 249,
-    "BET": 93,
-    "LEAN": 17
+    "REVIEW": 1063,
+    "N/A": 843,
+    "PASS": 426,
+    "BET": 119,
+    "LEAN": 29
   },
   "errors": [
     {
@@ -23,13 +23,6 @@
       "player2": "Rybakina, Elena",
       "tournament": "US Open Women Singles",
       "error": "Unmatched V5 player(s): Frodin, Thea"
-    },
-    {
-      "fixture_id": "id1205232674171370",
-      "player1": "Nesterov, Pyotr",
-      "player2": "Milev, Yanaki",
-      "tournament": "ATP Challenger Plovdiv 3, Bulgaria Men Singles",
-      "error": "Unmatched V5 player(s): Nesterov, Pyotr"
     }
   ]
 }
