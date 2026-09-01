@@ -2,16 +2,32 @@ name: OddsPapi Normalized Daily v2
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/oddspapi_normalized_daily_v2.yml"
   schedule:
-    - cron: "15 12 * * *"
+    # Four quota-aware pulls per day. During EDT these are
+    # 8:15 AM, 12:15 PM, 4:15 PM and 8:15 PM Eastern.
+    - cron: "15 0,12,16,20 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: oddspapi-normalized-daily-v2
+  cancel-in-progress: true
 
 jobs:
   pull:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -49,7 +65,26 @@ jobs:
       - name: Normalize ML, game spreads and total games
         run: python normalize_oddspapi_snapshot.py
 
-      - name: Upload normalized snapshot
+      - name: Build V5-ready market feed immediately
+        run: python build_v5_market_board_input.py
+
+      - name: Commit current market feed for Streamlit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            v5_market_ready/market_board_input.csv \
+            v5_market_ready/all_book_prices.csv \
+            v5_market_ready/market_feed_qc.json
+          if git diff --cached --quiet; then
+            echo "No market-feed changes to commit."
+          else
+            git commit -m "Update V5 market feed"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+
+      - name: Upload normalized snapshot and V5-ready feed
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -58,4 +93,5 @@ jobs:
             oddspapi_daily/
             oddspapi_normalized/
             oddspapi_markets_tennis.json
+            v5_market_ready/
           if-no-files-found: warn
