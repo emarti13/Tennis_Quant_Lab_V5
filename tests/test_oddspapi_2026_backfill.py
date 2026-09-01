@@ -3,7 +3,13 @@ from __future__ import annotations
 import unittest
 from datetime import datetime, timezone
 
-from backfill_oddspapi_2026 import iter_windows, START_UTC, WINDOW_DAYS
+from backfill_oddspapi_2026 import (
+    START_UTC,
+    WINDOW_DAYS,
+    iter_windows,
+    pending_fixtures,
+    terminal_not_found_ids,
+)
 from oddspapi_client import OddsPapiClient, OddsPapiError
 
 
@@ -42,6 +48,46 @@ class BackfillWindowTests(unittest.TestCase):
             has_odds=True,
         )
         self.assertEqual(rows, [])
+
+
+class HistoricalRetryPolicyTests(unittest.TestCase):
+    def test_legacy_not_found_failures_are_terminal_for_current_bookset(self):
+        checkpoint = {
+            "completed_fixture_ids": ["cached"],
+            "failed": {
+                "missing": "OddsPapi HTTP 404: {'error': {'message': 'No historical odds found.', 'code': 'NOT_FOUND'}}",
+                "retry": "OddsPapi HTTP 503: temporarily unavailable",
+            },
+        }
+        self.assertEqual(terminal_not_found_ids(checkpoint), {"missing"})
+
+        fixtures = [
+            {"fixtureId": "cached"},
+            {"fixtureId": "missing"},
+            {"fixtureId": "retry"},
+            {"fixtureId": "new"},
+        ]
+        self.assertEqual(
+            [f["fixtureId"] for f in pending_fixtures(fixtures, checkpoint)],
+            ["retry", "new"],
+        )
+
+    def test_explicit_not_found_bookset_does_not_apply_to_different_books(self):
+        checkpoint = {
+            "completed_fixture_ids": [],
+            "failed": {},
+            "terminal_not_found_by_bookset": {
+                "pinnacle,betrivers,draftkings": ["fx1"],
+            },
+        }
+        self.assertEqual(
+            terminal_not_found_ids(checkpoint, books="pinnacle,betrivers,draftkings"),
+            {"fx1"},
+        )
+        self.assertEqual(
+            terminal_not_found_ids(checkpoint, books="pinnacle"),
+            set(),
+        )
 
 
 if __name__ == "__main__":
