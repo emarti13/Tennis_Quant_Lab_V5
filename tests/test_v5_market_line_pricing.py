@@ -1,5 +1,6 @@
 import unittest
 
+import numpy as np
 import pandas as pd
 
 from v5_core import simulate_match
@@ -80,10 +81,10 @@ class ExactMarketLinePricingTests(unittest.TestCase):
         ])
         out = add_model_pricing(rows, result, "Alice Alpha", "Bob Beta")
         self.assertTrue(out["model_probability"].notna().all())
-        self.assertTrue((out["model_push_probability"] == 0.10).all())
-        self.assertTrue((out["model_win_probability"] == 0.45).all())
+        self.assertTrue(np.allclose(out["model_push_probability"], 0.10))
+        self.assertTrue(np.allclose(out["model_win_probability"], 0.45))
         # 45% win at 2.10, 10% push, 45% loss => +0.045 expected units.
-        self.assertTrue((out["expected_value"].round(6) == 0.045).all())
+        self.assertTrue(np.allclose(out["expected_value"], 0.045))
 
 
 if __name__ == "__main__":
