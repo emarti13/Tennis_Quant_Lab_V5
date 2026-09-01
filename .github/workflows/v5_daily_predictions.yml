@@ -7,16 +7,20 @@ on:
     paths:
       - "v5_market_ready/**"
       - ".github/workflows/v5_daily_predictions.yml"
+  workflow_run:
+    workflows: ["OddsPapi Normalized Daily v2"]
+    types: [completed]
 
 permissions:
   contents: write
 
 concurrency:
   group: v5-daily-predictions
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build-and-freeze:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -49,11 +53,20 @@ jobs:
             cat v5_daily_ready/latest_summary.json
           fi
 
-      - name: Commit frozen daily board
+      - name: Commit frozen daily board safely
         if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin main
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo "main advanced during prediction build; rerunning against the latest market feed."
+            git reset --hard origin/main
+            python -m unittest discover -s tests -v
+            python v5_daily_batch.py
+          fi
+
           git add v5_daily_ready/latest_board.csv \
                   v5_daily_ready/latest_summary.json \
                   v5_daily_ready/frozen_predictions.csv
@@ -61,6 +74,5 @@ jobs:
             echo "No new daily predictions to commit."
           else
             git commit -m "Freeze V5 daily predictions"
-            git pull --rebase origin main
             git push origin HEAD:main
           fi
