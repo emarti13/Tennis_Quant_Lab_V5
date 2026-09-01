@@ -25,6 +25,8 @@ def test_workload_uses_only_prior_matches():
     assert third["matches_last_7d"] == 2
     assert third["games_last_7d"] == 50
     assert third["minutes_last_7d"] == 240
+    # The target match's own missing duration is not allowed to contaminate its pre-match state.
+    assert third["duration_quality"] == "prior_complete"
 
 
 def test_future_match_does_not_change_earlier_features():
@@ -38,7 +40,13 @@ def test_future_match_does_not_change_earlier_features():
     pd.testing.assert_frame_equal(base[cols].reset_index(drop=True), extended.iloc[:len(base)][cols].reset_index(drop=True))
 
 
-def test_missing_duration_is_not_treated_as_zero_observation():
-    out = build_workload_features(_rows())
-    assert out.iloc[2]["duration_quality"] == "prior_partial"
+def test_missing_prior_duration_is_not_treated_as_zero_observation():
+    fourth = pd.DataFrame([{
+        "match_id":"m4","player_name":"A","match_date":"2026-01-06","match_games":18,"match_sets":2,
+        "match_duration_minutes":100,"best_of":3,"round":"SF"
+    }])
+    out = build_workload_features(pd.concat([_rows(), fourth], ignore_index=True))
+    assert out.iloc[3]["duration_quality"] == "prior_partial"
+    # Missing m3 duration is omitted, never silently turned into zero minutes.
+    assert out.iloc[3]["minutes_last_7d"] == 240
     assert pd.isna(out.iloc[0]["minutes_last_7d"])
