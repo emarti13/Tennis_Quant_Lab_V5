@@ -7,10 +7,13 @@ on:
       - feature/permanent-oddspapi-fixture-registry
     paths:
       - "oddspapi_fixture_registry.py"
+      - "sync_oddspapi_registry_history_status.py"
       - "tests/test_oddspapi_fixture_registry.py"
       - "pull_oddspapi_quota_aware.py"
       - "backfill_oddspapi_2026.py"
       - ".github/workflows/oddspapi_normalized_daily_v2.yml"
+      - ".github/workflows/oddspapi_2026_backfill.yml"
+      - ".github/workflows/oddspapi_fixture_registry_seed.yml"
       - ".github/workflows/fixture_registry_tests.yml"
   workflow_dispatch:
 
@@ -24,3 +27,5 @@ jobs:
           python-version: "3.12"
       - name: Run fixture registry tests
         run: python -m unittest discover -s tests -p 'test_oddspapi_fixture_registry.py' -v
+      - name: Compile fixture registry modules
+        run: python -m py_compile oddspapi_fixture_registry.py sync_oddspapi_registry_history_status.py
