@@ -73,12 +73,16 @@ def discover_fixtures(client: OddsPapiClient, end_utc: datetime) -> dict:
     raw_count = 0
     relevant_count = 0
     for idx, (start, end) in enumerate(windows, 1):
+        # Historical finished fixtures frequently report hasOdds=false even when
+        # OddsPapi retains historical odds for the fixture. The verified Aug 24-31
+        # probe returned 1,371 finished fixtures / 610 relevant tennis fixtures only
+        # when hasOdds was omitted, so do not filter archived discovery by hasOdds.
         fixtures = client.fixtures(
             SPORT_ID,
             iso_z(start),
             iso_z(end),
             status_id=2,
-            has_odds=True,
+            has_odds=None,
         )
         raw_count += len(fixtures)
         filtered = [f for f in fixtures if relevant_fixture(f)]
