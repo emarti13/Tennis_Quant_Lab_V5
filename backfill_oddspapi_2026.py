@@ -23,6 +23,7 @@ OUTDIR = Path("oddspapi_history")
 FIXTURE_INDEX = OUTDIR / "fixtures_2026.jsonl"
 CHECKPOINT = OUTDIR / "historical_checkpoint.json"
 SUMMARY = OUTDIR / "backfill_summary.json"
+COMPLETE_FLAG = OUTDIR / "BACKFILL_COMPLETE"
 CHUNK_DIR = OUTDIR / "chunks"
 
 
@@ -194,22 +195,41 @@ def fetch_history_batch(client: OddsPapiClient, batch_size: int) -> dict:
     }
 
 
-def write_summary(discovery: dict | None, history: dict | None) -> None:
+def write_summary(discovery: dict | None, history: dict | None) -> dict:
     OUTDIR.mkdir(parents=True, exist_ok=True)
     fixtures = load_fixture_index()
     checkpoint = load_checkpoint()
     completed = len(set(checkpoint.get("completed_fixture_ids", [])))
+    remaining = max(0, len(fixtures) - completed)
     summary = {
         "updated_at_utc": datetime.now(timezone.utc).isoformat(),
         "fixture_index_rows": len(fixtures),
         "historical_completed": completed,
-        "historical_remaining": max(0, len(fixtures) - completed),
+        "historical_remaining": remaining,
         "historical_failed_pending": len(checkpoint.get("failed", {})),
         "discovery_run": discovery,
         "history_run": history,
     }
     SUMMARY.write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    if fixtures and remaining == 0:
+        COMPLETE_FLAG.write_text(
+            f"Completed {completed} fixtures at {summary['updated_at_utc']}\n",
+            encoding="utf-8",
+        )
     print(json.dumps(summary, indent=2))
+    return summary
+
+
+def already_complete() -> bool:
+    if COMPLETE_FLAG.exists():
+        return True
+    fixtures = load_fixture_index()
+    if not fixtures:
+        return False
+    checkpoint = load_checkpoint()
+    completed = set(checkpoint.get("completed_fixture_ids", []))
+    fixture_ids = {f.get("fixtureId") for f in fixtures if f.get("fixtureId")}
+    return bool(fixture_ids) and fixture_ids.issubset(completed)
 
 
 def main():
@@ -221,6 +241,9 @@ def main():
     args = parser.parse_args()
 
     if not args.discover and not args.history:
+        if already_complete():
+            print(json.dumps({"status": "ALREADY_COMPLETE", "summary": str(SUMMARY)}))
+            return
         args.discover = not FIXTURE_INDEX.exists()
         args.history = True
 
