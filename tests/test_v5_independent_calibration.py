@@ -1,8 +1,9 @@
 import math
 import unittest
 
-from v5_core import condition_serve_pair_to_match_probability, logit, simulate_match
+from v5_core import logit, simulate_match
 from v5_model_calibration import calibrated_match_probability, calibration_record
+from v5_strength_conditioning import condition_serve_pair_to_match_probability
 
 
 class IndependentCalibrationTests(unittest.TestCase):
