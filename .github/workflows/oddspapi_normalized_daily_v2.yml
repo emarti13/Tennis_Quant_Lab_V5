@@ -52,7 +52,7 @@ jobs:
           path: oddspapi_markets_tennis.json
           key: oddspapi-tennis-markets-v1
 
-      - name: Pull quota-aware odds
+      - name: Pull quota-aware odds and persist fixture IDs
         env:
           ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
         run: python pull_oddspapi_quota_aware.py
@@ -63,18 +63,19 @@ jobs:
       - name: Build V5-ready market feed immediately
         run: python build_v5_market_board_input.py
 
-      - name: Commit current market feed for Streamlit
+      - name: Commit market feed and permanent fixture registry
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add \
+            oddspapi_registry/fixtures.csv \
             v5_market_ready/market_board_input.csv \
             v5_market_ready/all_book_prices.csv \
             v5_market_ready/market_feed_qc.json
           if git diff --cached --quiet; then
-            echo "No market-feed changes to commit."
+            echo "No market-feed or fixture-registry changes to commit."
           else
-            git commit -m "Update V5 market feed"
+            git commit -m "Update V5 market feed and OddsPapi fixture registry"
             git pull --rebase origin main
             git push origin HEAD:main
           fi
@@ -88,5 +89,6 @@ jobs:
             oddspapi_daily/
             oddspapi_normalized/
             oddspapi_markets_tennis.json
+            oddspapi_registry/
             v5_market_ready/
           if-no-files-found: warn
