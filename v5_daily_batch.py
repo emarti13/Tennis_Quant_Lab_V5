@@ -204,6 +204,16 @@ def _confidence_for_market(row, p1, p2, p1_conf, p2_conf):
     return min(p1_conf, p2_conf)
 
 
+def _requested_market_lines(fixture_rows, market_group):
+    if "market_group" not in fixture_rows.columns or "line" not in fixture_rows.columns:
+        return []
+    values = pd.to_numeric(
+        fixture_rows.loc[fixture_rows["market_group"] == market_group, "line"],
+        errors="coerce",
+    ).dropna()
+    return sorted({float(x) for x in values})
+
+
 def build_fixture_board(fixture_rows, ratings_by_tour, summary, sims=5000, frozen_at=None):
     """Run V5 once for a fixture and price every usable market row in that fixture."""
     if fixture_rows is None or fixture_rows.empty:
@@ -250,6 +260,8 @@ def build_fixture_board(fixture_rows, ratings_by_tour, summary, sims=5000, froze
         volA=float(a.get("day_vol_logit", 0.06)),
         volB=float(b.get("day_vol_logit", 0.06)),
         state_variation=True,
+        spread_lines=_requested_market_lines(fixture_rows, "game_spread"),
+        total_lines=_requested_market_lines(fixture_rows, "total_games"),
     )
 
     p1_match = float(result["pA_win"])
