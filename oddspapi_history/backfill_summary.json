@@ -1,18 +1,18 @@
 {
-  "updated_at_utc": "2026-09-01T20:08:05.490089+00:00",
+  "updated_at_utc": "2026-09-01T21:17:41.468598+00:00",
   "fixture_index_rows": 15993,
-  "historical_completed": 5,
-  "historical_remaining": 15988,
-  "historical_failed_pending": 495,
+  "historical_completed": 8,
+  "historical_remaining": 15985,
+  "historical_failed_pending": 497,
   "discovery_run": null,
   "history_run": {
     "selected": 500,
-    "succeeded": 5,
-    "failed": 495,
-    "completed_total": 5,
+    "succeeded": 3,
+    "failed": 497,
+    "completed_total": 8,
     "fixture_total": 15993,
-    "remaining": 15988,
-    "chunk": "oddspapi_history/chunks/history_chunk_0001.jsonl.gz",
+    "remaining": 15985,
+    "chunk": "oddspapi_history/chunks/history_chunk_0002.jsonl.gz",
     "done": false
   }
 }
