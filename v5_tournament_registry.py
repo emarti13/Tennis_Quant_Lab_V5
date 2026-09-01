@@ -13,7 +13,20 @@ def normalize_event_name(value: str) -> str:
     text = unicodedata.normalize("NFKD", text)
     text = "".join(ch for ch in text if not unicodedata.combining(ch)).lower()
     text = re.sub(r"[^a-z0-9]+", " ", text)
-    return " ".join(text.split())
+    tokens = text.split()
+    collapsed = []
+    initials = []
+    for token in tokens:
+        if len(token) == 1 and token.isalpha():
+            initials.append(token)
+            continue
+        if initials:
+            collapsed.append("".join(initials))
+            initials = []
+        collapsed.append(token)
+    if initials:
+        collapsed.append("".join(initials))
+    return " ".join(collapsed)
 
 
 @dataclass(frozen=True)
@@ -43,7 +56,8 @@ class TournamentRegistry:
             return
         for idx, row in self.frame.iterrows():
             names = [row.get("canonical_name")]
-            aliases = str(row.get("aliases") or "").split("|")
+            alias_value = row.get("aliases")
+            aliases = [] if pd.isna(alias_value) else str(alias_value).split("|")
             names.extend(aliases)
             for name in names:
                 key = normalize_event_name(name)
@@ -78,7 +92,6 @@ class TournamentRegistry:
                 continue
             valid.append(row)
 
-        # Exact aliases should resolve to exactly one valid venue-era row. Ambiguity stays unresolved.
         if len(valid) != 1:
             return TournamentContext(source_quality="ambiguous" if valid else "unresolved")
 
@@ -121,14 +134,20 @@ def coverage_report(matches: pd.DataFrame, registry: TournamentRegistry) -> dict
     resolved = 0
     unresolved: dict[str, int] = {}
     for _, row in matches.iterrows():
-        date = pd.to_datetime(row.get("match_date") or row.get("tourney_date"), errors="coerce")
+        raw_date = row.get("match_date")
+        if pd.isna(raw_date):
+            raw_date = row.get("tourney_date")
+        date = pd.to_datetime(raw_date, errors="coerce")
         year = int(date.year) if pd.notna(date) else 0
-        result = registry.resolve(row.get("tourney_name") or row.get("tournament") or "", row.get("tour") or "MEN", year)
+        name = row.get("tourney_name")
+        if pd.isna(name) or not str(name).strip():
+            name = row.get("tournament") or ""
+        result = registry.resolve(name, row.get("tour") or "MEN", year)
         if result.canonical_event_id:
             resolved += 1
         else:
-            name = str(row.get("tourney_name") or row.get("tournament") or "")
-            unresolved[name] = unresolved.get(name, 0) + 1
+            display_name = str(name)
+            unresolved[display_name] = unresolved.get(display_name, 0) + 1
     return {
         "rows": int(len(matches)),
         "resolved": int(resolved),
