@@ -59,7 +59,6 @@ def settle_market(prediction, result):
     score = str(result.get("score", "") or "")
     if any(marker in score.upper() for marker in VOID_MARKERS):
         return {"settled_result": "VOID", "profit_units": 0.0, "winner_games": None, "loser_games": None}
-
     parsed = parse_score_games(score)
     if parsed is None:
         return {"settled_result": "VOID", "profit_units": 0.0, "winner_games": None, "loser_games": None}
@@ -69,7 +68,6 @@ def settle_market(prediction, result):
     selection = canonical_name(prediction.get("selection"))
     group = str(prediction.get("market_group", "")).strip().lower()
     line = pd.to_numeric(pd.Series([prediction.get("line")]), errors="coerce").iloc[0]
-
     settled = None
     if group == "moneyline":
         settled = "WIN" if selection == winner else ("LOSS" if selection == loser else None)
@@ -88,7 +86,6 @@ def settle_market(prediction, result):
                 settled = "WIN" if total > float(line) else ("PUSH" if total == float(line) else "LOSS")
             elif selection == "under":
                 settled = "WIN" if total < float(line) else ("PUSH" if total == float(line) else "LOSS")
-
     if settled is None:
         return {"settled_result": None, "profit_units": None, "winner_games": wg, "loser_games": lg}
     return {
@@ -151,6 +148,14 @@ def settle_ledger(ledger, results, settled_at=None):
     for c in added:
         if c not in out.columns:
             out[c] = None
+    text_columns = [
+        "result_status", "settled_result", "settled_at_utc", "result_source",
+        "result_tournament", "result_winner", "result_loser", "result_score",
+        "settlement_note",
+    ]
+    for c in text_columns:
+        if c in out.columns:
+            out[c] = out[c].astype(object)
     settled_count = 0
     missing = 0
     for idx, pred in out.iterrows():
