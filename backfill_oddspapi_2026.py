@@ -73,10 +73,6 @@ def discover_fixtures(client: OddsPapiClient, end_utc: datetime) -> dict:
     raw_count = 0
     relevant_count = 0
     for idx, (start, end) in enumerate(windows, 1):
-        # Historical finished fixtures frequently report hasOdds=false even when
-        # OddsPapi retains historical odds for the fixture. The verified Aug 24-31
-        # probe returned 1,371 finished fixtures / 610 relevant tennis fixtures only
-        # when hasOdds was omitted, so do not filter archived discovery by hasOdds.
         fixtures = client.fixtures(
             SPORT_ID,
             iso_z(start),
@@ -129,31 +125,65 @@ def save_checkpoint(checkpoint: dict) -> None:
     CHECKPOINT.write_text(json.dumps(checkpoint, indent=2, sort_keys=True), encoding="utf-8")
 
 
+def is_historical_not_found(error: object) -> bool:
+    text = str(error).lower()
+    return "no historical odds found" in text or ("not_found" in text and "historical" in text)
+
+
+def terminal_not_found_ids(checkpoint: dict, books: str = HISTORY_BOOKS) -> set[str]:
+    explicit = checkpoint.get("terminal_not_found_by_bookset") or {}
+    ids = {str(fid) for fid in explicit.get(books, [])}
+
+    # Migrate the legacy checkpoint in place logically: before terminal status had
+    # its own field, NOT_FOUND responses lived under `failed`. They were generated
+    # with HISTORY_BOOKS, so they are terminal only for that exact book set.
+    if books == HISTORY_BOOKS:
+        for fixture_id, error in (checkpoint.get("failed") or {}).items():
+            if is_historical_not_found(error):
+                ids.add(str(fixture_id))
+    return ids
+
+
+def pending_fixtures(fixtures: list[dict], checkpoint: dict, books: str = HISTORY_BOOKS) -> list[dict]:
+    completed = {str(fid) for fid in checkpoint.get("completed_fixture_ids", [])}
+    unavailable = terminal_not_found_ids(checkpoint, books=books)
+    resolved = completed | unavailable
+    return [
+        fixture for fixture in fixtures
+        if fixture.get("fixtureId") and str(fixture.get("fixtureId")) not in resolved
+    ]
+
+
 def fetch_history_batch(client: OddsPapiClient, batch_size: int) -> dict:
     fixtures = load_fixture_index()
     checkpoint = load_checkpoint()
-    completed = set(checkpoint.get("completed_fixture_ids", []))
-    pending = [f for f in fixtures if f.get("fixtureId") and f.get("fixtureId") not in completed]
-    selected = pending[:batch_size]
+    completed = {str(fid) for fid in checkpoint.get("completed_fixture_ids", [])}
+    terminal_not_found = terminal_not_found_ids(checkpoint)
+    selected = pending_fixtures(fixtures, checkpoint)[:batch_size]
 
     if not selected:
+        resolved_total = len(completed | terminal_not_found)
         return {
             "selected": 0,
             "completed_total": len(completed),
+            "not_found_total": len(terminal_not_found),
+            "resolved_total": resolved_total,
             "fixture_total": len(fixtures),
-            "remaining": 0,
-            "done": True,
+            "remaining": max(0, len(fixtures) - resolved_total),
+            "done": resolved_total >= len(fixtures),
         }
 
     CHUNK_DIR.mkdir(parents=True, exist_ok=True)
     chunk_no = int(checkpoint.get("next_chunk", 1))
     chunk_path = CHUNK_DIR / f"history_chunk_{chunk_no:04d}.jsonl.gz"
 
-    successes = []
-    failures = {}
+    successes: list[str] = []
+    retryable_failures: dict[str, str] = {}
+    newly_not_found: set[str] = set()
     with gzip.open(chunk_path, "wt", encoding="utf-8") as gz:
         for idx, fixture in enumerate(selected, 1):
-            fid = fixture["fixtureId"]
+            fid = str(fixture["fixtureId"])
+            status = "FAILED_RETRYABLE"
             try:
                 payload = client.historical_odds(fid, HISTORY_BOOKS)
                 gz.write(json.dumps({
@@ -163,35 +193,49 @@ def fetch_history_batch(client: OddsPapiClient, batch_size: int) -> dict:
                 }, separators=(",", ":"), ensure_ascii=False) + "\n")
                 successes.append(fid)
                 completed.add(fid)
+                status = "SUCCESS"
             except Exception as exc:
-                failures[fid] = str(exc)
+                if is_historical_not_found(exc):
+                    newly_not_found.add(fid)
+                    terminal_not_found.add(fid)
+                    status = "NOT_FOUND_TERMINAL"
+                else:
+                    retryable_failures[fid] = str(exc)
             print(json.dumps({
                 "stage": "historical_odds",
                 "chunk": chunk_no,
                 "item": idx,
                 "batch_size": len(selected),
                 "fixture_id": fid,
-                "status": "SUCCESS" if fid in completed else "FAILED",
+                "status": status,
             }))
             if idx < len(selected):
                 time.sleep(HISTORY_COOLDOWN_SECONDS)
 
     checkpoint["completed_fixture_ids"] = sorted(completed)
-    prior_failed = checkpoint.get("failed", {})
-    prior_failed.update(failures)
-    for fid in successes:
+    terminal_by_bookset = checkpoint.setdefault("terminal_not_found_by_bookset", {})
+    terminal_by_bookset[HISTORY_BOOKS] = sorted(terminal_not_found)
+
+    prior_failed = dict(checkpoint.get("failed") or {})
+    # Legacy NOT_FOUND entries and successful IDs are no longer retryable failures.
+    for fid in terminal_not_found | set(successes):
         prior_failed.pop(fid, None)
+    prior_failed.update(retryable_failures)
     checkpoint["failed"] = prior_failed
     checkpoint["next_chunk"] = chunk_no + 1
     checkpoint["updated_at_utc"] = datetime.now(timezone.utc).isoformat()
     save_checkpoint(checkpoint)
 
-    remaining = max(0, len(fixtures) - len(completed))
+    resolved = completed | terminal_not_found
+    remaining = max(0, len(fixtures) - len(resolved))
     return {
         "selected": len(selected),
         "succeeded": len(successes),
-        "failed": len(failures),
+        "not_found": len(newly_not_found),
+        "failed_retryable": len(retryable_failures),
         "completed_total": len(completed),
+        "not_found_total": len(terminal_not_found),
+        "resolved_total": len(resolved),
         "fixture_total": len(fixtures),
         "remaining": remaining,
         "chunk": str(chunk_path),
@@ -203,21 +247,27 @@ def write_summary(discovery: dict | None, history: dict | None) -> dict:
     OUTDIR.mkdir(parents=True, exist_ok=True)
     fixtures = load_fixture_index()
     checkpoint = load_checkpoint()
-    completed = len(set(checkpoint.get("completed_fixture_ids", [])))
-    remaining = max(0, len(fixtures) - completed)
+    completed_ids = {str(fid) for fid in checkpoint.get("completed_fixture_ids", [])}
+    not_found_ids = terminal_not_found_ids(checkpoint)
+    resolved_ids = completed_ids | not_found_ids
+    remaining = max(0, len(fixtures) - len(resolved_ids))
     summary = {
         "updated_at_utc": datetime.now(timezone.utc).isoformat(),
         "fixture_index_rows": len(fixtures),
-        "historical_completed": completed,
+        "historical_cached": len(completed_ids),
+        "historical_not_found_for_bookset": len(not_found_ids),
+        "historical_resolved": len(resolved_ids),
         "historical_remaining": remaining,
-        "historical_failed_pending": len(checkpoint.get("failed", {})),
+        "historical_failed_retryable": len(checkpoint.get("failed", {})),
+        "historical_bookset": HISTORY_BOOKS,
         "discovery_run": discovery,
         "history_run": history,
     }
     SUMMARY.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     if fixtures and remaining == 0:
         COMPLETE_FLAG.write_text(
-            f"Completed {completed} fixtures at {summary['updated_at_utc']}\n",
+            f"Resolved {len(resolved_ids)} fixtures at {summary['updated_at_utc']} "
+            f"({len(completed_ids)} cached, {len(not_found_ids)} not found for {HISTORY_BOOKS})\n",
             encoding="utf-8",
         )
     print(json.dumps(summary, indent=2))
@@ -231,9 +281,10 @@ def already_complete() -> bool:
     if not fixtures:
         return False
     checkpoint = load_checkpoint()
-    completed = set(checkpoint.get("completed_fixture_ids", []))
-    fixture_ids = {f.get("fixtureId") for f in fixtures if f.get("fixtureId")}
-    return bool(fixture_ids) and fixture_ids.issubset(completed)
+    completed = {str(fid) for fid in checkpoint.get("completed_fixture_ids", [])}
+    unavailable = terminal_not_found_ids(checkpoint)
+    fixture_ids = {str(f.get("fixtureId")) for f in fixtures if f.get("fixtureId")}
+    return bool(fixture_ids) and fixture_ids.issubset(completed | unavailable)
 
 
 def main():
