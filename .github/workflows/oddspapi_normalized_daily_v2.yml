@@ -11,6 +11,7 @@ on:
     # 8:15 AM, 12:15 PM, 4:15 PM and 8:15 PM Eastern.
     - cron: "15 0,12,16,20 * * *"
 
+# A committed edit to this workflow intentionally triggers an immediate refresh.
 permissions:
   contents: write
 
