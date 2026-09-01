@@ -116,6 +116,19 @@ def infer_surface(tournament):
     return "Hard", "Auto default — review"
 
 
+def infer_best_of(tournament, tour):
+    """Infer match format; men's Grand Slam main draw is best-of-five, everything else best-of-three."""
+    t = str(tournament or "").lower()
+    category = str(tour or "").lower()
+    is_men = category in {"men", "atp"} or "men" in category
+    is_slam = any(
+        name in t
+        for name in ("australian open", "french open", "roland garros", "wimbledon", "us open")
+    )
+    is_qualifying = any(term in t for term in ("qualifying", "qualification", "qualifier"))
+    return 5 if is_men and is_slam and not is_qualifying else 3
+
+
 def _tour_to_v5(category, tournament):
     text = f"{category or ''} {tournament or ''}".lower()
     return "WTA" if "wta" in text or "women" in text else "MEN"
@@ -201,6 +214,7 @@ def build_fixture_board(fixture_rows, ratings_by_tour, summary, sims=5000, froze
     tour = _tour_to_v5(first.get("tour"), tournament)
     ratings = ratings_by_tour[tour]
     surface, surface_source = infer_surface(tournament)
+    best_of = infer_best_of(tournament, tour)
 
     lookup = _player_lookup(ratings)
     p1 = _resolve_player(first.get("player1"), lookup)
@@ -228,7 +242,7 @@ def build_fixture_board(fixture_rows, ratings_by_tour, summary, sims=5000, froze
     result = simulate_match(
         p1_serve,
         p2_serve,
-        best_of=3,
+        best_of=best_of,
         n=int(sims),
         seed=42,
         formA=float(a.get("form_logit", 0.0)),
@@ -262,6 +276,7 @@ def build_fixture_board(fixture_rows, ratings_by_tour, summary, sims=5000, froze
     priced["tour_v5"] = tour
     priced["surface"] = surface
     priced["surface_source"] = surface_source
+    priced["best_of"] = best_of
     priced["resolved_player1"] = p1
     priced["resolved_player2"] = p2
     priced["simulations"] = int(sims)
