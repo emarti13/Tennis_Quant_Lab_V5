@@ -1,0 +1,43 @@
+name: OddsPapi Historical Fixture Probe
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/oddspapi_historical_fixture_probe.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: Run exactly one finished-fixture discovery request
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: python probe_oddspapi_historical_fixtures.py
+      - name: Commit probe result
+        if: always()
+        run: |
+          if [ ! -f oddspapi_history/historical_fixture_probe.json ]; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add oddspapi_history/historical_fixture_probe.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Record OddsPapi historical fixture probe"
+          git pull --rebase origin main
+          git push origin HEAD:main
