@@ -16,6 +16,16 @@ from v5_settlement import canonical_name, parse_score_games
 
 SLAM_TOKENS = ("australian open", "roland garros", "french open", "wimbledon", "us open")
 HISTORY_SUFFIXES = ("", "_atp_quali", "_challenger", "_wta")
+RAW_STAT_SUFFIXES = {
+    "ace": "aces",
+    "df": "double_faults",
+    "svpt": "service_points",
+    "1stIn": "first_serves_in",
+    "1stWon": "first_serve_points_won",
+    "2ndWon": "second_serve_points_won",
+    "bpSaved": "break_points_saved",
+    "bpFaced": "break_points_faced",
+}
 
 
 def _manifest_basename(item: dict) -> str:
@@ -26,7 +36,6 @@ def _manifest_basename(item: dict) -> str:
 
 
 def resolve_history_targets(files: list[dict], years: tuple[int, ...] | list[int]) -> dict[str, dict]:
-    """Resolve exact TennisMyLife season files; never substitute an approximate filename."""
     lookup = {_manifest_basename(item): item for item in files if isinstance(item, dict) and item.get("url")}
     resolved: dict[str, dict] = {}
     for year in years:
@@ -47,6 +56,7 @@ def load_tennismylife_history(years=(2025, 2026)) -> tuple[pd.DataFrame, dict]:
     frames = []
     loaded = []
     failed = []
+    source_columns: dict[str, list[str]] = {}
     for local_name, meta in targets.items():
         try:
             response = requests.get(meta["url"], timeout=120)
@@ -63,6 +73,7 @@ def load_tennismylife_history(years=(2025, 2026)) -> tuple[pd.DataFrame, dict]:
             df["tourney_name"] = ""
         df["result_file"] = local_name
         frames.append(df)
+        source_columns[local_name] = list(df.columns)
         loaded.append({"file": local_name, "rows": int(len(df))})
 
     out = pd.concat(frames, ignore_index=True, sort=False) if frames else pd.DataFrame()
@@ -71,7 +82,17 @@ def load_tennismylife_history(years=(2025, 2026)) -> tuple[pd.DataFrame, dict]:
         keys = [c for c in ["tourney_id", "match_num", "winner_name", "loser_name", "score"] if c in out.columns]
         if keys:
             out = out.drop_duplicates(keys, keep="last")
-    return out, {"requested_years": [int(y) for y in years], "loaded": loaded, "missing": missing, "failed": failed}
+    detail = {
+        "requested_years": [int(y) for y in years],
+        "loaded": loaded,
+        "missing": missing,
+        "failed": failed,
+        "stat_column_coverage": {
+            file_name: sorted([c for c in cols if c.startswith(("w_", "l_"))])
+            for file_name, cols in source_columns.items()
+        },
+    }
+    return out, detail
 
 
 def _parse_date(value) -> pd.Timestamp:
@@ -82,8 +103,7 @@ def _parse_date(value) -> pd.Timestamp:
 
 
 def _infer_tour(result_file: str) -> str:
-    name = str(result_file or "").lower()
-    return "WTA" if "wta" in name else "MEN"
+    return "WTA" if "wta" in str(result_file or "").lower() else "MEN"
 
 
 def _infer_best_of(row: pd.Series, tour: str) -> int:
@@ -127,7 +147,7 @@ def normalize_results(results: pd.DataFrame) -> pd.DataFrame:
         match_date = _parse_date(row.get("tourney_date"))
         parsed = parse_score_games(row.get("score"))
         wg, lg = parsed if parsed is not None else (None, None)
-        records.append({
+        record = {
             "match_id": _stable_match_id(row, tour, match_date),
             "tour": tour,
             "match_date": match_date,
@@ -149,14 +169,24 @@ def normalize_results(results: pd.DataFrame) -> pd.DataFrame:
             "source_quality": "exact_result_row",
             "winner_rank": row.get("winner_rank"),
             "loser_rank": row.get("loser_rank"),
-        })
+        }
+        for prefix in ("w", "l"):
+            for source_suffix, canonical_suffix in RAW_STAT_SUFFIXES.items():
+                record[f"raw_{prefix}_{canonical_suffix}"] = row.get(f"{prefix}_{source_suffix}")
+        records.append(record)
     out = pd.DataFrame(records)
     if out.empty:
         return pd.DataFrame(columns=MATCH_COLUMNS)
     out["match_date"] = pd.to_datetime(out["match_date"], errors="coerce")
     out = out.sort_values(["match_date", "tour", "tourney_name", "match_id"], kind="stable").reset_index(drop=True)
-    out = out.drop_duplicates("match_id", keep="last").reset_index(drop=True)
-    return out
+    return out.drop_duplicates("match_id", keep="last").reset_index(drop=True)
+
+
+def _player_raw_stats(match: pd.Series, prefix: str) -> dict:
+    return {
+        f"stat_{canonical_suffix}": match.get(f"raw_{prefix}_{canonical_suffix}")
+        for canonical_suffix in RAW_STAT_SUFFIXES.values()
+    }
 
 
 def build_player_match_rows(matches: pd.DataFrame) -> pd.DataFrame:
@@ -175,7 +205,7 @@ def build_player_match_rows(matches: pd.DataFrame) -> pd.DataFrame:
             "match_duration_minutes": match.get("match_duration_minutes"),
         }
         rows.append({
-            **base, **raw_history,
+            **base, **raw_history, **_player_raw_stats(match, "w"),
             "player_name": match.get("winner_name"),
             "opponent_name": match.get("loser_name"),
             "player_role": "winner",
@@ -183,7 +213,7 @@ def build_player_match_rows(matches: pd.DataFrame) -> pd.DataFrame:
             "opponent_rank": match.get("loser_rank"),
         })
         rows.append({
-            **base, **raw_history,
+            **base, **raw_history, **_player_raw_stats(match, "l"),
             "player_name": match.get("loser_name"),
             "opponent_name": match.get("winner_name"),
             "player_role": "loser",
@@ -199,16 +229,14 @@ def build_context_warehouse(base_dir: str = ".", years=(2025, 2026)) -> dict[str
     base = Path(base_dir)
     out_dir = base / "context_warehouse"
     out_dir.mkdir(parents=True, exist_ok=True)
-
     raw, source_detail = load_tennismylife_history(years=years)
     if raw.empty:
         raise RuntimeError("No TennisMyLife historical result rows available; refusing to create an empty warehouse")
     matches = normalize_results(raw)
     player_rows = build_player_match_rows(matches)
-
     matches.to_parquet(out_dir / "matches.parquet", index=False)
     player_rows.to_parquet(out_dir / "player_match_rows.parquet", index=False)
-
+    stat_cols = [c for c in player_rows.columns if c.startswith("stat_")]
     manifest = {
         "schema_version": SCHEMA_VERSION,
         "source": "TennisMyLife manifest historical season files",
@@ -218,18 +246,16 @@ def build_context_warehouse(base_dir: str = ".", years=(2025, 2026)) -> dict[str
         "player_match_rows": int(len(player_rows)),
         "tour_counts": {str(k): int(v) for k, v in matches["tour"].value_counts().to_dict().items()},
         "year_counts": {str(int(k)): int(v) for k, v in matches["match_date"].dt.year.value_counts().sort_index().to_dict().items() if pd.notna(k)},
+        "stat_non_null_counts": {c: int(player_rows[c].notna().sum()) for c in stat_cols},
         "date_min": str(matches["match_date"].min()),
         "date_max": str(matches["match_date"].max()),
     }
     schema = {
         "schema_version": SCHEMA_VERSION,
-        "grain": {
-            "matches": "one row per canonical singles match",
-            "player_match_rows": "two rows per match, one per player",
-        },
+        "grain": {"matches": "one row per canonical singles match", "player_match_rows": "two rows per match, one per player"},
         "match_columns": list(matches.columns),
         "player_match_columns": list(player_rows.columns),
-        "feature_namespace": "feature_* is reserved for pre-first-serve information only; raw target-match outcomes may exist outside that namespace solely to become lagged history for later rows",
+        "feature_namespace": "feature_* is reserved for pre-first-serve information only; raw target-match outcomes/stats may exist outside that namespace solely to become lagged history for later rows",
     }
     (out_dir / "source_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     (out_dir / "schema.json").write_text(json.dumps(schema, indent=2), encoding="utf-8")
