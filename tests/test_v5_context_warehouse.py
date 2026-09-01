@@ -79,6 +79,20 @@ def test_player_match_rows_orient_raw_match_stats_to_player():
     assert loser["stat_service_points"] == 68
 
 
+def test_player_match_rows_derive_return_points_and_break_conversion_from_opponent_serve_stats():
+    rows = build_player_match_rows(normalize_results(_sample_results()))
+    winner = rows.loc[rows.player_role == "winner"].iloc[0]
+    loser = rows.loc[rows.player_role == "loser"].iloc[0]
+    assert winner["stat_return_points_total"] == 68
+    assert winner["stat_return_points_won"] == 32
+    assert winner["stat_break_points_converted"] == 3
+    assert winner["stat_break_points_opportunities"] == 9
+    assert loser["stat_return_points_total"] == 62
+    assert loser["stat_return_points_won"] == 19
+    assert loser["stat_break_points_converted"] == 1
+    assert loser["stat_break_points_opportunities"] == 5
+
+
 def test_result_file_drives_tour_without_guessing_from_player_names():
     men = _sample_results().copy()
     men["result_file"] = "2026_challenger.csv"
