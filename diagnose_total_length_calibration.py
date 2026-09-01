@@ -15,10 +15,13 @@ from v5_core import logistic, logit, simulate_match
 from v5_daily_batch import infer_best_of
 from v5_model_calibration import calibrated_match_probability
 from v5_settlement import VOID_MARKERS, canonical_name, parse_score_games
+from v5_strength_conditioning import condition_serve_pair_to_match_probability
 
 OUT=Path("v5_daily_ready/total_length_calibration_diagnostic.json")
 CANDIDATE_OFFSETS=[-0.12,-0.09,-0.06,-0.03,0.0,0.03,0.06]
 SIMS=160
+STRENGTH_SEARCH_SIMS=120
+STRENGTH_SEARCH_ITERATIONS=7
 SAMPLE={"MEN":700,"WTA":450}
 
 
@@ -94,9 +97,20 @@ def _sample(frame,n,seed):
 
 
 def _predict_row(row,tour,offset,seed):
-    p1=logistic(logit(row["winner_serve_p"])+offset);p2=logistic(logit(row["loser_serve_p"])+offset)
+    # A common serve-logit offset changes the scoring/hold environment while
+    # preserving the original SR matchup differential used by calibration.
+    p1_level=logistic(logit(row["winner_serve_p"])+offset)
+    p2_level=logistic(logit(row["loser_serve_p"])+offset)
     target=calibrated_match_probability(row["winner_serve_p"],row["loser_serve_p"],row["elo_winner_p"],tour)
-    result=simulate_match(p1,p2,best_of=infer_best_of(row.get("tournament"),tour),n=SIMS,seed=seed,state_variation=False,target_pA_win=target,spread_lines=[],total_lines=[])
+    best_of=infer_best_of(row.get("tournament"),tour)
+    p1_score,p2_score,_=condition_serve_pair_to_match_probability(
+        p1_level,p2_level,target,best_of=best_of,
+        n=STRENGTH_SEARCH_SIMS,seed=seed,max_iter=STRENGTH_SEARCH_ITERATIONS,
+    )
+    result=simulate_match(
+        p1_score,p2_score,best_of=best_of,n=SIMS,seed=seed+500000,
+        state_variation=False,target_pA_win=target,spread_lines=[],total_lines=[],
+    )
     return float(result["expected_total"])
 
 
@@ -110,7 +124,7 @@ def _evaluate(frame,tour,offset,seed_base):
 
 def main():
     results,loaded,missing=_historical_result_files();lookup=_result_index(results)
-    payload={"method":{"fit_year":2025,"validation_year":2026,"inputs":"TennisMyLife historical completed scores + pre-match V5 serve/return and surface Elo only","market_prices_used":False,"parameter":"common offset added to both players' serve logits; relative serve differential unchanged","candidate_offsets":CANDIDATE_OFFSETS,"simulations_per_match":SIMS},"score_files_loaded":loaded,"score_files_missing":missing,"score_rows_loaded":int(len(results)),"tours":{}}
+    payload={"method":{"fit_year":2025,"validation_year":2026,"inputs":"TennisMyLife historical completed scores + pre-match V5 serve/return and surface Elo only","market_prices_used":False,"probability_conditioning":"relative serve-logit difference is conditioned to independently calibrated match probability before score simulation","parameter":"common offset added to both players' serve logits; relative base serve differential unchanged before conditioning","candidate_offsets":CANDIDATE_OFFSETS,"simulations_per_match":SIMS,"strength_search_simulations":STRENGTH_SEARCH_SIMS,"strength_search_iterations":STRENGTH_SEARCH_ITERATIONS},"score_files_loaded":loaded,"score_files_missing":missing,"score_rows_loaded":int(len(results)),"tours":{}}
     for tour in ("MEN","WTA"):
         matched=_matched_rows(tour,lookup)
         if matched.empty:
