@@ -1,0 +1,67 @@
+name: Seed Permanent OddsPapi Fixture Registry
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/oddspapi_fixture_registry_seed.yml"
+      - "oddspapi_fixture_registry.py"
+      - "sync_oddspapi_registry_history_status.py"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: oddspapi-fixture-registry-writer
+  cancel-in-progress: false
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Seed all retained 2026 fixture IDs
+        run: |
+          python oddspapi_fixture_registry.py \
+            --seed-jsonl oddspapi_history/fixtures_2026.jsonl \
+            --source 2026_backfill
+
+      - name: Apply existing historical cache status
+        run: python sync_oddspapi_registry_history_status.py
+
+      - name: Verify registry row count and uniqueness
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          p = Path('oddspapi_registry/fixtures.csv')
+          rows = list(csv.DictReader(p.open(encoding='utf-8')))
+          ids = [r['fixture_id'] for r in rows]
+          assert rows, 'registry is empty'
+          assert len(ids) == len(set(ids)), 'duplicate fixture IDs in registry'
+          print({'registry_rows': len(rows), 'unique_fixture_ids': len(set(ids))})
+          PY
+
+      - name: Commit permanent registry
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add oddspapi_registry/fixtures.csv
+          if git diff --cached --quiet; then
+            echo "Permanent registry already current."
+          else
+            git commit -m "Seed permanent OddsPapi fixture registry"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
