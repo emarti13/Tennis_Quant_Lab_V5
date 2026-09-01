@@ -178,6 +178,13 @@ def normalize_results(results: pd.DataFrame) -> pd.DataFrame:
     if out.empty:
         return pd.DataFrame(columns=MATCH_COLUMNS)
     out["match_date"] = pd.to_datetime(out["match_date"], errors="coerce")
+    numeric_columns = [
+        "match_num", "best_of", "winner_games", "loser_games", "total_games", "total_sets",
+        "match_duration_minutes", "winner_rank", "loser_rank",
+    ] + [c for c in out.columns if c.startswith(("raw_w_", "raw_l_"))]
+    for col in numeric_columns:
+        if col in out.columns:
+            out[col] = pd.to_numeric(out[col], errors="coerce")
     out = out.sort_values(["match_date", "tour", "tourney_name", "match_id"], kind="stable").reset_index(drop=True)
     return out.drop_duplicates("match_id", keep="last").reset_index(drop=True)
 
@@ -222,6 +229,11 @@ def build_player_match_rows(matches: pd.DataFrame) -> pd.DataFrame:
         })
     out = pd.DataFrame(rows)
     out["match_date"] = pd.to_datetime(out["match_date"], errors="coerce")
+    for col in [c for c in out.columns if c.startswith("stat_")] + [
+        "match_games", "match_sets", "match_duration_minutes", "player_rank", "opponent_rank"
+    ]:
+        if col in out.columns:
+            out[col] = pd.to_numeric(out[col], errors="coerce")
     return out.sort_values(["match_date", "match_id", "player_role"], kind="stable").reset_index(drop=True)
 
 
