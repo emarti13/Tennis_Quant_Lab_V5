@@ -28,6 +28,15 @@ def test_player_state_collects_context_without_market_inputs():
         "layoff_90d": 0,
         "first_match_after_60d": 0,
         "matches_since_60d_layoff": np.nan,
+        "layoff_response_30d_sample": 3,
+        "layoff_response_30d_shrunk_win_rate": 0.60,
+        "layoff_response_30d_excess": 0.10,
+        "layoff_response_60d_sample": 2,
+        "layoff_response_60d_shrunk_win_rate": 0.75,
+        "layoff_response_60d_excess": 0.25,
+        "layoff_response_90d_sample": 1,
+        "layoff_response_90d_shrunk_win_rate": 2/3,
+        "layoff_response_90d_excess": 1/6,
         "matches_last_7d": 4,
         "games_last_7d": 96,
         "minutes_last_7d": 520,
@@ -53,6 +62,9 @@ def test_player_state_collects_context_without_market_inputs():
     assert state["rest_log1p"] == np.log1p(2)
     assert state["rest_bucket"] == 2
     assert state["layoff_60d"] == 0
+    assert state["layoff_response_60d_sample"] == 2
+    assert state["layoff_response_60d_shrunk_win_rate"] == 0.75
+    assert state["layoff_response_60d_excess"] == 0.25
     assert "sportsbook_probability" not in state
     assert "market_price" not in state
 
