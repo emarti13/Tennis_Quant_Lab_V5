@@ -1,0 +1,22 @@
+name: V5 Full Regression Suite
+
+on:
+  push:
+    branches: [feature/v5-full-context-model]
+    paths:
+      - '**.py'
+      - '.github/workflows/v5_full_test_suite.yml'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt pytest
+      - name: Run complete test suite
+        run: python -m pytest tests -q

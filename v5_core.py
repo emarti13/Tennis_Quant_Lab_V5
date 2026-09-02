@@ -1,8 +1,7 @@
-
 from __future__ import annotations
 import math
 from dataclasses import dataclass
-from collections import defaultdict, Counter
+from collections import defaultdict
 import numpy as np
 import pandas as pd
 
@@ -172,10 +171,39 @@ def _sim_set(rng,pa,pb,firstA=True):
         serverA=not serverA
         if (ga>=6 or gb>=6) and abs(ga-gb)>=2:return ga,gb,serverA
 
+def _clean_market_lines(lines, default):
+    source=default if lines is None else lines
+    out=[]
+    for value in source:
+        try:v=float(value)
+        except Exception:continue
+        if math.isfinite(v) and v not in out:out.append(v)
+    return sorted(out)
+
+def _spread_key(line):
+    return f"{float(line):+.1f}"
+
+def _total_key(line):
+    return f"{float(line):.1f}"
+
+def _importance_weights(a_won, target):
+    """Reweight simulated score paths to an independently calibrated match-win prior."""
+    a_won=np.asarray(a_won,dtype=bool)
+    raw=float(np.mean(a_won))
+    if target is None:
+        return np.ones(len(a_won),dtype=float), raw, raw
+    target=min(max(float(target),1e-6),1-1e-6)
+    if raw<=1e-9 or raw>=1-1e-9:
+        # No simulated support exists for one outcome; do not fabricate score paths.
+        return np.ones(len(a_won),dtype=float), raw, raw
+    weights=np.where(a_won,target/raw,(1-target)/(1-raw)).astype(float)
+    return weights, raw, target
+
 def simulate_match(pAserve,pBserve,best_of=3,n=20000,seed=42,
-                   formA=0.0,formB=0.0,volA=0.0,volB=0.0,state_variation=True):
+                   formA=0.0,formB=0.0,volA=0.0,volB=0.0,state_variation=True,
+                   spread_lines=None,total_lines=None,target_pA_win=None):
     rng=np.random.default_rng(seed); need=best_of//2+1
-    wins=0;marg=[];tot=[];score=Counter();tbs=0; sas=[];sbs=[]
+    marg=[];tot=[];scores=[];tb_flags=[];a_won=[];sas=[];sbs=[]
     ea=logit(pAserve); eb=logit(pBserve)
     for _ in range(int(n)):
         if state_variation:
@@ -193,16 +221,43 @@ def simulate_match(pAserve,pBserve,best_of=3,n=20000,seed=42,
             if (xa==7 and xb==6) or (xb==7 and xa==6):tb=True
             if xa>xb:sa+=1
             else:sb+=1
-        wins+=sa>sb;marg.append(ga-gb);tot.append(ga+gb);score[f"{sa}-{sb}"]+=1;tbs+=tb
-    m=np.asarray(marg);t=np.asarray(tot);sas=np.asarray(sas);sbs=np.asarray(sbs)
+        a_won.append(sa>sb);marg.append(ga-gb);tot.append(ga+gb)
+        scores.append(f"{sa}-{sb}");tb_flags.append(tb)
+    m=np.asarray(marg,dtype=float);t=np.asarray(tot,dtype=float)
+    aw=np.asarray(a_won,dtype=bool);tb=np.asarray(tb_flags,dtype=bool)
+    sas=np.asarray(sas,dtype=float);sbs=np.asarray(sbs,dtype=float)
+    weights,raw_p,final_p=_importance_weights(aw,target_pA_win)
+    weight_sum=float(weights.sum())
+
+    def wmean(values):
+        return float(np.average(np.asarray(values,dtype=float),weights=weights))
+
+    default_spreads=[-6.5,-5.5,-4.5,-3.5,-2.5,-1.5,1.5,2.5,3.5,4.5,5.5,6.5]
+    default_totals=[18.5,19.5,20.5,21.5,22.5,23.5,24.5,25.5,26.5]
+    spread_lines=_clean_market_lines(spread_lines,default_spreads)
+    total_lines=_clean_market_lines(total_lines,default_totals)
+    spread={_spread_key(line):wmean(m+line>0) for line in spread_lines}
+    spread_push={_spread_key(line):wmean(np.isclose(m+line,0.0)) for line in spread_lines}
+    over={_total_key(line):wmean(t>line) for line in total_lines}
+    total_push={_total_key(line):wmean(np.isclose(t-line,0.0)) for line in total_lines}
+
+    score_probs={}
+    scores_arr=np.asarray(scores,dtype=object)
+    for key in sorted(set(scores)):
+        score_probs[key]=float(weights[scores_arr==key].sum()/weight_sum)
+
     return {
-        "pA_win":wins/n,"fair_A":american_from_prob(wins/n),"fair_B":american_from_prob(1-wins/n),
-        "expected_margin":float(m.mean()),"expected_total":float(t.mean()),
-        "score_probs":{k:v/n for k,v in score.items()},"tiebreak_prob":tbs/n,
-        "spread":{f"{sgn}{x:.1f}":float(np.mean(m>x if sgn=="-" else m>-x))
-                  for sgn in ["-","+"] for x in [1.5,2.5,3.5,4.5,5.5,6.5]},
-        "over":{str(x):float(np.mean(t>x)) for x in [18.5,19.5,20.5,21.5,22.5,23.5,24.5,25.5,26.5]},
-        "margin_sd":float(m.std()),"total_sd":float(t.std()),
+        "pA_win":float(final_p),
+        "raw_pA_win":raw_p,
+        "calibration_target_pA_win":None if target_pA_win is None else float(target_pA_win),
+        "fair_A":american_from_prob(final_p),"fair_B":american_from_prob(1-final_p),
+        "expected_margin":wmean(m),"expected_total":wmean(t),
+        "raw_expected_margin":float(m.mean()),"raw_expected_total":float(t.mean()),
+        "score_probs":score_probs,"tiebreak_prob":wmean(tb),
+        "spread":spread,"spread_push":spread_push,
+        "over":over,"total_push":total_push,
+        "margin_sd":float(np.sqrt(np.average((m-wmean(m))**2,weights=weights))),
+        "total_sd":float(np.sqrt(np.average((t-wmean(t))**2,weights=weights))),
         "sampled_serve_A_mean":float(sas.mean()),"sampled_serve_B_mean":float(sbs.mean()),
         "sampled_serve_A_sd":float(sas.std()),"sampled_serve_B_sd":float(sbs.std()),
         "sampled_serve_A_p10":float(np.quantile(sas,.10)),"sampled_serve_A_p90":float(np.quantile(sas,.90)),

@@ -9,8 +9,10 @@ import re
 import numpy as np
 import pandas as pd
 
-from v5_core import simulate_match, american_from_prob
+from v5_core import simulate_match
 from v5_live_market import canonical_name, add_model_pricing, signal_row
+from v5_model_calibration import calibrated_match_probability, calibration_record
+from v5_strength_conditioning import condition_serve_pair_to_match_probability
 
 
 BASE = Path(__file__).resolve().parent
@@ -33,7 +35,6 @@ def _line_token(value):
 
 
 def freeze_key(row):
-    """Stable identity for a fixture/market/selection/line prediction."""
     fixture = str(row.get("fixture_id", "")).strip()
     group = str(row.get("market_group", "")).strip().lower()
     selection = canonical_name(row.get("selection"))
@@ -42,7 +43,6 @@ def freeze_key(row):
 
 
 def eligible_pre_match(feed, now=None):
-    """Keep only fixtures that have not started at batch execution time."""
     if feed.empty or "start_time_utc" not in feed.columns:
         return feed.iloc[0:0].copy()
     now = now or datetime.now(timezone.utc)
@@ -56,19 +56,16 @@ def eligible_pre_match(feed, now=None):
 
 
 def merge_frozen(existing, fresh):
-    """Append only unseen freeze keys; never rewrite an existing prediction."""
     if existing is None or existing.empty:
         return fresh.copy().reset_index(drop=True)
     if fresh is None or fresh.empty:
         return existing.copy().reset_index(drop=True)
-
     existing = existing.copy()
     fresh = fresh.copy()
     if "freeze_key" not in existing.columns:
         existing["freeze_key"] = existing.apply(freeze_key, axis=1)
     if "freeze_key" not in fresh.columns:
         fresh["freeze_key"] = fresh.apply(freeze_key, axis=1)
-
     seen = set(existing["freeze_key"].astype(str))
     add = fresh.loc[~fresh["freeze_key"].astype(str).isin(seen)].copy()
     return pd.concat([existing, add], ignore_index=True, sort=False)
@@ -85,25 +82,11 @@ def rank_board(board):
 
 
 def infer_surface(tournament):
-    """Conservative name-based surface inference with an explicit review state."""
     t = str(tournament or "").lower()
-    grass = (
-        "wimbledon", "queen", "halle", "eastbourne", "nottingham",
-        "s-hertogenbosch", "hertogenbosch", "newport",
-    )
-    clay = (
-        "roland garros", "french open", "rome", "madrid", "monte carlo",
-        "barcelona", "munich", "hamburg", "bastad", "gstaad", "kitzbuhel",
-        "bucharest", "marrakech", "geneva", "estoril", "rio", "buenos aires",
-        "santiago", "augsburg", "como", "plovdiv",
-    )
-    hard = (
-        "us open", "australian open", "cincinnati", "canada", "montreal",
-        "toronto", "indian wells", "miami", "washington", "atlanta",
-        "acapulco", "delray beach", "doha", "dubai", "beijing", "tokyo",
-        "shanghai", "vienna", "paris masters", "basel", "manacor", "mallorca",
-        "porto", "zhangjiagang",
-    )
+    grass = ("wimbledon", "queen", "halle", "eastbourne", "nottingham", "s-hertogenbosch", "hertogenbosch", "newport")
+    clay = ("roland garros", "french open", "rome", "madrid", "monte carlo", "barcelona", "munich", "hamburg", "bastad", "gstaad", "kitzbuhel", "bucharest", "marrakech", "geneva", "estoril", "rio", "buenos aires", "santiago", "augsburg", "como", "plovdiv")
+    hard = ("us open", "australian open", "cincinnati", "canada", "montreal", "toronto", "indian wells", "miami", "washington", "atlanta", "acapulco", "delray beach", "doha", "dubai", "beijing", "tokyo", "shanghai", "vienna", "paris masters", "basel", "manacor", "mallorca", "porto", "zhangjiagang")
+
     def has_term(term):
         return re.search(r"(?<![a-z0-9])" + re.escape(term) + r"(?![a-z0-9])", t) is not None
 
@@ -114,6 +97,16 @@ def infer_surface(tournament):
     if any(has_term(x) for x in hard):
         return "Hard", "Auto — tournament map"
     return "Hard", "Auto default — review"
+
+
+def infer_best_of(tournament, tour):
+    """Men's Grand Slam main draws are Bo5; qualifying and all WTA are Bo3."""
+    t = str(tournament or "").lower()
+    category = str(tour or "").lower()
+    is_men = category in {"men", "atp"} or "men" in category
+    is_slam = any(name in t for name in ("australian open", "french open", "roland garros", "wimbledon", "us open"))
+    is_qualifying = any(term in t for term in ("qualifying", "qualification", "qualifier"))
+    return 5 if is_men and is_slam and not is_qualifying else 3
 
 
 def _tour_to_v5(category, tournament):
@@ -132,7 +125,6 @@ def _resolve_player(name, lookup):
     exact = lookup.get(target)
     if exact is not None:
         return exact
-
     target_tokens = target.split()
     target_set = set(target_tokens)
     subset = []
@@ -142,7 +134,6 @@ def _resolve_player(name, lookup):
             subset.append(actual)
     if len(set(subset)) == 1:
         return subset[0]
-
     if len(target_tokens) >= 2:
         first, surname = target_tokens[0], target_tokens[-1]
         ends = []
@@ -165,18 +156,8 @@ def _base_probs_from_ratings(df, p1, p2, surface, baseline):
     a = a.iloc[-1]
     b = b.iloc[-1]
     wa = min(1.0, (float(a.surface_points) + float(b.surface_points)) / 700.0)
-    eta_a = (
-        logit(baseline[surface])
-        + float(a.serve_global)
-        - float(b.return_global)
-        + 0.55 * wa * (float(a.serve_surface) - float(b.return_surface))
-    )
-    eta_b = (
-        logit(baseline[surface])
-        + float(b.serve_global)
-        - float(a.return_global)
-        + 0.55 * wa * (float(b.serve_surface) - float(a.return_surface))
-    )
+    eta_a = logit(baseline[surface]) + float(a.serve_global) - float(b.return_global) + 0.55 * wa * (float(a.serve_surface) - float(b.return_surface))
+    eta_b = logit(baseline[surface]) + float(b.serve_global) - float(a.return_global) + 0.55 * wa * (float(b.serve_surface) - float(a.return_surface))
     return logistic(eta_a), logistic(eta_b), a, b
 
 
@@ -191,16 +172,25 @@ def _confidence_for_market(row, p1, p2, p1_conf, p2_conf):
     return min(p1_conf, p2_conf)
 
 
+def _requested_market_lines(fixture_rows, market_group):
+    if "market_group" not in fixture_rows.columns or "line" not in fixture_rows.columns:
+        return []
+    values = pd.to_numeric(
+        fixture_rows.loc[fixture_rows["market_group"] == market_group, "line"],
+        errors="coerce",
+    ).dropna()
+    return sorted({float(x) for x in values})
+
+
 def build_fixture_board(fixture_rows, ratings_by_tour, summary, sims=5000, frozen_at=None):
-    """Run V5 once for a fixture and price every usable market row in that fixture."""
     if fixture_rows is None or fixture_rows.empty:
         return pd.DataFrame()
-
     first = fixture_rows.iloc[0]
     tournament = first.get("tournament")
     tour = _tour_to_v5(first.get("tour"), tournament)
     ratings = ratings_by_tour[tour]
     surface, surface_source = infer_surface(tournament)
+    best_of = infer_best_of(tournament, tour)
 
     lookup = _player_lookup(ratings)
     p1 = _resolve_player(first.get("player1"), lookup)
@@ -215,31 +205,50 @@ def build_fixture_board(fixture_rows, ratings_by_tour, summary, sims=5000, froze
     if p1 == p2:
         raise ValueError("Players resolved to the same V5 identity.")
 
-    baseline = summary.get(tour, {}).get(
-        "baseline", {"Hard": 0.62, "Clay": 0.60, "Grass": 0.65}
-    )
-    p1_serve, p2_serve, a, b = _base_probs_from_ratings(
-        ratings, p1, p2, surface, baseline
-    )
+    baseline = summary.get(tour, {}).get("baseline", {"Hard": 0.62, "Clay": 0.60, "Grass": 0.65})
+    p1_serve, p2_serve, a, b = _base_probs_from_ratings(ratings, p1, p2, surface, baseline)
     elo_a = 0.35 * float(a.elo) + 0.65 * float(a.surface_elo)
     elo_b = 0.35 * float(b.elo) + 0.65 * float(b.surface_elo)
     p_elo = 1 / (1 + 10 ** ((elo_b - elo_a) / 400))
+    calibrated_p = calibrated_match_probability(p1_serve, p2_serve, p_elo, tour)
+    calibration = calibration_record(tour)
 
-    result = simulate_match(
+    # The match probability is fitted from tennis outcomes only. Before score
+    # simulation, map that matchup strength into the *difference* between the two
+    # serve logits while holding their average serve environment fixed. This lets
+    # margin and total distributions reflect the same independent matchup strength.
+    strength_search_sims = max(600, min(1200, int(sims) // 4))
+    score_p1_serve, score_p2_serve, strength_meta = condition_serve_pair_to_match_probability(
         p1_serve,
         p2_serve,
-        best_of=3,
-        n=int(sims),
-        seed=42,
-        formA=float(a.get("form_logit", 0.0)),
-        formB=float(b.get("form_logit", 0.0)),
-        volA=float(a.get("day_vol_logit", 0.06)),
-        volB=float(b.get("day_vol_logit", 0.06)),
-        state_variation=True,
+        calibrated_p,
+        best_of=best_of,
+        n=strength_search_sims,
+        seed=31,
+        max_iter=8,
     )
 
-    p1_match = float(result["pA_win"])
-    model_gap = abs(p1_match - p_elo)
+    # Form and day-volatility remain diagnostic state features until a separate
+    # chronological holdout test proves they improve probability/score calibration.
+    # A final target weight removes only the residual Monte Carlo miss after the
+    # structural serve-difference conditioning above.
+    result = simulate_match(
+        score_p1_serve,
+        score_p2_serve,
+        best_of=best_of,
+        n=int(sims),
+        seed=42,
+        formA=0.0,
+        formB=0.0,
+        volA=0.0,
+        volB=0.0,
+        state_variation=False,
+        spread_lines=_requested_market_lines(fixture_rows, "game_spread"),
+        total_lines=_requested_market_lines(fixture_rows, "total_games"),
+        target_pA_win=calibrated_p,
+    )
+
+    model_gap = abs(calibrated_p - p_elo)
     disagreement = "HIGH" if model_gap >= 0.12 else ("MODERATE" if model_gap >= 0.07 else "LOW")
     p1_conf = float(a.get("state_confidence", 0.0))
     p2_conf = float(b.get("state_confidence", 0.0))
@@ -258,18 +267,36 @@ def build_fixture_board(fixture_rows, ratings_by_tour, summary, sims=5000, froze
 
     priced["signal"] = signals
     priced["state_confidence"] = confs
-    priced["model_version"] = "V5"
+    priced["model_version"] = "V5.1_OUTCOME_CALIBRATED"
     priced["tour_v5"] = tour
     priced["surface"] = surface
     priced["surface_source"] = surface_source
+    priced["best_of"] = best_of
     priced["resolved_player1"] = p1
     priced["resolved_player2"] = p2
     priced["simulations"] = int(sims)
+    priced["serve_probability_p1"] = p1_serve
+    priced["serve_probability_p2"] = p2_serve
+    priced["score_serve_probability_p1"] = score_p1_serve
+    priced["score_serve_probability_p2"] = score_p2_serve
     priced["elo_probability_p1"] = p_elo
+    priced["raw_sim_probability_p1"] = float(result["raw_pA_win"])
+    priced["calibrated_probability_p1"] = calibrated_p
+    priced["strength_conditioning_target_p1"] = float(strength_meta["target_probability"])
+    priced["strength_conditioning_achieved_p1"] = float(strength_meta["achieved_probability"])
+    priced["original_serve_logit_difference"] = float(strength_meta["original_logit_difference"])
+    priced["conditioned_serve_logit_difference"] = float(strength_meta["adjusted_logit_difference"])
+    priced["strength_conditioning_search_sims"] = int(strength_meta["search_simulations"])
+    priced["calibration_version"] = calibration["version"]
+    priced["calibration_fit_year"] = calibration["fit_year"]
+    priced["calibration_validation_year"] = calibration["validation_year"]
+    priced["state_variation_used"] = False
     priced["model_disagreement"] = disagreement
     priced["model_gap"] = model_gap
     priced["expected_margin"] = float(result["expected_margin"])
     priced["expected_total"] = float(result["expected_total"])
+    priced["raw_expected_margin"] = float(result["raw_expected_margin"])
+    priced["raw_expected_total"] = float(result["raw_expected_total"])
     priced["frozen_at_utc"] = frozen_at
     priced["result_status"] = "OPEN"
     priced["settled_result"] = ""
@@ -279,23 +306,13 @@ def build_fixture_board(fixture_rows, ratings_by_tour, summary, sims=5000, froze
 
 
 def build_daily_outputs(feed, ratings_by_tour, summary, existing_ledger=None, now=None, sims=5000):
-    """Build the ranked pre-match value board and append-only frozen ledger."""
     eligible = eligible_pre_match(feed, now=now)
     frames = []
     errors = []
     frozen_at = (now or datetime.now(timezone.utc)).isoformat()
-
     for fixture_id, g in eligible.groupby("fixture_id", sort=False):
         try:
-            frames.append(
-                build_fixture_board(
-                    g,
-                    ratings_by_tour,
-                    summary,
-                    sims=sims,
-                    frozen_at=frozen_at,
-                )
-            )
+            frames.append(build_fixture_board(g, ratings_by_tour, summary, sims=sims, frozen_at=frozen_at))
         except Exception as exc:
             first = g.iloc[0]
             errors.append({
@@ -305,15 +322,9 @@ def build_daily_outputs(feed, ratings_by_tour, summary, existing_ledger=None, no
                 "tournament": first.get("tournament"),
                 "error": str(exc),
             })
-
     board = pd.concat(frames, ignore_index=True, sort=False) if frames else pd.DataFrame()
     board = rank_board(board)
-
-    if board.empty:
-        fresh = pd.DataFrame()
-    else:
-        fresh = board[pd.to_numeric(board["model_probability"], errors="coerce").notna()].copy()
-
+    fresh = pd.DataFrame() if board.empty else board[pd.to_numeric(board["model_probability"], errors="coerce").notna()].copy()
     ledger = merge_frozen(existing_ledger, fresh)
     return board, ledger, errors
 
@@ -332,18 +343,12 @@ def _load_ratings():
 def main(sims=5000):
     if not MARKET_PATH.exists():
         raise FileNotFoundError(MARKET_PATH)
-
     feed = pd.read_csv(MARKET_PATH, low_memory=False)
     summary = _load_summary()
     ratings = _load_ratings()
-    existing = (
-        pd.read_csv(FROZEN_LEDGER_PATH, low_memory=False)
-        if FROZEN_LEDGER_PATH.exists()
-        else pd.DataFrame()
-    )
+    existing = pd.read_csv(FROZEN_LEDGER_PATH, low_memory=False) if FROZEN_LEDGER_PATH.exists() else pd.DataFrame()
     old_count = len(existing)
     now = datetime.now(timezone.utc)
-
     board, ledger, errors = build_daily_outputs(
         feed,
         ratings,
@@ -352,20 +357,13 @@ def main(sims=5000):
         now=now,
         sims=sims,
     )
-
     OUTDIR.mkdir(parents=True, exist_ok=True)
     board.to_csv(LATEST_BOARD_PATH, index=False)
     ledger.to_csv(FROZEN_LEDGER_PATH, index=False)
-
     snapshot = None
     if "snapshot_utc" in feed.columns and not feed["snapshot_utc"].dropna().empty:
         snapshot = str(feed["snapshot_utc"].dropna().iloc[0])
-
-    signal_counts = (
-        board["signal"].value_counts(dropna=False).to_dict()
-        if not board.empty and "signal" in board.columns
-        else {}
-    )
+    signal_counts = board["signal"].value_counts(dropna=False).to_dict() if not board.empty and "signal" in board.columns else {}
     payload = {
         "status": "SUCCESS" if not errors else "PARTIAL",
         "built_at_utc": now.isoformat(),
@@ -379,6 +377,10 @@ def main(sims=5000):
         "new_frozen_rows": int(len(ledger) - old_count),
         "signal_counts": {str(k): int(v) for k, v in signal_counts.items()},
         "errors": errors,
+        "model_version": "V5.1_OUTCOME_CALIBRATED",
+        "probability_source": "2025 outcome-calibrated serve/return + surface Elo; no sportsbook inputs",
+        "score_strength_conditioning": "calibrated probability mapped to relative serve-logit difference with mean serve environment fixed",
+        "state_variation_used": False,
     }
     LATEST_SUMMARY_PATH.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
     print(json.dumps(payload, indent=2, default=str))

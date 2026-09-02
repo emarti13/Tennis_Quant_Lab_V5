@@ -1,0 +1,26 @@
+name: V5 Context Matchups
+
+on:
+  push:
+    branches: [feature/v5-full-context-model]
+    paths:
+      - 'build_v5_context_matchups.py'
+      - 'tests/test_v5_context_matchups.py'
+      - '.github/workflows/v5_context_matchups.yml'
+      - 'v5_rolling_stats.py'
+      - 'v5_workload_features.py'
+      - 'v5_player_state.py'
+      - 'v5_matchup_features.py'
+      - 'v5_model_calibration.py'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest tests/test_v5_context_matchups.py -v
