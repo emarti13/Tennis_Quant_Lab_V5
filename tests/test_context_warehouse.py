@@ -1,7 +1,11 @@
+import json
+import tempfile
 import unittest
+from pathlib import Path
 
 import pandas as pd
 
+from context_warehouse.io import write_warehouse
 from context_warehouse.normalize import build_player_match_rows, canonicalize_matches
 
 
@@ -51,6 +55,25 @@ class CanonicalWarehouseContractTests(unittest.TestCase):
         self.assertEqual(set(rows["match_id"]), {matches.loc[0, "match_id"]})
         self.assertEqual(set(rows["is_winner"]), {True, False})
         self.assertTrue(rows["player_id"].str.startswith("p_").all())
+
+    def test_writer_emits_required_audit_files_and_counts(self):
+        matches = canonicalize_matches(
+            self.sample_source(), tour="MEN", level="ATP", source_name="fixture"
+        )
+        players = build_player_match_rows(matches)
+        manifest = [{"source_name": "fixture", "input_rows": 1, "canonical_rows": 1}]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            summary = write_warehouse(matches, players, Path(tmp), manifest)
+            root = Path(tmp)
+            self.assertTrue((root / "matches.csv").exists())
+            self.assertTrue((root / "player_match_rows.csv").exists())
+            self.assertTrue((root / "source_manifest.json").exists())
+            self.assertTrue((root / "schema.json").exists())
+            self.assertEqual(summary["match_rows"], 1)
+            self.assertEqual(summary["player_match_rows"], 2)
+            stored_manifest = json.loads((root / "source_manifest.json").read_text())
+            self.assertEqual(stored_manifest["sources"][0]["source_name"], "fixture")
 
 
 if __name__ == "__main__":
