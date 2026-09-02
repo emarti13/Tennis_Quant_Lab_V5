@@ -1,0 +1,70 @@
+import numpy as np
+import pandas as pd
+
+from build_v5_context_matchups import assemble_matchup_dataset, enrich_player_history
+
+
+def _player_rows():
+    rows = []
+    matches = [
+        ("m0", "2024-12-20", "Alpha", "Beta", "Hard", 1),
+        ("m1", "2025-01-10", "Alpha", "Gamma", "Hard", 1),
+        ("m2", "2026-01-10", "Gamma", "Alpha", "Hard", 1),
+    ]
+    for match_id, date, winner, loser, surface, _ in matches:
+        common = {
+            "match_id": match_id, "tour": "MEN", "match_date": date, "surface": surface,
+            "best_of": 3, "tourney_name": "Example Open", "match_games": 22,
+            "match_sets": 2, "match_duration_minutes": 95,
+        }
+        stats_w = {"stat_aces":8,"stat_double_faults":2,"stat_service_points":60,"stat_first_serves_in":38,"stat_first_serve_points_won":29,"stat_second_serve_points_won":12,"stat_break_points_saved":4,"stat_break_points_faced":5,"stat_return_points_total":62,"stat_return_points_won":26,"stat_break_points_opportunities":7,"stat_break_points_converted":3}
+        stats_l = {"stat_aces":4,"stat_double_faults":4,"stat_service_points":62,"stat_first_serves_in":37,"stat_first_serve_points_won":24,"stat_second_serve_points_won":10,"stat_break_points_saved":4,"stat_break_points_faced":7,"stat_return_points_total":60,"stat_return_points_won":19,"stat_break_points_opportunities":5,"stat_break_points_converted":1}
+        rows.append({**common, **stats_w, "player_name":winner,"opponent_name":loser,"player_role":"winner","player_rank":20,"opponent_rank":50})
+        rows.append({**common, **stats_l, "player_name":loser,"opponent_name":winner,"player_role":"loser","player_rank":50,"opponent_rank":20})
+    return pd.DataFrame(rows)
+
+
+def _walkforward():
+    return pd.DataFrame([
+        {"date":"2025-01-10","tour":"MEN","winner":"Alpha","loser":"Gamma","winner_serve_p":.64,"loser_serve_p":.61,"elo_winner_p":.66,"surface":"Hard","level":"A"},
+        {"date":"2026-01-10","tour":"MEN","winner":"Gamma","loser":"Alpha","winner_serve_p":.63,"loser_serve_p":.62,"elo_winner_p":.57,"surface":"Hard","level":"A"},
+    ])
+
+
+def test_enrichment_uses_2024_as_history_for_first_2025_match():
+    enriched = enrich_player_history(_player_rows())
+    alpha_2025 = enriched[(enriched.match_id == "m1") & (enriched.player_name == "Alpha")].iloc[0]
+    assert np.isclose(alpha_2025["rolling_ace_rate"], 8/60)
+    assert alpha_2025["rest_days"] == 21
+    assert np.isclose(alpha_2025["rolling_return_points_won_pct"], 26/62)
+
+
+def test_assembler_matches_exact_winner_loser_date_and_builds_deterministic_orientation():
+    enriched = enrich_player_history(_player_rows())
+    out, qc = assemble_matchup_dataset(enriched, _walkforward(), target_years=(2025, 2026))
+    assert len(out) == 2
+    assert qc["matched_matches"] == 2
+    row_2025 = out[out.year == 2025].iloc[0]
+    assert row_2025["player_a"] == "Alpha"
+    assert row_2025["target_a_win"] == 1
+    assert 0 < row_2025["baseline_a_probability"] < 1
+    assert np.isfinite(row_2025["x_sr_a"])
+    assert np.isfinite(row_2025["x_elo_a"])
+    assert any(c.startswith("ctx_") for c in out.columns)
+
+
+def test_current_match_raw_stats_never_enter_context_feature_namespace():
+    enriched = enrich_player_history(_player_rows())
+    out, _ = assemble_matchup_dataset(enriched, _walkforward(), target_years=(2025, 2026))
+    forbidden_fragments = ["stat_aces", "stat_service_points", "match_games", "player_role"]
+    context_cols = [c for c in out.columns if c.startswith("ctx_")]
+    assert context_cols
+    assert not any(fragment in col for col in context_cols for fragment in forbidden_fragments)
+
+
+def test_unmatched_walkforward_rows_are_counted_not_guessed():
+    enriched = enrich_player_history(_player_rows())
+    wf = pd.concat([_walkforward(), pd.DataFrame([{"date":"2026-02-01","tour":"MEN","winner":"Nobody","loser":"Unknown","winner_serve_p":.62,"loser_serve_p":.61,"elo_winner_p":.55,"surface":"Hard","level":"A"}])], ignore_index=True)
+    out, qc = assemble_matchup_dataset(enriched, wf, target_years=(2025, 2026))
+    assert len(out) == 2
+    assert qc["walkforward_unmatched"] == 1
