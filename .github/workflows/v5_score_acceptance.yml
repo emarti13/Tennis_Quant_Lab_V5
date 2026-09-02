@@ -36,13 +36,24 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements.txt pytest
-      - name: Verify score contracts
-        run: python -m pytest tests/test_v5_score_walkforward.py tests/test_v5_score_production_promotion.py tests/test_v5_context_matchups.py -q
-      - name: Build deterministic score-validation context
+      - name: Run complete deterministic score acceptance pipeline
+        id: score
+        continue-on-error: true
+        env:
+          V5_SCORE_DIAGNOSTIC_SIMS: '80'
+          V5_SCORE_MAX_VALIDATION_ROWS: '1000'
+          V5_SCORE_MAX_HYBRID_TRAIN_ROWS: '1200'
         run: |
-          python build_v5_context_warehouse.py
-          python build_v5_venue_registry.py
-          python - <<'PY'
+          set -o pipefail
+          {
+            echo '=== SCORE CONTRACTS ==='
+            python -m pytest tests/test_v5_score_walkforward.py tests/test_v5_score_production_promotion.py tests/test_v5_context_matchups.py -q
+            echo '=== CONTEXT WAREHOUSE ==='
+            python build_v5_context_warehouse.py
+            echo '=== VENUE REGISTRY ==='
+            python build_v5_venue_registry.py
+            echo '=== SCORE MATCHUP DATASET ==='
+            python - <<'PY'
           from pathlib import Path
           import pandas as pd
           from build_v5_context_matchups import assemble_matchup_dataset, enrich_player_history, load_walkforward
@@ -61,16 +72,9 @@ jobs:
           matchups.to_parquet(out/'matched_context_rows.parquet',index=False)
           print({'matched_rows':len(matchups),'join_qc':qc})
           PY
-      - name: Run 2025 fit / 2026 score validation
-        id: score
-        continue-on-error: true
-        env:
-          V5_SCORE_DIAGNOSTIC_SIMS: '80'
-          V5_SCORE_MAX_VALIDATION_ROWS: '1000'
-          V5_SCORE_MAX_HYBRID_TRAIN_ROWS: '1200'
-        run: |
-          set -o pipefail
-          python diagnose_v5_score_distribution.py 2>&1 | tee /tmp/v5-score-acceptance.txt
+            echo '=== 2025 FIT / 2026 SCORE VALIDATION ==='
+            python diagnose_v5_score_distribution.py
+          } 2>&1 | tee /tmp/v5-score-acceptance.txt
       - name: Persist score acceptance evidence
         if: always()
         env:
@@ -92,7 +96,7 @@ jobs:
           Path('experiments/acceptance/score_acceptance_status.json').write_text(json.dumps({
               'status':os.environ['SCORE_OUTCOME'],
               'expected':'success',
-              'log_tail':text[-16000:],
+              'log_tail':text[-20000:],
               'context_policy':'historical as-of context + venue/travel/court-speed/player-state; weather omitted from this score gate unless already reproducibly cached',
               'validation_sampling':'deterministic chronological even spacing; up to 1000 untouched 2026 rows per tour',
               'hybrid_training_sampling':'deterministic chronological even spacing; up to 1200 2025 rows per tour'
