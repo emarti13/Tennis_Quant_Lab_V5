@@ -1,0 +1,23 @@
+name: V5 Score Architecture
+
+on:
+  push:
+    branches: [feature/v5-full-context-model]
+    paths:
+      - 'historical_score_calibration.py'
+      - 'v5_score_architecture.py'
+      - 'tests/test_historical_score_calibration.py'
+      - 'tests/test_v5_score_architecture.py'
+      - '.github/workflows/v5_score_architecture.yml'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest tests/test_historical_score_calibration.py tests/test_v5_score_architecture.py -v
