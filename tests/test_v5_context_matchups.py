@@ -15,9 +15,10 @@ def _player_rows():
         ("m2", "2026-01-10", "Gamma", "Alpha", "Hard", 1),
     ]
     for match_id, date, winner, loser, surface, _ in matches:
+        year = pd.Timestamp(date).year
         common = {
             "match_id": match_id, "tour": "MEN", "match_date": date, "surface": surface,
-            "best_of": 3, "tourney_name": "Example Open", "match_games": 22,
+            "best_of": 3, "tourney_id": f"{year}-0600", "tourney_name": "Example Open", "match_games": 22,
             "match_sets": 2, "match_duration_minutes": 95,
         }
         stats_w = {"stat_aces":8,"stat_double_faults":2,"stat_service_points":60,"stat_first_serves_in":38,"stat_first_serve_points_won":29,"stat_second_serve_points_won":12,"stat_break_points_saved":4,"stat_break_points_faced":5,"stat_return_points_total":62,"stat_return_points_won":26,"stat_break_points_opportunities":7,"stat_break_points_converted":3}
@@ -25,6 +26,13 @@ def _player_rows():
         rows.append({**common, **stats_w, "player_name":winner,"opponent_name":loser,"player_role":"winner","player_rank":20,"opponent_rank":50})
         rows.append({**common, **stats_l, "player_name":loser,"opponent_name":winner,"player_role":"loser","player_rank":50,"opponent_rank":20})
     return pd.DataFrame(rows)
+
+
+def _registry():
+    return pd.DataFrame([
+        {"canonical_event_id":"MEN:0600","canonical_name":"Example Open","aliases":"","tour":"MEN","start_year":2023,"end_year":2024,"city":"New York","country":"USA","continent":"North America","latitude":40.7128,"longitude":-74.0060,"timezone":"America/New_York","altitude_m":10,"surface":"Hard","indoor":False,"source_quality":"test"},
+        {"canonical_event_id":"MEN:0600","canonical_name":"Example Open","aliases":"","tour":"MEN","start_year":2025,"end_year":2026,"city":"Madrid","country":"Spain","continent":"Europe","latitude":40.4168,"longitude":-3.7038,"timezone":"Europe/Madrid","altitude_m":657,"surface":"Hard","indoor":False,"source_quality":"test"},
+    ])
 
 
 def _walkforward():
@@ -49,6 +57,15 @@ def test_enrichment_builds_historical_prior_court_speed_before_target_match():
     assert first_2025["court_speed_historical_prior"].notna().all()
     assert first_2025["court_speed_blended"].notna().all()
     assert first_2025["court_speed_current_event_sample_size"].iloc[0] == 0
+
+
+def test_enrichment_attaches_year_aware_travel_state_when_registry_is_available():
+    enriched = enrich_player_history(_player_rows(), tournament_registry=_registry())
+    alpha_2025 = enriched[(enriched.match_id == "m1") & (enriched.player_name == "Alpha")].iloc[0]
+    assert alpha_2025["venue_city"] == "Madrid"
+    assert 5700 < alpha_2025["travel_km_from_previous_event"] < 5900
+    assert alpha_2025["continent_change"] == 1
+    assert alpha_2025["altitude_change_m"] == 647
 
 
 def test_assembler_matches_exact_winner_loser_date_and_builds_deterministic_orientation():
