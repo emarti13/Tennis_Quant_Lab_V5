@@ -7,8 +7,6 @@ from build_v5_context_matchups import assemble_matchup_dataset, enrich_player_hi
 def _player_rows():
     rows = []
     matches = [
-        # 2023 establishes statistical baselines so the 2024 completed match can become
-        # an opponent-adjusted historical court-speed observation for the 2025 target.
         ("mpre", "2023-12-20", "Alpha", "Beta", "Hard", 1),
         ("m0", "2024-12-20", "Alpha", "Beta", "Hard", 1),
         ("m1", "2025-01-10", "Alpha", "Gamma", "Hard", 1),
@@ -16,11 +14,7 @@ def _player_rows():
     ]
     for match_id, date, winner, loser, surface, _ in matches:
         year = pd.Timestamp(date).year
-        common = {
-            "match_id": match_id, "tour": "MEN", "match_date": date, "surface": surface,
-            "best_of": 3, "tourney_id": f"{year}-0600", "tourney_name": "Example Open", "match_games": 22,
-            "match_sets": 2, "match_duration_minutes": 95,
-        }
+        common = {"match_id": match_id, "tour": "MEN", "match_date": date, "surface": surface, "best_of": 3, "tourney_id": f"{year}-0600", "tourney_name": "Example Open", "match_games": 22, "match_sets": 2, "match_duration_minutes": 95}
         stats_w = {"stat_aces":8,"stat_double_faults":2,"stat_service_points":60,"stat_first_serves_in":38,"stat_first_serve_points_won":29,"stat_second_serve_points_won":12,"stat_break_points_saved":4,"stat_break_points_faced":5,"stat_return_points_total":62,"stat_return_points_won":26,"stat_break_points_opportunities":7,"stat_break_points_converted":3}
         stats_l = {"stat_aces":4,"stat_double_faults":4,"stat_service_points":62,"stat_first_serves_in":37,"stat_first_serve_points_won":24,"stat_second_serve_points_won":10,"stat_break_points_saved":4,"stat_break_points_faced":7,"stat_return_points_total":60,"stat_return_points_won":19,"stat_break_points_opportunities":5,"stat_break_points_converted":1}
         rows.append({**common, **stats_w, "player_name":winner,"opponent_name":loser,"player_role":"winner","player_rank":20,"opponent_rank":50})
@@ -79,6 +73,13 @@ def test_assembler_matches_exact_winner_loser_date_and_builds_deterministic_orie
     assert 0 < row_2025["baseline_a_probability"] < 1
     assert np.isfinite(row_2025["x_sr_a"])
     assert np.isfinite(row_2025["x_elo_a"])
+    assert row_2025["serve_probability_a"] == .64
+    assert row_2025["serve_probability_b"] == .61
+    row_2026 = out[out.year == 2026].iloc[0]
+    assert row_2026["player_a"] == "Alpha"
+    assert row_2026["target_a_win"] == 0
+    assert row_2026["serve_probability_a"] == .62
+    assert row_2026["serve_probability_b"] == .63
     assert any(c.startswith("ctx_") for c in out.columns)
     assert "ctx_rest_days_diff" not in out.columns
     assert "ctx_rest_log1p_diff" in out.columns
@@ -90,12 +91,8 @@ def test_current_match_raw_stats_never_enter_context_feature_namespace():
     out, _ = assemble_matchup_dataset(enriched, _walkforward(), target_years=(2025, 2026))
     context_cols = [c for c in out.columns if c.startswith("ctx_")]
     assert context_cols
-    forbidden_exact = {
-        "ctx_stat_aces", "ctx_stat_service_points", "ctx_stat_return_points_won",
-        "ctx_match_games", "ctx_match_sets", "ctx_match_duration_minutes", "ctx_player_role",
-    }
+    forbidden_exact = {"ctx_stat_aces", "ctx_stat_service_points", "ctx_stat_return_points_won", "ctx_match_games", "ctx_match_sets", "ctx_match_duration_minutes", "ctx_player_role"}
     assert not forbidden_exact.intersection(context_cols)
-    # Prior-match workload is explicitly allowed because it is known before first serve.
     assert "ctx_previous_match_games_diff" in context_cols
 
 
