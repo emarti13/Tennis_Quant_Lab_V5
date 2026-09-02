@@ -70,13 +70,23 @@ def _window_value(window: dict, field: str, *, empty_value: float) -> float:
     return float(window["sums"][field])
 
 
+def _completed_win(row: pd.Series) -> int | None:
+    role = str(row.get("player_role") or "").strip().lower()
+    if role == "winner":
+        return 1
+    if role == "loser":
+        return 0
+    return None
+
+
 def build_workload_features(player_rows: pd.DataFrame) -> pd.DataFrame:
     """Build strictly lagged workload, fatigue, rest and layoff-state features.
 
     Rest is intentionally represented in several nonlinear forms. Raw days remain available
     for diagnostics, while log/bucket/layoff-state variables prevent a 180-day absence from
-    being treated as simply twice a 90-day absence. All features use only matches completed
-    before the target row.
+    being treated as simply twice a 90-day absence. Player-specific comeback history is also
+    strictly lagged: a comeback match's own outcome can update future response state only after
+    that match's pre-match features are emitted.
     """
     if player_rows is None or player_rows.empty:
         return player_rows.copy() if player_rows is not None else pd.DataFrame()
@@ -100,6 +110,10 @@ def build_workload_features(player_rows: pd.DataFrame) -> pd.DataFrame:
         prior_duration_valid = 0
         consecutive_days = 0
         matches_since_layoff = {threshold: None for threshold in LAYOFF_THRESHOLDS}
+        layoff_response = {
+            threshold: {"sample": 0, "wins": 0}
+            for threshold in LAYOFF_THRESHOLDS
+        }
 
         for idx, row in group.iterrows():
             current_date = row["match_date"]
@@ -118,8 +132,10 @@ def build_workload_features(player_rows: pd.DataFrame) -> pd.DataFrame:
             feat["short_rest_2d"] = int(_finite(rest_days) and float(rest_days) == 2)
             feat["rest_3_to_7d"] = int(_finite(rest_days) and 3 <= float(rest_days) <= 7)
 
+            current_layoff_flags: dict[int, bool] = {}
             for threshold in LAYOFF_THRESHOLDS:
                 is_layoff = bool(_finite(rest_days) and float(rest_days) >= threshold)
+                current_layoff_flags[threshold] = is_layoff
                 feat[f"layoff_{threshold}d"] = int(is_layoff)
                 feat[f"first_match_after_{threshold}d"] = int(is_layoff)
                 if is_layoff:
@@ -129,6 +145,16 @@ def build_workload_features(player_rows: pd.DataFrame) -> pd.DataFrame:
                     feat[f"matches_since_{threshold}d_layoff"] = np.nan
                 else:
                     feat[f"matches_since_{threshold}d_layoff"] = int(matches_since_layoff[threshold])
+
+                response = layoff_response[threshold]
+                sample = int(response["sample"])
+                wins = int(response["wins"])
+                # Beta(1,1) shrinkage prevents 1-2 historical comeback matches from
+                # producing a misleading extreme player-specific response estimate.
+                shrunk_rate = float((wins + 1.0) / (sample + 2.0))
+                feat[f"layoff_response_{threshold}d_sample"] = sample
+                feat[f"layoff_response_{threshold}d_shrunk_win_rate"] = shrunk_rate
+                feat[f"layoff_response_{threshold}d_excess"] = shrunk_rate - 0.5
 
             if pd.notna(normalized_current) and pd.notna(previous_play_date):
                 gap = int((normalized_current - previous_play_date).days)
@@ -182,6 +208,14 @@ def build_workload_features(player_rows: pd.DataFrame) -> pd.DataFrame:
             previous_record = record
             previous_date = normalized_current
             previous_play_date = normalized_current
+
+            completed_win = _completed_win(row)
+            if completed_win is not None:
+                for threshold, is_layoff in current_layoff_flags.items():
+                    if is_layoff:
+                        layoff_response[threshold]["sample"] += 1
+                        layoff_response[threshold]["wins"] += int(completed_win)
+
             for threshold in LAYOFF_THRESHOLDS:
                 if matches_since_layoff[threshold] is not None:
                     matches_since_layoff[threshold] += 1
