@@ -13,6 +13,7 @@ from v5_model_calibration import calibrated_match_probability
 from v5_player_state import add_trajectory_features, build_player_state
 from v5_rolling_stats import build_rolling_stats
 from v5_settlement import canonical_name
+from v5_travel_features import build_travel_features
 from v5_workload_features import build_workload_features
 
 
@@ -25,18 +26,24 @@ def _logit(value: float) -> float:
     return math.log(p / (1.0 - p))
 
 
-def enrich_player_history(player_rows: pd.DataFrame) -> pd.DataFrame:
+def enrich_player_history(
+    player_rows: pd.DataFrame,
+    tournament_registry: pd.DataFrame | None = None,
+) -> pd.DataFrame:
     """Create strictly pre-match rolling/workload/trajectory/context state.
 
     Derived court speed is computed only after lagged player baselines exist. A completed
     target match may contribute a court-speed observation to later dates, but never to its
-    own pre-match state.
+    own pre-match state. When a year-aware venue registry is supplied, travel and transition
+    state are attached from each player's previous competition before pricing the target.
     """
     if player_rows is None or player_rows.empty:
         return player_rows.copy() if player_rows is not None else pd.DataFrame()
     enriched = build_rolling_stats(player_rows)
     enriched = build_workload_features(enriched)
     enriched = add_trajectory_features(enriched)
+    if tournament_registry is not None and not tournament_registry.empty:
+        enriched = build_travel_features(enriched, tournament_registry)
     enriched = add_derived_court_speed_features(enriched)
     return enriched
 
