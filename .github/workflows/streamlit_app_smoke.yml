@@ -6,15 +6,18 @@ on:
     branches:
       - codex/streamlit-smoke-test
       - main
+      - feature/complete-superpowers-v5
     paths:
       - "tennis_quant_app_v5.py"
       - "v5_*.py"
+      - "experiments/acceptance/production_candidate.json"
+      - "experiments/acceptance/score_production_candidate.json"
       - "requirements.txt"
       - "tests/test_streamlit_app_smoke.py"
       - ".github/workflows/streamlit_app_smoke.yml"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   smoke:
@@ -24,6 +27,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -38,4 +43,40 @@ jobs:
           pip install pytest
 
       - name: Run Streamlit app smoke test
-        run: pytest tests/test_streamlit_app_smoke.py -v
+        id: smoke_test
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          pytest tests/test_streamlit_app_smoke.py -v 2>&1 | tee /tmp/streamlit-smoke.txt
+
+      - name: Persist branch smoke verification
+        if: always() && github.ref == 'refs/heads/feature/complete-superpowers-v5'
+        env:
+          SMOKE_OUTCOME: ${{ steps.smoke_test.outcome }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          cp /tmp/streamlit-smoke.txt /tmp/streamlit-smoke-copy.txt || true
+          git pull --rebase origin feature/complete-superpowers-v5
+          mkdir -p experiments/acceptance
+          cp /tmp/streamlit-smoke-copy.txt /tmp/streamlit-smoke.txt || true
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('/tmp/streamlit-smoke.txt')
+          text=p.read_text(encoding='utf-8', errors='replace') if p.exists() else ''
+          Path('experiments/acceptance/streamlit_smoke_status.json').write_text(json.dumps({
+              'status': os.environ['SMOKE_OUTCOME'],
+              'expected': 'success',
+              'pytest_tail': text[-12000:],
+          }, indent=2))
+          PY
+          git add experiments/acceptance/streamlit_smoke_status.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record Streamlit smoke verification'
+            git push origin HEAD:feature/complete-superpowers-v5
+          fi
+
+      - name: Enforce Streamlit smoke gate
+        if: steps.smoke_test.outcome != 'success'
+        run: exit 1
