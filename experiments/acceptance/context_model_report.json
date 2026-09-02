@@ -3,16 +3,16 @@
   "fit_year": 2025,
   "validation_year": 2026,
   "venue_registry_rows": 391,
-  "weather_cache_rows": 647,
+  "weather_cache_rows": 661,
   "weather_coverage_enriched_rows": {
-    "weather_temperature_c": 0.3413984461709212,
-    "weather_humidity_pct": 0.3413984461709212,
-    "weather_wind_speed_kmh": 0.3413984461709212,
-    "weather_wind_gust_kmh": 0.3413984461709212,
-    "weather_precipitation_mm": 0.3413984461709212,
-    "weather_dew_point_c": 0.3413984461709212,
-    "weather_pressure_hpa": 0.3413984461709212,
-    "weather_source_quality": 0.3413984461709212
+    "weather_temperature_c": 0.35011603269094943,
+    "weather_humidity_pct": 0.35011603269094943,
+    "weather_wind_speed_kmh": 0.35011603269094943,
+    "weather_wind_gust_kmh": 0.35011603269094943,
+    "weather_precipitation_mm": 0.35011603269094943,
+    "weather_dew_point_c": 0.35011603269094943,
+    "weather_pressure_hpa": 0.35011603269094943,
+    "weather_source_quality": 0.35011603269094943
   },
   "join_qc": {
     "target_warehouse_matches": 23397,
@@ -99,7 +99,7 @@
     },
     "ctx_context_quality_diff": {
       "non_missing_fraction": 1.0,
-      "finite_unique_values": 19,
+      "finite_unique_values": 17,
       "constant": false,
       "mean": 0.0005686160618752101,
       "std": 0.09397874660546786
@@ -176,10 +176,10 @@
     },
     "ctx_games_load_x_heat_diff": {
       "non_missing_fraction": 1.0,
-      "finite_unique_values": 1641,
+      "finite_unique_values": 1693,
       "constant": false,
-      "mean": 0.009624969684000282,
-      "std": 0.8666803850334399
+      "mean": 0.011232227690990795,
+      "std": 0.8732170721133226
     },
     "ctx_layoff_30d_diff": {
       "non_missing_fraction": 1.0,
@@ -344,10 +344,10 @@
     },
     "ctx_serve_dependence_x_wind_diff": {
       "non_missing_fraction": 1.0,
-      "finite_unique_values": 16880,
+      "finite_unique_values": 17312,
       "constant": false,
-      "mean": -0.0015538003640600232,
-      "std": 0.052069424230928196
+      "mean": -0.0014803348199448256,
+      "std": 0.05263330351911765
     },
     "ctx_serve_dominance_diff": {
       "non_missing_fraction": 1.0,
@@ -393,10 +393,10 @@
     },
     "ctx_short_rest_x_heat_diff": {
       "non_missing_fraction": 1.0,
-      "finite_unique_values": 801,
+      "finite_unique_values": 825,
       "constant": false,
-      "mean": 0.002133204981061096,
-      "std": 1.0893246585035876
+      "mean": 0.0026501451865347473,
+      "std": 1.100475641689761
     },
     "ctx_state_uncertainty_diff": {
       "non_missing_fraction": 1.0,
@@ -449,17 +449,17 @@
     },
     "ctx_workload_x_heat_diff": {
       "non_missing_fraction": 1.0,
-      "finite_unique_values": 455,
+      "finite_unique_values": 469,
       "constant": false,
-      "mean": 0.02305264284185747,
-      "std": 1.8205217744552993
+      "mean": 0.027238212425993287,
+      "std": 1.837258902223715
     },
     "ctx_workload_x_humidity_diff": {
       "non_missing_fraction": 1.0,
-      "finite_unique_values": 2523,
+      "finite_unique_values": 2569,
       "constant": false,
-      "mean": 0.02373412868250232,
-      "std": 1.751913438642437
+      "mean": 0.027146640273913974,
+      "std": 1.787120548546654
     }
   },
   "tours": {
@@ -476,15 +476,15 @@
         },
         "context_only": {
           "n": 8469,
-          "brier": 0.17867443216363174,
-          "log_loss": 0.5373185644412916,
+          "brier": 0.17869647377294853,
+          "log_loss": 0.5374270683109592,
           "accuracy": 0.7327901759357658
         },
         "combined": {
           "n": 8469,
-          "brier": 0.1701351902781988,
-          "log_loss": 0.5151367604289703,
-          "accuracy": 0.7475498878261896
+          "brier": 0.1701589609869097,
+          "log_loss": 0.5152328023201269,
+          "accuracy": 0.7469594993505727
         }
       },
       "ablations": {
@@ -500,13 +500,13 @@
           "kept_context_features": 56,
           "validation_metrics": {
             "n": 8469,
-            "brier": 0.17005015141738788,
-            "log_loss": 0.5149317075287707,
-            "accuracy": 0.7473137324359429
+            "brier": 0.1700696776260366,
+            "log_loss": 0.515013040609966,
+            "accuracy": 0.7474318101310662
           },
-          "delta_brier_vs_full": -8.503886081090428e-05,
-          "delta_log_loss_vs_full": -0.0002050529001995649,
-          "delta_accuracy_vs_full": -0.00023615539024668397
+          "delta_brier_vs_full": -8.928336087307698e-05,
+          "delta_log_loss_vs_full": -0.00021976171016091506,
+          "delta_accuracy_vs_full": 0.00047231078049347897
         },
         "other": {
           "family": "other",
@@ -520,13 +520,13 @@
           "kept_context_features": 56,
           "validation_metrics": {
             "n": 8469,
-            "brier": 0.17009988706131268,
-            "log_loss": 0.5150208826900837,
+            "brier": 0.1701200689318062,
+            "log_loss": 0.5151051082284192,
             "accuracy": 0.7475498878261896
           },
-          "delta_brier_vs_full": -3.5303216886106714e-05,
-          "delta_log_loss_vs_full": -0.00011587773888654951,
-          "delta_accuracy_vs_full": 0.0
+          "delta_brier_vs_full": -3.889205510348992e-05,
+          "delta_log_loss_vs_full": -0.00012769409170776402,
+          "delta_accuracy_vs_full": 0.0005903884756168765
         },
         "rank": {
           "family": "rank",
@@ -536,13 +536,13 @@
           "kept_context_features": 60,
           "validation_metrics": {
             "n": 8469,
-            "brier": 0.17033889508368888,
-            "log_loss": 0.5157466621041276,
-            "accuracy": 0.7451883339237219
+            "brier": 0.17036337846444183,
+            "log_loss": 0.5158466251883091,
+            "accuracy": 0.7455425670090919
           },
-          "delta_brier_vs_full": 0.0002037048054900903,
-          "delta_log_loss_vs_full": 0.0006099016751572872,
-          "delta_accuracy_vs_full": -0.002361553902467728
+          "delta_brier_vs_full": 0.00020441747753213724,
+          "delta_log_loss_vs_full": 0.0006138228681822344,
+          "delta_accuracy_vs_full": -0.00141693234148077
         },
         "rest_layoff": {
           "family": "rest_layoff",
@@ -572,13 +572,13 @@
           "kept_context_features": 40,
           "validation_metrics": {
             "n": 8469,
-            "brier": 0.17456091541364616,
-            "log_loss": 0.5374633177228985,
-            "accuracy": 0.7442437123627347
+            "brier": 0.17460753622315478,
+            "log_loss": 0.5376393273198189,
+            "accuracy": 0.7449521785334751
           },
-          "delta_brier_vs_full": 0.004425725135447367,
-          "delta_log_loss_vs_full": 0.022326557293928184,
-          "delta_accuracy_vs_full": -0.003306175463454908
+          "delta_brier_vs_full": 0.004448575236245089,
+          "delta_log_loss_vs_full": 0.02240652499969198,
+          "delta_accuracy_vs_full": -0.0020073208170976464
         },
         "serve_return_geometry": {
           "family": "serve_return_geometry",
@@ -596,13 +596,13 @@
           "kept_context_features": 52,
           "validation_metrics": {
             "n": 8469,
-            "brier": 0.17010753672269036,
-            "log_loss": 0.5150541387543528,
-            "accuracy": 0.7477860432164364
+            "brier": 0.170143388342,
+            "log_loss": 0.5151830380510813,
+            "accuracy": 0.747667965521313
           },
-          "delta_brier_vs_full": -2.7653555508433403e-05,
-          "delta_log_loss_vs_full": -8.262167461747794e-05,
-          "delta_accuracy_vs_full": 0.000236155390246795
+          "delta_brier_vs_full": -1.557264490970045e-05,
+          "delta_log_loss_vs_full": -4.9764269045571297e-05,
+          "delta_accuracy_vs_full": 0.000708466170740274
         },
         "trajectory": {
           "family": "trajectory",
@@ -613,13 +613,13 @@
           "kept_context_features": 59,
           "validation_metrics": {
             "n": 8469,
-            "brier": 0.17009521745597753,
-            "log_loss": 0.5150810162226643,
-            "accuracy": 0.7466052662652025
+            "brier": 0.17012115391350774,
+            "log_loss": 0.5151823601192994,
+            "accuracy": 0.7468414216554493
           },
-          "delta_brier_vs_full": -3.997282222126253e-05,
-          "delta_log_loss_vs_full": -5.574420630594101e-05,
-          "delta_accuracy_vs_full": -0.000944621560987069
+          "delta_brier_vs_full": -3.7807073401951996e-05,
+          "delta_log_loss_vs_full": -5.044220082750517e-05,
+          "delta_accuracy_vs_full": -0.0001180776951233975
         },
         "travel": {
           "family": "travel",
@@ -630,13 +630,13 @@
           "kept_context_features": 59,
           "validation_metrics": {
             "n": 8469,
-            "brier": 0.17002210797193992,
-            "log_loss": 0.5147514873375486,
-            "accuracy": 0.7468414216554493
+            "brier": 0.1700446118854439,
+            "log_loss": 0.5148364929964041,
+            "accuracy": 0.7473137324359429
           },
-          "delta_brier_vs_full": -0.00011308230625886595,
-          "delta_log_loss_vs_full": -0.0003852730914216673,
-          "delta_accuracy_vs_full": -0.000708466170740274
+          "delta_brier_vs_full": -0.0001143491014657938,
+          "delta_log_loss_vs_full": -0.0003963093237228099,
+          "delta_accuracy_vs_full": 0.0003542330853701925
         },
         "uncertainty_quality": {
           "family": "uncertainty_quality",
@@ -647,13 +647,13 @@
           "kept_context_features": 59,
           "validation_metrics": {
             "n": 8469,
-            "brier": 0.17001221987977921,
-            "log_loss": 0.514536427577609,
-            "accuracy": 0.7470775770456961
+            "brier": 0.17003340825883953,
+            "log_loss": 0.5146229178000741,
+            "accuracy": 0.7471956547408195
           },
-          "delta_brier_vs_full": -0.00012297039841957513,
-          "delta_log_loss_vs_full": -0.000600332851361296,
-          "delta_accuracy_vs_full": -0.00047231078049347897
+          "delta_brier_vs_full": -0.0001255527280701607,
+          "delta_log_loss_vs_full": -0.0006098845200528391,
+          "delta_accuracy_vs_full": 0.000236155390246795
         },
         "workload": {
           "family": "workload",
@@ -676,23 +676,23 @@
           "kept_context_features": 47,
           "validation_metrics": {
             "n": 8469,
-            "brier": 0.17881438202897018,
-            "log_loss": 0.5318548718112163,
-            "accuracy": 0.726532058094226
+            "brier": 0.17882010903721232,
+            "log_loss": 0.5318788216877938,
+            "accuracy": 0.7267682134844727
           },
-          "delta_brier_vs_full": 0.008679191750771392,
-          "delta_log_loss_vs_full": 0.016718111382245993,
-          "delta_accuracy_vs_full": -0.021017829731963533
+          "delta_brier_vs_full": 0.00866114805030263,
+          "delta_log_loss_vs_full": 0.016646019367666853,
+          "delta_accuracy_vs_full": -0.020191285866099973
         }
       },
       "winner_call_flips": {
         "n": 8469,
         "old_accuracy": 0.6336049120321171,
-        "new_accuracy": 0.7475498878261896,
-        "flips": 2343,
-        "old_wrong_new_correct": 1654,
-        "old_correct_new_wrong": 689,
-        "net_corrected_flips": 965,
+        "new_accuracy": 0.7469594993505727,
+        "flips": 2344,
+        "old_wrong_new_correct": 1652,
+        "old_correct_new_wrong": 692,
+        "net_corrected_flips": 960,
         "flip_rows": [
           {
             "match_date": "2026-04-02",
@@ -704,8 +704,8 @@
             "old_predicted_winner": "Tomas Martin Etcheverry",
             "old_predicted_probability": 0.845791517649546,
             "new_predicted_winner": "Alex Bolt",
-            "new_predicted_probability": 0.9458927590664871,
-            "probability_swing_a": 0.791684276716033,
+            "new_predicted_probability": 0.9453725414550368,
+            "probability_swing_a": 0.7911640591045828,
             "old_correct": true,
             "new_correct": false
           },
@@ -719,8 +719,8 @@
             "old_predicted_winner": "Adolfo Daniel Vallejo",
             "old_predicted_probability": 0.8815692358457827,
             "new_predicted_winner": "Franco Roncadelli",
-            "new_predicted_probability": 0.9059261171704525,
-            "probability_swing_a": -0.7874953530162352,
+            "new_predicted_probability": 0.9061606750542831,
+            "probability_swing_a": -0.7877299109000658,
             "old_correct": false,
             "new_correct": true
           },
@@ -734,8 +734,8 @@
             "old_predicted_winner": "Emilio Nava",
             "old_predicted_probability": 0.7939998888339739,
             "new_predicted_winner": "Taro Daniel",
-            "new_predicted_probability": 0.9737000935314254,
-            "probability_swing_a": -0.7676999823653993,
+            "new_predicted_probability": 0.9739302272937912,
+            "probability_swing_a": -0.7679301161277651,
             "old_correct": false,
             "new_correct": true
           },
@@ -749,8 +749,8 @@
             "old_predicted_winner": "Alexander Blockx",
             "old_predicted_probability": 0.8297899930553919,
             "new_predicted_winner": "Coleman Wong",
-            "new_predicted_probability": 0.9234071600672781,
-            "probability_swing_a": -0.75319715312267,
+            "new_predicted_probability": 0.9241470262978158,
+            "probability_swing_a": -0.7539370193532077,
             "old_correct": true,
             "new_correct": false
           },
@@ -764,8 +764,8 @@
             "old_predicted_winner": "Grigor Dimitrov",
             "old_predicted_probability": 0.7782795887896687,
             "new_predicted_winner": "Abdullah Shelbayh",
-            "new_predicted_probability": 0.9661879371992413,
-            "probability_swing_a": 0.7444675259889101,
+            "new_predicted_probability": 0.966790835664577,
+            "probability_swing_a": 0.7450704244542458,
             "old_correct": true,
             "new_correct": false
           },
@@ -779,8 +779,8 @@
             "old_predicted_winner": "Yosuke Watanuki",
             "old_predicted_probability": 0.8009105288413405,
             "new_predicted_winner": "Omar Jasika",
-            "new_predicted_probability": 0.9397766288265182,
-            "probability_swing_a": 0.7406871576678586,
+            "new_predicted_probability": 0.9408370681090119,
+            "probability_swing_a": 0.7417475969503524,
             "old_correct": false,
             "new_correct": true
           },
@@ -794,8 +794,8 @@
             "old_predicted_winner": "Kei Nishikori",
             "old_predicted_probability": 0.735558242841102,
             "new_predicted_winner": "Jack Kennedy",
-            "new_predicted_probability": 0.9834860296130539,
-            "probability_swing_a": 0.7190442724541559,
+            "new_predicted_probability": 0.9843054485164804,
+            "probability_swing_a": 0.7198636913575824,
             "old_correct": false,
             "new_correct": true
           },
@@ -809,8 +809,8 @@
             "old_predicted_winner": "Alvaro Guillen Meza",
             "old_predicted_probability": 0.7763232116397039,
             "new_predicted_winner": "Stefan Palosi",
-            "new_predicted_probability": 0.9391342878469514,
-            "probability_swing_a": -0.7154574994866553,
+            "new_predicted_probability": 0.9395052526939932,
+            "probability_swing_a": -0.7158284643336971,
             "old_correct": false,
             "new_correct": true
           },
@@ -824,8 +824,8 @@
             "old_predicted_winner": "Andrey Rublev",
             "old_predicted_probability": 0.8278274593959567,
             "new_predicted_winner": "Timofey Skatov",
-            "new_predicted_probability": 0.8810918109586539,
-            "probability_swing_a": -0.7089192703546106,
+            "new_predicted_probability": 0.879994020520578,
+            "probability_swing_a": -0.7078214799165347,
             "old_correct": true,
             "new_correct": false
           },
@@ -839,8 +839,8 @@
             "old_predicted_winner": "Valentin Vacherot",
             "old_predicted_probability": 0.7828158362983939,
             "new_predicted_winner": "Thomas Faurel",
-            "new_predicted_probability": 0.9205663633387311,
-            "probability_swing_a": 0.703382199637125,
+            "new_predicted_probability": 0.9216418854949562,
+            "probability_swing_a": 0.7044577217933501,
             "old_correct": true,
             "new_correct": false
           },
@@ -854,8 +854,8 @@
             "old_predicted_winner": "Alexander Zverev",
             "old_predicted_probability": 0.7780616706569681,
             "new_predicted_winner": "Cristian Garin",
-            "new_predicted_probability": 0.9221436946176605,
-            "probability_swing_a": -0.7002053652746286,
+            "new_predicted_probability": 0.9243378796544189,
+            "probability_swing_a": -0.702399550311387,
             "old_correct": true,
             "new_correct": false
           },
@@ -869,8 +869,8 @@
             "old_predicted_winner": "Michael Mmoh",
             "old_predicted_probability": 0.7513017412983162,
             "new_predicted_winner": "Niels Visker",
-            "new_predicted_probability": 0.9476824592503315,
-            "probability_swing_a": -0.6989842005486476,
+            "new_predicted_probability": 0.9485001203381868,
+            "probability_swing_a": -0.6998018616365029,
             "old_correct": true,
             "new_correct": false
           },
@@ -884,8 +884,8 @@
             "old_predicted_winner": "Coleman Wong",
             "old_predicted_probability": 0.7417261271219209,
             "new_predicted_winner": "Nicolas Mejia",
-            "new_predicted_probability": 0.9460005252386723,
-            "probability_swing_a": -0.6877266523605932,
+            "new_predicted_probability": 0.9470361988673716,
+            "probability_swing_a": -0.6887623259892924,
             "old_correct": false,
             "new_correct": true
           },
@@ -899,8 +899,8 @@
             "old_predicted_winner": "Jakub Mensik",
             "old_predicted_probability": 0.7475894961406525,
             "new_predicted_winner": "Martin Damm",
-            "new_predicted_probability": 0.936792849976896,
-            "probability_swing_a": -0.6843823461175486,
+            "new_predicted_probability": 0.9372537388357363,
+            "probability_swing_a": -0.6848432349763889,
             "old_correct": true,
             "new_correct": false
           },
@@ -914,8 +914,8 @@
             "old_predicted_winner": "Gonzalo Bueno",
             "old_predicted_probability": 0.7155122087257935,
             "new_predicted_winner": "Francesco Forti",
-            "new_predicted_probability": 0.9644328054954494,
-            "probability_swing_a": 0.6799450142212429,
+            "new_predicted_probability": 0.9649793486588277,
+            "probability_swing_a": 0.6804915573846211,
             "old_correct": false,
             "new_correct": true
           },
@@ -929,38 +929,8 @@
             "old_predicted_winner": "Jannik Sinner",
             "old_predicted_probability": 0.9417517892968225,
             "new_predicted_winner": "Benjamin Bonzi",
-            "new_predicted_probability": 0.7341937048458362,
-            "probability_swing_a": 0.6759454941426587,
-            "old_correct": true,
-            "new_correct": false
-          },
-          {
-            "match_date": "2026-06-29",
-            "tour": "MEN",
-            "surface": "Clay",
-            "tourney_name": "Brasov",
-            "actual_winner": "Keegan Smith",
-            "actual_loser": "Andrej Nedic",
-            "old_predicted_winner": "Andrej Nedic",
-            "old_predicted_probability": 0.7026684466382185,
-            "new_predicted_winner": "Keegan Smith",
-            "new_predicted_probability": 0.9673303643870725,
-            "probability_swing_a": -0.669998811025291,
-            "old_correct": false,
-            "new_correct": true
-          },
-          {
-            "match_date": "2026-05-25",
-            "tour": "MEN",
-            "surface": "Hard",
-            "tourney_name": "Centurion",
-            "actual_winner": "Harold Mayot",
-            "actual_loser": "Millen Hurrion",
-            "old_predicted_winner": "Harold Mayot",
-            "old_predicted_probability": 0.7015316196457803,
-            "new_predicted_winner": "Millen Hurrion",
-            "new_predicted_probability": 0.9680451143235176,
-            "probability_swing_a": -0.6695767339692978,
+            "new_predicted_probability": 0.737556434817316,
+            "probability_swing_a": 0.6793082241141385,
             "old_correct": true,
             "new_correct": false
           },
@@ -974,8 +944,38 @@
             "old_predicted_winner": "Liam Broady",
             "old_predicted_probability": 0.81174268417999,
             "new_predicted_winner": "August Holmgren",
-            "new_predicted_probability": 0.8572759755892224,
-            "probability_swing_a": 0.6690186597692124,
+            "new_predicted_probability": 0.8598928792792571,
+            "probability_swing_a": 0.671635563459247,
+            "old_correct": true,
+            "new_correct": false
+          },
+          {
+            "match_date": "2026-06-29",
+            "tour": "MEN",
+            "surface": "Clay",
+            "tourney_name": "Brasov",
+            "actual_winner": "Keegan Smith",
+            "actual_loser": "Andrej Nedic",
+            "old_predicted_winner": "Andrej Nedic",
+            "old_predicted_probability": 0.7026684466382185,
+            "new_predicted_winner": "Keegan Smith",
+            "new_predicted_probability": 0.9671254924314882,
+            "probability_swing_a": -0.6697939390697066,
+            "old_correct": false,
+            "new_correct": true
+          },
+          {
+            "match_date": "2026-05-25",
+            "tour": "MEN",
+            "surface": "Hard",
+            "tourney_name": "Centurion",
+            "actual_winner": "Harold Mayot",
+            "actual_loser": "Millen Hurrion",
+            "old_predicted_winner": "Harold Mayot",
+            "old_predicted_probability": 0.7015316196457803,
+            "new_predicted_winner": "Millen Hurrion",
+            "new_predicted_probability": 0.9677068059059498,
+            "probability_swing_a": -0.6692384255517301,
             "old_correct": true,
             "new_correct": false
           },
@@ -989,8 +989,8 @@
             "old_predicted_winner": "Facundo Diaz Acosta",
             "old_predicted_probability": 0.8061565225529175,
             "new_predicted_winner": "Hernan Casanova",
-            "new_predicted_probability": 0.8552072313987359,
-            "probability_swing_a": -0.6613637539516534,
+            "new_predicted_probability": 0.8565493232584829,
+            "probability_swing_a": -0.6627058458114004,
             "old_correct": false,
             "new_correct": true
           },
@@ -1004,8 +1004,8 @@
             "old_predicted_winner": "Quentin Halys",
             "old_predicted_probability": 0.6930497868867035,
             "new_predicted_winner": "Marc-Andrea Huesler",
-            "new_predicted_probability": 0.9679994061959425,
-            "probability_swing_a": 0.661049193082646,
+            "new_predicted_probability": 0.9681018797556348,
+            "probability_swing_a": 0.6611516666423383,
             "old_correct": false,
             "new_correct": true
           },
@@ -1019,23 +1019,8 @@
             "old_predicted_winner": "Andres Martin",
             "old_predicted_probability": 0.6701025237868616,
             "new_predicted_winner": "Marek Gengel",
-            "new_predicted_probability": 0.990267826751404,
-            "probability_swing_a": -0.6603703505382656,
-            "old_correct": false,
-            "new_correct": true
-          },
-          {
-            "match_date": "2026-03-23",
-            "tour": "MEN",
-            "surface": "Hard",
-            "tourney_name": "Morelia",
-            "actual_winner": "Luka Pavlovic",
-            "actual_loser": "Adam Walton",
-            "old_predicted_winner": "Adam Walton",
-            "old_predicted_probability": 0.7722862830345167,
-            "new_predicted_winner": "Luka Pavlovic",
-            "new_predicted_probability": 0.8867088721043499,
-            "probability_swing_a": -0.6589951551388666,
+            "new_predicted_probability": 0.9905355780931959,
+            "probability_swing_a": -0.6606381018800576,
             "old_correct": false,
             "new_correct": true
           },
@@ -1049,8 +1034,8 @@
             "old_predicted_winner": "Gianluca Cadenasso",
             "old_predicted_probability": 0.6782197909796867,
             "new_predicted_winner": "Felix Gill",
-            "new_predicted_probability": 0.9803027342513584,
-            "probability_swing_a": 0.658522525231045,
+            "new_predicted_probability": 0.980585836755344,
+            "probability_swing_a": 0.6588056277350307,
             "old_correct": false,
             "new_correct": true
           },
@@ -1064,8 +1049,23 @@
             "old_predicted_winner": "Eliot Spizzirri",
             "old_predicted_probability": 0.7092600450668152,
             "new_predicted_winner": "Jack Pinnington Jones",
-            "new_predicted_probability": 0.9481095246097954,
-            "probability_swing_a": -0.6573695696766105,
+            "new_predicted_probability": 0.9486646277231554,
+            "probability_swing_a": -0.6579246727899706,
+            "old_correct": false,
+            "new_correct": true
+          },
+          {
+            "match_date": "2026-03-23",
+            "tour": "MEN",
+            "surface": "Hard",
+            "tourney_name": "Morelia",
+            "actual_winner": "Luka Pavlovic",
+            "actual_loser": "Adam Walton",
+            "old_predicted_winner": "Adam Walton",
+            "old_predicted_probability": 0.7722862830345167,
+            "new_predicted_winner": "Luka Pavlovic",
+            "new_predicted_probability": 0.8854070599294295,
+            "probability_swing_a": -0.6576933429639462,
             "old_correct": false,
             "new_correct": true
           },
@@ -1079,8 +1079,8 @@
             "old_predicted_winner": "Laslo Djere",
             "old_predicted_probability": 0.76187095636871,
             "new_predicted_winner": "Timofey Skatov",
-            "new_predicted_probability": 0.8949822913814629,
-            "probability_swing_a": -0.656853247750173,
+            "new_predicted_probability": 0.8946299353292818,
+            "probability_swing_a": -0.6565008916979919,
             "old_correct": false,
             "new_correct": true
           },
@@ -1094,8 +1094,8 @@
             "old_predicted_winner": "Sho Shimabukuro",
             "old_predicted_probability": 0.8012244161986257,
             "new_predicted_winner": "Keegan Smith",
-            "new_predicted_probability": 0.8532696512575051,
-            "probability_swing_a": 0.6544940674561308,
+            "new_predicted_probability": 0.853009565080272,
+            "probability_swing_a": 0.6542339812788978,
             "old_correct": false,
             "new_correct": true
           },
@@ -1109,8 +1109,8 @@
             "old_predicted_winner": "Karen Khachanov",
             "old_predicted_probability": 0.7192640502291623,
             "new_predicted_winner": "Michael Mmoh",
-            "new_predicted_probability": 0.9335633434180753,
-            "probability_swing_a": -0.6528273936472376,
+            "new_predicted_probability": 0.9347279317654749,
+            "probability_swing_a": -0.6539919819946372,
             "old_correct": false,
             "new_correct": true
           },
@@ -1124,8 +1124,8 @@
             "old_predicted_winner": "Stefan Kozlov",
             "old_predicted_probability": 0.6798737416130205,
             "new_predicted_winner": "Rodrigo Pacheco Mendez",
-            "new_predicted_probability": 0.9728328819406065,
-            "probability_swing_a": 0.652706623553627,
+            "new_predicted_probability": 0.9734001633325727,
+            "probability_swing_a": 0.6532739049455931,
             "old_correct": false,
             "new_correct": true
           },
@@ -1139,23 +1139,8 @@
             "old_predicted_winner": "Francisco Cerundolo",
             "old_predicted_probability": 0.7193914398722592,
             "new_predicted_winner": "Tristan Boyer",
-            "new_predicted_probability": 0.9318357983564068,
-            "probability_swing_a": -0.651227238228666,
-            "old_correct": true,
-            "new_correct": false
-          },
-          {
-            "match_date": "2026-07-23",
-            "tour": "MEN",
-            "surface": "Clay",
-            "tourney_name": "Estoril",
-            "actual_winner": "Luciano Darderi",
-            "actual_loser": "Pedro Martinez",
-            "old_predicted_winner": "Luciano Darderi",
-            "old_predicted_probability": 0.7597154492311948,
-            "new_predicted_winner": "Pedro Martinez",
-            "new_predicted_probability": 0.8893754872533537,
-            "probability_swing_a": -0.6490909364845485,
+            "new_predicted_probability": 0.9326855885410742,
+            "probability_swing_a": -0.6520770284133334,
             "old_correct": true,
             "new_correct": false
           },
@@ -1169,10 +1154,25 @@
             "old_predicted_winner": "Nicolas Mejia",
             "old_predicted_probability": 0.7418531418453014,
             "new_predicted_winner": "Matthew William Donald",
-            "new_predicted_probability": 0.9059036601155537,
-            "probability_swing_a": 0.647756801960855,
+            "new_predicted_probability": 0.9082523774566658,
+            "probability_swing_a": 0.6501055193019671,
             "old_correct": false,
             "new_correct": true
+          },
+          {
+            "match_date": "2026-07-23",
+            "tour": "MEN",
+            "surface": "Clay",
+            "tourney_name": "Estoril",
+            "actual_winner": "Luciano Darderi",
+            "actual_loser": "Pedro Martinez",
+            "old_predicted_winner": "Luciano Darderi",
+            "old_predicted_probability": 0.7597154492311948,
+            "new_predicted_winner": "Pedro Martinez",
+            "new_predicted_probability": 0.8889569563270603,
+            "probability_swing_a": -0.6486724055582551,
+            "old_correct": true,
+            "new_correct": false
           },
           {
             "match_date": "2026-07-13",
@@ -1184,8 +1184,23 @@
             "old_predicted_winner": "Raphael Collignon",
             "old_predicted_probability": 0.7674904748797114,
             "new_predicted_winner": "Timofey Skatov",
-            "new_predicted_probability": 0.8779200013020149,
-            "probability_swing_a": -0.6454104761817263,
+            "new_predicted_probability": 0.8802381345893943,
+            "probability_swing_a": -0.6477286094691057,
+            "old_correct": true,
+            "new_correct": false
+          },
+          {
+            "match_date": "2026-02-16",
+            "tour": "MEN",
+            "surface": "Hard",
+            "tourney_name": "Doha",
+            "actual_winner": "Jakub Mensik",
+            "actual_loser": "Jan Choinski",
+            "old_predicted_winner": "Jakub Mensik",
+            "old_predicted_probability": 0.8921169577356962,
+            "new_predicted_winner": "Jan Choinski",
+            "new_predicted_probability": 0.7545133575686995,
+            "probability_swing_a": -0.6466303153043957,
             "old_correct": true,
             "new_correct": false
           },
@@ -1199,8 +1214,8 @@
             "old_predicted_winner": "Federico Agustin Gomez",
             "old_predicted_probability": 0.683911223960271,
             "new_predicted_winner": "Felix Gill",
-            "new_predicted_probability": 0.9608901469791141,
-            "probability_swing_a": -0.6448013709393852,
+            "new_predicted_probability": 0.9608540780946595,
+            "probability_swing_a": -0.6447653020549305,
             "old_correct": false,
             "new_correct": true
           },
@@ -1214,25 +1229,10 @@
             "old_predicted_winner": "Juan Carlos Prado Angelo",
             "old_predicted_probability": 0.6776870218277135,
             "new_predicted_winner": "Miguel Damas",
-            "new_predicted_probability": 0.9658217865196009,
-            "probability_swing_a": -0.6435088083473144,
+            "new_predicted_probability": 0.9666146182159858,
+            "probability_swing_a": -0.6443016400436993,
             "old_correct": false,
             "new_correct": true
-          },
-          {
-            "match_date": "2026-02-16",
-            "tour": "MEN",
-            "surface": "Hard",
-            "tourney_name": "Doha",
-            "actual_winner": "Jakub Mensik",
-            "actual_loser": "Jan Choinski",
-            "old_predicted_winner": "Jakub Mensik",
-            "old_predicted_probability": 0.8921169577356962,
-            "new_predicted_winner": "Jan Choinski",
-            "new_predicted_probability": 0.7513670061462707,
-            "probability_swing_a": -0.6434839638819669,
-            "old_correct": true,
-            "new_correct": false
           },
           {
             "match_date": "2026-02-12",
@@ -1244,8 +1244,8 @@
             "old_predicted_winner": "Francisco Cerundolo",
             "old_predicted_probability": 0.7224064077613807,
             "new_predicted_winner": "Hugo Dellien",
-            "new_predicted_probability": 0.9176827422866835,
-            "probability_swing_a": -0.6400891500480641,
+            "new_predicted_probability": 0.9194322134943229,
+            "probability_swing_a": -0.6418386212557036,
             "old_correct": true,
             "new_correct": false
           },
@@ -1259,25 +1259,10 @@
             "old_predicted_winner": "Lukas Neumayer",
             "old_predicted_probability": 0.7828594741356159,
             "new_predicted_winner": "Jack Kennedy",
-            "new_predicted_probability": 0.856103176959706,
-            "probability_swing_a": 0.6389626510953218,
+            "new_predicted_probability": 0.8584483814790184,
+            "probability_swing_a": 0.6413078556146342,
             "old_correct": false,
             "new_correct": true
-          },
-          {
-            "match_date": "2026-07-01",
-            "tour": "MEN",
-            "surface": "Grass",
-            "tourney_name": "Wimbledon",
-            "actual_winner": "Tommy Paul",
-            "actual_loser": "Soonwoo Kwon",
-            "old_predicted_winner": "Tommy Paul",
-            "old_predicted_probability": 0.7454107960112216,
-            "new_predicted_winner": "Soonwoo Kwon",
-            "new_predicted_probability": 0.8920499269133154,
-            "probability_swing_a": 0.637460722924537,
-            "old_correct": true,
-            "new_correct": false
           },
           {
             "match_date": "2026-04-25",
@@ -1289,8 +1274,23 @@
             "old_predicted_winner": "Felix Auger-Aliassime",
             "old_predicted_probability": 0.7100643061132093,
             "new_predicted_winner": "Vilius Gaubas",
-            "new_predicted_probability": 0.9269837909809822,
-            "probability_swing_a": -0.6370480970941914,
+            "new_predicted_probability": 0.928634418852328,
+            "probability_swing_a": -0.6386987249655373,
+            "old_correct": true,
+            "new_correct": false
+          },
+          {
+            "match_date": "2026-07-01",
+            "tour": "MEN",
+            "surface": "Grass",
+            "tourney_name": "Wimbledon",
+            "actual_winner": "Tommy Paul",
+            "actual_loser": "Soonwoo Kwon",
+            "old_predicted_winner": "Tommy Paul",
+            "old_predicted_probability": 0.7454107960112216,
+            "new_predicted_winner": "Soonwoo Kwon",
+            "new_predicted_probability": 0.8931155842147556,
+            "probability_swing_a": 0.6385263802259772,
             "old_correct": true,
             "new_correct": false
           },
@@ -1304,8 +1304,8 @@
             "old_predicted_winner": "Nikolas Sanchez Izquierdo",
             "old_predicted_probability": 0.6724943464520452,
             "new_predicted_winner": "Maxim Mrva",
-            "new_predicted_probability": 0.9637734455580688,
-            "probability_swing_a": 0.6362677920101139,
+            "new_predicted_probability": 0.9651442021344377,
+            "probability_swing_a": 0.6376385485864828,
             "old_correct": false,
             "new_correct": true
           },
@@ -1319,8 +1319,8 @@
             "old_predicted_winner": "Juan Manuel La Serna",
             "old_predicted_probability": 0.6528369556377941,
             "new_predicted_winner": "Johan Alexander Rodriguez",
-            "new_predicted_probability": 0.9824321299547443,
-            "probability_swing_a": 0.6352690855925384,
+            "new_predicted_probability": 0.9823222774541258,
+            "probability_swing_a": 0.6351592330919199,
             "old_correct": false,
             "new_correct": true
           },
@@ -1334,8 +1334,8 @@
             "old_predicted_winner": "Alexander Bublik",
             "old_predicted_probability": 0.7402278586214969,
             "new_predicted_winner": "Edas Butvilas",
-            "new_predicted_probability": 0.8936188918335654,
-            "probability_swing_a": -0.6338467504550622,
+            "new_predicted_probability": 0.8936371607953939,
+            "probability_swing_a": -0.6338650194168908,
             "old_correct": true,
             "new_correct": false
           },
@@ -1349,8 +1349,8 @@
             "old_predicted_winner": "Thanasi Kokkinakis",
             "old_predicted_probability": 0.7942745227188414,
             "new_predicted_winner": "Yannick Theodor Alexandrescou",
-            "new_predicted_probability": 0.835162522737843,
-            "probability_swing_a": -0.6294370454566843,
+            "new_predicted_probability": 0.8364914376387453,
+            "probability_swing_a": -0.6307659603575867,
             "old_correct": false,
             "new_correct": true
           },
@@ -1364,8 +1364,8 @@
             "old_predicted_winner": "Guido Ivan Justo",
             "old_predicted_probability": 0.7059857912957276,
             "new_predicted_winner": "Federico Bondioli",
-            "new_predicted_probability": 0.9208698379188696,
-            "probability_swing_a": 0.6268556292145971,
+            "new_predicted_probability": 0.9213818241892796,
+            "probability_swing_a": 0.6273676154850072,
             "old_correct": false,
             "new_correct": true
           },
@@ -1379,8 +1379,8 @@
             "old_predicted_winner": "Pavel Kotov",
             "old_predicted_probability": 0.6557472033722959,
             "new_predicted_winner": "Cezar Cretu",
-            "new_predicted_probability": 0.9703579900938196,
-            "probability_swing_a": 0.6261051934661155,
+            "new_predicted_probability": 0.9709501672271599,
+            "probability_swing_a": 0.6266973705994557,
             "old_correct": false,
             "new_correct": true
           },
@@ -1394,8 +1394,8 @@
             "old_predicted_winner": "Gael Monfils",
             "old_predicted_probability": 0.6780188459918641,
             "new_predicted_winner": "Dane Sweeny",
-            "new_predicted_probability": 0.9468640356001333,
-            "probability_swing_a": 0.6248828815919973,
+            "new_predicted_probability": 0.9469081420337124,
+            "probability_swing_a": 0.6249269880255766,
             "old_correct": false,
             "new_correct": true
           },
@@ -1409,8 +1409,8 @@
             "old_predicted_winner": "Tommy Paul",
             "old_predicted_probability": 0.6684338167761779,
             "new_predicted_winner": "Tomas Martin Etcheverry",
-            "new_predicted_probability": 0.9556279486174437,
-            "probability_swing_a": 0.6240617653936216,
+            "new_predicted_probability": 0.9554431599390496,
+            "probability_swing_a": 0.6238769767152275,
             "old_correct": true,
             "new_correct": false
           },
@@ -1424,8 +1424,8 @@
             "old_predicted_winner": "Filipe Bullamah",
             "old_predicted_probability": 0.7456845333350334,
             "new_predicted_winner": "Wilson Leite",
-            "new_predicted_probability": 0.8782601209800494,
-            "probability_swing_a": -0.6239446543150828,
+            "new_predicted_probability": 0.8780940122789606,
+            "probability_swing_a": -0.6237785456139939,
             "old_correct": false,
             "new_correct": true
           },
@@ -1439,8 +1439,8 @@
             "old_predicted_winner": "Jurij Rodionov",
             "old_predicted_probability": 0.771424723869612,
             "new_predicted_winner": "Ivan Gakhov",
-            "new_predicted_probability": 0.8510333093011544,
-            "probability_swing_a": 0.6224580331707664,
+            "new_predicted_probability": 0.8510470848507985,
+            "probability_swing_a": 0.6224718087204105,
             "old_correct": false,
             "new_correct": true
           }
@@ -1494,89 +1494,89 @@
         "context_only": {
           "under_10": {
             "n": 26,
-            "mean_prediction": 0.4043207484500981,
+            "mean_prediction": 0.4048343190352517,
             "actual_win_rate": 0.038461538461538464,
-            "calibration_error": 0.3658592099885596
+            "calibration_error": 0.36637278057371325
           },
           "10_to_20": {
             "n": 146,
-            "mean_prediction": 0.2894210387886508,
+            "mean_prediction": 0.2893818109209323,
             "actual_win_rate": 0.1506849315068493,
-            "calibration_error": 0.13873610728180147
+            "calibration_error": 0.13869687941408299
           },
           "20_to_40": {
             "n": 1918,
-            "mean_prediction": 0.382045306007237,
+            "mean_prediction": 0.3819433292720335,
             "actual_win_rate": 0.3086548488008342,
-            "calibration_error": 0.0733904572064028
+            "calibration_error": 0.07328848047119929
           },
           "40_to_60": {
             "n": 4174,
-            "mean_prediction": 0.4985214508577859,
+            "mean_prediction": 0.49852073725618223,
             "actual_win_rate": 0.5,
-            "calibration_error": -0.001478549142214125
+            "calibration_error": -0.0014792627438177663
           },
           "60_to_80": {
             "n": 1995,
-            "mean_prediction": 0.605903979684337,
+            "mean_prediction": 0.6059684996715327,
             "actual_win_rate": 0.6942355889724311,
-            "calibration_error": -0.08833160928809414
+            "calibration_error": -0.08826708930089844
           },
           "80_to_90": {
             "n": 186,
-            "mean_prediction": 0.6697039376269976,
+            "mean_prediction": 0.669709144399429,
             "actual_win_rate": 0.8440860215053764,
-            "calibration_error": -0.17438208387837872
+            "calibration_error": -0.1743768771059474
           },
           "over_90": {
             "n": 24,
-            "mean_prediction": 0.6298076239401805,
+            "mean_prediction": 0.6295025398798966,
             "actual_win_rate": 0.9166666666666666,
-            "calibration_error": -0.2868590427264861
+            "calibration_error": -0.28716412678677006
           }
         },
         "combined": {
           "under_10": {
             "n": 26,
-            "mean_prediction": 0.13987869154667434,
+            "mean_prediction": 0.14036545115457735,
             "actual_win_rate": 0.038461538461538464,
-            "calibration_error": 0.10141715308513588
+            "calibration_error": 0.10190391269303889
           },
           "10_to_20": {
             "n": 146,
-            "mean_prediction": 0.17209158569991662,
+            "mean_prediction": 0.17215461772756427,
             "actual_win_rate": 0.1506849315068493,
-            "calibration_error": 0.02140665419306731
+            "calibration_error": 0.021469686220714962
           },
           "20_to_40": {
             "n": 1918,
-            "mean_prediction": 0.3188681258353225,
+            "mean_prediction": 0.3188129172454781,
             "actual_win_rate": 0.3086548488008342,
-            "calibration_error": 0.010213277034488266
+            "calibration_error": 0.010158068444643897
           },
           "40_to_60": {
             "n": 4174,
-            "mean_prediction": 0.49876019370747626,
+            "mean_prediction": 0.4987493835463193,
             "actual_win_rate": 0.5,
-            "calibration_error": -0.0012398062925237374
+            "calibration_error": -0.0012506164536806863
           },
           "60_to_80": {
             "n": 1995,
-            "mean_prediction": 0.670282138845825,
+            "mean_prediction": 0.6703199471353948,
             "actual_win_rate": 0.6942355889724311,
-            "calibration_error": -0.0239534501266061
+            "calibration_error": -0.023915641837036317
           },
           "80_to_90": {
             "n": 186,
-            "mean_prediction": 0.8092125965112201,
+            "mean_prediction": 0.8092012797199023,
             "actual_win_rate": 0.8440860215053764,
-            "calibration_error": -0.034873424994156244
+            "calibration_error": -0.03488474178547407
           },
           "over_90": {
             "n": 24,
-            "mean_prediction": 0.8576665578369379,
+            "mean_prediction": 0.8575309587366888,
             "actual_win_rate": 0.9166666666666666,
-            "calibration_error": -0.059000108829728726
+            "calibration_error": -0.0591357079299778
           }
         }
       },
@@ -1646,7 +1646,7 @@
         },
         "ctx_context_quality_diff": {
           "non_missing_fraction": 1.0,
-          "finite_unique_values": 19,
+          "finite_unique_values": 17,
           "constant": false,
           "mean": 0.0004729617241535877,
           "std": 0.09135235900543635
@@ -1723,10 +1723,10 @@
         },
         "ctx_games_load_x_heat_diff": {
           "non_missing_fraction": 1.0,
-          "finite_unique_values": 1387,
+          "finite_unique_values": 1439,
           "constant": false,
-          "mean": 0.009634579051453183,
-          "std": 0.9248274736153489
+          "mean": 0.011623856693858802,
+          "std": 0.9324062651463668
         },
         "ctx_layoff_30d_diff": {
           "non_missing_fraction": 1.0,
@@ -1891,10 +1891,10 @@
         },
         "ctx_serve_dependence_x_wind_diff": {
           "non_missing_fraction": 1.0,
-          "finite_unique_values": 12874,
+          "finite_unique_values": 13306,
           "constant": false,
-          "mean": -0.0017960538678184691,
-          "std": 0.05242833711189304
+          "mean": -0.001705126733680764,
+          "std": 0.05312104569285062
         },
         "ctx_serve_dominance_diff": {
           "non_missing_fraction": 1.0,
@@ -1940,16 +1940,16 @@
         },
         "ctx_short_rest_x_heat_diff": {
           "non_missing_fraction": 1.0,
-          "finite_unique_values": 686,
+          "finite_unique_values": 710,
           "constant": false,
-          "mean": 0.0015941659641990126,
-          "std": 1.053998176609506
+          "mean": 0.0022339746251213506,
+          "std": 1.0682392357952857
         },
         "ctx_state_uncertainty_diff": {
           "non_missing_fraction": 1.0,
           "finite_unique_values": 18860,
           "constant": false,
-          "mean": -0.0003891843781671486,
+          "mean": -0.0003891843781671485,
           "std": 0.047680338575519225
         },
         "ctx_timezone_change_abs_diff": {
@@ -1996,765 +1996,765 @@
         },
         "ctx_workload_x_heat_diff": {
           "non_missing_fraction": 1.0,
-          "finite_unique_values": 408,
+          "finite_unique_values": 422,
           "constant": false,
-          "mean": 0.021296173676590025,
-          "std": 1.9226655795051255
+          "mean": 0.026476586502807486,
+          "std": 1.9422739028223235
         },
         "ctx_workload_x_humidity_diff": {
           "non_missing_fraction": 1.0,
-          "finite_unique_values": 2273,
+          "finite_unique_values": 2320,
           "constant": false,
-          "mean": 0.02373254140622241,
-          "std": 1.8084662477143196
+          "mean": 0.027956152664477166,
+          "std": 1.8506110210570978
         }
       },
       "context_coefficients": [
         {
           "feature": "ctx_matches_3d_diff",
-          "standardized_coefficient": 1.4207670762346165,
+          "standardized_coefficient": 1.4226166855455014,
           "training_rms_scale": 1.4398965067793494,
-          "absolute_coefficient": 1.4207670762346165
+          "absolute_coefficient": 1.4226166855455014
         },
         {
           "feature": "ctx_games_7d_diff",
-          "standardized_coefficient": -0.5117567492365609,
+          "standardized_coefficient": -0.5091399886014548,
           "training_rms_scale": 53.02927988319612,
-          "absolute_coefficient": 0.5117567492365609
+          "absolute_coefficient": 0.5091399886014548
         },
         {
           "feature": "ctx_matches_7d_diff",
-          "standardized_coefficient": 0.49226264649061113,
+          "standardized_coefficient": 0.5045757663411443,
           "training_rms_scale": 2.2518232704007355,
-          "absolute_coefficient": 0.49226264649061113
+          "absolute_coefficient": 0.5045757663411443
         },
         {
           "feature": "ctx_short_rest_0d_diff",
-          "standardized_coefficient": 0.42145156348753604,
+          "standardized_coefficient": 0.41918727324438837,
           "training_rms_scale": 0.676308096198592,
-          "absolute_coefficient": 0.42145156348753604
+          "absolute_coefficient": 0.41918727324438837
         },
         {
           "feature": "ctx_games_30d_diff",
-          "standardized_coefficient": 0.3713179671558838,
+          "standardized_coefficient": 0.3720586999290433,
           "training_rms_scale": 99.1986079527901,
-          "absolute_coefficient": 0.3713179671558838
+          "absolute_coefficient": 0.3720586999290433
         },
         {
           "feature": "ctx_serve_second_won_diff",
-          "standardized_coefficient": 0.26499894049288814,
+          "standardized_coefficient": 0.2646921933272854,
           "training_rms_scale": 0.04023222856647087,
-          "absolute_coefficient": 0.26499894049288814
+          "absolute_coefficient": 0.2646921933272854
         },
         {
           "feature": "ctx_rank_diff",
-          "standardized_coefficient": -0.2632852798824511,
+          "standardized_coefficient": -0.26304048734238944,
           "training_rms_scale": 253.67612032369257,
-          "absolute_coefficient": 0.2632852798824511
+          "absolute_coefficient": 0.26304048734238944
         },
         {
           "feature": "ctx_matches_30d_diff",
-          "standardized_coefficient": -0.25786537657562136,
+          "standardized_coefficient": -0.258284042740231,
           "training_rms_scale": 4.215596712703209,
-          "absolute_coefficient": 0.25786537657562136
+          "absolute_coefficient": 0.258284042740231
         },
         {
           "feature": "ctx_rest_log1p_diff",
-          "standardized_coefficient": -0.20639270304450574,
+          "standardized_coefficient": -0.20788243728385986,
           "training_rms_scale": 2.0416983028153224,
-          "absolute_coefficient": 0.20639270304450574
+          "absolute_coefficient": 0.20788243728385986
         },
         {
           "feature": "ctx_weak_second_serve_x_elite_returner",
-          "standardized_coefficient": 0.19428764318902864,
+          "standardized_coefficient": 0.19419968085196088,
           "training_rms_scale": 0.015547002450438427,
-          "absolute_coefficient": 0.19428764318902864
+          "absolute_coefficient": 0.19419968085196088
         },
         {
           "feature": "ctx_state_uncertainty_diff",
-          "standardized_coefficient": -0.17875784741229225,
-          "training_rms_scale": 0.049177382811419174,
-          "absolute_coefficient": 0.17875784741229225
+          "standardized_coefficient": -0.1780851468071033,
+          "training_rms_scale": 0.04917738281141917,
+          "absolute_coefficient": 0.1780851468071033
         },
         {
           "feature": "ctx_consecutive_play_days_diff",
-          "standardized_coefficient": -0.148530474728715,
+          "standardized_coefficient": -0.1489011556297596,
           "training_rms_scale": 0.12590340276094414,
-          "absolute_coefficient": 0.148530474728715
+          "absolute_coefficient": 0.1489011556297596
         },
         {
           "feature": "ctx_short_rest_1d_diff",
-          "standardized_coefficient": -0.148530474728715,
+          "standardized_coefficient": -0.1489011556297596,
           "training_rms_scale": 0.12590340276094414,
-          "absolute_coefficient": 0.148530474728715
+          "absolute_coefficient": 0.1489011556297596
         },
         {
           "feature": "ctx_games_14d_diff",
-          "standardized_coefficient": 0.14422484437442085,
+          "standardized_coefficient": 0.14275712933361925,
           "training_rms_scale": 69.53204066215432,
-          "absolute_coefficient": 0.14422484437442085
+          "absolute_coefficient": 0.14275712933361925
         },
         {
           "feature": "ctx_altitude_change_x_short_rest_diff",
-          "standardized_coefficient": -0.12625744474641978,
+          "standardized_coefficient": -0.1264053106691027,
           "training_rms_scale": 55.26194758200591,
-          "absolute_coefficient": 0.12625744474641978
+          "absolute_coefficient": 0.1264053106691027
         },
         {
           "feature": "ctx_matches_14d_diff",
-          "standardized_coefficient": -0.11504109808626674,
+          "standardized_coefficient": -0.11432241336888382,
           "training_rms_scale": 2.9589207214643705,
-          "absolute_coefficient": 0.11504109808626674
+          "absolute_coefficient": 0.11432241336888382
         },
         {
           "feature": "ctx_serve_dominance_diff",
-          "standardized_coefficient": 0.10583922268896453,
+          "standardized_coefficient": 0.10568005822065618,
           "training_rms_scale": 0.09977250962204968,
-          "absolute_coefficient": 0.10583922268896453
+          "absolute_coefficient": 0.10568005822065618
         },
         {
           "feature": "ctx_serve_first_won_diff",
-          "standardized_coefficient": 0.10448317973839318,
+          "standardized_coefficient": 0.10423405381740737,
           "training_rms_scale": 0.05503526347289493,
-          "absolute_coefficient": 0.10448317973839318
+          "absolute_coefficient": 0.10423405381740737
         },
         {
           "feature": "ctx_return_dominance_diff",
-          "standardized_coefficient": 0.10275401386379661,
+          "standardized_coefficient": 0.10334969203774291,
           "training_rms_scale": 0.03795707054859839,
-          "absolute_coefficient": 0.10275401386379661
+          "absolute_coefficient": 0.10334969203774291
         },
         {
           "feature": "ctx_workload_x_humidity_diff",
-          "standardized_coefficient": -0.09004002114514463,
-          "training_rms_scale": 1.960119133515852,
-          "absolute_coefficient": 0.09004002114514463
+          "standardized_coefficient": -0.10331345657202455,
+          "training_rms_scale": 2.030306260692785,
+          "absolute_coefficient": 0.10331345657202455
         },
         {
           "feature": "ctx_return_strength_diff",
-          "standardized_coefficient": 0.08780212696661199,
+          "standardized_coefficient": 0.08833218270289404,
           "training_rms_scale": 0.03733410847032332,
-          "absolute_coefficient": 0.08780212696661199
+          "absolute_coefficient": 0.08833218270289404
         },
         {
           "feature": "ctx_comeback_recency_30d_diff",
-          "standardized_coefficient": -0.07986545809600526,
+          "standardized_coefficient": -0.07990131754868957,
           "training_rms_scale": 0.3587310993139561,
-          "absolute_coefficient": 0.07986545809600526
+          "absolute_coefficient": 0.07990131754868957
         },
         {
           "feature": "ctx_minutes_7d_diff",
-          "standardized_coefficient": 0.07805817627841746,
+          "standardized_coefficient": 0.07614082210175369,
           "training_rms_scale": 180.7979665202505,
-          "absolute_coefficient": 0.07805817627841746
+          "absolute_coefficient": 0.07614082210175369
         },
         {
           "feature": "ctx_previous_match_duration_diff",
-          "standardized_coefficient": 0.07000002988874429,
+          "standardized_coefficient": 0.06927340792132392,
           "training_rms_scale": 49.29419994032512,
-          "absolute_coefficient": 0.07000002988874429
-        },
-        {
-          "feature": "ctx_layoff_response_90d_evidence_diff",
-          "standardized_coefficient": -0.06718326771671453,
-          "training_rms_scale": 0.2011536836966162,
-          "absolute_coefficient": 0.06718326771671453
+          "absolute_coefficient": 0.06927340792132392
         },
         {
           "feature": "ctx_first_match_after_90d_diff",
-          "standardized_coefficient": 0.06656987228240699,
+          "standardized_coefficient": 0.06642418133348532,
           "training_rms_scale": 0.24346586385234784,
-          "absolute_coefficient": 0.06656987228240699
+          "absolute_coefficient": 0.06642418133348532
         },
         {
           "feature": "ctx_layoff_90d_diff",
-          "standardized_coefficient": 0.06656987228240699,
+          "standardized_coefficient": 0.06642418133348532,
           "training_rms_scale": 0.24346586385234784,
-          "absolute_coefficient": 0.06656987228240699
+          "absolute_coefficient": 0.06642418133348532
+        },
+        {
+          "feature": "ctx_layoff_response_90d_evidence_diff",
+          "standardized_coefficient": -0.06640133661226223,
+          "training_rms_scale": 0.2011536836966162,
+          "absolute_coefficient": 0.06640133661226223
         },
         {
           "feature": "ctx_comeback_recency_60d_diff",
-          "standardized_coefficient": -0.06349020679425799,
+          "standardized_coefficient": -0.0630009413829563,
           "training_rms_scale": 0.30041408964382504,
-          "absolute_coefficient": 0.06349020679425799
+          "absolute_coefficient": 0.0630009413829563
         },
         {
           "feature": "ctx_big_server_x_altitude",
-          "standardized_coefficient": -0.05985033796058612,
+          "standardized_coefficient": -0.06001700473029121,
           "training_rms_scale": 0.03555122301618322,
-          "absolute_coefficient": 0.05985033796058612
+          "absolute_coefficient": 0.06001700473029121
         },
         {
           "feature": "ctx_timezone_change_abs_diff",
-          "standardized_coefficient": -0.05975207132321948,
+          "standardized_coefficient": -0.05970274735356199,
           "training_rms_scale": 2.401823849857651,
-          "absolute_coefficient": 0.05975207132321948
+          "absolute_coefficient": 0.05970274735356199
         },
         {
           "feature": "ctx_layoff_response_60d_evidence_diff",
-          "standardized_coefficient": 0.05588183160435605,
+          "standardized_coefficient": 0.05557709508604106,
           "training_rms_scale": 0.3169287265123331,
-          "absolute_coefficient": 0.05588183160435605
+          "absolute_coefficient": 0.05557709508604106
         },
         {
           "feature": "ctx_serve_dependence_diff",
-          "standardized_coefficient": 0.055311756794425286,
+          "standardized_coefficient": 0.054992072044064214,
           "training_rms_scale": 0.12040122926301307,
-          "absolute_coefficient": 0.055311756794425286
+          "absolute_coefficient": 0.054992072044064214
         },
         {
           "feature": "ctx_rest_3_to_7d_diff",
-          "standardized_coefficient": -0.05068499043321113,
+          "standardized_coefficient": -0.05211852842187111,
           "training_rms_scale": 0.5358687771599522,
-          "absolute_coefficient": 0.05068499043321113
-        },
-        {
-          "feature": "ctx_games_load_x_heat_diff",
-          "standardized_coefficient": -0.0499062276340374,
-          "training_rms_scale": 1.125275038664046,
-          "absolute_coefficient": 0.0499062276340374
-        },
-        {
-          "feature": "ctx_first_match_after_30d_diff",
-          "standardized_coefficient": 0.04560096816494321,
-          "training_rms_scale": 0.38188392844739816,
-          "absolute_coefficient": 0.04560096816494321
-        },
-        {
-          "feature": "ctx_layoff_30d_diff",
-          "standardized_coefficient": 0.04560096816494321,
-          "training_rms_scale": 0.38188392844739816,
-          "absolute_coefficient": 0.04560096816494321
-        },
-        {
-          "feature": "ctx_layoff_response_60d_context_diff",
-          "standardized_coefficient": -0.042675439154521023,
-          "training_rms_scale": 0.05361020485116883,
-          "absolute_coefficient": 0.042675439154521023
-        },
-        {
-          "feature": "ctx_court_speed_x_serve_dominance_diff",
-          "standardized_coefficient": 0.0415049975164482,
-          "training_rms_scale": 0.0014253219484415152,
-          "absolute_coefficient": 0.0415049975164482
-        },
-        {
-          "feature": "ctx_workload_x_heat_diff",
-          "standardized_coefficient": 0.04111120669201655,
-          "training_rms_scale": 2.329177458484283,
-          "absolute_coefficient": 0.04111120669201655
+          "absolute_coefficient": 0.05211852842187111
         },
         {
           "feature": "ctx_short_rest_x_heat_diff",
-          "standardized_coefficient": -0.040006772411486556,
-          "training_rms_scale": 1.254244020239188,
-          "absolute_coefficient": 0.040006772411486556
+          "standardized_coefficient": -0.04618188142733114,
+          "training_rms_scale": 1.2759096603137183,
+          "absolute_coefficient": 0.04618188142733114
+        },
+        {
+          "feature": "ctx_first_match_after_30d_diff",
+          "standardized_coefficient": 0.045544131386829126,
+          "training_rms_scale": 0.38188392844739816,
+          "absolute_coefficient": 0.045544131386829126
+        },
+        {
+          "feature": "ctx_layoff_30d_diff",
+          "standardized_coefficient": 0.045544131386829126,
+          "training_rms_scale": 0.38188392844739816,
+          "absolute_coefficient": 0.045544131386829126
+        },
+        {
+          "feature": "ctx_games_load_x_heat_diff",
+          "standardized_coefficient": -0.045479868024496356,
+          "training_rms_scale": 1.1365950973360384,
+          "absolute_coefficient": 0.045479868024496356
+        },
+        {
+          "feature": "ctx_layoff_response_60d_context_diff",
+          "standardized_coefficient": -0.04213119838566853,
+          "training_rms_scale": 0.05361020485116883,
+          "absolute_coefficient": 0.04213119838566853
+        },
+        {
+          "feature": "ctx_court_speed_x_serve_dominance_diff",
+          "standardized_coefficient": 0.042057460780890545,
+          "training_rms_scale": 0.0014253219484415152,
+          "absolute_coefficient": 0.042057460780890545
+        },
+        {
+          "feature": "ctx_workload_x_heat_diff",
+          "standardized_coefficient": 0.03574389899160972,
+          "training_rms_scale": 2.3585931926158117,
+          "absolute_coefficient": 0.03574389899160972
         },
         {
           "feature": "ctx_trajectory_return_diff",
-          "standardized_coefficient": 0.03494278998101048,
+          "standardized_coefficient": 0.03444862191868453,
           "training_rms_scale": 0.010012040057215132,
-          "absolute_coefficient": 0.03494278998101048
-        },
-        {
-          "feature": "ctx_layoff_response_30d_context_diff",
-          "standardized_coefficient": 0.032963426039796115,
-          "training_rms_scale": 0.08237489150350433,
-          "absolute_coefficient": 0.032963426039796115
+          "absolute_coefficient": 0.03444862191868453
         },
         {
           "feature": "ctx_ace_rate_diff",
-          "standardized_coefficient": -0.03264205891763937,
+          "standardized_coefficient": -0.03307738015682622,
           "training_rms_scale": 0.04056597385140453,
-          "absolute_coefficient": 0.03264205891763937
+          "absolute_coefficient": 0.03307738015682622
         },
         {
-          "feature": "ctx_big_server_x_fast_court",
-          "standardized_coefficient": 0.029709370662311885,
-          "training_rms_scale": 0.0011125272773610992,
-          "absolute_coefficient": 0.029709370662311885
+          "feature": "ctx_layoff_response_30d_context_diff",
+          "standardized_coefficient": 0.03282531415006106,
+          "training_rms_scale": 0.08237489150350433,
+          "absolute_coefficient": 0.03282531415006106
         },
         {
           "feature": "ctx_big_server_x_slow_court",
-          "standardized_coefficient": 0.029300120898848165,
+          "standardized_coefficient": 0.030650171375345703,
           "training_rms_scale": 0.0008909689746767937,
-          "absolute_coefficient": 0.029300120898848165
+          "absolute_coefficient": 0.030650171375345703
+        },
+        {
+          "feature": "ctx_big_server_x_fast_court",
+          "standardized_coefficient": 0.029335973011088843,
+          "training_rms_scale": 0.0011125272773610992,
+          "absolute_coefficient": 0.029335973011088843
         },
         {
           "feature": "ctx_layoff_response_30d_evidence_diff",
-          "standardized_coefficient": -0.0272765694828143,
+          "standardized_coefficient": -0.02693467983034703,
           "training_rms_scale": 0.6034968033008749,
-          "absolute_coefficient": 0.0272765694828143
+          "absolute_coefficient": 0.02693467983034703
         },
         {
           "feature": "ctx_trajectory_serve_diff",
-          "standardized_coefficient": 0.026627448732442438,
+          "standardized_coefficient": 0.026054911711411735,
           "training_rms_scale": 0.010614502464336371,
-          "absolute_coefficient": 0.026627448732442438
+          "absolute_coefficient": 0.026054911711411735
         },
         {
           "feature": "ctx_short_rest_2d_diff",
-          "standardized_coefficient": 0.025274704581025275,
+          "standardized_coefficient": 0.02473239589150285,
           "training_rms_scale": 0.08374462183926579,
-          "absolute_coefficient": 0.025274704581025275
-        },
-        {
-          "feature": "ctx_games_3d_diff",
-          "standardized_coefficient": -0.021760468885742613,
-          "training_rms_scale": 34.93002075971043,
-          "absolute_coefficient": 0.021760468885742613
+          "absolute_coefficient": 0.02473239589150285
         },
         {
           "feature": "ctx_serve_dependence_x_wind_diff",
-          "standardized_coefficient": 0.021454251233586526,
-          "training_rms_scale": 0.05391646194952704,
-          "absolute_coefficient": 0.021454251233586526
+          "standardized_coefficient": 0.024558831743125037,
+          "training_rms_scale": 0.0551272207199394,
+          "absolute_coefficient": 0.024558831743125037
+        },
+        {
+          "feature": "ctx_games_3d_diff",
+          "standardized_coefficient": -0.02411925602245376,
+          "training_rms_scale": 34.93002075971043,
+          "absolute_coefficient": 0.02411925602245376
         },
         {
           "feature": "ctx_context_quality_diff",
-          "standardized_coefficient": 0.020203114439854862,
+          "standardized_coefficient": 0.02166422308503904,
           "training_rms_scale": 0.09461358957043521,
-          "absolute_coefficient": 0.020203114439854862
+          "absolute_coefficient": 0.02166422308503904
         },
         {
           "feature": "ctx_comeback_recency_90d_diff",
-          "standardized_coefficient": 0.020170679896859195,
+          "standardized_coefficient": 0.019733879998448455,
           "training_rms_scale": 0.2594596809730338,
-          "absolute_coefficient": 0.020170679896859195
+          "absolute_coefficient": 0.019733879998448455
         },
         {
           "feature": "ctx_rest_bucket_diff",
-          "standardized_coefficient": 0.016883918039070443,
+          "standardized_coefficient": 0.016075053464593914,
           "training_rms_scale": 3.3880685574959983,
-          "absolute_coefficient": 0.016883918039070443
-        },
-        {
-          "feature": "ctx_travel_per_rest_day_diff",
-          "standardized_coefficient": -0.01361412117678177,
-          "training_rms_scale": 643.1965515356649,
-          "absolute_coefficient": 0.01361412117678177
+          "absolute_coefficient": 0.016075053464593914
         },
         {
           "feature": "ctx_double_fault_rate_diff",
-          "standardized_coefficient": 0.013552376275872335,
+          "standardized_coefficient": 0.01355054136172435,
           "training_rms_scale": 0.018091221142092717,
-          "absolute_coefficient": 0.013552376275872335
+          "absolute_coefficient": 0.01355054136172435
+        },
+        {
+          "feature": "ctx_travel_per_rest_day_diff",
+          "standardized_coefficient": -0.013068581719198202,
+          "training_rms_scale": 643.1965515356649,
+          "absolute_coefficient": 0.013068581719198202
         },
         {
           "feature": "ctx_travel_km_diff",
-          "standardized_coefficient": -0.010565354560050337,
+          "standardized_coefficient": -0.012442284287319114,
           "training_rms_scale": 2690.666179238946,
-          "absolute_coefficient": 0.010565354560050337
+          "absolute_coefficient": 0.012442284287319114
         },
         {
           "feature": "ctx_first_match_after_60d_diff",
-          "standardized_coefficient": -0.0066662737003063965,
+          "standardized_coefficient": -0.00653972068628175,
           "training_rms_scale": 0.2910916771264103,
-          "absolute_coefficient": 0.0066662737003063965
+          "absolute_coefficient": 0.00653972068628175
         },
         {
           "feature": "ctx_layoff_60d_diff",
-          "standardized_coefficient": -0.0066662737003063965,
+          "standardized_coefficient": -0.00653972068628175,
           "training_rms_scale": 0.2910916771264103,
-          "absolute_coefficient": 0.0066662737003063965
+          "absolute_coefficient": 0.00653972068628175
         },
         {
           "feature": "ctx_court_speed_x_return_dominance_diff",
-          "standardized_coefficient": 0.0025562433441928367,
+          "standardized_coefficient": 0.0026345941893140224,
           "training_rms_scale": 0.0005503356121320271,
-          "absolute_coefficient": 0.0025562433441928367
+          "absolute_coefficient": 0.0026345941893140224
         },
         {
           "feature": "ctx_layoff_response_90d_context_diff",
-          "standardized_coefficient": 0.0021327513985185008,
+          "standardized_coefficient": 0.0022215937046092477,
           "training_rms_scale": 0.03910434687032654,
-          "absolute_coefficient": 0.0021327513985185008
+          "absolute_coefficient": 0.0022215937046092477
         },
         {
           "feature": "ctx_previous_match_games_diff",
-          "standardized_coefficient": -0.001621781371830584,
+          "standardized_coefficient": -0.0008283871355142268,
           "training_rms_scale": 9.421574593767216,
-          "absolute_coefficient": 0.001621781371830584
+          "absolute_coefficient": 0.0008283871355142268
         }
       ],
       "combined_coefficients": [
         {
           "feature": "ctx_matches_3d_diff",
-          "standardized_coefficient": 1.4466970901114113,
+          "standardized_coefficient": 1.4488208262026945,
           "training_rms_scale": 1.4398965067793494,
-          "absolute_coefficient": 1.4466970901114113
+          "absolute_coefficient": 1.4488208262026945
         },
         {
           "feature": "x_elo_a",
-          "standardized_coefficient": 0.5559622382627484,
+          "standardized_coefficient": 0.5571487480645304,
           "training_rms_scale": 0.8299196544497509,
-          "absolute_coefficient": 0.5559622382627484
+          "absolute_coefficient": 0.5571487480645304
         },
         {
           "feature": "ctx_short_rest_0d_diff",
-          "standardized_coefficient": 0.4291002702151808,
+          "standardized_coefficient": 0.4268907715292938,
           "training_rms_scale": 0.676308096198592,
-          "absolute_coefficient": 0.4291002702151808
+          "absolute_coefficient": 0.4268907715292938
         },
         {
           "feature": "ctx_rest_log1p_diff",
-          "standardized_coefficient": -0.36729274473060325,
+          "standardized_coefficient": -0.3676916534003651,
           "training_rms_scale": 2.0416983028153224,
-          "absolute_coefficient": 0.36729274473060325
+          "absolute_coefficient": 0.3676916534003651
         },
         {
           "feature": "ctx_games_7d_diff",
-          "standardized_coefficient": -0.354151190286001,
+          "standardized_coefficient": -0.35261534966778735,
           "training_rms_scale": 53.02927988319612,
-          "absolute_coefficient": 0.354151190286001
+          "absolute_coefficient": 0.35261534966778735
         },
         {
           "feature": "ctx_matches_7d_diff",
-          "standardized_coefficient": 0.32870441487863283,
+          "standardized_coefficient": 0.3436717104805037,
           "training_rms_scale": 2.2518232704007355,
-          "absolute_coefficient": 0.32870441487863283
+          "absolute_coefficient": 0.3436717104805037
         },
         {
           "feature": "ctx_matches_30d_diff",
-          "standardized_coefficient": -0.2796154006780994,
+          "standardized_coefficient": -0.27938609397805503,
           "training_rms_scale": 4.215596712703209,
-          "absolute_coefficient": 0.2796154006780994
+          "absolute_coefficient": 0.27938609397805503
         },
         {
           "feature": "ctx_games_30d_diff",
-          "standardized_coefficient": 0.2416018555667934,
+          "standardized_coefficient": 0.24185129968173785,
           "training_rms_scale": 99.1986079527901,
-          "absolute_coefficient": 0.2416018555667934
+          "absolute_coefficient": 0.24185129968173785
         },
         {
           "feature": "ctx_games_14d_diff",
-          "standardized_coefficient": 0.24073746233043106,
+          "standardized_coefficient": 0.2384919087203822,
           "training_rms_scale": 69.53204066215432,
-          "absolute_coefficient": 0.24073746233043106
+          "absolute_coefficient": 0.2384919087203822
         },
         {
           "feature": "ctx_matches_14d_diff",
-          "standardized_coefficient": -0.2330387951880004,
+          "standardized_coefficient": -0.2314007716319761,
           "training_rms_scale": 2.9589207214643705,
-          "absolute_coefficient": 0.2330387951880004
+          "absolute_coefficient": 0.2314007716319761
         },
         {
           "feature": "ctx_state_uncertainty_diff",
-          "standardized_coefficient": -0.23116979283688519,
-          "training_rms_scale": 0.049177382811419174,
-          "absolute_coefficient": 0.23116979283688519
+          "standardized_coefficient": -0.23035752032977921,
+          "training_rms_scale": 0.04917738281141917,
+          "absolute_coefficient": 0.23035752032977921
         },
         {
           "feature": "ctx_weak_second_serve_x_elite_returner",
-          "standardized_coefficient": 0.1878231654869858,
+          "standardized_coefficient": 0.1877852834978353,
           "training_rms_scale": 0.015547002450438427,
-          "absolute_coefficient": 0.1878231654869858
+          "absolute_coefficient": 0.1877852834978353
         },
         {
           "feature": "ctx_serve_second_won_diff",
-          "standardized_coefficient": 0.16051058009603938,
+          "standardized_coefficient": 0.15977501299498503,
           "training_rms_scale": 0.04023222856647087,
-          "absolute_coefficient": 0.16051058009603938
+          "absolute_coefficient": 0.15977501299498503
         },
         {
           "feature": "x_sr_a",
-          "standardized_coefficient": 0.15875416564049888,
+          "standardized_coefficient": 0.15750829556568458,
           "training_rms_scale": 0.08153332655373471,
-          "absolute_coefficient": 0.15875416564049888
+          "absolute_coefficient": 0.15750829556568458
         },
         {
           "feature": "ctx_consecutive_play_days_diff",
-          "standardized_coefficient": -0.14388361945094308,
+          "standardized_coefficient": -0.14416585451137282,
           "training_rms_scale": 0.12590340276094414,
-          "absolute_coefficient": 0.14388361945094308
+          "absolute_coefficient": 0.14416585451137282
         },
         {
           "feature": "ctx_short_rest_1d_diff",
-          "standardized_coefficient": -0.14388361945094308,
+          "standardized_coefficient": -0.14416585451137282,
           "training_rms_scale": 0.12590340276094414,
-          "absolute_coefficient": 0.14388361945094308
+          "absolute_coefficient": 0.14416585451137282
         },
         {
           "feature": "ctx_rest_bucket_diff",
-          "standardized_coefficient": 0.13473239601473463,
+          "standardized_coefficient": 0.13359670421146377,
           "training_rms_scale": 3.3880685574959983,
-          "absolute_coefficient": 0.13473239601473463
+          "absolute_coefficient": 0.13359670421146377
         },
         {
           "feature": "ctx_altitude_change_x_short_rest_diff",
-          "standardized_coefficient": -0.12123725217758091,
+          "standardized_coefficient": -0.1213440655472173,
           "training_rms_scale": 55.26194758200591,
-          "absolute_coefficient": 0.12123725217758091
+          "absolute_coefficient": 0.1213440655472173
         },
         {
           "feature": "ctx_comeback_recency_30d_diff",
-          "standardized_coefficient": -0.10783472471548446,
+          "standardized_coefficient": -0.10807564213537095,
           "training_rms_scale": 0.3587310993139561,
-          "absolute_coefficient": 0.10783472471548446
-        },
-        {
-          "feature": "ctx_first_match_after_90d_diff",
-          "standardized_coefficient": 0.10093510386437052,
-          "training_rms_scale": 0.24346586385234784,
-          "absolute_coefficient": 0.10093510386437052
-        },
-        {
-          "feature": "ctx_layoff_90d_diff",
-          "standardized_coefficient": 0.10093510386437052,
-          "training_rms_scale": 0.24346586385234784,
-          "absolute_coefficient": 0.10093510386437052
-        },
-        {
-          "feature": "ctx_rank_diff",
-          "standardized_coefficient": -0.09282787703624526,
-          "training_rms_scale": 253.67612032369257,
-          "absolute_coefficient": 0.09282787703624526
+          "absolute_coefficient": 0.10807564213537095
         },
         {
           "feature": "ctx_workload_x_humidity_diff",
-          "standardized_coefficient": -0.08707750047441849,
-          "training_rms_scale": 1.960119133515852,
-          "absolute_coefficient": 0.08707750047441849
+          "standardized_coefficient": -0.10229175245513072,
+          "training_rms_scale": 2.030306260692785,
+          "absolute_coefficient": 0.10229175245513072
+        },
+        {
+          "feature": "ctx_first_match_after_90d_diff",
+          "standardized_coefficient": 0.1008435282341582,
+          "training_rms_scale": 0.24346586385234784,
+          "absolute_coefficient": 0.1008435282341582
+        },
+        {
+          "feature": "ctx_layoff_90d_diff",
+          "standardized_coefficient": 0.1008435282341582,
+          "training_rms_scale": 0.24346586385234784,
+          "absolute_coefficient": 0.1008435282341582
+        },
+        {
+          "feature": "ctx_rank_diff",
+          "standardized_coefficient": -0.09249226970158088,
+          "training_rms_scale": 253.67612032369257,
+          "absolute_coefficient": 0.09249226970158088
         },
         {
           "feature": "ctx_timezone_change_abs_diff",
-          "standardized_coefficient": -0.0808126380564989,
+          "standardized_coefficient": -0.08080186172227931,
           "training_rms_scale": 2.401823849857651,
-          "absolute_coefficient": 0.0808126380564989
+          "absolute_coefficient": 0.08080186172227931
         },
         {
           "feature": "ctx_layoff_response_60d_evidence_diff",
-          "standardized_coefficient": 0.07911477055029384,
+          "standardized_coefficient": 0.0790095115713228,
           "training_rms_scale": 0.3169287265123331,
-          "absolute_coefficient": 0.07911477055029384
+          "absolute_coefficient": 0.0790095115713228
         },
         {
           "feature": "ctx_comeback_recency_90d_diff",
-          "standardized_coefficient": -0.07495897255052988,
+          "standardized_coefficient": -0.07539724980907234,
           "training_rms_scale": 0.2594596809730338,
-          "absolute_coefficient": 0.07495897255052988
+          "absolute_coefficient": 0.07539724980907234
         },
         {
           "feature": "ctx_layoff_response_90d_evidence_diff",
-          "standardized_coefficient": -0.0679793636820627,
+          "standardized_coefficient": -0.06711256070160411,
           "training_rms_scale": 0.2011536836966162,
-          "absolute_coefficient": 0.0679793636820627
+          "absolute_coefficient": 0.06711256070160411
         },
         {
           "feature": "ctx_previous_match_duration_diff",
-          "standardized_coefficient": 0.06349001782725214,
+          "standardized_coefficient": 0.06272524859180288,
           "training_rms_scale": 49.29419994032512,
-          "absolute_coefficient": 0.06349001782725214
+          "absolute_coefficient": 0.06272524859180288
         },
         {
           "feature": "ctx_minutes_7d_diff",
-          "standardized_coefficient": 0.055332024775634404,
+          "standardized_coefficient": 0.053222333366056376,
           "training_rms_scale": 180.7979665202505,
-          "absolute_coefficient": 0.055332024775634404
+          "absolute_coefficient": 0.053222333366056376
         },
         {
           "feature": "ctx_short_rest_x_heat_diff",
-          "standardized_coefficient": -0.03756528730306532,
-          "training_rms_scale": 1.254244020239188,
-          "absolute_coefficient": 0.03756528730306532
-        },
-        {
-          "feature": "ctx_games_3d_diff",
-          "standardized_coefficient": 0.03308094224985335,
-          "training_rms_scale": 34.93002075971043,
-          "absolute_coefficient": 0.03308094224985335
+          "standardized_coefficient": -0.04248966214020492,
+          "training_rms_scale": 1.2759096603137183,
+          "absolute_coefficient": 0.04248966214020492
         },
         {
           "feature": "ctx_serve_first_won_diff",
-          "standardized_coefficient": -0.0304724666990108,
+          "standardized_coefficient": -0.03157694120597115,
           "training_rms_scale": 0.05503526347289493,
-          "absolute_coefficient": 0.0304724666990108
+          "absolute_coefficient": 0.03157694120597115
         },
         {
-          "feature": "ctx_serve_dominance_diff",
-          "standardized_coefficient": 0.029574439466156198,
-          "training_rms_scale": 0.09977250962204968,
-          "absolute_coefficient": 0.029574439466156198
-        },
-        {
-          "feature": "ctx_comeback_recency_60d_diff",
-          "standardized_coefficient": -0.027971064511593036,
-          "training_rms_scale": 0.30041408964382504,
-          "absolute_coefficient": 0.027971064511593036
-        },
-        {
-          "feature": "ctx_short_rest_2d_diff",
-          "standardized_coefficient": 0.02511878286327681,
-          "training_rms_scale": 0.08374462183926579,
-          "absolute_coefficient": 0.02511878286327681
-        },
-        {
-          "feature": "ctx_first_match_after_30d_diff",
-          "standardized_coefficient": 0.02490442659968258,
-          "training_rms_scale": 0.38188392844739816,
-          "absolute_coefficient": 0.02490442659968258
-        },
-        {
-          "feature": "ctx_layoff_30d_diff",
-          "standardized_coefficient": 0.02490442659968258,
-          "training_rms_scale": 0.38188392844739816,
-          "absolute_coefficient": 0.02490442659968258
-        },
-        {
-          "feature": "ctx_travel_per_rest_day_diff",
-          "standardized_coefficient": -0.024659411922563896,
-          "training_rms_scale": 643.1965515356649,
-          "absolute_coefficient": 0.024659411922563896
-        },
-        {
-          "feature": "ctx_trajectory_return_diff",
-          "standardized_coefficient": 0.02408983234258384,
-          "training_rms_scale": 0.010012040057215132,
-          "absolute_coefficient": 0.02408983234258384
-        },
-        {
-          "feature": "ctx_court_speed_x_return_dominance_diff",
-          "standardized_coefficient": -0.02234263028292848,
-          "training_rms_scale": 0.0005503356121320271,
-          "absolute_coefficient": 0.02234263028292848
-        },
-        {
-          "feature": "ctx_big_server_x_slow_court",
-          "standardized_coefficient": 0.020728560680827075,
-          "training_rms_scale": 0.0008909689746767937,
-          "absolute_coefficient": 0.020728560680827075
+          "feature": "ctx_games_3d_diff",
+          "standardized_coefficient": 0.030521065588530207,
+          "training_rms_scale": 34.93002075971043,
+          "absolute_coefficient": 0.030521065588530207
         },
         {
           "feature": "ctx_serve_dependence_x_wind_diff",
-          "standardized_coefficient": 0.020042204628124217,
-          "training_rms_scale": 0.05391646194952704,
-          "absolute_coefficient": 0.020042204628124217
+          "standardized_coefficient": 0.029080835981982942,
+          "training_rms_scale": 0.0551272207199394,
+          "absolute_coefficient": 0.029080835981982942
         },
         {
-          "feature": "ctx_serve_dependence_diff",
-          "standardized_coefficient": 0.019211025084541016,
-          "training_rms_scale": 0.12040122926301307,
-          "absolute_coefficient": 0.019211025084541016
+          "feature": "ctx_serve_dominance_diff",
+          "standardized_coefficient": 0.02849428887010024,
+          "training_rms_scale": 0.09977250962204968,
+          "absolute_coefficient": 0.02849428887010024
         },
         {
-          "feature": "ctx_layoff_response_60d_context_diff",
-          "standardized_coefficient": -0.01710468517895759,
-          "training_rms_scale": 0.05361020485116883,
-          "absolute_coefficient": 0.01710468517895759
+          "feature": "ctx_comeback_recency_60d_diff",
+          "standardized_coefficient": -0.027077163993280827,
+          "training_rms_scale": 0.30041408964382504,
+          "absolute_coefficient": 0.027077163993280827
+        },
+        {
+          "feature": "ctx_first_match_after_30d_diff",
+          "standardized_coefficient": 0.02509417338775051,
+          "training_rms_scale": 0.38188392844739816,
+          "absolute_coefficient": 0.02509417338775051
+        },
+        {
+          "feature": "ctx_layoff_30d_diff",
+          "standardized_coefficient": 0.02509417338775051,
+          "training_rms_scale": 0.38188392844739816,
+          "absolute_coefficient": 0.02509417338775051
+        },
+        {
+          "feature": "ctx_short_rest_2d_diff",
+          "standardized_coefficient": 0.02459456391150143,
+          "training_rms_scale": 0.08374462183926579,
+          "absolute_coefficient": 0.02459456391150143
+        },
+        {
+          "feature": "ctx_travel_per_rest_day_diff",
+          "standardized_coefficient": -0.024151273028453477,
+          "training_rms_scale": 643.1965515356649,
+          "absolute_coefficient": 0.024151273028453477
+        },
+        {
+          "feature": "ctx_trajectory_return_diff",
+          "standardized_coefficient": 0.02369621672910268,
+          "training_rms_scale": 0.010012040057215132,
+          "absolute_coefficient": 0.02369621672910268
+        },
+        {
+          "feature": "ctx_big_server_x_slow_court",
+          "standardized_coefficient": 0.02233920675225654,
+          "training_rms_scale": 0.0008909689746767937,
+          "absolute_coefficient": 0.02233920675225654
+        },
+        {
+          "feature": "ctx_court_speed_x_return_dominance_diff",
+          "standardized_coefficient": -0.022312430966005797,
+          "training_rms_scale": 0.0005503356121320271,
+          "absolute_coefficient": 0.022312430966005797
         },
         {
           "feature": "ctx_return_dominance_diff",
-          "standardized_coefficient": 0.0168001640117515,
+          "standardized_coefficient": 0.01817383476607392,
           "training_rms_scale": 0.03795707054859839,
-          "absolute_coefficient": 0.0168001640117515
+          "absolute_coefficient": 0.01817383476607392
         },
         {
-          "feature": "ctx_previous_match_games_diff",
-          "standardized_coefficient": -0.01661738065086911,
-          "training_rms_scale": 9.421574593767216,
-          "absolute_coefficient": 0.01661738065086911
+          "feature": "ctx_serve_dependence_diff",
+          "standardized_coefficient": 0.017882883715485468,
+          "training_rms_scale": 0.12040122926301307,
+          "absolute_coefficient": 0.017882883715485468
+        },
+        {
+          "feature": "ctx_layoff_response_60d_context_diff",
+          "standardized_coefficient": -0.016505553628565914,
+          "training_rms_scale": 0.05361020485116883,
+          "absolute_coefficient": 0.016505553628565914
         },
         {
           "feature": "ctx_first_match_after_60d_diff",
-          "standardized_coefficient": -0.016155106413617417,
+          "standardized_coefficient": -0.016399589921141208,
           "training_rms_scale": 0.2910916771264103,
-          "absolute_coefficient": 0.016155106413617417
+          "absolute_coefficient": 0.016399589921141208
         },
         {
           "feature": "ctx_layoff_60d_diff",
-          "standardized_coefficient": -0.016155106413617417,
+          "standardized_coefficient": -0.016399589921141208,
           "training_rms_scale": 0.2910916771264103,
-          "absolute_coefficient": 0.016155106413617417
+          "absolute_coefficient": 0.016399589921141208
         },
         {
           "feature": "ctx_layoff_response_90d_context_diff",
-          "standardized_coefficient": 0.015785564655290043,
+          "standardized_coefficient": 0.01588328598445662,
           "training_rms_scale": 0.03910434687032654,
-          "absolute_coefficient": 0.015785564655290043
+          "absolute_coefficient": 0.01588328598445662
         },
         {
-          "feature": "ctx_ace_rate_diff",
-          "standardized_coefficient": 0.013388154367575397,
-          "training_rms_scale": 0.04056597385140453,
-          "absolute_coefficient": 0.013388154367575397
+          "feature": "ctx_previous_match_games_diff",
+          "standardized_coefficient": -0.015753261333102578,
+          "training_rms_scale": 9.421574593767216,
+          "absolute_coefficient": 0.015753261333102578
         },
         {
           "feature": "ctx_big_server_x_altitude",
-          "standardized_coefficient": -0.013217066419036987,
+          "standardized_coefficient": -0.01388793253438871,
           "training_rms_scale": 0.03555122301618322,
-          "absolute_coefficient": 0.013217066419036987
-        },
-        {
-          "feature": "ctx_games_load_x_heat_diff",
-          "standardized_coefficient": -0.01259802327374025,
-          "training_rms_scale": 1.125275038664046,
-          "absolute_coefficient": 0.01259802327374025
-        },
-        {
-          "feature": "ctx_trajectory_serve_diff",
-          "standardized_coefficient": 0.01206897681560768,
-          "training_rms_scale": 0.010614502464336371,
-          "absolute_coefficient": 0.01206897681560768
+          "absolute_coefficient": 0.01388793253438871
         },
         {
           "feature": "ctx_context_quality_diff",
-          "standardized_coefficient": 0.011762943619648815,
+          "standardized_coefficient": 0.013269519714134185,
           "training_rms_scale": 0.09461358957043521,
-          "absolute_coefficient": 0.011762943619648815
+          "absolute_coefficient": 0.013269519714134185
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "standardized_coefficient": 0.012670098398407654,
+          "training_rms_scale": 0.04056597385140453,
+          "absolute_coefficient": 0.012670098398407654
         },
         {
           "feature": "ctx_court_speed_x_serve_dominance_diff",
-          "standardized_coefficient": 0.011576248396706642,
+          "standardized_coefficient": 0.012155762217870167,
           "training_rms_scale": 0.0014253219484415152,
-          "absolute_coefficient": 0.011576248396706642
+          "absolute_coefficient": 0.012155762217870167
         },
         {
-          "feature": "ctx_travel_km_diff",
-          "standardized_coefficient": 0.005759299258228845,
-          "training_rms_scale": 2690.666179238946,
-          "absolute_coefficient": 0.005759299258228845
-        },
-        {
-          "feature": "ctx_return_strength_diff",
-          "standardized_coefficient": -0.004746411838869308,
-          "training_rms_scale": 0.03733410847032332,
-          "absolute_coefficient": 0.004746411838869308
-        },
-        {
-          "feature": "ctx_layoff_response_30d_evidence_diff",
-          "standardized_coefficient": 0.004162021979371874,
-          "training_rms_scale": 0.6034968033008749,
-          "absolute_coefficient": 0.004162021979371874
-        },
-        {
-          "feature": "ctx_layoff_response_30d_context_diff",
-          "standardized_coefficient": 0.004026805493968628,
-          "training_rms_scale": 0.08237489150350433,
-          "absolute_coefficient": 0.004026805493968628
-        },
-        {
-          "feature": "ctx_big_server_x_fast_court",
-          "standardized_coefficient": -0.0017695058592645553,
-          "training_rms_scale": 0.0011125272773610992,
-          "absolute_coefficient": 0.0017695058592645553
+          "feature": "ctx_trajectory_serve_diff",
+          "standardized_coefficient": 0.01149927468606027,
+          "training_rms_scale": 0.010614502464336371,
+          "absolute_coefficient": 0.01149927468606027
         },
         {
           "feature": "ctx_workload_x_heat_diff",
-          "standardized_coefficient": 0.001698679048483289,
-          "training_rms_scale": 2.329177458484283,
-          "absolute_coefficient": 0.001698679048483289
+          "standardized_coefficient": -0.009478025278747589,
+          "training_rms_scale": 2.3585931926158117,
+          "absolute_coefficient": 0.009478025278747589
         },
         {
-          "feature": "ctx_double_fault_rate_diff",
-          "standardized_coefficient": 0.0004783426225750025,
-          "training_rms_scale": 0.018091221142092717,
-          "absolute_coefficient": 0.0004783426225750025
+          "feature": "ctx_layoff_response_30d_evidence_diff",
+          "standardized_coefficient": 0.0041871820831290785,
+          "training_rms_scale": 0.6034968033008749,
+          "absolute_coefficient": 0.0041871820831290785
+        },
+        {
+          "feature": "ctx_layoff_response_30d_context_diff",
+          "standardized_coefficient": 0.003829129637966113,
+          "training_rms_scale": 0.08237489150350433,
+          "absolute_coefficient": 0.003829129637966113
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "standardized_coefficient": -0.0037433200607116775,
+          "training_rms_scale": 0.03733410847032332,
+          "absolute_coefficient": 0.0037433200607116775
+        },
+        {
+          "feature": "ctx_travel_km_diff",
+          "standardized_coefficient": 0.003585086343601566,
+          "training_rms_scale": 2690.666179238946,
+          "absolute_coefficient": 0.003585086343601566
+        },
+        {
+          "feature": "ctx_games_load_x_heat_diff",
+          "standardized_coefficient": -0.002770805825142401,
+          "training_rms_scale": 1.1365950973360384,
+          "absolute_coefficient": 0.002770805825142401
+        },
+        {
+          "feature": "ctx_big_server_x_fast_court",
+          "standardized_coefficient": -0.0023169458389459643,
+          "training_rms_scale": 0.0011125272773610992,
+          "absolute_coefficient": 0.0023169458389459643
         },
         {
           "feature": "ctx_rest_3_to_7d_diff",
-          "standardized_coefficient": -0.0002991965924450746,
+          "standardized_coefficient": -0.0017107850788627083,
           "training_rms_scale": 0.5358687771599522,
-          "absolute_coefficient": 0.0002991965924450746
+          "absolute_coefficient": 0.0017107850788627083
+        },
+        {
+          "feature": "ctx_double_fault_rate_diff",
+          "standardized_coefficient": 0.0005900114255647997,
+          "training_rms_scale": 0.018091221142092717,
+          "absolute_coefficient": 0.0005900114255647997
         }
       ]
     },
@@ -5057,11 +5057,11 @@
   "combined_2026_winner_call_flips": {
     "n": 10437,
     "old_accuracy": 0.6372520839321644,
-    "new_accuracy": 0.7578806170355467,
-    "flips": 2901,
-    "old_wrong_new_correct": 2080,
-    "old_correct_new_wrong": 821,
-    "net_corrected_flips": 1259,
+    "new_accuracy": 0.7574015521701638,
+    "flips": 2902,
+    "old_wrong_new_correct": 2078,
+    "old_correct_new_wrong": 824,
+    "net_corrected_flips": 1254,
     "flip_rows": [
       {
         "match_date": "2026-04-02",
@@ -5073,8 +5073,8 @@
         "old_predicted_winner": "Tomas Martin Etcheverry",
         "old_predicted_probability": 0.845791517649546,
         "new_predicted_winner": "Alex Bolt",
-        "new_predicted_probability": 0.9458927590664871,
-        "probability_swing_a": 0.791684276716033,
+        "new_predicted_probability": 0.9453725414550368,
+        "probability_swing_a": 0.7911640591045828,
         "old_correct": true,
         "new_correct": false
       },
@@ -5088,8 +5088,8 @@
         "old_predicted_winner": "Adolfo Daniel Vallejo",
         "old_predicted_probability": 0.8815692358457827,
         "new_predicted_winner": "Franco Roncadelli",
-        "new_predicted_probability": 0.9059261171704525,
-        "probability_swing_a": -0.7874953530162352,
+        "new_predicted_probability": 0.9061606750542831,
+        "probability_swing_a": -0.7877299109000658,
         "old_correct": false,
         "new_correct": true
       },
@@ -5103,10 +5103,25 @@
         "old_predicted_winner": "Emilio Nava",
         "old_predicted_probability": 0.7939998888339739,
         "new_predicted_winner": "Taro Daniel",
-        "new_predicted_probability": 0.9737000935314254,
-        "probability_swing_a": -0.7676999823653993,
+        "new_predicted_probability": 0.9739302272937912,
+        "probability_swing_a": -0.7679301161277651,
         "old_correct": false,
         "new_correct": true
+      },
+      {
+        "match_date": "2026-05-24",
+        "tour": "MEN",
+        "surface": "Clay",
+        "tourney_name": "Roland Garros",
+        "actual_winner": "Alexander Blockx",
+        "actual_loser": "Coleman Wong",
+        "old_predicted_winner": "Alexander Blockx",
+        "old_predicted_probability": 0.8297899930553919,
+        "new_predicted_winner": "Coleman Wong",
+        "new_predicted_probability": 0.9241470262978158,
+        "probability_swing_a": -0.7539370193532077,
+        "old_correct": true,
+        "new_correct": false
       },
       {
         "match_date": "2026-05-24",
@@ -5124,21 +5139,6 @@
         "new_correct": true
       },
       {
-        "match_date": "2026-05-24",
-        "tour": "MEN",
-        "surface": "Clay",
-        "tourney_name": "Roland Garros",
-        "actual_winner": "Alexander Blockx",
-        "actual_loser": "Coleman Wong",
-        "old_predicted_winner": "Alexander Blockx",
-        "old_predicted_probability": 0.8297899930553919,
-        "new_predicted_winner": "Coleman Wong",
-        "new_predicted_probability": 0.9234071600672781,
-        "probability_swing_a": -0.75319715312267,
-        "old_correct": true,
-        "new_correct": false
-      },
-      {
         "match_date": "2026-06-24",
         "tour": "MEN",
         "surface": "Grass",
@@ -5148,8 +5148,8 @@
         "old_predicted_winner": "Grigor Dimitrov",
         "old_predicted_probability": 0.7782795887896687,
         "new_predicted_winner": "Abdullah Shelbayh",
-        "new_predicted_probability": 0.9661879371992413,
-        "probability_swing_a": 0.7444675259889101,
+        "new_predicted_probability": 0.966790835664577,
+        "probability_swing_a": 0.7450704244542458,
         "old_correct": true,
         "new_correct": false
       },
@@ -5163,8 +5163,8 @@
         "old_predicted_winner": "Yosuke Watanuki",
         "old_predicted_probability": 0.8009105288413405,
         "new_predicted_winner": "Omar Jasika",
-        "new_predicted_probability": 0.9397766288265182,
-        "probability_swing_a": 0.7406871576678586,
+        "new_predicted_probability": 0.9408370681090119,
+        "probability_swing_a": 0.7417475969503524,
         "old_correct": false,
         "new_correct": true
       },
@@ -5193,8 +5193,8 @@
         "old_predicted_winner": "Kei Nishikori",
         "old_predicted_probability": 0.735558242841102,
         "new_predicted_winner": "Jack Kennedy",
-        "new_predicted_probability": 0.9834860296130539,
-        "probability_swing_a": 0.7190442724541559,
+        "new_predicted_probability": 0.9843054485164804,
+        "probability_swing_a": 0.7198636913575824,
         "old_correct": false,
         "new_correct": true
       },
@@ -5208,8 +5208,8 @@
         "old_predicted_winner": "Alvaro Guillen Meza",
         "old_predicted_probability": 0.7763232116397039,
         "new_predicted_winner": "Stefan Palosi",
-        "new_predicted_probability": 0.9391342878469514,
-        "probability_swing_a": -0.7154574994866553,
+        "new_predicted_probability": 0.9395052526939932,
+        "probability_swing_a": -0.7158284643336971,
         "old_correct": false,
         "new_correct": true
       },
@@ -5238,8 +5238,8 @@
         "old_predicted_winner": "Andrey Rublev",
         "old_predicted_probability": 0.8278274593959567,
         "new_predicted_winner": "Timofey Skatov",
-        "new_predicted_probability": 0.8810918109586539,
-        "probability_swing_a": -0.7089192703546106,
+        "new_predicted_probability": 0.879994020520578,
+        "probability_swing_a": -0.7078214799165347,
         "old_correct": true,
         "new_correct": false
       },
@@ -5253,8 +5253,23 @@
         "old_predicted_winner": "Valentin Vacherot",
         "old_predicted_probability": 0.7828158362983939,
         "new_predicted_winner": "Thomas Faurel",
-        "new_predicted_probability": 0.9205663633387311,
-        "probability_swing_a": 0.703382199637125,
+        "new_predicted_probability": 0.9216418854949562,
+        "probability_swing_a": 0.7044577217933501,
+        "old_correct": true,
+        "new_correct": false
+      },
+      {
+        "match_date": "2026-04-08",
+        "tour": "MEN",
+        "surface": "Clay",
+        "tourney_name": "Monte Carlo",
+        "actual_winner": "Alexander Zverev",
+        "actual_loser": "Cristian Garin",
+        "old_predicted_winner": "Alexander Zverev",
+        "old_predicted_probability": 0.7780616706569681,
+        "new_predicted_winner": "Cristian Garin",
+        "new_predicted_probability": 0.9243378796544189,
+        "probability_swing_a": -0.702399550311387,
         "old_correct": true,
         "new_correct": false
       },
@@ -5289,21 +5304,6 @@
         "new_correct": true
       },
       {
-        "match_date": "2026-04-08",
-        "tour": "MEN",
-        "surface": "Clay",
-        "tourney_name": "Monte Carlo",
-        "actual_winner": "Alexander Zverev",
-        "actual_loser": "Cristian Garin",
-        "old_predicted_winner": "Alexander Zverev",
-        "old_predicted_probability": 0.7780616706569681,
-        "new_predicted_winner": "Cristian Garin",
-        "new_predicted_probability": 0.9221436946176605,
-        "probability_swing_a": -0.7002053652746286,
-        "old_correct": true,
-        "new_correct": false
-      },
-      {
         "match_date": "2026-04-27",
         "tour": "MEN",
         "surface": "Hard",
@@ -5313,8 +5313,8 @@
         "old_predicted_winner": "Michael Mmoh",
         "old_predicted_probability": 0.7513017412983162,
         "new_predicted_winner": "Niels Visker",
-        "new_predicted_probability": 0.9476824592503315,
-        "probability_swing_a": -0.6989842005486476,
+        "new_predicted_probability": 0.9485001203381868,
+        "probability_swing_a": -0.6998018616365029,
         "old_correct": true,
         "new_correct": false
       },
@@ -5358,8 +5358,8 @@
         "old_predicted_winner": "Coleman Wong",
         "old_predicted_probability": 0.7417261271219209,
         "new_predicted_winner": "Nicolas Mejia",
-        "new_predicted_probability": 0.9460005252386723,
-        "probability_swing_a": -0.6877266523605932,
+        "new_predicted_probability": 0.9470361988673716,
+        "probability_swing_a": -0.6887623259892924,
         "old_correct": false,
         "new_correct": true
       },
@@ -5373,10 +5373,25 @@
         "old_predicted_winner": "Jakub Mensik",
         "old_predicted_probability": 0.7475894961406525,
         "new_predicted_winner": "Martin Damm",
-        "new_predicted_probability": 0.936792849976896,
-        "probability_swing_a": -0.6843823461175486,
+        "new_predicted_probability": 0.9372537388357363,
+        "probability_swing_a": -0.6848432349763889,
         "old_correct": true,
         "new_correct": false
+      },
+      {
+        "match_date": "2026-06-08",
+        "tour": "MEN",
+        "surface": "Clay",
+        "tourney_name": "Cattolica",
+        "actual_winner": "Francesco Forti",
+        "actual_loser": "Gonzalo Bueno",
+        "old_predicted_winner": "Gonzalo Bueno",
+        "old_predicted_probability": 0.7155122087257935,
+        "new_predicted_winner": "Francesco Forti",
+        "new_predicted_probability": 0.9649793486588277,
+        "probability_swing_a": 0.6804915573846211,
+        "old_correct": false,
+        "new_correct": true
       },
       {
         "match_date": "2026-04-13",
@@ -5390,21 +5405,6 @@
         "new_predicted_winner": "Mirra Andreeva",
         "new_predicted_probability": 0.9988755168585464,
         "probability_swing_a": -0.6804097572341639,
-        "old_correct": false,
-        "new_correct": true
-      },
-      {
-        "match_date": "2026-06-08",
-        "tour": "MEN",
-        "surface": "Clay",
-        "tourney_name": "Cattolica",
-        "actual_winner": "Francesco Forti",
-        "actual_loser": "Gonzalo Bueno",
-        "old_predicted_winner": "Gonzalo Bueno",
-        "old_predicted_probability": 0.7155122087257935,
-        "new_predicted_winner": "Francesco Forti",
-        "new_predicted_probability": 0.9644328054954494,
-        "probability_swing_a": 0.6799450142212429,
         "old_correct": false,
         "new_correct": true
       },
@@ -5433,25 +5433,25 @@
         "old_predicted_winner": "Jannik Sinner",
         "old_predicted_probability": 0.9417517892968225,
         "new_predicted_winner": "Benjamin Bonzi",
-        "new_predicted_probability": 0.7341937048458362,
-        "probability_swing_a": 0.6759454941426587,
+        "new_predicted_probability": 0.737556434817316,
+        "probability_swing_a": 0.6793082241141385,
         "old_correct": true,
         "new_correct": false
       },
       {
-        "match_date": "2026-06-29",
+        "match_date": "2026-04-13",
         "tour": "MEN",
-        "surface": "Clay",
-        "tourney_name": "Brasov",
-        "actual_winner": "Keegan Smith",
-        "actual_loser": "Andrej Nedic",
-        "old_predicted_winner": "Andrej Nedic",
-        "old_predicted_probability": 0.7026684466382185,
-        "new_predicted_winner": "Keegan Smith",
-        "new_predicted_probability": 0.9673303643870725,
-        "probability_swing_a": -0.669998811025291,
-        "old_correct": false,
-        "new_correct": true
+        "surface": "Hard",
+        "tourney_name": "Busan",
+        "actual_winner": "Liam Broady",
+        "actual_loser": "August Holmgren",
+        "old_predicted_winner": "Liam Broady",
+        "old_predicted_probability": 0.81174268417999,
+        "new_predicted_winner": "August Holmgren",
+        "new_predicted_probability": 0.8598928792792571,
+        "probability_swing_a": 0.671635563459247,
+        "old_correct": true,
+        "new_correct": false
       },
       {
         "match_date": "2026-06-29",
@@ -5469,6 +5469,21 @@
         "new_correct": true
       },
       {
+        "match_date": "2026-06-29",
+        "tour": "MEN",
+        "surface": "Clay",
+        "tourney_name": "Brasov",
+        "actual_winner": "Keegan Smith",
+        "actual_loser": "Andrej Nedic",
+        "old_predicted_winner": "Andrej Nedic",
+        "old_predicted_probability": 0.7026684466382185,
+        "new_predicted_winner": "Keegan Smith",
+        "new_predicted_probability": 0.9671254924314882,
+        "probability_swing_a": -0.6697939390697066,
+        "old_correct": false,
+        "new_correct": true
+      },
+      {
         "match_date": "2026-05-25",
         "tour": "MEN",
         "surface": "Hard",
@@ -5478,23 +5493,8 @@
         "old_predicted_winner": "Harold Mayot",
         "old_predicted_probability": 0.7015316196457803,
         "new_predicted_winner": "Millen Hurrion",
-        "new_predicted_probability": 0.9680451143235176,
-        "probability_swing_a": -0.6695767339692978,
-        "old_correct": true,
-        "new_correct": false
-      },
-      {
-        "match_date": "2026-04-13",
-        "tour": "MEN",
-        "surface": "Hard",
-        "tourney_name": "Busan",
-        "actual_winner": "Liam Broady",
-        "actual_loser": "August Holmgren",
-        "old_predicted_winner": "Liam Broady",
-        "old_predicted_probability": 0.81174268417999,
-        "new_predicted_winner": "August Holmgren",
-        "new_predicted_probability": 0.8572759755892224,
-        "probability_swing_a": 0.6690186597692124,
+        "new_predicted_probability": 0.9677068059059498,
+        "probability_swing_a": -0.6692384255517301,
         "old_correct": true,
         "new_correct": false
       },
@@ -5508,8 +5508,8 @@
         "old_predicted_winner": "Facundo Diaz Acosta",
         "old_predicted_probability": 0.8061565225529175,
         "new_predicted_winner": "Hernan Casanova",
-        "new_predicted_probability": 0.8552072313987359,
-        "probability_swing_a": -0.6613637539516534,
+        "new_predicted_probability": 0.8565493232584829,
+        "probability_swing_a": -0.6627058458114004,
         "old_correct": false,
         "new_correct": true
       },
@@ -5523,8 +5523,8 @@
         "old_predicted_winner": "Quentin Halys",
         "old_predicted_probability": 0.6930497868867035,
         "new_predicted_winner": "Marc-Andrea Huesler",
-        "new_predicted_probability": 0.9679994061959425,
-        "probability_swing_a": 0.661049193082646,
+        "new_predicted_probability": 0.9681018797556348,
+        "probability_swing_a": 0.6611516666423383,
         "old_correct": false,
         "new_correct": true
       },
@@ -5538,23 +5538,8 @@
         "old_predicted_winner": "Andres Martin",
         "old_predicted_probability": 0.6701025237868616,
         "new_predicted_winner": "Marek Gengel",
-        "new_predicted_probability": 0.990267826751404,
-        "probability_swing_a": -0.6603703505382656,
-        "old_correct": false,
-        "new_correct": true
-      },
-      {
-        "match_date": "2026-03-23",
-        "tour": "MEN",
-        "surface": "Hard",
-        "tourney_name": "Morelia",
-        "actual_winner": "Luka Pavlovic",
-        "actual_loser": "Adam Walton",
-        "old_predicted_winner": "Adam Walton",
-        "old_predicted_probability": 0.7722862830345167,
-        "new_predicted_winner": "Luka Pavlovic",
-        "new_predicted_probability": 0.8867088721043499,
-        "probability_swing_a": -0.6589951551388666,
+        "new_predicted_probability": 0.9905355780931959,
+        "probability_swing_a": -0.6606381018800576,
         "old_correct": false,
         "new_correct": true
       },
@@ -5568,8 +5553,8 @@
         "old_predicted_winner": "Gianluca Cadenasso",
         "old_predicted_probability": 0.6782197909796867,
         "new_predicted_winner": "Felix Gill",
-        "new_predicted_probability": 0.9803027342513584,
-        "probability_swing_a": 0.658522525231045,
+        "new_predicted_probability": 0.980585836755344,
+        "probability_swing_a": 0.6588056277350307,
         "old_correct": false,
         "new_correct": true
       },
@@ -5583,8 +5568,23 @@
         "old_predicted_winner": "Eliot Spizzirri",
         "old_predicted_probability": 0.7092600450668152,
         "new_predicted_winner": "Jack Pinnington Jones",
-        "new_predicted_probability": 0.9481095246097954,
-        "probability_swing_a": -0.6573695696766105,
+        "new_predicted_probability": 0.9486646277231554,
+        "probability_swing_a": -0.6579246727899706,
+        "old_correct": false,
+        "new_correct": true
+      },
+      {
+        "match_date": "2026-03-23",
+        "tour": "MEN",
+        "surface": "Hard",
+        "tourney_name": "Morelia",
+        "actual_winner": "Luka Pavlovic",
+        "actual_loser": "Adam Walton",
+        "old_predicted_winner": "Adam Walton",
+        "old_predicted_probability": 0.7722862830345167,
+        "new_predicted_winner": "Luka Pavlovic",
+        "new_predicted_probability": 0.8854070599294295,
+        "probability_swing_a": -0.6576933429639462,
         "old_correct": false,
         "new_correct": true
       },
@@ -5598,8 +5598,8 @@
         "old_predicted_winner": "Laslo Djere",
         "old_predicted_probability": 0.76187095636871,
         "new_predicted_winner": "Timofey Skatov",
-        "new_predicted_probability": 0.8949822913814629,
-        "probability_swing_a": -0.656853247750173,
+        "new_predicted_probability": 0.8946299353292818,
+        "probability_swing_a": -0.6565008916979919,
         "old_correct": false,
         "new_correct": true
       },
@@ -5628,8 +5628,8 @@
         "old_predicted_winner": "Sho Shimabukuro",
         "old_predicted_probability": 0.8012244161986257,
         "new_predicted_winner": "Keegan Smith",
-        "new_predicted_probability": 0.8532696512575051,
-        "probability_swing_a": 0.6544940674561308,
+        "new_predicted_probability": 0.853009565080272,
+        "probability_swing_a": 0.6542339812788978,
         "old_correct": false,
         "new_correct": true
       },
@@ -5643,8 +5643,8 @@
         "old_predicted_winner": "Karen Khachanov",
         "old_predicted_probability": 0.7192640502291623,
         "new_predicted_winner": "Michael Mmoh",
-        "new_predicted_probability": 0.9335633434180753,
-        "probability_swing_a": -0.6528273936472376,
+        "new_predicted_probability": 0.9347279317654749,
+        "probability_swing_a": -0.6539919819946372,
         "old_correct": false,
         "new_correct": true
       },
@@ -5658,8 +5658,8 @@
         "old_predicted_winner": "Stefan Kozlov",
         "old_predicted_probability": 0.6798737416130205,
         "new_predicted_winner": "Rodrigo Pacheco Mendez",
-        "new_predicted_probability": 0.9728328819406065,
-        "probability_swing_a": 0.652706623553627,
+        "new_predicted_probability": 0.9734001633325727,
+        "probability_swing_a": 0.6532739049455931,
         "old_correct": false,
         "new_correct": true
       },
@@ -5673,10 +5673,25 @@
         "old_predicted_winner": "Francisco Cerundolo",
         "old_predicted_probability": 0.7193914398722592,
         "new_predicted_winner": "Tristan Boyer",
-        "new_predicted_probability": 0.9318357983564068,
-        "probability_swing_a": -0.651227238228666,
+        "new_predicted_probability": 0.9326855885410742,
+        "probability_swing_a": -0.6520770284133334,
         "old_correct": true,
         "new_correct": false
+      },
+      {
+        "match_date": "2026-04-27",
+        "tour": "MEN",
+        "surface": "Clay",
+        "tourney_name": "Mauthausen",
+        "actual_winner": "Matthew William Donald",
+        "actual_loser": "Nicolas Mejia",
+        "old_predicted_winner": "Nicolas Mejia",
+        "old_predicted_probability": 0.7418531418453014,
+        "new_predicted_winner": "Matthew William Donald",
+        "new_predicted_probability": 0.9082523774566658,
+        "probability_swing_a": 0.6501055193019671,
+        "old_correct": false,
+        "new_correct": true
       },
       {
         "match_date": "2026-07-27",
@@ -5703,25 +5718,40 @@
         "old_predicted_winner": "Luciano Darderi",
         "old_predicted_probability": 0.7597154492311948,
         "new_predicted_winner": "Pedro Martinez",
-        "new_predicted_probability": 0.8893754872533537,
-        "probability_swing_a": -0.6490909364845485,
+        "new_predicted_probability": 0.8889569563270603,
+        "probability_swing_a": -0.6486724055582551,
         "old_correct": true,
         "new_correct": false
       },
       {
-        "match_date": "2026-04-27",
+        "match_date": "2026-07-13",
         "tour": "MEN",
         "surface": "Clay",
-        "tourney_name": "Mauthausen",
-        "actual_winner": "Matthew William Donald",
-        "actual_loser": "Nicolas Mejia",
-        "old_predicted_winner": "Nicolas Mejia",
-        "old_predicted_probability": 0.7418531418453014,
-        "new_predicted_winner": "Matthew William Donald",
-        "new_predicted_probability": 0.9059036601155537,
-        "probability_swing_a": 0.647756801960855,
-        "old_correct": false,
-        "new_correct": true
+        "tourney_name": "Gstaad",
+        "actual_winner": "Raphael Collignon",
+        "actual_loser": "Timofey Skatov",
+        "old_predicted_winner": "Raphael Collignon",
+        "old_predicted_probability": 0.7674904748797114,
+        "new_predicted_winner": "Timofey Skatov",
+        "new_predicted_probability": 0.8802381345893943,
+        "probability_swing_a": -0.6477286094691057,
+        "old_correct": true,
+        "new_correct": false
+      },
+      {
+        "match_date": "2026-02-16",
+        "tour": "MEN",
+        "surface": "Hard",
+        "tourney_name": "Doha",
+        "actual_winner": "Jakub Mensik",
+        "actual_loser": "Jan Choinski",
+        "old_predicted_winner": "Jakub Mensik",
+        "old_predicted_probability": 0.8921169577356962,
+        "new_predicted_winner": "Jan Choinski",
+        "new_predicted_probability": 0.7545133575686995,
+        "probability_swing_a": -0.6466303153043957,
+        "old_correct": true,
+        "new_correct": false
       },
       {
         "match_date": "2026-03-17",
@@ -5737,21 +5767,6 @@
         "probability_swing_a": 0.6457052066845712,
         "old_correct": false,
         "new_correct": true
-      },
-      {
-        "match_date": "2026-07-13",
-        "tour": "MEN",
-        "surface": "Clay",
-        "tourney_name": "Gstaad",
-        "actual_winner": "Raphael Collignon",
-        "actual_loser": "Timofey Skatov",
-        "old_predicted_winner": "Raphael Collignon",
-        "old_predicted_probability": 0.7674904748797114,
-        "new_predicted_winner": "Timofey Skatov",
-        "new_predicted_probability": 0.8779200013020149,
-        "probability_swing_a": -0.6454104761817263,
-        "old_correct": true,
-        "new_correct": false
       },
       {
         "match_date": "2026-04-20",
@@ -5778,8 +5793,8 @@
         "old_predicted_winner": "Federico Agustin Gomez",
         "old_predicted_probability": 0.683911223960271,
         "new_predicted_winner": "Felix Gill",
-        "new_predicted_probability": 0.9608901469791141,
-        "probability_swing_a": -0.6448013709393852,
+        "new_predicted_probability": 0.9608540780946595,
+        "probability_swing_a": -0.6447653020549305,
         "old_correct": false,
         "new_correct": true
       },
@@ -5793,25 +5808,10 @@
         "old_predicted_winner": "Juan Carlos Prado Angelo",
         "old_predicted_probability": 0.6776870218277135,
         "new_predicted_winner": "Miguel Damas",
-        "new_predicted_probability": 0.9658217865196009,
-        "probability_swing_a": -0.6435088083473144,
+        "new_predicted_probability": 0.9666146182159858,
+        "probability_swing_a": -0.6443016400436993,
         "old_correct": false,
         "new_correct": true
-      },
-      {
-        "match_date": "2026-02-16",
-        "tour": "MEN",
-        "surface": "Hard",
-        "tourney_name": "Doha",
-        "actual_winner": "Jakub Mensik",
-        "actual_loser": "Jan Choinski",
-        "old_predicted_winner": "Jakub Mensik",
-        "old_predicted_probability": 0.8921169577356962,
-        "new_predicted_winner": "Jan Choinski",
-        "new_predicted_probability": 0.7513670061462707,
-        "probability_swing_a": -0.6434839638819669,
-        "old_correct": true,
-        "new_correct": false
       },
       {
         "match_date": "2026-02-12",
@@ -5823,8 +5823,8 @@
         "old_predicted_winner": "Francisco Cerundolo",
         "old_predicted_probability": 0.7224064077613807,
         "new_predicted_winner": "Hugo Dellien",
-        "new_predicted_probability": 0.9176827422866835,
-        "probability_swing_a": -0.6400891500480641,
+        "new_predicted_probability": 0.9194322134943229,
+        "probability_swing_a": -0.6418386212557036,
         "old_correct": true,
         "new_correct": false
       },
@@ -5838,10 +5838,25 @@
         "old_predicted_winner": "Lukas Neumayer",
         "old_predicted_probability": 0.7828594741356159,
         "new_predicted_winner": "Jack Kennedy",
-        "new_predicted_probability": 0.856103176959706,
-        "probability_swing_a": 0.6389626510953218,
+        "new_predicted_probability": 0.8584483814790184,
+        "probability_swing_a": 0.6413078556146342,
         "old_correct": false,
         "new_correct": true
+      },
+      {
+        "match_date": "2026-04-25",
+        "tour": "MEN",
+        "surface": "Clay",
+        "tourney_name": "Madrid Masters",
+        "actual_winner": "Felix Auger-Aliassime",
+        "actual_loser": "Vilius Gaubas",
+        "old_predicted_winner": "Felix Auger-Aliassime",
+        "old_predicted_probability": 0.7100643061132093,
+        "new_predicted_winner": "Vilius Gaubas",
+        "new_predicted_probability": 0.928634418852328,
+        "probability_swing_a": -0.6386987249655373,
+        "old_correct": true,
+        "new_correct": false
       },
       {
         "match_date": "2026-07-01",
@@ -5853,10 +5868,25 @@
         "old_predicted_winner": "Tommy Paul",
         "old_predicted_probability": 0.7454107960112216,
         "new_predicted_winner": "Soonwoo Kwon",
-        "new_predicted_probability": 0.8920499269133154,
-        "probability_swing_a": 0.637460722924537,
+        "new_predicted_probability": 0.8931155842147556,
+        "probability_swing_a": 0.6385263802259772,
         "old_correct": true,
         "new_correct": false
+      },
+      {
+        "match_date": "2026-08-10",
+        "tour": "MEN",
+        "surface": "Clay",
+        "tourney_name": "Todi",
+        "actual_winner": "Maxim Mrva",
+        "actual_loser": "Nikolas Sanchez Izquierdo",
+        "old_predicted_winner": "Nikolas Sanchez Izquierdo",
+        "old_predicted_probability": 0.6724943464520452,
+        "new_predicted_winner": "Maxim Mrva",
+        "new_predicted_probability": 0.9651442021344377,
+        "probability_swing_a": 0.6376385485864828,
+        "old_correct": false,
+        "new_correct": true
       },
       {
         "match_date": "2026-04-13",
@@ -5874,36 +5904,6 @@
         "new_correct": false
       },
       {
-        "match_date": "2026-04-25",
-        "tour": "MEN",
-        "surface": "Clay",
-        "tourney_name": "Madrid Masters",
-        "actual_winner": "Felix Auger-Aliassime",
-        "actual_loser": "Vilius Gaubas",
-        "old_predicted_winner": "Felix Auger-Aliassime",
-        "old_predicted_probability": 0.7100643061132093,
-        "new_predicted_winner": "Vilius Gaubas",
-        "new_predicted_probability": 0.9269837909809822,
-        "probability_swing_a": -0.6370480970941914,
-        "old_correct": true,
-        "new_correct": false
-      },
-      {
-        "match_date": "2026-08-10",
-        "tour": "MEN",
-        "surface": "Clay",
-        "tourney_name": "Todi",
-        "actual_winner": "Maxim Mrva",
-        "actual_loser": "Nikolas Sanchez Izquierdo",
-        "old_predicted_winner": "Nikolas Sanchez Izquierdo",
-        "old_predicted_probability": 0.6724943464520452,
-        "new_predicted_winner": "Maxim Mrva",
-        "new_predicted_probability": 0.9637734455580688,
-        "probability_swing_a": 0.6362677920101139,
-        "old_correct": false,
-        "new_correct": true
-      },
-      {
         "match_date": "2026-06-08",
         "tour": "MEN",
         "surface": "Clay",
@@ -5913,8 +5913,8 @@
         "old_predicted_winner": "Juan Manuel La Serna",
         "old_predicted_probability": 0.6528369556377941,
         "new_predicted_winner": "Johan Alexander Rodriguez",
-        "new_predicted_probability": 0.9824321299547443,
-        "probability_swing_a": 0.6352690855925384,
+        "new_predicted_probability": 0.9823222774541258,
+        "probability_swing_a": 0.6351592330919199,
         "old_correct": false,
         "new_correct": true
       },
@@ -5928,8 +5928,8 @@
         "old_predicted_winner": "Alexander Bublik",
         "old_predicted_probability": 0.7402278586214969,
         "new_predicted_winner": "Edas Butvilas",
-        "new_predicted_probability": 0.8936188918335654,
-        "probability_swing_a": -0.6338467504550622,
+        "new_predicted_probability": 0.8936371607953939,
+        "probability_swing_a": -0.6338650194168908,
         "old_correct": true,
         "new_correct": false
       },
@@ -5958,8 +5958,8 @@
         "old_predicted_winner": "Thanasi Kokkinakis",
         "old_predicted_probability": 0.7942745227188414,
         "new_predicted_winner": "Yannick Theodor Alexandrescou",
-        "new_predicted_probability": 0.835162522737843,
-        "probability_swing_a": -0.6294370454566843,
+        "new_predicted_probability": 0.8364914376387453,
+        "probability_swing_a": -0.6307659603575867,
         "old_correct": false,
         "new_correct": true
       },
@@ -6048,8 +6048,8 @@
         "old_predicted_winner": "Guido Ivan Justo",
         "old_predicted_probability": 0.7059857912957276,
         "new_predicted_winner": "Federico Bondioli",
-        "new_predicted_probability": 0.9208698379188696,
-        "probability_swing_a": 0.6268556292145971,
+        "new_predicted_probability": 0.9213818241892796,
+        "probability_swing_a": 0.6273676154850072,
         "old_correct": false,
         "new_correct": true
       },
@@ -6078,8 +6078,8 @@
         "old_predicted_winner": "Pavel Kotov",
         "old_predicted_probability": 0.6557472033722959,
         "new_predicted_winner": "Cezar Cretu",
-        "new_predicted_probability": 0.9703579900938196,
-        "probability_swing_a": 0.6261051934661155,
+        "new_predicted_probability": 0.9709501672271599,
+        "probability_swing_a": 0.6266973705994557,
         "old_correct": false,
         "new_correct": true
       },
@@ -6093,8 +6093,8 @@
         "old_predicted_winner": "Gael Monfils",
         "old_predicted_probability": 0.6780188459918641,
         "new_predicted_winner": "Dane Sweeny",
-        "new_predicted_probability": 0.9468640356001333,
-        "probability_swing_a": 0.6248828815919973,
+        "new_predicted_probability": 0.9469081420337124,
+        "probability_swing_a": 0.6249269880255766,
         "old_correct": false,
         "new_correct": true
       },
@@ -6108,8 +6108,8 @@
         "old_predicted_winner": "Tommy Paul",
         "old_predicted_probability": 0.6684338167761779,
         "new_predicted_winner": "Tomas Martin Etcheverry",
-        "new_predicted_probability": 0.9556279486174437,
-        "probability_swing_a": 0.6240617653936216,
+        "new_predicted_probability": 0.9554431599390496,
+        "probability_swing_a": 0.6238769767152275,
         "old_correct": true,
         "new_correct": false
       },
@@ -6123,8 +6123,8 @@
         "old_predicted_winner": "Filipe Bullamah",
         "old_predicted_probability": 0.7456845333350334,
         "new_predicted_winner": "Wilson Leite",
-        "new_predicted_probability": 0.8782601209800494,
-        "probability_swing_a": -0.6239446543150828,
+        "new_predicted_probability": 0.8780940122789606,
+        "probability_swing_a": -0.6237785456139939,
         "old_correct": false,
         "new_correct": true
       },
@@ -6138,8 +6138,8 @@
         "old_predicted_winner": "Jurij Rodionov",
         "old_predicted_probability": 0.771424723869612,
         "new_predicted_winner": "Ivan Gakhov",
-        "new_predicted_probability": 0.8510333093011544,
-        "probability_swing_a": 0.6224580331707664,
+        "new_predicted_probability": 0.8510470848507985,
+        "probability_swing_a": 0.6224718087204105,
         "old_correct": false,
         "new_correct": true
       },
@@ -6153,23 +6153,8 @@
         "old_predicted_winner": "Gustavo Albieri",
         "old_predicted_probability": 0.6401099087519785,
         "new_predicted_winner": "Joao Eduardo Schiessl",
-        "new_predicted_probability": 0.981824310504176,
-        "probability_swing_a": -0.6219342192561544,
-        "old_correct": false,
-        "new_correct": true
-      },
-      {
-        "match_date": "2026-06-15",
-        "tour": "MEN",
-        "surface": "Clay",
-        "tourney_name": "Royan",
-        "actual_winner": "Lucio Ratti",
-        "actual_loser": "Calvin Hemery",
-        "old_predicted_winner": "Calvin Hemery",
-        "old_predicted_probability": 0.6607820758297038,
-        "new_predicted_winner": "Lucio Ratti",
-        "new_predicted_probability": 0.960251450732,
-        "probability_swing_a": -0.6210335265617039,
+        "new_predicted_probability": 0.9818168253086682,
+        "probability_swing_a": -0.6219267340606467,
         "old_correct": false,
         "new_correct": true
       },
@@ -6183,23 +6168,23 @@
         "old_predicted_winner": "Hubert Hurkacz",
         "old_predicted_probability": 0.6629026485769751,
         "new_predicted_winner": "Mattia Bellucci",
-        "new_predicted_probability": 0.9572531131036877,
-        "probability_swing_a": -0.6201557616806628,
+        "new_predicted_probability": 0.9583709646350855,
+        "probability_swing_a": -0.6212736132120606,
         "old_correct": false,
         "new_correct": true
       },
       {
-        "match_date": "2026-07-27",
+        "match_date": "2026-06-15",
         "tour": "MEN",
         "surface": "Clay",
-        "tourney_name": "Liberec",
-        "actual_winner": "Frederico Ferreira Silva",
-        "actual_loser": "Maks Kasnikowski",
-        "old_predicted_winner": "Maks Kasnikowski",
-        "old_predicted_probability": 0.7006904395200478,
-        "new_predicted_winner": "Frederico Ferreira Silva",
-        "new_predicted_probability": 0.9176098525335308,
-        "probability_swing_a": 0.6183002920535786,
+        "tourney_name": "Royan",
+        "actual_winner": "Lucio Ratti",
+        "actual_loser": "Calvin Hemery",
+        "old_predicted_winner": "Calvin Hemery",
+        "old_predicted_probability": 0.6607820758297038,
+        "new_predicted_winner": "Lucio Ratti",
+        "new_predicted_probability": 0.9604618527523994,
+        "probability_swing_a": -0.6212439285821032,
         "old_correct": false,
         "new_correct": true
       },
@@ -6213,8 +6198,23 @@
         "old_predicted_winner": "Guy Den Ouden",
         "old_predicted_probability": 0.7275983530237207,
         "new_predicted_winner": "Diego Dedura",
-        "new_predicted_probability": 0.8904217180682314,
-        "probability_swing_a": 0.6180200710919521,
+        "new_predicted_probability": 0.8922062400834663,
+        "probability_swing_a": 0.6198045931071869,
+        "old_correct": false,
+        "new_correct": true
+      },
+      {
+        "match_date": "2026-07-27",
+        "tour": "MEN",
+        "surface": "Clay",
+        "tourney_name": "Liberec",
+        "actual_winner": "Frederico Ferreira Silva",
+        "actual_loser": "Maks Kasnikowski",
+        "old_predicted_winner": "Maks Kasnikowski",
+        "old_predicted_probability": 0.7006904395200478,
+        "new_predicted_winner": "Frederico Ferreira Silva",
+        "new_predicted_probability": 0.9175482413501365,
+        "probability_swing_a": 0.6182386808701843,
         "old_correct": false,
         "new_correct": true
       },
@@ -6243,23 +6243,8 @@
         "old_predicted_winner": "Alex Molcan",
         "old_predicted_probability": 0.6568224581063412,
         "new_predicted_winner": "Damir Dzumhur",
-        "new_predicted_probability": 0.9588162102851943,
-        "probability_swing_a": -0.6156386683915355,
-        "old_correct": false,
-        "new_correct": true
-      },
-      {
-        "match_date": "2026-07-27",
-        "tour": "MEN",
-        "surface": "Hard",
-        "tourney_name": "Vancouver",
-        "actual_winner": "Jay Friend",
-        "actual_loser": "Toby Samuel",
-        "old_predicted_winner": "Toby Samuel",
-        "old_predicted_probability": 0.8120777748641176,
-        "new_predicted_winner": "Jay Friend",
-        "new_predicted_probability": 0.8033688005256965,
-        "probability_swing_a": 0.6154465753898141,
+        "new_predicted_probability": 0.9589252263578683,
+        "probability_swing_a": -0.6157476844642095,
         "old_correct": false,
         "new_correct": true
       },
@@ -6273,8 +6258,23 @@
         "old_predicted_winner": "Keegan Smith",
         "old_predicted_probability": 0.654563578183955,
         "new_predicted_winner": "Moez Echargui",
-        "new_predicted_probability": 0.9605520272331206,
-        "probability_swing_a": -0.6151156054170757,
+        "new_predicted_probability": 0.9606957111550595,
+        "probability_swing_a": -0.6152592893390145,
+        "old_correct": false,
+        "new_correct": true
+      },
+      {
+        "match_date": "2026-03-09",
+        "tour": "MEN",
+        "surface": "Hard",
+        "tourney_name": "Phoenix",
+        "actual_winner": "Billy Harris",
+        "actual_loser": "Adrian Mannarino",
+        "old_predicted_winner": "Adrian Mannarino",
+        "old_predicted_probability": 0.7159538700283565,
+        "new_predicted_winner": "Billy Harris",
+        "new_predicted_probability": 0.8990500197290016,
+        "probability_swing_a": -0.6150038897573581,
         "old_correct": false,
         "new_correct": true
       },
@@ -6309,36 +6309,6 @@
         "new_correct": true
       },
       {
-        "match_date": "2026-05-25",
-        "tour": "MEN",
-        "surface": "Clay",
-        "tourney_name": "Moldova",
-        "actual_winner": "Genaro Alberto Olivieri",
-        "actual_loser": "Andrej Nedic",
-        "old_predicted_winner": "Andrej Nedic",
-        "old_predicted_probability": 0.6403343735185824,
-        "new_predicted_winner": "Genaro Alberto Olivieri",
-        "new_predicted_probability": 0.9742897110626535,
-        "probability_swing_a": -0.6146240845812359,
-        "old_correct": false,
-        "new_correct": true
-      },
-      {
-        "match_date": "2026-06-17",
-        "tour": "MEN",
-        "surface": "Grass",
-        "tourney_name": "Halle",
-        "actual_winner": "Daniil Medvedev",
-        "actual_loser": "Terence Atmane",
-        "old_predicted_winner": "Daniil Medvedev",
-        "old_predicted_probability": 0.8210910343821799,
-        "new_predicted_winner": "Terence Atmane",
-        "new_predicted_probability": 0.7932314807631091,
-        "probability_swing_a": -0.6143225151452891,
-        "old_correct": true,
-        "new_correct": false
-      },
-      {
         "match_date": "2026-08-16",
         "tour": "MEN",
         "surface": "Hard",
@@ -6348,23 +6318,23 @@
         "old_predicted_winner": "Alex de Minaur",
         "old_predicted_probability": 0.6751423472730756,
         "new_predicted_winner": "Quentin Halys",
-        "new_predicted_probability": 0.9391417073179799,
-        "probability_swing_a": -0.6142840545910555,
+        "new_predicted_probability": 0.9394177445788966,
+        "probability_swing_a": -0.6145600918519722,
         "old_correct": true,
         "new_correct": false
       },
       {
-        "match_date": "2026-03-09",
+        "match_date": "2026-05-25",
         "tour": "MEN",
-        "surface": "Hard",
-        "tourney_name": "Phoenix",
-        "actual_winner": "Billy Harris",
-        "actual_loser": "Adrian Mannarino",
-        "old_predicted_winner": "Adrian Mannarino",
-        "old_predicted_probability": 0.7159538700283565,
-        "new_predicted_winner": "Billy Harris",
-        "new_predicted_probability": 0.8980692291155703,
-        "probability_swing_a": -0.6140230991439268,
+        "surface": "Clay",
+        "tourney_name": "Moldova",
+        "actual_winner": "Genaro Alberto Olivieri",
+        "actual_loser": "Andrej Nedic",
+        "old_predicted_winner": "Andrej Nedic",
+        "old_predicted_probability": 0.6403343735185824,
+        "new_predicted_winner": "Genaro Alberto Olivieri",
+        "new_predicted_probability": 0.9741537787364045,
+        "probability_swing_a": -0.6144881522549869,
         "old_correct": false,
         "new_correct": true
       },
@@ -6378,10 +6348,40 @@
         "old_predicted_winner": "Yoshihito Nishioka",
         "old_predicted_probability": 0.6403481527150804,
         "new_predicted_winner": "Kyrian Jacquet",
-        "new_predicted_probability": 0.9732585101416936,
-        "probability_swing_a": 0.613606662856774,
+        "new_predicted_probability": 0.9735675506478141,
+        "probability_swing_a": 0.6139157033628945,
         "old_correct": false,
         "new_correct": true
+      },
+      {
+        "match_date": "2026-07-27",
+        "tour": "MEN",
+        "surface": "Hard",
+        "tourney_name": "Vancouver",
+        "actual_winner": "Jay Friend",
+        "actual_loser": "Toby Samuel",
+        "old_predicted_winner": "Toby Samuel",
+        "old_predicted_probability": 0.8120777748641176,
+        "new_predicted_winner": "Jay Friend",
+        "new_predicted_probability": 0.8011138191181718,
+        "probability_swing_a": 0.6131915939822894,
+        "old_correct": false,
+        "new_correct": true
+      },
+      {
+        "match_date": "2026-06-17",
+        "tour": "MEN",
+        "surface": "Grass",
+        "tourney_name": "Halle",
+        "actual_winner": "Daniil Medvedev",
+        "actual_loser": "Terence Atmane",
+        "old_predicted_winner": "Daniil Medvedev",
+        "old_predicted_probability": 0.8210910343821799,
+        "new_predicted_winner": "Terence Atmane",
+        "new_predicted_probability": 0.7919711218046556,
+        "probability_swing_a": -0.6130621561868355,
+        "old_correct": true,
+        "new_correct": false
       },
       {
         "match_date": "2026-06-29",
@@ -6393,8 +6393,8 @@
         "old_predicted_winner": "Fajing Sun",
         "old_predicted_probability": 0.6282011248168882,
         "new_predicted_winner": "Braden Shick",
-        "new_predicted_probability": 0.9845926462353455,
-        "probability_swing_a": 0.6127937710522336,
+        "new_predicted_probability": 0.9844487860479451,
+        "probability_swing_a": 0.6126499108648332,
         "old_correct": false,
         "new_correct": true
       },
@@ -6408,38 +6408,8 @@
         "old_predicted_winner": "Dalibor Svrcina",
         "old_predicted_probability": 0.7326254790718774,
         "new_predicted_winner": "Maxim Mrva",
-        "new_predicted_probability": 0.8796866066530409,
-        "probability_swing_a": -0.6123120857249182,
-        "old_correct": false,
-        "new_correct": true
-      },
-      {
-        "match_date": "2026-07-20",
-        "tour": "MEN",
-        "surface": "Clay",
-        "tourney_name": "Zug",
-        "actual_winner": "Marc-Andrea Huesler",
-        "actual_loser": "Roberto Carballes Baena",
-        "old_predicted_winner": "Roberto Carballes Baena",
-        "old_predicted_probability": 0.6191530263830101,
-        "new_predicted_winner": "Marc-Andrea Huesler",
-        "new_predicted_probability": 0.9903345040753534,
-        "probability_swing_a": 0.6094875304583636,
-        "old_correct": false,
-        "new_correct": true
-      },
-      {
-        "match_date": "2026-01-19",
-        "tour": "MEN",
-        "surface": "Hard",
-        "tourney_name": "Oeiras 1",
-        "actual_winner": "Vilius Gaubas",
-        "actual_loser": "Mikhail Kukushkin",
-        "old_predicted_winner": "Mikhail Kukushkin",
-        "old_predicted_probability": 0.6869190707894476,
-        "new_predicted_winner": "Vilius Gaubas",
-        "new_predicted_probability": 0.9224885764325058,
-        "probability_swing_a": -0.6094076472219534,
+        "new_predicted_probability": 0.8789727142277566,
+        "probability_swing_a": -0.6115981932996339,
         "old_correct": false,
         "new_correct": true
       },
@@ -6453,8 +6423,23 @@
         "old_predicted_winner": "Jerome Kym",
         "old_predicted_probability": 0.6327002065617399,
         "new_predicted_winner": "Alexis Galarneau",
-        "new_predicted_probability": 0.976548631398947,
-        "probability_swing_a": 0.6092488379606869,
+        "new_predicted_probability": 0.9771077693148257,
+        "probability_swing_a": 0.6098079758765655,
+        "old_correct": false,
+        "new_correct": true
+      },
+      {
+        "match_date": "2026-07-20",
+        "tour": "MEN",
+        "surface": "Clay",
+        "tourney_name": "Zug",
+        "actual_winner": "Marc-Andrea Huesler",
+        "actual_loser": "Roberto Carballes Baena",
+        "old_predicted_winner": "Roberto Carballes Baena",
+        "old_predicted_probability": 0.6191530263830101,
+        "new_predicted_winner": "Marc-Andrea Huesler",
+        "new_predicted_probability": 0.9904924615435976,
+        "probability_swing_a": 0.6096454879266078,
         "old_correct": false,
         "new_correct": true
       },
@@ -6468,8 +6453,23 @@
         "old_predicted_winner": "Zhizhen Zhang",
         "old_predicted_probability": 0.7300086828269422,
         "new_predicted_winner": "Justin Boulais",
-        "new_predicted_probability": 0.87918276791906,
-        "probability_swing_a": 0.6091914507460022,
+        "new_predicted_probability": 0.8791323609360586,
+        "probability_swing_a": 0.6091410437630008,
+        "old_correct": false,
+        "new_correct": true
+      },
+      {
+        "match_date": "2026-01-19",
+        "tour": "MEN",
+        "surface": "Hard",
+        "tourney_name": "Oeiras 1",
+        "actual_winner": "Vilius Gaubas",
+        "actual_loser": "Mikhail Kukushkin",
+        "old_predicted_winner": "Mikhail Kukushkin",
+        "old_predicted_probability": 0.6869190707894476,
+        "new_predicted_winner": "Vilius Gaubas",
+        "new_predicted_probability": 0.9221088398615179,
+        "probability_swing_a": -0.6090279106509655,
         "old_correct": false,
         "new_correct": true
       },
@@ -6489,21 +6489,6 @@
         "new_correct": true
       },
       {
-        "match_date": "2026-05-04",
-        "tour": "MEN",
-        "surface": "Hard",
-        "tourney_name": "Wuxi",
-        "actual_winner": "Akira Santillan",
-        "actual_loser": "Coleman Wong",
-        "old_predicted_winner": "Coleman Wong",
-        "old_predicted_probability": 0.775990590863408,
-        "new_predicted_winner": "Akira Santillan",
-        "new_predicted_probability": 0.8307329319550106,
-        "probability_swing_a": 0.6067235228184187,
-        "old_correct": false,
-        "new_correct": true
-      },
-      {
         "match_date": "2026-05-25",
         "tour": "MEN",
         "surface": "Hard",
@@ -6513,23 +6498,8 @@
         "old_predicted_winner": "Edas Butvilas",
         "old_predicted_probability": 0.6734700573036523,
         "new_predicted_winner": "Aidan Mayo",
-        "new_predicted_probability": 0.933201457051644,
-        "probability_swing_a": 0.6066715143552963,
-        "old_correct": false,
-        "new_correct": true
-      },
-      {
-        "match_date": "2026-01-05",
-        "tour": "MEN",
-        "surface": "Hard",
-        "tourney_name": "Noumea",
-        "actual_winner": "Blake Ellis",
-        "actual_loser": "Pierre-Hugues Herbert",
-        "old_predicted_winner": "Pierre-Hugues Herbert",
-        "old_predicted_probability": 0.6321484350496662,
-        "new_predicted_winner": "Blake Ellis",
-        "new_predicted_probability": 0.9739387505682201,
-        "probability_swing_a": 0.6060871856178862,
+        "new_predicted_probability": 0.9336198897212324,
+        "probability_swing_a": 0.6070899470248847,
         "old_correct": false,
         "new_correct": true
       },
@@ -6543,23 +6513,53 @@
         "old_predicted_winner": "Laslo Djere",
         "old_predicted_probability": 0.6953554792702521,
         "new_predicted_winner": "Kimmer Coppejans",
-        "new_predicted_probability": 0.91039615048971,
-        "probability_swing_a": 0.6057516297599621,
+        "new_predicted_probability": 0.91102148354569,
+        "probability_swing_a": 0.6063769628159421,
         "old_correct": false,
         "new_correct": true
       },
       {
-        "match_date": "2026-02-23",
+        "match_date": "2026-05-04",
         "tour": "MEN",
         "surface": "Hard",
-        "tourney_name": "Saint-Brieuc",
-        "actual_winner": "Matteo Martineau",
-        "actual_loser": "Jurij Rodionov",
-        "old_predicted_winner": "Jurij Rodionov",
-        "old_predicted_probability": 0.698942524356013,
-        "new_predicted_winner": "Matteo Martineau",
-        "new_predicted_probability": 0.9060820180756414,
-        "probability_swing_a": -0.6050245424316544,
+        "tourney_name": "Wuxi",
+        "actual_winner": "Akira Santillan",
+        "actual_loser": "Coleman Wong",
+        "old_predicted_winner": "Coleman Wong",
+        "old_predicted_probability": 0.775990590863408,
+        "new_predicted_winner": "Akira Santillan",
+        "new_predicted_probability": 0.830293143925667,
+        "probability_swing_a": 0.606283734789075,
+        "old_correct": false,
+        "new_correct": true
+      },
+      {
+        "match_date": "2026-01-05",
+        "tour": "MEN",
+        "surface": "Hard",
+        "tourney_name": "Noumea",
+        "actual_winner": "Blake Ellis",
+        "actual_loser": "Pierre-Hugues Herbert",
+        "old_predicted_winner": "Pierre-Hugues Herbert",
+        "old_predicted_probability": 0.6321484350496662,
+        "new_predicted_winner": "Blake Ellis",
+        "new_predicted_probability": 0.9740090689424771,
+        "probability_swing_a": 0.6061575039921432,
+        "old_correct": false,
+        "new_correct": true
+      },
+      {
+        "match_date": "2026-08-17",
+        "tour": "MEN",
+        "surface": "Hard",
+        "tourney_name": "Quebec City",
+        "actual_winner": "Stefanos Sakellaridis",
+        "actual_loser": "Aleksandar Vukic",
+        "old_predicted_winner": "Aleksandar Vukic",
+        "old_predicted_probability": 0.6863669437869864,
+        "new_predicted_winner": "Stefanos Sakellaridis",
+        "new_predicted_probability": 0.9196572176273877,
+        "probability_swing_a": -0.6060241614143741,
         "old_correct": false,
         "new_correct": true
       }
