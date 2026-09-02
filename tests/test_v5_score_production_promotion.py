@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import numpy as np
 import pytest
 
 
@@ -66,3 +67,41 @@ def test_daily_score_bundle_rejects_missing_validated_candidate():
 
     with pytest.raises(ValueError, match="validated score candidate"):
         _score_model_bundle(None, tour="MEN", live_features={}, simulations=1000)
+
+
+def test_hybrid_score_model_reconstructs_mechanistic_margin_live():
+    from v5_score_distribution import predict_score_distribution
+
+    model = {
+        "version": "v5-gaussian-score-1",
+        "feature_names": ["mechanistic_margin_a"],
+        "scales": [1.0],
+        "total_scales": [1.0],
+        "margin_coefficients": [1.0],
+        "total_coefficients": [0.0],
+        "total_intercept": 22.0,
+        "margin_sd": 3.0,
+        "total_sd": 4.0,
+    }
+    result = predict_score_distribution(
+        {
+            "serve_probability_p1": 0.64,
+            "serve_probability_p2": 0.61,
+            "winner_probability_p1": 0.62,
+            "best_of": 3,
+            "spread_lines": [-2.5, 2.5],
+            "total_lines": [21.5],
+            "score_features": {},
+        },
+        {
+            "model_type": "gaussian_hybrid",
+            "model": model,
+            "simulations": 1200,
+            "seed": 9,
+        },
+    )
+
+    assert result.model_type == "gaussian_hybrid"
+    assert np.isfinite(result.expected_margin)
+    assert np.isfinite(result.expected_total)
+    assert result.match_win_probability_p1 == pytest.approx(0.62)
