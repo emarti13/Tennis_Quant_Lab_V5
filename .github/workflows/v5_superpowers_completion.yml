@@ -32,7 +32,9 @@ jobs:
       - name: Run completion contracts
         id: contracts
         continue-on-error: true
-        run: python -m pytest tests/test_v5_superpowers_completion.py -q --junitxml=superpowers-contract.xml
+        run: |
+          set -o pipefail
+          python -m pytest tests/test_v5_superpowers_completion.py -q --junitxml=superpowers-contract.xml 2>&1 | tee superpowers-contract-output.txt
       - name: Record contract state
         env:
           CONTRACT_OUTCOME: ${{ steps.contracts.outcome }}
@@ -42,17 +44,20 @@ jobs:
           from pathlib import Path
           out = Path('experiments/acceptance')
           out.mkdir(parents=True, exist_ok=True)
+          text = Path('superpowers-contract-output.txt').read_text(encoding='utf-8', errors='replace') if Path('superpowers-contract-output.txt').exists() else ''
           (out / 'superpowers_contract_status.json').write_text(json.dumps({
               'status': os.environ['CONTRACT_OUTCOME'],
               'expected': 'success',
+              'pytest_tail': text[-12000:],
           }, indent=2))
           PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git pull --rebase origin feature/complete-superpowers-v5
           git add experiments/acceptance/superpowers_contract_status.json
           if ! git diff --cached --quiet; then
             git commit -m "Record Superpowers completion contract state"
-            git push
+            git push origin HEAD:feature/complete-superpowers-v5
           fi
       - name: Enforce green gate
         if: steps.contracts.outcome != 'success'
