@@ -6,6 +6,7 @@ from v5_context_model import (
     predict_symmetric_logistic,
     evaluate_context_models,
     orient_matchup_row,
+    context_feature_family,
 )
 
 
@@ -31,8 +32,6 @@ def test_symmetric_logistic_prediction_complements_when_features_reverse():
 
 
 def test_missing_signed_feature_is_neutral_and_preserves_swap_symmetry():
-    # f1 deliberately has a nonzero training median. A signed A-minus-B feature cannot
-    # be imputed to that same positive value in both orientations; missing must be neutral 0.
     X = pd.DataFrame({"f1": [1., 2., 3., 4.], "f2": [-2., -.5, .5, 2.]})
     y = np.array([0, 0, 1, 1], dtype=float)
     model = fit_symmetric_logistic(X, y, l2=1.0)
@@ -55,7 +54,18 @@ def test_training_imputation_is_not_changed_by_validation_values():
     assert predict_symmetric_logistic(b, validation_b).shape == (1,)
 
 
-def test_walkforward_evaluation_fits_2025_and_scores_2026_only():
+def test_context_feature_family_assigns_features_to_auditable_groups():
+    assert context_feature_family("ctx_layoff_60d_diff") == "rest_layoff"
+    assert context_feature_family("ctx_games_7d_diff") == "workload"
+    assert context_feature_family("ctx_travel_km_diff") == "travel"
+    assert context_feature_family("ctx_court_speed_x_serve_dominance_diff") == "environment"
+    assert context_feature_family("ctx_serve_first_won_diff") == "serve_return_geometry"
+    assert context_feature_family("ctx_trajectory_serve_diff") == "trajectory"
+    assert context_feature_family("ctx_state_uncertainty_diff") == "uncertainty_quality"
+    assert context_feature_family("ctx_rank_diff") == "rank"
+
+
+def test_walkforward_evaluation_fits_2025_and_scores_2026_only_with_family_ablations():
     rows = []
     for year in (2025, 2026):
         for i in range(20):
@@ -71,7 +81,11 @@ def test_walkforward_evaluation_fits_2025_and_scores_2026_only():
                 "x_elo_a": strength * .7,
                 "ctx_serve_first_won_diff": strength * .03,
                 "ctx_return_strength_diff": strength * .02,
-                "ctx_rest_days_diff": float(i % 3 - 1),
+                "ctx_layoff_60d_diff": float(i % 3 - 1),
+                "ctx_games_7d_diff": strength * 2,
+                "ctx_travel_km_diff": strength * 100,
+                "ctx_court_speed_x_serve_dominance_diff": strength * .01,
+                "ctx_trajectory_serve_diff": strength * .005,
             })
     frame = pd.DataFrame(rows)
     report = evaluate_context_models(frame, fit_year=2025, validation_year=2026)
@@ -82,3 +96,10 @@ def test_walkforward_evaluation_fits_2025_and_scores_2026_only():
     for model in report["models"].values():
         assert 0 <= model["brier"] <= 1
         assert model["log_loss"] >= 0
+    assert {"rest_layoff", "workload", "travel", "environment", "serve_return_geometry", "trajectory"}.issubset(report["ablations"])
+    for family, result in report["ablations"].items():
+        assert result["family"] == family
+        assert result["removed_features"]
+        assert result["validation_metrics"]["n"] == 20
+        assert "delta_brier_vs_full" in result
+        assert "delta_log_loss_vs_full" in result
