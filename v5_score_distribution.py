@@ -83,9 +83,19 @@ def predict_score_distribution(match_features: Mapping[str, Any], model_bundle: 
 
     if model_type in {"gaussian_contextual", "gaussian_hybrid"}:
         model = model_bundle.get("model") or {}
-        features = dict(match_features.get("score_features") or {})
-        if not model or not features:
-            raise ValueError("Contextual score model requires model and score_features")
+        features = dict(match_features.get("score_features") or model_bundle.get("score_features") or {})
+        if model_type == "gaussian_hybrid":
+            # The hybrid was trained with the conditioned mechanistic margin as one
+            # additional tennis-only feature. Recreate that feature live from the
+            # same frozen winner probability and serve environment before applying
+            # the validated residual score geometry.
+            features["mechanistic_margin_a"] = float(result["expected_margin"])
+        if not model:
+            raise ValueError("Contextual score model requires model")
+        required = [str(name) for name in model.get("feature_names", [])]
+        missing = [name for name in required if name not in features]
+        if missing:
+            raise ValueError("Contextual score model missing score_features: " + ", ".join(missing))
         pred = predict_gaussian_score_model(model, pd.DataFrame([features]))
         expected_margin = float(pred["margin_mean"][0]); margin_sd = float(pred["margin_sd"][0])
         expected_total = float(pred["total_mean"][0]); total_sd = float(pred["total_sd"][0])
