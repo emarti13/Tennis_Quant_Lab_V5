@@ -48,18 +48,25 @@ def _comeback_recency(state: dict, threshold: int) -> float:
     matches_since = _f(state, f"matches_since_{threshold}d_layoff")
     if not math.isfinite(matches_since) or matches_since < 0:
         return 0.0
-    # First match back = 1.0, then decays rapidly without assuming a permanent penalty.
     return 1.0 / (1.0 + float(matches_since))
 
 
-def build_matchup_features(state_a: dict, state_b: dict, context: dict) -> dict[str, float]:
-    """Build signed, leak-safe matchup and environment interactions.
+def _layoff_response_context(state: dict, threshold: int) -> float:
+    active = _safe(_f(state, f"first_match_after_{threshold}d"), _safe(_f(state, f"layoff_{threshold}d"), 0.0))
+    excess = _safe(_f(state, f"layoff_response_{threshold}d_excess"), 0.0)
+    return float(active * excess)
 
-    Rest is deliberately nonlinear. Raw rest days are retained in player state for audit and
-    interactions, but are not emitted as a direct linear feature. This prevents a 180-day
-    absence from mechanically counting as twice a 90-day absence while still preserving
-    short-rest fatigue and layoff/comeback information.
-    """
+
+def _layoff_response_evidence(state: dict, threshold: int) -> float:
+    active = _safe(_f(state, f"first_match_after_{threshold}d"), _safe(_f(state, f"layoff_{threshold}d"), 0.0))
+    sample = max(_safe(_f(state, f"layoff_response_{threshold}d_sample"), 0.0), 0.0)
+    # Log evidence grows with history without letting a veteran with many prior returns
+    # mechanically dominate the probability model.
+    return float(active * math.log1p(sample))
+
+
+def build_matchup_features(state_a: dict, state_b: dict, context: dict) -> dict[str, float]:
+    """Build signed, leak-safe matchup and environment interactions."""
     serve_a, serve_b = _serve_dominance(state_a), _serve_dominance(state_b)
     return_a, return_b = _return_dominance(state_a), _return_dominance(state_b)
     dependence_a, dependence_b = _serve_dependence(state_a), _serve_dependence(state_b)
@@ -87,8 +94,6 @@ def build_matchup_features(state_a: dict, state_b: dict, context: dict) -> dict[
         "ace_rate_diff": _diff(state_a, state_b, "ace_rate"),
         "double_fault_rate_diff": _diff(state_a, state_b, "double_fault_rate"),
         "return_strength_diff": _diff(state_a, state_b, "return_strength"),
-
-        # Nonlinear rest/layoff state.
         "rest_log1p_diff": _diff(state_a, state_b, "rest_log1p"),
         "rest_bucket_diff": _diff(state_a, state_b, "rest_bucket"),
         "short_rest_0d_diff": _diff(state_a, state_b, "short_rest_0d"),
@@ -104,8 +109,12 @@ def build_matchup_features(state_a: dict, state_b: dict, context: dict) -> dict[
         "comeback_recency_30d_diff": _comeback_recency(state_a, 30) - _comeback_recency(state_b, 30),
         "comeback_recency_60d_diff": _comeback_recency(state_a, 60) - _comeback_recency(state_b, 60),
         "comeback_recency_90d_diff": _comeback_recency(state_a, 90) - _comeback_recency(state_b, 90),
-
-        # Workload at multiple horizons and immediate previous-match cost.
+        "layoff_response_30d_context_diff": _layoff_response_context(state_a, 30) - _layoff_response_context(state_b, 30),
+        "layoff_response_60d_context_diff": _layoff_response_context(state_a, 60) - _layoff_response_context(state_b, 60),
+        "layoff_response_90d_context_diff": _layoff_response_context(state_a, 90) - _layoff_response_context(state_b, 90),
+        "layoff_response_30d_evidence_diff": _layoff_response_evidence(state_a, 30) - _layoff_response_evidence(state_b, 30),
+        "layoff_response_60d_evidence_diff": _layoff_response_evidence(state_a, 60) - _layoff_response_evidence(state_b, 60),
+        "layoff_response_90d_evidence_diff": _layoff_response_evidence(state_a, 90) - _layoff_response_evidence(state_b, 90),
         "consecutive_play_days_diff": _diff(state_a, state_b, "consecutive_play_days"),
         "previous_match_games_diff": _diff(state_a, state_b, "previous_match_games"),
         "previous_match_duration_diff": _diff(state_a, state_b, "previous_match_duration"),
@@ -118,7 +127,6 @@ def build_matchup_features(state_a: dict, state_b: dict, context: dict) -> dict[
         "games_14d_diff": _diff(state_a, state_b, "fatigue_games_14d"),
         "matches_30d_diff": _diff(state_a, state_b, "fatigue_matches_30d"),
         "games_30d_diff": _diff(state_a, state_b, "fatigue_games_30d"),
-
         "travel_km_diff": _diff(state_a, state_b, "travel_km"),
         "timezone_change_abs_diff": abs(_safe(_f(state_a, "timezone_change_hours"), 0.0)) - abs(_safe(_f(state_b, "timezone_change_hours"), 0.0)),
         "state_uncertainty_diff": _diff(state_a, state_b, "state_uncertainty"),
