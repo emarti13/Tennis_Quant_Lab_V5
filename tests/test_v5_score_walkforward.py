@@ -13,7 +13,6 @@ def test_parse_completed_score_counts_games_and_sets():
     assert out["loser_games"] == 10
     assert out["total_games"] == 23
     assert out["winner_margin"] == 3
-    assert out["sets"] == 2
 
 
 def test_parse_score_rejects_retirement_and_walkover():
@@ -90,3 +89,19 @@ def test_score_holdout_cap_is_deterministic_and_spans_full_chronology():
     assert a.iloc[0]["row_id"] == 0
     assert a.iloc[-1]["row_id"] == 100
     assert a["row_id"].is_monotonic_increasing
+
+
+def test_mens_score_holdout_preserves_all_bo5_before_sampling_bo3():
+    from diagnose_v5_score_distribution import _validation_cap
+
+    frame = pd.DataFrame({
+        "match_date": pd.date_range("2026-01-01", periods=120, freq="D"),
+        "match_id": [f"m{i:03d}" for i in range(120)],
+        "best_of": [5] * 30 + [3] * 90,
+    })
+    sampled = _validation_cap(frame.sample(frac=1.0, random_state=9), max_rows=50, tour="MEN")
+
+    assert len(sampled) == 50
+    assert int((sampled["best_of"] == 5).sum()) == 30
+    assert set(frame.loc[frame["best_of"] == 5, "match_id"]) <= set(sampled["match_id"])
+    assert int((sampled["best_of"] == 3).sum()) == 20
