@@ -8,10 +8,32 @@ import pandas as pd
 
 WINDOWS = (3, 7, 14, 30)
 VALUE_FIELDS = ("match_games", "match_sets", "match_duration_minutes")
+LAYOFF_THRESHOLDS = (30, 60, 90)
 
 
 def _finite(value) -> bool:
     return value is not None and math.isfinite(float(value))
+
+
+def _rest_bucket(days: float) -> float:
+    if not _finite(days):
+        return np.nan
+    d = float(days)
+    if d <= 0:
+        return 0.0
+    if d <= 1:
+        return 1.0
+    if d <= 2:
+        return 2.0
+    if d <= 5:
+        return 3.0
+    if d <= 10:
+        return 4.0
+    if d <= 21:
+        return 5.0
+    if d <= 45:
+        return 6.0
+    return 7.0
 
 
 def _new_window() -> dict:
@@ -49,10 +71,12 @@ def _window_value(window: dict, field: str, *, empty_value: float) -> float:
 
 
 def build_workload_features(player_rows: pd.DataFrame) -> pd.DataFrame:
-    """Build strictly lagged workload/rest features from chronological player matches.
+    """Build strictly lagged workload, fatigue, rest and layoff-state features.
 
-    Streaming deques preserve the original inclusive N-day boundaries without rebuilding
-    historical DataFrames for each target row.
+    Rest is intentionally represented in several nonlinear forms. Raw days remain available
+    for diagnostics, while log/bucket/layoff-state variables prevent a 180-day absence from
+    being treated as simply twice a 90-day absence. All features use only matches completed
+    before the target row.
     """
     if player_rows is None or player_rows.empty:
         return player_rows.copy() if player_rows is not None else pd.DataFrame()
@@ -75,6 +99,7 @@ def build_workload_features(player_rows: pd.DataFrame) -> pd.DataFrame:
         prior_matches = 0
         prior_duration_valid = 0
         consecutive_days = 0
+        matches_since_layoff = {threshold: None for threshold in LAYOFF_THRESHOLDS}
 
         for idx, row in group.iterrows():
             current_date = row["match_date"]
@@ -82,9 +107,28 @@ def build_workload_features(player_rows: pd.DataFrame) -> pd.DataFrame:
             feat = {"_idx": idx}
 
             if pd.isna(normalized_current) or pd.isna(previous_date):
-                feat["rest_days"] = np.nan
+                rest_days = np.nan
             else:
-                feat["rest_days"] = int((normalized_current - previous_date).days)
+                rest_days = int((normalized_current - previous_date).days)
+            feat["rest_days"] = rest_days
+            feat["rest_log1p"] = math.log1p(max(float(rest_days), 0.0)) if _finite(rest_days) else np.nan
+            feat["rest_bucket"] = _rest_bucket(rest_days)
+            feat["short_rest_0d"] = int(_finite(rest_days) and float(rest_days) <= 0)
+            feat["short_rest_1d"] = int(_finite(rest_days) and float(rest_days) == 1)
+            feat["short_rest_2d"] = int(_finite(rest_days) and float(rest_days) == 2)
+            feat["rest_3_to_7d"] = int(_finite(rest_days) and 3 <= float(rest_days) <= 7)
+
+            for threshold in LAYOFF_THRESHOLDS:
+                is_layoff = bool(_finite(rest_days) and float(rest_days) >= threshold)
+                feat[f"layoff_{threshold}d"] = int(is_layoff)
+                feat[f"first_match_after_{threshold}d"] = int(is_layoff)
+                if is_layoff:
+                    feat[f"matches_since_{threshold}d_layoff"] = 0
+                    matches_since_layoff[threshold] = 0
+                elif matches_since_layoff[threshold] is None:
+                    feat[f"matches_since_{threshold}d_layoff"] = np.nan
+                else:
+                    feat[f"matches_since_{threshold}d_layoff"] = int(matches_since_layoff[threshold])
 
             if pd.notna(normalized_current) and pd.notna(previous_play_date):
                 gap = int((normalized_current - previous_play_date).days)
@@ -138,6 +182,9 @@ def build_workload_features(player_rows: pd.DataFrame) -> pd.DataFrame:
             previous_record = record
             previous_date = normalized_current
             previous_play_date = normalized_current
+            for threshold in LAYOFF_THRESHOLDS:
+                if matches_since_layoff[threshold] is not None:
+                    matches_since_layoff[threshold] += 1
 
     features = pd.DataFrame(feature_rows).set_index("_idx")
     for col in features.columns:
