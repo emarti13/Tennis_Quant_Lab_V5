@@ -59,18 +59,18 @@ jobs:
           from build_v5_context_matchups import assemble_matchup_dataset, enrich_player_history, load_walkforward
           from diagnose_v5_context_model import load_tournament_registry
 
-          base=Path('.')
-          player_rows=pd.read_parquet(base/'context_warehouse'/'player_match_rows.parquet')
-          registry=load_tournament_registry(base)
-          enriched=enrich_player_history(player_rows,tournament_registry=registry)
-          walkforward=load_walkforward(base)
-          matchups,qc=assemble_matchup_dataset(enriched,walkforward,target_years=(2025,2026))
+          base = Path('.')
+          player_rows = pd.read_parquet(base / 'context_warehouse' / 'player_match_rows.parquet')
+          registry = load_tournament_registry(base)
+          enriched = enrich_player_history(player_rows, tournament_registry=registry)
+          walkforward = load_walkforward(base)
+          matchups, qc = assemble_matchup_dataset(enriched, walkforward, target_years=(2025, 2026))
           if matchups.empty:
               raise RuntimeError('No score-validation matchup rows assembled')
-          out=base/'v5_context_diagnostic'
-          out.mkdir(parents=True,exist_ok=True)
-          matchups.to_parquet(out/'matched_context_rows.parquet',index=False)
-          print({'matched_rows':len(matchups),'join_qc':qc})
+          out = base / 'v5_context_diagnostic'
+          out.mkdir(parents=True, exist_ok=True)
+          matchups.to_parquet(out / 'matched_context_rows.parquet', index=False)
+          print({'matched_rows': len(matchups), 'join_qc': qc})
           PY
             echo '=== 2025 FIT / 2026 SCORE VALIDATION ==='
             python diagnose_v5_score_distribution.py
@@ -91,16 +91,16 @@ jobs:
           python - <<'PY'
           import json, os
           from pathlib import Path
-          p=Path('/tmp/score-artifacts/log.txt')
-          text=p.read_text(encoding='utf-8',errors='replace') if p.exists() else ''
+          p = Path('/tmp/score-artifacts/log.txt')
+          text = p.read_text(encoding='utf-8', errors='replace') if p.exists() else ''
           Path('experiments/acceptance/score_acceptance_status.json').write_text(json.dumps({
-              'status':os.environ['SCORE_OUTCOME'],
-              'expected':'success',
-              'log_tail':text[-20000:],
-              'context_policy':'historical as-of context + venue/travel/court-speed/player-state; weather omitted from this score gate unless already reproducibly cached',
-              'validation_sampling':'deterministic chronological even spacing; up to 1000 untouched 2026 rows per tour',
-              'hybrid_training_sampling':'deterministic chronological even spacing; up to 1200 2025 rows per tour'
-          },indent=2))
+              'status': os.environ['SCORE_OUTCOME'],
+              'expected': 'success',
+              'log_tail': text[-20000:],
+              'context_policy': 'historical as-of context + venue/travel/court-speed/player-state; weather omitted from this score gate unless already reproducibly cached',
+              'validation_sampling': 'deterministic chronological even spacing; up to 1000 untouched 2026 rows per tour',
+              'hybrid_training_sampling': 'deterministic chronological even spacing; up to 1200 2025 rows per tour'
+          }, indent=2))
           PY
           git add experiments/acceptance/score_acceptance_status.json
           if [ "$SCORE_OUTCOME" = "success" ]; then
