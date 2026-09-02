@@ -30,6 +30,15 @@ def test_symmetric_logistic_prediction_complements_when_features_reverse():
     assert np.isclose(p + q, 1.0, atol=1e-10)
 
 
+def test_missing_signed_feature_is_neutral_and_preserves_swap_symmetry():
+    X = pd.DataFrame({"f1": [-3., -1., 1., 4.], "f2": [-2., -.5, .5, 2.]})
+    y = np.array([0, 0, 1, 1], dtype=float)
+    model = fit_symmetric_logistic(X, y, l2=1.0)
+    p = predict_symmetric_logistic(model, pd.DataFrame({"f1": [np.nan], "f2": [.8]}))[0]
+    q = predict_symmetric_logistic(model, pd.DataFrame({"f1": [np.nan], "f2": [-.8]}))[0]
+    assert np.isclose(p + q, 1.0, atol=1e-10)
+
+
 def test_training_imputation_is_not_changed_by_validation_values():
     train_x = pd.DataFrame({"f1": [1., 2., np.nan, 4.], "f2": [0., 1., 0., 1.]})
     y = np.array([0, 0, 1, 1], dtype=float)
