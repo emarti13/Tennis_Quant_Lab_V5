@@ -17,6 +17,7 @@ from v5_advanced_model import (
 from v5_context_model import predict_symmetric_logistic
 from v5_matchup_features import build_matchup_features
 from v5_player_state import build_player_state
+from v5_weather_features import attach_live_weather
 
 
 DEFAULT_CANDIDATE_PATH = Path("experiments/acceptance/production_candidate.json")
@@ -159,8 +160,9 @@ def build_live_enriched_history(
     *,
     tournament_registry: pd.DataFrame | None = None,
     weather_cache: pd.DataFrame | None = None,
+    forecast_client=None,
 ) -> pd.DataFrame:
-    """Append all target rows and run the shared historical feature path exactly once per slate."""
+    """Append all targets and run the shared as-of feature path once per slate."""
     targets = [_target_rows(fixture) for fixture in fixtures]
     target_frame = pd.concat(targets, ignore_index=True, sort=False) if targets else pd.DataFrame()
     history = historical_player_rows.copy() if historical_player_rows is not None else pd.DataFrame()
@@ -168,6 +170,7 @@ def build_live_enriched_history(
     enriched = enrich_player_history(combined, tournament_registry=tournament_registry)
     if weather_cache is not None:
         enriched = attach_weather_cache(enriched, weather_cache)
+    enriched = attach_live_weather(enriched, client=forecast_client)
     return enriched
 
 
@@ -230,6 +233,7 @@ def build_live_matchup_features_from_enriched(
         "state_uncertainty_a": float(state_a.get("state_uncertainty", np.nan)),
         "state_uncertainty_b": float(state_b.get("state_uncertainty", np.nan)),
         "weather_source_quality": str(target_context.get("weather_source_quality") or "missing"),
+        "weather_forecast_hour": str(target_context.get("weather_forecast_hour") or ""),
         "court_speed_source_quality": str(target_context.get("court_speed_source_quality") or target_context.get("court_speed_prior_level") or "missing"),
     }
     output.update({f"ctx_{k}": v for k, v in build_matchup_features(state_a, state_b, context).items()})
@@ -245,6 +249,7 @@ def build_live_matchup_features(
     x_elo_p1: float,
     tournament_registry: pd.DataFrame | None = None,
     weather_cache: pd.DataFrame | None = None,
+    forecast_client=None,
 ) -> dict:
     """Single-fixture convenience wrapper over the slate-wide shared feature path."""
     enriched = build_live_enriched_history(
@@ -252,6 +257,7 @@ def build_live_matchup_features(
         [fixture],
         tournament_registry=tournament_registry,
         weather_cache=weather_cache,
+        forecast_client=forecast_client,
     )
     return build_live_matchup_features_from_enriched(
         enriched,
