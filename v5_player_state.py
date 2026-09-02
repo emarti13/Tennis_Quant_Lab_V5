@@ -6,7 +6,7 @@ from typing import Iterable
 import numpy as np
 import pandas as pd
 
-STATE_VERSION = "v5-player-state-1"
+STATE_VERSION = "v5-player-state-2"
 
 
 def _float(value) -> float:
@@ -45,10 +45,41 @@ STATE_FIELD_MAP = {
     "surface_serve_first_won": "surface_first_serve_points_won_pct",
     "surface_serve_second_won": "surface_second_serve_points_won_pct",
     "rest_days": "rest_days",
+    "rest_log1p": "rest_log1p",
+    "rest_bucket": "rest_bucket",
+    "short_rest_0d": "short_rest_0d",
+    "short_rest_1d": "short_rest_1d",
+    "short_rest_2d": "short_rest_2d",
+    "rest_3_to_7d": "rest_3_to_7d",
+    "layoff_30d": "layoff_30d",
+    "layoff_60d": "layoff_60d",
+    "layoff_90d": "layoff_90d",
+    "first_match_after_30d": "first_match_after_30d",
+    "first_match_after_60d": "first_match_after_60d",
+    "first_match_after_90d": "first_match_after_90d",
+    "matches_since_30d_layoff": "matches_since_30d_layoff",
+    "matches_since_60d_layoff": "matches_since_60d_layoff",
+    "matches_since_90d_layoff": "matches_since_90d_layoff",
+    "consecutive_play_days": "consecutive_play_days",
+    "previous_match_games": "previous_match_games",
+    "previous_match_sets": "previous_match_sets",
+    "previous_match_duration": "previous_match_duration",
+    "fatigue_matches_3d": "matches_last_3d",
+    "fatigue_games_3d": "games_last_3d",
+    "fatigue_sets_3d": "sets_last_3d",
+    "fatigue_minutes_3d": "minutes_last_3d",
     "fatigue_matches_7d": "matches_last_7d",
     "fatigue_games_7d": "games_last_7d",
     "fatigue_minutes_7d": "minutes_last_7d",
     "fatigue_sets_7d": "sets_last_7d",
+    "fatigue_matches_14d": "matches_last_14d",
+    "fatigue_games_14d": "games_last_14d",
+    "fatigue_sets_14d": "sets_last_14d",
+    "fatigue_minutes_14d": "minutes_last_14d",
+    "fatigue_matches_30d": "matches_last_30d",
+    "fatigue_games_30d": "games_last_30d",
+    "fatigue_sets_30d": "sets_last_30d",
+    "fatigue_minutes_30d": "minutes_last_30d",
     "travel_km": "travel_km_from_previous_event",
     "timezone_change_hours": "timezone_change_hours",
     "altitude_change_m": "altitude_change_m",
@@ -56,7 +87,13 @@ STATE_FIELD_MAP = {
     "weather_humidity_pct": "weather_humidity_pct",
     "weather_wind_speed_kmh": "weather_wind_speed_kmh",
     "weather_wind_gust_kmh": "weather_wind_gust_kmh",
+    "weather_precipitation_mm": "weather_precipitation_mm",
+    "weather_dew_point_c": "weather_dew_point_c",
+    "weather_pressure_hpa": "weather_pressure_hpa",
     "court_speed": "court_speed_blended",
+    "court_speed_historical": "court_speed_historical_prior",
+    "court_speed_current_event": "court_speed_current_event",
+    "court_speed_delta_vs_historical": "court_speed_delta_vs_historical",
     "court_speed_uncertainty": "court_speed_blended_uncertainty",
     "service_uncertainty": "stat_uncertainty_service",
     "rolling_service_points": "rolling_effective_service_points",
@@ -69,8 +106,8 @@ STATE_FIELD_MAP = {
 
 QUALITY_FIELDS = [
     "serve_first_won", "serve_second_won", "ace_rate", "double_fault_rate",
-    "rest_days", "fatigue_matches_7d", "fatigue_games_7d", "travel_km",
-    "timezone_change_hours", "weather_temperature_c", "weather_humidity_pct",
+    "return_strength", "rest_log1p", "fatigue_matches_7d", "fatigue_games_7d",
+    "travel_km", "timezone_change_hours", "weather_temperature_c", "weather_humidity_pct",
     "weather_wind_speed_kmh", "court_speed",
 ]
 
