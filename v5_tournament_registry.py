@@ -35,6 +35,7 @@ class TournamentContext:
     canonical_name: str | None = None
     city: str | None = None
     country: str | None = None
+    continent: str | None = None
     latitude: float | None = None
     longitude: float | None = None
     timezone: str | None = None
@@ -116,6 +117,7 @@ class TournamentRegistry:
             canonical_name=_nullable_text(row.get("canonical_name")),
             city=_nullable_text(row.get("city")),
             country=_nullable_text(row.get("country")),
+            continent=_nullable_text(row.get("continent")),
             latitude=_nullable_float(row.get("latitude")),
             longitude=_nullable_float(row.get("longitude")),
             timezone=_nullable_text(row.get("timezone")),
@@ -140,12 +142,6 @@ class TournamentRegistry:
         return self._resolve_indices(candidates, tour, year, str(name))
 
     def resolve_event(self, event_id: str, tour: str, year: int) -> TournamentContext:
-        """Resolve a stable source event ID with explicit year validity.
-
-        Multiple registry rows may share one stable event ID when a tournament changes or
-        alternates venue. Exactly one row must be valid for the requested tour/year; otherwise
-        the result remains explicitly ambiguous/unresolved rather than guessed.
-        """
         key = str(event_id or "").strip()
         if not key:
             return TournamentContext()
