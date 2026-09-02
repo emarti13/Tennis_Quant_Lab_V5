@@ -5,7 +5,9 @@ on:
     branches: [feature/v5-full-context-model]
     paths:
       - 'v5_venue_metadata.py'
+      - 'build_v5_venue_registry.py'
       - 'tests/test_v5_venue_metadata.py'
+      - 'tests/test_build_v5_venue_registry.py'
       - '.github/workflows/v5_venue_metadata.yml'
   workflow_dispatch:
 
@@ -18,4 +20,4 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements.txt pytest
-      - run: python -m pytest tests/test_v5_venue_metadata.py -v
+      - run: python -m pytest tests/test_v5_venue_metadata.py tests/test_build_v5_venue_registry.py -v
