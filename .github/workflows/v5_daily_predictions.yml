@@ -9,6 +9,7 @@ on:
       - "v5_production_config.json"
       - "v5_production_policy.py"
       - "v5_daily_policy_postprocess.py"
+      - "tests/test_v5_daily_policy_postprocess.py"
       - ".github/workflows/v5_daily_predictions.yml"
   workflow_run:
     workflows: ["OddsPapi Normalized Daily v2"]
