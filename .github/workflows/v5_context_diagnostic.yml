@@ -6,12 +6,15 @@ on:
     paths:
       - 'diagnose_v5_context_model.py'
       - 'diagnose_v5_advanced_model.py'
+      - 'diagnose_v5_score_distribution.py'
       - 'build_v5_context_matchups.py'
       - 'build_v5_context_warehouse.py'
       - 'build_v5_venue_registry.py'
       - 'build_v5_weather_cache.py'
       - 'v5_context_model.py'
       - 'v5_advanced_model.py'
+      - 'v5_score_distribution.py'
+      - 'v5_score_walkforward.py'
       - 'v5_weather_features.py'
       - 'v5_rolling_stats.py'
       - 'v5_workload_features.py'
@@ -26,6 +29,7 @@ on:
       - 'tests/test_v5_context_model.py'
       - 'tests/test_v5_context_matchups.py'
       - 'tests/test_v5_advanced_model.py'
+      - 'tests/test_v5_score_walkforward.py'
       - 'tests/test_build_v5_weather_cache.py'
       - '.github/workflows/v5_context_diagnostic.yml'
   workflow_dispatch:
@@ -36,7 +40,7 @@ permissions:
 jobs:
   walkforward:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
         with:
@@ -49,11 +53,13 @@ jobs:
       - name: Run complete full-context acceptance pipeline
         id: validation
         continue-on-error: true
+        env:
+          V5_SCORE_DIAGNOSTIC_SIMS: '160'
         run: |
           set -o pipefail
           {
             echo '=== MODEL CONTRACTS ==='
-            python -m pytest tests/test_v5_context_diagnostic.py tests/test_v5_context_model.py tests/test_v5_context_matchups.py tests/test_v5_advanced_model.py tests/test_build_v5_weather_cache.py -v
+            python -m pytest tests/test_v5_context_diagnostic.py tests/test_v5_context_model.py tests/test_v5_context_matchups.py tests/test_v5_advanced_model.py tests/test_v5_score_walkforward.py tests/test_build_v5_weather_cache.py -v
             echo '=== CONTEXT WAREHOUSE ==='
             python build_v5_context_warehouse.py
             echo '=== VENUE REGISTRY ==='
@@ -64,6 +70,8 @@ jobs:
             python diagnose_v5_context_model.py
             echo '=== ADVANCED NESTED VALIDATION ==='
             python diagnose_v5_advanced_model.py
+            echo '=== SCORE DISTRIBUTION 2025 FIT / 2026 VALIDATION ==='
+            python diagnose_v5_score_distribution.py
           } 2>&1 | tee /tmp/full-context-validation.txt
       - name: Persist acceptance evidence
         if: always() && github.ref == 'refs/heads/feature/complete-superpowers-v5'
@@ -77,6 +85,8 @@ jobs:
           cp v5_context_diagnostic/report.json /tmp/full-context-artifacts/context_model_report.json || true
           cp v5_advanced_diagnostic/report.json /tmp/full-context-artifacts/advanced_model_report.json || true
           cp v5_advanced_diagnostic/production_candidate.json /tmp/full-context-artifacts/production_candidate.json || true
+          cp v5_score_diagnostic/report.json /tmp/full-context-artifacts/score_model_report.json || true
+          cp v5_score_diagnostic/production_candidate.json /tmp/full-context-artifacts/score_production_candidate.json || true
           git pull --rebase origin feature/complete-superpowers-v5
           mkdir -p experiments/acceptance
           python - <<'PY'
@@ -87,17 +97,19 @@ jobs:
           Path('experiments/acceptance/context_diagnostic_status.json').write_text(json.dumps({
               'status': os.environ['VALIDATION_OUTCOME'],
               'expected': 'success',
-              'log_tail': text[-16000:],
+              'log_tail': text[-20000:],
           }, indent=2))
           PY
           if [ "$VALIDATION_OUTCOME" = "success" ]; then
             cp /tmp/full-context-artifacts/context_model_report.json experiments/acceptance/context_model_report.json
             cp /tmp/full-context-artifacts/advanced_model_report.json experiments/acceptance/advanced_model_report.json
             cp /tmp/full-context-artifacts/production_candidate.json experiments/acceptance/production_candidate.json
+            cp /tmp/full-context-artifacts/score_model_report.json experiments/acceptance/score_model_report.json
+            cp /tmp/full-context-artifacts/score_production_candidate.json experiments/acceptance/score_production_candidate.json
           fi
           git add experiments/acceptance/context_diagnostic_status.json
           if [ "$VALIDATION_OUTCOME" = "success" ]; then
-            git add experiments/acceptance/context_model_report.json experiments/acceptance/advanced_model_report.json experiments/acceptance/production_candidate.json
+            git add experiments/acceptance/context_model_report.json experiments/acceptance/advanced_model_report.json experiments/acceptance/production_candidate.json experiments/acceptance/score_model_report.json experiments/acceptance/score_production_candidate.json
           fi
           if ! git diff --cached --quiet; then
             git commit -m 'Record full-context production acceptance evidence'
@@ -118,6 +130,8 @@ jobs:
             v5_advanced_diagnostic/report.json
             v5_advanced_diagnostic/advanced_predictions_2026.csv
             v5_advanced_diagnostic/production_candidate.json
+            v5_score_diagnostic/report.json
+            v5_score_diagnostic/production_candidate.json
             context_warehouse/source_manifest.json
             context_warehouse/schema.json
             context_registry/tournaments.csv
