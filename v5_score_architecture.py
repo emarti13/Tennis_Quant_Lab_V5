@@ -48,3 +48,20 @@ def score_decomposition(simulation: dict) -> dict[str, float | None]:
         "straight_sets_probability": float(straight),
         "deciding_set_probability": float(deciding),
     }
+
+
+def actual_score_decomposition(score: str, total_games: float | int | None = None) -> dict[str, float | int | None]:
+    """Extract completed set count and games/set from a conventional tennis score string."""
+    tokens = re.findall(r"(?<!\d)(\d+)-(\d+)(?:\([^)]*\))?", str(score or ""))
+    sets = len(tokens)
+    if sets == 0:
+        return {"actual_sets": None, "actual_games_per_set": None}
+    if total_games is None:
+        total = sum(int(a) + int(b) for a, b in tokens)
+    else:
+        try:
+            total = float(total_games)
+        except Exception:
+            total = float("nan")
+    gps = float(total) / sets if math.isfinite(float(total)) else None
+    return {"actual_sets": int(sets), "actual_games_per_set": gps}
