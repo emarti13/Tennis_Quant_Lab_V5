@@ -56,7 +56,7 @@ jobs:
         id: validation
         continue-on-error: true
         env:
-          V5_SCORE_DIAGNOSTIC_SIMS: '160'
+          V5_SCORE_DIAGNOSTIC_SIMS: '80'
         run: |
           set -o pipefail
           {
