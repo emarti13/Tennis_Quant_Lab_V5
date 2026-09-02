@@ -1,0 +1,23 @@
+name: V5 Production Policy
+
+on:
+  push:
+    branches: [feature/v5-full-context-model]
+    paths:
+      - 'v5_production_policy.py'
+      - 'v5_production_readiness.py'
+      - 'tests/test_v5_production_policy.py'
+      - 'tests/test_v5_production_readiness.py'
+      - '.github/workflows/v5_production_policy.yml'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest tests/test_v5_production_policy.py tests/test_v5_production_readiness.py -v
