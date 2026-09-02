@@ -5,7 +5,9 @@ on:
     branches: [feature/v5-full-context-model]
     paths:
       - 'v5_weather_features.py'
+      - 'build_v5_weather_cache.py'
       - 'tests/test_v5_weather_features.py'
+      - 'tests/test_build_v5_weather_cache.py'
       - '.github/workflows/v5_weather_features.yml'
   workflow_dispatch:
 
@@ -18,4 +20,4 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements.txt pytest
-      - run: python -m pytest tests/test_v5_weather_features.py -v
+      - run: python -m pytest tests/test_v5_weather_features.py tests/test_build_v5_weather_cache.py -v
