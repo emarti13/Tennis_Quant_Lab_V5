@@ -1,7 +1,9 @@
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 
-from diagnose_v5_context_model import probability_band_report, feature_coverage_report
+from diagnose_v5_context_model import probability_band_report, feature_coverage_report, load_tournament_registry
 
 
 def test_probability_band_report_separates_longshots_and_favorites():
@@ -33,3 +35,19 @@ def test_feature_coverage_reports_non_missing_fraction_and_constant_features():
     assert report["ctx_b"]["constant"] is True
     assert report["ctx_c"]["non_missing_fraction"] == 0.0
     assert report["ctx_c"]["constant"] is True
+
+
+def test_load_tournament_registry_reads_persisted_registry(tmp_path: Path):
+    registry_dir = tmp_path / "context_registry"
+    registry_dir.mkdir()
+    pd.DataFrame([
+        {"canonical_event_id":"MEN:0600","canonical_name":"Canada","tour":"MEN","start_year":2026,"end_year":2026,"city":"Montreal","latitude":45.5,"longitude":-73.6,"timezone":"America/Toronto","altitude_m":36},
+    ]).to_csv(registry_dir / "tournaments.csv", index=False)
+    registry = load_tournament_registry(tmp_path)
+    assert len(registry) == 1
+    assert registry.iloc[0]["city"] == "Montreal"
+
+
+def test_load_tournament_registry_is_explicit_when_registry_missing(tmp_path: Path):
+    registry = load_tournament_registry(tmp_path)
+    assert registry.empty
