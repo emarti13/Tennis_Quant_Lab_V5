@@ -20,8 +20,14 @@ def _empty_accumulator() -> dict:
 
 
 def _value(row: pd.Series, col: str) -> float:
-    value = pd.to_numeric(pd.Series([row.get(col)]), errors="coerce").iloc[0]
-    return float(value) if pd.notna(value) else float("nan")
+    value = row.get(col)
+    if value is None or pd.isna(value):
+        return float("nan")
+    try:
+        parsed = float(value)
+    except (TypeError, ValueError):
+        return float("nan")
+    return parsed if math.isfinite(parsed) else float("nan")
 
 
 def _update(acc: dict, row: pd.Series) -> None:
@@ -83,11 +89,7 @@ def _state(acc: dict, prefix: str) -> dict[str, float]:
 
 
 def build_rolling_stats(player_rows: pd.DataFrame) -> pd.DataFrame:
-    """Build all-surface and surface-specific serve/return states from prior matches only.
-
-    This implementation is streaming O(n): the target match is observed only after its
-    pre-match state is emitted, preserving the original strict lag semantics.
-    """
+    """Build all-surface and surface-specific serve/return states from prior matches only."""
     if player_rows is None or player_rows.empty:
         return player_rows.copy() if player_rows is not None else pd.DataFrame()
 
