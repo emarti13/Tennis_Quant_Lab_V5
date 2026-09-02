@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from hashlib import sha256
 from pathlib import Path
+from zoneinfo import ZoneInfo
 import json
 
 import numpy as np
@@ -9,6 +10,7 @@ import pandas as pd
 import requests
 
 ARCHIVE_URL = "https://archive-api.open-meteo.com/v1/archive"
+FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 HOURLY_VARIABLES = [
     "temperature_2m",
     "relative_humidity_2m",
@@ -81,6 +83,42 @@ def summarize_hourly_weather_by_date(payload: dict) -> dict[str, dict[str, float
     return out
 
 
+def summarize_forecast_at_time(payload: dict, target_time) -> dict[str, float | str]:
+    """Select the closest hourly forecast to the pre-match target time.
+
+    Open-Meteo returns local clock timestamps when a timezone is requested. This function
+    deliberately consumes only forecast fields; no match result or later tennis observation
+    can enter the environment state.
+    """
+    hourly = (payload or {}).get("hourly") or {}
+    times = pd.to_datetime(pd.Series(hourly.get("time", [])), errors="coerce")
+    target = pd.Timestamp(target_time)
+    if target.tzinfo is not None:
+        target = target.tz_localize(None)
+    if times.empty or times.notna().sum() == 0:
+        raise ValueError("Forecast payload contains no hourly timestamps")
+    valid = times.notna()
+    distance = (times[valid] - target).abs()
+    idx = distance.idxmin()
+
+    def value(name):
+        raw = pd.to_numeric(pd.Series(hourly.get(name, [])), errors="coerce")
+        return float(raw.iloc[idx]) if idx < len(raw) and pd.notna(raw.iloc[idx]) else np.nan
+
+    forecast_hour = pd.Timestamp(times.iloc[idx]).isoformat()
+    return {
+        "temperature_c": value("temperature_2m"),
+        "humidity_pct": value("relative_humidity_2m"),
+        "wind_speed_kmh": value("wind_speed_10m"),
+        "wind_gust_kmh": value("wind_gusts_10m"),
+        "precipitation_mm": value("precipitation"),
+        "dew_point_c": value("dew_point_2m"),
+        "pressure_hpa": value("surface_pressure"),
+        "source_quality": "forecast_hourly_pre_match",
+        "forecast_hour": forecast_hour,
+    }
+
+
 class OpenMeteoArchiveClient:
     def __init__(self, cache_dir: str | Path = "context_cache/weather", session=None):
         self.cache_dir = Path(cache_dir)
@@ -127,6 +165,61 @@ class OpenMeteoArchiveClient:
         return summarize_hourly_weather_by_date(payload)
 
 
+class OpenMeteoForecastClient:
+    """Cached current/future hourly weather available before the match begins."""
+
+    def __init__(self, cache_dir: str | Path = "context_cache/weather_forecast", session=None):
+        self.cache_dir = Path(cache_dir)
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
+        self.session = session or requests.Session()
+
+    def _local_target(self, when, timezone=None) -> pd.Timestamp:
+        target = pd.Timestamp(when)
+        tz = str(timezone or "UTC")
+        if target.tzinfo is None:
+            return target
+        try:
+            return target.tz_convert(ZoneInfo(tz)).tz_localize(None)
+        except Exception:
+            return target.tz_convert("UTC").tz_localize(None)
+
+    def _request_payload(self, latitude, longitude, target_time, timezone=None) -> tuple[dict, pd.Timestamp]:
+        lat = float(latitude)
+        lon = float(longitude)
+        tz = str(timezone or "UTC")
+        local_target = self._local_target(target_time, tz)
+        day = local_target.strftime("%Y-%m-%d")
+        # Cache by venue/local day. Forecast responses are intentionally refreshed between
+        # workflow runs; a single run reuses the same response for every match at the venue.
+        key_raw = f"forecast|{lat:.4f}|{lon:.4f}|{day}|{tz}|{'|'.join(HOURLY_VARIABLES)}"
+        key = sha256(key_raw.encode("utf-8")).hexdigest()[:32]
+        path = self.cache_dir / f"{key}.json"
+        if path.exists():
+            return json.loads(path.read_text(encoding="utf-8")), local_target
+        response = self.session.get(
+            FORECAST_URL,
+            params={
+                "latitude": lat,
+                "longitude": lon,
+                "start_date": day,
+                "end_date": day,
+                "hourly": ",".join(HOURLY_VARIABLES),
+                "timezone": tz,
+                "wind_speed_unit": "kmh",
+                "precipitation_unit": "mm",
+            },
+            timeout=60,
+        )
+        response.raise_for_status()
+        payload = response.json()
+        path.write_text(json.dumps(payload), encoding="utf-8")
+        return payload, local_target
+
+    def get_at_time(self, latitude, longitude, when, timezone=None) -> dict:
+        payload, local_target = self._request_payload(latitude, longitude, when, timezone=timezone)
+        return summarize_forecast_at_time(payload, local_target)
+
+
 def _weather_columns() -> list[str]:
     return [
         "weather_temperature_c",
@@ -140,13 +233,71 @@ def _weather_columns() -> list[str]:
     ]
 
 
-def build_weather_features(player_rows: pd.DataFrame, client=None) -> pd.DataFrame:
-    """Attach venue/date weather shared by all player rows in the same match.
+def _missing_weather(quality: str) -> dict:
+    return {
+        "temperature_c": np.nan,
+        "humidity_pct": np.nan,
+        "wind_speed_kmh": np.nan,
+        "wind_gust_kmh": np.nan,
+        "precipitation_mm": np.nan,
+        "dew_point_c": np.nan,
+        "pressure_hpa": np.nan,
+        "source_quality": quality,
+        "forecast_hour": "",
+    }
 
-    Historical matches use observed hourly archive data aggregated to the local match date.
-    This is exogenous match context; target-match tennis outcomes are never used. Missing venue
-    coordinates remain explicit rather than being inferred.
-    """
+
+def _apply_weather_values(df: pd.DataFrame, mask: pd.Series, values_by_match: dict) -> pd.DataFrame:
+    mapping = {
+        "weather_temperature_c": "temperature_c",
+        "weather_humidity_pct": "humidity_pct",
+        "weather_wind_speed_kmh": "wind_speed_kmh",
+        "weather_wind_gust_kmh": "wind_gust_kmh",
+        "weather_precipitation_mm": "precipitation_mm",
+        "weather_dew_point_c": "dew_point_c",
+        "weather_pressure_hpa": "pressure_hpa",
+        "weather_source_quality": "source_quality",
+        "weather_forecast_hour": "forecast_hour",
+    }
+    for target, source in mapping.items():
+        if target not in df.columns:
+            df[target] = np.nan if target not in {"weather_source_quality", "weather_forecast_hour"} else ""
+        df.loc[mask, target] = df.loc[mask, "match_id"].map(lambda match_id: values_by_match.get(match_id, {}).get(source, np.nan))
+    return df
+
+
+def attach_live_weather(player_rows: pd.DataFrame, client=None) -> pd.DataFrame:
+    """Attach only pre-match forecast weather to LIVE_TARGET rows, preserving history."""
+    if player_rows is None or player_rows.empty:
+        return player_rows.copy() if player_rows is not None else pd.DataFrame()
+    df = player_rows.copy()
+    client = client or OpenMeteoForecastClient()
+    live_mask = df.get("result_file", pd.Series("", index=df.index)).astype(str).eq("LIVE_TARGET")
+    if not live_mask.any():
+        return df
+    values_by_match = {}
+    request_cache = {}
+    for match_id, group in df[live_mask].groupby("match_id", sort=False, dropna=False):
+        row = group.iloc[0]
+        lat = pd.to_numeric(pd.Series([row.get("venue_latitude")]), errors="coerce").iloc[0]
+        lon = pd.to_numeric(pd.Series([row.get("venue_longitude")]), errors="coerce").iloc[0]
+        when = row.get("match_date")
+        timezone = row.get("venue_timezone")
+        if pd.isna(lat) or pd.isna(lon) or pd.isna(pd.to_datetime(when, errors="coerce")):
+            values_by_match[match_id] = _missing_weather("unresolved_live_venue")
+            continue
+        key = (round(float(lat), 4), round(float(lon), 4), str(pd.Timestamp(when)), str(timezone or "UTC"))
+        if key not in request_cache:
+            try:
+                request_cache[key] = client.get_at_time(float(lat), float(lon), when, timezone=timezone)
+            except Exception as exc:
+                request_cache[key] = _missing_weather(f"forecast_error:{type(exc).__name__}")
+        values_by_match[match_id] = request_cache[key]
+    return _apply_weather_values(df, live_mask, values_by_match)
+
+
+def build_weather_features(player_rows: pd.DataFrame, client=None) -> pd.DataFrame:
+    """Attach venue/date historical weather shared by all player rows in the same match."""
     if player_rows is None or player_rows.empty:
         return player_rows.copy() if player_rows is not None else pd.DataFrame()
 
@@ -165,16 +316,7 @@ def build_weather_features(player_rows: pd.DataFrame, client=None) -> pd.DataFra
         timezone = row.get("venue_timezone")
 
         if pd.isna(lat) or pd.isna(lon) or not day:
-            match_weather[match_id] = {
-                "temperature_c": np.nan,
-                "humidity_pct": np.nan,
-                "wind_speed_kmh": np.nan,
-                "wind_gust_kmh": np.nan,
-                "precipitation_mm": np.nan,
-                "dew_point_c": np.nan,
-                "pressure_hpa": np.nan,
-                "source_quality": "unresolved_venue",
-            }
+            match_weather[match_id] = _missing_weather("unresolved_venue")
             continue
 
         key = (round(float(lat), 4), round(float(lon), 4), str(day), str(timezone or "UTC"))
@@ -182,28 +324,9 @@ def build_weather_features(player_rows: pd.DataFrame, client=None) -> pd.DataFra
             try:
                 request_cache[key] = client.get_daily(float(lat), float(lon), str(day), timezone=timezone)
             except Exception as exc:
-                request_cache[key] = {
-                    "temperature_c": np.nan,
-                    "humidity_pct": np.nan,
-                    "wind_speed_kmh": np.nan,
-                    "wind_gust_kmh": np.nan,
-                    "precipitation_mm": np.nan,
-                    "dew_point_c": np.nan,
-                    "pressure_hpa": np.nan,
-                    "source_quality": f"weather_error:{type(exc).__name__}",
-                }
+                request_cache[key] = _missing_weather(f"weather_error:{type(exc).__name__}")
         match_weather[match_id] = request_cache[key]
 
-    mapping = {
-        "weather_temperature_c": "temperature_c",
-        "weather_humidity_pct": "humidity_pct",
-        "weather_wind_speed_kmh": "wind_speed_kmh",
-        "weather_wind_gust_kmh": "wind_gust_kmh",
-        "weather_precipitation_mm": "precipitation_mm",
-        "weather_dew_point_c": "dew_point_c",
-        "weather_pressure_hpa": "pressure_hpa",
-        "weather_source_quality": "source_quality",
-    }
-    for target, source in mapping.items():
-        df[target] = df["match_id"].map(lambda match_id: match_weather.get(match_id, {}).get(source, np.nan))
+    mask = pd.Series(True, index=df.index)
+    df = _apply_weather_values(df, mask, match_weather)
     return df.drop(columns=["_weather_date"])
