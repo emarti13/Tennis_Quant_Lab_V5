@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 
 from v5_tournament_registry import TournamentRegistry
+from v5_venue_metadata import stable_event_id
 
 EARTH_RADIUS_KM = 6371.0088
 
@@ -37,21 +38,25 @@ def _utc_offset_hours(timezone_name: str | None, when: pd.Timestamp) -> float:
         return np.nan
 
 
-def _continent_lookup(registry_frame: pd.DataFrame) -> dict[str, str | None]:
-    out: dict[str, str | None] = {}
-    if registry_frame is None or registry_frame.empty or "canonical_event_id" not in registry_frame.columns:
-        return out
-    for _, row in registry_frame.iterrows():
-        event_id = str(row.get("canonical_event_id") or "").strip()
-        if not event_id:
-            continue
-        value = row.get("continent")
-        out[event_id] = None if pd.isna(value) or str(value).strip() == "" else str(value).strip()
-    return out
+def _resolve_current_context(registry: TournamentRegistry, row: pd.Series, year: int):
+    tour = row.get("tour") or "MEN"
+    raw_id = row.get("tourney_id")
+    name = row.get("tourney_name") or ""
+    event_id = stable_event_id(tour, raw_id, name)
+    current = registry.resolve_event(event_id, tour, year)
+    if current.canonical_event_id is not None:
+        return current, "stable_event_id"
+    current = registry.resolve(name, tour, year)
+    return current, "name_alias" if current.canonical_event_id is not None else "unresolved"
 
 
 def build_travel_features(player_rows: pd.DataFrame, tournament_registry: pd.DataFrame) -> pd.DataFrame:
-    """Build strict as-of travel/transition features from the player's prior competition row."""
+    """Build strict as-of travel/transition features from the player's prior competition row.
+
+    Venue resolution prefers a stable source tournament ID plus target year so sponsor/name
+    changes and alternating/moved venues do not break travel continuity. Name resolution is a
+    conservative fallback only when stable-ID resolution is unavailable.
+    """
     if player_rows is None or player_rows.empty:
         return player_rows.copy() if player_rows is not None else pd.DataFrame()
 
@@ -59,7 +64,6 @@ def build_travel_features(player_rows: pd.DataFrame, tournament_registry: pd.Dat
     df["_orig_order"] = np.arange(len(df))
     df["match_date"] = pd.to_datetime(df["match_date"], errors="coerce", utc=True)
     registry = TournamentRegistry(tournament_registry)
-    continents = _continent_lookup(tournament_registry)
 
     result_rows: list[dict] = []
     ordered = df.sort_values(["player_name", "match_date", "_orig_order"], kind="stable")
@@ -69,10 +73,22 @@ def build_travel_features(player_rows: pd.DataFrame, tournament_registry: pd.Dat
         for idx, row in group.iterrows():
             current_date = row["match_date"]
             year = int(current_date.year) if pd.notna(current_date) else 0
-            current = registry.resolve(row.get("tourney_name") or "", row.get("tour") or "MEN", year)
-            current_continent = continents.get(current.canonical_event_id or "")
+            current, resolution_method = _resolve_current_context(registry, row, year)
+            current_continent = current.continent
 
-            feat = {"_idx": idx}
+            feat = {
+                "_idx": idx,
+                "venue_event_id": current.canonical_event_id,
+                "venue_city": current.city,
+                "venue_country": current.country,
+                "venue_continent": current.continent,
+                "venue_latitude": current.latitude,
+                "venue_longitude": current.longitude,
+                "venue_timezone": current.timezone,
+                "venue_altitude_m": current.altitude_m,
+                "venue_source_quality": current.source_quality,
+                "venue_resolution_method": resolution_method,
+            }
             if previous is None or current.canonical_event_id is None or previous["ctx"].canonical_event_id is None:
                 feat.update({
                     "travel_km_from_previous_event": np.nan,
@@ -87,8 +103,13 @@ def build_travel_features(player_rows: pd.DataFrame, tournament_registry: pd.Dat
                 })
             else:
                 prev_ctx = previous["ctx"]
-                same_event = current.canonical_event_id == prev_ctx.canonical_event_id
-                distance = 0.0 if same_event else haversine_km(
+                same_physical_venue = (
+                    current.canonical_event_id == prev_ctx.canonical_event_id
+                    and current.city == prev_ctx.city
+                    and current.latitude == prev_ctx.latitude
+                    and current.longitude == prev_ctx.longitude
+                )
+                distance = 0.0 if same_physical_venue else haversine_km(
                     prev_ctx.latitude, prev_ctx.longitude, current.latitude, current.longitude
                 )
                 previous_offset = _utc_offset_hours(prev_ctx.timezone, current_date)
@@ -118,7 +139,10 @@ def build_travel_features(player_rows: pd.DataFrame, tournament_registry: pd.Dat
                         else np.nan
                     ),
                     "surface_change": (
-                        int(str(current.surface or row.get("surface") or "").lower() != str(prev_ctx.surface or previous.get("surface") or "").lower())
+                        int(
+                            str(current.surface or row.get("surface") or "").lower()
+                            != str(prev_ctx.surface or previous.get("surface") or "").lower()
+                        )
                         if (current.surface or row.get("surface")) and (prev_ctx.surface or previous.get("surface"))
                         else np.nan
                     ),
