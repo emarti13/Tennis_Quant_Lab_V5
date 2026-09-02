@@ -21,7 +21,7 @@ def test_main_skips_headerless_empty_board(tmp_path):
     ready = tmp_path / "v5_daily_ready"
     ready.mkdir()
     board = ready / "latest_board.csv"
-    board.write_text("\\n", encoding="utf-8")
+    board.write_text("\n", encoding="utf-8")
 
     assert main(tmp_path) == 0
-    assert board.read_text(encoding="utf-8") == "\\n"
+    assert board.read_text(encoding="utf-8") == "\n"
