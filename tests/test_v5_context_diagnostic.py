@@ -3,7 +3,12 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from diagnose_v5_context_model import probability_band_report, feature_coverage_report, load_tournament_registry
+from diagnose_v5_context_model import (
+    probability_band_report,
+    feature_coverage_report,
+    load_tournament_registry,
+    prediction_flip_report,
+)
 
 
 def test_probability_band_report_separates_longshots_and_favorites():
@@ -35,6 +40,27 @@ def test_feature_coverage_reports_non_missing_fraction_and_constant_features():
     assert report["ctx_b"]["constant"] is True
     assert report["ctx_c"]["non_missing_fraction"] == 0.0
     assert report["ctx_c"]["constant"] is True
+
+
+def test_prediction_flip_report_counts_net_corrected_winner_calls():
+    frame = pd.DataFrame({
+        "target_a_win": [1, 0, 1, 0, 1],
+        "accepted_baseline_probability": [.60, .60, .40, .40, .70],
+        "combined_probability": [.65, .45, .55, .60, .48],
+        "player_a": ["A", "C", "E", "G", "I"],
+        "player_b": ["B", "D", "F", "H", "J"],
+        "match_date": pd.to_datetime(["2026-01-01"] * 5),
+        "surface": ["Hard"] * 5,
+    })
+    report = prediction_flip_report(frame)
+    assert report["n"] == 5
+    assert report["flips"] == 4
+    assert report["old_wrong_new_correct"] == 2
+    assert report["old_correct_new_wrong"] == 2
+    assert report["net_corrected_flips"] == 0
+    assert 0 <= report["old_accuracy"] <= 1
+    assert 0 <= report["new_accuracy"] <= 1
+    assert len(report["flip_rows"]) == 4
 
 
 def test_load_tournament_registry_reads_persisted_registry(tmp_path: Path):
