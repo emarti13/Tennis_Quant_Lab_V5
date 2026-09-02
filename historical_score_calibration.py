@@ -50,7 +50,6 @@ def build_result_index(results: pd.DataFrame) -> dict:
             "score": row.get("score"),
         }
         if key in out and out[key] != item:
-            # Refuse an ambiguous same-date/name duplicate rather than silently choose.
             out[key] = None
         else:
             out[key] = item
@@ -90,6 +89,7 @@ def load_historical_results(years=(2025, 2026)):
 
 
 def matched_walkforward_scores(walkforward: pd.DataFrame, result_lookup: dict) -> pd.DataFrame:
+    """Join score outcomes and add deterministic A/B orientation for unbiased signed-margin scoring."""
     rows = []
     if walkforward is None or walkforward.empty:
         return pd.DataFrame()
@@ -105,15 +105,29 @@ def matched_walkforward_scores(walkforward: pd.DataFrame, result_lookup: dict) -
             continue
         if not all(math.isfinite(x) and 0 < x < 1 for x in (p_w, p_l, p_elo)):
             continue
+        winner = str(row.get("winner") or "")
+        loser = str(row.get("loser") or "")
+        winner_is_a = canonical_name(winner) <= canonical_name(loser)
+        player_a, player_b = (winner, loser) if winner_is_a else (loser, winner)
+        a_serve, b_serve = (p_w, p_l) if winner_is_a else (p_l, p_w)
+        elo_a = p_elo if winner_is_a else 1.0 - p_elo
+        signed_margin = float(result["actual_margin"]) if winner_is_a else -float(result["actual_margin"])
         rows.append({
             "date": pd.Timestamp(row.get("date")),
             "surface": str(row.get("surface") or "Hard"),
             "level": row.get("level"),
-            "winner": row.get("winner"),
-            "loser": row.get("loser"),
+            "winner": winner,
+            "loser": loser,
             "winner_serve_p": p_w,
             "loser_serve_p": p_l,
             "elo_winner_p": p_elo,
+            "player_a": player_a,
+            "player_b": player_b,
+            "target_a_win": int(winner_is_a),
+            "a_serve_p": a_serve,
+            "b_serve_p": b_serve,
+            "elo_a_p": elo_a,
+            "actual_margin_a": signed_margin,
             **result,
         })
     return pd.DataFrame(rows)
