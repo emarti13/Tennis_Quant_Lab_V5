@@ -15,6 +15,7 @@ from v5_settlement import canonical_name, parse_score_games
 
 SLAM_TOKENS = ("australian open", "roland garros", "french open", "wimbledon", "us open")
 HISTORY_SUFFIXES = ("", "_atp_quali", "_challenger", "_wta")
+DEFAULT_HISTORY_YEARS = (2023, 2024, 2025, 2026)
 RAW_STAT_SUFFIXES = {
     "ace": "aces", "df": "double_faults", "svpt": "service_points", "1stIn": "first_serves_in",
     "1stWon": "first_serve_points_won", "2ndWon": "second_serve_points_won",
@@ -38,7 +39,7 @@ def resolve_history_targets(files: list[dict], years) -> dict[str, dict]:
     return resolved
 
 
-def load_tennismylife_history(years=(2025, 2026)) -> tuple[pd.DataFrame, dict]:
+def load_tennismylife_history(years=DEFAULT_HISTORY_YEARS) -> tuple[pd.DataFrame, dict]:
     from refresh_tennismylife_cloud import get_manifest
     files = get_manifest()
     targets = resolve_history_targets(files, years=tuple(int(y) for y in years))
@@ -182,7 +183,7 @@ def build_player_match_rows(matches: pd.DataFrame) -> pd.DataFrame:
     return out.sort_values(["match_date", "match_id", "player_role"], kind="stable").reset_index(drop=True)
 
 
-def build_context_warehouse(base_dir: str = ".", years=(2025, 2026)) -> dict[str, object]:
+def build_context_warehouse(base_dir: str = ".", years=DEFAULT_HISTORY_YEARS) -> dict[str, object]:
     out_dir = Path(base_dir) / "context_warehouse"; out_dir.mkdir(parents=True, exist_ok=True)
     raw, source_detail = load_tennismylife_history(years=years)
     if raw.empty:
