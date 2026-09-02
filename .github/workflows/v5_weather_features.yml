@@ -1,0 +1,21 @@
+name: V5 Weather Features
+
+on:
+  push:
+    branches: [feature/v5-full-context-model]
+    paths:
+      - 'v5_weather_features.py'
+      - 'tests/test_v5_weather_features.py'
+      - '.github/workflows/v5_weather_features.yml'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest tests/test_v5_weather_features.py -v
