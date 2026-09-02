@@ -7,6 +7,7 @@ on:
       - 'diagnose_context_join_keys.py'
       - 'build_v5_context_matchups.py'
       - 'tests/test_v5_context_walkforward_dates.py'
+      - 'tests/test_v5_context_timezone_keys.py'
       - '.github/workflows/v5_context_join_keys.yml'
   workflow_dispatch:
 
@@ -20,5 +21,5 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements.txt pytest
-      - run: python -m pytest tests/test_v5_context_walkforward_dates.py -v
+      - run: python -m pytest tests/test_v5_context_walkforward_dates.py tests/test_v5_context_timezone_keys.py -v
       - run: python diagnose_context_join_keys.py
