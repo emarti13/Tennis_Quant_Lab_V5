@@ -1,0 +1,6 @@
+{
+  "status": "skipped",
+  "expected": "success",
+  "log_tail": "",
+  "context_policy": "historical as-of context + venue/travel/court-speed/player-state; weather omitted from this score gate unless already reproducibly cached"
+}
