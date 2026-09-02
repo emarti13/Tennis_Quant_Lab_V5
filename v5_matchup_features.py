@@ -27,7 +27,6 @@ def _serve_dominance(state: dict) -> float:
     second = _safe(_f(state, "serve_second_won"), 0.50)
     ace = _safe(_f(state, "ace_rate"), 0.07)
     df = _safe(_f(state, "double_fault_rate"), 0.04)
-    # Centered continuous archetype dimension, not a categorical player label.
     return (first - 0.67) + 0.8 * (second - 0.50) + 0.8 * (ace - 0.07) - 0.5 * (df - 0.04)
 
 
@@ -45,11 +44,21 @@ def _second_serve_vulnerability(server: dict, returner: dict) -> float:
     return (0.55 - second) * return_strength
 
 
-def build_matchup_features(state_a: dict, state_b: dict, context: dict) -> dict[str, float]:
-    """Build signed matchup and environment interactions from tennis-only state inputs.
+def _comeback_recency(state: dict, threshold: int) -> float:
+    matches_since = _f(state, f"matches_since_{threshold}d_layoff")
+    if not math.isfinite(matches_since) or matches_since < 0:
+        return 0.0
+    # First match back = 1.0, then decays rapidly without assuming a permanent penalty.
+    return 1.0 / (1.0 + float(matches_since))
 
-    A positive signed feature always points in player A's direction. Sportsbook/market
-    fields are deliberately ignored even if callers include them in `context`.
+
+def build_matchup_features(state_a: dict, state_b: dict, context: dict) -> dict[str, float]:
+    """Build signed, leak-safe matchup and environment interactions.
+
+    Rest is deliberately nonlinear. Raw rest days are retained in player state for audit and
+    interactions, but are not emitted as a direct linear feature. This prevents a 180-day
+    absence from mechanically counting as twice a 90-day absence while still preserving
+    short-rest fatigue and layoff/comeback information.
     """
     serve_a, serve_b = _serve_dominance(state_a), _serve_dominance(state_b)
     return_a, return_b = _return_dominance(state_a), _return_dominance(state_b)
@@ -78,7 +87,38 @@ def build_matchup_features(state_a: dict, state_b: dict, context: dict) -> dict[
         "ace_rate_diff": _diff(state_a, state_b, "ace_rate"),
         "double_fault_rate_diff": _diff(state_a, state_b, "double_fault_rate"),
         "return_strength_diff": _diff(state_a, state_b, "return_strength"),
-        "rest_days_diff": _diff(state_a, state_b, "rest_days"),
+
+        # Nonlinear rest/layoff state.
+        "rest_log1p_diff": _diff(state_a, state_b, "rest_log1p"),
+        "rest_bucket_diff": _diff(state_a, state_b, "rest_bucket"),
+        "short_rest_0d_diff": _diff(state_a, state_b, "short_rest_0d"),
+        "short_rest_1d_diff": _diff(state_a, state_b, "short_rest_1d"),
+        "short_rest_2d_diff": _diff(state_a, state_b, "short_rest_2d"),
+        "rest_3_to_7d_diff": _diff(state_a, state_b, "rest_3_to_7d"),
+        "layoff_30d_diff": _diff(state_a, state_b, "layoff_30d"),
+        "layoff_60d_diff": _diff(state_a, state_b, "layoff_60d"),
+        "layoff_90d_diff": _diff(state_a, state_b, "layoff_90d"),
+        "first_match_after_30d_diff": _diff(state_a, state_b, "first_match_after_30d"),
+        "first_match_after_60d_diff": _diff(state_a, state_b, "first_match_after_60d"),
+        "first_match_after_90d_diff": _diff(state_a, state_b, "first_match_after_90d"),
+        "comeback_recency_30d_diff": _comeback_recency(state_a, 30) - _comeback_recency(state_b, 30),
+        "comeback_recency_60d_diff": _comeback_recency(state_a, 60) - _comeback_recency(state_b, 60),
+        "comeback_recency_90d_diff": _comeback_recency(state_a, 90) - _comeback_recency(state_b, 90),
+
+        # Workload at multiple horizons and immediate previous-match cost.
+        "consecutive_play_days_diff": _diff(state_a, state_b, "consecutive_play_days"),
+        "previous_match_games_diff": _diff(state_a, state_b, "previous_match_games"),
+        "previous_match_duration_diff": _diff(state_a, state_b, "previous_match_duration"),
+        "matches_3d_diff": _diff(state_a, state_b, "fatigue_matches_3d"),
+        "games_3d_diff": _diff(state_a, state_b, "fatigue_games_3d"),
+        "matches_7d_diff": _diff(state_a, state_b, "fatigue_matches_7d"),
+        "games_7d_diff": _diff(state_a, state_b, "fatigue_games_7d"),
+        "minutes_7d_diff": _diff(state_a, state_b, "fatigue_minutes_7d"),
+        "matches_14d_diff": _diff(state_a, state_b, "fatigue_matches_14d"),
+        "games_14d_diff": _diff(state_a, state_b, "fatigue_games_14d"),
+        "matches_30d_diff": _diff(state_a, state_b, "fatigue_matches_30d"),
+        "games_30d_diff": _diff(state_a, state_b, "fatigue_games_30d"),
+
         "travel_km_diff": _diff(state_a, state_b, "travel_km"),
         "timezone_change_abs_diff": abs(_safe(_f(state_a, "timezone_change_hours"), 0.0)) - abs(_safe(_f(state_b, "timezone_change_hours"), 0.0)),
         "state_uncertainty_diff": _diff(state_a, state_b, "state_uncertainty"),
@@ -102,7 +142,6 @@ def build_matchup_features(state_a: dict, state_b: dict, context: dict) -> dict[
         "rank_diff": _diff(state_a, state_b, "player_rank"),
     }
 
-    # Travel/rest interaction: more travel is less damaging when accompanied by more rest.
     travel_a = _safe(_f(state_a, "travel_km"), 0.0)
     travel_b = _safe(_f(state_b, "travel_km"), 0.0)
     recovery_a = max(_safe(rest_a, 0.0), 0.5)
