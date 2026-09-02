@@ -63,6 +63,13 @@ def feature_coverage_report(frame: pd.DataFrame) -> dict:
     return report
 
 
+def load_tournament_registry(base_dir: str | Path = ".") -> pd.DataFrame:
+    path = Path(base_dir) / "context_registry" / "tournaments.csv"
+    if not path.exists():
+        return pd.DataFrame()
+    return pd.read_csv(path, low_memory=False)
+
+
 def _validation_predictions(tour_frame: pd.DataFrame, evaluation: dict, validation_year: int = 2026) -> pd.DataFrame:
     valid = tour_frame[pd.to_numeric(tour_frame["year"], errors="coerce") == int(validation_year)].copy()
     context_cols = evaluation["context_features"]
@@ -95,7 +102,8 @@ def run_diagnostic(base_dir: str | Path = ".", output_dir: str | Path = "v5_cont
         raise FileNotFoundError("context_warehouse/player_match_rows.parquet missing; build the context warehouse first")
 
     player_rows = pd.read_parquet(player_path)
-    enriched = enrich_player_history(player_rows)
+    tournament_registry = load_tournament_registry(base)
+    enriched = enrich_player_history(player_rows, tournament_registry=tournament_registry)
     walkforward = load_walkforward(base)
     matchups, join_qc = assemble_matchup_dataset(enriched, walkforward, target_years=(2025, 2026))
     if matchups.empty:
@@ -103,9 +111,10 @@ def run_diagnostic(base_dir: str | Path = ".", output_dir: str | Path = "v5_cont
 
     matchups.to_parquet(out_dir / "matched_context_rows.parquet", index=False)
     report = {
-        "diagnostic_version": "v5-context-2025-2026-oos-1",
+        "diagnostic_version": "v5-context-2025-2026-oos-2",
         "fit_year": 2025,
         "validation_year": 2026,
+        "venue_registry_rows": int(len(tournament_registry)),
         "join_qc": join_qc,
         "matched_rows": int(len(matchups)),
         "matched_by_year": {str(int(k)): int(v) for k, v in matchups["year"].value_counts().sort_index().to_dict().items()},
