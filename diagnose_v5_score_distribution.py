@@ -31,6 +31,27 @@ def _attach_scores(matchups: pd.DataFrame, matches: pd.DataFrame) -> pd.DataFram
     return out
 
 
+def _deterministic_cap(frame: pd.DataFrame, max_rows: int | None) -> pd.DataFrame:
+    """Evenly sample a chronological frame without peeking at outcomes.
+
+    This is used only to bound the expensive mechanistic replay. The direct model
+    still fits on all available 2025 rows; candidate metrics are compared on the
+    exact same untouched 2026 rows selected here.
+    """
+    ordered = frame.copy()
+    ordered["match_date"] = pd.to_datetime(ordered.get("match_date"), errors="coerce")
+    sort_cols = [c for c in ("match_date", "match_id") if c in ordered.columns]
+    if sort_cols:
+        ordered = ordered.sort_values(sort_cols, kind="stable")
+    ordered = ordered.reset_index(drop=True)
+    limit = int(max_rows or 0)
+    if limit <= 0 or len(ordered) <= limit:
+        return ordered
+    positions = np.linspace(0, len(ordered) - 1, num=limit)
+    indices = np.unique(np.rint(positions).astype(int))
+    return ordered.iloc[indices].reset_index(drop=True)
+
+
 def _mechanistic_predictions(frame: pd.DataFrame, *, simulations: int) -> dict[str, np.ndarray]:
     margins=[]; totals=[]; margin_sd=[]; total_sd=[]
     for i, row in frame.reset_index(drop=True).iterrows():
@@ -67,7 +88,6 @@ def _segment_metrics(frame: pd.DataFrame, prediction: dict[str, np.ndarray]) -> 
 def _feature_columns(frame: pd.DataFrame) -> list[str]:
     base=[c for c in ("x_sr_a","x_elo_a") if c in frame.columns]
     ctx=[c for c in frame.columns if c.startswith("ctx_")]
-    # Constant or entirely missing columns carry no score information and only add instability.
     keep=[]
     for col in base+ctx:
         values=pd.to_numeric(frame[col],errors="coerce")
@@ -77,24 +97,22 @@ def _feature_columns(frame: pd.DataFrame) -> list[str]:
     return keep
 
 
-def evaluate_tour(frame: pd.DataFrame, tour: str, *, simulations: int) -> dict:
+def evaluate_tour(frame: pd.DataFrame, tour: str, *, simulations: int, max_validation_rows: int | None = None, max_hybrid_train_rows: int | None = None) -> dict:
     train=frame[pd.to_numeric(frame["year"],errors="coerce").eq(2025)].copy().reset_index(drop=True)
-    valid=frame[pd.to_numeric(frame["year"],errors="coerce").eq(2026)].copy().reset_index(drop=True)
-    if len(train)<50 or len(valid)<50:
-        return {"status":"insufficient_rows","train_rows":int(len(train)),"validation_rows":int(len(valid))}
+    valid_full=frame[pd.to_numeric(frame["year"],errors="coerce").eq(2026)].copy().reset_index(drop=True)
+    if len(train)<50 or len(valid_full)<50:
+        return {"status":"insufficient_rows","train_rows":int(len(train)),"validation_rows":int(len(valid_full))}
     features=_feature_columns(train)
     direct_model=fit_gaussian_score_model(train,features=features,l2=16.0)
-    direct_valid=predict_gaussian_score_model(direct_model,valid)
 
-    # Mechanistic baseline is evaluated on the complete later-period score sample.
+    valid=_deterministic_cap(valid_full,max_validation_rows)
+    direct_valid=predict_gaussian_score_model(direct_model,valid)
     mech_valid=_mechanistic_predictions(valid,simulations=simulations)
     mech_metrics=distribution_metrics(valid["actual_margin_a"],valid["actual_total"],mech_valid)
     direct_metrics=distribution_metrics(valid["actual_margin_a"],valid["actual_total"],direct_valid)
 
-    # Hybrid residual geometry: fit on a deterministic chronological 2025 subset after
-    # obtaining mechanistic means. The mechanistic margin becomes one additional signed
-    # tennis-only feature; totals remain swap invariant through absolute-feature encoding.
-    hybrid_train=train.tail(min(len(train),4000)).copy().reset_index(drop=True)
+    hybrid_limit = max_hybrid_train_rows if max_hybrid_train_rows is not None else 4000
+    hybrid_train=_deterministic_cap(train,hybrid_limit)
     mech_train=_mechanistic_predictions(hybrid_train,simulations=simulations)
     hybrid_train["mechanistic_margin_a"] = mech_train["margin_mean"]
     hybrid_features=features+["mechanistic_margin_a"]
@@ -112,8 +130,11 @@ def evaluate_tour(frame: pd.DataFrame, tour: str, *, simulations: int) -> dict:
     selected=min(eligible,key=lambda n:(metric_map[n]["margin_crps"]+metric_map[n]["total_crps"],metric_map[n]["margin_rmse"]+metric_map[n]["total_rmse"])) if eligible else "conditioned_mechanistic"
     pred_map={"conditioned_mechanistic":mech_valid,"gaussian_contextual":direct_valid,"gaussian_hybrid":hybrid_valid}
     return {
-        "status":"evaluated","tour":tour,"train_rows":int(len(train)),"validation_rows":int(len(valid)),"features":features,
-        "diagnostic_simulations_per_match":int(simulations),"metrics_2026":metric_map,"gates_vs_conditioned_mechanistic":gates,
+        "status":"evaluated","tour":tour,"train_rows":int(len(train)),"validation_rows_full":int(len(valid_full)),"validation_rows":int(len(valid)),"features":features,
+        "diagnostic_simulations_per_match":int(simulations),
+        "validation_sampling":{"policy":"chronological_even_spacing","max_rows":None if not max_validation_rows else int(max_validation_rows),"full_rows":int(len(valid_full)),"scored_rows":int(len(valid))},
+        "hybrid_training_sampling":{"policy":"chronological_even_spacing","max_rows":None if not hybrid_limit else int(hybrid_limit),"full_rows":int(len(train)),"scored_rows":int(len(hybrid_train))},
+        "metrics_2026":metric_map,"gates_vs_conditioned_mechanistic":gates,
         "selected_candidate":selected,"selected_metrics_2026":metric_map[selected],
         "bo3_bo5_selected_metrics":_segment_metrics(valid,pred_map[selected]),
         "bo3_bo5_mechanistic_metrics":_segment_metrics(valid,mech_valid),
@@ -127,20 +148,28 @@ def run(base_dir: str | Path = ".") -> dict:
     if not matches_path.exists(): raise FileNotFoundError("context_warehouse/matches.parquet missing")
     frame=_attach_scores(pd.read_parquet(matchup_path),pd.read_parquet(matches_path))
     simulations=max(80,int(os.getenv("V5_SCORE_DIAGNOSTIC_SIMS","160")))
-    report={"version":"v5-score-walkforward-1","fit_year":2025,"validation_year":2026,"market_prices_used":False,"completed_score_rows":int(len(frame)),"tours":{}}
+    max_validation_rows=max(0,int(os.getenv("V5_SCORE_MAX_VALIDATION_ROWS","0"))) or None
+    max_hybrid_train_rows=max(0,int(os.getenv("V5_SCORE_MAX_HYBRID_TRAIN_ROWS","0"))) or None
+    report={"version":"v5-score-walkforward-2","fit_year":2025,"validation_year":2026,"market_prices_used":False,"completed_score_rows":int(len(frame)),"tours":{}}
     production={"version":report["version"],"market_prices_used":False}
     for tour in ("MEN","WTA"):
-        result=evaluate_tour(frame[frame["tour"].astype(str).str.upper().eq(tour)].copy(),tour,simulations=simulations)
+        result=evaluate_tour(
+            frame[frame["tour"].astype(str).str.upper().eq(tour)].copy(),
+            tour,
+            simulations=simulations,
+            max_validation_rows=max_validation_rows,
+            max_hybrid_train_rows=max_hybrid_train_rows,
+        )
         report["tours"][tour]=result
         selected=result.get("selected_candidate","conditioned_mechanistic")
         model=None
         if selected=="gaussian_contextual": model=result.get("direct_model")
         elif selected=="gaussian_hybrid": model=result.get("hybrid_model")
-        production[tour]={"selected_candidate":selected,"model":model,"validation_metrics":result.get("selected_metrics_2026"),"bo3_bo5_metrics":result.get("bo3_bo5_selected_metrics")}
+        production[tour]={"selected_candidate":selected,"model":model,"validation_metrics":result.get("selected_metrics_2026"),"bo3_bo5_metrics":result.get("bo3_bo5_selected_metrics"),"validation_sampling":result.get("validation_sampling")}
     out=base/OUTDIR; out.mkdir(parents=True,exist_ok=True)
     (out/"report.json").write_text(json.dumps(report,indent=2,allow_nan=False),encoding="utf-8")
     (out/"production_candidate.json").write_text(json.dumps(production,indent=2,allow_nan=False),encoding="utf-8")
-    print(json.dumps({"version":report["version"],"completed_score_rows":report["completed_score_rows"],"selection":{t:production[t]["selected_candidate"] for t in ("MEN","WTA")}},indent=2))
+    print(json.dumps({"version":report["version"],"completed_score_rows":report["completed_score_rows"],"selection":{t:production[t]["selected_candidate"] for t in ("MEN","WTA")},"validation_sampling":{t:production[t].get("validation_sampling") for t in ("MEN","WTA")}},indent=2))
     return report
 
 
