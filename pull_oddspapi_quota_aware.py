@@ -60,7 +60,7 @@ def quota_state(account):
 
 def tournament_request_groups(tournament_ids):
     tids = list(tournament_ids)
-    return [tids] if tids else []
+    return [tids[i:i + 5] for i in range(0, len(tids), 5)]
 
 
 def books_for_today(now, remaining):

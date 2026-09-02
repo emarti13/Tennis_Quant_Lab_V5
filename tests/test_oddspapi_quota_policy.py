@@ -17,8 +17,11 @@ class OddsPapiQuotaPolicyTests(unittest.TestCase):
         self.assertEqual(q["used"], 78)
         self.assertEqual(q["remaining"], 172)
 
-    def test_all_tournaments_are_sent_in_one_odds_request(self):
-        self.assertEqual(tournament_request_groups([11, 22, 33, 44, 55, 66]), [[11, 22, 33, 44, 55, 66]])
+    def test_tournaments_are_batched_to_api_maximum_of_five(self):
+        self.assertEqual(
+            tournament_request_groups([11, 22, 33, 44, 55, 66, 77]),
+            [[11, 22, 33, 44, 55], [66, 77]],
+        )
 
     def test_primary_book_is_daily_when_above_reserve(self):
         now = datetime(2026, 9, 1, tzinfo=timezone.utc)
