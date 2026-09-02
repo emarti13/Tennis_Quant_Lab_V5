@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from collections import defaultdict
 import math
+
 import numpy as np
 import pandas as pd
 
-from v5_tournament_registry import normalize_event_name
+from v5_venue_metadata import stable_event_id
 
 
 def _estimate(values: pd.Series, weights: np.ndarray | None = None) -> tuple[float, float, int]:
@@ -46,84 +48,153 @@ def blend_estimates(mean_a: float, uncertainty_a: float, mean_b: float, uncertai
     return float(mean), float(uncertainty)
 
 
-def _historical_prior(prior: pd.DataFrame, target: pd.Series) -> tuple[float, float, int, str]:
-    target_year = int(target["match_start"].year)
-    hist = prior[prior["match_start"].dt.year < target_year]
-    if hist.empty:
-        return np.nan, np.nan, 0, "none"
+def _new_moments() -> dict[str, float]:
+    return {"count": 0, "sum": 0.0, "sumsq": 0.0}
 
-    event_id = target.get("canonical_event_id")
-    same_event = hist[hist["canonical_event_id"] == event_id] if pd.notna(event_id) else hist.iloc[0:0]
-    if not same_event.empty:
-        years_old = target_year - same_event["match_start"].dt.year.to_numpy()
-        weights = np.power(0.70, np.maximum(years_old - 1, 0))
-        m, u, n = _estimate(same_event["speed_residual"], weights)
-        if n > 0:
-            return m, u, n, "same_event"
 
-    cohort = hist[
-        (hist["tour"].astype(str) == str(target.get("tour")))
-        & (hist["surface"].astype(str) == str(target.get("surface")))
-        & (hist["indoor"].astype(str) == str(target.get("indoor")))
-    ]
-    if not cohort.empty:
-        years_old = target_year - cohort["match_start"].dt.year.to_numpy()
-        weights = np.power(0.70, np.maximum(years_old - 1, 0))
-        m, u, n = _estimate(cohort["speed_residual"], weights)
-        if n > 0:
-            return m, u, n, "tour_surface_indoor"
-    return np.nan, np.nan, 0, "none"
+def _add_moment(stats: dict[str, float], value: float) -> None:
+    if value is None or not math.isfinite(float(value)):
+        return
+    x = float(value)
+    stats["count"] += 1
+    stats["sum"] += x
+    stats["sumsq"] += x * x
+
+
+def _moments_estimate(stats: dict[str, float] | None) -> tuple[float, float, int]:
+    if not stats or int(stats.get("count", 0)) <= 0:
+        return np.nan, np.nan, 0
+    n = int(stats["count"])
+    mean = float(stats["sum"] / n)
+    if n == 1:
+        return mean, 0.50, 1
+    variance = max(float(stats["sumsq"] / n - mean * mean), 0.0)
+    uncertainty = max(math.sqrt(variance / n), 0.08)
+    return mean, uncertainty, n
+
+
+def _historical_moments_estimate(year_stats: dict[int, dict[str, float]] | None, target_year: int) -> tuple[float, float, int]:
+    if not year_stats:
+        return np.nan, np.nan, 0
+    total_w = weighted_sum = weighted_sumsq = sum_w2 = 0.0
+    n_total = 0
+    for year, stats in year_stats.items():
+        if int(year) >= int(target_year) or int(stats.get("count", 0)) <= 0:
+            continue
+        n = int(stats["count"])
+        years_old = int(target_year) - int(year)
+        w = float(0.70 ** max(years_old - 1, 0))
+        total_w += w * n
+        weighted_sum += w * float(stats["sum"])
+        weighted_sumsq += w * float(stats["sumsq"])
+        sum_w2 += (w * w) * n
+        n_total += n
+    if n_total <= 0 or total_w <= 0:
+        return np.nan, np.nan, 0
+    mean = weighted_sum / total_w
+    if n_total == 1:
+        return float(mean), 0.50, 1
+    variance = max(weighted_sumsq / total_w - mean * mean, 0.0)
+    eff_n = (total_w * total_w) / max(sum_w2, 1e-12)
+    uncertainty = max(math.sqrt(variance / max(eff_n, 1.0)), 0.08)
+    return float(mean), float(uncertainty), int(n_total)
+
+
+def _cohort_key(row: pd.Series) -> tuple[str, str, str]:
+    return (
+        str(row.get("tour") or ""),
+        str(row.get("surface") or ""),
+        str(row.get("indoor")),
+    )
 
 
 def build_court_speed_features(matches: pd.DataFrame) -> pd.DataFrame:
-    """Create leak-safe historical-prior/current-event/current-day court-speed states."""
+    """Create leak-safe historical-prior/current-event/current-day court-speed states.
+
+    This implementation is streaming rather than repeatedly filtering the full historical
+    table. Rows sharing the exact same timestamp are priced before any of them update state,
+    preventing same-time leakage. Date-only history therefore never leaks same-day matches.
+    """
     if matches is None or matches.empty:
         return matches.copy() if matches is not None else pd.DataFrame()
 
     df = matches.copy()
     df["_orig_order"] = np.arange(len(df))
     df["match_start"] = pd.to_datetime(df["match_start"], errors="coerce", utc=True)
-    df = df.sort_values(["match_start", "_orig_order"], kind="stable").reset_index(drop=True)
-    rows = []
+    df = df.sort_values(["match_start", "_orig_order"], kind="stable", na_position="last").reset_index(drop=True)
 
-    for _, target in df.iterrows():
-        start = target["match_start"]
-        if pd.isna(start):
-            prior = df.iloc[0:0]
-        else:
-            # With date-only historical data, equal timestamps deliberately do not see one
-            # another. That is conservative and prevents unknown same-day order leakage.
-            prior = df[df["match_start"] < start]
+    event_year_stats: dict[str, dict[int, dict[str, float]]] = defaultdict(lambda: defaultdict(_new_moments))
+    cohort_year_stats: dict[tuple[str, str, str], dict[int, dict[str, float]]] = defaultdict(lambda: defaultdict(_new_moments))
+    current_event_stats: dict[tuple[str, int], dict[str, float]] = defaultdict(_new_moments)
+    current_day_stats: dict[tuple[str, object], dict[str, float]] = defaultdict(_new_moments)
+    rows: list[dict] = []
 
-        hist_mean, hist_u, hist_n, prior_level = _historical_prior(prior, target)
-        year = int(start.year) if pd.notna(start) else -1
-        event_id = target.get("canonical_event_id")
-        current = prior[
-            (prior["canonical_event_id"] == event_id)
-            & (prior["match_start"].dt.year == year)
-        ] if pd.notna(event_id) else prior.iloc[0:0]
-        cur_mean, cur_u, cur_n = _estimate(current["speed_residual"])
+    valid = df[df["match_start"].notna()]
+    for timestamp, batch in valid.groupby("match_start", sort=True):
+        year = int(timestamp.year)
+        day = timestamp.normalize()
+        # Score every row in this exact-time batch from state that existed before the batch.
+        for _, target in batch.iterrows():
+            event_id = target.get("canonical_event_id")
+            event_key = str(event_id) if pd.notna(event_id) and str(event_id) else ""
+            cohort = _cohort_key(target)
 
-        day = current[current["match_start"].dt.normalize() == start.normalize()] if pd.notna(start) else current.iloc[0:0]
-        day_mean, day_u, day_n = _estimate(day["speed_residual"])
+            hist_mean, hist_u, hist_n = _historical_moments_estimate(event_year_stats.get(event_key), year) if event_key else (np.nan, np.nan, 0)
+            prior_level = "same_event" if hist_n > 0 else "none"
+            if hist_n == 0:
+                hist_mean, hist_u, hist_n = _historical_moments_estimate(cohort_year_stats.get(cohort), year)
+                if hist_n > 0:
+                    prior_level = "tour_surface_indoor"
 
-        blended, blended_u = blend_estimates(hist_mean, hist_u, cur_mean, cur_u)
+            cur_mean, cur_u, cur_n = _moments_estimate(current_event_stats.get((event_key, year))) if event_key else (np.nan, np.nan, 0)
+            day_mean, day_u, day_n = _moments_estimate(current_day_stats.get((event_key, day))) if event_key else (np.nan, np.nan, 0)
+            blended, blended_u = blend_estimates(hist_mean, hist_u, cur_mean, cur_u)
+            rows.append({
+                "_orig_order": target["_orig_order"],
+                "court_speed_historical_prior": hist_mean,
+                "court_speed_historical_sample_size": hist_n,
+                "court_speed_historical_uncertainty": hist_u,
+                "court_speed_current_event": cur_mean,
+                "court_speed_current_event_sample_size": cur_n,
+                "court_speed_current_event_uncertainty": cur_u,
+                "court_speed_current_day": day_mean,
+                "court_speed_current_day_sample_size": day_n,
+                "court_speed_blended": blended,
+                "court_speed_blended_uncertainty": blended_u,
+                "court_speed_delta_vs_historical": float(cur_mean - hist_mean) if pd.notna(cur_mean) and pd.notna(hist_mean) else np.nan,
+                "court_speed_prior_level": prior_level,
+            })
+
+        # Only after every target at this exact timestamp is priced may the observations enter history.
+        for _, completed in batch.iterrows():
+            value = pd.to_numeric(pd.Series([completed.get("speed_residual")]), errors="coerce").iloc[0]
+            if pd.isna(value) or not math.isfinite(float(value)):
+                continue
+            event_id = completed.get("canonical_event_id")
+            event_key = str(event_id) if pd.notna(event_id) and str(event_id) else ""
+            cohort = _cohort_key(completed)
+            if event_key:
+                _add_moment(event_year_stats[event_key][year], float(value))
+                _add_moment(current_event_stats[(event_key, year)], float(value))
+                _add_moment(current_day_stats[(event_key, day)], float(value))
+            _add_moment(cohort_year_stats[cohort][year], float(value))
+
+    # Invalid-date rows remain explicit missing context.
+    for _, target in df[df["match_start"].isna()].iterrows():
         rows.append({
             "_orig_order": target["_orig_order"],
-            "court_speed_historical_prior": hist_mean,
-            "court_speed_historical_sample_size": hist_n,
-            "court_speed_historical_uncertainty": hist_u,
-            "court_speed_current_event": cur_mean,
-            "court_speed_current_event_sample_size": cur_n,
-            "court_speed_current_event_uncertainty": cur_u,
-            "court_speed_current_day": day_mean,
-            "court_speed_current_day_sample_size": day_n,
-            "court_speed_blended": blended,
-            "court_speed_blended_uncertainty": blended_u,
-            "court_speed_delta_vs_historical": (
-                float(cur_mean - hist_mean) if pd.notna(cur_mean) and pd.notna(hist_mean) else np.nan
-            ),
-            "court_speed_prior_level": prior_level,
+            "court_speed_historical_prior": np.nan,
+            "court_speed_historical_sample_size": 0,
+            "court_speed_historical_uncertainty": np.nan,
+            "court_speed_current_event": np.nan,
+            "court_speed_current_event_sample_size": 0,
+            "court_speed_current_event_uncertainty": np.nan,
+            "court_speed_current_day": np.nan,
+            "court_speed_current_day_sample_size": 0,
+            "court_speed_blended": np.nan,
+            "court_speed_blended_uncertainty": np.nan,
+            "court_speed_delta_vs_historical": np.nan,
+            "court_speed_prior_level": "none",
         })
 
     features = pd.DataFrame(rows).set_index("_orig_order")
@@ -152,10 +223,7 @@ def _expected_service_win(row: pd.Series, opponent: pd.Series) -> float:
     first_in = _num(row, "rolling_first_serve_in_pct")
     first_won = _num(row, "rolling_first_serve_points_won_pct")
     second_won = _num(row, "rolling_second_serve_points_won_pct")
-    own = (
-        first_in * first_won + (1.0 - first_in) * second_won
-        if all(math.isfinite(v) for v in (first_in, first_won, second_won)) else float("nan")
-    )
+    own = first_in * first_won + (1.0 - first_in) * second_won if all(math.isfinite(v) for v in (first_in, first_won, second_won)) else float("nan")
     opp_return = _num(opponent, "rolling_return_points_won_pct")
     versus_return = 1.0 - opp_return if math.isfinite(opp_return) else float("nan")
     return _mean_finite([own, versus_return])
@@ -176,7 +244,6 @@ def _player_speed_signal(row: pd.Series, opponent: pd.Series) -> float:
     ret_total = _num(row, "stat_return_points_total")
     actual_return = _ratio(_num(row, "stat_return_points_won"), ret_total)
     expected_return = _num(row, "rolling_return_points_won_pct")
-    # Faster conditions should suppress return success relative to the player's prior state.
     return_suppression = expected_return - actual_return if all(math.isfinite(v) for v in (expected_return, actual_return)) else float("nan")
 
     components = []
@@ -190,18 +257,18 @@ def _player_speed_signal(row: pd.Series, opponent: pd.Series) -> float:
 
 
 def _event_id(row: pd.Series) -> str | None:
-    name = normalize_event_name(row.get("tourney_name") or "")
-    if not name:
-        return None
-    tour = str(row.get("tour") or "MEN").upper()
-    return f"{tour}:{name}"
+    name = str(row.get("tourney_name") or "")
+    event_id = stable_event_id(row.get("tour") or "MEN", row.get("tourney_id"), name)
+    return event_id if not event_id.endswith(":unknown") else None
 
 
 def add_derived_court_speed_features(player_rows: pd.DataFrame) -> pd.DataFrame:
     """Derive opponent-adjusted event speed observations then attach pre-match speed state.
 
     Current-match statistics create a speed observation only for later matches. The target
-    row receives historical/current-event estimates produced solely from earlier dates.
+    row receives historical/current-event estimates produced solely from earlier timestamps.
+    Stable source tournament codes take precedence over event names, preserving continuity
+    through sponsor/name changes.
     """
     if player_rows is None or player_rows.empty:
         return player_rows.copy() if player_rows is not None else pd.DataFrame()
@@ -214,22 +281,19 @@ def add_derived_court_speed_features(player_rows: pd.DataFrame) -> pd.DataFrame:
             continue
         first, second = group.iloc[0], group.iloc[1]
         signals = [_player_speed_signal(first, second), _player_speed_signal(second, first)]
-        speed_residual = _mean_finite(signals)
-        event_id = _event_id(first)
         observations.append({
             "match_id": match_id,
-            "canonical_event_id": event_id,
+            "canonical_event_id": _event_id(first),
             "tour": first.get("tour"),
             "surface": first.get("surface"),
             "indoor": first.get("indoor", np.nan),
             "match_start": first.get("match_date"),
-            "speed_residual": speed_residual,
+            "speed_residual": _mean_finite(signals),
         })
 
     if not observations:
         return df
-    match_frame = pd.DataFrame(observations)
-    speed = build_court_speed_features(match_frame)
+    speed = build_court_speed_features(pd.DataFrame(observations))
     feature_cols = ["match_id"] + [c for c in speed.columns if c.startswith("court_speed_")]
     mapping = speed[feature_cols].drop_duplicates("match_id").set_index("match_id")
     for col in feature_cols[1:]:
