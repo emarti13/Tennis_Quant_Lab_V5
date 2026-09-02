@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import math
 from pathlib import Path
 
 import numpy as np
@@ -63,6 +62,76 @@ def feature_coverage_report(frame: pd.DataFrame) -> dict:
     return report
 
 
+def prediction_flip_report(frame: pd.DataFrame, *, max_rows: int = 50) -> dict:
+    """Compare accepted baseline winner calls with the candidate combined model."""
+    if frame is None or frame.empty:
+        return {
+            "n": 0, "old_accuracy": None, "new_accuracy": None, "flips": 0,
+            "old_wrong_new_correct": 0, "old_correct_new_wrong": 0,
+            "net_corrected_flips": 0, "flip_rows": [],
+        }
+    df = frame.copy()
+    actual = pd.to_numeric(df["target_a_win"], errors="coerce")
+    old_p = pd.to_numeric(df["accepted_baseline_probability"], errors="coerce")
+    new_p = pd.to_numeric(df["combined_probability"], errors="coerce")
+    valid = actual.notna() & old_p.notna() & new_p.notna()
+    df = df.loc[valid].copy()
+    actual = actual.loc[valid].astype(int)
+    old_p = old_p.loc[valid]
+    new_p = new_p.loc[valid]
+    old_call = old_p.ge(0.5).astype(int)
+    new_call = new_p.ge(0.5).astype(int)
+    old_correct = old_call.eq(actual)
+    new_correct = new_call.eq(actual)
+    flips = old_call.ne(new_call)
+    corrected = flips & (~old_correct) & new_correct
+    harmed = flips & old_correct & (~new_correct)
+
+    flip_rows = df.loc[flips].copy()
+    if not flip_rows.empty:
+        flip_rows["_old_p"] = old_p.loc[flips]
+        flip_rows["_new_p"] = new_p.loc[flips]
+        flip_rows["_actual"] = actual.loc[flips]
+        flip_rows["_swing"] = (flip_rows["_new_p"] - flip_rows["_old_p"]).abs()
+        flip_rows = flip_rows.sort_values("_swing", ascending=False).head(int(max_rows))
+
+    rows = []
+    for _, row in flip_rows.iterrows():
+        actual_a = int(row["_actual"])
+        old_a = int(float(row["_old_p"]) >= 0.5)
+        new_a = int(float(row["_new_p"]) >= 0.5)
+        a = str(row.get("player_a") or "")
+        b = str(row.get("player_b") or "")
+        date = pd.to_datetime(row.get("match_date"), errors="coerce")
+        rows.append({
+            "match_date": None if pd.isna(date) else date.strftime("%Y-%m-%d"),
+            "tour": row.get("tour"),
+            "surface": row.get("surface"),
+            "tourney_name": row.get("tourney_name"),
+            "actual_winner": a if actual_a else b,
+            "actual_loser": b if actual_a else a,
+            "old_predicted_winner": a if old_a else b,
+            "old_predicted_probability": float(row["_old_p"] if old_a else 1.0 - row["_old_p"]),
+            "new_predicted_winner": a if new_a else b,
+            "new_predicted_probability": float(row["_new_p"] if new_a else 1.0 - row["_new_p"]),
+            "probability_swing_a": float(row["_new_p"] - row["_old_p"]),
+            "old_correct": bool(old_a == actual_a),
+            "new_correct": bool(new_a == actual_a),
+        })
+
+    n = int(len(df))
+    return {
+        "n": n,
+        "old_accuracy": None if n == 0 else float(old_correct.mean()),
+        "new_accuracy": None if n == 0 else float(new_correct.mean()),
+        "flips": int(flips.sum()),
+        "old_wrong_new_correct": int(corrected.sum()),
+        "old_correct_new_wrong": int(harmed.sum()),
+        "net_corrected_flips": int(corrected.sum() - harmed.sum()),
+        "flip_rows": rows,
+    }
+
+
 def load_tournament_registry(base_dir: str | Path = ".") -> pd.DataFrame:
     path = Path(base_dir) / "context_registry" / "tournaments.csv"
     if not path.exists():
@@ -111,7 +180,7 @@ def run_diagnostic(base_dir: str | Path = ".", output_dir: str | Path = "v5_cont
 
     matchups.to_parquet(out_dir / "matched_context_rows.parquet", index=False)
     report = {
-        "diagnostic_version": "v5-context-2025-2026-oos-2",
+        "diagnostic_version": "v5-context-2025-2026-oos-3",
         "fit_year": 2025,
         "validation_year": 2026,
         "venue_registry_rows": int(len(tournament_registry)),
@@ -147,6 +216,8 @@ def run_diagnostic(base_dir: str | Path = ".", output_dir: str | Path = "v5_cont
             "fit_rows": evaluation["fit_rows"],
             "validation_rows": evaluation["validation_rows"],
             "models": evaluation["models"],
+            "ablations": evaluation["ablations"],
+            "winner_call_flips": prediction_flip_report(valid),
             "tail_calibration_by_accepted_baseline_band": tail,
             "feature_coverage": feature_coverage_report(tour_frame),
             "context_coefficients": _coefficient_report(evaluation["context_model"]),
@@ -155,12 +226,14 @@ def run_diagnostic(base_dir: str | Path = ".", output_dir: str | Path = "v5_cont
 
     if prediction_frames:
         predictions = pd.concat(prediction_frames, ignore_index=True, sort=False)
+        report["combined_2026_winner_call_flips"] = prediction_flip_report(predictions, max_rows=100)
         keep = [
             c for c in ["match_id", "match_date", "tour", "surface", "level", "tourney_name", "player_a", "player_b",
                         "target_a_win", "baseline_a_probability", "accepted_baseline_probability", "context_only_probability",
                         "combined_probability"] if c in predictions.columns
         ]
         predictions[keep].to_csv(out_dir / "validation_predictions_2026.csv", index=False)
+        pd.DataFrame(report["combined_2026_winner_call_flips"]["flip_rows"]).to_csv(out_dir / "prediction_flips_2026.csv", index=False)
 
     (out_dir / "report.json").write_text(json.dumps(report, indent=2, allow_nan=False), encoding="utf-8")
     print(json.dumps(report, indent=2, allow_nan=False))
