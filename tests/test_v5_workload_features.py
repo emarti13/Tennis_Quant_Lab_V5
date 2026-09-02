@@ -77,6 +77,30 @@ def test_rest_is_represented_as_nonlinear_layoff_state_not_only_raw_days():
     assert third_back["matches_since_60d_layoff"] == 2
 
 
+def test_player_specific_layoff_response_uses_only_prior_comeback_outcomes():
+    rows = pd.DataFrame([
+        {"match_id":"r1","player_name":"A","match_date":"2023-01-01","player_role":"winner"},
+        {"match_id":"r2","player_name":"A","match_date":"2023-04-15","player_role":"loser"},
+        {"match_id":"r3","player_name":"A","match_date":"2023-04-20","player_role":"winner"},
+        {"match_id":"r4","player_name":"A","match_date":"2024-01-15","player_role":"winner"},
+        {"match_id":"r5","player_name":"A","match_date":"2024-01-20","player_role":"loser"},
+        {"match_id":"r6","player_name":"A","match_date":"2025-01-15","player_role":"winner"},
+    ])
+    out = build_workload_features(rows)
+    first_comeback = out[out.match_id == "r2"].iloc[0]
+    second_comeback = out[out.match_id == "r4"].iloc[0]
+    third_comeback = out[out.match_id == "r6"].iloc[0]
+
+    assert first_comeback["layoff_response_60d_sample"] == 0
+    assert np.isclose(first_comeback["layoff_response_60d_shrunk_win_rate"], 0.5)
+    # r2 was a loss. Its result becomes available only after r2 is completed.
+    assert second_comeback["layoff_response_60d_sample"] == 1
+    assert np.isclose(second_comeback["layoff_response_60d_shrunk_win_rate"], 1/3)
+    # r4 was a win, so the third comeback sees one historical win in two prior 60d comebacks.
+    assert third_comeback["layoff_response_60d_sample"] == 2
+    assert np.isclose(third_comeback["layoff_response_60d_shrunk_win_rate"], 0.5)
+
+
 def test_rest_bucket_is_monotonic_but_does_not_make_180_days_twice_90_days():
     rows = pd.DataFrame([
         {"match_id":"b1","player_name":"B","match_date":"2025-01-01"},
