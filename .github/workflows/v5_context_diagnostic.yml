@@ -7,12 +7,17 @@ on:
       - 'diagnose_v5_context_model.py'
       - 'build_v5_context_matchups.py'
       - 'build_v5_context_warehouse.py'
+      - 'build_v5_venue_registry.py'
       - 'v5_context_model.py'
       - 'v5_rolling_stats.py'
       - 'v5_workload_features.py'
       - 'v5_player_state.py'
       - 'v5_matchup_features.py'
       - 'v5_model_calibration.py'
+      - 'v5_travel_features.py'
+      - 'v5_venue_metadata.py'
+      - 'v5_tournament_registry.py'
+      - 'v5_court_speed.py'
       - 'tests/test_v5_context_diagnostic.py'
       - 'tests/test_v5_context_model.py'
       - 'tests/test_v5_context_matchups.py'
@@ -35,6 +40,8 @@ jobs:
           python -m pytest tests/test_v5_context_diagnostic.py tests/test_v5_context_model.py tests/test_v5_context_matchups.py -v
       - name: Build 2023-2026 context warehouse
         run: python build_v5_context_warehouse.py
+      - name: Build year-aware venue registry
+        run: python build_v5_venue_registry.py
       - name: Run 2025 fit / 2026 validation
         run: python diagnose_v5_context_model.py
       - name: Print compact report
@@ -43,6 +50,7 @@ jobs:
           import json
           from pathlib import Path
           r=json.loads(Path('v5_context_diagnostic/report.json').read_text())
+          print('VENUE_REGISTRY_ROWS', r.get('venue_registry_rows'))
           print('JOIN_QC', json.dumps(r['join_qc'], sort_keys=True))
           print('MATCHED_BY_YEAR', json.dumps(r['matched_by_year'], sort_keys=True))
           for tour,data in r['tours'].items():
@@ -60,4 +68,6 @@ jobs:
             v5_context_diagnostic/matched_context_rows.parquet
             context_warehouse/source_manifest.json
             context_warehouse/schema.json
+            context_registry/tournaments.csv
+            context_registry/venue_registry_report.json
           retention-days: 14
