@@ -76,3 +76,17 @@ def test_contextual_gaussian_score_bundle_prices_requested_lines_without_changin
     assert 0 < out.spread_probability_p1["-2.5"] < 1
     assert 0 < out.over_probability["21.5"] < 1
     assert out.margin_sd > 0 and out.total_sd > 0
+
+
+def test_score_holdout_cap_is_deterministic_and_spans_full_chronology():
+    from diagnose_v5_score_distribution import _deterministic_cap
+
+    frame = pd.DataFrame({"match_date": pd.date_range("2026-01-01", periods=101, freq="D"), "row_id": range(101)})
+    a = _deterministic_cap(frame, 11)
+    b = _deterministic_cap(frame.sample(frac=1.0, random_state=7), 11)
+
+    assert a["row_id"].tolist() == b["row_id"].tolist()
+    assert len(a) == 11
+    assert a.iloc[0]["row_id"] == 0
+    assert a.iloc[-1]["row_id"] == 100
+    assert a["row_id"].is_monotonic_increasing
