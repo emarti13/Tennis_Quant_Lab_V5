@@ -1,0 +1,13 @@
+{
+  "version": "v5-score-gated-baseline-1",
+  "market_prices_used": false,
+  "promotion_policy": "retain conditioned mechanistic score distribution until a 2025-fit/2026-validation score candidate passes the Superpowers score gate",
+  "MEN": {
+    "selected_candidate": "conditioned_mechanistic",
+    "model": null
+  },
+  "WTA": {
+    "selected_candidate": "conditioned_mechanistic",
+    "model": null
+  }
+}
