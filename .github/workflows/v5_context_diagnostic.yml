@@ -28,6 +28,33 @@ on:
       - 'tests/test_v5_advanced_model.py'
       - 'tests/test_build_v5_weather_cache.py'
       - '.github/workflows/v5_context_diagnostic.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'diagnose_v5_context_model.py'
+      - 'diagnose_v5_advanced_model.py'
+      - 'build_v5_context_matchups.py'
+      - 'build_v5_context_warehouse.py'
+      - 'build_v5_venue_registry.py'
+      - 'build_v5_weather_cache.py'
+      - 'v5_context_model.py'
+      - 'v5_advanced_model.py'
+      - 'v5_weather_features.py'
+      - 'v5_rolling_stats.py'
+      - 'v5_workload_features.py'
+      - 'v5_player_state.py'
+      - 'v5_matchup_features.py'
+      - 'v5_model_calibration.py'
+      - 'v5_travel_features.py'
+      - 'v5_venue_metadata.py'
+      - 'v5_tournament_registry.py'
+      - 'v5_court_speed.py'
+      - 'tests/test_v5_context_diagnostic.py'
+      - 'tests/test_v5_context_model.py'
+      - 'tests/test_v5_context_matchups.py'
+      - 'tests/test_v5_advanced_model.py'
+      - 'tests/test_build_v5_weather_cache.py'
+      - '.github/workflows/v5_context_diagnostic.yml'
   workflow_dispatch:
 
 jobs:
