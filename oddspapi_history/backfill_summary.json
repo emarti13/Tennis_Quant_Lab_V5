@@ -1,18 +1,24 @@
 {
-  "updated_at_utc": "2026-09-01T21:17:41.468598+00:00",
+  "updated_at_utc": "2026-09-02T00:44:02.871814+00:00",
   "fixture_index_rows": 15993,
-  "historical_completed": 8,
-  "historical_remaining": 15985,
-  "historical_failed_pending": 497,
+  "historical_cached": 952,
+  "historical_not_found_for_bookset": 551,
+  "historical_resolved": 1503,
+  "historical_remaining": 14490,
+  "historical_failed_retryable": 0,
+  "historical_bookset": "pinnacle,betrivers,draftkings",
   "discovery_run": null,
   "history_run": {
     "selected": 500,
-    "succeeded": 3,
-    "failed": 497,
-    "completed_total": 8,
+    "succeeded": 481,
+    "not_found": 19,
+    "failed_retryable": 0,
+    "completed_total": 952,
+    "not_found_total": 551,
+    "resolved_total": 1503,
     "fixture_total": 15993,
-    "remaining": 15985,
-    "chunk": "oddspapi_history/chunks/history_chunk_0002.jsonl.gz",
+    "remaining": 14490,
+    "chunk": "oddspapi_history/chunks/history_chunk_0004.jsonl.gz",
     "done": false
   }
 }
