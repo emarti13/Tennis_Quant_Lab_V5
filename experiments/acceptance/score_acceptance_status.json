@@ -1,6 +1,8 @@
 {
-  "status": "skipped",
+  "status": "success",
   "expected": "success",
-  "log_tail": "",
-  "context_policy": "historical as-of context + venue/travel/court-speed/player-state; weather omitted from this score gate unless already reproducibly cached"
+  "log_tail": "{\n  \"version\": \"v5-score-walkforward-2\",\n  \"completed_score_rows\": 21293,\n  \"selection\": {\n    \"MEN\": \"gaussian_contextual\",\n    \"WTA\": \"gaussian_contextual\"\n  },\n  \"validation_sampling\": {\n    \"MEN\": {\n      \"policy\": \"chronological_even_spacing\",\n      \"max_rows\": 1000,\n      \"full_rows\": 7731,\n      \"scored_rows\": 1000\n    },\n    \"WTA\": {\n      \"policy\": \"chronological_even_spacing\",\n      \"max_rows\": 1000,\n      \"full_rows\": 1746,\n      \"scored_rows\": 1000\n    }\n  }\n}\n",
+  "context_policy": "historical as-of context + venue/travel/court-speed/player-state; weather omitted from this score gate unless already reproducibly cached",
+  "validation_sampling": "deterministic chronological even spacing; up to 1000 untouched 2026 rows per tour",
+  "hybrid_training_sampling": "deterministic chronological even spacing; up to 1200 2025 rows per tour"
 }
