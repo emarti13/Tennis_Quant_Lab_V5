@@ -1,5 +1,5 @@
 {
-  "version": "v5-score-walkforward-1",
+  "version": "v5-score-walkforward-2",
   "market_prices_used": false,
   "MEN": {
     "selected_candidate": "conditioned_mechanistic",
@@ -38,6 +38,12 @@
         "margin_mae": 5.351507800069132,
         "total_mae": 8.542285052745656
       }
+    },
+    "validation_sampling": {
+      "policy": "chronological_even_spacing",
+      "max_rows": null,
+      "full_rows": 7731,
+      "scored_rows": 7731
     }
   },
   "WTA": {
@@ -409,6 +415,12 @@
       "bo5": {
         "n": 0
       }
+    },
+    "validation_sampling": {
+      "policy": "chronological_even_spacing",
+      "max_rows": null,
+      "full_rows": 1746,
+      "scored_rows": 1746
     }
   }
 }
