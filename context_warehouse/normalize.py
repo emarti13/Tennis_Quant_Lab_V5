@@ -14,6 +14,11 @@ def _text(value: Any) -> str:
     return str(value).strip()
 
 
+def _nullable_text(value: Any) -> str | None:
+    text = _text(value)
+    return text or None
+
+
 def _value(row: pd.Series, *names: str) -> Any:
     for name in names:
         if name in row.index:
@@ -88,8 +93,8 @@ def canonicalize_matches(
                 "indoor_outdoor": row.get("indoor_outdoor"),
                 "best_of": row.get("best_of"),
                 "match_minutes": row.get("minutes"),
-                "winner_source_player_id": row.get("winner_id"),
-                "loser_source_player_id": row.get("loser_id"),
+                "winner_source_player_id": _nullable_text(row.get("winner_id")),
+                "loser_source_player_id": _nullable_text(row.get("loser_id")),
                 "winner_name": winner,
                 "loser_name": loser,
                 "winner_hand": row.get("winner_hand"),
