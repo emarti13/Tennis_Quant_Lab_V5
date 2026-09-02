@@ -39,6 +39,11 @@ jobs:
         env:
           CONTRACT_OUTCOME: ${{ steps.contracts.outcome }}
         run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          cp superpowers-contract-output.txt /tmp/superpowers-contract-output.txt || true
+          git pull --rebase origin feature/complete-superpowers-v5
+          cp /tmp/superpowers-contract-output.txt superpowers-contract-output.txt || true
           python - <<'PY'
           import json, os
           from pathlib import Path
@@ -51,9 +56,6 @@ jobs:
               'pytest_tail': text[-12000:],
           }, indent=2))
           PY
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git pull --rebase origin feature/complete-superpowers-v5
           git add experiments/acceptance/superpowers_contract_status.json
           if ! git diff --cached --quiet; then
             git commit -m "Record Superpowers completion contract state"
