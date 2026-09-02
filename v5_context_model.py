@@ -66,7 +66,8 @@ def orient_matchup_row(
 
 def _prepare_training_matrix(frame: pd.DataFrame) -> tuple[np.ndarray, list[str], np.ndarray, np.ndarray, np.ndarray]:
     cols = list(frame.columns)
-    raw = frame.apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float)
+    # pandas 3 may expose a read-only NumPy view; imputation requires a private writable array.
+    raw = frame.apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float, copy=True)
     medians = np.zeros(len(cols), dtype=float)
     for j in range(len(cols)):
         finite = raw[np.isfinite(raw[:, j]), j]
@@ -141,7 +142,7 @@ def fit_symmetric_logistic(
 def predict_symmetric_logistic(model: dict, X: pd.DataFrame) -> np.ndarray:
     cols = list(model["feature_names"])
     frame = X.reindex(columns=cols).apply(pd.to_numeric, errors="coerce")
-    raw = frame.to_numpy(dtype=float)
+    raw = frame.to_numpy(dtype=float, copy=True)
     medians = np.asarray(model["medians"], dtype=float)
     scales = np.asarray(model["scales"], dtype=float)
     for j in range(raw.shape[1]):
