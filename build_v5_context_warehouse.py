@@ -81,6 +81,26 @@ def _parse_date(value) -> pd.Timestamp:
     return pd.to_datetime(text, format="%Y%m%d", errors="coerce") if re.fullmatch(r"\d{8}", text) else pd.to_datetime(value, errors="coerce")
 
 
+def _season_year(result_file) -> int | None:
+    match = re.match(r"^(20\d{2})", Path(str(result_file or "")).name)
+    return int(match.group(1)) if match else None
+
+
+def _plausible_season_date(match_date: pd.Timestamp, result_file) -> bool:
+    if pd.isna(match_date):
+        return False
+    season = _season_year(result_file)
+    if season is None:
+        return True
+    if int(match_date.year) == season:
+        return True
+    return bool(
+        int(match_date.year) == season - 1
+        and int(match_date.month) == 12
+        and int(match_date.day) >= 20
+    )
+
+
 def _infer_tour(result_file: str) -> str:
     return "WTA" if "wta" in str(result_file or "").lower() else "MEN"
 
@@ -114,7 +134,10 @@ def normalize_results(results: pd.DataFrame) -> pd.DataFrame:
         winner, loser = row.get("winner_name"), row.get("loser_name")
         if not canonical_name(winner) or not canonical_name(loser):
             continue
-        tour, match_date = _infer_tour(row.get("result_file")), _parse_date(row.get("tourney_date"))
+        match_date = _parse_date(row.get("tourney_date"))
+        if not _plausible_season_date(match_date, row.get("result_file")):
+            continue
+        tour = _infer_tour(row.get("result_file"))
         parsed = parse_score_games(row.get("score")); wg, lg = parsed if parsed is not None else (None, None)
         record = {
             "match_id": _stable_match_id(row, tour, match_date), "tour": tour, "match_date": match_date,
@@ -193,7 +216,8 @@ def build_context_warehouse(base_dir: str = ".", years=DEFAULT_HISTORY_YEARS) ->
     stat_cols = [c for c in player_rows.columns if c.startswith("stat_")]
     manifest = {
         "schema_version": SCHEMA_VERSION, "source": "TennisMyLife manifest historical season files", "source_detail": source_detail,
-        "raw_rows": int(len(raw)), "match_rows": int(len(matches)), "player_match_rows": int(len(player_rows)),
+        "raw_rows": int(len(raw)), "match_rows": int(len(matches)), "season_date_rejected_rows": int(len(raw) - len(matches)),
+        "player_match_rows": int(len(player_rows)),
         "tour_counts": {str(k): int(v) for k, v in matches["tour"].value_counts().to_dict().items()},
         "year_counts": {str(int(k)): int(v) for k, v in matches["match_date"].dt.year.value_counts().sort_index().to_dict().items() if pd.notna(k)},
         "stat_non_null_counts": {c: int(player_rows[c].notna().sum()) for c in stat_cols},
