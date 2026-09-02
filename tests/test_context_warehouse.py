@@ -1,4 +1,6 @@
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -74,6 +76,42 @@ class CanonicalWarehouseContractTests(unittest.TestCase):
             self.assertEqual(summary["player_match_rows"], 2)
             stored_manifest = json.loads((root / "source_manifest.json").read_text())
             self.assertEqual(stored_manifest["sources"][0]["source_name"], "fixture")
+
+    def test_cli_builds_mixed_tour_warehouse(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            men = root / "ATP.csv"
+            wta = root / "WTA.csv"
+            out = root / "warehouse"
+            self.sample_source().to_csv(men, index=False)
+            wta_frame = self.sample_source().copy()
+            wta_frame["winner_name"] = "WTA One"
+            wta_frame["loser_name"] = "WTA Two"
+            wta_frame["tourney_id"] = "2026-W01"
+            wta_frame.to_csv(wta, index=False)
+
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    "build_context_warehouse.py",
+                    "--input",
+                    f"MEN:ATP:{men}",
+                    "--input",
+                    f"WTA:WTA:{wta}",
+                    "--output-dir",
+                    str(out),
+                ],
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            matches = pd.read_csv(out / "matches.csv")
+            players = pd.read_csv(out / "player_match_rows.csv")
+            self.assertEqual(len(matches), 2)
+            self.assertEqual(len(players), 4)
+            self.assertEqual(set(matches["tour"]), {"MEN", "WTA"})
+            forbidden = {"moneyline", "odds", "no_vig", "spread_line", "total_line"}
+            self.assertFalse(forbidden.intersection(matches.columns))
 
 
 if __name__ == "__main__":
