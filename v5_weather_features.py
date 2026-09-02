@@ -3,7 +3,6 @@ from __future__ import annotations
 from hashlib import sha256
 from pathlib import Path
 import json
-import math
 
 import numpy as np
 import pandas as pd
@@ -55,41 +54,77 @@ def summarize_hourly_weather(payload: dict) -> dict[str, float | str]:
     }
 
 
+def summarize_hourly_weather_by_date(payload: dict) -> dict[str, dict[str, float | str]]:
+    """Aggregate one multi-day Open-Meteo hourly payload into local-date summaries."""
+    hourly = (payload or {}).get("hourly") or {}
+    times = pd.to_datetime(pd.Series(hourly.get("time", [])), errors="coerce")
+    if times.empty:
+        return {}
+    frame = pd.DataFrame({"time": times})
+    for key in HOURLY_VARIABLES:
+        raw = hourly.get(key, [])
+        frame[key] = pd.to_numeric(pd.Series(raw), errors="coerce").reindex(frame.index)
+    frame = frame[frame["time"].notna()].copy()
+    frame["date"] = frame["time"].dt.strftime("%Y-%m-%d")
+    out: dict[str, dict[str, float | str]] = {}
+    for day, group in frame.groupby("date", sort=True):
+        out[str(day)] = {
+            "temperature_c": _mean(group["temperature_2m"]),
+            "humidity_pct": _mean(group["relative_humidity_2m"]),
+            "wind_speed_kmh": _mean(group["wind_speed_10m"]),
+            "wind_gust_kmh": _max(group["wind_gusts_10m"]),
+            "precipitation_mm": _sum(group["precipitation"]),
+            "dew_point_c": _mean(group["dew_point_2m"]),
+            "pressure_hpa": _mean(group["surface_pressure"]),
+            "source_quality": "historical_observed_daily",
+        }
+    return out
+
+
 class OpenMeteoArchiveClient:
     def __init__(self, cache_dir: str | Path = "context_cache/weather", session=None):
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.session = session or requests.Session()
 
-    def get_daily(self, latitude, longitude, date, timezone=None) -> dict:
-        day = pd.Timestamp(date).strftime("%Y-%m-%d")
+    def _request_payload(self, latitude, longitude, start_date, end_date, timezone=None) -> dict:
+        start = pd.Timestamp(start_date).strftime("%Y-%m-%d")
+        end = pd.Timestamp(end_date).strftime("%Y-%m-%d")
         lat = float(latitude)
         lon = float(longitude)
         tz = str(timezone or "UTC")
-        key_raw = f"{lat:.4f}|{lon:.4f}|{day}|{tz}|{'|'.join(HOURLY_VARIABLES)}"
+        key_raw = f"{lat:.4f}|{lon:.4f}|{start}|{end}|{tz}|{'|'.join(HOURLY_VARIABLES)}"
         key = sha256(key_raw.encode("utf-8")).hexdigest()[:32]
         path = self.cache_dir / f"{key}.json"
         if path.exists():
-            return summarize_hourly_weather(json.loads(path.read_text(encoding="utf-8")))
-
+            return json.loads(path.read_text(encoding="utf-8"))
         response = self.session.get(
             ARCHIVE_URL,
             params={
                 "latitude": lat,
                 "longitude": lon,
-                "start_date": day,
-                "end_date": day,
+                "start_date": start,
+                "end_date": end,
                 "hourly": ",".join(HOURLY_VARIABLES),
                 "timezone": tz,
                 "wind_speed_unit": "kmh",
                 "precipitation_unit": "mm",
             },
-            timeout=45,
+            timeout=60,
         )
         response.raise_for_status()
         payload = response.json()
         path.write_text(json.dumps(payload), encoding="utf-8")
+        return payload
+
+    def get_daily(self, latitude, longitude, date, timezone=None) -> dict:
+        day = pd.Timestamp(date).strftime("%Y-%m-%d")
+        payload = self._request_payload(latitude, longitude, day, day, timezone=timezone)
         return summarize_hourly_weather(payload)
+
+    def get_range(self, latitude, longitude, start_date, end_date, timezone=None) -> dict[str, dict]:
+        payload = self._request_payload(latitude, longitude, start_date, end_date, timezone=timezone)
+        return summarize_hourly_weather_by_date(payload)
 
 
 def _weather_columns() -> list[str]:
