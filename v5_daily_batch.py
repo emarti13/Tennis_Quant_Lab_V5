@@ -31,6 +31,7 @@ FROZEN_LEDGER_PATH = OUTDIR / "frozen_predictions.csv"
 CONTEXT_HISTORY_PATH = BASE / "context_warehouse" / "player_match_rows.parquet"
 TOURNAMENT_REGISTRY_PATH = BASE / "context_registry" / "tournaments.csv"
 PRODUCTION_CANDIDATE_PATH = BASE / "experiments" / "acceptance" / "production_candidate.json"
+SCORE_PRODUCTION_CANDIDATE_PATH = BASE / "experiments" / "acceptance" / "score_production_candidate.json"
 
 SIGNAL_ORDER = {"BET": 0, "LEAN": 1, "REVIEW": 2, "PASS": 3, "N/A": 4, "NO PRICE": 5}
 
@@ -281,6 +282,49 @@ def _score_result_dict(score, final_probability_p1):
     }
 
 
+def _score_model_bundle(score_candidate, *, tour, live_features, simulations):
+    """Build the live score bundle from the chronologically validated score candidate.
+
+    Historical score models are trained in deterministic player-A/player-B orientation.
+    Live market pricing is player1/player2, so every signed score feature is flipped when
+    player1 is B. Total predictions remain invariant because the score model uses absolute
+    feature magnitudes for its total-games component.
+    """
+    if not score_candidate:
+        raise ValueError("validated score candidate is required for production scoring")
+    if score_candidate.get("market_prices_used") not in (False, None):
+        raise ValueError("validated score candidate may not use market prices")
+    key = "WTA" if str(tour).upper() == "WTA" else "MEN"
+    tour_bundle = score_candidate.get(key)
+    if not isinstance(tour_bundle, dict):
+        raise ValueError(f"validated score candidate missing tour bundle: {key}")
+    selected = str(tour_bundle.get("selected_candidate") or "")
+    if selected not in {"conditioned_mechanistic", "gaussian_contextual", "gaussian_hybrid"}:
+        raise ValueError(f"unsupported validated score candidate: {selected}")
+
+    bundle = {"model_type": selected, "simulations": int(simulations), "seed": 42}
+    if selected == "conditioned_mechanistic":
+        return bundle
+
+    model = tour_bundle.get("model") or {}
+    feature_names = [str(name) for name in model.get("feature_names", [])]
+    if not model or not feature_names:
+        raise ValueError(f"validated score candidate {selected} is missing its fitted model")
+    if live_features is None:
+        raise ValueError(f"validated score candidate {selected} requires live context features")
+
+    sign = 1.0 if bool(live_features.get("player1_is_a", True)) else -1.0
+    score_features = {}
+    for name in feature_names:
+        if name == "mechanistic_margin_a":
+            continue
+        value = pd.to_numeric(pd.Series([live_features.get(name)]), errors="coerce").iloc[0]
+        score_features[name] = np.nan if pd.isna(value) else sign * float(value)
+    bundle["model"] = model
+    bundle["score_features"] = score_features
+    return bundle
+
+
 def build_fixture_board(
     fixture_rows,
     ratings_by_tour,
@@ -291,6 +335,7 @@ def build_fixture_board(
     prepared=None,
     enriched_context=None,
     production_candidate=None,
+    score_candidate=None,
 ):
     if fixture_rows is None or fixture_rows.empty:
         return pd.DataFrame()
@@ -334,6 +379,12 @@ def build_fixture_board(
         except Exception as exc:
             context_fallback_reason = f"{type(exc).__name__}:{exc}"
 
+    score_bundle = _score_model_bundle(
+        score_candidate,
+        tour=prepared["tour"],
+        live_features=live_features,
+        simulations=sims,
+    )
     score = predict_score_distribution(
         {
             "serve_probability_p1": prepared["p1_serve"],
@@ -342,8 +393,9 @@ def build_fixture_board(
             "best_of": prepared["best_of"],
             "spread_lines": _requested_market_lines(fixture_rows, "game_spread"),
             "total_lines": _requested_market_lines(fixture_rows, "total_games"),
+            "score_features": score_bundle.get("score_features", {}),
         },
-        {"model_type": "conditioned_mechanistic", "simulations": int(sims), "seed": 42},
+        score_bundle,
     )
     result = _score_result_dict(score, final_p)
 
@@ -409,7 +461,8 @@ def build_fixture_board(
     priced["context_quality_b"] = np.nan if live_features is None else live_features.get("context_quality_b", np.nan)
     priced["weather_source_quality"] = "missing" if live_features is None else live_features.get("weather_source_quality", "missing")
     priced["court_speed_source_quality"] = "missing" if live_features is None else live_features.get("court_speed_source_quality", "missing")
-    priced["score_model_version"] = "conditioned_mechanistic_v1"
+    priced["score_model_version"] = str(score_candidate.get("version", "unknown"))
+    priced["selected_score_candidate"] = score.model_type
     priced["expected_margin"] = float(score.expected_margin)
     priced["expected_total"] = float(score.expected_total)
     priced["raw_expected_margin"] = float(score.expected_margin)
@@ -432,6 +485,7 @@ def build_daily_outputs(
     *,
     context_history=None,
     production_candidate=None,
+    score_candidate=None,
     tournament_registry=None,
     weather_cache=None,
 ):
@@ -477,6 +531,7 @@ def build_daily_outputs(
                 prepared=prepared,
                 enriched_context=enriched_context,
                 production_candidate=production_candidate,
+                score_candidate=score_candidate,
             ))
         except Exception as exc:
             first = group.iloc[0]
@@ -506,6 +561,16 @@ def _load_ratings():
     }
 
 
+def _load_score_candidate(path=SCORE_PRODUCTION_CANDIDATE_PATH):
+    p = Path(path)
+    if not p.exists():
+        raise FileNotFoundError(f"Validated score candidate missing: {p}")
+    data = json.loads(p.read_text(encoding="utf-8"))
+    if data.get("market_prices_used") not in (False, None) or "MEN" not in data or "WTA" not in data:
+        raise ValueError("Invalid validated score candidate contract")
+    return data
+
+
 def _load_full_context_assets():
     if not CONTEXT_HISTORY_PATH.exists():
         raise FileNotFoundError(f"Full-context warehouse missing: {CONTEXT_HISTORY_PATH}")
@@ -515,7 +580,8 @@ def _load_full_context_assets():
     registry = pd.read_csv(TOURNAMENT_REGISTRY_PATH, low_memory=False) if TOURNAMENT_REGISTRY_PATH.exists() else pd.DataFrame()
     weather = load_weather_cache(BASE)
     candidate = load_production_candidate(PRODUCTION_CANDIDATE_PATH)
-    return history, registry, weather, candidate
+    score_candidate = _load_score_candidate(SCORE_PRODUCTION_CANDIDATE_PATH)
+    return history, registry, weather, candidate, score_candidate
 
 
 def main(sims=5000):
@@ -524,7 +590,7 @@ def main(sims=5000):
     feed = pd.read_csv(MARKET_PATH, low_memory=False)
     summary = _load_summary()
     ratings = _load_ratings()
-    context_history, tournament_registry, weather_cache, production_candidate = _load_full_context_assets()
+    context_history, tournament_registry, weather_cache, production_candidate, score_candidate = _load_full_context_assets()
     existing = pd.read_csv(FROZEN_LEDGER_PATH, low_memory=False) if FROZEN_LEDGER_PATH.exists() else pd.DataFrame()
     old_count = len(existing)
     now = datetime.now(timezone.utc)
@@ -537,6 +603,7 @@ def main(sims=5000):
         sims=sims,
         context_history=context_history,
         production_candidate=production_candidate,
+        score_candidate=score_candidate,
         tournament_registry=tournament_registry,
         weather_cache=weather_cache,
     )
@@ -548,6 +615,7 @@ def main(sims=5000):
         snapshot = str(feed["snapshot_utc"].dropna().iloc[0])
     signal_counts = board["signal"].value_counts(dropna=False).to_dict() if not board.empty and "signal" in board.columns else {}
     candidate_counts = board["selected_model_candidate"].value_counts(dropna=False).to_dict() if not board.empty and "selected_model_candidate" in board.columns else {}
+    score_candidate_counts = board["selected_score_candidate"].value_counts(dropna=False).to_dict() if not board.empty and "selected_score_candidate" in board.columns else {}
     fallback_rows = int(board["context_fallback_reason"].astype(str).ne("").sum()) if not board.empty and "context_fallback_reason" in board.columns else 0
     payload = {
         "status": "SUCCESS" if not errors and fallback_rows == 0 else "PARTIAL",
@@ -562,11 +630,13 @@ def main(sims=5000):
         "new_frozen_rows": int(len(ledger) - old_count),
         "signal_counts": {str(k): int(v) for k, v in signal_counts.items()},
         "selected_candidate_counts": {str(k): int(v) for k, v in candidate_counts.items()},
+        "selected_score_candidate_counts": {str(k): int(v) for k, v in score_candidate_counts.items()},
         "context_fallback_rows": fallback_rows,
         "errors": errors,
         "model_version": str(production_candidate["version"]),
+        "score_model_version": str(score_candidate["version"]),
         "probability_source": "chronologically validated independent full-context candidate; sportsbook inputs joined only after probability freeze",
-        "score_model": "dedicated conditioned mechanistic score distribution driven by frozen winner probability and tennis-only serve environment",
+        "score_model": "chronologically validated dedicated score-distribution candidate driven only by frozen tennis probability/context",
         "market_prices_used_in_model": False,
         "state_variation_used": False,
     }
