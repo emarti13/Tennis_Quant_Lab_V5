@@ -59,5 +59,24 @@ class MarketFreshnessTests(unittest.TestCase):
         self.assertFalse(out.attrs.get("stale_market_feed", False))
 
 
+class EmptyAllPricesTests(unittest.TestCase):
+    def test_empty_all_book_prices_file_returns_empty_frame(self):
+        import tempfile
+        from pathlib import Path
+        import v5_live_market
+
+        with tempfile.TemporaryDirectory() as tmp:
+            empty = Path(tmp) / "all_book_prices.csv"
+            empty.write_text("", encoding="utf-8")
+            original = v5_live_market.ALL_PRICE_CANDIDATES
+            v5_live_market.ALL_PRICE_CANDIDATES = [empty]
+            try:
+                result = v5_live_market.load_all_book_prices()
+            finally:
+                v5_live_market.ALL_PRICE_CANDIDATES = original
+
+        self.assertTrue(result.empty)
+
+
 if __name__ == "__main__":
     unittest.main()

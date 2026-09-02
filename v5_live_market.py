@@ -229,7 +229,11 @@ ALL_PRICE_CANDIDATES=[BASE/"v5_market_ready"/"all_book_prices.csv",BASE/"all_boo
 def load_all_book_prices():
     for p in ALL_PRICE_CANDIDATES:
         if p.exists():
-            df=pd.read_csv(p,low_memory=False);df.attrs["source_path"]=str(p)
+            try:
+                df = pd.read_csv(p, low_memory=False)
+            except pd.errors.EmptyDataError:
+                continue
+            df.attrs["source_path"] = str(p)
             out=current_market_rows(df);out.attrs["source_path"]=str(p);return out
     return pd.DataFrame()
 
