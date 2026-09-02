@@ -5,17 +5,59 @@ on:
     branches: [feature/v5-full-context-model]
     paths:
       - 'diagnose_v5_context_model.py'
+      - 'build_v5_context_matchups.py'
+      - 'build_v5_context_warehouse.py'
+      - 'v5_context_model.py'
+      - 'v5_rolling_stats.py'
+      - 'v5_workload_features.py'
+      - 'v5_player_state.py'
+      - 'v5_matchup_features.py'
+      - 'v5_model_calibration.py'
       - 'tests/test_v5_context_diagnostic.py'
+      - 'tests/test_v5_context_model.py'
+      - 'tests/test_v5_context_matchups.py'
       - '.github/workflows/v5_context_diagnostic.yml'
   workflow_dispatch:
 
 jobs:
-  test:
+  walkforward:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install -r requirements.txt pytest
-      - run: python -m pytest tests/test_v5_context_diagnostic.py -v
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest
+      - name: Verify model contracts
+        run: |
+          python -m pytest tests/test_v5_context_diagnostic.py tests/test_v5_context_model.py tests/test_v5_context_matchups.py -v
+      - name: Build 2023-2026 context warehouse
+        run: python build_v5_context_warehouse.py
+      - name: Run 2025 fit / 2026 validation
+        run: python diagnose_v5_context_model.py
+      - name: Print compact report
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('v5_context_diagnostic/report.json').read_text())
+          print('JOIN_QC', json.dumps(r['join_qc'], sort_keys=True))
+          print('MATCHED_BY_YEAR', json.dumps(r['matched_by_year'], sort_keys=True))
+          for tour,data in r['tours'].items():
+              print('TOUR',tour,'STATUS',data.get('status'))
+              if data.get('status')=='evaluated':
+                  print('MODELS',json.dumps(data['models'],sort_keys=True))
+                  print('TAILS',json.dumps(data['tail_calibration_by_accepted_baseline_band'],sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v5-context-diagnostic
+          path: |
+            v5_context_diagnostic/report.json
+            v5_context_diagnostic/validation_predictions_2026.csv
+            v5_context_diagnostic/matched_context_rows.parquet
+            context_warehouse/source_manifest.json
+            context_warehouse/schema.json
+          retention-days: 14
