@@ -69,16 +69,26 @@ class DailyBatchModuleTests(unittest.TestCase):
     def _summary():
         return {"MEN":{"baseline":{"Hard":0.62,"Clay":0.60,"Grass":0.65}}}
 
+    @staticmethod
+    def _score_candidate():
+        return {
+            "version":"v5-score-test-baseline",
+            "market_prices_used":False,
+            "MEN":{"selected_candidate":"conditioned_mechanistic","model":None},
+            "WTA":{"selected_candidate":"conditioned_mechanistic","model":None},
+        }
+
     def test_build_fixture_board_prices_all_moneyline_selections(self):
         rows=pd.DataFrame([
             {"snapshot_utc":"2026-09-01T05:00:00Z","fixture_id":"fx1","start_time_utc":"2026-09-01T07:00:00Z","tournament":"US Open Men Singles","tour":"ATP","player1":"Alpha, Alice","player2":"Beta, Bob","market_group":"moneyline","selection":"Alpha, Alice","line":None,"best_bookmaker":"pinnacle","best_decimal_odds":1.8,"best_american_odds":-125,"consensus_no_vig_prob":0.55},
             {"snapshot_utc":"2026-09-01T05:00:00Z","fixture_id":"fx1","start_time_utc":"2026-09-01T07:00:00Z","tournament":"US Open Men Singles","tour":"ATP","player1":"Alpha, Alice","player2":"Beta, Bob","market_group":"moneyline","selection":"Beta, Bob","line":None,"best_bookmaker":"pinnacle","best_decimal_odds":2.2,"best_american_odds":120,"consensus_no_vig_prob":0.45},
         ])
-        out=v5_daily_batch.build_fixture_board(rows,{"MEN":self._ratings()},self._summary(),sims=300)
+        out=v5_daily_batch.build_fixture_board(rows,{"MEN":self._ratings()},self._summary(),sims=300,score_candidate=self._score_candidate())
         self.assertEqual(len(out),2)
         self.assertTrue(out["model_probability"].notna().all())
         self.assertEqual(set(out["best_of"]),{5})
-        self.assertEqual(set(out["model_version"]),{"V5.1_OUTCOME_CALIBRATED"})
+        self.assertEqual(set(out["model_version"]),{"V5.1_OUTCOME_CALIBRATED_FALLBACK"})
+        self.assertEqual(set(out["selected_score_candidate"]),{"conditioned_mechanistic"})
         self.assertEqual(set(out["state_variation_used"]),{False})
         self.assertTrue((out["model_probability"].between(0,1)).all())
         p1=out[out["selection"]=="Alpha, Alice"].iloc[0]
@@ -90,7 +100,7 @@ class DailyBatchModuleTests(unittest.TestCase):
             {"fixture_id":"fx2","tournament":"US Open Men Singles","tour":"ATP","player1":"Alpha, Alice","player2":"Beta, Bob","market_group":"game_spread","selection":"Alpha, Alice","line":-9.5,"best_decimal_odds":1.95,"consensus_no_vig_prob":0.50},
             {"fixture_id":"fx2","tournament":"US Open Men Singles","tour":"ATP","player1":"Alpha, Alice","player2":"Beta, Bob","market_group":"game_spread","selection":"Beta, Bob","line":9.5,"best_decimal_odds":1.95,"consensus_no_vig_prob":0.50},
         ])
-        out=v5_daily_batch.build_fixture_board(rows,{"MEN":self._ratings()},self._summary(),sims=300)
+        out=v5_daily_batch.build_fixture_board(rows,{"MEN":self._ratings()},self._summary(),sims=300,score_candidate=self._score_candidate())
         self.assertEqual(set(out["best_of"]),{5})
         self.assertTrue(out["model_probability"].notna().all())
 
@@ -103,7 +113,7 @@ class DailyBatchModuleTests(unittest.TestCase):
             {**base,"fixture_id":"past","start_time_utc":"2026-09-01T05:30:00Z","selection":"Beta, Bob","best_decimal_odds":2.2,"best_american_odds":120},
         ])
         now=datetime(2026,9,1,6,0,tzinfo=timezone.utc)
-        board,ledger,errors=v5_daily_batch.build_daily_outputs(feed,{"MEN":self._ratings()},self._summary(),existing_ledger=pd.DataFrame(),now=now,sims=100)
+        board,ledger,errors=v5_daily_batch.build_daily_outputs(feed,{"MEN":self._ratings()},self._summary(),existing_ledger=pd.DataFrame(),now=now,sims=100,score_candidate=self._score_candidate())
         self.assertEqual(set(board["fixture_id"]),{"future"})
         self.assertEqual(len(ledger),2); self.assertEqual(errors,[]); self.assertTrue(ledger["freeze_key"].is_unique)
 
