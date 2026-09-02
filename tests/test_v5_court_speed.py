@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-from v5_court_speed import blend_estimates, build_court_speed_features
+from v5_court_speed import blend_estimates, build_court_speed_features, add_derived_court_speed_features
 
 
 def _matches():
@@ -60,3 +60,65 @@ def test_appending_later_match_does_not_change_earlier_court_speed_features():
         extended[extended.match_id.isin(base.match_id)].sort_values("match_id")[cols].reset_index(drop=True),
         check_dtype=False,
     )
+
+
+def _player_rows_for_derived_speed():
+    rows = []
+    for match_id, date, p1, p2, p1_ace, p2_ace in [
+        ("h", "2025-08-20", "A", "B", 12, 10),
+        ("c1", "2026-08-20", "A", "C", 14, 12),
+        ("c2", "2026-08-21", "B", "C", 8, 7),
+    ]:
+        for player, opponent, ace in [(p1, p2, p1_ace), (p2, p1, p2_ace)]:
+            rows.append({
+                "match_id": match_id,
+                "match_date": date,
+                "tour": "MEN",
+                "surface": "Hard",
+                "tourney_name": "Example Open",
+                "player_name": player,
+                "opponent_name": opponent,
+                "stat_service_points": 60,
+                "stat_first_serves_in": 36,
+                "stat_first_serve_points_won": 27,
+                "stat_second_serve_points_won": 12,
+                "stat_aces": ace,
+                "stat_double_faults": 2,
+                "stat_return_points_total": 60,
+                "stat_return_points_won": 21,
+                "rolling_first_serve_in_pct": 0.60,
+                "rolling_first_serve_points_won_pct": 0.70,
+                "rolling_second_serve_points_won_pct": 0.50,
+                "rolling_ace_rate": 0.10,
+                "rolling_double_fault_rate": 0.04,
+                "rolling_return_points_won_pct": 0.36,
+            })
+    return pd.DataFrame(rows)
+
+
+def test_derived_court_speed_starts_from_historical_event_prior_and_is_shared_by_match():
+    out = add_derived_court_speed_features(_player_rows_for_derived_speed())
+    current_first = out[out.match_id == "c1"]
+    assert len(current_first) == 2
+    assert current_first["court_speed_historical_sample_size"].iloc[0] == 1
+    assert current_first["court_speed_historical_prior"].notna().all()
+    assert current_first["court_speed_blended"].nunique(dropna=False) == 1
+    # Match c1 cannot use its own stats to price itself.
+    assert current_first["court_speed_current_event_sample_size"].iloc[0] == 0
+
+    next_day = out[out.match_id == "c2"].iloc[0]
+    assert next_day["court_speed_current_event_sample_size"] == 1
+
+
+def test_same_date_matches_do_not_leak_into_each_other_without_known_start_times():
+    rows = _player_rows_for_derived_speed()
+    extra = rows[rows.match_id == "c1"].copy()
+    extra["match_id"] = "c1b"
+    extra["player_name"] = ["D", "E"]
+    extra["opponent_name"] = ["E", "D"]
+    rows = pd.concat([rows, extra], ignore_index=True)
+    out = add_derived_court_speed_features(rows)
+    c1 = out[out.match_id == "c1"].iloc[0]
+    c1b = out[out.match_id == "c1b"].iloc[0]
+    assert c1["court_speed_current_event_sample_size"] == 0
+    assert c1b["court_speed_current_event_sample_size"] == 0
