@@ -1,0 +1,48 @@
+name: V5 Score Architecture Diagnostic
+
+on:
+  push:
+    branches: [feature/v5-full-context-model]
+    paths:
+      - 'diagnose_v5_score_architecture.py'
+      - 'historical_score_calibration.py'
+      - 'v5_score_architecture.py'
+      - 'v5_core.py'
+      - 'v5_strength_conditioning.py'
+      - 'v5_model_calibration.py'
+      - 'v5_daily_batch.py'
+      - 'tests/test_historical_score_calibration.py'
+      - 'tests/test_v5_score_architecture.py'
+      - '.github/workflows/v5_score_architecture_diagnostic.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt pytest
+      - name: Verify score contracts
+        run: python -m pytest tests/test_historical_score_calibration.py tests/test_v5_score_architecture.py -v
+      - name: Run 2025 fit / 2026 score architecture validation
+        run: python diagnose_v5_score_architecture.py
+      - name: Print production gates
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('v5_score_diagnostic/report.json').read_text())
+          for segment,data in r['segments'].items():
+              print(segment, json.dumps(data['production_gate'], sort_keys=True))
+              print('SELECTED', json.dumps(data['validation_2026_selected'], sort_keys=True))
+              print('BASELINE', json.dumps(data['validation_2026_baseline'], sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v5-score-architecture-diagnostic
+          path: v5_score_diagnostic/report.json
+          retention-days: 14
