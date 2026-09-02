@@ -31,12 +31,7 @@ def orient_matchup_row(
     base_features: dict[str, float] | None = None,
     context: dict | None = None,
 ) -> dict[str, float | str | int]:
-    """Orient one completed match to deterministic player A/player B order.
-
-    `baseline_winner_probability`, `x_sr_winner`, and `x_elo_winner` are expressed from
-    the historical winner's perspective. The returned row is expressed from player A's
-    perspective, where A is chosen only from the two names and never from the outcome.
-    """
+    """Orient one completed match to deterministic player A/player B order."""
     one = dict(player_one)
     two = dict(player_two)
     name_one = str(one.get("player_name") or "")
@@ -66,20 +61,19 @@ def orient_matchup_row(
 
 def _prepare_training_matrix(frame: pd.DataFrame) -> tuple[np.ndarray, list[str], np.ndarray, np.ndarray, np.ndarray]:
     cols = list(frame.columns)
-    # pandas 3 may expose a read-only NumPy view; imputation requires a private writable array.
     raw = frame.apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float, copy=True)
-    medians = np.zeros(len(cols), dtype=float)
-    for j in range(len(cols)):
-        finite = raw[np.isfinite(raw[:, j]), j]
-        medians[j] = float(np.median(finite)) if len(finite) else 0.0
-        raw[~np.isfinite(raw[:, j]), j] = medians[j]
 
-    # Signed matchup features are intentionally not mean-centered. Centering would make
-    # x and -x cease to be exact opposites and would break player-swap symmetry.
+    # Every feature accepted by this learner is directional: x(A,B) = -x(B,A).
+    # Missing directional evidence must therefore contribute zero. A training median
+    # would be inserted with the same sign in both orientations and violate symmetry.
+    fill_values = np.zeros(len(cols), dtype=float)
+    for j in range(len(cols)):
+        raw[~np.isfinite(raw[:, j]), j] = fill_values[j]
+
     means = np.zeros(len(cols), dtype=float)
     scales = np.sqrt(np.mean(raw * raw, axis=0))
     scales = np.where(np.isfinite(scales) & (scales > 1e-8), scales, 1.0)
-    return raw / scales, cols, medians, means, scales
+    return raw / scales, cols, fill_values, means, scales
 
 
 def fit_symmetric_logistic(
@@ -90,12 +84,7 @@ def fit_symmetric_logistic(
     max_iter: int = 80,
     tolerance: float = 1e-9,
 ) -> dict:
-    """Fit a ridge-logistic model whose prediction obeys p(x)+p(-x)=1.
-
-    Training is mirrored with (-x, 1-y), and the model has no intercept. This makes the
-    probability invariant to arbitrary historical row orientation and prevents an
-    orientation-induced favorite/underdog skew.
-    """
+    """Fit a ridge-logistic model constrained to p(x)+p(-x)=1."""
     if X is None or len(X) == 0:
         raise ValueError("Cannot fit contextual model with zero rows")
     y_arr = np.asarray(list(y), dtype=float)
@@ -104,7 +93,7 @@ def fit_symmetric_logistic(
     if not np.isin(y_arr, [0.0, 1.0]).all():
         raise ValueError("Targets must be binary 0/1")
 
-    z, cols, medians, means, scales = _prepare_training_matrix(X)
+    z, cols, fill_values, means, scales = _prepare_training_matrix(X)
     z_aug = np.vstack([z, -z])
     y_aug = np.concatenate([y_arr, 1.0 - y_arr])
     w = np.zeros(z_aug.shape[1], dtype=float)
@@ -126,16 +115,19 @@ def fit_symmetric_logistic(
         w = w_next
 
     return {
-        "version": "v5-context-symmetric-logistic-1",
+        "version": "v5-context-symmetric-logistic-2",
         "feature_names": cols,
         "coefficients": w.tolist(),
-        "medians": medians.tolist(),
+        # Keep the existing key for artifact backward compatibility; these are now
+        # explicitly neutral fill values, all zero for signed features.
+        "medians": fill_values.tolist(),
         "means": means.tolist(),
         "scales": scales.tolist(),
         "l2": ridge,
         "training_rows": int(len(X)),
         "mirrored_training_rows": int(len(y_aug)),
         "symmetric_no_intercept": True,
+        "missing_signed_value_policy": "neutral_zero",
     }
 
 
@@ -143,10 +135,10 @@ def predict_symmetric_logistic(model: dict, X: pd.DataFrame) -> np.ndarray:
     cols = list(model["feature_names"])
     frame = X.reindex(columns=cols).apply(pd.to_numeric, errors="coerce")
     raw = frame.to_numpy(dtype=float, copy=True)
-    medians = np.asarray(model["medians"], dtype=float)
+    fill_values = np.asarray(model["medians"], dtype=float)
     scales = np.asarray(model["scales"], dtype=float)
     for j in range(raw.shape[1]):
-        raw[~np.isfinite(raw[:, j]), j] = medians[j]
+        raw[~np.isfinite(raw[:, j]), j] = fill_values[j]
     z = raw / scales
     w = np.asarray(model["coefficients"], dtype=float)
     return _logistic_array(z @ w)
