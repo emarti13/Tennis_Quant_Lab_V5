@@ -2,7 +2,7 @@ name: V5 Context Model Diagnostic
 
 on:
   push:
-    branches: [main]
+    branches: [main, feature/complete-superpowers-v5]
     paths:
       - 'diagnose_v5_context_model.py'
       - 'diagnose_v5_advanced_model.py'
