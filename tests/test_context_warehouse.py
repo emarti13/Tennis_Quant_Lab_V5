@@ -22,12 +22,41 @@ class CanonicalWarehouseContractTests(unittest.TestCase):
                     "match_num": 7,
                     "round": "R32",
                     "surface": "hard",
+                    "winner_id": 101,
+                    "loser_id": 202,
                     "winner_name": "Player One",
                     "loser_name": "Player Two",
+                    "winner_hand": "R",
+                    "loser_hand": "L",
+                    "winner_ht": 188,
+                    "loser_ht": 191,
+                    "winner_age": 27.4,
+                    "loser_age": 29.1,
                     "winner_rank": 11,
                     "loser_rank": None,
+                    "winner_rank_points": 2500,
+                    "loser_rank_points": 1700,
                     "score": "6-4 6-3",
                     "best_of": 3,
+                    "minutes": 91,
+                    "w_ace": 8,
+                    "w_df": 2,
+                    "w_svpt": 58,
+                    "w_1stIn": 35,
+                    "w_1stWon": 29,
+                    "w_2ndWon": 13,
+                    "w_SvGms": 10,
+                    "w_bpSaved": 3,
+                    "w_bpFaced": 4,
+                    "l_ace": 4,
+                    "l_df": 5,
+                    "l_svpt": 61,
+                    "l_1stIn": 36,
+                    "l_1stWon": 24,
+                    "l_2ndWon": 9,
+                    "l_SvGms": 10,
+                    "l_bpSaved": 5,
+                    "l_bpFaced": 8,
                 }
             ]
         )
@@ -57,6 +86,26 @@ class CanonicalWarehouseContractTests(unittest.TestCase):
         self.assertEqual(set(rows["match_id"]), {matches.loc[0, "match_id"]})
         self.assertEqual(set(rows["is_winner"]), {True, False})
         self.assertTrue(rows["player_id"].str.startswith("p_").all())
+
+    def test_player_rows_preserve_source_ids_metadata_and_stats(self):
+        matches = canonicalize_matches(
+            self.sample_source(), tour="MEN", level="ATP", source_name="fixture"
+        )
+        rows = build_player_match_rows(matches).set_index("player_side")
+        winner = rows.loc["winner"]
+        loser = rows.loc["loser"]
+        self.assertEqual(winner["source_player_id"], 101)
+        self.assertEqual(loser["source_player_id"], 202)
+        self.assertEqual(winner["hand"], "R")
+        self.assertEqual(loser["height_cm"], 191)
+        self.assertEqual(winner["rank_points"], 2500)
+        self.assertEqual(winner["aces"], 8)
+        self.assertEqual(winner["service_points"], 58)
+        self.assertEqual(winner["first_serve_in"], 35)
+        self.assertEqual(winner["break_points_faced"], 4)
+        self.assertEqual(loser["double_faults"], 5)
+        self.assertEqual(loser["second_serve_points_won"], 9)
+        self.assertEqual(winner["match_minutes"], 91)
 
     def test_writer_emits_required_audit_files_and_counts(self):
         matches = canonicalize_matches(
