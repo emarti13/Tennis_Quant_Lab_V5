@@ -57,15 +57,26 @@ def _winner_loser_columns(frame: pd.DataFrame) -> tuple[str, str]:
     return winner, loser
 
 
+def _normalize_calendar_date(value) -> pd.Timestamp:
+    """Return a timezone-naive normalized calendar date for deterministic join keys."""
+    if pd.isna(value):
+        return pd.NaT
+    parsed = pd.Timestamp(value)
+    if parsed.tzinfo is not None:
+        parsed = parsed.tz_localize(None)
+    return parsed.normalize()
+
+
 def _parse_walkforward_date(value) -> pd.Timestamp:
     if pd.isna(value):
         return pd.NaT
     text = str(value).strip()
     if re.fullmatch(r"\d{8}(?:\.0+)?", text):
         text = text.split(".", 1)[0]
-        return pd.to_datetime(text, format="%Y%m%d", errors="coerce").normalize()
-    parsed = pd.to_datetime(value, errors="coerce")
-    return pd.NaT if pd.isna(parsed) else pd.Timestamp(parsed).normalize()
+        parsed = pd.to_datetime(text, format="%Y%m%d", errors="coerce")
+    else:
+        parsed = pd.to_datetime(value, errors="coerce")
+    return pd.NaT if pd.isna(parsed) else _normalize_calendar_date(parsed)
 
 
 def _prepare_walkforward(walkforward: pd.DataFrame, target_years: tuple[int, ...]) -> pd.DataFrame:
@@ -114,7 +125,7 @@ def assemble_matchup_dataset(
     """
     years = tuple(int(y) for y in target_years)
     rows = enriched_player_rows.copy()
-    rows["match_date"] = pd.to_datetime(rows["match_date"], errors="coerce")
+    rows["match_date"] = rows["match_date"].map(_normalize_calendar_date)
     target_rows = rows[rows["match_date"].dt.year.isin(years)].copy()
     wf = _prepare_walkforward(walkforward, years)
 
@@ -132,7 +143,7 @@ def assemble_matchup_dataset(
             continue
         winner_row = group[group["player_role"].astype(str).str.lower() == "winner"].iloc[0]
         loser_row = group[group["player_role"].astype(str).str.lower() == "loser"].iloc[0]
-        date = pd.Timestamp(winner_row["match_date"]).normalize()
+        date = _normalize_calendar_date(winner_row["match_date"])
         tour = str(winner_row.get("tour") or "MEN").upper().replace("ATP", "MEN")
         key = (date, tour, canonical_name(winner_row["player_name"]), canonical_name(loser_row["player_name"]))
         candidates = wf_groups.get(key)
