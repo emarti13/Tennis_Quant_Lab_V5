@@ -6,6 +6,7 @@ on:
       - feature/full-context-stage1-warehouse
     paths:
       - 'context_warehouse/**'
+      - 'tests/test_context_warehouse.py'
       - 'build_context_warehouse.py'
       - '.github/workflows/context_warehouse_history_smoke.yml'
   workflow_dispatch:
@@ -28,6 +29,9 @@ jobs:
 
       - name: Install dependencies
         run: python -m pip install pandas requests pyarrow
+
+      - name: Run Stage 1 unit and integration tests
+        run: python -m unittest discover -s tests -p 'test_context_warehouse.py' -v
 
       - name: Restore TennisMyLife historical cache
         id: history-cache
