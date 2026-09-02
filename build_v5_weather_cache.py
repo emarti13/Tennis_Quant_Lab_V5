@@ -44,6 +44,34 @@ def _resolve_context(registry: TournamentRegistry, row: pd.Series, year: int):
     return registry.resolve(str(row.get("tourney_name") or row.get("tournament") or ""), tour, year)
 
 
+def attach_weather_cache(player_rows: pd.DataFrame, weather_cache: pd.DataFrame) -> pd.DataFrame:
+    """Join event/date cached weather onto already venue-resolved player rows without guessing."""
+    if player_rows is None or player_rows.empty:
+        return player_rows.copy() if player_rows is not None else pd.DataFrame()
+    out = player_rows.copy()
+    if weather_cache is None or weather_cache.empty:
+        for col in WEATHER_MAP:
+            if col not in out.columns:
+                out[col] = np.nan
+        return out
+    cache = weather_cache.copy()
+    out["_weather_join_date"] = pd.to_datetime(out["match_date"], errors="coerce").dt.normalize()
+    cache["_weather_join_date"] = pd.to_datetime(cache["match_date"], errors="coerce").dt.normalize()
+    cache = cache.rename(columns={"canonical_event_id": "venue_event_id"})
+    keep = ["venue_event_id", "_weather_join_date", *WEATHER_MAP.keys()]
+    cache = cache[keep].drop_duplicates(["venue_event_id", "_weather_join_date"], keep="last")
+    for col in WEATHER_MAP:
+        if col in out.columns:
+            out = out.drop(columns=[col])
+    out = out.merge(cache, on=["venue_event_id", "_weather_join_date"], how="left", validate="many_to_one")
+    return out.drop(columns=["_weather_join_date"])
+
+
+def load_weather_cache(base_dir: str | Path = ".") -> pd.DataFrame:
+    path = Path(base_dir) / "context_weather" / "weather_by_event_date.parquet"
+    return pd.read_parquet(path) if path.exists() else pd.DataFrame()
+
+
 def build_weather_cache(base_dir: str | Path = ".", *, client=None) -> dict:
     """Fetch one historical weather range per resolved tournament-year and persist match-day rows."""
     base = Path(base_dir)
