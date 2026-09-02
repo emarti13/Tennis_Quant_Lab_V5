@@ -31,7 +31,9 @@ def test_symmetric_logistic_prediction_complements_when_features_reverse():
 
 
 def test_missing_signed_feature_is_neutral_and_preserves_swap_symmetry():
-    X = pd.DataFrame({"f1": [-3., -1., 1., 4.], "f2": [-2., -.5, .5, 2.]})
+    # f1 deliberately has a nonzero training median. A signed A-minus-B feature cannot
+    # be imputed to that same positive value in both orientations; missing must be neutral 0.
+    X = pd.DataFrame({"f1": [1., 2., 3., 4.], "f2": [-2., -.5, .5, 2.]})
     y = np.array([0, 0, 1, 1], dtype=float)
     model = fit_symmetric_logistic(X, y, l2=1.0)
     p = predict_symmetric_logistic(model, pd.DataFrame({"f1": [np.nan], "f2": [.8]}))[0]
