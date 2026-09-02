@@ -32,12 +32,7 @@ def _attach_scores(matchups: pd.DataFrame, matches: pd.DataFrame) -> pd.DataFram
 
 
 def _deterministic_cap(frame: pd.DataFrame, max_rows: int | None) -> pd.DataFrame:
-    """Evenly sample a chronological frame without peeking at outcomes.
-
-    This is used only to bound the expensive mechanistic replay. The direct model
-    still fits on all available 2025 rows; candidate metrics are compared on the
-    exact same untouched 2026 rows selected here.
-    """
+    """Evenly sample a chronological frame without peeking at outcomes."""
     ordered = frame.copy()
     ordered["match_date"] = pd.to_datetime(ordered.get("match_date"), errors="coerce")
     sort_cols = [c for c in ("match_date", "match_id") if c in ordered.columns]
@@ -50,6 +45,43 @@ def _deterministic_cap(frame: pd.DataFrame, max_rows: int | None) -> pd.DataFram
     positions = np.linspace(0, len(ordered) - 1, num=limit)
     indices = np.unique(np.rint(positions).astype(int))
     return ordered.iloc[indices].reset_index(drop=True)
+
+
+def _best_of_counts(frame: pd.DataFrame) -> dict[str, int]:
+    if frame is None or frame.empty or "best_of" not in frame.columns:
+        return {"bo3": 0, "bo5": 0, "other_or_missing": int(0 if frame is None else len(frame))}
+    best_of = pd.to_numeric(frame["best_of"], errors="coerce")
+    bo3 = int(best_of.eq(3).sum())
+    bo5 = int(best_of.eq(5).sum())
+    return {"bo3": bo3, "bo5": bo5, "other_or_missing": int(len(frame) - bo3 - bo5)}
+
+
+def _validation_cap(frame: pd.DataFrame, max_rows: int | None, *, tour: str) -> pd.DataFrame:
+    """Bound validation cost while preserving format-specific evidence.
+
+    MEN Bo5 matches are rare relative to the full calendar but materially different
+    from Bo3 for score distributions. When the validation cap is active, retain all
+    available Bo5 rows first (when they fit inside the cap), then fill the remaining
+    budget with a deterministic chronological Bo3 sample. No outcomes or market data
+    are used in selection.
+    """
+    limit = int(max_rows or 0)
+    if limit <= 0 or len(frame) <= limit:
+        return _deterministic_cap(frame, None)
+    if str(tour).upper() != "MEN" or "best_of" not in frame.columns:
+        return _deterministic_cap(frame, limit)
+
+    best_of = pd.to_numeric(frame["best_of"], errors="coerce")
+    bo5 = frame.loc[best_of.eq(5)].copy()
+    non_bo5 = frame.loc[~best_of.eq(5)].copy()
+
+    if len(bo5) >= limit:
+        return _deterministic_cap(bo5, limit)
+
+    remaining = limit - len(bo5)
+    sampled_non_bo5 = _deterministic_cap(non_bo5, remaining)
+    combined = pd.concat([bo5, sampled_non_bo5], ignore_index=True, sort=False)
+    return _deterministic_cap(combined, None)
 
 
 def _mechanistic_predictions(frame: pd.DataFrame, *, simulations: int) -> dict[str, np.ndarray]:
@@ -105,7 +137,7 @@ def evaluate_tour(frame: pd.DataFrame, tour: str, *, simulations: int, max_valid
     features=_feature_columns(train)
     direct_model=fit_gaussian_score_model(train,features=features,l2=16.0)
 
-    valid=_deterministic_cap(valid_full,max_validation_rows)
+    valid=_validation_cap(valid_full,max_validation_rows,tour=tour)
     direct_valid=predict_gaussian_score_model(direct_model,valid)
     mech_valid=_mechanistic_predictions(valid,simulations=simulations)
     mech_metrics=distribution_metrics(valid["actual_margin_a"],valid["actual_total"],mech_valid)
@@ -132,7 +164,14 @@ def evaluate_tour(frame: pd.DataFrame, tour: str, *, simulations: int, max_valid
     return {
         "status":"evaluated","tour":tour,"train_rows":int(len(train)),"validation_rows_full":int(len(valid_full)),"validation_rows":int(len(valid)),"features":features,
         "diagnostic_simulations_per_match":int(simulations),
-        "validation_sampling":{"policy":"chronological_even_spacing","max_rows":None if not max_validation_rows else int(max_validation_rows),"full_rows":int(len(valid_full)),"scored_rows":int(len(valid))},
+        "validation_sampling":{
+            "policy":"preserve_all_bo5_then_chronological_even_spacing_bo3" if str(tour).upper()=="MEN" else "chronological_even_spacing",
+            "max_rows":None if not max_validation_rows else int(max_validation_rows),
+            "full_rows":int(len(valid_full)),
+            "scored_rows":int(len(valid)),
+            "full_best_of_counts":_best_of_counts(valid_full),
+            "scored_best_of_counts":_best_of_counts(valid),
+        },
         "hybrid_training_sampling":{"policy":"chronological_even_spacing","max_rows":None if not hybrid_limit else int(hybrid_limit),"full_rows":int(len(train)),"scored_rows":int(len(hybrid_train))},
         "metrics_2026":metric_map,"gates_vs_conditioned_mechanistic":gates,
         "selected_candidate":selected,"selected_metrics_2026":metric_map[selected],
@@ -150,7 +189,7 @@ def run(base_dir: str | Path = ".") -> dict:
     simulations=max(80,int(os.getenv("V5_SCORE_DIAGNOSTIC_SIMS","160")))
     max_validation_rows=max(0,int(os.getenv("V5_SCORE_MAX_VALIDATION_ROWS","0"))) or None
     max_hybrid_train_rows=max(0,int(os.getenv("V5_SCORE_MAX_HYBRID_TRAIN_ROWS","0"))) or None
-    report={"version":"v5-score-walkforward-2","fit_year":2025,"validation_year":2026,"market_prices_used":False,"completed_score_rows":int(len(frame)),"tours":{}}
+    report={"version":"v5-score-walkforward-3","fit_year":2025,"validation_year":2026,"market_prices_used":False,"completed_score_rows":int(len(frame)),"tours":{}}
     production={"version":report["version"],"market_prices_used":False}
     for tour in ("MEN","WTA"):
         result=evaluate_tour(
