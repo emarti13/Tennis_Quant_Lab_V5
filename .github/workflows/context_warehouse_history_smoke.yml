@@ -5,6 +5,8 @@ on:
     branches:
       - feature/full-context-stage1-warehouse
     paths:
+      - 'context_warehouse/**'
+      - 'build_context_warehouse.py'
       - '.github/workflows/context_warehouse_history_smoke.yml'
   workflow_dispatch:
 
@@ -39,6 +41,7 @@ jobs:
 
       - name: Build canonical warehouse
         run: |
+          mkdir -p context_warehouse_output
           python build_context_warehouse.py \
             --input MEN:ATP:ATP.csv \
             --input MEN:QUALIFYING:ATPQualifiers.csv \
