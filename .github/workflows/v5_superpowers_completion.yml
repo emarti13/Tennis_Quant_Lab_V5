@@ -1,0 +1,59 @@
+name: V5 Superpowers Completion Gate
+
+on:
+  push:
+    branches: [feature/complete-superpowers-v5]
+    paths:
+      - 'v5_score_distribution.py'
+      - 'v5_residual_model.py'
+      - 'v5_ensemble.py'
+      - 'v5_experiments.py'
+      - 'v5_market_evaluation.py'
+      - 'v5_full_context_live.py'
+      - 'v5_daily_batch.py'
+      - 'tests/test_v5_superpowers_completion.py'
+      - '.github/workflows/v5_superpowers_completion.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt pytest
+      - name: Run completion contracts
+        id: contracts
+        continue-on-error: true
+        run: python -m pytest tests/test_v5_superpowers_completion.py -q --junitxml=superpowers-contract.xml
+      - name: Record contract state
+        env:
+          CONTRACT_OUTCOME: ${{ steps.contracts.outcome }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          out = Path('experiments/acceptance')
+          out.mkdir(parents=True, exist_ok=True)
+          (out / 'superpowers_contract_status.json').write_text(json.dumps({
+              'status': os.environ['CONTRACT_OUTCOME'],
+              'expected': 'success',
+          }, indent=2))
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add experiments/acceptance/superpowers_contract_status.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Record Superpowers completion contract state"
+            git push
+          fi
+      - name: Enforce green gate
+        if: steps.contracts.outcome != 'success'
+        run: exit 1
