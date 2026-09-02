@@ -1,23 +1,38 @@
 {
-  "status": "SUCCESS",
-  "built_at_utc": "2026-09-02T19:11:59.505364+00:00",
+  "status": "PARTIAL",
+  "built_at_utc": "2026-09-02T22:01:51.105088+00:00",
   "market_snapshot_utc": "2026-09-02T17:15:09.142632+00:00",
   "simulations_per_fixture": 5000,
   "market_rows_input": 986,
-  "eligible_pre_match_fixtures": 50,
-  "priced_rows": 832,
-  "board_rows": 832,
+  "eligible_pre_match_fixtures": 41,
+  "priced_rows": 698,
+  "board_rows": 698,
   "frozen_ledger_rows": 2735,
-  "new_frozen_rows": 650,
+  "new_frozen_rows": 0,
   "signal_counts": {
-    "PASS": 419,
-    "BET": 263,
-    "REVIEW": 130,
+    "PASS": 339,
+    "BET": 254,
+    "REVIEW": 85,
     "LEAN": 20
   },
-  "errors": [],
-  "model_version": "V5.1_OUTCOME_CALIBRATED",
-  "probability_source": "2025 outcome-calibrated serve/return + surface Elo; no sportsbook inputs",
-  "score_strength_conditioning": "calibrated probability mapped to relative serve-logit difference with mean serve environment fixed",
+  "selected_candidate_counts": {
+    "accepted_baseline": 698
+  },
+  "selected_score_candidate_counts": {
+    "conditioned_mechanistic": 698
+  },
+  "context_fallback_rows": 698,
+  "errors": [
+    {
+      "fixture_id": "ALL",
+      "stage": "build_live_context",
+      "error": "Invalid value '<ArrowStringArray>\n['unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue']\nLength: 82, dtype: str' for dtype 'float64'"
+    }
+  ],
+  "model_version": "v5-advanced-nested-chronological-1",
+  "score_model_version": "v5-score-gated-baseline-1",
+  "probability_source": "chronologically validated independent full-context candidate; sportsbook inputs joined only after probability freeze",
+  "score_model": "chronologically validated dedicated score-distribution candidate driven only by frozen tennis probability/context",
+  "market_prices_used_in_model": false,
   "state_variation_used": false
 }
