@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from pathlib import Path
 import json
-import math
 
 import numpy as np
 import pandas as pd
 
 from build_v5_context_matchups import enrich_player_history
+from build_v5_weather_cache import attach_weather_cache
 from v5_advanced_model import (
     damp_probability_by_uncertainty,
     predict_logit_stack,
@@ -36,11 +36,6 @@ def _clip(p: float) -> float:
     return min(max(float(p), 1e-8), 1.0 - 1e-8)
 
 
-def _logit(p: float) -> float:
-    p = _clip(p)
-    return math.log(p / (1.0 - p))
-
-
 def predict_with_production_candidate(
     candidate: dict,
     *,
@@ -57,22 +52,19 @@ def predict_with_production_candidate(
     context_cols = [c for c in row.columns if c.startswith("ctx_")]
 
     components: dict[str, float] = {"accepted_baseline": float(baseline[0])}
-    if selected != "accepted_baseline" or bundle.get("direct_context_model"):
-        direct_model = bundle.get("direct_context_model") or {}
-        if direct_model.get("feature_names"):
-            direct = predict_symmetric_logistic(direct_model, row)[0]
-            components["direct_context"] = float(direct)
-        else:
-            direct = baseline[0]
+    direct_model = bundle.get("direct_context_model") or {}
+    if direct_model.get("feature_names"):
+        direct = float(predict_symmetric_logistic(direct_model, row)[0])
+        components["direct_context"] = direct
     else:
-        direct = baseline[0]
+        direct = float(baseline[0])
 
     residual_model = bundle.get("residual_model") or {}
     if residual_model.get("feature_names"):
-        residual = predict_offset_logistic(residual_model, baseline, row[context_cols])[0]
-        components["residual"] = float(residual)
+        residual = float(predict_offset_logistic(residual_model, baseline, row[context_cols])[0])
+        components["residual"] = residual
     else:
-        residual = baseline[0]
+        residual = float(baseline[0])
 
     uncertainty = float(uncertainty_score(row, [residual], [direct])[0])
     gamma = float((bundle.get("uncertainty_model") or {}).get("gamma", 0.0))
@@ -97,14 +89,14 @@ def predict_with_production_candidate(
         ensemble = float(predict_logit_stack(stack_model, stack_inputs)[0])
         components["ensemble"] = ensemble
     else:
-        ensemble = baseline[0]
+        ensemble = float(baseline[0])
 
     selected_probability = {
         "accepted_baseline": float(baseline[0]),
-        "direct_context": float(direct),
-        "residual": float(residual),
+        "direct_context": direct,
+        "residual": residual,
         "residual_uncertainty": residual_uncertainty,
-        "ensemble": float(ensemble),
+        "ensemble": ensemble,
     }.get(selected)
     if selected_probability is None:
         raise ValueError(f"Unsupported selected_candidate: {selected}")
@@ -161,27 +153,34 @@ def _target_rows(fixture: dict) -> pd.DataFrame:
     ])
 
 
-def build_live_matchup_features(
+def build_live_enriched_history(
     historical_player_rows: pd.DataFrame,
+    fixtures: list[dict],
+    *,
+    tournament_registry: pd.DataFrame | None = None,
+    weather_cache: pd.DataFrame | None = None,
+) -> pd.DataFrame:
+    """Append all target rows and run the shared historical feature path exactly once per slate."""
+    targets = [_target_rows(fixture) for fixture in fixtures]
+    target_frame = pd.concat(targets, ignore_index=True, sort=False) if targets else pd.DataFrame()
+    history = historical_player_rows.copy() if historical_player_rows is not None else pd.DataFrame()
+    combined = pd.concat([history, target_frame], ignore_index=True, sort=False)
+    enriched = enrich_player_history(combined, tournament_registry=tournament_registry)
+    if weather_cache is not None:
+        enriched = attach_weather_cache(enriched, weather_cache)
+    return enriched
+
+
+def build_live_matchup_features_from_enriched(
+    enriched_history: pd.DataFrame,
     fixture: dict,
     *,
     baseline_probability: float,
     x_sr_p1: float,
     x_elo_p1: float,
-    tournament_registry: pd.DataFrame | None = None,
 ) -> dict:
-    """Build a live signed matchup row through the same historical feature builders.
-
-    Outcome-empty target rows are appended after historical rows. Because rolling/workload/
-    travel/court-speed builders emit features before ingesting the current row, the target
-    fixture cannot leak its own result/statistics into its state.
-    """
-    target = _target_rows(fixture)
-    history = historical_player_rows.copy() if historical_player_rows is not None else pd.DataFrame()
-    combined = pd.concat([history, target], ignore_index=True, sort=False)
-    enriched = enrich_player_history(combined, tournament_registry=tournament_registry)
-    target_id = target.iloc[0]["match_id"]
-    live = enriched[enriched["match_id"].astype(str) == str(target_id)].copy()
+    target_id = f"live_{fixture.get('fixture_id') or 'unknown'}"
+    live = enriched_history[enriched_history["match_id"].astype(str) == target_id].copy()
     if len(live) != 2:
         raise ValueError("Live context builder requires exactly two target player rows")
 
@@ -191,8 +190,10 @@ def build_live_matchup_features(
     row2 = live[live["player_name"].astype(str) == p2]
     if len(row1) != 1 or len(row2) != 1:
         raise ValueError("Live target players could not be resolved in contextual history")
-    state1 = build_player_state(row1.iloc[0])
-    state2 = build_player_state(row2.iloc[0])
+    row1 = row1.iloc[0]
+    row2 = row2.iloc[0]
+    state1 = build_player_state(row1)
+    state2 = build_player_state(row2)
     state1["player_name"] = p1
     state2["player_name"] = p2
 
@@ -201,7 +202,7 @@ def build_live_matchup_features(
     a_name, b_name = (p1, p2) if p1_is_a else (p2, p1)
     baseline_a = _clip(baseline_probability if p1_is_a else 1.0 - baseline_probability)
     sign = 1.0 if p1_is_a else -1.0
-    target_context = row1.iloc[0]
+    target_context = row1
 
     def pick(*names):
         for name in names:
@@ -228,6 +229,34 @@ def build_live_matchup_features(
         "context_quality_b": float(state_b.get("context_quality", 0.0)),
         "state_uncertainty_a": float(state_a.get("state_uncertainty", np.nan)),
         "state_uncertainty_b": float(state_b.get("state_uncertainty", np.nan)),
+        "weather_source_quality": str(target_context.get("weather_source_quality") or "missing"),
+        "court_speed_source_quality": str(target_context.get("court_speed_source_quality") or target_context.get("court_speed_prior_level") or "missing"),
     }
     output.update({f"ctx_{k}": v for k, v in build_matchup_features(state_a, state_b, context).items()})
     return output
+
+
+def build_live_matchup_features(
+    historical_player_rows: pd.DataFrame,
+    fixture: dict,
+    *,
+    baseline_probability: float,
+    x_sr_p1: float,
+    x_elo_p1: float,
+    tournament_registry: pd.DataFrame | None = None,
+    weather_cache: pd.DataFrame | None = None,
+) -> dict:
+    """Single-fixture convenience wrapper over the slate-wide shared feature path."""
+    enriched = build_live_enriched_history(
+        historical_player_rows,
+        [fixture],
+        tournament_registry=tournament_registry,
+        weather_cache=weather_cache,
+    )
+    return build_live_matchup_features_from_enriched(
+        enriched,
+        fixture,
+        baseline_probability=baseline_probability,
+        x_sr_p1=x_sr_p1,
+        x_elo_p1=x_elo_p1,
+    )
