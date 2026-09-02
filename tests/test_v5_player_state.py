@@ -22,6 +22,12 @@ def test_player_state_collects_context_without_market_inputs():
         "surface_first_serve_points_won_pct": 0.72,
         "surface_second_serve_points_won_pct": 0.52,
         "rest_days": 2,
+        "rest_log1p": np.log1p(2),
+        "rest_bucket": 2,
+        "layoff_60d": 0,
+        "layoff_90d": 0,
+        "first_match_after_60d": 0,
+        "matches_since_60d_layoff": np.nan,
         "matches_last_7d": 4,
         "games_last_7d": 96,
         "minutes_last_7d": 520,
@@ -39,11 +45,14 @@ def test_player_state_collects_context_without_market_inputs():
         "market_price": 5.0,
     })
     state = build_player_state(row)
-    assert state["state_version"] == "v5-player-state-1"
+    assert state["state_version"] == "v5-player-state-2"
     assert state["serve_first_won"] == 0.74
     assert state["fatigue_matches_7d"] == 4
     assert state["travel_km"] == 4100
     assert state["court_speed"] == 0.35
+    assert state["rest_log1p"] == np.log1p(2)
+    assert state["rest_bucket"] == 2
+    assert state["layoff_60d"] == 0
     assert "sportsbook_probability" not in state
     assert "market_price" not in state
 
