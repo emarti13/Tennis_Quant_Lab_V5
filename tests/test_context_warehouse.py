@@ -94,8 +94,10 @@ class CanonicalWarehouseContractTests(unittest.TestCase):
         rows = build_player_match_rows(matches).set_index("player_side")
         winner = rows.loc["winner"]
         loser = rows.loc["loser"]
-        self.assertEqual(winner["source_player_id"], 101)
-        self.assertEqual(loser["source_player_id"], 202)
+        self.assertEqual(winner["source_player_id"], "101")
+        self.assertEqual(loser["source_player_id"], "202")
+        self.assertEqual(matches.loc[0, "winner_source_player_id"], "101")
+        self.assertEqual(matches.loc[0, "loser_source_player_id"], "202")
         self.assertEqual(winner["hand"], "R")
         self.assertEqual(loser["height_cm"], 191)
         self.assertEqual(winner["rank_points"], 2500)
@@ -137,6 +139,8 @@ class CanonicalWarehouseContractTests(unittest.TestCase):
             wta_frame["winner_name"] = "WTA One"
             wta_frame["loser_name"] = "WTA Two"
             wta_frame["tourney_id"] = "2026-W01"
+            wta_frame["winner_id"] = "wta-101"
+            wta_frame["loser_id"] = "wta-202"
             wta_frame.to_csv(wta, index=False)
 
             completed = subprocess.run(
