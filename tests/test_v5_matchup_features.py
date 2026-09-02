@@ -23,6 +23,12 @@ def _state(**overrides):
         "layoff_90d": 0.0,
         "first_match_after_60d": 0.0,
         "matches_since_60d_layoff": float("nan"),
+        "layoff_response_30d_sample": 0.0,
+        "layoff_response_30d_excess": 0.0,
+        "layoff_response_60d_sample": 0.0,
+        "layoff_response_60d_excess": 0.0,
+        "layoff_response_90d_sample": 0.0,
+        "layoff_response_90d_excess": 0.0,
         "consecutive_play_days": 0.0,
         "previous_match_games": 22.0,
         "previous_match_duration": 105.0,
@@ -75,6 +81,27 @@ def test_layoff_state_distinguishes_first_match_back_from_normal_long_rest():
     assert out["layoff_90d_diff"] == 1
     assert out["first_match_after_60d_diff"] == 1
     assert out["comeback_recency_60d_diff"] > 0
+
+
+def test_player_specific_layoff_response_only_activates_when_player_is_currently_returning():
+    proven_returner = _state(
+        layoff_60d=1,
+        first_match_after_60d=1,
+        layoff_response_60d_sample=6,
+        layoff_response_60d_excess=0.25,
+    )
+    normal = _state(layoff_response_60d_sample=8, layoff_response_60d_excess=0.30)
+    out = build_matchup_features(proven_returner, normal, {})
+    assert out["layoff_response_60d_context_diff"] == 0.25
+    assert out["layoff_response_60d_evidence_diff"] > 0
+
+    neither_returning = build_matchup_features(
+        _state(layoff_response_60d_sample=6, layoff_response_60d_excess=0.25),
+        _state(layoff_response_60d_sample=8, layoff_response_60d_excess=-0.20),
+        {},
+    )
+    assert neither_returning["layoff_response_60d_context_diff"] == 0
+    assert neither_returning["layoff_response_60d_evidence_diff"] == 0
 
 
 def test_environment_interactions_capture_tennis_specific_matchup_geometry():
