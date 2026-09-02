@@ -66,6 +66,8 @@ jobs:
         continue-on-error: true
         env:
           V5_SCORE_DIAGNOSTIC_SIMS: '80'
+          V5_SCORE_MAX_VALIDATION_ROWS: '1000'
+          V5_SCORE_MAX_HYBRID_TRAIN_ROWS: '1200'
         run: |
           set -o pipefail
           python diagnose_v5_score_distribution.py 2>&1 | tee /tmp/v5-score-acceptance.txt
@@ -91,7 +93,9 @@ jobs:
               'status':os.environ['SCORE_OUTCOME'],
               'expected':'success',
               'log_tail':text[-16000:],
-              'context_policy':'historical as-of context + venue/travel/court-speed/player-state; weather omitted from this score gate unless already reproducibly cached'
+              'context_policy':'historical as-of context + venue/travel/court-speed/player-state; weather omitted from this score gate unless already reproducibly cached',
+              'validation_sampling':'deterministic chronological even spacing; up to 1000 untouched 2026 rows per tour',
+              'hybrid_training_sampling':'deterministic chronological even spacing; up to 1200 2025 rows per tour'
           },indent=2))
           PY
           git add experiments/acceptance/score_acceptance_status.json
