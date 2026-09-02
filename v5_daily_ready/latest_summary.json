@@ -1,28 +1,18 @@
 {
-  "status": "PARTIAL",
-  "built_at_utc": "2026-09-01T18:18:55.500068+00:00",
+  "status": "SUCCESS",
+  "built_at_utc": "2026-09-02T16:29:06.380802+00:00",
   "market_snapshot_utc": "2026-09-01T18:18:07.439339+00:00",
   "simulations_per_fixture": 5000,
   "market_rows_input": 2075,
-  "eligible_pre_match_fixtures": 86,
-  "priced_rows": 1251,
-  "board_rows": 2057,
+  "eligible_pre_match_fixtures": 0,
+  "priced_rows": 0,
+  "board_rows": 0,
   "frozen_ledger_rows": 2085,
-  "new_frozen_rows": 36,
-  "signal_counts": {
-    "REVIEW": 825,
-    "N/A": 807,
-    "PASS": 315,
-    "BET": 87,
-    "LEAN": 23
-  },
-  "errors": [
-    {
-      "fixture_id": "id1200259574124808",
-      "player1": "Frodin, Thea",
-      "player2": "Rybakina, Elena",
-      "tournament": "US Open Women Singles",
-      "error": "Unmatched V5 player(s): Frodin, Thea"
-    }
-  ]
+  "new_frozen_rows": 0,
+  "signal_counts": {},
+  "errors": [],
+  "model_version": "V5.1_OUTCOME_CALIBRATED",
+  "probability_source": "2025 outcome-calibrated serve/return + surface Elo; no sportsbook inputs",
+  "score_strength_conditioning": "calibrated probability mapped to relative serve-logit difference with mean serve environment fixed",
+  "state_variation_used": false
 }
