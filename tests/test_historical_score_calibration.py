@@ -30,6 +30,22 @@ class HistoricalScoreCalibrationTests(unittest.TestCase):
         self.assertEqual(int(matched.iloc[0]["actual_margin"]), 4)
         self.assertAlmostEqual(float(matched.iloc[0]["winner_serve_p"]), .64)
 
+    def test_score_rows_have_deterministic_player_a_orientation_and_signed_margin(self):
+        results = pd.DataFrame([
+            {"tourney_date": 20250820, "winner_name": "Zulu Z", "loser_name": "Alpha A", "score": "6-4 6-4", "tourney_name": "Test Open"},
+        ])
+        wf = pd.DataFrame([
+            {"date": "2025-08-20", "surface": "Hard", "winner": "Zulu Z", "loser": "Alpha A", "winner_serve_p": .64, "loser_serve_p": .60, "elo_winner_p": .70},
+        ])
+        row = matched_walkforward_scores(wf, build_result_index(results)).iloc[0]
+        self.assertEqual(row["player_a"], "Alpha A")
+        self.assertEqual(row["player_b"], "Zulu Z")
+        self.assertEqual(int(row["target_a_win"]), 0)
+        self.assertEqual(int(row["actual_margin_a"]), -4)
+        self.assertAlmostEqual(float(row["a_serve_p"]), .60)
+        self.assertAlmostEqual(float(row["b_serve_p"]), .64)
+        self.assertAlmostEqual(float(row["elo_a_p"]), .30)
+
 
 if __name__ == "__main__":
     unittest.main()
