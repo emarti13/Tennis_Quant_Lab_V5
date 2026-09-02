@@ -62,4 +62,25 @@ def test_registry_builder_deduplicates_event_and_preserves_surface():
     assert row["surface"] == "Clay"
     assert row["timezone"] == "Europe/Madrid"
     assert row["altitude_m"] == 657
+    assert row["start_year"] == 2025
+    assert row["end_year"] == 2026
     assert report["resolved_events"] == 1
+
+
+def test_registry_builder_keeps_year_specific_rows_when_stable_event_changes_city():
+    events = pd.DataFrame([
+        {"tour":"MEN","tourney_id":"2025-0600","tourney_name":"Toronto","surface":"Hard","match_date":"2025-08-01"},
+        {"tour":"MEN","tourney_id":"2026-0600","tourney_name":"Montreal","surface":"Hard","match_date":"2026-08-01"},
+    ])
+    geocoder = FakeGeocoder({
+        "Toronto":[{"name":"Toronto","country":"Canada","country_code":"CA","latitude":43.65,"longitude":-79.38,"timezone":"America/Toronto","elevation":76,"population":2800000}],
+        "Montreal":[{"name":"Montreal","country":"Canada","country_code":"CA","latitude":45.50,"longitude":-73.57,"timezone":"America/Toronto","elevation":36,"population":1760000}],
+    })
+    registry, report = build_registry_from_events(events, geocoder=geocoder)
+    assert len(registry) == 2
+    assert set(registry["canonical_event_id"]) == {"MEN:0600"}
+    toronto = registry[registry.city == "Toronto"].iloc[0]
+    montreal = registry[registry.city == "Montreal"].iloc[0]
+    assert toronto["start_year"] == 2025 and toronto["end_year"] == 2025
+    assert montreal["start_year"] == 2026 and montreal["end_year"] == 2026
+    assert report["resolved_events"] == 2
