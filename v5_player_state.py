@@ -10,18 +10,18 @@ STATE_VERSION = "v5-player-state-1"
 
 
 def _float(value) -> float:
-    parsed = pd.to_numeric(pd.Series([value]), errors="coerce").iloc[0]
-    return float(parsed) if pd.notna(parsed) else float("nan")
+    if value is None or pd.isna(value):
+        return float("nan")
+    try:
+        parsed = float(value)
+    except (TypeError, ValueError):
+        return float("nan")
+    return parsed if math.isfinite(parsed) else float("nan")
 
 
 def regularized_slope(values: Iterable[float], shrink_matches: float = 8.0) -> float:
-    """Return a shrinkage-regularized end-to-end trend.
-
-    This represents the total directional movement across the observed window rather than
-    an unregularized per-match coefficient. Two points therefore cannot manufacture the
-    same confidence as a persistent multi-match trend.
-    """
-    arr = pd.to_numeric(pd.Series(list(values)), errors="coerce").dropna().to_numpy(dtype=float)
+    arr = np.asarray([_float(v) for v in values], dtype=float)
+    arr = arr[np.isfinite(arr)]
     n = len(arr)
     if n < 2:
         return 0.0
@@ -67,7 +67,6 @@ STATE_FIELD_MAP = {
     "trajectory_elo": "trajectory_elo",
 }
 
-# These fields define context coverage. Missing values remain missing; they are never zero-filled.
 QUALITY_FIELDS = [
     "serve_first_won", "serve_second_won", "ace_rate", "double_fault_rate",
     "rest_days", "fatigue_matches_7d", "fatigue_games_7d", "travel_km",
@@ -83,7 +82,7 @@ def _sample_uncertainty(points: float, scale: float) -> float:
 
 
 def build_player_state(feature_row: pd.Series | dict) -> dict[str, float | str | int]:
-    row = pd.Series(feature_row)
+    row = feature_row if isinstance(feature_row, dict) else feature_row
     state: dict[str, float | str | int] = {"state_version": STATE_VERSION}
     for output_name, source_name in STATE_FIELD_MAP.items():
         state[output_name] = _float(row.get(source_name))
@@ -115,7 +114,6 @@ def add_trajectory_features(
     elo_col: str = "surface_elo",
     window: int = 8,
 ) -> pd.DataFrame:
-    """Add lagged regularized trends using only states strictly before each row."""
     if player_rows is None or player_rows.empty:
         return player_rows.copy() if player_rows is not None else pd.DataFrame()
     df = player_rows.copy()
