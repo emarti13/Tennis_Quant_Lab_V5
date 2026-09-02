@@ -55,8 +55,8 @@ def attach_weather_cache(player_rows: pd.DataFrame, weather_cache: pd.DataFrame)
                 out[col] = np.nan
         return out
     cache = weather_cache.copy()
-    out["_weather_join_date"] = pd.to_datetime(out["match_date"], errors="coerce").dt.normalize()
-    cache["_weather_join_date"] = pd.to_datetime(cache["match_date"], errors="coerce").dt.normalize()
+    out["_weather_join_date"] = pd.to_datetime(out["match_date"], errors="coerce").dt.tz_localize(None).dt.normalize()
+    cache["_weather_join_date"] = pd.to_datetime(cache["match_date"], errors="coerce").dt.tz_localize(None).dt.normalize()
     cache = cache.rename(columns={"canonical_event_id": "venue_event_id"})
     keep = ["venue_event_id", "_weather_join_date", *WEATHER_MAP.keys()]
     cache = cache[keep].drop_duplicates(["venue_event_id", "_weather_join_date"], keep="last")
@@ -72,7 +72,7 @@ def load_weather_cache(base_dir: str | Path = ".") -> pd.DataFrame:
     return pd.read_parquet(path) if path.exists() else pd.DataFrame()
 
 
-def build_weather_cache(base_dir: str | Path = ".", *, client=None) -> dict:
+def build_weather_cache(base_dir: str | Path = ".", *, client=None, years=(2025, 2026)) -> dict:
     """Fetch one historical weather range per resolved tournament-year and persist match-day rows."""
     base = Path(base_dir)
     match_path = base / "context_warehouse" / "matches.parquet"
@@ -85,6 +85,9 @@ def build_weather_cache(base_dir: str | Path = ".", *, client=None) -> dict:
         raise ValueError("matches.parquet requires match_date")
     matches["match_date"] = pd.to_datetime(matches["match_date"], errors="coerce")
     matches = matches[matches["match_date"].notna()].copy()
+    if years is not None:
+        target = {int(y) for y in years}
+        matches = matches[matches["match_date"].dt.year.isin(target)].copy()
 
     registry = TournamentRegistry.from_csv(registry_path)
     client = client or OpenMeteoArchiveClient(base / "context_cache" / "weather")
@@ -157,6 +160,7 @@ def build_weather_cache(base_dir: str | Path = ".", *, client=None) -> dict:
     out_dir.mkdir(parents=True, exist_ok=True)
     out.to_parquet(out_dir / "weather_by_event_date.parquet", index=False)
     report = {
+        "requested_years": None if years is None else sorted(int(y) for y in years),
         "requested_event_years": int(len(groups)),
         "weather_rows": int(len(out)),
         "unresolved_matches": int(unresolved),
