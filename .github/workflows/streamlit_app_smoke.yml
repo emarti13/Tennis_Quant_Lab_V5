@@ -1,0 +1,41 @@
+name: Streamlit App Smoke Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/streamlit-smoke-test
+      - main
+    paths:
+      - "tennis_quant_app_v5.py"
+      - "v5_*.py"
+      - "requirements.txt"
+      - "tests/test_streamlit_app_smoke.py"
+      - ".github/workflows/streamlit_app_smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run Streamlit app smoke test
+        run: pytest tests/test_streamlit_app_smoke.py -v

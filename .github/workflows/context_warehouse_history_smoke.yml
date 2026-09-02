@@ -1,0 +1,101 @@
+name: Context Warehouse History Smoke
+
+on:
+  push:
+    branches:
+      - feature/full-context-stage1-warehouse
+    paths:
+      - 'context_warehouse/**'
+      - 'tests/test_context_warehouse.py'
+      - 'build_context_warehouse.py'
+      - '.github/workflows/context_warehouse_history_smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  history-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: python -m pip install pandas requests pyarrow
+
+      - name: Run Stage 1 unit and integration tests
+        run: python -m unittest discover -s tests -p 'test_context_warehouse.py' -v
+
+      - name: Restore TennisMyLife historical cache
+        id: history-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .v5_history_cache
+          key: v5-tennis-history-2010-2025-v3
+
+      - name: Prepare historical source files
+        run: python bootstrap_v5_history.py
+
+      - name: Build canonical warehouse
+        run: |
+          mkdir -p context_warehouse_output
+          python build_context_warehouse.py \
+            --input MEN:ATP:ATP.csv \
+            --input MEN:QUALIFYING:ATPQualifiers.csv \
+            --input MEN:CHALLENGER:Challenger.csv \
+            --input WTA:WTA:WTA.csv \
+            --output-dir context_warehouse_output \
+            | tee context_warehouse_output/build_summary.json
+
+      - name: Validate real-history output
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+
+          root = Path('context_warehouse_output')
+          manifest = json.loads((root / 'source_manifest.json').read_text())
+          schema = json.loads((root / 'schema.json').read_text())
+          matches = pd.read_parquet(root / 'matches.parquet')
+          players = pd.read_parquet(root / 'player_match_rows.parquet')
+
+          assert len(matches) > 50000, len(matches)
+          assert len(players) == 2 * len(matches), (len(players), len(matches))
+          assert set(matches['tour'].dropna().unique()) == {'MEN', 'WTA'}
+          assert {'ATP', 'QUALIFYING', 'CHALLENGER', 'WTA'}.issubset(set(matches['level'].dropna().unique()))
+          assert manifest['match_rows'] == len(matches)
+          assert manifest['player_match_rows'] == len(players)
+          assert schema['schema_version'] == '1.1.0'
+          forbidden = {'moneyline', 'odds', 'no_vig', 'spread_line', 'total_line'}
+          assert not forbidden.intersection(matches.columns)
+          assert matches['match_id'].is_unique
+          assert players.groupby('match_id').size().eq(2).all()
+          print(json.dumps({
+              'matches': int(len(matches)),
+              'player_rows': int(len(players)),
+              'tour_counts': matches['tour'].value_counts().to_dict(),
+              'level_counts': matches['level'].value_counts().to_dict(),
+              'surface_counts': matches['surface'].value_counts(dropna=False).to_dict(),
+              'schema_version': schema['schema_version'],
+          }, indent=2, default=str))
+          PY
+
+      - name: Upload warehouse audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: context-warehouse-history-smoke
+          path: |
+            context_warehouse_output/build_summary.json
+            context_warehouse_output/source_manifest.json
+            context_warehouse_output/schema.json
+          if-no-files-found: warn
+          retention-days: 14
