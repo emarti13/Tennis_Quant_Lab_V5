@@ -39,58 +39,75 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - name: Install dependencies
         run: pip install -r requirements.txt pytest
-      - name: Verify model contracts
+      - name: Run complete full-context acceptance pipeline
+        id: validation
+        continue-on-error: true
         run: |
-          python -m pytest tests/test_v5_context_diagnostic.py tests/test_v5_context_model.py tests/test_v5_context_matchups.py tests/test_v5_advanced_model.py tests/test_build_v5_weather_cache.py -v
-      - name: Build 2023-2026 context warehouse
-        run: python build_v5_context_warehouse.py
-      - name: Build year-aware venue registry
-        run: python build_v5_venue_registry.py
-      - name: Build batched 2025-2026 historical weather cache
-        run: python build_v5_weather_cache.py
-      - name: Run 2025 fit / 2026 validation
-        run: python diagnose_v5_context_model.py
-      - name: Run nested residual uncertainty ensemble validation
-        run: python diagnose_v5_advanced_model.py
-      - name: Print compact report
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          r=json.loads(Path('v5_context_diagnostic/report.json').read_text())
-          a=json.loads(Path('v5_advanced_diagnostic/report.json').read_text())
-          print('VENUE_REGISTRY_ROWS', r.get('venue_registry_rows'))
-          print('WEATHER_CACHE_ROWS', r.get('weather_cache_rows'))
-          print('JOIN_QC', json.dumps(r['join_qc'], sort_keys=True))
-          print('MATCHED_BY_YEAR', json.dumps(r['matched_by_year'], sort_keys=True))
-          for tour,data in r['tours'].items():
-              print('TOUR',tour,'STATUS',data.get('status'))
-              if data.get('status')=='evaluated':
-                  print('MODELS',json.dumps(data['models'],sort_keys=True))
-          print('ADVANCED_PRODUCTION_GATE',json.dumps(a['production_gate'],sort_keys=True))
-          for tour,data in a['tours'].items():
-              print('ADVANCED',tour,data['selected_candidate'],json.dumps(data['metrics_2026'],sort_keys=True))
-          PY
-      - name: Persist acceptance artifacts on completion branch
-        if: github.ref == 'refs/heads/feature/complete-superpowers-v5'
+          set -o pipefail
+          {
+            echo '=== MODEL CONTRACTS ==='
+            python -m pytest tests/test_v5_context_diagnostic.py tests/test_v5_context_model.py tests/test_v5_context_matchups.py tests/test_v5_advanced_model.py tests/test_build_v5_weather_cache.py -v
+            echo '=== CONTEXT WAREHOUSE ==='
+            python build_v5_context_warehouse.py
+            echo '=== VENUE REGISTRY ==='
+            python build_v5_venue_registry.py
+            echo '=== HISTORICAL WEATHER ==='
+            python build_v5_weather_cache.py
+            echo '=== CONTEXT 2025 FIT / 2026 VALIDATION ==='
+            python diagnose_v5_context_model.py
+            echo '=== ADVANCED NESTED VALIDATION ==='
+            python diagnose_v5_advanced_model.py
+          } 2>&1 | tee /tmp/full-context-validation.txt
+      - name: Persist acceptance evidence
+        if: always() && github.ref == 'refs/heads/feature/complete-superpowers-v5'
+        env:
+          VALIDATION_OUTCOME: ${{ steps.validation.outcome }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          mkdir -p /tmp/full-context-artifacts
+          cp /tmp/full-context-validation.txt /tmp/full-context-artifacts/validation.txt || true
+          cp v5_context_diagnostic/report.json /tmp/full-context-artifacts/context_model_report.json || true
+          cp v5_advanced_diagnostic/report.json /tmp/full-context-artifacts/advanced_model_report.json || true
+          cp v5_advanced_diagnostic/production_candidate.json /tmp/full-context-artifacts/production_candidate.json || true
+          git pull --rebase origin feature/complete-superpowers-v5
           mkdir -p experiments/acceptance
-          cp v5_context_diagnostic/report.json experiments/acceptance/context_model_report.json
-          cp v5_advanced_diagnostic/report.json experiments/acceptance/advanced_model_report.json
-          cp v5_advanced_diagnostic/production_candidate.json experiments/acceptance/production_candidate.json
-          git add experiments/acceptance/context_model_report.json experiments/acceptance/advanced_model_report.json experiments/acceptance/production_candidate.json
-          if ! git diff --cached --quiet; then
-            git commit -m 'Record full-context production acceptance artifacts'
-            git push
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          log_path=Path('/tmp/full-context-artifacts/validation.txt')
+          text=log_path.read_text(encoding='utf-8', errors='replace') if log_path.exists() else ''
+          Path('experiments/acceptance/context_diagnostic_status.json').write_text(json.dumps({
+              'status': os.environ['VALIDATION_OUTCOME'],
+              'expected': 'success',
+              'log_tail': text[-16000:],
+          }, indent=2))
+          PY
+          if [ "$VALIDATION_OUTCOME" = "success" ]; then
+            cp /tmp/full-context-artifacts/context_model_report.json experiments/acceptance/context_model_report.json
+            cp /tmp/full-context-artifacts/advanced_model_report.json experiments/acceptance/advanced_model_report.json
+            cp /tmp/full-context-artifacts/production_candidate.json experiments/acceptance/production_candidate.json
           fi
+          git add experiments/acceptance/context_diagnostic_status.json
+          if [ "$VALIDATION_OUTCOME" = "success" ]; then
+            git add experiments/acceptance/context_model_report.json experiments/acceptance/advanced_model_report.json experiments/acceptance/production_candidate.json
+          fi
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record full-context production acceptance evidence'
+            git push origin HEAD:feature/complete-superpowers-v5
+          fi
+      - name: Enforce acceptance gate
+        if: steps.validation.outcome != 'success'
+        run: exit 1
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: v5-context-diagnostic
           path: |
@@ -107,4 +124,5 @@ jobs:
             context_registry/venue_registry_report.json
             context_weather/weather_by_event_date.parquet
             context_weather/weather_cache_report.json
+          if-no-files-found: warn
           retention-days: 14
