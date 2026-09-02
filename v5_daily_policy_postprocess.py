@@ -36,12 +36,16 @@ def main(base_dir: str | Path = ".", config_path: str | Path = "v5_production_co
     config = load_production_config(base / config_path)
     ready = base / "v5_daily_ready"
     targets = [ready / "latest_board.csv", ready / "frozen_predictions.csv"]
-    summary = {"updated": [], "missing": []}
+    summary = {"updated": [], "missing": [], "empty": []}
     for path in targets:
         if not path.exists():
             summary["missing"].append(str(path))
             continue
-        frame = pd.read_csv(path, low_memory=False)
+        try:
+            frame = pd.read_csv(path, low_memory=False)
+        except pd.errors.EmptyDataError:
+            summary["empty"].append(str(path))
+            continue
         frame = apply_daily_policy(frame, config)
         frame.to_csv(path, index=False)
         summary["updated"].append(str(path))

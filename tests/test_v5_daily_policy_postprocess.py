@@ -13,3 +13,15 @@ def test_daily_policy_suppresses_disabled_score_signals_and_preserves_moneyline(
     out = apply_daily_policy(board, config)
     assert list(out["signal"]) == ["REVIEW", "REVIEW", "BET"]
     assert list(out["production_market_enabled"]) == [False, False, True]
+
+
+def test_main_skips_headerless_empty_board(tmp_path):
+    from v5_daily_policy_postprocess import main
+
+    ready = tmp_path / "v5_daily_ready"
+    ready.mkdir()
+    board = ready / "latest_board.csv"
+    board.write_text("\\n", encoding="utf-8")
+
+    assert main(tmp_path) == 0
+    assert board.read_text(encoding="utf-8") == "\\n"
