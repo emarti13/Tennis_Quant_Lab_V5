@@ -99,11 +99,31 @@ def _year_bounds(group: pd.DataFrame) -> tuple[int | None, int | None]:
     return int(years.min()), int(years.max())
 
 
-def build_registry_from_events(events: pd.DataFrame, geocoder=None) -> tuple[pd.DataFrame, dict]:
-    """Build a conservative venue registry from observed event metadata.
+def _contiguous_year_segments(group: pd.DataFrame) -> list[pd.DataFrame]:
+    dates = pd.to_datetime(group.get("match_date"), errors="coerce")
+    working = group.copy()
+    working["_year"] = dates.dt.year
+    valid_years = sorted(int(y) for y in working["_year"].dropna().unique())
+    if not valid_years:
+        return [working.drop(columns=["_year"])]
+    runs, current = [], [valid_years[0]]
+    for year in valid_years[1:]:
+        if year == current[-1] + 1:
+            current.append(year)
+        else:
+            runs.append(current)
+            current = [year]
+    runs.append(current)
+    return [working[working["_year"].isin(run)].drop(columns=["_year"]) for run in runs]
 
-    Geocoding never silently accepts a non-exact ambiguous place. Unresolved events remain
-    explicit so travel/weather features can carry missingness rather than fabricated geography.
+
+def build_registry_from_events(events: pd.DataFrame, geocoder=None) -> tuple[pd.DataFrame, dict]:
+    """Build conservative, year-aware venue registry rows from observed event metadata.
+
+    A stable tournament code may map to different cities in different years. Location-name
+    groups are therefore segmented into contiguous year ranges; this prevents alternating or
+    moved events from being assigned one permanent geography. Ambiguous geocodes remain
+    explicitly unresolved.
     """
     if events is None or events.empty:
         return pd.DataFrame(), {"events": 0, "resolved_events": 0, "unresolved_events": 0}
@@ -115,41 +135,46 @@ def build_registry_from_events(events: pd.DataFrame, geocoder=None) -> tuple[pd.
         stable_event_id(tour, tid, name)
         for tour, tid, name in zip(df.get("tour", "MEN"), df["tourney_id"], df.get("tourney_name", ""))
     ]
+    df["location_query"] = [location_query(name) for name in df.get("tourney_name", "")]
 
     rows = []
     unresolved = []
-    for event_id, group in df.groupby("stable_event_id", sort=True):
-        name = str(_mode_nonempty(group.get("tourney_name", pd.Series(dtype=object))) or "")
-        query = location_query(name)
-        candidates = geocoder.search(query)
-        chosen, quality = choose_geocode_candidate(query, candidates)
-        start_year, end_year = _year_bounds(group)
-        tour = str(_mode_nonempty(group.get("tour", pd.Series(dtype=object))) or "BOTH").upper().replace("ATP", "MEN")
-        surface = _mode_nonempty(group.get("surface", pd.Series(dtype=object)))
-        indoor = _mode_nonempty(group.get("indoor", pd.Series(dtype=object)))
+    for (event_id, query), location_group in df.groupby(["stable_event_id", "location_query"], sort=True, dropna=False):
+        for group in _contiguous_year_segments(location_group):
+            name = str(_mode_nonempty(group.get("tourney_name", pd.Series(dtype=object))) or query or "")
+            query_text = str(query or "").strip()
+            candidates = geocoder.search(query_text)
+            chosen, quality = choose_geocode_candidate(query_text, candidates)
+            start_year, end_year = _year_bounds(group)
+            tour = str(_mode_nonempty(group.get("tour", pd.Series(dtype=object))) or "BOTH").upper().replace("ATP", "MEN")
+            surface = _mode_nonempty(group.get("surface", pd.Series(dtype=object)))
+            indoor = _mode_nonempty(group.get("indoor", pd.Series(dtype=object)))
 
-        if chosen is None:
-            unresolved.append({"canonical_event_id": event_id, "tourney_name": name, "query": query, "reason": quality})
-            continue
-        rows.append({
-            "canonical_event_id": event_id,
-            "canonical_name": name or query,
-            "aliases": name,
-            "tour": tour,
-            "start_year": start_year,
-            "end_year": end_year,
-            "city": chosen.get("name"),
-            "country": chosen.get("country"),
-            "country_code": chosen.get("country_code"),
-            "latitude": chosen.get("latitude"),
-            "longitude": chosen.get("longitude"),
-            "timezone": chosen.get("timezone"),
-            "altitude_m": chosen.get("elevation"),
-            "surface": surface,
-            "indoor": indoor,
-            "source_quality": quality,
-            "geocode_query": query,
-        })
+            if chosen is None:
+                unresolved.append({
+                    "canonical_event_id": event_id, "tourney_name": name, "query": query_text,
+                    "start_year": start_year, "end_year": end_year, "reason": quality,
+                })
+                continue
+            rows.append({
+                "canonical_event_id": event_id,
+                "canonical_name": name or query_text,
+                "aliases": name,
+                "tour": tour,
+                "start_year": start_year,
+                "end_year": end_year,
+                "city": chosen.get("name"),
+                "country": chosen.get("country"),
+                "country_code": chosen.get("country_code"),
+                "latitude": chosen.get("latitude"),
+                "longitude": chosen.get("longitude"),
+                "timezone": chosen.get("timezone"),
+                "altitude_m": chosen.get("elevation"),
+                "surface": surface,
+                "indoor": indoor,
+                "source_quality": quality,
+                "geocode_query": query_text,
+            })
 
     registry = pd.DataFrame(rows)
     report = {
