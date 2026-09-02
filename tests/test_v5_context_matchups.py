@@ -7,6 +7,9 @@ from build_v5_context_matchups import assemble_matchup_dataset, enrich_player_hi
 def _player_rows():
     rows = []
     matches = [
+        # 2023 establishes statistical baselines so the 2024 completed match can become
+        # an opponent-adjusted historical court-speed observation for the 2025 target.
+        ("mpre", "2023-12-20", "Alpha", "Beta", "Hard", 1),
         ("m0", "2024-12-20", "Alpha", "Beta", "Hard", 1),
         ("m1", "2025-01-10", "Alpha", "Gamma", "Hard", 1),
         ("m2", "2026-01-10", "Gamma", "Alpha", "Hard", 1),
@@ -34,9 +37,9 @@ def _walkforward():
 def test_enrichment_uses_2024_as_history_for_first_2025_match():
     enriched = enrich_player_history(_player_rows())
     alpha_2025 = enriched[(enriched.match_id == "m1") & (enriched.player_name == "Alpha")].iloc[0]
-    assert np.isclose(alpha_2025["rolling_ace_rate"], 8/60)
+    assert np.isclose(alpha_2025["rolling_ace_rate"], 16/120)
     assert alpha_2025["rest_days"] == 21
-    assert np.isclose(alpha_2025["rolling_return_points_won_pct"], 26/62)
+    assert np.isclose(alpha_2025["rolling_return_points_won_pct"], 52/124)
 
 
 def test_enrichment_builds_historical_prior_court_speed_before_target_match():
@@ -68,10 +71,15 @@ def test_assembler_matches_exact_winner_loser_date_and_builds_deterministic_orie
 def test_current_match_raw_stats_never_enter_context_feature_namespace():
     enriched = enrich_player_history(_player_rows())
     out, _ = assemble_matchup_dataset(enriched, _walkforward(), target_years=(2025, 2026))
-    forbidden_fragments = ["stat_aces", "stat_service_points", "match_games", "player_role"]
     context_cols = [c for c in out.columns if c.startswith("ctx_")]
     assert context_cols
-    assert not any(fragment in col for col in context_cols for fragment in forbidden_fragments)
+    forbidden_exact = {
+        "ctx_stat_aces", "ctx_stat_service_points", "ctx_stat_return_points_won",
+        "ctx_match_games", "ctx_match_sets", "ctx_match_duration_minutes", "ctx_player_role",
+    }
+    assert not forbidden_exact.intersection(context_cols)
+    # Prior-match workload is explicitly allowed because it is known before first serve.
+    assert "ctx_previous_match_games_diff" in context_cols
 
 
 def test_unmatched_walkforward_rows_are_counted_not_guessed():
