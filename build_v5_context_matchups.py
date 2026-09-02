@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 
 from v5_context_model import orient_matchup_row
+from v5_court_speed import add_derived_court_speed_features
 from v5_model_calibration import calibrated_match_probability
 from v5_player_state import add_trajectory_features, build_player_state
 from v5_rolling_stats import build_rolling_stats
@@ -25,12 +26,18 @@ def _logit(value: float) -> float:
 
 
 def enrich_player_history(player_rows: pd.DataFrame) -> pd.DataFrame:
-    """Create strictly pre-match rolling/workload/trajectory state on player-match rows."""
+    """Create strictly pre-match rolling/workload/trajectory/context state.
+
+    Derived court speed is computed only after lagged player baselines exist. A completed
+    target match may contribute a court-speed observation to later dates, but never to its
+    own pre-match state.
+    """
     if player_rows is None or player_rows.empty:
         return player_rows.copy() if player_rows is not None else pd.DataFrame()
     enriched = build_rolling_stats(player_rows)
     enriched = build_workload_features(enriched)
     enriched = add_trajectory_features(enriched)
+    enriched = add_derived_court_speed_features(enriched)
     return enriched
 
 
@@ -158,7 +165,6 @@ def assemble_matchup_dataset(
         })
         output.append(oriented)
 
-    # A walk-forward row that has no exact warehouse partner is separately visible in QC.
     walkforward_unmatched = int(sum(1 for idx in wf.index if int(idx) not in used_wf_indices))
     result = pd.DataFrame(output)
     qc = {
