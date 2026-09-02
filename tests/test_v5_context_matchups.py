@@ -39,6 +39,15 @@ def test_enrichment_uses_2024_as_history_for_first_2025_match():
     assert np.isclose(alpha_2025["rolling_return_points_won_pct"], 26/62)
 
 
+def test_enrichment_builds_historical_prior_court_speed_before_target_match():
+    enriched = enrich_player_history(_player_rows())
+    first_2025 = enriched[enriched.match_id == "m1"]
+    assert first_2025["court_speed_historical_sample_size"].iloc[0] == 1
+    assert first_2025["court_speed_historical_prior"].notna().all()
+    assert first_2025["court_speed_blended"].notna().all()
+    assert first_2025["court_speed_current_event_sample_size"].iloc[0] == 0
+
+
 def test_assembler_matches_exact_winner_loser_date_and_builds_deterministic_orientation():
     enriched = enrich_player_history(_player_rows())
     out, qc = assemble_matchup_dataset(enriched, _walkforward(), target_years=(2025, 2026))
@@ -51,6 +60,9 @@ def test_assembler_matches_exact_winner_loser_date_and_builds_deterministic_orie
     assert np.isfinite(row_2025["x_sr_a"])
     assert np.isfinite(row_2025["x_elo_a"])
     assert any(c.startswith("ctx_") for c in out.columns)
+    assert "ctx_rest_days_diff" not in out.columns
+    assert "ctx_rest_log1p_diff" in out.columns
+    assert "ctx_court_speed_x_serve_dominance_diff" in out.columns
 
 
 def test_current_match_raw_stats_never_enter_context_feature_namespace():
