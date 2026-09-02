@@ -52,9 +52,13 @@ class TournamentRegistry:
     def __init__(self, frame: pd.DataFrame):
         self.frame = frame.copy() if frame is not None else pd.DataFrame()
         self._index: dict[str, list[int]] = {}
+        self._event_index: dict[str, list[int]] = {}
         if self.frame.empty:
             return
         for idx, row in self.frame.iterrows():
+            event_id = row.get("canonical_event_id")
+            if pd.notna(event_id) and str(event_id).strip():
+                self._event_index.setdefault(str(event_id).strip(), []).append(idx)
             names = [row.get("canonical_name")]
             alias_value = row.get("aliases")
             aliases = [] if pd.isna(alias_value) else str(alias_value).split("|")
@@ -73,17 +77,12 @@ class TournamentRegistry:
             return cls(pd.DataFrame())
         return cls(pd.read_csv(path))
 
-    def resolve(self, name: str, tour: str, year: int) -> TournamentContext:
-        key = normalize_event_name(name)
-        candidates = self._index.get(key, [])
-        if not candidates:
-            return TournamentContext()
-
-        requested_tour = str(tour or "").upper()
+    def _valid_rows(self, indices: list[int], tour: str, year: int) -> list[pd.Series]:
+        requested_tour = str(tour or "").upper().replace("ATP", "MEN")
         valid = []
-        for idx in candidates:
+        for idx in indices:
             row = self.frame.loc[idx]
-            row_tour = str(row.get("tour") or "BOTH").upper()
+            row_tour = str(row.get("tour") or "BOTH").upper().replace("ATP", "MEN")
             if row_tour not in ("BOTH", requested_tour):
                 continue
             start = pd.to_numeric(pd.Series([row.get("start_year")]), errors="coerce").iloc[0]
@@ -93,12 +92,10 @@ class TournamentRegistry:
             if pd.notna(end) and int(year) > int(end):
                 continue
             valid.append(row)
+        return valid
 
-        if len(valid) != 1:
-            return TournamentContext(source_quality="ambiguous" if valid else "unresolved")
-
-        row = valid[0]
-
+    @staticmethod
+    def _row_to_context(row: pd.Series, matched_alias: str | None) -> TournamentContext:
         def _nullable_float(v):
             parsed = pd.to_numeric(pd.Series([v]), errors="coerce").iloc[0]
             return None if pd.isna(parsed) else float(parsed)
@@ -126,8 +123,36 @@ class TournamentRegistry:
             surface=_nullable_text(row.get("surface")),
             indoor=indoor_value,
             source_quality=_nullable_text(row.get("source_quality")) or "registry",
-            matched_alias=str(name),
+            matched_alias=matched_alias,
         )
+
+    def _resolve_indices(self, indices: list[int], tour: str, year: int, matched_alias: str | None) -> TournamentContext:
+        valid = self._valid_rows(indices, tour, year)
+        if len(valid) != 1:
+            return TournamentContext(source_quality="ambiguous" if valid else "unresolved", matched_alias=matched_alias)
+        return self._row_to_context(valid[0], matched_alias)
+
+    def resolve(self, name: str, tour: str, year: int) -> TournamentContext:
+        key = normalize_event_name(name)
+        candidates = self._index.get(key, [])
+        if not candidates:
+            return TournamentContext(matched_alias=str(name) if name is not None else None)
+        return self._resolve_indices(candidates, tour, year, str(name))
+
+    def resolve_event(self, event_id: str, tour: str, year: int) -> TournamentContext:
+        """Resolve a stable source event ID with explicit year validity.
+
+        Multiple registry rows may share one stable event ID when a tournament changes or
+        alternates venue. Exactly one row must be valid for the requested tour/year; otherwise
+        the result remains explicitly ambiguous/unresolved rather than guessed.
+        """
+        key = str(event_id or "").strip()
+        if not key:
+            return TournamentContext()
+        candidates = self._event_index.get(key, [])
+        if not candidates:
+            return TournamentContext(matched_alias=key)
+        return self._resolve_indices(candidates, tour, year, key)
 
 
 def coverage_report(matches: pd.DataFrame, registry: TournamentRegistry) -> dict:
@@ -141,14 +166,18 @@ def coverage_report(matches: pd.DataFrame, registry: TournamentRegistry) -> dict
             raw_date = row.get("tourney_date")
         date = pd.to_datetime(raw_date, errors="coerce")
         year = int(date.year) if pd.notna(date) else 0
-        name = row.get("tourney_name")
-        if pd.isna(name) or not str(name).strip():
-            name = row.get("tournament") or ""
-        result = registry.resolve(name, row.get("tour") or "MEN", year)
+        event_id = row.get("canonical_event_id")
+        if pd.notna(event_id) and str(event_id).strip():
+            result = registry.resolve_event(str(event_id), row.get("tour") or "MEN", year)
+        else:
+            name = row.get("tourney_name")
+            if pd.isna(name) or not str(name).strip():
+                name = row.get("tournament") or ""
+            result = registry.resolve(name, row.get("tour") or "MEN", year)
         if result.canonical_event_id:
             resolved += 1
         else:
-            display_name = str(name)
+            display_name = str(row.get("tourney_name") or row.get("tournament") or event_id or "")
             unresolved[display_name] = unresolved.get(display_name, 0) + 1
     return {
         "rows": int(len(matches)),
