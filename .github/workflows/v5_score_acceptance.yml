@@ -2,7 +2,7 @@ name: V5 Score Distribution Acceptance
 
 on:
   push:
-    branches: [feature/complete-superpowers-v5]
+    branches: [main, feature/complete-superpowers-v5]
     paths:
       - 'diagnose_v5_score_distribution.py'
       - 'v5_score_distribution.py'
@@ -79,6 +79,7 @@ jobs:
         if: always()
         env:
           SCORE_OUTCOME: ${{ steps.score.outcome }}
+          TARGET_BRANCH: ${{ github.ref_name }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
@@ -86,7 +87,7 @@ jobs:
           cp /tmp/v5-score-acceptance.txt /tmp/score-artifacts/log.txt || true
           cp v5_score_diagnostic/report.json /tmp/score-artifacts/report.json || true
           cp v5_score_diagnostic/production_candidate.json /tmp/score-artifacts/candidate.json || true
-          git pull --rebase origin feature/complete-superpowers-v5
+          git pull --rebase origin "$TARGET_BRANCH"
           mkdir -p experiments/acceptance
           python - <<'PY'
           import json, os
@@ -110,7 +111,7 @@ jobs:
           fi
           if ! git diff --cached --quiet; then
             git commit -m 'Record score distribution acceptance evidence'
-            git push origin HEAD:feature/complete-superpowers-v5
+            git push origin HEAD:"$TARGET_BRANCH"
           fi
       - name: Enforce score acceptance gate
         if: steps.score.outcome != 'success'
