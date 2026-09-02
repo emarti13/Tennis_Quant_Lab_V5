@@ -1,0 +1,118 @@
+name: V5 Score Distribution Acceptance
+
+on:
+  push:
+    branches: [main, feature/complete-superpowers-v5]
+    paths:
+      - 'diagnose_v5_score_distribution.py'
+      - 'v5_score_distribution.py'
+      - 'v5_score_walkforward.py'
+      - 'build_v5_context_matchups.py'
+      - 'build_v5_context_warehouse.py'
+      - 'build_v5_venue_registry.py'
+      - 'v5_rolling_stats.py'
+      - 'v5_workload_features.py'
+      - 'v5_player_state.py'
+      - 'v5_matchup_features.py'
+      - 'v5_court_speed.py'
+      - 'v5_travel_features.py'
+      - 'tests/test_v5_score_walkforward.py'
+      - 'tests/test_v5_score_production_promotion.py'
+      - '.github/workflows/v5_score_acceptance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  score-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt pytest
+      - name: Run complete deterministic score acceptance pipeline
+        id: score
+        continue-on-error: true
+        env:
+          V5_SCORE_DIAGNOSTIC_SIMS: '80'
+          V5_SCORE_MAX_VALIDATION_ROWS: '1000'
+          V5_SCORE_MAX_HYBRID_TRAIN_ROWS: '1200'
+        run: |
+          set -o pipefail
+          {
+            echo '=== SCORE CONTRACTS ==='
+            python -m pytest tests/test_v5_score_walkforward.py tests/test_v5_score_production_promotion.py tests/test_v5_context_matchups.py -q
+            echo '=== CONTEXT WAREHOUSE ==='
+            python build_v5_context_warehouse.py
+            echo '=== VENUE REGISTRY ==='
+            python build_v5_venue_registry.py
+            echo '=== SCORE MATCHUP DATASET ==='
+            python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+          from build_v5_context_matchups import assemble_matchup_dataset, enrich_player_history, load_walkforward
+          from diagnose_v5_context_model import load_tournament_registry
+
+          base = Path('.')
+          player_rows = pd.read_parquet(base / 'context_warehouse' / 'player_match_rows.parquet')
+          registry = load_tournament_registry(base)
+          enriched = enrich_player_history(player_rows, tournament_registry=registry)
+          walkforward = load_walkforward(base)
+          matchups, qc = assemble_matchup_dataset(enriched, walkforward, target_years=(2025, 2026))
+          if matchups.empty:
+              raise RuntimeError('No score-validation matchup rows assembled')
+          out = base / 'v5_context_diagnostic'
+          out.mkdir(parents=True, exist_ok=True)
+          matchups.to_parquet(out / 'matched_context_rows.parquet', index=False)
+          print({'matched_rows': len(matchups), 'join_qc': qc})
+          PY
+            echo '=== 2025 FIT / 2026 SCORE VALIDATION ==='
+            python diagnose_v5_score_distribution.py
+          } 2>&1 | tee /tmp/v5-score-acceptance.txt
+      - name: Persist score acceptance evidence
+        if: always()
+        env:
+          SCORE_OUTCOME: ${{ steps.score.outcome }}
+          TARGET_BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          mkdir -p /tmp/score-artifacts
+          cp /tmp/v5-score-acceptance.txt /tmp/score-artifacts/log.txt || true
+          cp v5_score_diagnostic/report.json /tmp/score-artifacts/report.json || true
+          cp v5_score_diagnostic/production_candidate.json /tmp/score-artifacts/candidate.json || true
+          git pull --rebase origin "$TARGET_BRANCH"
+          mkdir -p experiments/acceptance
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = Path('/tmp/score-artifacts/log.txt')
+          text = p.read_text(encoding='utf-8', errors='replace') if p.exists() else ''
+          Path('experiments/acceptance/score_acceptance_status.json').write_text(json.dumps({
+              'status': os.environ['SCORE_OUTCOME'],
+              'expected': 'success',
+              'log_tail': text[-20000:],
+              'context_policy': 'historical as-of context + venue/travel/court-speed/player-state; weather omitted from this score gate unless already reproducibly cached',
+              'validation_sampling': 'deterministic chronological even spacing; up to 1000 untouched 2026 rows per tour',
+              'hybrid_training_sampling': 'deterministic chronological even spacing; up to 1200 2025 rows per tour'
+          }, indent=2))
+          PY
+          git add experiments/acceptance/score_acceptance_status.json
+          if [ "$SCORE_OUTCOME" = "success" ]; then
+            cp /tmp/score-artifacts/report.json experiments/acceptance/score_model_report.json
+            cp /tmp/score-artifacts/candidate.json experiments/acceptance/score_production_candidate.json
+            git add experiments/acceptance/score_model_report.json experiments/acceptance/score_production_candidate.json
+          fi
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record score distribution acceptance evidence'
+            git push origin HEAD:"$TARGET_BRANCH"
+          fi
+      - name: Enforce score acceptance gate
+        if: steps.score.outcome != 'success'
+        run: exit 1

@@ -1,0 +1,5 @@
+{
+  "status": "success",
+  "expected": "success",
+  "pytest_tail": "============================= test session starts ==============================\nplatform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0 -- /opt/hostedtoolcache/Python/3.12.14/x64/bin/python\ncachedir: .pytest_cache\nrootdir: /home/runner/work/Tennis_Quant_Lab_V5/Tennis_Quant_Lab_V5\nplugins: anyio-4.14.2\ncollecting ... collected 3 items\n\ntests/test_streamlit_app_smoke.py::test_streamlit_server_exposes_healthy_endpoint PASSED [ 33%]\ntests/test_streamlit_app_smoke.py::test_app_renders_without_uncaught_exception PASSED [ 66%]\ntests/test_streamlit_app_smoke.py::test_primary_navigation_exposes_both_v5_modes PASSED [100%]\n\n============================== 3 passed in 3.20s ===============================\n"
+}

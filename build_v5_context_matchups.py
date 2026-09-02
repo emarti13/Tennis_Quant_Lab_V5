@@ -27,17 +27,7 @@ def _logit(value: float) -> float:
     return math.log(p / (1.0 - p))
 
 
-def enrich_player_history(
-    player_rows: pd.DataFrame,
-    tournament_registry: pd.DataFrame | None = None,
-) -> pd.DataFrame:
-    """Create strictly pre-match rolling/workload/trajectory/context state.
-
-    Derived court speed is computed only after lagged player baselines exist. A completed
-    target match may contribute a court-speed observation to later dates, but never to its
-    own pre-match state. When a year-aware venue registry is supplied, travel and transition
-    state are attached from each player's previous competition before pricing the target.
-    """
+def enrich_player_history(player_rows: pd.DataFrame, tournament_registry: pd.DataFrame | None = None) -> pd.DataFrame:
     if player_rows is None or player_rows.empty:
         return player_rows.copy() if player_rows is not None else pd.DataFrame()
     enriched = build_rolling_stats(player_rows)
@@ -58,7 +48,6 @@ def _winner_loser_columns(frame: pd.DataFrame) -> tuple[str, str]:
 
 
 def _normalize_calendar_date(value) -> pd.Timestamp:
-    """Return a timezone-naive normalized calendar date for deterministic join keys."""
     if pd.isna(value):
         return pd.NaT
     parsed = pd.Timestamp(value)
@@ -101,7 +90,6 @@ def _shared_context(row: pd.Series) -> dict[str, float]:
             if name in row.index and pd.notna(row.get(name)):
                 return row.get(name)
         return np.nan
-
     return {
         "court_speed": pick("court_speed_blended", "court_speed"),
         "altitude_m": pick("altitude_m", "venue_altitude_m"),
@@ -112,35 +100,20 @@ def _shared_context(row: pd.Series) -> dict[str, float]:
     }
 
 
-def assemble_matchup_dataset(
-    enriched_player_rows: pd.DataFrame,
-    walkforward: pd.DataFrame,
-    *,
-    target_years: Iterable[int] = (2025, 2026),
-) -> tuple[pd.DataFrame, dict[str, int]]:
-    """Join leak-safe contextual states to chronological SR/Elo walk-forward rows.
-
-    Matching is exact on normalized date, tour, historical winner and historical loser.
-    Ambiguous or unmatched records are skipped rather than guessed.
-    """
+def assemble_matchup_dataset(enriched_player_rows: pd.DataFrame, walkforward: pd.DataFrame, *, target_years: Iterable[int] = (2025, 2026)) -> tuple[pd.DataFrame, dict[str, int]]:
     years = tuple(int(y) for y in target_years)
     rows = enriched_player_rows.copy()
     rows["match_date"] = rows["match_date"].map(_normalize_calendar_date)
     target_rows = rows[rows["match_date"].dt.year.isin(years)].copy()
     wf = _prepare_walkforward(walkforward, years)
-
     wf_groups = {key: group for key, group in wf.groupby("_key", sort=False)}
     used_wf_indices: set[int] = set()
     output: list[dict] = []
-    invalid = 0
-    unmatched = 0
-    ambiguous = 0
-    missing_baseline = 0
+    invalid = unmatched = ambiguous = missing_baseline = 0
 
     for match_id, group in target_rows.groupby("match_id", sort=False):
         if len(group) != 2 or set(group["player_role"].astype(str).str.lower()) != {"winner", "loser"}:
-            invalid += 1
-            continue
+            invalid += 1; continue
         winner_row = group[group["player_role"].astype(str).str.lower() == "winner"].iloc[0]
         loser_row = group[group["player_role"].astype(str).str.lower() == "loser"].iloc[0]
         date = _normalize_calendar_date(winner_row["match_date"])
@@ -148,78 +121,50 @@ def assemble_matchup_dataset(
         key = (date, tour, canonical_name(winner_row["player_name"]), canonical_name(loser_row["player_name"]))
         candidates = wf_groups.get(key)
         if candidates is None or candidates.empty:
-            unmatched += 1
-            continue
+            unmatched += 1; continue
         if len(candidates) != 1:
-            ambiguous += 1
-            continue
+            ambiguous += 1; continue
         wf_row = candidates.iloc[0]
         used_wf_indices.add(int(wf_row.name))
-
         try:
-            p_w_serve = float(wf_row["winner_serve_p"])
-            p_l_serve = float(wf_row["loser_serve_p"])
-            p_elo_w = float(wf_row["elo_winner_p"])
+            p_w_serve = float(wf_row["winner_serve_p"]); p_l_serve = float(wf_row["loser_serve_p"]); p_elo_w = float(wf_row["elo_winner_p"])
             baseline_winner = calibrated_match_probability(p_w_serve, p_l_serve, p_elo_w, tour)
         except (KeyError, TypeError, ValueError):
-            missing_baseline += 1
-            continue
+            missing_baseline += 1; continue
         if not all(np.isfinite(v) for v in (p_w_serve, p_l_serve, p_elo_w, baseline_winner)):
-            missing_baseline += 1
-            continue
+            missing_baseline += 1; continue
 
-        state_w = build_player_state(winner_row)
-        state_l = build_player_state(loser_row)
-        state_w.update({"player_name": winner_row["player_name"], "player_role": "winner"})
-        state_l.update({"player_name": loser_row["player_name"], "player_role": "loser"})
-        context = _shared_context(winner_row)
+        state_w = build_player_state(winner_row); state_l = build_player_state(loser_row)
+        state_w.update({"player_name": winner_row["player_name"], "player_role": "winner"}); state_l.update({"player_name": loser_row["player_name"], "player_role": "loser"})
         oriented = orient_matchup_row(
-            state_w,
-            state_l,
-            baseline_winner_probability=baseline_winner,
-            base_features={
-                "x_sr_winner": _logit(p_w_serve) - _logit(p_l_serve),
-                "x_elo_winner": _logit(p_elo_w),
-            },
-            context=context,
+            state_w, state_l, baseline_winner_probability=baseline_winner,
+            base_features={"x_sr_winner": _logit(p_w_serve) - _logit(p_l_serve), "x_elo_winner": _logit(p_elo_w)},
+            context=_shared_context(winner_row),
         )
+        a_is_winner = bool(oriented["target_a_win"])
         oriented.update({
-            "match_id": match_id,
-            "match_date": date,
-            "year": int(date.year),
-            "tour": tour,
-            "surface": winner_row.get("surface"),
-            "level": wf_row.get("level"),
-            "tourney_name": winner_row.get("tourney_name"),
-            "best_of": winner_row.get("best_of"),
+            "match_id": match_id, "match_date": date, "year": int(date.year), "tour": tour,
+            "surface": winner_row.get("surface"), "level": wf_row.get("level"), "tourney_name": winner_row.get("tourney_name"), "best_of": winner_row.get("best_of"),
+            "serve_probability_a": p_w_serve if a_is_winner else p_l_serve,
+            "serve_probability_b": p_l_serve if a_is_winner else p_w_serve,
+            "winner_name": str(winner_row.get("player_name") or ""), "loser_name": str(loser_row.get("player_name") or ""),
         })
         output.append(oriented)
 
-    walkforward_unmatched = int(sum(1 for idx in wf.index if int(idx) not in used_wf_indices))
     result = pd.DataFrame(output)
     qc = {
-        "target_warehouse_matches": int(target_rows["match_id"].nunique()),
-        "walkforward_rows": int(len(wf)),
-        "matched_matches": int(len(result)),
-        "warehouse_unmatched": int(unmatched),
-        "warehouse_invalid": int(invalid),
-        "walkforward_ambiguous": int(ambiguous),
-        "missing_baseline_inputs": int(missing_baseline),
-        "walkforward_unmatched": walkforward_unmatched,
+        "target_warehouse_matches": int(target_rows["match_id"].nunique()), "walkforward_rows": int(len(wf)), "matched_matches": int(len(result)),
+        "warehouse_unmatched": int(unmatched), "warehouse_invalid": int(invalid), "walkforward_ambiguous": int(ambiguous),
+        "missing_baseline_inputs": int(missing_baseline), "walkforward_unmatched": int(sum(1 for idx in wf.index if int(idx) not in used_wf_indices)),
     }
     return result, qc
 
 
 def load_walkforward(base_dir: str | Path = ".") -> pd.DataFrame:
-    base = Path(base_dir)
-    frames = []
+    base = Path(base_dir); frames = []
     for name, tour in (("v5_men_walkforward.csv", "MEN"), ("v5_wta_walkforward.csv", "WTA")):
         path = base / name
-        if not path.exists():
-            continue
-        frame = pd.read_csv(path, low_memory=False)
-        frame["tour"] = tour
-        frames.append(frame)
-    if not frames:
-        raise FileNotFoundError("No V5 walk-forward files found")
+        if not path.exists(): continue
+        frame = pd.read_csv(path, low_memory=False); frame["tour"] = tour; frames.append(frame)
+    if not frames: raise FileNotFoundError("No V5 walk-forward files found")
     return pd.concat(frames, ignore_index=True, sort=False)

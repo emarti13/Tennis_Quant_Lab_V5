@@ -6,10 +6,25 @@ on:
     branches: [main]
     paths:
       - "v5_market_ready/**"
+      - "v5_daily_batch.py"
+      - "v5_full_context_live.py"
+      - "v5_score_distribution.py"
+      - "build_v5_context_warehouse.py"
+      - "v5_context_schema.py"
+      - "v5_rolling_stats.py"
+      - "v5_workload_features.py"
+      - "v5_player_state.py"
+      - "v5_matchup_features.py"
+      - "v5_court_speed.py"
+      - "v5_travel_features.py"
+      - "v5_weather_features.py"
+      - "experiments/acceptance/production_candidate.json"
+      - "experiments/acceptance/score_production_candidate.json"
       - "v5_production_config.json"
       - "v5_production_policy.py"
       - "v5_daily_policy_postprocess.py"
       - "tests/test_v5_daily_policy_postprocess.py"
+      - "tests/test_v5_score_production_promotion.py"
       - ".github/workflows/v5_daily_predictions.yml"
   workflow_run:
     workflows: ["OddsPapi Normalized Daily v2"]
@@ -26,7 +41,7 @@ jobs:
   build-and-freeze:
     if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repository
@@ -46,6 +61,9 @@ jobs:
 
       - name: Run daily batch tests
         run: python -m pytest tests -q
+
+      - name: Rebuild as-of-match context warehouse
+        run: python build_v5_context_warehouse.py
 
       - name: Build ranked board and freeze pre-match predictions
         run: |
@@ -70,6 +88,7 @@ jobs:
             echo "main advanced during prediction build; rerunning against the latest market feed."
             git reset --hard origin/main
             python -m pytest tests -q
+            python build_v5_context_warehouse.py
             python v5_daily_batch.py
             python v5_daily_policy_postprocess.py
           fi
