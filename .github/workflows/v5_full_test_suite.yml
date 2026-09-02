@@ -2,11 +2,16 @@ name: V5 Full Regression Suite
 
 on:
   push:
-    branches: [main]
+    branches: [main, feature/complete-superpowers-v5]
     paths:
       - '**.py'
+      - 'experiments/acceptance/production_candidate.json'
+      - 'experiments/acceptance/score_production_candidate.json'
       - '.github/workflows/v5_full_test_suite.yml'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   test:
@@ -14,9 +19,45 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: pip install -r requirements.txt pytest
       - name: Run complete test suite
-        run: python -m pytest tests -q
+        id: suite
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python -m pytest tests -q 2>&1 | tee /tmp/v5-full-regression.txt
+      - name: Persist branch verification
+        if: always() && github.ref == 'refs/heads/feature/complete-superpowers-v5'
+        env:
+          SUITE_OUTCOME: ${{ steps.suite.outcome }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          cp /tmp/v5-full-regression.txt /tmp/v5-full-regression-copy.txt || true
+          git pull --rebase origin feature/complete-superpowers-v5
+          mkdir -p experiments/acceptance
+          cp /tmp/v5-full-regression-copy.txt /tmp/v5-full-regression.txt || true
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('/tmp/v5-full-regression.txt')
+          text=p.read_text(encoding='utf-8', errors='replace') if p.exists() else ''
+          Path('experiments/acceptance/full_regression_status.json').write_text(json.dumps({
+              'status': os.environ['SUITE_OUTCOME'],
+              'expected': 'success',
+              'pytest_tail': text[-16000:],
+          }, indent=2))
+          PY
+          git add experiments/acceptance/full_regression_status.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record full regression verification'
+            git push origin HEAD:feature/complete-superpowers-v5
+          fi
+      - name: Enforce full regression gate
+        if: steps.suite.outcome != 'success'
+        run: exit 1
