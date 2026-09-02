@@ -3,7 +3,7 @@ name: V5 Model Bias Diagnostics
 on:
   push:
     branches:
-      - diagnostics/v5-bias-audit
+      - main
     paths:
       - "diagnose_v5_selection_bias.py"
       - "diagnose_slam_market_ranges.py"

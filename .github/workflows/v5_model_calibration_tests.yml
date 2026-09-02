@@ -3,7 +3,7 @@ name: V5 Independent Calibration Tests
 on:
   push:
     branches:
-      - feature/v5-independent-calibration
+      - main
     paths:
       - "v5_model_calibration.py"
       - "v5_strength_conditioning.py"

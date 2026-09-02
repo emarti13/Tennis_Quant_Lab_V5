@@ -2,7 +2,7 @@ name: V5 Score Architecture
 
 on:
   push:
-    branches: [feature/v5-full-context-model]
+    branches: [main]
     paths:
       - 'historical_score_calibration.py'
       - 'v5_score_architecture.py'

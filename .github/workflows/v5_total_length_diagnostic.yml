@@ -3,7 +3,7 @@ name: V5 Total Length Diagnostic
 on:
   push:
     branches:
-      - feature/v5-independent-calibration
+      - main
     paths:
       - "diagnose_total_length_calibration.py"
       - ".github/workflows/v5_total_length_diagnostic.yml"

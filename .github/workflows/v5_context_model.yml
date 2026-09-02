@@ -2,7 +2,7 @@ name: V5 Context Model
 
 on:
   push:
-    branches: [feature/v5-full-context-model]
+    branches: [main]
     paths:
       - 'v5_context_model.py'
       - 'tests/test_v5_context_model.py'

@@ -3,7 +3,7 @@ name: V5 Context Warehouse
 on:
   push:
     branches:
-      - feature/v5-full-context-model
+      - main
     paths:
       - 'build_v5_context_warehouse.py'
       - 'v5_context_schema.py'

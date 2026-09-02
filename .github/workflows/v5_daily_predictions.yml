@@ -41,10 +41,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt pytest
 
       - name: Run daily batch tests
-        run: python -m unittest discover -s tests -v
+        run: python -m pytest tests -q
 
       - name: Build ranked board and freeze pre-match predictions
         run: |
@@ -68,7 +68,7 @@ jobs:
           if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
             echo "main advanced during prediction build; rerunning against the latest market feed."
             git reset --hard origin/main
-            python -m unittest discover -s tests -v
+            python -m pytest tests -q
             python v5_daily_batch.py
             python v5_daily_policy_postprocess.py
           fi

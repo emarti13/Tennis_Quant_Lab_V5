@@ -2,7 +2,7 @@ name: V5 Advanced Model
 
 on:
   push:
-    branches: [feature/v5-full-context-model]
+    branches: [main]
     paths:
       - 'v5_advanced_model.py'
       - 'diagnose_v5_advanced_model.py'

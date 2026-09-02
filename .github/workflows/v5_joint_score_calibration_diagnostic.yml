@@ -3,7 +3,7 @@ name: V5 Joint Score Distribution Calibration
 on:
   push:
     branches:
-      - feature/v5-independent-calibration
+      - main
     paths:
       - "diagnose_joint_score_distribution_calibration.py"
       - "historical_score_calibration.py"

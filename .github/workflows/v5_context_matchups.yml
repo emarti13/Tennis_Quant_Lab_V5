@@ -2,7 +2,7 @@ name: V5 Context Matchups
 
 on:
   push:
-    branches: [feature/v5-full-context-model]
+    branches: [main]
     paths:
       - 'build_v5_context_matchups.py'
       - 'tests/test_v5_context_matchups.py'

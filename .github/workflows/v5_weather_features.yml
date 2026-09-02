@@ -2,7 +2,7 @@ name: V5 Weather Features
 
 on:
   push:
-    branches: [feature/v5-full-context-model]
+    branches: [main]
     paths:
       - 'v5_weather_features.py'
       - 'build_v5_weather_cache.py'

@@ -2,7 +2,7 @@ name: V5 Full Regression Suite
 
 on:
   push:
-    branches: [feature/v5-full-context-model]
+    branches: [main]
     paths:
       - '**.py'
       - '.github/workflows/v5_full_test_suite.yml'

@@ -2,7 +2,7 @@ name: V5 Workload Features
 
 on:
   push:
-    branches: [feature/v5-full-context-model]
+    branches: [main]
     paths:
       - 'v5_workload_features.py'
       - 'tests/test_v5_workload_features.py'

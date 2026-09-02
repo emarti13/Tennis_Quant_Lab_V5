@@ -3,7 +3,7 @@ name: Context Warehouse History Smoke
 on:
   push:
     branches:
-      - feature/full-context-stage1-warehouse
+      - main
     paths:
       - 'context_warehouse/**'
       - 'tests/test_context_warehouse.py'

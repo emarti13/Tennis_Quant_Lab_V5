@@ -3,7 +3,7 @@ name: V5 Calibrated Board Diagnostic
 on:
   push:
     branches:
-      - feature/v5-independent-calibration
+      - main
     paths:
       - "diagnose_calibrated_live_board.py"
       - "v5_model_calibration.py"

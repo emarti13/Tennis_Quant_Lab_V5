@@ -3,7 +3,7 @@ name: V5 Margin Calibration Diagnostic
 on:
   push:
     branches:
-      - feature/v5-independent-calibration
+      - main
     paths:
       - "diagnose_margin_calibration.py"
       - "historical_score_calibration.py"

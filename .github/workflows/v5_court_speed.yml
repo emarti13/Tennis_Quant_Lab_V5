@@ -2,7 +2,7 @@ name: V5 Court Speed
 
 on:
   push:
-    branches: [feature/v5-full-context-model]
+    branches: [main]
     paths:
       - 'v5_court_speed.py'
       - 'tests/test_v5_court_speed.py'
