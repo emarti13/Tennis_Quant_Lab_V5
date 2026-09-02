@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+import re
 from pathlib import Path
 from typing import Iterable
 
@@ -56,6 +57,17 @@ def _winner_loser_columns(frame: pd.DataFrame) -> tuple[str, str]:
     return winner, loser
 
 
+def _parse_walkforward_date(value) -> pd.Timestamp:
+    if pd.isna(value):
+        return pd.NaT
+    text = str(value).strip()
+    if re.fullmatch(r"\d{8}(?:\.0+)?", text):
+        text = text.split(".", 1)[0]
+        return pd.to_datetime(text, format="%Y%m%d", errors="coerce").normalize()
+    parsed = pd.to_datetime(value, errors="coerce")
+    return pd.NaT if pd.isna(parsed) else pd.Timestamp(parsed).normalize()
+
+
 def _prepare_walkforward(walkforward: pd.DataFrame, target_years: tuple[int, ...]) -> pd.DataFrame:
     wf = walkforward.copy()
     winner_col, loser_col = _winner_loser_columns(wf)
@@ -63,7 +75,7 @@ def _prepare_walkforward(walkforward: pd.DataFrame, target_years: tuple[int, ...
         raise ValueError("Walk-forward data requires date")
     if "tour" not in wf.columns:
         raise ValueError("Walk-forward data requires tour")
-    wf["_date"] = pd.to_datetime(wf["date"], errors="coerce").dt.normalize()
+    wf["_date"] = wf["date"].map(_parse_walkforward_date)
     wf["_year"] = wf["_date"].dt.year
     wf["_winner_key"] = wf[winner_col].map(canonical_name)
     wf["_loser_key"] = wf[loser_col].map(canonical_name)
