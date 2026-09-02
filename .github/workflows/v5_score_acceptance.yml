@@ -24,6 +24,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: v5-score-acceptance-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   score-acceptance:
     runs-on: ubuntu-latest
