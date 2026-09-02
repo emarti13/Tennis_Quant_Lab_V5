@@ -5,6 +5,9 @@ on:
     branches: [feature/complete-superpowers-v5]
     paths:
       - 'v5_score_distribution.py'
+      - 'v5_score_walkforward.py'
+      - 'diagnose_v5_score_distribution.py'
+      - 'build_v5_context_matchups.py'
       - 'v5_residual_model.py'
       - 'v5_ensemble.py'
       - 'v5_experiments.py'
@@ -14,6 +17,8 @@ on:
       - 'v5_daily_batch.py'
       - 'tests/test_v5_superpowers_completion.py'
       - 'tests/test_v5_live_weather.py'
+      - 'tests/test_v5_score_walkforward.py'
+      - 'tests/test_v5_context_matchups.py'
       - '.github/workflows/v5_superpowers_completion.yml'
   workflow_dispatch:
 
@@ -36,7 +41,7 @@ jobs:
         continue-on-error: true
         run: |
           set -o pipefail
-          python -m pytest tests/test_v5_superpowers_completion.py tests/test_v5_live_weather.py -q --junitxml=superpowers-contract.xml 2>&1 | tee superpowers-contract-output.txt
+          python -m pytest tests/test_v5_superpowers_completion.py tests/test_v5_live_weather.py tests/test_v5_score_walkforward.py tests/test_v5_context_matchups.py -q --junitxml=superpowers-contract.xml 2>&1 | tee superpowers-contract-output.txt
       - name: Record contract state
         env:
           CONTRACT_OUTCOME: ${{ steps.contracts.outcome }}
@@ -55,7 +60,7 @@ jobs:
           (out / 'superpowers_contract_status.json').write_text(json.dumps({
               'status': os.environ['CONTRACT_OUTCOME'],
               'expected': 'success',
-              'pytest_tail': text[-12000:],
+              'pytest_tail': text[-16000:],
           }, indent=2))
           PY
           git add experiments/acceptance/superpowers_contract_status.json
