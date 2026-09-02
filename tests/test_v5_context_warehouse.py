@@ -55,6 +55,15 @@ def test_normalize_results_produces_deterministic_match_id_and_typed_date():
     assert pd.api.types.is_datetime64_any_dtype(first["match_date"])
 
 
+def test_impossible_old_dates_inside_modern_season_files_are_rejected_but_prior_december_is_allowed():
+    current = _sample_results().iloc[0].to_dict()
+    prior_december = {**current, "tourney_id": "2026-000", "match_num": 2, "tourney_date": 20251229}
+    corrupt_old = {**current, "tourney_id": "bad-old", "match_num": 3, "tourney_date": 20080101}
+    out = normalize_results(pd.DataFrame([current, prior_december, corrupt_old]))
+    assert len(out) == 2
+    assert set(out["match_date"].dt.year) == {2025, 2026}
+
+
 def test_player_match_rows_have_exactly_two_rows_and_no_target_outcome_in_feature_namespace():
     matches = normalize_results(_sample_results())
     rows = build_player_match_rows(matches)
