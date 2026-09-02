@@ -25,11 +25,13 @@ on:
       - 'v5_venue_metadata.py'
       - 'v5_tournament_registry.py'
       - 'v5_court_speed.py'
+      - 'v5_daily_batch.py'
       - 'tests/test_v5_context_diagnostic.py'
       - 'tests/test_v5_context_model.py'
       - 'tests/test_v5_context_matchups.py'
       - 'tests/test_v5_advanced_model.py'
       - 'tests/test_v5_score_walkforward.py'
+      - 'tests/test_v5_score_production_promotion.py'
       - 'tests/test_build_v5_weather_cache.py'
       - '.github/workflows/v5_context_diagnostic.yml'
   workflow_dispatch:
@@ -59,7 +61,7 @@ jobs:
           set -o pipefail
           {
             echo '=== MODEL CONTRACTS ==='
-            python -m pytest tests/test_v5_context_diagnostic.py tests/test_v5_context_model.py tests/test_v5_context_matchups.py tests/test_v5_advanced_model.py tests/test_v5_score_walkforward.py tests/test_build_v5_weather_cache.py -v
+            python -m pytest tests/test_v5_context_diagnostic.py tests/test_v5_context_model.py tests/test_v5_context_matchups.py tests/test_v5_advanced_model.py tests/test_v5_score_walkforward.py tests/test_v5_score_production_promotion.py tests/test_build_v5_weather_cache.py -v
             echo '=== CONTEXT WAREHOUSE ==='
             python build_v5_context_warehouse.py
             echo '=== VENUE REGISTRY ==='
