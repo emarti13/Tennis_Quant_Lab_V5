@@ -302,11 +302,8 @@ def render_today_results(
     prepared = prepare_today_board(board)
     summary = today_summary(prepared, market_feed, snapshot)
 
-    st_module.markdown('<div class="v5-eyebrow">Daily slate</div>', unsafe_allow_html=True)
-    st_module.markdown('<div class="v5-title">Today</div>', unsafe_allow_html=True)
-    st_module.markdown(
-        f'<div class="v5-subtitle">{summary["matches_analyzed"]} matches analyzed · refreshed {escape(str(summary["snapshot"]))}</div>',
-        unsafe_allow_html=True,
+    st_module.caption(
+        f'{summary["matches_analyzed"]} matches analyzed · market snapshot {summary["snapshot"]}'
     )
 
     if hasattr(st_module, "columns"):
