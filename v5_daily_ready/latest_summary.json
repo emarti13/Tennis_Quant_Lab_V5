@@ -1,36 +1,164 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-09-02T22:01:51.105088+00:00",
-  "market_snapshot_utc": "2026-09-02T17:15:09.142632+00:00",
+  "built_at_utc": "2026-09-03T14:00:12.898088+00:00",
+  "market_snapshot_utc": "2026-09-03T13:58:21.198980+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 986,
-  "eligible_pre_match_fixtures": 41,
-  "priced_rows": 698,
-  "board_rows": 698,
-  "frozen_ledger_rows": 2735,
-  "new_frozen_rows": 0,
+  "market_rows_input": 562,
+  "eligible_pre_match_fixtures": 35,
+  "priced_rows": 252,
+  "board_rows": 252,
+  "frozen_ledger_rows": 2859,
+  "new_frozen_rows": 124,
   "signal_counts": {
-    "PASS": 339,
-    "BET": 254,
-    "REVIEW": 85,
-    "LEAN": 20
+    "PASS": 142,
+    "BET": 92,
+    "REVIEW": 12,
+    "LEAN": 6
   },
   "selected_candidate_counts": {
-    "accepted_baseline": 698
+    "accepted_baseline": 252
   },
   "selected_score_candidate_counts": {
-    "conditioned_mechanistic": 698
+    "conditioned_mechanistic": 252
   },
-  "context_fallback_rows": 698,
+  "context_fallback_rows": 252,
   "errors": [
     {
       "fixture_id": "ALL",
       "stage": "build_live_context",
-      "error": "Invalid value '<ArrowStringArray>\n['unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue']\nLength: 82, dtype: str' for dtype 'float64'"
+      "error": "Invalid value '<ArrowStringArray>\n['unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue', 'unresolved_live_venue', 'unresolved_live_venue',\n 'unresolved_live_venue']\nLength: 70, dtype: str' for dtype 'float64'"
+    },
+    {
+      "fixture_id": "id1200259573992476",
+      "player1": "Keys, Madison",
+      "player2": "Bondar, Anna",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992482",
+      "player1": "Timofeeva, Maria",
+      "player2": "Mertens, Elise",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992488",
+      "player1": "Swiatek, Iga",
+      "player2": "Podoroska, Nadia",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992524",
+      "player1": "Potapova, Anastasia",
+      "player2": "Jeanjean, Leolia",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992480",
+      "player1": "Osaka, Naomi",
+      "player2": "Siniakova, Katerina",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992490",
+      "player1": "Dart, Harriet",
+      "player2": "Bouzkova, Marie",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992526",
+      "player1": "Tagger, Lilli",
+      "player2": "Anisimova, Amanda",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992478",
+      "player1": "Zheng, Qinwen",
+      "player2": "Putintseva, Yulia",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992530",
+      "player1": "Oliynykova, Oleksandra",
+      "player2": "Eala, Alexandra",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992484",
+      "player1": "Bucsa, Cristina",
+      "player2": "Sakatsume, Himeno",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992536",
+      "player1": "Andreeva, Mirra",
+      "player2": "Lys, Eva",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992500",
+      "player1": "Sakkari, Maria",
+      "player2": "Starodubtseva, Yuliia",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992538",
+      "player1": "Bartunkova, Nikola",
+      "player2": "Maria, Tatjana",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992528",
+      "player1": "Jovic, Iva",
+      "player2": "Jones, Francesca",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992486",
+      "player1": "Badosa, Paula",
+      "player2": "Gauff, Coco",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
+    },
+    {
+      "fixture_id": "id1200259573992502",
+      "player1": "Bouzas Maneiro, Jessica",
+      "player2": "Rybakina, Elena",
+      "tournament": "US Open Women Singles",
+      "stage": "price_fixture",
+      "error": "validated score candidate gaussian_contextual requires live context features"
     }
   ],
   "model_version": "v5-advanced-nested-chronological-1",
-  "score_model_version": "v5-score-gated-baseline-1",
+  "score_model_version": "v5-score-walkforward-3",
   "probability_source": "chronologically validated independent full-context candidate; sportsbook inputs joined only after probability freeze",
   "score_model": "chronologically validated dedicated score-distribution candidate driven only by frozen tennis probability/context",
   "market_prices_used_in_model": false,
