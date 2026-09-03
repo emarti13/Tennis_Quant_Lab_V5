@@ -16,8 +16,11 @@ on:
 permissions:
   contents: write
 
+# The live feed must never wait behind historical backfill work. Normal
+# schedules are separated, and a rare overlapping historical commit can retry
+# on its next window if the permanent registry changes underneath it.
 concurrency:
-  group: oddspapi-fixture-registry-writer
+  group: oddspapi-live-market-writer
   cancel-in-progress: false
 
 jobs:
