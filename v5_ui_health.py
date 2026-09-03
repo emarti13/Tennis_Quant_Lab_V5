@@ -103,3 +103,42 @@ def load_model_health(base_dir: str | Path = ".") -> dict[str, Any]:
             "score_validation": str(acceptance / "score_acceptance_status.json"),
         },
     }
+
+
+def _label(value: Any) -> str:
+    text = str(value or "unknown")
+    return text.replace("_", " ").title()
+
+
+def render_model_health_page(st_module, health: dict[str, Any] | None) -> None:
+    health = health or {}
+    st_module.markdown("## Model Health")
+    st_module.caption("Production selections and verification states are read directly from persisted acceptance artifacts.")
+
+    overall = str(health.get("overall") or "unknown").lower()
+    if overall == "degraded":
+        st_module.warning("One or more production verification checks are degraded.")
+    elif overall == "unknown":
+        st_module.info("Model health is unknown because required verification evidence is incomplete.")
+
+    winner = health.get("winner_models") or {}
+    score = health.get("score_models") or {}
+
+    st_module.markdown("### Production candidates")
+    cols = st_module.columns(4)
+    cols[0].metric("MEN winner", str(winner.get("MEN", _UNAVAILABLE)))
+    cols[1].metric("WTA winner", str(winner.get("WTA", _UNAVAILABLE)))
+    cols[2].metric("MEN score", str(score.get("MEN", _UNAVAILABLE)))
+    cols[3].metric("WTA score", str(score.get("WTA", _UNAVAILABLE)))
+
+    st_module.markdown("### Verification")
+    verify = st_module.columns(4)
+    verify[0].metric("Overall", _label(overall))
+    verify[1].metric("Full regression", _label(health.get("full_regression")))
+    verify[2].metric("Streamlit smoke", _label(health.get("streamlit_smoke")))
+    verify[3].metric("Score validation", _label(health.get("score_validation")))
+
+    artifacts = health.get("artifacts") or {}
+    if artifacts:
+        with st_module.expander("Evidence paths", expanded=False):
+            st_module.json(artifacts)
