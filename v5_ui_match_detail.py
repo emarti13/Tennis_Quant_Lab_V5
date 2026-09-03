@@ -4,6 +4,8 @@ from typing import Any
 
 import pandas as pd
 
+from v5_ui_theme import format_american_odds, format_edge, format_probability
+
 
 _UNAVAILABLE = "Unavailable"
 
@@ -111,3 +113,92 @@ def match_detail_sections(row: pd.Series, all_prices: pd.DataFrame | None) -> di
         "model_detail": model_detail,
         "raw": row.copy(),
     }
+
+
+def _display_value(value: Any, digits: int = 2) -> str:
+    if value in (None, _UNAVAILABLE):
+        return _UNAVAILABLE
+    try:
+        if pd.isna(value):
+            return _UNAVAILABLE
+    except (TypeError, ValueError):
+        pass
+    if isinstance(value, float):
+        return f"{value:.{digits}f}"
+    return str(value)
+
+
+def render_match_detail(st_module, row: pd.Series | None, all_prices: pd.DataFrame | None) -> dict[str, Any] | None:
+    if row is None or len(row) == 0:
+        st_module.info("Select a match from Today to open its full analysis.")
+        return None
+
+    sections = match_detail_sections(row, all_prices)
+    overview = sections["overview"]
+
+    st_module.markdown('<div class="v5-eyebrow">Match analysis</div>', unsafe_allow_html=True)
+    st_module.markdown(
+        f'<div class="v5-title">{overview["player_1"]} vs {overview["player_2"]}</div>',
+        unsafe_allow_html=True,
+    )
+    st_module.markdown(
+        f'<div class="v5-subtitle">{overview["primary_market"]} · {overview["signal"]}</div>',
+        unsafe_allow_html=True,
+    )
+
+    columns = st_module.columns(4)
+    columns[0].metric("P1 win", format_probability(overview["p1_probability"]))
+    columns[1].metric("P1 fair", format_american_odds(overview["p1_fair"]))
+    columns[2].metric("Expected margin", _display_value(overview["expected_margin"], 1))
+    columns[3].metric("Expected total", _display_value(overview["expected_total"], 1))
+
+    st_module.markdown('<div class="v5-section-title">Overview</div>', unsafe_allow_html=True)
+    overview_frame = pd.DataFrame(
+        [
+            {
+                "Signal": overview["signal"],
+                "Primary market": overview["primary_market"],
+                "Market price": format_american_odds(overview["primary_market_odds"]),
+                "Edge": format_edge(overview["primary_edge"]),
+                "Agreement": _display_value(overview["agreement"]),
+                "Model gap": _display_value(overview["model_gap"]),
+            }
+        ]
+    )
+    st_module.dataframe(overview_frame, use_container_width=True, hide_index=True)
+
+    st_module.markdown('<div class="v5-section-title">Matchup context</div>', unsafe_allow_html=True)
+    context = sections["context"]
+    context_frame = pd.DataFrame(
+        [
+            {"Dimension": "Serve / return", "Value": _display_value(context["serve_return"])},
+            {"Dimension": "Rest / workload", "Value": _display_value(context["rest_workload"])},
+            {"Dimension": "Travel", "Value": _display_value(context["travel"])},
+            {"Dimension": "Court", "Value": _display_value(context["court"])},
+            {"Dimension": "Player state", "Value": _display_value(context["player_state"])},
+        ]
+    )
+    st_module.dataframe(context_frame, use_container_width=True, hide_index=True)
+
+    st_module.markdown('<div class="v5-section-title">Market board</div>', unsafe_allow_html=True)
+    if sections["market_board"].empty:
+        st_module.info("No all-book market rows are available for this fixture in the current snapshot.")
+    else:
+        st_module.dataframe(sections["market_board"], use_container_width=True, hide_index=True)
+
+    st_module.markdown('<div class="v5-section-title">Model detail</div>', unsafe_allow_html=True)
+    model = sections["model_detail"]
+    model_frame = pd.DataFrame(
+        [
+            {"Item": "Winner model", "Value": _display_value(model["winner_model"])},
+            {"Item": "Score model", "Value": _display_value(model["score_model"])},
+            {"Item": "Agreement", "Value": _display_value(model["agreement"])},
+            {"Item": "Model gap", "Value": _display_value(model["model_gap"])},
+        ]
+    )
+    st_module.dataframe(model_frame, use_container_width=True, hide_index=True)
+
+    with st_module.expander("Raw / audit data", expanded=False):
+        st_module.dataframe(pd.DataFrame([sections["raw"].to_dict()]), use_container_width=True, hide_index=True)
+
+    return sections
