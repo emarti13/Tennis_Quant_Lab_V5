@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import pandas as pd
 
 
@@ -34,3 +36,9 @@ def test_market_snapshot_is_explicit_when_missing():
     assert market_snapshot(pd.DataFrame()) == "Unknown"
     feed = pd.DataFrame({"snapshot_utc": [None, "2026-09-03T12:00:00Z"]})
     assert market_snapshot(feed) == "2026-09-03T12:00:00Z"
+
+
+def test_streamlit_entrypoint_delegates_to_today_ui_host():
+    source = Path("tennis_quant_app_v5.py").read_text(encoding="utf-8")
+    assert "from v5_ui_host import run_v5_ui_app" in source
+    assert "run_v5_ui_app(st, BASE, globals())" in source
