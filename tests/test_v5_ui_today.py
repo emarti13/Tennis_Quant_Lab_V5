@@ -63,6 +63,56 @@ def test_prepare_today_board_preserves_source_values_and_ranks_signal_first():
     assert out.loc[out["Fixture ID"] == "a", "Expected Total"].iloc[0] == 22.4
 
 
+def test_prepare_today_board_preserves_all_model_and_market_decision_outputs_exactly():
+    from v5_ui_today import prepare_today_board
+
+    protected = {
+        "P1 V5 %": 0.643219,
+        "P2 V5 %": 0.356781,
+        "P1 Fair": -180,
+        "P2 Fair": 180,
+        "P1 ML EV": 0.0711,
+        "P2 ML EV": -0.0522,
+        "P1 ML Signal": "BET",
+        "P2 ML Signal": "PASS",
+        "P1 Spread EV": 0.0444,
+        "P2 Spread EV": -0.0333,
+        "P1 Spread Signal": "LEAN",
+        "P2 Spread Signal": "PASS",
+        "Over EV": 0.0222,
+        "Under EV": -0.0111,
+        "Over Signal": "LEAN",
+        "Under Signal": "PASS",
+        "Expected Margin": 3.257,
+        "Expected Total": 22.734,
+    }
+    source = pd.DataFrame([
+        {
+            "Fixture ID": "fx-invariance",
+            "Player 1": "A",
+            "Player 2": "B",
+            "P1 ML": -120,
+            "P2 ML": 110,
+            "P1 Spread": -2.5,
+            "P2 Spread": 2.5,
+            "P1 Spread Odds": -105,
+            "P2 Spread Odds": -115,
+            "Total": 22.5,
+            "Over Odds": -108,
+            "Under Odds": -112,
+            **protected,
+        }
+    ])
+    original = source.copy(deep=True)
+
+    out = prepare_today_board(source)
+
+    pd.testing.assert_frame_equal(source, original)
+    row = out.iloc[0]
+    for column, expected in protected.items():
+        assert row[column] == expected, column
+
+
 def test_primary_market_uses_best_existing_signal_then_existing_ev():
     from v5_ui_today import primary_market_for_row
 
