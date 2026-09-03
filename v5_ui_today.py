@@ -1,9 +1,17 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from html import escape
 from typing import Any
 
 import pandas as pd
+
+from v5_ui_theme import (
+    format_american_odds,
+    format_edge,
+    format_probability,
+    signal_class,
+)
 
 
 _SIGNAL_PRIORITY = {
@@ -36,7 +44,15 @@ _MARKET_CANDIDATES = (
 
 
 def _missing(value: Any) -> bool:
-    return pd.isna(value) or str(value).strip() == ""
+    if value is None:
+        return True
+    try:
+        missing = pd.isna(value)
+        if isinstance(missing, bool) and missing:
+            return True
+    except (TypeError, ValueError):
+        pass
+    return str(value).strip() == ""
 
 
 def _float_or_none(value: Any) -> float | None:
@@ -119,6 +135,9 @@ def prepare_today_board(board: pd.DataFrame) -> pd.DataFrame:
     out["Primary Market Family"] = [item["family"] for item in primary]
     out["Primary Edge"] = [item["edge"] for item in primary]
     out["Primary Market Odds"] = [item["market_odds"] for item in primary]
+    out["Primary Signal Col"] = [item["signal_col"] for item in primary]
+    out["Primary EV Col"] = [item["ev_col"] for item in primary]
+    out["Primary Odds Col"] = [item["odds_col"] for item in primary]
     out["_signal_rank"] = out["Best Signal"].map(lambda value: _SIGNAL_PRIORITY.get(str(value), 9))
     out["_edge_rank"] = pd.to_numeric(out["Primary Edge"], errors="coerce").fillna(float("-inf"))
 
@@ -167,3 +186,143 @@ def why_it_stands_out(row: pd.Series) -> str:
 
     text = ", ".join(reasons[:3])
     return text[0].upper() + text[1:] + "."
+
+
+def today_summary(
+    board: pd.DataFrame,
+    market_feed: pd.DataFrame | None,
+    snapshot: str | None,
+) -> dict[str, Any]:
+    prepared = board.copy() if board is not None else pd.DataFrame()
+    if not prepared.empty and ("Best Signal" not in prepared.columns or "Primary Edge" not in prepared.columns):
+        prepared = prepare_today_board(prepared)
+
+    edges = pd.to_numeric(prepared.get("Primary Edge", pd.Series(dtype=float)), errors="coerce")
+    best_edge = None if edges.dropna().empty else float(edges.max())
+    signals = prepared.get("Best Signal", pd.Series(dtype=str)).astype(str).str.upper()
+    qualified = int(signals.isin(["BET", "LEAN"]).sum())
+
+    feed = market_feed if market_feed is not None else pd.DataFrame()
+    markets_live = 0
+    for col in ("bookmaker", "book", "sportsbook"):
+        if col in feed.columns:
+            markets_live = int(feed[col].dropna().astype(str).replace("", pd.NA).dropna().nunique())
+            break
+
+    return {
+        "best_edge": best_edge,
+        "qualified_plays": qualified,
+        "matches_analyzed": int(len(prepared)),
+        "markets_live": markets_live,
+        "snapshot": snapshot or "Unknown",
+    }
+
+
+def _format_start(value: Any) -> str:
+    if _missing(value):
+        return "Time TBD"
+    parsed = pd.to_datetime(value, errors="coerce", utc=True)
+    if pd.isna(parsed):
+        return str(value)
+    return parsed.strftime("%b %-d · %-I:%M %p UTC")
+
+
+def _model_probability_and_fair(row: pd.Series) -> tuple[Any, Any]:
+    source = str(row.get("Primary Signal Col") or "")
+    primary = str(row.get("Primary Market") or "")
+    p2 = str(row.get("Player 2") or "")
+    use_p2 = source.startswith("P2 ") or (p2 and primary.startswith(p2))
+    if use_p2:
+        return row.get("P2 V5 %"), row.get("P2 Fair")
+    return row.get("P1 V5 %"), row.get("P1 Fair")
+
+
+def match_card_html(row: pd.Series) -> str:
+    p1 = escape(str(row.get("Player 1") or "Player 1"))
+    p2 = escape(str(row.get("Player 2") or "Player 2"))
+    tournament = escape(str(row.get("Tournament") or "Tournament TBD"))
+    tour_raw = str(row.get("Tour") or "").upper()
+    tour = "Men" if tour_raw == "MEN" else ("WTA" if tour_raw == "WTA" else escape(tour_raw or "Tour TBD"))
+    best_of = _float_or_none(row.get("Best Of"))
+    bo = f"Bo{int(best_of)}" if best_of is not None else "Format TBD"
+    start = escape(_format_start(row.get("Start")))
+    signal = str(row.get("Best Signal") or "NO PRICE").upper()
+    primary_market = escape(str(row.get("Primary Market") or "No priced market"))
+    edge = row.get("Primary Edge")
+    market_odds = row.get("Primary Market Odds")
+    model_probability, fair_odds = _model_probability_and_fair(row)
+    explanation = escape(why_it_stands_out(row))
+
+    return f"""
+    <div class="v5-card">
+      <div class="v5-match-name">{p1} <span style="color:#86868b;font-weight:500;">vs</span> {p2}</div>
+      <div class="v5-meta">{tournament} · {start} · {tour} · {bo}</div>
+      <div class="v5-primary-market">{primary_market}<span class="v5-signal {signal_class(signal)}">{escape(signal)}</span></div>
+      <div class="v5-metric-line">Model <strong>{format_probability(model_probability)}</strong> · Fair <strong>{format_american_odds(fair_odds)}</strong></div>
+      <div class="v5-metric-line">Best market <strong>{format_american_odds(market_odds)}</strong> · Edge <strong>{format_edge(edge)}</strong></div>
+      <div class="v5-why"><strong>Why it stands out:</strong> {explanation}</div>
+    </div>
+    """.strip()
+
+
+def _summary_card_html(label: str, value: str, detail: str = "") -> str:
+    detail_html = f'<div class="v5-meta">{escape(detail)}</div>' if detail else ""
+    return (
+        '<div class="v5-summary-card">'
+        f'<div class="v5-summary-label">{escape(label)}</div>'
+        f'<div class="v5-summary-value">{escape(value)}</div>'
+        f"{detail_html}</div>"
+    )
+
+
+def render_today_results(
+    st_module,
+    board: pd.DataFrame | None,
+    market_feed: pd.DataFrame | None,
+    snapshot: str | None,
+) -> pd.DataFrame:
+    if board is None or board.empty:
+        st_module.info("No modeled matches are available yet. Run the current slate to populate Today.")
+        return pd.DataFrame()
+
+    prepared = prepare_today_board(board)
+    summary = today_summary(prepared, market_feed, snapshot)
+
+    st_module.markdown('<div class="v5-eyebrow">Daily slate</div>', unsafe_allow_html=True)
+    st_module.markdown('<div class="v5-title">Today</div>', unsafe_allow_html=True)
+    st_module.markdown(
+        f'<div class="v5-subtitle">{summary["matches_analyzed"]} matches analyzed · refreshed {escape(str(summary["snapshot"]))}</div>',
+        unsafe_allow_html=True,
+    )
+
+    if hasattr(st_module, "columns"):
+        cols = st_module.columns(4)
+        cards = [
+            ("Best Edge", format_edge(summary["best_edge"]), "strongest current qualified edge"),
+            ("Qualified Plays", str(summary["qualified_plays"]), "BET + LEAN"),
+            ("Model Health", "Live", "production outputs loaded"),
+            ("Markets Live", str(summary["markets_live"]), "books in current feed"),
+        ]
+        for col, (label, value, detail) in zip(cols, cards):
+            col.markdown(_summary_card_html(label, value, detail), unsafe_allow_html=True)
+
+    actionable = prepared[prepared["Best Signal"].isin(["BET", "LEAN", "REVIEW"])].copy()
+    other = prepared[~prepared.index.isin(actionable.index)].copy()
+
+    if actionable.empty:
+        st_module.info("No qualified plays on the current slate. The full modeled board remains available below.")
+    else:
+        st_module.markdown('<div class="v5-section-title">Top opportunities</div>', unsafe_allow_html=True)
+        for _, row in actionable.iterrows():
+            st_module.markdown(match_card_html(row), unsafe_allow_html=True)
+
+    if not other.empty:
+        if hasattr(st_module, "expander"):
+            with st_module.expander(f"Other matches ({len(other)})", expanded=False):
+                for _, row in other.iterrows():
+                    st_module.markdown(match_card_html(row), unsafe_allow_html=True)
+        else:
+            for _, row in other.iterrows():
+                st_module.markdown(match_card_html(row), unsafe_allow_html=True)
+
+    return prepared
