@@ -1,29 +1,25 @@
 import numpy as np
 import pandas as pd
 
-from v5_travel_features import build_travel_features
+from v5_weather_features import attach_live_weather
 
 
-def test_travel_features_replace_numeric_placeholder_columns_with_text_metadata():
-    """Live targets may append to warehouse columns inferred as float when history is all-null."""
+def test_live_weather_replaces_numeric_placeholder_metadata_columns_with_text():
+    """Parquet history can infer all-null weather metadata as float before live rows are appended."""
     rows = pd.DataFrame(
         {
-            "player_name": ["Player A", "Player B"],
-            "match_date": ["2026-09-03", "2026-09-03"],
-            "tour": ["MEN", "MEN"],
-            "tourney_id": ["live-a", "live-a"],
-            "tourney_name": ["Unknown Live Event", "Unknown Live Event"],
-            "surface": ["Hard", "Hard"],
-            # These reproduce the parquet/concat state seen in the live pipeline:
-            # metadata columns exist but are numeric because historical values were null.
-            "venue_source_quality": pd.Series([np.nan, np.nan], dtype="float64"),
-            "venue_resolution_method": pd.Series([np.nan, np.nan], dtype="float64"),
-            "travel_context_quality": pd.Series([np.nan, np.nan], dtype="float64"),
+            "match_id": ["live_fixture", "live_fixture"],
+            "result_file": ["LIVE_TARGET", "LIVE_TARGET"],
+            "match_date": [pd.Timestamp("2026-09-03 16:40:00"), pd.Timestamp("2026-09-03 16:40:00")],
+            "venue_latitude": [np.nan, np.nan],
+            "venue_longitude": [np.nan, np.nan],
+            "venue_timezone": [np.nan, np.nan],
+            "weather_source_quality": pd.Series([np.nan, np.nan], dtype="float64"),
+            "weather_forecast_hour": pd.Series([np.nan, np.nan], dtype="float64"),
         }
     )
 
-    out = build_travel_features(rows, pd.DataFrame())
+    out = attach_live_weather(rows, client=object())
 
-    assert out["venue_source_quality"].tolist() == ["unresolved", "unresolved"]
-    assert out["venue_resolution_method"].tolist() == ["unresolved", "unresolved"]
-    assert out["travel_context_quality"].tolist() == ["no_prior", "no_prior"]
+    assert out["weather_source_quality"].tolist() == ["unresolved_live_venue", "unresolved_live_venue"]
+    assert out["weather_forecast_hour"].tolist() == ["", ""]
