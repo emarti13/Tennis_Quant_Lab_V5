@@ -154,6 +154,12 @@ def _run_daily_board(st_module, namespace: Mapping[str, Any], base_dir: Path, ed
             result["Start"] = row.get("Start")
             if "Best Of" in row.index and "Best Of" not in result:
                 result["Best Of"] = row.get("Best Of")
+            for market_field in (
+                "P1 ML", "P2 ML", "P1 Spread", "P1 Spread Odds",
+                "P2 Spread", "P2 Spread Odds", "Total", "Over Odds", "Under Odds",
+            ):
+                if market_field in row.index:
+                    result[market_field] = row.get(market_field)
             results.append(result)
         except Exception as exc:
             results.append({
