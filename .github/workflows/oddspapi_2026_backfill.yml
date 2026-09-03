@@ -7,7 +7,11 @@ on:
     paths:
       - ".github/workflows/oddspapi_2026_backfill.yml"
   schedule:
-    - cron: "7 * * * *"
+    # Historical work is intentionally kept away from the live-market pull
+    # windows (00:15, 12:15, 16:15, 20:15 UTC) because both workflows update
+    # the permanent fixture registry. Eight backfill windows/day preserves
+    # progress while guaranteeing the live feed gets priority.
+    - cron: "45 1,3,5,7,9,13,17,21 * * *"
 
 permissions:
   contents: write
@@ -83,3 +87,13 @@ jobs:
             git pull --rebase origin main
             git push origin HEAD:main
           fi
+
+      - name: Upload historical backfill checkpoint
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: oddspapi-2026-backfill
+          path: |
+            oddspapi_history/
+            oddspapi_registry/
+          if-no-files-found: warn
