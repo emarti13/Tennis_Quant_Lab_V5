@@ -78,9 +78,14 @@ def test_app_renders_without_uncaught_exception(rendered_app):
     ]
 
 
-def test_primary_navigation_exposes_both_v5_modes(rendered_app):
+def test_primary_navigation_is_today_first_and_preserves_expert_workflow(rendered_app):
     assert len(rendered_app.sidebar.radio) == 1
     assert list(rendered_app.sidebar.radio[0].options) == [
-        "Daily Board",
+        "Today",
+        "Match Detail",
+        "All Markets",
+        "Performance",
+        "Model Health",
         "Matchup Lab",
     ]
+    assert rendered_app.sidebar.radio[0].value == "Today"

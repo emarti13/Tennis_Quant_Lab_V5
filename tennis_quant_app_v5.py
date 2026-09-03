@@ -15,6 +15,8 @@ from v5_live_market import (
     canonical_name, load_all_book_prices, find_all_match_prices,
 )
 
+from v5_ui_host import run_v5_ui_app
+
 BASE = Path(__file__).resolve().parent
 
 
@@ -1909,17 +1911,7 @@ def daily_board():
 
 def app():
     st.set_page_config(page_title="Tennis Quant Lab V5", layout="wide", page_icon="🎾")
-    mode = st.sidebar.radio(
-        "V5 Mode",
-        ["Daily Board", "Matchup Lab"],
-        index=0,
-        help="Daily Board automatically models the OddsPapi market slate. Matchup Lab keeps the detailed one-on-one feature."
-    )
-
-    if mode == "Daily Board":
-        daily_board()
-    else:
-        matchup_lab()
+    run_v5_ui_app(st, BASE, globals())
 
 
 if __name__ == "__main__":
