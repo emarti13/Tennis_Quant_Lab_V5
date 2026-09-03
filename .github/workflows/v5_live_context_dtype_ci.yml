@@ -1,0 +1,18 @@
+name: V5 Live Context Dtype CI
+
+on:
+  push:
+    branches: [fix/live-context-dtype]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest tests/test_v5_live_context_dtype.py -q
