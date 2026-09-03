@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from html import escape
-from typing import Any
+from typing import Any, Callable
 
 import pandas as pd
 
@@ -224,7 +224,10 @@ def _format_start(value: Any) -> str:
     parsed = pd.to_datetime(value, errors="coerce", utc=True)
     if pd.isna(parsed):
         return str(value)
-    return parsed.strftime("%b %-d · %-I:%M %p UTC")
+    try:
+        return parsed.strftime("%b %-d · %-I:%M %p UTC")
+    except ValueError:
+        return parsed.strftime("%b %d · %I:%M %p UTC").replace(" 0", " ")
 
 
 def _model_probability_and_fair(row: pd.Series) -> tuple[Any, Any]:
@@ -275,11 +278,22 @@ def _summary_card_html(label: str, value: str, detail: str = "") -> str:
     )
 
 
+def _render_card_action(st_module, row: pd.Series, on_select: Callable[[Any], None] | None) -> None:
+    if on_select is None or not hasattr(st_module, "button"):
+        return
+    fixture_id = row.get("Fixture ID")
+    if _missing(fixture_id):
+        fixture_id = f"{row.get('Player 1', '')}-{row.get('Player 2', '')}-{row.name}"
+    if st_module.button("View analysis", key=f"v5_view_{fixture_id}", use_container_width=True):
+        on_select(fixture_id)
+
+
 def render_today_results(
     st_module,
     board: pd.DataFrame | None,
     market_feed: pd.DataFrame | None,
     snapshot: str | None,
+    on_select: Callable[[Any], None] | None = None,
 ) -> pd.DataFrame:
     if board is None or board.empty:
         st_module.info("No modeled matches are available yet. Run the current slate to populate Today.")
@@ -315,12 +329,14 @@ def render_today_results(
         st_module.markdown('<div class="v5-section-title">Top opportunities</div>', unsafe_allow_html=True)
         for _, row in actionable.iterrows():
             st_module.markdown(match_card_html(row), unsafe_allow_html=True)
+            _render_card_action(st_module, row, on_select)
 
     if not other.empty:
         if hasattr(st_module, "expander"):
             with st_module.expander(f"Other matches ({len(other)})", expanded=False):
                 for _, row in other.iterrows():
                     st_module.markdown(match_card_html(row), unsafe_allow_html=True)
+                    _render_card_action(st_module, row, on_select)
         else:
             for _, row in other.iterrows():
                 st_module.markdown(match_card_html(row), unsafe_allow_html=True)
