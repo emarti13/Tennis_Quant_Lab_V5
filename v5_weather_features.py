@@ -259,9 +259,14 @@ def _apply_weather_values(df: pd.DataFrame, mask: pd.Series, values_by_match: di
         "weather_source_quality": "source_quality",
         "weather_forecast_hour": "forecast_hour",
     }
+    text_targets = {"weather_source_quality", "weather_forecast_hour"}
     for target, source in mapping.items():
         if target not in df.columns:
-            df[target] = np.nan if target not in {"weather_source_quality", "weather_forecast_hour"} else ""
+            df[target] = "" if target in text_targets else np.nan
+        elif target in text_targets and not (pd.api.types.is_object_dtype(df[target].dtype) or pd.api.types.is_string_dtype(df[target].dtype)):
+            # Historical all-null metadata can be read from parquet as float64.
+            # Cast only text metadata before assigning live source labels under Pandas 3.
+            df[target] = df[target].astype("object")
         df.loc[mask, target] = df.loc[mask, "match_id"].map(lambda match_id: values_by_match.get(match_id, {}).get(source, np.nan))
     return df
 
