@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+import pandas as pd
+
 
 PERFORMANCE_PATH = Path("v5_daily_ready") / "settled_performance_audit.json"
 
@@ -47,3 +49,75 @@ def headline_metrics(report: dict[str, Any] | None) -> dict[str, Any]:
         "mean_markets_per_fixture": fixtures.get("mean_markets_per_fixture"),
         "max_correlated_markets": int(fixtures.get("max_markets_on_one_fixture") or 0),
     }
+
+
+def _percent(value: Any) -> str:
+    try:
+        if value is None or pd.isna(value):
+            return "—"
+        return f"{float(value):.1%}"
+    except (TypeError, ValueError):
+        return "—"
+
+
+def _number(value: Any, digits: int = 2) -> str:
+    try:
+        if value is None or pd.isna(value):
+            return "—"
+        return f"{float(value):.{digits}f}"
+    except (TypeError, ValueError):
+        return "—"
+
+
+def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[str, Any] | None:
+    report = report or {}
+    status = str(report.get("status") or "missing").lower()
+    if status != "ok":
+        st_module.info(
+            "Settled performance evidence is not available yet. This page will populate after the settlement audit produces a current report."
+        )
+        return None
+
+    headline = headline_metrics(report)
+    st_module.markdown('<div class="v5-eyebrow">Validated results</div>', unsafe_allow_html=True)
+    st_module.markdown('<div class="v5-title">Performance</div>', unsafe_allow_html=True)
+    st_module.markdown(
+        '<div class="v5-subtitle">Market-level results and independent fixture evidence are reported separately.</div>',
+        unsafe_allow_html=True,
+    )
+
+    columns = st_module.columns(4)
+    columns[0].metric("Market record", headline["market_record"])
+    columns[1].metric("Fixture evidence", headline["fixture_record"])
+    columns[2].metric("Market ROI", _percent(headline["market_roi"]))
+    columns[3].metric("Max correlated markets", str(headline["max_correlated_markets"]))
+
+    st_module.caption(
+        "Multiple correlated markets from the same match remain legitimate market observations, but they are not treated as independent evidence of model quality."
+    )
+
+    calibration = report.get("moneyline_calibration") or {}
+    if calibration:
+        st_module.markdown('<div class="v5-section-title">Moneyline calibration</div>', unsafe_allow_html=True)
+        cal_cols = st_module.columns(3)
+        cal_cols[0].metric("Settled ML", str(int(calibration.get("n") or 0)))
+        cal_cols[1].metric("Brier", _number(calibration.get("brier"), 3))
+        cal_cols[2].metric("Log loss", _number(calibration.get("log_loss"), 3))
+
+    breakdowns = [
+        ("By market", "by_market_group"),
+        ("By signal", "by_signal"),
+        ("By tour", "by_tour"),
+        ("By format", "by_best_of"),
+    ]
+    for label, key in breakdowns:
+        payload = report.get(key)
+        if payload:
+            st_module.markdown(f'<div class="v5-section-title">{label}</div>', unsafe_allow_html=True)
+            frame = pd.DataFrame(payload) if isinstance(payload, list) else pd.DataFrame.from_dict(payload, orient="index")
+            st_module.dataframe(frame, use_container_width=True)
+
+    with st_module.expander("Audit details", expanded=False):
+        st_module.json(report)
+
+    return headline
