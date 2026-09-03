@@ -111,3 +111,87 @@ def test_why_it_stands_out_is_deterministic_and_uses_only_present_fields():
     assert "margin" in text.lower()
     assert "travel" not in text.lower()
     assert "fatigue" not in text.lower()
+
+
+def test_today_summary_reports_best_edge_and_qualified_play_count():
+    from v5_ui_today import today_summary
+
+    board = pd.DataFrame(
+        [
+            {"Best Signal": "BET", "Primary Edge": 0.084},
+            {"Best Signal": "LEAN", "Primary Edge": 0.051},
+            {"Best Signal": "PASS", "Primary Edge": -0.02},
+        ]
+    )
+    market_feed = pd.DataFrame(
+        [
+            {"fixture_id": "a", "bookmaker": "Book A"},
+            {"fixture_id": "a", "bookmaker": "Book B"},
+            {"fixture_id": "b", "bookmaker": "Book A"},
+        ]
+    )
+
+    out = today_summary(board, market_feed, "2026-09-02T21:00:00Z")
+
+    assert out["best_edge"] == 0.084
+    assert out["qualified_plays"] == 2
+    assert out["matches_analyzed"] == 3
+    assert out["markets_live"] == 2
+    assert out["snapshot"] == "2026-09-02T21:00:00Z"
+
+
+def test_match_card_html_contains_primary_decision_fields():
+    from v5_ui_today import match_card_html
+
+    row = pd.Series(
+        {
+            "Player 1": "Jannik Sinner",
+            "Player 2": "Alex de Minaur",
+            "Tournament": "US Open",
+            "Start": "2026-09-03T23:00:00Z",
+            "Tour": "MEN",
+            "Best Of": 5,
+            "P1 V5 %": 0.67,
+            "P1 Fair": -203,
+            "Best Signal": "BET",
+            "Primary Market": "Jannik Sinner -4.5",
+            "Primary Edge": 0.135,
+            "Primary Market Odds": -115,
+            "Agreement": 0.90,
+            "Expected Margin": 5.1,
+        }
+    )
+
+    html = match_card_html(row)
+
+    assert "Jannik Sinner" in html
+    assert "Alex de Minaur" in html
+    assert "US Open" in html
+    assert "Bo5" in html
+    assert "Jannik Sinner -4.5" in html
+    assert "BET" in html
+    assert "67.0%" in html
+    assert "-203" in html
+    assert "-115" in html
+    assert "+13.5%" in html
+
+
+def test_render_today_results_has_deliberate_empty_state():
+    from v5_ui_today import render_today_results
+
+    class FakeSt:
+        def __init__(self):
+            self.info_messages = []
+            self.markdown_messages = []
+
+        def info(self, message):
+            self.info_messages.append(message)
+
+        def markdown(self, message, **kwargs):
+            self.markdown_messages.append(message)
+
+    fake = FakeSt()
+    render_today_results(fake, pd.DataFrame(), pd.DataFrame(), "Unknown")
+
+    assert fake.info_messages
+    assert "no modeled matches" in fake.info_messages[0].lower()
