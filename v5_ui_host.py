@@ -103,6 +103,25 @@ def _slate_editor(st_module, slate: pd.DataFrame) -> tuple[pd.DataFrame, int]:
     return edited, sims
 
 
+def _unmatched_players(namespace: Mapping[str, Any], edited: pd.DataFrame) -> list[str]:
+    load_ratings = _required(namespace, "load_ratings")
+    player_lookup = _required(namespace, "_player_lookup")
+    resolve_player = _required(namespace, "_resolve_player")
+    ratings_by_tour = {"MEN": load_ratings("MEN"), "WTA": load_ratings("WTA")}
+    unmatched: set[str] = set()
+    for _, row in edited.iterrows():
+        tour = str(row.get("Tour", "MEN")).upper().strip()
+        ratings = ratings_by_tour.get(tour)
+        if ratings is None:
+            continue
+        lookup = player_lookup(ratings)
+        for side in ("Player 1", "Player 2"):
+            name = row.get(side)
+            if name and resolve_player(name, lookup) is None:
+                unmatched.add(str(name))
+    return sorted(unmatched)
+
+
 def _run_daily_board(st_module, namespace: Mapping[str, Any], base_dir: Path, edited: pd.DataFrame, sims: int) -> pd.DataFrame:
     load_ratings = _required(namespace, "load_ratings")
     batch_one_match = _required(namespace, "_batch_one_match")
@@ -185,7 +204,34 @@ def _render_today_page(st_module, namespace: Mapping[str, Any], base_dir: Path) 
 
     with st_module.expander("Slate setup / advanced", expanded=False):
         st_module.caption(f"Market snapshot: {snapshot} · {len(slate)} fixtures currently available")
+        st_module.markdown("#### Current market slate")
+        preview_cols = [c for c in (
+            "Start", "Tournament", "Tour", "Surface", "Surface Source", "Player 1", "Player 2",
+            "P1 ML", "P2 ML", "P1 Spread", "P1 Spread Odds", "Total", "Over Odds", "Under Odds"
+        ) if c in slate.columns]
+        if hasattr(st_module, "dataframe"):
+            st_module.dataframe(slate[preview_cols], use_container_width=True, hide_index=True)
+
+        default_surface = pd.Series(False, index=slate.index)
+        if "Surface Source" in slate.columns:
+            default_surface = slate["Surface Source"].astype(str).str.contains("review", case=False, na=False)
+        if bool(default_surface.any()):
+            st_module.warning(
+                f"Surface inference: {int(default_surface.sum())} fixture(s) use an auto-default surface and should be reviewed before simulation."
+            )
+        else:
+            st_module.caption("Surface inference: current fixture surfaces were resolved by the tournament map or edited input.")
+
         edited, sims = _slate_editor(st_module, slate)
+        unmatched = _unmatched_players(namespace, edited)
+        if unmatched:
+            st_module.warning(
+                f"{len(unmatched)} OddsPapi player names could not be matched to the V5 ratings database. Those rows will be flagged rather than guessed."
+            )
+            st_module.write(unmatched)
+        else:
+            st_module.caption("Player-name diagnostic: all current slate names resolve to the V5 ratings database.")
+
         if st_module.button("Run entire daily board", type="primary", key="v5_run_today_board", use_container_width=True):
             board = _run_daily_board(st_module, namespace, base_dir, edited, sims)
             st_module.session_state["v5_daily_results"] = board
