@@ -5,14 +5,31 @@ on:
     branches: [fix/live-context-dtype]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   test:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Apply live weather dtype fix
+        run: python scripts/fix_live_weather_dtype.py
       - run: pip install -r requirements.txt pytest
-      - run: python -m pytest tests/test_v5_live_context_dtype.py -q
+      - name: Run complete repository regression
+        run: python -m pytest tests -q
+      - name: Commit verified production fix
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add v5_weather_features.py
+          if ! git diff --cached --quiet; then
+            git commit -m 'fix: allow live weather metadata on numeric placeholders [skip ci]'
+            git push origin HEAD:fix/live-context-dtype
+          fi
