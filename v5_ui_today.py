@@ -335,7 +335,7 @@ def match_card_html(row: pd.Series) -> str:
     p1_conf_text = "—" if p1_conf is None else f"{p1_conf:.0%}"
     p2_conf_text = "—" if p2_conf is None else f"{p2_conf:.0%}"
 
-    return f"""
+    html = f"""
     <div class="v5-card">
       <div class="v5-match-name">{p1} <span style="color:#86868b;font-weight:500;">vs</span> {p2}</div>
       <div class="v5-meta">{tournament} · {start} · {tour} · {bo}</div>
@@ -355,7 +355,9 @@ def match_card_html(row: pd.Series) -> str:
       <div class="v5-metric-line">Best market <strong>{format_american_odds(market_odds)}</strong> · EV/edge <strong>{format_edge(edge)}</strong></div>
       <div class="v5-why"><strong>Why it stands out:</strong> {explanation}</div>
     </div>
-    """.strip()
+    """
+    return "".join(line.strip() for line in html.splitlines())
+
 
 def _summary_card_html(label: str, value: str, detail: str = "") -> str:
     detail_html = f'<div class="v5-meta">{escape(detail)}</div>' if detail else ""
