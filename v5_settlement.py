@@ -139,8 +139,15 @@ def match_result_row(prediction, results):
         if {w, l} != {p1, p2}:
             continue
         rd = _parse_tourney_date(r.get("tourney_date"))
-        if pd.notna(start) and pd.notna(rd) and abs((rd.normalize() - start.normalize()).days) > 2:
-            continue
+        if pd.notna(start) and pd.notna(rd):
+            # TennisMyLife tourney_date is the event start date, not necessarily
+            # the exact match date. Later rounds of a two-week event can occur
+            # well after that stored date. Allow the match to occur up to 18
+            # days after event start, while still rejecting unrelated old events
+            # and dates materially after the prediction start.
+            event_day_offset = (start.normalize() - rd.normalize()).days
+            if event_day_offset < -2 or event_day_offset > 18:
+                continue
         if not _tournament_overlap(prediction.get("tournament"), r.get("tourney_name") or r.get("tournament")):
             continue
         matches.append(r)

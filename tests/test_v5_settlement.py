@@ -27,6 +27,24 @@ class SettlementTests(unittest.TestCase):
         r=match_result_row(pred,results)
         self.assertEqual(r['winner_name'],'A')
 
+    def test_match_result_row_accepts_late_round_when_source_date_is_tournament_start(self):
+        # TennisMyLife tourney_date is an event-start date, not necessarily the exact match date.
+        # A Grand Slam quarterfinal can be 10+ days after that stored event date.
+        results=pd.DataFrame([
+            {'winner_name':'A','loser_name':'B','tourney_date':20260824,'tourney_name':'US Open','score':'6-4 6-4 6-4'},
+        ])
+        pred={'resolved_player1':'A','resolved_player2':'B','start_time_utc':'2026-09-03T17:00:00Z','tournament':'US Open Men Singles'}
+        r=match_result_row(pred,results)
+        self.assertIsNotNone(r)
+        self.assertEqual(r['winner_name'],'A')
+
+    def test_match_result_row_rejects_pair_outside_same_event_window(self):
+        results=pd.DataFrame([
+            {'winner_name':'A','loser_name':'B','tourney_date':20260701,'tourney_name':'US Open','score':'6-4 6-4'},
+        ])
+        pred={'resolved_player1':'A','resolved_player2':'B','start_time_utc':'2026-09-03T17:00:00Z','tournament':'US Open Men Singles'}
+        self.assertIsNone(match_result_row(pred,results))
+
     def test_settle_ledger_handles_csv_inferred_float_text_columns(self):
         ledger=pd.DataFrame([{'freeze_key':'x','result_status':'OPEN','settled_result':float('nan'),'resolved_player1':'A','resolved_player2':'B','start_time_utc':'2026-09-01T17:00:00Z','tournament':'US Open Men Singles','market_group':'moneyline','selection':'A','line':None,'best_decimal_odds':2.0}])
         results=pd.DataFrame([{'winner_name':'A','loser_name':'B','tourney_date':20260901,'tourney_name':'US Open','score':'6-4 6-4'}])
