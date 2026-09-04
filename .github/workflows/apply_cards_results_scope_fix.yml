@@ -1,0 +1,32 @@
+name: Apply cards and results scope fix
+
+on:
+  push:
+    branches: [fix/cards-and-results-scope]
+    paths:
+      - 'tools/apply_cards_results_scope_fix.py'
+      - '.github/workflows/apply_cards_results_scope_fix.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tools/apply_cards_results_scope_fix.py
+      - run: python -m py_compile v5_ui_today.py results_accuracy_page.py diagnose_v5_settled_performance.py v5_ui_performance.py
+      - name: Commit production changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add v5_ui_today.py results_accuracy_page.py diagnose_v5_settled_performance.py v5_ui_performance.py
+          git commit -m 'fix: render cards natively and scope performance to recommendations'
+          git push origin HEAD:fix/cards-and-results-scope
