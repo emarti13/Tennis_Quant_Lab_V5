@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import math
 from pathlib import Path
 
 import numpy as np
@@ -115,29 +114,52 @@ def _moneyline_calibration(frame: pd.DataFrame) -> dict:
     }
 
 
-def settled_performance_report(frame: pd.DataFrame) -> dict:
+def settled_performance_report(frame: pd.DataFrame, current_model_version: str | None = None) -> dict:
     settled = _clean_settled(frame)
     signal = settled.get("signal", pd.Series(index=settled.index, dtype=object)).fillna("").astype(str).str.upper()
     actionable = settled[signal.isin(["BET", "LEAN"])].copy()
+    if current_model_version and "model_version" in actionable.columns:
+        current_engine = actionable[actionable["model_version"].fillna("").astype(str).eq(str(current_model_version))].copy()
+    else:
+        current_engine = actionable.iloc[0:0].copy()
     report = {
         "settled_rows_after_dedupe": int(len(settled)),
+        "current_model_version": current_model_version,
         "raw_markets": _raw_summary(settled),
         "fixture_clusters": _fixture_summary(settled),
         "actionable_markets": _raw_summary(actionable),
         "actionable_fixture_clusters": _fixture_summary(actionable),
+        "current_engine_markets": _raw_summary(current_engine),
+        "current_engine_fixture_clusters": _fixture_summary(current_engine),
         "moneyline_calibration": _moneyline_calibration(settled),
+        "current_engine_moneyline_calibration": _moneyline_calibration(current_engine),
         "by_market_group": _group_summaries(settled, "market_group"),
         "by_signal": _group_summaries(settled, "signal"),
         "by_tour": _group_summaries(settled, "tour_v5" if "tour_v5" in settled.columns else "tour"),
         "by_best_of": _group_summaries(settled, "best_of"),
+        "current_engine_by_signal": _group_summaries(current_engine, "signal"),
+        "current_engine_by_candidate": _group_summaries(current_engine, "selected_model_candidate"),
     }
     return report
+
+
+def _load_current_model_version(base: Path) -> str | None:
+    path = base / "experiments" / "acceptance" / "production_candidate.json"
+    if not path.exists():
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    version = payload.get("version") if isinstance(payload, dict) else None
+    return None if not version else str(version)
 
 
 def main(base_dir: str | Path = ".") -> int:
     base = Path(base_dir)
     path = base / "v5_daily_ready" / "frozen_predictions.csv"
     out_path = base / "v5_daily_ready" / "settled_performance_audit.json"
+    current_model_version = _load_current_model_version(base)
     if not path.exists():
         report = {"status":"missing","source":str(path)}
     else:
@@ -145,7 +167,7 @@ def main(base_dir: str | Path = ".") -> int:
             frame = pd.read_csv(path, low_memory=False)
         except pd.errors.EmptyDataError:
             frame = pd.DataFrame()
-        report = {"status":"ok","source":str(path), **settled_performance_report(frame)}
+        report = {"status":"ok","source":str(path), **settled_performance_report(frame, current_model_version=current_model_version)}
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(report, indent=2, allow_nan=False), encoding="utf-8")
     print(json.dumps(report, indent=2, allow_nan=False))
