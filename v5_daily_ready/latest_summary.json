@@ -1,27 +1,27 @@
 {
   "status": "SUCCESS",
-  "built_at_utc": "2026-09-04T06:31:05.406902+00:00",
-  "market_snapshot_utc": "2026-09-04T06:29:09.981733+00:00",
+  "built_at_utc": "2026-09-04T16:26:29.275688+00:00",
+  "market_snapshot_utc": "2026-09-04T16:24:02.745978+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 614,
-  "eligible_pre_match_fixtures": 32,
-  "priced_rows": 614,
-  "board_rows": 614,
-  "frozen_ledger_rows": 3541,
-  "new_frozen_rows": 614,
+  "market_rows_input": 476,
+  "eligible_pre_match_fixtures": 30,
+  "priced_rows": 476,
+  "board_rows": 476,
+  "frozen_ledger_rows": 3843,
+  "new_frozen_rows": 302,
   "signal_counts": {
-    "PASS": 321,
-    "BET": 223,
-    "REVIEW": 48,
-    "LEAN": 22
+    "PASS": 256,
+    "BET": 205,
+    "LEAN": 9,
+    "REVIEW": 6
   },
   "selected_candidate_counts": {
-    "ensemble": 448,
-    "residual": 166
+    "residual": 240,
+    "ensemble": 236
   },
   "selected_score_candidate_counts": {
-    "conditioned_mechanistic": 448,
-    "gaussian_contextual": 166
+    "gaussian_contextual": 240,
+    "conditioned_mechanistic": 236
   },
   "context_fallback_rows": 0,
   "errors": [],
