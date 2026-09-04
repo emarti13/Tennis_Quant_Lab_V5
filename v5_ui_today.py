@@ -369,6 +369,15 @@ def _summary_card_html(label: str, value: str, detail: str = "") -> str:
     )
 
 
+def _render_match_card(st_module, row: pd.Series) -> None:
+    card = match_card_html(row)
+    if hasattr(st_module, "html"):
+        st_module.html(card)
+    else:
+        # Compatibility for lightweight test adapters / older Streamlit only.
+        st_module.markdown(card, unsafe_allow_html=True)
+
+
 def _render_card_action(st_module, row: pd.Series, on_select: Callable[[Any], None] | None) -> None:
     if on_select is None or not hasattr(st_module, "button"):
         return
@@ -416,17 +425,17 @@ def render_today_results(
     else:
         st_module.markdown('<div class="v5-section-title">Top opportunities</div>', unsafe_allow_html=True)
         for _, row in actionable.iterrows():
-            st_module.markdown(match_card_html(row), unsafe_allow_html=True)
+            _render_match_card(st_module, row)
             _render_card_action(st_module, row, on_select)
 
     if not other.empty:
         if hasattr(st_module, "expander"):
             with st_module.expander(f"Other matches ({len(other)})", expanded=False):
                 for _, row in other.iterrows():
-                    st_module.markdown(match_card_html(row), unsafe_allow_html=True)
+                    _render_match_card(st_module, row)
                     _render_card_action(st_module, row, on_select)
         else:
             for _, row in other.iterrows():
-                st_module.markdown(match_card_html(row), unsafe_allow_html=True)
+                _render_match_card(st_module, row)
 
     return prepared

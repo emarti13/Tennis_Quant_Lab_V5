@@ -27,8 +27,8 @@ def load_performance_report(base_dir: str | Path = ".") -> dict[str, Any]:
 
 def headline_metrics(report: dict[str, Any] | None) -> dict[str, Any]:
     report = report or {}
-    raw = report.get("raw_markets") or {}
-    fixtures = report.get("fixture_clusters") or {}
+    raw = report.get("actionable_markets") or report.get("raw_markets") or {}
+    fixtures = report.get("actionable_fixture_clusters") or report.get("fixture_clusters") or {}
 
     wins = int(raw.get("wins") or 0)
     losses = int(raw.get("losses") or 0)
@@ -37,8 +37,8 @@ def headline_metrics(report: dict[str, Any] | None) -> dict[str, Any]:
     profitable = int(fixtures.get("profitable_fixtures") or 0)
 
     return {
-        "market_label": "Market results",
-        "fixture_label": "Independent fixtures",
+        "market_label": "Recommended market results",
+        "fixture_label": "Recommended fixtures",
         "market_record": f"{wins}-{losses}-{pushes}",
         "market_win_rate": raw.get("win_rate"),
         "market_roi": raw.get("roi"),
@@ -82,12 +82,12 @@ def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[st
     st_module.markdown('<div class="v5-eyebrow">Validated results</div>', unsafe_allow_html=True)
     st_module.markdown('<div class="v5-title">Performance</div>', unsafe_allow_html=True)
     st_module.markdown(
-        '<div class="v5-subtitle">Market-level results and independent fixture evidence are reported separately.</div>',
+        '<div class="v5-subtitle">BET + LEAN results are the headline. PASS / REVIEW rows remain audit evidence and are not counted as recommendations.</div>',
         unsafe_allow_html=True,
     )
 
     columns = st_module.columns(4)
-    columns[0].metric("Market record", headline["market_record"])
+    columns[0].metric("Recommended record", headline["market_record"])
     columns[1].metric("Fixture evidence", headline["fixture_record"])
     columns[2].metric("Market ROI", _percent(headline["market_roi"]))
     columns[3].metric("Max correlated markets", str(headline["max_correlated_markets"]))

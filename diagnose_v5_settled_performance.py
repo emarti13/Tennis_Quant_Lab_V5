@@ -117,10 +117,14 @@ def _moneyline_calibration(frame: pd.DataFrame) -> dict:
 
 def settled_performance_report(frame: pd.DataFrame) -> dict:
     settled = _clean_settled(frame)
+    signal = settled.get("signal", pd.Series(index=settled.index, dtype=object)).fillna("").astype(str).str.upper()
+    actionable = settled[signal.isin(["BET", "LEAN"])].copy()
     report = {
         "settled_rows_after_dedupe": int(len(settled)),
         "raw_markets": _raw_summary(settled),
         "fixture_clusters": _fixture_summary(settled),
+        "actionable_markets": _raw_summary(actionable),
+        "actionable_fixture_clusters": _fixture_summary(actionable),
         "moneyline_calibration": _moneyline_calibration(settled),
         "by_market_group": _group_summaries(settled, "market_group"),
         "by_signal": _group_summaries(settled, "signal"),

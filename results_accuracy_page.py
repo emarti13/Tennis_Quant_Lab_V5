@@ -30,7 +30,7 @@ def load_accuracy_ledger(path=DEFAULT_LEDGER):
     return df
 
 
-def accuracy_metrics(df):
+def accuracy_metrics(df, *, actionable_only=True):
     if df is None or df.empty:
         return {
             "frozen": 0, "settled": 0, "decisions": 0, "wins": 0,
@@ -40,6 +40,9 @@ def accuracy_metrics(df):
     status = df.get("result_status", pd.Series(index=df.index, dtype=object)).fillna("").astype(str).str.upper()
     result = df.get("settled_result", pd.Series(index=df.index, dtype=object)).fillna("").astype(str).str.upper()
     settled_mask = status.eq("SETTLED")
+    if actionable_only and "signal" in df.columns:
+        actionable = df["signal"].fillna("").astype(str).str.upper().isin(["BET", "LEAN"])
+        settled_mask = settled_mask & actionable
     decision_mask = settled_mask & result.isin(["WIN", "LOSS"])
     wins = int((decision_mask & result.eq("WIN")).sum())
     losses = int((decision_mask & result.eq("LOSS")).sum())
@@ -99,28 +102,33 @@ def render_results_accuracy(ledger_path=DEFAULT_LEDGER):
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Frozen Markets", f"{metrics['frozen']:,}")
     c2.metric(
-        "Decision Win Rate",
+        "Recommended Win Rate",
         "—" if pd.isna(metrics["win_rate"]) else f"{metrics['win_rate']:.1%}",
         help="WIN/(WIN+LOSS). Pushes and voids are excluded.",
     )
     c3.metric(
-        "Tracked ROI",
+        "Recommended ROI",
         "—" if pd.isna(metrics["roi"]) else f"{metrics['roi']:+.1%}",
         help="Profit units divided by settled WIN/LOSS decisions. Pushes and voids are excluded.",
     )
     c4.metric("Units", f"{metrics['units']:+.2f}")
 
     st.caption(
-        f"Settled: {metrics['settled']:,} • Decisions: {metrics['decisions']:,} • "
-        f"Pushes: {metrics['pushes']:,} • Voids: {metrics['voids']:,} • "
-        f"Open: {metrics['frozen'] - metrics['settled']:,}"
+        f"Recommended settled: {metrics['settled']:,} • Recommended decisions: {metrics['decisions']:,} • "
+        f"Pushes: {metrics['pushes']:,} • Voids: {metrics['voids']:,}. "
+        "Headline performance includes BET + LEAN only; PASS and REVIEW remain visible for audit but are not treated as recommendations."
+    )
+    st.info(
+        "Frozen historical predictions are preserved exactly as they were made. Model upgrades do not retroactively rewrite old live predictions; "
+        "doing so would contaminate out-of-sample performance. Historical evaluation of a newer engine belongs in a separate time-safe backtest."
     )
 
     result = df.get("settled_result", pd.Series(index=df.index, dtype=object)).fillna("").astype(str).str.upper()
     status = df.get("result_status", pd.Series(index=df.index, dtype=object)).fillna("").astype(str).str.upper()
-    decisions = df[status.eq("SETTLED") & result.isin(["WIN", "LOSS"])].copy()
+    actionable_signal = df.get("signal", pd.Series(index=df.index, dtype=object)).fillna("").astype(str).str.upper().isin(["BET", "LEAN"])
+    decisions = df[status.eq("SETTLED") & result.isin(["WIN", "LOSS"]) & actionable_signal].copy()
 
-    st.subheader("Performance by Signal")
+    st.subheader("Recommended Performance by Signal")
     perf_signal = _performance_table(decisions, "signal", "Signal")
     if perf_signal.empty:
         st.info("Performance tables populate after settled WIN/LOSS decisions are available.")
@@ -134,7 +142,7 @@ def render_results_accuracy(ledger_path=DEFAULT_LEDGER):
             hide_index=True,
         )
 
-    st.subheader("Performance by Market")
+    st.subheader("Recommended Performance by Market")
     perf_market = _performance_table(decisions, "market_group", "Market")
     if not perf_market.empty:
         st.dataframe(
@@ -173,6 +181,19 @@ def render_results_accuracy(ledger_path=DEFAULT_LEDGER):
         )
     else:
         st.info(f"Calibration table begins at 20 WIN/LOSS decisions. Current: {len(calibration)}.")
+
+    all_metrics = accuracy_metrics(df, actionable_only=False)
+    with st.expander("All settled model-market rows (audit only)", expanded=False):
+        st.caption(
+            "This includes PASS and REVIEW observations. These rows are useful for calibration/audit and must not be interpreted as wagers or recommendations."
+        )
+        st.write({
+            "settled_rows": all_metrics["settled"],
+            "win_loss_decisions": all_metrics["decisions"],
+            "wins": all_metrics["wins"],
+            "losses": all_metrics["losses"],
+            "units_if_every_row_were_bet": all_metrics["units"],
+        })
 
     st.subheader("Settled Prediction Ledger")
     settled = df[status.eq("SETTLED")].copy()
