@@ -1,0 +1,69 @@
+name: Diagnose engine-era results
+
+on:
+  push:
+    branches: [fix/cards-and-results-scope]
+    paths:
+      - '.github/workflows/diagnose_engine_era_results.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas
+      - name: Build engine-era diagnostic
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+          p=Path('v5_daily_ready/frozen_predictions.csv')
+          df=pd.read_csv(p, low_memory=False)
+          status=df.get('result_status', pd.Series(index=df.index,dtype=object)).fillna('').astype(str).str.upper()
+          result=df.get('settled_result', pd.Series(index=df.index,dtype=object)).fillna('').astype(str).str.upper()
+          signal=df.get('signal', pd.Series(index=df.index,dtype=object)).fillna('').astype(str).str.upper()
+          settled=df[status.eq('SETTLED') & result.isin(['WIN','LOSS','PUSH'])].copy()
+          actionable=settled[signal.loc[settled.index].isin(['BET','LEAN'])].copy()
+          def groups(frame,col):
+              if col not in frame.columns:
+                  return {'__COLUMN_MISSING__': {'rows':len(frame)}}
+              s=frame[col].fillna('').astype(str).replace('', '__MISSING__')
+              out={}
+              for value, idx in s.groupby(s).groups.items():
+                  g=frame.loc[idx]
+                  r=g.get('settled_result',pd.Series(index=g.index,dtype=object)).fillna('').astype(str).str.upper()
+                  profit=pd.to_numeric(g.get('profit_units'),errors='coerce').fillna(0.0)
+                  w=int(r.eq('WIN').sum()); l=int(r.eq('LOSS').sum()); p=int(r.eq('PUSH').sum())
+                  out[str(value)]={'rows':int(len(g)),'wins':w,'losses':l,'pushes':p,'win_rate':(w/(w+l) if w+l else None),'units':float(profit.sum())}
+              return out
+          payload={
+              'ledger_rows':int(len(df)),
+              'settled_rows':int(len(settled)),
+              'actionable_settled_rows':int(len(actionable)),
+              'columns':[c for c in ['frozen_at_utc','selected_model_candidate','selected_score_candidate','model_version','score_model_version','context_fallback_reason'] if c in df.columns],
+              'all_settled_by_winner_candidate':groups(settled,'selected_model_candidate'),
+              'actionable_by_winner_candidate':groups(actionable,'selected_model_candidate'),
+              'actionable_by_score_candidate':groups(actionable,'selected_score_candidate'),
+              'actionable_by_model_version':groups(actionable,'model_version'),
+              'actionable_by_score_model_version':groups(actionable,'score_model_version'),
+          }
+          Path('experiments/acceptance/results_engine_breakdown.json').write_text(json.dumps(payload,indent=2),encoding='utf-8')
+          print(json.dumps(payload,indent=2))
+          PY
+      - name: Commit diagnostic
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add experiments/acceptance/results_engine_breakdown.json
+          git commit -m 'diagnostic: split settled results by engine era'
+          git push origin HEAD:fix/cards-and-results-scope
