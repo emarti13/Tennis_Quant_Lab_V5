@@ -21,10 +21,7 @@ jobs:
           python-version: '3.12'
       - name: Apply production implementation
         run: python scripts/apply_unified_production_ui.py
-      - run: pip install -r requirements.txt pytest
-      - name: Run complete repository regression
-        run: python -m pytest tests -q
-      - name: Commit verified implementation
+      - name: Persist implementation
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
@@ -33,3 +30,6 @@ jobs:
             git commit -m 'fix: unify Today with full-context production engine [skip ci]'
             git push origin HEAD:fix/unify-production-ui-settlement
           fi
+      - run: pip install -r requirements.txt pytest
+      - name: Run complete repository regression
+        run: python -m pytest tests -q
