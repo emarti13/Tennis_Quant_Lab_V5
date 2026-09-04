@@ -27,8 +27,23 @@ def load_performance_report(base_dir: str | Path = ".") -> dict[str, Any]:
 
 def headline_metrics(report: dict[str, Any] | None) -> dict[str, Any]:
     report = report or {}
-    raw = report.get("raw_markets") or {}
-    fixtures = report.get("fixture_clusters") or {}
+    current = report.get("current_engine_markets") or {}
+    current_fixtures = report.get("current_engine_fixture_clusters") or {}
+    current_count = int(current.get("bets") or 0)
+    if current_count == 0:
+        current_count = int(current.get("wins") or 0) + int(current.get("losses") or 0) + int(current.get("pushes") or 0)
+    if current_count > 0:
+        raw = current
+        fixtures = current_fixtures
+        scope = "current_engine"
+    elif report.get("actionable_markets"):
+        raw = report.get("actionable_markets") or {}
+        fixtures = report.get("actionable_fixture_clusters") or {}
+        scope = "all_actionable"
+    else:
+        raw = report.get("raw_markets") or {}
+        fixtures = report.get("fixture_clusters") or {}
+        scope = "all_settled"
 
     wins = int(raw.get("wins") or 0)
     losses = int(raw.get("losses") or 0)
@@ -37,8 +52,9 @@ def headline_metrics(report: dict[str, Any] | None) -> dict[str, Any]:
     profitable = int(fixtures.get("profitable_fixtures") or 0)
 
     return {
-        "market_label": "Market results",
-        "fixture_label": "Independent fixtures",
+        "scope": scope,
+        "market_label": "Current engine results" if scope == "current_engine" else "Recommended market results",
+        "fixture_label": "Current engine fixtures" if scope == "current_engine" else "Recommended fixtures",
         "market_record": f"{wins}-{losses}-{pushes}",
         "market_win_rate": raw.get("win_rate"),
         "market_roi": raw.get("roi"),
@@ -81,10 +97,11 @@ def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[st
     headline = headline_metrics(report)
     st_module.markdown('<div class="v5-eyebrow">Validated results</div>', unsafe_allow_html=True)
     st_module.markdown('<div class="v5-title">Performance</div>', unsafe_allow_html=True)
-    st_module.markdown(
-        '<div class="v5-subtitle">Market-level results and independent fixture evidence are reported separately.</div>',
-        unsafe_allow_html=True,
-    )
+    if headline["scope"] == "current_engine":
+        subtitle = "Current full-context engine BET + LEAN results are the headline. Legacy recommendations and PASS / REVIEW rows are retained separately for audit."
+    else:
+        subtitle = "BET + LEAN results are the headline. PASS / REVIEW rows remain audit evidence and are not counted as recommendations."
+    st_module.markdown(f'<div class="v5-subtitle">{subtitle}</div>', unsafe_allow_html=True)
 
     columns = st_module.columns(4)
     columns[0].metric("Market record", headline["market_record"])
@@ -96,7 +113,8 @@ def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[st
         "Multiple correlated markets from the same match remain legitimate market observations, but they are not treated as independent evidence of model quality."
     )
 
-    calibration = report.get("moneyline_calibration") or {}
+    calibration = report.get("current_engine_moneyline_calibration") if headline["scope"] == "current_engine" else report.get("moneyline_calibration")
+    calibration = calibration or {}
     if calibration:
         st_module.markdown('<div class="v5-section-title">Moneyline calibration</div>', unsafe_allow_html=True)
         cal_cols = st_module.columns(3)
@@ -104,18 +122,30 @@ def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[st
         cal_cols[1].metric("Brier", _number(calibration.get("brier"), 3))
         cal_cols[2].metric("Log loss", _number(calibration.get("log_loss"), 3))
 
+    if headline["scope"] == "current_engine":
+        current_breakdowns = [
+            ("Current engine by signal", "current_engine_by_signal"),
+            ("Current engine by candidate", "current_engine_by_candidate"),
+        ]
+        for label, key in current_breakdowns:
+            payload = report.get(key)
+            if payload:
+                st_module.markdown(f'<div class="v5-section-title">{label}</div>', unsafe_allow_html=True)
+                st_module.dataframe(pd.DataFrame.from_dict(payload, orient="index"), use_container_width=True)
+
     breakdowns = [
-        ("By market", "by_market_group"),
-        ("By signal", "by_signal"),
-        ("By tour", "by_tour"),
-        ("By format", "by_best_of"),
+        ("Historical audit — by market", "by_market_group"),
+        ("Historical audit — by signal", "by_signal"),
+        ("Historical audit — by tour", "by_tour"),
+        ("Historical audit — by format", "by_best_of"),
     ]
-    for label, key in breakdowns:
-        payload = report.get(key)
-        if payload:
-            st_module.markdown(f'<div class="v5-section-title">{label}</div>', unsafe_allow_html=True)
-            frame = pd.DataFrame(payload) if isinstance(payload, list) else pd.DataFrame.from_dict(payload, orient="index")
-            st_module.dataframe(frame, use_container_width=True)
+    with st_module.expander("Legacy and all-row audit breakdowns", expanded=False):
+        for label, key in breakdowns:
+            payload = report.get(key)
+            if payload:
+                st_module.markdown(f'<div class="v5-section-title">{label}</div>', unsafe_allow_html=True)
+                frame = pd.DataFrame(payload) if isinstance(payload, list) else pd.DataFrame.from_dict(payload, orient="index")
+                st_module.dataframe(frame, use_container_width=True)
 
     with st_module.expander("Audit details", expanded=False):
         st_module.json(report)
