@@ -29,7 +29,10 @@ def headline_metrics(report: dict[str, Any] | None) -> dict[str, Any]:
     report = report or {}
     current = report.get("current_engine_markets") or {}
     current_fixtures = report.get("current_engine_fixture_clusters") or {}
-    if int(current.get("bets") or 0) > 0:
+    current_count = int(current.get("bets") or 0)
+    if current_count == 0:
+        current_count = int(current.get("wins") or 0) + int(current.get("losses") or 0) + int(current.get("pushes") or 0)
+    if current_count > 0:
         raw = current
         fixtures = current_fixtures
         scope = "current_engine"
