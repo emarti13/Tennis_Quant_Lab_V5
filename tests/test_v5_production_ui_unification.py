@@ -12,16 +12,10 @@ def _ratings():
 
 def test_prepare_fixture_honors_explicit_ui_overrides():
     from v5_daily_batch import _prepare_fixture
-
     rows = pd.DataFrame([{
-        "fixture_id":"fx1",
-        "tournament":"US Open Men Singles",
-        "tour":"Men",
-        "player1":"Alpha",
-        "player2":"Beta",
-        "v5_tour_override":"MEN",
-        "v5_surface_override":"Clay",
-        "v5_best_of_override":3,
+        "fixture_id":"fx1","tournament":"US Open Men Singles","tour":"Men",
+        "player1":"Alpha","player2":"Beta","v5_tour_override":"MEN",
+        "v5_surface_override":"Clay","v5_best_of_override":3,
     }])
     prepared = _prepare_fixture(rows, {"MEN":_ratings()}, {"MEN":{"baseline":{"Clay":0.60}}})
     assert prepared["tour"] == "MEN"
@@ -32,30 +26,18 @@ def test_prepare_fixture_honors_explicit_ui_overrides():
 
 def test_production_board_adapter_preserves_models_and_context():
     from v5_ui_today import production_board_to_today
-
+    common = {
+        "fixture_id":"fx1","tournament":"Test Open","start_time_utc":"2026-09-04T18:00:00Z",
+        "tour_v5":"MEN","surface":"Hard","best_of":3,"resolved_player1":"Alpha","resolved_player2":"Beta",
+        "full_context_probability_p1":0.64,"expected_margin":3.2,"expected_total":22.4,
+        "model_gap":0.035,"model_disagreement":"LOW","selected_model_candidate":"ensemble",
+        "selected_score_candidate":"conditioned_mechanistic","context_quality_a":0.91,"context_quality_b":0.86,
+        "ctx_serve_dominance_diff":0.08,"ctx_rest_log1p_diff":0.15,"ctx_travel_km_diff":-320.0,
+        "ctx_court_speed_x_serve_dominance_diff":0.03,"ctx_state_uncertainty_diff":-0.04,
+    }
     production = pd.DataFrame([
-        {
-            "fixture_id":"fx1","tournament":"Test Open","start_time_utc":"2026-09-04T18:00:00Z",
-            "tour_v5":"MEN","surface":"Hard","best_of":3,"resolved_player1":"Alpha","resolved_player2":"Beta",
-            "full_context_probability_p1":0.64,"expected_margin":3.2,"expected_total":22.4,
-            "model_gap":0.035,"model_disagreement":"LOW","selected_model_candidate":"ensemble",
-            "selected_score_candidate":"conditioned_mechanistic","context_quality_a":0.91,"context_quality_b":0.86,
-            "ctx_serve_dominance_diff":0.08,"ctx_rest_log1p_diff":0.15,"ctx_travel_km_diff":-320.0,
-            "ctx_court_speed_x_serve_dominance_diff":0.03,"ctx_state_uncertainty_diff":-0.04,
-            "market_group":"moneyline","selection":"Alpha","line":None,"best_american_odds":-115,
-            "expected_value":0.19,"signal":"BET",
-        },
-        {
-            "fixture_id":"fx1","tournament":"Test Open","start_time_utc":"2026-09-04T18:00:00Z",
-            "tour_v5":"MEN","surface":"Hard","best_of":3,"resolved_player1":"Alpha","resolved_player2":"Beta",
-            "full_context_probability_p1":0.64,"expected_margin":3.2,"expected_total":22.4,
-            "model_gap":0.035,"model_disagreement":"LOW","selected_model_candidate":"ensemble",
-            "selected_score_candidate":"conditioned_mechanistic","context_quality_a":0.91,"context_quality_b":0.86,
-            "ctx_serve_dominance_diff":0.08,"ctx_rest_log1p_diff":0.15,"ctx_travel_km_diff":-320.0,
-            "ctx_court_speed_x_serve_dominance_diff":0.03,"ctx_state_uncertainty_diff":-0.04,
-            "market_group":"moneyline","selection":"Beta","line":None,"best_american_odds":105,
-            "expected_value":-0.20,"signal":"PASS",
-        },
+        {**common,"market_group":"moneyline","selection":"Alpha","line":None,"best_american_odds":-115,"expected_value":0.19,"signal":"BET"},
+        {**common,"market_group":"moneyline","selection":"Beta","line":None,"best_american_odds":105,"expected_value":-0.20,"signal":"PASS"},
     ])
     today = production_board_to_today(production)
     assert len(today) == 1
@@ -70,16 +52,15 @@ def test_production_board_adapter_preserves_models_and_context():
 
 
 def test_today_host_uses_production_batch_not_legacy_batch_one_match():
-    source = Path("tennis_quant_app_v5.py").read_text(encoding="utf-8")
-    daily = source[source.index("def daily_board():"):source.index("\ndef app():")]
-    assert "build_daily_outputs(" in daily
-    assert "production_board_to_today(" in daily
-    assert "_batch_one_match(row" not in daily
+    source = Path("v5_ui_host.py").read_text(encoding="utf-8")
+    run_block = source[source.index("def _run_daily_board"):source.index("\ndef _render_today_page")]
+    assert "build_daily_outputs(" in run_block
+    assert "production_board_to_today(" in run_block
+    assert '"_batch_one_match"' not in run_block
 
 
 def test_production_board_declares_context_fields_for_match_detail():
     from v5_daily_batch import LIVE_CONTEXT_DISPLAY_FIELDS
-
     required = {
         "ctx_serve_dominance_diff","ctx_return_dominance_diff","ctx_return_strength_diff",
         "ctx_rest_log1p_diff","ctx_games_7d_diff","ctx_minutes_7d_diff","ctx_matches_7d_diff",
