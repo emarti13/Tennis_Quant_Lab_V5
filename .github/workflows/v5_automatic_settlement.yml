@@ -2,29 +2,33 @@ name: V5 Automatic Settlement
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "30 10 * * *"
   push:
     branches: [main]
     paths:
       - "v5_settlement.py"
+      - "diagnose_v5_settled_performance.py"
       - "results_accuracy_page.py"
       - "pages/**"
       - "tests/test_v5_settlement.py"
+      - "tests/test_v5_settlement_pipeline.py"
       - "tests/test_results_accuracy.py"
       - ".github/workflows/v5_automatic_settlement.yml"
   workflow_run:
-    workflows: ["V5 Player Ratings Refresh"]
+    workflows: ["V5 Player Ratings Refresh", "V5 Daily Predictions"]
     types: [completed]
 
 permissions:
   contents: write
 
 concurrency:
-  group: v5-automatic-settlement-v2
+  group: v5-automatic-settlement-v3
   cancel-in-progress: true
 
 jobs:
   settle:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event_name == 'schedule' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -50,6 +54,9 @@ jobs:
       - name: Settle frozen predictions
         run: python v5_settlement.py
 
+      - name: Build fixture-clustered performance audit
+        run: python diagnose_v5_settled_performance.py
+
       - name: Show settlement summary
         if: always()
         run: |
@@ -69,13 +76,15 @@ jobs:
             git reset --hard origin/main
             python -m unittest discover -s tests -v
             python v5_settlement.py
+            python diagnose_v5_settled_performance.py
           fi
 
           git add v5_daily_ready/frozen_predictions.csv \
-                  v5_daily_ready/settlement_summary.json
+                  v5_daily_ready/settlement_summary.json \
+                  v5_daily_ready/settled_performance_audit.json
           if git diff --cached --quiet; then
             echo "No settlement changes to commit."
           else
-            git commit -m "Settle V5 frozen predictions"
+            git commit -m "Settle V5 frozen predictions and refresh performance"
             git push origin HEAD:main
           fi
