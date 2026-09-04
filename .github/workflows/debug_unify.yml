@@ -1,0 +1,18 @@
+name: Debug Unified Production Patch
+on:
+  push:
+    branches: [fix/unify-production-ui-settlement]
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m py_compile scripts/apply_unified_production_ui.py
+      - run: python scripts/apply_unified_production_ui.py
+      - run: python -m py_compile v5_daily_batch.py v5_ui_today.py v5_ui_host.py
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest tests/test_v5_production_ui_unification.py tests/test_v5_settlement_pipeline.py -q
