@@ -226,6 +226,16 @@ def test_match_card_html_contains_primary_decision_fields():
     assert "+13.5%" in html
 
 
+def test_match_card_html_cannot_be_parsed_as_indented_markdown_code():
+    from v5_ui_today import match_card_html
+
+    html = match_card_html(pd.Series({"Player 1": "A", "Player 2": "B", "Best Signal": "BET"}))
+
+    assert "\n" not in html
+    assert html.startswith('<div class="v5-card">')
+    assert html.endswith("</div>")
+
+
 def test_render_today_results_has_deliberate_empty_state():
     from v5_ui_today import render_today_results
 
