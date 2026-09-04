@@ -95,3 +95,5 @@ def test_performance_headline_prefers_actionable_results_when_available():
     assert out["market_record"] == "3-2-0"
     assert out["market_win_rate"] == .60
     assert out["fixture_record"] == "2 profitable / 4"
+
+# This file intentionally provides regression contracts for the production UI/reporting split.
