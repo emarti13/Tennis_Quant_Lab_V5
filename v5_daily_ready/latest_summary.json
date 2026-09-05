@@ -1,30 +1,87 @@
 {
-  "status": "SUCCESS",
-  "built_at_utc": "2026-09-05T18:23:00.561767+00:00",
-  "market_snapshot_utc": "2026-09-05T18:20:44.072347+00:00",
+  "status": "PARTIAL",
+  "built_at_utc": "2026-09-05T22:07:08.111943+00:00",
+  "market_snapshot_utc": "2026-09-05T22:05:02.097162+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 348,
-  "eligible_pre_match_fixtures": 21,
-  "priced_rows": 348,
-  "board_rows": 348,
-  "frozen_ledger_rows": 4253,
-  "new_frozen_rows": 66,
+  "market_rows_input": 556,
+  "eligible_pre_match_fixtures": 28,
+  "priced_rows": 402,
+  "board_rows": 402,
+  "frozen_ledger_rows": 4409,
+  "new_frozen_rows": 156,
   "signal_counts": {
-    "PASS": 189,
-    "BET": 139,
-    "LEAN": 14,
-    "REVIEW": 6
+    "PASS": 175,
+    "REVIEW": 113,
+    "BET": 102,
+    "LEAN": 12
   },
   "selected_candidate_counts": {
-    "ensemble": 186,
-    "residual": 162
+    "ensemble": 274,
+    "residual": 128
   },
   "selected_score_candidate_counts": {
-    "conditioned_mechanistic": 186,
-    "gaussian_contextual": 162
+    "conditioned_mechanistic": 274,
+    "gaussian_contextual": 128
   },
   "context_fallback_rows": 0,
-  "errors": [],
+  "errors": [
+    {
+      "fixture_id": "id1202612674374536",
+      "player1": "Paldanius, Oskari",
+      "player2": "Tepmahc, Nicolas",
+      "tournament": "ATP Challenger Cassis, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Tepmahc, Nicolas"
+    },
+    {
+      "fixture_id": "id1202612674374540",
+      "player1": "Scaglia, Mathieu",
+      "player2": "Vales, Amit",
+      "tournament": "ATP Challenger Cassis, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Scaglia, Mathieu"
+    },
+    {
+      "fixture_id": "id1202612674374542",
+      "player1": "Deckers, Alec",
+      "player2": "Tailleu, Pierre Antoine",
+      "tournament": "ATP Challenger Cassis, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Tailleu, Pierre Antoine"
+    },
+    {
+      "fixture_id": "id1202612674374546",
+      "player1": "Makk, Peter",
+      "player2": "Pietri, Benjamin",
+      "tournament": "ATP Challenger Cassis, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Pietri, Benjamin"
+    },
+    {
+      "fixture_id": "id1202612674374544",
+      "player1": "Car, Hugo",
+      "player2": "Dalmasso, Guillaume",
+      "tournament": "ATP Challenger Cassis, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Car, Hugo"
+    },
+    {
+      "fixture_id": "id1205173474371148",
+      "player1": "Koizumi, Noritaka",
+      "player2": "Ichikawa, Taisei",
+      "tournament": "ATP Challenger Phan Thiet 3, Vietnam Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Koizumi, Noritaka"
+    },
+    {
+      "fixture_id": "id1205173474371144",
+      "player1": "Papa, Christopher",
+      "player2": "Ryan Ziegann, Sam",
+      "tournament": "ATP Challenger Phan Thiet 3, Vietnam Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Ryan Ziegann, Sam"
+    }
+  ],
   "model_version": "v5-advanced-nested-chronological-1",
   "score_model_version": "v5-score-walkforward-3",
   "probability_source": "chronologically validated independent full-context candidate; sportsbook inputs joined only after probability freeze",
