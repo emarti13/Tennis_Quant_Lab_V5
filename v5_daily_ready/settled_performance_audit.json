@@ -1,72 +1,72 @@
 {
   "status": "ok",
   "source": "v5_daily_ready/frozen_predictions.csv",
-  "settled_rows_after_dedupe": 3298,
+  "settled_rows_after_dedupe": 3508,
   "current_model_version": "v5-advanced-nested-chronological-1",
   "raw_markets": {
-    "bets": 3298,
-    "wins": 1625,
-    "losses": 1627,
-    "pushes": 46,
-    "win_rate": 0.49969249692496925,
-    "net_units": -237.90300000000005,
-    "roi": -0.07213553668890238
+    "bets": 3508,
+    "wins": 1725,
+    "losses": 1727,
+    "pushes": 56,
+    "win_rate": 0.49971031286210893,
+    "net_units": -238.26500000000001,
+    "roi": -0.06792046750285063
   },
   "fixture_clusters": {
-    "fixtures": 176,
-    "profitable_fixtures": 27,
-    "losing_fixtures": 149,
+    "fixtures": 185,
+    "profitable_fixtures": 31,
+    "losing_fixtures": 154,
     "flat_fixtures": 0,
-    "profitable_fixture_rate": 0.1534090909090909,
-    "mean_markets_per_fixture": 18.738636363636363,
+    "profitable_fixture_rate": 0.16756756756756758,
+    "mean_markets_per_fixture": 18.962162162162162,
     "max_markets_on_one_fixture": 40,
-    "net_units": -237.90300000000002
+    "net_units": -238.265
   },
   "actionable_markets": {
-    "bets": 70,
-    "wins": 29,
-    "losses": 41,
+    "bets": 76,
+    "wins": 34,
+    "losses": 42,
     "pushes": 0,
-    "win_rate": 0.4142857142857143,
-    "net_units": 14.854,
-    "roi": 0.2122
+    "win_rate": 0.4473684210526316,
+    "net_units": 27.074000000000005,
+    "roi": 0.35623684210526324
   },
   "actionable_fixture_clusters": {
-    "fixtures": 70,
-    "profitable_fixtures": 29,
-    "losing_fixtures": 41,
+    "fixtures": 76,
+    "profitable_fixtures": 34,
+    "losing_fixtures": 42,
     "flat_fixtures": 0,
-    "profitable_fixture_rate": 0.4142857142857143,
+    "profitable_fixture_rate": 0.4473684210526316,
     "mean_markets_per_fixture": 1.0,
     "max_markets_on_one_fixture": 1,
-    "net_units": 14.854
+    "net_units": 27.074
   },
   "current_engine_markets": {
-    "bets": 24,
-    "wins": 12,
-    "losses": 12,
+    "bets": 30,
+    "wins": 17,
+    "losses": 13,
     "pushes": 0,
-    "win_rate": 0.5,
-    "net_units": 7.792,
-    "roi": 0.32466666666666666
+    "win_rate": 0.5666666666666667,
+    "net_units": 20.012,
+    "roi": 0.6670666666666667
   },
   "current_engine_fixture_clusters": {
-    "fixtures": 24,
-    "profitable_fixtures": 12,
-    "losing_fixtures": 12,
+    "fixtures": 30,
+    "profitable_fixtures": 17,
+    "losing_fixtures": 13,
     "flat_fixtures": 0,
-    "profitable_fixture_rate": 0.5,
+    "profitable_fixture_rate": 0.5666666666666667,
     "mean_markets_per_fixture": 1.0,
     "max_markets_on_one_fixture": 1,
-    "net_units": 7.792000000000001
+    "net_units": 20.012
   },
   "moneyline_calibration": {
-    "n": 351,
-    "mean_model_probability": 0.4999783475783476,
-    "mean_market_probability": 0.5001649422702055,
-    "observed_win_rate": 0.4985754985754986,
-    "brier": 0.2095652423805397,
-    "log_loss": 0.6042384492311279,
+    "n": 369,
+    "mean_model_probability": 0.4999794037940379,
+    "mean_market_probability": 0.5001568963058052,
+    "observed_win_rate": 0.4986449864498645,
+    "brier": 0.21589863804281786,
+    "log_loss": 0.6180515119419246,
     "buckets": {
       "0-10%": {
         "n": 6,
@@ -83,46 +83,46 @@
         "calibration_error": 0.1532219259373922
       },
       "20-30%": {
-        "n": 28,
-        "mean_model_probability": 0.24972641140631108,
-        "mean_market_probability": 0.2817323306615321,
-        "observed_win_rate": 0.25,
-        "calibration_error": -0.00027358859368892263
+        "n": 30,
+        "mean_model_probability": 0.24879842966876703,
+        "mean_market_probability": 0.27683288200160294,
+        "observed_win_rate": 0.26666666666666666,
+        "calibration_error": -0.017868236997899634
       },
       "30-40%": {
-        "n": 48,
-        "mean_model_probability": 0.35445879849787004,
-        "mean_market_probability": 0.35097510737525983,
-        "observed_win_rate": 0.3541666666666667,
-        "calibration_error": 0.0002921318312033572
+        "n": 52,
+        "mean_model_probability": 0.3546279698067444,
+        "mean_market_probability": 0.3458518630991912,
+        "observed_win_rate": 0.38461538461538464,
+        "calibration_error": -0.029987414808640256
       },
       "40-50%": {
-        "n": 81,
-        "mean_model_probability": 0.4523881342862669,
-        "mean_market_probability": 0.45327440535899655,
-        "observed_win_rate": 0.4444444444444444,
-        "calibration_error": 0.007943689841822477
+        "n": 84,
+        "mean_model_probability": 0.45234456683750723,
+        "mean_market_probability": 0.45485802275575504,
+        "observed_win_rate": 0.4642857142857143,
+        "calibration_error": -0.011941147448207068
       },
       "50-60%": {
-        "n": 80,
-        "mean_model_probability": 0.5481120140351547,
-        "mean_market_probability": 0.5480333487845424,
-        "observed_win_rate": 0.55,
-        "calibration_error": -0.0018879859648452957
+        "n": 83,
+        "mean_model_probability": 0.5481380287427638,
+        "mean_market_probability": 0.5463833834380565,
+        "observed_win_rate": 0.5301204819277109,
+        "calibration_error": 0.018017546815052965
       },
       "60-70%": {
-        "n": 48,
-        "mean_model_probability": 0.6455412015021299,
-        "mean_market_probability": 0.6490248926247401,
-        "observed_win_rate": 0.6458333333333334,
-        "calibration_error": -0.0002921318312034682
+        "n": 52,
+        "mean_model_probability": 0.6453720301932555,
+        "mean_market_probability": 0.6541481369008088,
+        "observed_win_rate": 0.6153846153846154,
+        "calibration_error": 0.02998741480864009
       },
       "70-80%": {
-        "n": 28,
-        "mean_model_probability": 0.750273588593689,
-        "mean_market_probability": 0.718267669338468,
-        "observed_win_rate": 0.75,
-        "calibration_error": 0.00027358859368897814
+        "n": 30,
+        "mean_model_probability": 0.7512015703312329,
+        "mean_market_probability": 0.7231671179983971,
+        "observed_win_rate": 0.7333333333333333,
+        "calibration_error": 0.017868236997899634
       },
       "80-90%": {
         "n": 13,
@@ -141,12 +141,12 @@
     }
   },
   "current_engine_moneyline_calibration": {
-    "n": 24,
-    "mean_model_probability": 0.4504076704369471,
-    "mean_market_probability": 0.37785179116376494,
-    "observed_win_rate": 0.5,
-    "brier": 0.21138586774257473,
-    "log_loss": 0.6047046640239404,
+    "n": 30,
+    "mean_model_probability": 0.4285847329329361,
+    "mean_market_probability": 0.35934792452938547,
+    "observed_win_rate": 0.5666666666666667,
+    "brier": 0.24166296222519892,
+    "log_loss": 0.6717551157957388,
     "buckets": {
       "10-20%": {
         "n": 2,
@@ -156,25 +156,25 @@
         "calibration_error": 0.1650882148643241
       },
       "20-30%": {
-        "n": 1,
-        "mean_model_probability": 0.263284433449202,
-        "mean_market_probability": 0.221311475409836,
-        "observed_win_rate": 1.0,
-        "calibration_error": -0.7367155665507981
+        "n": 3,
+        "mean_model_probability": 0.2449659347118344,
+        "mean_market_probability": 0.21259755897834218,
+        "observed_win_rate": 0.6666666666666666,
+        "calibration_error": -0.42170073195483226
       },
       "30-40%": {
-        "n": 7,
-        "mean_model_probability": 0.3341632050680742,
-        "mean_market_probability": 0.253467310866727,
-        "observed_win_rate": 0.42857142857142855,
-        "calibration_error": -0.09440822350335437
+        "n": 9,
+        "mean_model_probability": 0.33624742888076997,
+        "mean_market_probability": 0.25192018969350777,
+        "observed_win_rate": 0.5555555555555556,
+        "calibration_error": -0.2193081266747856
       },
       "40-50%": {
-        "n": 7,
-        "mean_model_probability": 0.4574643501502358,
-        "mean_market_probability": 0.37893963744970144,
-        "observed_win_rate": 0.42857142857142855,
-        "calibration_error": 0.02889292157880724
+        "n": 9,
+        "mean_model_probability": 0.45459006149069897,
+        "mean_market_probability": 0.3838978308221605,
+        "observed_win_rate": 0.5555555555555556,
+        "calibration_error": -0.10096549406485661
       },
       "50-60%": {
         "n": 3,
@@ -215,69 +215,69 @@
   },
   "by_market_group": {
     "game_spread": {
-      "bets": 1891,
-      "wins": 927,
-      "losses": 928,
-      "pushes": 36,
-      "win_rate": 0.49973045822102424,
-      "net_units": -142.239,
-      "roi": -0.07521893178212587
+      "bets": 1987,
+      "wins": 972,
+      "losses": 973,
+      "pushes": 42,
+      "win_rate": 0.4997429305912596,
+      "net_units": -145.83500000000004,
+      "roi": -0.07339456467035733
     },
     "moneyline": {
-      "bets": 351,
-      "wins": 175,
-      "losses": 176,
+      "bets": 369,
+      "wins": 184,
+      "losses": 185,
       "pushes": 0,
-      "win_rate": 0.4985754985754986,
-      "net_units": -32.001,
-      "roi": -0.09117094017094017
+      "win_rate": 0.4986449864498645,
+      "net_units": -25.208000000000002,
+      "roi": -0.06831436314363144
     },
     "total_games": {
-      "bets": 1056,
-      "wins": 523,
-      "losses": 523,
-      "pushes": 10,
+      "bets": 1152,
+      "wins": 569,
+      "losses": 569,
+      "pushes": 14,
       "win_rate": 0.5,
-      "net_units": -63.663000000000004,
-      "roi": -0.06028693181818182
+      "net_units": -67.22200000000001,
+      "roi": -0.058352430555555564
     }
   },
   "by_signal": {
     "BET": {
-      "bets": 57,
-      "wins": 23,
+      "bets": 62,
+      "wins": 28,
       "losses": 34,
       "pushes": 0,
-      "win_rate": 0.40350877192982454,
-      "net_units": 3.4900000000000007,
-      "roi": 0.06122807017543861
+      "win_rate": 0.45161290322580644,
+      "net_units": 16.71,
+      "roi": 0.2695161290322581
     },
     "LEAN": {
-      "bets": 13,
+      "bets": 14,
       "wins": 6,
-      "losses": 7,
+      "losses": 8,
       "pushes": 0,
-      "win_rate": 0.46153846153846156,
-      "net_units": 11.363999999999997,
-      "roi": 0.874153846153846
+      "win_rate": 0.42857142857142855,
+      "net_units": 10.363999999999997,
+      "roi": 0.7402857142857141
     },
     "PASS": {
-      "bets": 1249,
-      "wins": 623,
-      "losses": 603,
-      "pushes": 23,
-      "win_rate": 0.5081566068515497,
-      "net_units": -100.51699999999998,
-      "roi": -0.08047798238590871
+      "bets": 1345,
+      "wins": 646,
+      "losses": 671,
+      "pushes": 28,
+      "win_rate": 0.4905087319665907,
+      "net_units": -147.35700000000003,
+      "roi": -0.10955910780669147
     },
     "REVIEW": {
-      "bets": 1977,
-      "wins": 973,
-      "losses": 981,
-      "pushes": 23,
-      "win_rate": 0.49795291709314227,
-      "net_units": -150.23999999999995,
-      "roi": -0.07599393019726856
+      "bets": 2085,
+      "wins": 1045,
+      "losses": 1012,
+      "pushes": 28,
+      "win_rate": 0.5080213903743316,
+      "net_units": -115.98199999999997,
+      "roi": -0.05562685851318944
     },
     "MISSING": {
       "bets": 2,
@@ -291,33 +291,33 @@
   },
   "by_tour": {
     "MEN": {
-      "bets": 1834,
-      "wins": 905,
-      "losses": 907,
-      "pushes": 22,
-      "win_rate": 0.49944812362030905,
-      "net_units": -90.033,
-      "roi": -0.04909105779716467
+      "bets": 2002,
+      "wins": 986,
+      "losses": 988,
+      "pushes": 28,
+      "win_rate": 0.49949341438703143,
+      "net_units": -92.41300000000001,
+      "roi": -0.046160339660339667
     },
     "WTA": {
-      "bets": 1464,
-      "wins": 720,
-      "losses": 720,
-      "pushes": 24,
+      "bets": 1506,
+      "wins": 739,
+      "losses": 739,
+      "pushes": 28,
       "win_rate": 0.5,
-      "net_units": -147.87,
-      "roi": -0.10100409836065574
+      "net_units": -145.852,
+      "roi": -0.0968472775564409
     }
   },
   "by_best_of": {
     "3": {
-      "bets": 2454,
-      "wins": 1208,
-      "losses": 1210,
-      "pushes": 36,
-      "win_rate": 0.49958643507030603,
-      "net_units": -184.18000000000006,
-      "roi": -0.07505297473512636
+      "bets": 2664,
+      "wins": 1308,
+      "losses": 1310,
+      "pushes": 46,
+      "win_rate": 0.49961802902979374,
+      "net_units": -184.54200000000003,
+      "roi": -0.06927252252252253
     },
     "5": {
       "bets": 844,
@@ -331,42 +331,42 @@
   },
   "current_engine_by_signal": {
     "BET": {
-      "bets": 19,
-      "wins": 11,
+      "bets": 24,
+      "wins": 16,
       "losses": 8,
       "pushes": 0,
-      "win_rate": 0.5789473684210527,
-      "net_units": 10.661999999999999,
-      "roi": 0.5611578947368421
+      "win_rate": 0.6666666666666666,
+      "net_units": 23.882,
+      "roi": 0.9950833333333334
     },
     "LEAN": {
-      "bets": 5,
+      "bets": 6,
       "wins": 1,
-      "losses": 4,
+      "losses": 5,
       "pushes": 0,
-      "win_rate": 0.2,
-      "net_units": -2.87,
-      "roi": -0.5740000000000001
+      "win_rate": 0.16666666666666666,
+      "net_units": -3.87,
+      "roi": -0.645
     }
   },
   "current_engine_by_candidate": {
     "ensemble": {
-      "bets": 17,
-      "wins": 8,
-      "losses": 9,
+      "bets": 21,
+      "wins": 11,
+      "losses": 10,
       "pushes": 0,
-      "win_rate": 0.47058823529411764,
-      "net_units": 5.103,
-      "roi": 0.30017647058823527
+      "win_rate": 0.5238095238095238,
+      "net_units": 11.383,
+      "roi": 0.542047619047619
     },
     "residual": {
-      "bets": 7,
-      "wins": 4,
+      "bets": 9,
+      "wins": 6,
       "losses": 3,
       "pushes": 0,
-      "win_rate": 0.5714285714285714,
-      "net_units": 2.6889999999999996,
-      "roi": 0.38414285714285706
+      "win_rate": 0.6666666666666666,
+      "net_units": 8.629,
+      "roi": 0.9587777777777777
     }
   }
 }
