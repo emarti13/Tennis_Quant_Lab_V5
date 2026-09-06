@@ -1,30 +1,54 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-09-06T18:22:08.823796+00:00",
-  "market_snapshot_utc": "2026-09-06T18:19:49.024613+00:00",
+  "built_at_utc": "2026-09-06T22:11:06.246558+00:00",
+  "market_snapshot_utc": "2026-09-06T22:08:53.143180+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 958,
-  "eligible_pre_match_fixtures": 48,
-  "priced_rows": 928,
-  "board_rows": 928,
-  "frozen_ledger_rows": 6023,
-  "new_frozen_rows": 652,
+  "market_rows_input": 1294,
+  "eligible_pre_match_fixtures": 62,
+  "priced_rows": 1152,
+  "board_rows": 1152,
+  "frozen_ledger_rows": 6327,
+  "new_frozen_rows": 304,
   "signal_counts": {
-    "PASS": 458,
-    "REVIEW": 320,
-    "BET": 142,
-    "LEAN": 8
+    "REVIEW": 536,
+    "PASS": 482,
+    "BET": 129,
+    "LEAN": 5
   },
   "selected_candidate_counts": {
-    "ensemble": 798,
-    "residual": 130
+    "ensemble": 958,
+    "residual": 194
   },
   "selected_score_candidate_counts": {
-    "conditioned_mechanistic": 798,
-    "gaussian_contextual": 130
+    "conditioned_mechanistic": 958,
+    "gaussian_contextual": 194
   },
   "context_fallback_rows": 0,
   "errors": [
+    {
+      "fixture_id": "id1200606774401108",
+      "player1": "Uesugi, Kaito",
+      "player2": "Nam, Ji Sung",
+      "tournament": "ATP Challenger Shanghai, China Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Nam, Ji Sung"
+    },
+    {
+      "fixture_id": "id1205173474394280",
+      "player1": "Kawahashi, Yuta",
+      "player2": "Ryan Ziegann, Sam",
+      "tournament": "ATP Challenger Phan Thiet 3, Vietnam Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Ryan Ziegann, Sam"
+    },
+    {
+      "fixture_id": "id1205173474398038",
+      "player1": "O'Connell, Benjamin",
+      "player2": "Ichikawa, Taisei",
+      "tournament": "ATP Challenger Phan Thiet 3, Vietnam Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): O'Connell, Benjamin"
+    },
     {
       "fixture_id": "id1205194474396228",
       "player1": "Zolotareva, Rada",
@@ -40,6 +64,22 @@
       "tournament": "WTA 125K Antalya 4, Turkiye Women Singles",
       "stage": "prepare_fixture",
       "error": "Unmatched V5 player(s): de Stefano, Samira, Yoruk, Ilay"
+    },
+    {
+      "fixture_id": "id1205194474397868",
+      "player1": "Zelnickova, Radka",
+      "player2": "Kulambayeva, Zhibek",
+      "tournament": "WTA 125K Antalya 4, Turkiye Women Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Zelnickova, Radka"
+    },
+    {
+      "fixture_id": "id1205194474397866",
+      "player1": "Falkowska, Weronika",
+      "player2": "Yaneva, Elizara",
+      "tournament": "WTA 125K Antalya 4, Turkiye Women Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Yaneva, Elizara"
     }
   ],
   "model_version": "v5-advanced-nested-chronological-1",
