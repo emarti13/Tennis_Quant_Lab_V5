@@ -1,30 +1,47 @@
 {
-  "status": "SUCCESS",
-  "built_at_utc": "2026-09-06T15:32:56.436118+00:00",
-  "market_snapshot_utc": "2026-09-06T15:30:14.108282+00:00",
+  "status": "PARTIAL",
+  "built_at_utc": "2026-09-06T18:22:08.823796+00:00",
+  "market_snapshot_utc": "2026-09-06T18:19:49.024613+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 332,
-  "eligible_pre_match_fixtures": 19,
-  "priced_rows": 332,
-  "board_rows": 332,
-  "frozen_ledger_rows": 5371,
-  "new_frozen_rows": 202,
+  "market_rows_input": 958,
+  "eligible_pre_match_fixtures": 48,
+  "priced_rows": 928,
+  "board_rows": 928,
+  "frozen_ledger_rows": 6023,
+  "new_frozen_rows": 652,
   "signal_counts": {
-    "PASS": 168,
-    "BET": 103,
-    "REVIEW": 52,
-    "LEAN": 9
+    "PASS": 458,
+    "REVIEW": 320,
+    "BET": 142,
+    "LEAN": 8
   },
   "selected_candidate_counts": {
-    "ensemble": 180,
-    "residual": 152
+    "ensemble": 798,
+    "residual": 130
   },
   "selected_score_candidate_counts": {
-    "conditioned_mechanistic": 180,
-    "gaussian_contextual": 152
+    "conditioned_mechanistic": 798,
+    "gaussian_contextual": 130
   },
   "context_fallback_rows": 0,
-  "errors": [],
+  "errors": [
+    {
+      "fixture_id": "id1205194474396228",
+      "player1": "Zolotareva, Rada",
+      "player2": "Oz, Ipek",
+      "tournament": "WTA 125K Antalya 4, Turkiye Women Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Zolotareva, Rada"
+    },
+    {
+      "fixture_id": "id1205194474400904",
+      "player1": "de Stefano, Samira",
+      "player2": "Yoruk, Ilay",
+      "tournament": "WTA 125K Antalya 4, Turkiye Women Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): de Stefano, Samira, Yoruk, Ilay"
+    }
+  ],
   "model_version": "v5-advanced-nested-chronological-1",
   "score_model_version": "v5-score-walkforward-3",
   "probability_source": "chronologically validated independent full-context candidate; sportsbook inputs joined only after probability freeze",
