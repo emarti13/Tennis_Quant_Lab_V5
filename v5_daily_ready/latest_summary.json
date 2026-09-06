@@ -1,30 +1,95 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-09-05T22:07:08.111943+00:00",
-  "market_snapshot_utc": "2026-09-05T22:05:02.097162+00:00",
+  "built_at_utc": "2026-09-06T04:45:13.192889+00:00",
+  "market_snapshot_utc": "2026-09-06T04:43:03.800275+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 556,
-  "eligible_pre_match_fixtures": 28,
-  "priced_rows": 402,
-  "board_rows": 402,
-  "frozen_ledger_rows": 4409,
-  "new_frozen_rows": 156,
+  "market_rows_input": 1288,
+  "eligible_pre_match_fixtures": 72,
+  "priced_rows": 1028,
+  "board_rows": 1036,
+  "frozen_ledger_rows": 5169,
+  "new_frozen_rows": 760,
   "signal_counts": {
-    "PASS": 175,
-    "REVIEW": 113,
-    "BET": 102,
-    "LEAN": 12
+    "REVIEW": 603,
+    "PASS": 301,
+    "BET": 118,
+    "N/A": 8,
+    "LEAN": 6
   },
   "selected_candidate_counts": {
-    "ensemble": 274,
-    "residual": 128
+    "ensemble": 948,
+    "residual": 88
   },
   "selected_score_candidate_counts": {
-    "conditioned_mechanistic": 274,
-    "gaussian_contextual": 128
+    "conditioned_mechanistic": 948,
+    "gaussian_contextual": 88
   },
   "context_fallback_rows": 0,
   "errors": [
+    {
+      "fixture_id": "id1200380174375242",
+      "player1": "Chepelev, Andrey",
+      "player2": "Gschwendtner, Jeremy",
+      "tournament": "ATP Challenger Genoa, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Gschwendtner, Jeremy"
+    },
+    {
+      "fixture_id": "id1200381374374740",
+      "player1": "Sanchez Quilez, Alejo",
+      "player2": "Turriziani Alvarez, Alejandro",
+      "tournament": "ATP Challenger Seville, Spain Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Turriziani Alvarez, Alejandro"
+    },
+    {
+      "fixture_id": "id1200381374374736",
+      "player1": "Rodriguez Taverna, Santiago",
+      "player2": "Martin Espinar, Adam",
+      "tournament": "ATP Challenger Seville, Spain Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Martin Espinar, Adam"
+    },
+    {
+      "fixture_id": "id1200380174375246",
+      "player1": "Forti, Francesco",
+      "player2": "Ciavarella, Niccolo",
+      "tournament": "ATP Challenger Genoa, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Ciavarella, Niccolo"
+    },
+    {
+      "fixture_id": "id1200381374374752",
+      "player1": "Sanchez Jover, Carlos",
+      "player2": "Fita Juan, Sergi",
+      "tournament": "ATP Challenger Seville, Spain Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Fita Juan, Sergi"
+    },
+    {
+      "fixture_id": "id1200380174375228",
+      "player1": "Cherie Ligniere, Edoardo",
+      "player2": "Arnaboldi, Federico",
+      "tournament": "ATP Challenger Genoa, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Cherie Ligniere, Edoardo"
+    },
+    {
+      "fixture_id": "id1200606774368082",
+      "player1": "Nam, Ji Sung",
+      "player2": "Charlton, Joshua",
+      "tournament": "ATP Challenger Shanghai, China Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Nam, Ji Sung"
+    },
+    {
+      "fixture_id": "id1200606774368088",
+      "player1": "Nakamura, Ren",
+      "player2": "Liu, Hanyi",
+      "tournament": "ATP Challenger Shanghai, China Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Nakamura, Ren"
+    },
     {
       "fixture_id": "id1202612674374536",
       "player1": "Paldanius, Oskari",
@@ -32,6 +97,14 @@
       "tournament": "ATP Challenger Cassis, France Men Singles",
       "stage": "prepare_fixture",
       "error": "Unmatched V5 player(s): Tepmahc, Nicolas"
+    },
+    {
+      "fixture_id": "id1203487474374618",
+      "player1": "Gombos, Norbert",
+      "player2": "Wagner, Alexander",
+      "tournament": "ATP Challenger Tulln, Austria Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Wagner, Alexander"
     },
     {
       "fixture_id": "id1202612674374540",
@@ -42,12 +115,28 @@
       "error": "Unmatched V5 player(s): Scaglia, Mathieu"
     },
     {
+      "fixture_id": "id1203487474374622",
+      "player1": "Dedura-Palomero, Diego",
+      "player2": "Rosenkranz Koenig, Timo",
+      "tournament": "ATP Challenger Tulln, Austria Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Rosenkranz Koenig, Timo"
+    },
+    {
       "fixture_id": "id1202612674374542",
       "player1": "Deckers, Alec",
       "player2": "Tailleu, Pierre Antoine",
       "tournament": "ATP Challenger Cassis, France Men Singles",
       "stage": "prepare_fixture",
       "error": "Unmatched V5 player(s): Tailleu, Pierre Antoine"
+    },
+    {
+      "fixture_id": "id1203487474374610",
+      "player1": "Martin, Andrej",
+      "player2": "Gundacker, Jonas",
+      "tournament": "ATP Challenger Tulln, Austria Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Gundacker, Jonas"
     },
     {
       "fixture_id": "id1202612674374546",
@@ -58,6 +147,14 @@
       "error": "Unmatched V5 player(s): Pietri, Benjamin"
     },
     {
+      "fixture_id": "id1202612674374550",
+      "player1": "Boulais, Justin",
+      "player2": "Roche, Matis",
+      "tournament": "ATP Challenger Cassis, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Roche, Matis"
+    },
+    {
       "fixture_id": "id1202612674374544",
       "player1": "Car, Hugo",
       "player2": "Dalmasso, Guillaume",
@@ -66,20 +163,20 @@
       "error": "Unmatched V5 player(s): Car, Hugo"
     },
     {
-      "fixture_id": "id1205173474371148",
-      "player1": "Koizumi, Noritaka",
-      "player2": "Ichikawa, Taisei",
+      "fixture_id": "id1205173474371146",
+      "player1": "Kawahashi, Yuta",
+      "player2": "Bastola, Abhishek",
       "tournament": "ATP Challenger Phan Thiet 3, Vietnam Men Singles",
       "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): Koizumi, Noritaka"
+      "error": "Unmatched V5 player(s): Bastola, Abhishek"
     },
     {
-      "fixture_id": "id1205173474371144",
-      "player1": "Papa, Christopher",
-      "player2": "Ryan Ziegann, Sam",
-      "tournament": "ATP Challenger Phan Thiet 3, Vietnam Men Singles",
+      "fixture_id": "id1205194474372572",
+      "player1": "Dencheva, Rositsa",
+      "player2": "Lachinova, Adelina",
+      "tournament": "WTA 125K Antalya 4, Turkiye Women Singles",
       "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): Ryan Ziegann, Sam"
+      "error": "Unmatched V5 player(s): Dencheva, Rositsa"
     }
   ],
   "model_version": "v5-advanced-nested-chronological-1",
