@@ -2,7 +2,7 @@ name: V5 Full Regression Suite
 
 on:
   push:
-    branches: [main, feature/complete-superpowers-v5, fix/results-ledger-clarity]
+    branches: [main, feature/complete-superpowers-v5]
     paths:
       - '**.py'
       - 'experiments/acceptance/production_candidate.json'
