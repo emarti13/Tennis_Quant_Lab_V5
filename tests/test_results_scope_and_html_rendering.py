@@ -115,3 +115,21 @@ def test_filter_current_engine_rows_requires_current_model_version_and_actionabl
     assert len(out) == 1
     assert out.iloc[0]["model_version"] == "current-v"
     assert out.iloc[0]["signal"] == "BET"
+
+
+def test_results_ledger_views_keep_current_legacy_and_all_settled_separate():
+    from results_accuracy_page import results_ledger_views
+
+    df = pd.DataFrame([
+        {"model_version":"current-v","signal":"BET","result_status":"SETTLED","settled_result":"WIN"},
+        {"model_version":"current-v","signal":"PASS","result_status":"SETTLED","settled_result":"LOSS"},
+        {"model_version":"legacy-v","signal":"LEAN","result_status":"SETTLED","settled_result":"LOSS"},
+        {"model_version":"legacy-v","signal":"REVIEW","result_status":"SETTLED","settled_result":"LOSS"},
+        {"model_version":"current-v","signal":"BET","result_status":"OPEN","settled_result":""},
+    ])
+    views = results_ledger_views(df, "current-v")
+    assert len(views["current_engine"]) == 1
+    assert len(views["historical_actionable"]) == 1
+    assert len(views["all_settled"]) == 4
+    assert set(views["current_engine"]["signal"]) == {"BET"}
+    assert set(views["historical_actionable"]["signal"]) == {"LEAN"}

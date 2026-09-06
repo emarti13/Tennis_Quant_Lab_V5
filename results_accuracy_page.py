@@ -34,6 +34,39 @@ def filter_current_engine_rows(df, current_model_version):
     return df[version.eq(str(current_model_version)) & signal.isin(["BET", "LEAN"])].copy()
 
 
+def results_ledger_views(df, current_model_version):
+    """Return mutually understandable result scopes for the UI.
+
+    current_engine: settled BET/LEAN rows made by the presently promoted model version.
+    historical_actionable: settled BET/LEAN rows from every older model version.
+    all_settled: every settled modeled market row, including PASS/REVIEW audit observations.
+    """
+    if df is None or df.empty:
+        empty = pd.DataFrame(columns=list(df.columns) if df is not None else [])
+        return {"current_engine": empty.copy(), "historical_actionable": empty.copy(), "all_settled": empty.copy()}
+
+    status = df.get("result_status", pd.Series(index=df.index, dtype=object)).fillna("").astype(str).str.upper()
+    result = df.get("settled_result", pd.Series(index=df.index, dtype=object)).fillna("").astype(str).str.upper()
+    signal = df.get("signal", pd.Series(index=df.index, dtype=object)).fillna("").astype(str).str.upper()
+    settled = df[status.eq("SETTLED") & result.isin(["WIN", "LOSS", "PUSH", "VOID"])].copy()
+    actionable_mask = signal.loc[settled.index].isin(["BET", "LEAN"])
+    actionable = settled[actionable_mask].copy()
+
+    if current_model_version and "model_version" in actionable.columns:
+        version = actionable["model_version"].fillna("").astype(str)
+        current = actionable[version.eq(str(current_model_version))].copy()
+        historical = actionable[~version.eq(str(current_model_version))].copy()
+    else:
+        current = actionable.iloc[0:0].copy()
+        historical = actionable.copy()
+
+    return {
+        "current_engine": current,
+        "historical_actionable": historical,
+        "all_settled": settled,
+    }
+
+
 def load_accuracy_ledger(path=DEFAULT_LEDGER):
     path = Path(path)
     if not path.exists():
@@ -115,6 +148,35 @@ def _decision_rows(df):
     return df[status.eq("SETTLED") & result.isin(["WIN", "LOSS"]) & signal.isin(["BET", "LEAN"])].copy()
 
 
+def _display_ledger(frame):
+    if frame is None or frame.empty:
+        st.info("No rows are available in this result scope yet.")
+        return
+    display_cols = [
+        c for c in [
+            "settled_at_utc", "start_time_utc", "model_version", "selected_model_candidate", "selected_score_candidate",
+            "tournament", "tour_v5", "surface", "resolved_player1", "resolved_player2", "market_group", "selection", "line",
+            "model_probability", "model_fair_american", "best_bookmaker", "best_american_odds",
+            "edge_vs_consensus", "expected_value", "signal", "result_winner", "result_loser",
+            "result_score", "settled_result", "profit_units",
+        ] if c in frame.columns
+    ]
+    sort_col = "settled_at_utc" if "settled_at_utc" in frame.columns else None
+    shown = frame.sort_values(sort_col, ascending=False) if sort_col else frame.copy()
+    st.dataframe(
+        shown[display_cols].style.format({
+            "model_probability": "{:.1%}",
+            "edge_vs_consensus": "{:+.1%}",
+            "expected_value": "{:+.1%}",
+            "profit_units": "{:+.2f}",
+            "model_fair_american": "{:+.0f}",
+            "best_american_odds": "{:+.0f}",
+        }),
+        use_container_width=True,
+        hide_index=True,
+    )
+
+
 def render_results_accuracy(ledger_path=DEFAULT_LEDGER):
     st.title("Results & Accuracy")
     st.caption(
@@ -128,7 +190,8 @@ def render_results_accuracy(ledger_path=DEFAULT_LEDGER):
         return
 
     current_version = _current_model_version()
-    current_df = filter_current_engine_rows(df, current_version)
+    views = results_ledger_views(df, current_version)
+    current_df = views["current_engine"]
     current_metrics = accuracy_metrics(current_df)
     historical_metrics = accuracy_metrics(df)
     use_current = current_metrics["decisions"] > 0
@@ -160,8 +223,8 @@ def render_results_accuracy(ledger_path=DEFAULT_LEDGER):
         )
 
     st.info(
-        "Frozen historical predictions are preserved exactly as they were made. Model upgrades do not retroactively rewrite old live predictions; "
-        "doing so would contaminate out-of-sample performance. Historical evaluation of a newer engine belongs in a separate time-safe backtest."
+        "The thousands of stored rows are not thousands of recommendations. They include alternate spreads/totals and PASS/REVIEW model observations. "
+        "The current-engine record below uses only settled BET/LEAN rows produced by the presently promoted model version."
     )
 
     decisions = _decision_rows(current_df if use_current else df)
@@ -221,54 +284,20 @@ def render_results_accuracy(ledger_path=DEFAULT_LEDGER):
     else:
         st.info(f"Calibration table begins at 20 WIN/LOSS decisions in this scope. Current: {len(calibration)}.")
 
-    with st.expander("Historical BET + LEAN recommendations", expanded=False):
-        st.write({
-            "decisions": historical_metrics["decisions"],
-            "wins": historical_metrics["wins"],
-            "losses": historical_metrics["losses"],
-            "win_rate": None if pd.isna(historical_metrics["win_rate"]) else historical_metrics["win_rate"],
-            "units": historical_metrics["units"],
-            "roi": None if pd.isna(historical_metrics["roi"]) else historical_metrics["roi"],
-        })
-        st.caption("This history spans earlier V5 generations and is not a clean measurement of the current full-context engine.")
+    st.subheader("Current Engine Settled Recommendations")
+    st.caption(
+        f"Only settled BET/LEAN rows from {current_version or 'the current promoted model'} are shown here. "
+        f"Rows in this table: {len(views['current_engine'])}."
+    )
+    _display_ledger(views["current_engine"])
 
-    all_metrics = accuracy_metrics(df, actionable_only=False)
-    with st.expander("All settled model-market rows (audit only)", expanded=False):
+    with st.expander(f"Legacy BET + LEAN recommendations ({len(views['historical_actionable'])})", expanded=False):
+        st.caption("These are real historical recommendations from older V5 generations. They are preserved, but they do not measure the current engine.")
+        _display_ledger(views["historical_actionable"])
+
+    with st.expander(f"All settled model-market rows — audit only ({len(views['all_settled'])})", expanded=False):
         st.caption(
-            "This includes PASS and REVIEW observations. These rows are useful for calibration/audit and must not be interpreted as wagers or recommendations."
+            "This is the large table: every settled modeled market row, including PASS/REVIEW and alternate lines. "
+            "It is diagnostic evidence only and is intentionally excluded from the current-engine recommendation record."
         )
-        st.write({
-            "settled_rows": all_metrics["settled"],
-            "win_loss_decisions": all_metrics["decisions"],
-            "wins": all_metrics["wins"],
-            "losses": all_metrics["losses"],
-            "units_if_every_row_were_bet": all_metrics["units"],
-        })
-
-    st.subheader("Settled Prediction Ledger")
-    status = df.get("result_status", pd.Series(index=df.index, dtype=object)).fillna("").astype(str).str.upper()
-    settled = df[status.eq("SETTLED")].copy()
-    if settled.empty:
-        st.info("No predictions have settled yet.")
-    else:
-        display_cols = [
-            c for c in [
-                "settled_at_utc", "start_time_utc", "model_version", "selected_model_candidate", "selected_score_candidate",
-                "tournament", "tour_v5", "surface", "resolved_player1", "resolved_player2", "market_group", "selection", "line",
-                "model_probability", "model_fair_american", "best_bookmaker", "best_american_odds",
-                "edge_vs_consensus", "expected_value", "signal", "result_winner", "result_loser",
-                "result_score", "settled_result", "profit_units",
-            ] if c in settled.columns
-        ]
-        st.dataframe(
-            settled.sort_values("settled_at_utc", ascending=False)[display_cols].style.format({
-                "model_probability": "{:.1%}",
-                "edge_vs_consensus": "{:+.1%}",
-                "expected_value": "{:+.1%}",
-                "profit_units": "{:+.2f}",
-                "model_fair_american": "{:+.0f}",
-                "best_american_odds": "{:+.0f}",
-            }),
-            use_container_width=True,
-            hide_index=True,
-        )
+        _display_ledger(views["all_settled"])
