@@ -1,30 +1,38 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-09-06T22:11:06.246558+00:00",
-  "market_snapshot_utc": "2026-09-06T22:08:53.143180+00:00",
+  "built_at_utc": "2026-09-07T04:48:41.442390+00:00",
+  "market_snapshot_utc": "2026-09-07T04:46:27.387204+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 1294,
-  "eligible_pre_match_fixtures": 62,
-  "priced_rows": 1152,
-  "board_rows": 1152,
-  "frozen_ledger_rows": 6327,
-  "new_frozen_rows": 304,
+  "market_rows_input": 1754,
+  "eligible_pre_match_fixtures": 86,
+  "priced_rows": 1508,
+  "board_rows": 1508,
+  "frozen_ledger_rows": 6821,
+  "new_frozen_rows": 494,
   "signal_counts": {
-    "REVIEW": 536,
-    "PASS": 482,
-    "BET": 129,
-    "LEAN": 5
+    "REVIEW": 848,
+    "PASS": 536,
+    "BET": 121,
+    "LEAN": 3
   },
   "selected_candidate_counts": {
-    "ensemble": 958,
-    "residual": 194
+    "ensemble": 1270,
+    "residual": 238
   },
   "selected_score_candidate_counts": {
-    "conditioned_mechanistic": 958,
-    "gaussian_contextual": 194
+    "conditioned_mechanistic": 1270,
+    "gaussian_contextual": 238
   },
   "context_fallback_rows": 0,
   "errors": [
+    {
+      "fixture_id": "id1200380174401404",
+      "player1": "Zeitune, Maximo",
+      "player2": "La Vela, Giuseppe",
+      "tournament": "ATP Challenger Genoa, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): La Vela, Giuseppe"
+    },
     {
       "fixture_id": "id1200606774401108",
       "player1": "Uesugi, Kaito",
@@ -34,20 +42,60 @@
       "error": "Unmatched V5 player(s): Nam, Ji Sung"
     },
     {
-      "fixture_id": "id1205173474394280",
-      "player1": "Kawahashi, Yuta",
-      "player2": "Ryan Ziegann, Sam",
-      "tournament": "ATP Challenger Phan Thiet 3, Vietnam Men Singles",
+      "fixture_id": "id1200381374403200",
+      "player1": "Turriziani Alvarez, Alejandro",
+      "player2": "Ritschard, Alexander",
+      "tournament": "ATP Challenger Seville, Spain Men Singles",
       "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): Ryan Ziegann, Sam"
+      "error": "Unmatched V5 player(s): Turriziani Alvarez, Alejandro"
     },
     {
-      "fixture_id": "id1205173474398038",
-      "player1": "O'Connell, Benjamin",
-      "player2": "Ichikawa, Taisei",
-      "tournament": "ATP Challenger Phan Thiet 3, Vietnam Men Singles",
+      "fixture_id": "id1204310574401402",
+      "player1": "Nguyen Tan, Lucie",
+      "player2": "Spiteri, Dalila",
+      "tournament": "WTA 125K Montreux, Switzerland Women Singles",
       "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): O'Connell, Benjamin"
+      "error": "Unmatched V5 player(s): Nguyen Tan, Lucie"
+    },
+    {
+      "fixture_id": "id1204310574403424",
+      "player1": "Trevisan, Martina",
+      "player2": "Bonelli, Elsa",
+      "tournament": "WTA 125K Montreux, Switzerland Women Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Bonelli, Elsa"
+    },
+    {
+      "fixture_id": "id1202612674402646",
+      "player1": "Tailleu, Pierre Antoine",
+      "player2": "Scaglia, Mathieu",
+      "tournament": "ATP Challenger Cassis, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Tailleu, Pierre Antoine, Scaglia, Mathieu"
+    },
+    {
+      "fixture_id": "id1202612674403966",
+      "player1": "Pietri, Benjamin",
+      "player2": "Car, Hugo",
+      "tournament": "ATP Challenger Cassis, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Pietri, Benjamin, Car, Hugo"
+    },
+    {
+      "fixture_id": "id1204310574374696",
+      "player1": "Zolotareva, Anastasia",
+      "player2": "Papamichail, Despina",
+      "tournament": "WTA 125K Montreux, Switzerland Women Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Zolotareva, Anastasia"
+    },
+    {
+      "fixture_id": "id1204310574374682",
+      "player1": "Hodzic, Mina",
+      "player2": "Sobolieva, Anastasiia",
+      "tournament": "WTA 125K Montreux, Switzerland Women Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Sobolieva, Anastasiia"
     },
     {
       "fixture_id": "id1205194474396228",
@@ -72,6 +120,14 @@
       "tournament": "WTA 125K Antalya 4, Turkiye Women Singles",
       "stage": "prepare_fixture",
       "error": "Unmatched V5 player(s): Zelnickova, Radka"
+    },
+    {
+      "fixture_id": "id1205194474402376",
+      "player1": "Dencheva, Rositsa",
+      "player2": "Tona, Miriana",
+      "tournament": "WTA 125K Antalya 4, Turkiye Women Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Dencheva, Rositsa"
     },
     {
       "fixture_id": "id1205194474397866",
