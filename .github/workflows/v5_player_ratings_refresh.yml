@@ -3,7 +3,8 @@ name: V5 Player Ratings Refresh
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 5 * * *"
+    # One daily run. 06:00 UTC is 1 AM Eastern in standard time and 2 AM
+    # Eastern in daylight time, avoiding the former second DST probe runner.
     - cron: "0 6 * * *"
 
 permissions:
@@ -29,32 +30,13 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Decide whether this is the active 1 AM Eastern run
-        id: gate
-        env:
-          GITHUB_EVENT_NAME: ${{ github.event_name }}
-          GITHUB_EVENT_SCHEDULE: ${{ github.event.schedule }}
-        shell: bash
-        run: |
-          set +e
-          python should_run_1am_eastern.py
-          code=$?
-          if [ "$code" -eq 78 ]; then
-            echo "run_refresh=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          if [ "$code" -ne 0 ]; then exit "$code"; fi
-          echo "run_refresh=true" >> "$GITHUB_OUTPUT"
-
       - name: Install Python dependencies
-        if: steps.gate.outputs.run_refresh == 'true'
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install pandas numpy requests scikit-learn
 
       - name: Preflight builder
-        if: steps.gate.outputs.run_refresh == 'true'
         run: |
           test -f build_v5_states.py || {
             echo "::error::build_v5_states.py is missing from the repository root."
@@ -67,7 +49,6 @@ jobs:
           echo "V5 builder/runtime found."
 
       - name: Restore historical TennisMyLife cache
-        if: steps.gate.outputs.run_refresh == 'true'
         id: history-cache
         uses: actions/cache/restore@v4
         with:
@@ -75,31 +56,29 @@ jobs:
           key: v5-tennis-history-2010-2025-v3
 
       - name: Build or restore historical V5 inputs
-        if: steps.gate.outputs.run_refresh == 'true'
         run: python bootstrap_v5_history.py
 
       - name: Save historical TennisMyLife cache
-        if: steps.gate.outputs.run_refresh == 'true' && steps.history-cache.outputs.cache-hit != 'true'
+        if: steps.history-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: .v5_history_cache
           key: v5-tennis-history-2010-2025-v3
 
       - name: Refresh current TennisMyLife data and rebuild V5 ratings
-        if: steps.gate.outputs.run_refresh == 'true'
         run: python refresh_tennismylife_cloud.py --dir .
 
       - name: Remove ephemeral historical root copies before commit
-        if: steps.gate.outputs.run_refresh == 'true' && always()
+        if: always()
         run: rm -f ATP.csv ATPQualifiers.csv Challenger.csv WTA.csv
 
       - name: Show refresh summary
-        if: steps.gate.outputs.run_refresh == 'true' && always()
+        if: always()
         run: |
           if [ -f v5_refresh_last.json ]; then cat v5_refresh_last.json; fi
 
       - name: Commit refreshed player data and V5 ratings
-        if: steps.gate.outputs.run_refresh == 'true' && success()
+        if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -128,7 +107,7 @@ jobs:
           fi
 
       - name: Upload refresh audit artifact
-        if: steps.gate.outputs.run_refresh == 'true' && always()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: v5-player-refresh-audit
