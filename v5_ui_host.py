@@ -13,6 +13,7 @@ from v5_ui_health import load_model_health, render_model_health_page
 from v5_ui_match_detail import render_match_detail
 from v5_ui_navigation import PAGE_ORDER
 from v5_ui_performance import load_performance_report, render_performance_page
+from v5_ui_production import load_canonical_today_board, load_repricing_status, production_ui_state
 from v5_ui_theme import apply_v5_theme
 from v5_ui_today import prepare_today_board, render_today_results
 
@@ -93,7 +94,7 @@ def _slate_editor(st_module, slate: pd.DataFrame) -> tuple[pd.DataFrame, int]:
         "Simulation precision",
         ["Fast — 2,000 per match", "Standard — 5,000 per match", "High — 10,000 per match"],
         index=1,
-        help="This controls simulation count only; it does not change V5 policy thresholds.",
+        help="Used only for an explicit manual recovery/debug run. Normal Today data is produced automatically.",
         key="v5_ui_precision",
     )
     sims = {
@@ -147,7 +148,7 @@ def _run_daily_board(st_module, namespace: Mapping[str, Any], base_dir: Path, ma
     summary = _read_build_summary(base_dir)
     status = st_module.empty() if hasattr(st_module, "empty") else None
     if status is not None:
-        status.write("Building the full-context production board…")
+        status.write("Building a manual full-context recovery board…")
     try:
         board, errors = run_interactive_production(
             market_feed, edited, ratings_by_tour, summary, sims=sims, base_dir=base_dir
@@ -162,6 +163,16 @@ def _run_daily_board(st_module, namespace: Mapping[str, Any], base_dir: Path, ma
         if hasattr(st_module, "dataframe"):
             st_module.dataframe(pd.DataFrame(errors), use_container_width=True, hide_index=True)
     return board
+
+
+def _effective_production_state(feed_status: dict, repricing_status: dict) -> str:
+    if feed_status.get("state") == "missing":
+        return "MISSING"
+    if not feed_status.get("fresh"):
+        return "STALE_PRICES"
+    if feed_status.get("state") == "no_future_fixtures":
+        return "NO_FUTURE_FIXTURES"
+    return production_ui_state(repricing_status)
 
 
 def _render_today_page(st_module, namespace: Mapping[str, Any], base_dir: Path) -> None:
@@ -179,84 +190,87 @@ def _render_today_page(st_module, namespace: Mapping[str, Any], base_dir: Path) 
     slate = daily_slate() if feed_status["fresh"] else _fixture_slate_from_market_rows(future_market_rows(market_source))
     snapshot = market_snapshot(market_source)
 
+    repricing_status = load_repricing_status(base_dir)
+    production_state = _effective_production_state(feed_status, repricing_status)
+    canonical_board = load_canonical_today_board(base_dir) if production_state == "READY" else pd.DataFrame()
+
     st_module.markdown('<div class="v5-eyebrow">Tennis Quant Lab V5</div>', unsafe_allow_html=True)
     st_module.markdown('<div class="v5-title">Today</div>', unsafe_allow_html=True)
     st_module.markdown(
-        '<div class="v5-subtitle">Decision-first slate view. V5 model outputs stay independent; market prices are joined after modeling.</div>',
+        '<div class="v5-subtitle">Decision-first slate view. Daily model forecasts are frozen independently; live prices are repriced automatically.</div>',
         unsafe_allow_html=True,
     )
 
-    if feed_status["state"] == "missing":
-        st_module.info("The repository market-feed file is missing or empty. The scheduled OddsPapi workflow must create a valid feed before market recommendations can run.")
-        return
-
-    if not feed_status["fresh"]:
+    if production_state == "MISSING":
+        st_module.info("Production market data is missing. The scheduled OddsPapi workflow will restore the canonical feed automatically; no stale price is treated as actionable.")
+    elif production_state == "STALE_PRICES":
         age = feed_status.get("age_hours")
         age_text = "unknown age" if age is None else f"{age:.1f} hours old"
         st_module.warning(
-            f"OddsPapi prices are stale ({age_text}; snapshot {snapshot}). Stale prices are blocked from BET/LEAN generation. "
-            "The automatic live-feed workflow will replace them; fixture information remains visible when future fixtures exist."
+            f"OddsPapi prices are stale ({age_text}; snapshot {snapshot}). BET/LEAN generation is blocked until the automatic live refresh succeeds."
         )
-        if slate is None or slate.empty:
-            st_module.info("The stale repository snapshot contains no future fixtures. This is a stale-feed condition, not a missing repository file.")
-            return
+    elif production_state == "NO_FUTURE_FIXTURES":
+        st_module.info("The repository feed is fresh but currently contains no future eligible fixtures. Today will populate automatically when the next slate appears.")
+    elif production_state in {"STALE_FORECAST", "MISSING_FORECAST"}:
+        st_module.warning("Fresh market prices are available, but today's frozen production forecast is not ready yet. Repricing is blocked rather than using an old model forecast.")
 
-    elif feed_status["state"] == "no_future_fixtures" or slate is None or slate.empty:
-        st_module.info("The repository feed is fresh but currently contains no future fixtures. Today will populate automatically when the next eligible fixture set is published.")
+    if slate is not None and not slate.empty:
+        with st_module.expander("Slate setup / advanced", expanded=production_state != "READY"):
+            freshness = "fresh" if feed_status["fresh"] else "fixture-only; prices disabled"
+            st_module.caption(f"Market snapshot: {snapshot} · {len(slate)} fixtures available · {freshness}")
+            st_module.markdown("#### Current market slate")
+            preview_cols = [c for c in (
+                "Start", "Tournament", "Tour", "Surface", "Surface Source", "Player 1", "Player 2",
+                "P1 ML", "P2 ML", "P1 Spread", "P1 Spread Odds", "Total", "Over Odds", "Under Odds"
+            ) if c in slate.columns]
+            if hasattr(st_module, "dataframe"):
+                st_module.dataframe(slate[preview_cols], use_container_width=True, hide_index=True)
+            default_surface = pd.Series(False, index=slate.index)
+            if "Surface Source" in slate.columns:
+                default_surface = slate["Surface Source"].astype(str).str.contains("review", case=False, na=False)
+            if bool(default_surface.any()):
+                st_module.warning(f"Surface inference: {int(default_surface.sum())} fixture(s) use an auto-default surface and should be reviewed before a manual run.")
+            else:
+                st_module.caption("Surface inference: current fixture surfaces were resolved by the tournament map or edited input.")
+
+            edited, sims = _slate_editor(st_module, slate)
+            unmatched = _unmatched_players(namespace, edited)
+            if unmatched:
+                st_module.warning(f"{len(unmatched)} OddsPapi player names could not be matched to the V5 ratings database. Those rows are flagged rather than guessed.")
+                st_module.write(unmatched)
+            else:
+                st_module.caption("Player-name diagnostic: all current slate names resolve to the V5 ratings database.")
+
+            if feed_status["fresh"]:
+                st_module.caption("Manual run is recovery/debug only. Normal Today cards are populated by the scheduled production artifacts above.")
+                if st_module.button("Run manual recovery board", key="v5_run_today_board", use_container_width=True):
+                    board = _run_daily_board(st_module, namespace, base_dir, market_feed, edited, sims)
+                    st_module.session_state["v5_daily_results"] = board
+                    st_module.session_state["v5_manual_board_active"] = True
+            else:
+                st_module.warning("Manual run is disabled until fresh prices arrive. Stale sportsbook data can never create actionable recommendations.")
+
+            st_module.caption("All-book prices are loaded and available in Match Detail." if all_prices is not None and not all_prices.empty else "All-book comparison is unavailable until a fresh market snapshot is present.")
+
+    manual = st_module.session_state.get("v5_daily_results") if st_module.session_state.get("v5_manual_board_active") else None
+    display_board = manual if manual is not None and not manual.empty else canonical_board
+    if production_state != "READY" and (manual is None or manual.empty):
         return
-
-    with st_module.expander("Slate setup / advanced", expanded=not feed_status["fresh"]):
-        freshness = "fresh" if feed_status["fresh"] else "fixture-only; prices disabled"
-        st_module.caption(f"Market snapshot: {snapshot} · {len(slate)} fixtures available · {freshness}")
-        st_module.markdown("#### Current market slate")
-        preview_cols = [c for c in (
-            "Start", "Tournament", "Tour", "Surface", "Surface Source", "Player 1", "Player 2",
-            "P1 ML", "P2 ML", "P1 Spread", "P1 Spread Odds", "Total", "Over Odds", "Under Odds"
-        ) if c in slate.columns]
-        if hasattr(st_module, "dataframe"):
-            st_module.dataframe(slate[preview_cols], use_container_width=True, hide_index=True)
-        default_surface = pd.Series(False, index=slate.index)
-        if "Surface Source" in slate.columns:
-            default_surface = slate["Surface Source"].astype(str).str.contains("review", case=False, na=False)
-        if bool(default_surface.any()):
-            st_module.warning(f"Surface inference: {int(default_surface.sum())} fixture(s) use an auto-default surface and should be reviewed before simulation.")
-        else:
-            st_module.caption("Surface inference: current fixture surfaces were resolved by the tournament map or edited input.")
-
-        edited, sims = _slate_editor(st_module, slate)
-        unmatched = _unmatched_players(namespace, edited)
-        if unmatched:
-            st_module.warning(f"{len(unmatched)} OddsPapi player names could not be matched to the V5 ratings database. Those rows will be flagged rather than guessed.")
-            st_module.write(unmatched)
-        else:
-            st_module.caption("Player-name diagnostic: all current slate names resolve to the V5 ratings database.")
-
-        if feed_status["fresh"]:
-            if st_module.button("Run entire daily board", type="primary", key="v5_run_today_board", use_container_width=True):
-                board = _run_daily_board(st_module, namespace, base_dir, market_feed, edited, sims)
-                st_module.session_state["v5_daily_results"] = board
-        else:
-            st_module.warning("Run is disabled until fresh prices arrive. The app will never price or rank recommendations from stale sportsbook data.")
-
-        st_module.caption("All-book prices are loaded and available in Match Detail." if all_prices is not None and not all_prices.empty else "All-book comparison is unavailable until a fresh market snapshot is present.")
-
-    if not feed_status["fresh"]:
+    if display_board is None or display_board.empty:
+        st_module.info("The current production run has not produced modeled cards yet. The scheduled pipeline will populate Today automatically.")
         return
-
-    board = st_module.session_state.get("v5_daily_results")
-    if board is None or board.empty:
-        st_module.info("Run the current slate to populate Today with full-context production match cards.")
-        return
-    prepared = render_today_results(st_module, board, market_feed, snapshot, on_select=lambda fixture: _select_match(st_module, fixture))
+    prepared = render_today_results(st_module, display_board, market_feed, snapshot, on_select=lambda fixture: _select_match(st_module, fixture))
     st_module.session_state["v5_today_prepared"] = prepared
 
 
-def _render_match_detail_page(st_module, namespace: Mapping[str, Any]) -> None:
+def _render_match_detail_page(st_module, namespace: Mapping[str, Any], base_dir: Path) -> None:
     load_all_book_prices = _required(namespace, "load_all_book_prices")
     board = st_module.session_state.get("v5_today_prepared")
     if board is None or board.empty:
-        raw = st_module.session_state.get("v5_daily_results")
-        board = prepare_today_board(raw) if raw is not None and not raw.empty else pd.DataFrame()
+        canonical = load_canonical_today_board(base_dir)
+        raw = st_module.session_state.get("v5_daily_results") if st_module.session_state.get("v5_manual_board_active") else None
+        source = raw if raw is not None and not raw.empty else canonical
+        board = prepare_today_board(source) if source is not None and not source.empty else pd.DataFrame()
     selected = st_module.session_state.get("v5_selected_fixture_id")
     row = resolve_selected_match(board, selected)
     if row is None and board is not None and not board.empty:
@@ -282,12 +296,14 @@ def run_v5_ui_app(st_module, base_dir: str | Path, namespace: Mapping[str, Any])
     if page == "Today":
         _render_today_page(st_module, namespace, base_dir)
     elif page == "Match Detail":
-        _render_match_detail_page(st_module, namespace)
+        _render_match_detail_page(st_module, namespace, base_dir)
     elif page == "All Markets":
         board = st_module.session_state.get("v5_today_prepared")
         if board is None or board.empty:
-            raw = st_module.session_state.get("v5_daily_results")
-            board = prepare_today_board(raw) if raw is not None and not raw.empty else pd.DataFrame()
+            canonical = load_canonical_today_board(base_dir)
+            raw = st_module.session_state.get("v5_daily_results") if st_module.session_state.get("v5_manual_board_active") else None
+            source = raw if raw is not None and not raw.empty else canonical
+            board = prepare_today_board(source) if source is not None and not source.empty else pd.DataFrame()
         render_all_markets_page(st_module, board)
     elif page == "Performance":
         render_performance_page(st_module, load_performance_report(base_dir))
