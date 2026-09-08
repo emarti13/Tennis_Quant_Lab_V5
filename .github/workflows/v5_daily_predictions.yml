@@ -2,10 +2,17 @@ name: V5 Daily Predictions
 
 on:
   workflow_dispatch:
+  schedule:
+    # One expensive sportsbook-independent forecast per production day, after
+    # the 06:00 UTC ratings refresh and 06:15 UTC live market snapshot.
+    - cron: "45 6 * * *"
   push:
     branches: [main]
     paths:
       - "v5_daily_batch.py"
+      - "v5_daily_forecast.py"
+      - "v5_build_daily_forecast_artifacts.py"
+      - "v5_forecast_context.py"
       - "v5_full_context_live.py"
       - "v5_score_distribution.py"
       - "build_v5_context_warehouse.py"
@@ -22,25 +29,19 @@ on:
       - "v5_production_config.json"
       - "v5_production_policy.py"
       - "v5_daily_policy_postprocess.py"
-      - "tests/test_v5_daily_policy_postprocess.py"
-      - "tests/test_v5_score_production_promotion.py"
       - ".github/workflows/v5_daily_predictions.yml"
-  workflow_run:
-    workflows: ["OddsPapi Normalized Daily v2"]
-    types: [completed]
 
 permissions:
   contents: write
 
 concurrency:
-  group: v5-daily-predictions
+  group: v5-daily-heavy-forecast
   cancel-in-progress: true
 
 jobs:
-  build-and-freeze:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
+  build-daily-forecast:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 35
 
     steps:
       - name: Checkout repository
@@ -53,34 +54,47 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
+      - name: Install production dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt pytest
 
-      - name: Run daily pipeline contracts
+      - name: Run focused daily-pipeline contracts
         run: |
           python -m pytest \
             tests/test_v5_daily_batch.py \
             tests/test_v5_daily_policy_postprocess.py \
-            tests/test_v5_score_production_promotion.py -q
+            tests/test_v5_score_production_promotion.py \
+            tests/test_v5_daily_forecast_ledger.py \
+            tests/test_v5_forecast_context.py \
+            tests/test_v5_production_artifacts.py \
+            tests/test_v5_repricing.py \
+            tests/test_v5_recommendation_ledger.py -q
 
       - name: Rebuild as-of-match context warehouse
         run: python build_v5_context_warehouse.py
 
-      - name: Build ranked board and freeze pre-match predictions
+      - name: Build one daily full-context forecast
         run: |
           python v5_daily_batch.py
           python v5_daily_policy_postprocess.py
+          python v5_build_daily_forecast_artifacts.py
 
-      - name: Show batch summary
+      - name: Reprice current market snapshot against frozen daily forecast
+        run: python v5_run_repricing.py
+
+      - name: Show production status
         if: always()
         run: |
-          if [ -f v5_daily_ready/latest_summary.json ]; then
-            cat v5_daily_ready/latest_summary.json
-          fi
+          for f in \
+            v5_daily_ready/latest_summary.json \
+            v5_daily_ready/forecast_status.json \
+            v5_daily_ready/repricing_status.json
+          do
+            if [ -f "$f" ]; then echo "===== $f ====="; cat "$f"; fi
+          done
 
-      - name: Commit frozen daily board safely
+      - name: Commit daily forecast and repricing safely
         if: success()
         run: |
           git config user.name "github-actions[bot]"
@@ -88,23 +102,33 @@ jobs:
 
           git fetch origin main
           if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
-            echo "main advanced during prediction build; rerunning against the latest market feed."
+            echo "main advanced during forecast build; rerunning against latest production inputs."
             git reset --hard origin/main
-            python -m pytest \
-              tests/test_v5_daily_batch.py \
-              tests/test_v5_daily_policy_postprocess.py \
-              tests/test_v5_score_production_promotion.py -q
             python build_v5_context_warehouse.py
             python v5_daily_batch.py
             python v5_daily_policy_postprocess.py
+            python v5_build_daily_forecast_artifacts.py
+            python v5_run_repricing.py
           fi
 
-          git add v5_daily_ready/latest_board.csv \
-                  v5_daily_ready/latest_summary.json \
-                  v5_daily_ready/frozen_predictions.csv
+          for f in \
+            v5_daily_ready/latest_board.csv \
+            v5_daily_ready/latest_summary.json \
+            v5_daily_ready/frozen_predictions.csv \
+            v5_daily_ready/daily_forecasts.csv \
+            v5_daily_ready/daily_market_probabilities.csv \
+            v5_daily_ready/forecast_status.json \
+            v5_daily_ready/latest_repriced_board.csv \
+            v5_daily_ready/official_recommendations.csv \
+            v5_daily_ready/recommendation_audit.csv \
+            v5_daily_ready/market_snapshot_history.csv \
+            v5_daily_ready/repricing_status.json
+          do
+            [ -e "$f" ] && git add "$f"
+          done
           if git diff --cached --quiet; then
-            echo "No new daily predictions to commit."
+            echo "No daily forecast changes to commit."
           else
-            git commit -m "Freeze V5 daily predictions"
+            git commit -m "Freeze daily V5 forecast and reprice live markets"
             git push origin HEAD:main
           fi
