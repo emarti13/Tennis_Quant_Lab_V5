@@ -87,3 +87,10 @@ def test_historical_backfill_is_not_an_eight_times_daily_actions_sink():
     text = Path(".github/workflows/oddspapi_2026_backfill.yml").read_text(encoding="utf-8")
     assert 'cron: "45 3 * * 1,4,6"' in text
     assert '45 1,3,5,7,9,13,17,21 * * *' not in text
+
+
+def test_player_ratings_uses_one_daily_runner_not_two_dst_probe_runs():
+    text = Path(".github/workflows/v5_player_ratings_refresh.yml").read_text(encoding="utf-8")
+    assert text.count("cron:") == 1
+    assert 'cron: "0 6 * * *"' in text
+    assert 'cron: "0 5 * * *"' not in text
