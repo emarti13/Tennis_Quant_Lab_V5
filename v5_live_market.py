@@ -31,44 +31,97 @@ def _as_utc_timestamp(value=None):
     return ts.tz_convert("UTC")
 
 
+def future_market_rows(df, now_utc=None):
+    """Return future fixture/market rows without asserting that prices are fresh.
+
+    This is deliberately separate from ``current_market_rows``.  It may be used
+    to preserve fixture visibility when a repository snapshot is stale, but its
+    prices must not be used for BET/LEAN decisions.
+    """
+    if df is None or df.empty:
+        return pd.DataFrame() if df is None else df.copy()
+    out = df.copy()
+    if "start_time_utc" not in out.columns:
+        return out.iloc[0:0].copy()
+    now = _as_utc_timestamp(now_utc)
+    starts = pd.to_datetime(out["start_time_utc"], errors="coerce", utc=True)
+    result = out.loc[starts.notna() & (starts > now)].copy()
+    result.attrs.update(out.attrs)
+    return result
+
+
+def market_feed_status(df, now_utc=None, max_snapshot_age_hours=DEFAULT_MAX_SNAPSHOT_AGE_HOURS):
+    """Describe repository feed availability independently from price freshness."""
+    now = _as_utc_timestamp(now_utc)
+    if df is None or df.empty:
+        return {
+            "state": "missing",
+            "available": False,
+            "fresh": False,
+            "snapshot_utc": None,
+            "age_hours": None,
+            "future_row_count": 0,
+            "future_fixture_count": 0,
+        }
+
+    out = df.copy()
+    snapshots = pd.to_datetime(out.get("snapshot_utc"), errors="coerce", utc=True) if "snapshot_utc" in out.columns else pd.Series(dtype="datetime64[ns, UTC]")
+    latest = snapshots.max() if not snapshots.empty else pd.NaT
+    age_hours = None if pd.isna(latest) else (now - latest).total_seconds() / 3600.0
+    fresh = age_hours is not None and age_hours <= float(max_snapshot_age_hours)
+    future = future_market_rows(out, now_utc=now)
+    if "fixture_id" in future.columns:
+        future_fixtures = int(future["fixture_id"].dropna().astype(str).nunique())
+    else:
+        future_fixtures = 0
+
+    if not fresh:
+        state = "stale_prices"
+    elif future.empty:
+        state = "no_future_fixtures"
+    else:
+        state = "ready"
+    return {
+        "state": state,
+        "available": True,
+        "fresh": bool(fresh),
+        "snapshot_utc": None if pd.isna(latest) else latest.isoformat(),
+        "age_hours": age_hours,
+        "future_row_count": int(len(future)),
+        "future_fixture_count": future_fixtures,
+    }
+
+
 def current_market_rows(df, now_utc=None, max_snapshot_age_hours=DEFAULT_MAX_SNAPSHOT_AGE_HOURS):
     if df is None or df.empty:
         return pd.DataFrame() if df is None else df.copy()
     out = df.copy()
     now = _as_utc_timestamp(now_utc)
-    out.attrs["stale_market_feed"] = False
-    if "snapshot_utc" not in out.columns:
-        out.attrs["stale_market_feed"] = True
-        return out.iloc[0:0].copy()
-    snapshots = pd.to_datetime(out["snapshot_utc"], errors="coerce", utc=True)
-    latest_snapshot = snapshots.max()
-    out.attrs["latest_snapshot_utc"] = None if pd.isna(latest_snapshot) else latest_snapshot.isoformat()
-    if pd.isna(latest_snapshot):
-        out.attrs["stale_market_feed"] = True
-        return out.iloc[0:0].copy()
-    age_hours = (now - latest_snapshot).total_seconds() / 3600.0
-    out.attrs["snapshot_age_hours"] = age_hours
-    if age_hours > float(max_snapshot_age_hours):
+    status = market_feed_status(out, now_utc=now, max_snapshot_age_hours=max_snapshot_age_hours)
+    out.attrs["stale_market_feed"] = not status["fresh"]
+    out.attrs["latest_snapshot_utc"] = status["snapshot_utc"]
+    out.attrs["snapshot_age_hours"] = status["age_hours"]
+    if not status["fresh"]:
         empty = out.iloc[0:0].copy()
         empty.attrs.update(out.attrs)
-        empty.attrs["stale_market_feed"] = True
         return empty
-    if "start_time_utc" not in out.columns:
-        return out.iloc[0:0].copy()
-    starts = pd.to_datetime(out["start_time_utc"], errors="coerce", utc=True)
-    out = out.loc[starts.notna() & (starts > now)].copy()
-    out.attrs["stale_market_feed"] = False
-    out.attrs["latest_snapshot_utc"] = latest_snapshot.isoformat()
-    out.attrs["snapshot_age_hours"] = age_hours
-    return out
+    result = future_market_rows(out, now_utc=now)
+    result.attrs.update(out.attrs)
+    result.attrs["stale_market_feed"] = False
+    return result
 
 
-def load_market_board():
+def load_market_board(include_stale=False):
     if not MARKET_FILE.exists():
         return pd.DataFrame()
-    df = pd.read_csv(MARKET_FILE, low_memory=False)
+    try:
+        df = pd.read_csv(MARKET_FILE, low_memory=False)
+    except pd.errors.EmptyDataError:
+        return pd.DataFrame()
     df.attrs["source_path"] = str(MARKET_FILE)
-    return current_market_rows(df)
+    out = future_market_rows(df) if include_stale else current_market_rows(df)
+    out.attrs["source_path"] = str(MARKET_FILE)
+    return out
 
 
 def find_match_rows(df, p1, p2):
