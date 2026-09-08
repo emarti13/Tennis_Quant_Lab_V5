@@ -52,6 +52,18 @@ def test_missing_feed_and_no_future_fixtures_are_distinct_states():
     assert expired["state"] == "no_future_fixtures"
 
 
+def test_stale_fixture_fallback_contains_no_odds_fields():
+    from v5_ui_host import _fixture_slate_from_market_rows
+
+    slate = _fixture_slate_from_market_rows(_sample())
+    assert len(slate) == 1
+    assert slate.iloc[0]["Fixture ID"] == "fx1"
+    assert slate.iloc[0]["Player 1"] == "A"
+    assert slate.iloc[0]["Player 2"] == "B"
+    assert "P1 ML" not in slate.columns
+    assert "P2 ML" not in slate.columns
+
+
 def test_live_workflow_uses_even_six_hour_schedule():
     text = Path(".github/workflows/oddspapi_normalized_daily_v2.yml").read_text(encoding="utf-8")
     assert "15 0,6,12,18 * * *" in text
