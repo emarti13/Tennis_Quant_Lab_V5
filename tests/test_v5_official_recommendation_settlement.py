@@ -1,4 +1,5 @@
 import pandas as pd
+import pytest
 
 from v5_official_performance import official_performance_report
 from v5_settlement import settle_ledger
@@ -47,14 +48,14 @@ def test_official_market_settles_once_and_performance_counts_one_recommendation(
     settled, stats = settle_ledger(_ledger(), _results(), settled_at="2026-09-08T20:00:00Z")
     assert stats["settled"] == 1
     assert settled.iloc[0]["settled_result"] == "WIN"
-    assert settled.iloc[0]["profit_units"] == 1.2
+    assert settled.iloc[0]["profit_units"] == pytest.approx(1.2)
 
     report = official_performance_report(settled)
     assert report["official_recommendations"] == 1
     assert report["unique_fixtures"] == 1
     assert report["wins"] == 1
     assert report["losses"] == 0
-    assert report["net_units"] == 1.2
+    assert report["net_units"] == pytest.approx(1.2)
     assert report["median_american_odds"] == 120.0
     assert report["underdog_recommendations"] == 1
     assert report["favorite_recommendations"] == 0
