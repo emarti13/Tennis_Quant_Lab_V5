@@ -2,11 +2,6 @@ name: V5 Daily Predictions
 
 on:
   workflow_dispatch:
-  schedule:
-    # Freeze one canonical daily board after the 12:15 UTC live-market refresh.
-    # Market prices can still refresh four times/day without rebuilding and
-    # refreezing the full model each time.
-    - cron: "45 12 * * *"
   push:
     branches: [main]
     paths:
@@ -30,6 +25,9 @@ on:
       - "tests/test_v5_daily_policy_postprocess.py"
       - "tests/test_v5_score_production_promotion.py"
       - ".github/workflows/v5_daily_predictions.yml"
+  workflow_run:
+    workflows: ["OddsPapi Normalized Daily v2"]
+    types: [completed]
 
 permissions:
   contents: write
@@ -40,6 +38,7 @@ concurrency:
 
 jobs:
   build-and-freeze:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
