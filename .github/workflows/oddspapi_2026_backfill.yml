@@ -7,11 +7,10 @@ on:
     paths:
       - ".github/workflows/oddspapi_2026_backfill.yml"
   schedule:
-    # Historical work is intentionally kept away from the live-market pull
-    # windows (00:15, 12:15, 16:15, 20:15 UTC) because both workflows update
-    # the permanent fixture registry. Eight backfill windows/day preserves
-    # progress while guaranteeing the live feed gets priority.
-    - cron: "45 1,3,5,7,9,13,17,21 * * *"
+    # Historical work is non-production and must not starve the live feed.
+    # Three checkpoints/week keeps the backfill advancing while cutting the
+    # former eight-runs-per-day Actions burn by more than 95%.
+    - cron: "45 3 * * 1,4,6"
 
 permissions:
   contents: write
