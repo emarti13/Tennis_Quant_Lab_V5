@@ -8,11 +8,18 @@ from v5_production_artifacts import stable_market_key
 
 
 OFFICIAL_COLUMNS = [
-    "fixture_id", "market_group", "selection", "line", "market_key",
-    "official_signal", "official_price_american", "official_price_decimal",
-    "official_model_probability", "official_expected_value", "official_edge",
-    "official_at_utc", "start_time_utc", "model_version",
-    "selected_model_candidate", "score_model_version", "selected_score_candidate",
+    "fixture_id", "tournament", "tour", "player1", "player2",
+    "resolved_player1", "resolved_player2",
+    "market_group", "selection", "line", "market_key",
+    "official_signal", "signal",
+    "official_price_american", "official_price_decimal",
+    "best_american_odds", "best_decimal_odds",
+    "official_model_probability", "model_probability",
+    "official_expected_value", "expected_value",
+    "official_edge", "edge_vs_consensus", "consensus_no_vig_prob",
+    "official_at_utc", "snapshot_utc", "start_time_utc",
+    "model_version", "selected_model_candidate",
+    "score_model_version", "selected_score_candidate",
     "result_status", "settled_result", "profit_units",
 ]
 
@@ -41,19 +48,39 @@ def _observation_market_key(row) -> str:
 
 
 def _official_record(row, signal: str, market_key: str) -> dict:
+    price_american = row.get("best_american_odds")
+    price_decimal = row.get("best_decimal_odds")
+    model_probability = row.get("model_probability")
+    expected_value = row.get("expected_value")
+    edge = row.get("edge_vs_consensus")
+    snapshot = row.get("snapshot_utc")
     return {
         "fixture_id": row.get("fixture_id"),
+        "tournament": row.get("tournament"),
+        "tour": row.get("tour"),
+        "player1": row.get("player1"),
+        "player2": row.get("player2"),
+        "resolved_player1": row.get("resolved_player1") or row.get("player1"),
+        "resolved_player2": row.get("resolved_player2") or row.get("player2"),
         "market_group": row.get("market_group"),
         "selection": row.get("selection"),
         "line": row.get("line"),
         "market_key": market_key,
         "official_signal": signal,
-        "official_price_american": row.get("best_american_odds"),
-        "official_price_decimal": row.get("best_decimal_odds"),
-        "official_model_probability": row.get("model_probability"),
-        "official_expected_value": row.get("expected_value"),
-        "official_edge": row.get("edge_vs_consensus"),
-        "official_at_utc": row.get("snapshot_utc"),
+        "signal": signal,
+        "official_price_american": price_american,
+        "official_price_decimal": price_decimal,
+        "best_american_odds": price_american,
+        "best_decimal_odds": price_decimal,
+        "official_model_probability": model_probability,
+        "model_probability": model_probability,
+        "official_expected_value": expected_value,
+        "expected_value": expected_value,
+        "official_edge": edge,
+        "edge_vs_consensus": edge,
+        "consensus_no_vig_prob": row.get("consensus_no_vig_prob"),
+        "official_at_utc": snapshot,
+        "snapshot_utc": snapshot,
         "start_time_utc": row.get("start_time_utc"),
         "model_version": row.get("model_version"),
         "selected_model_candidate": row.get("selected_model_candidate"),
@@ -104,11 +131,13 @@ def update_official_recommendations(
         except Exception:
             after_start = True
         if after_start:
-            audit_out = _audit_append(audit_out, {**event_base, "event": "BLOCKED_POST_START"})
+            if signal in {"BET", "LEAN"}:
+                audit_out = _audit_append(audit_out, {**event_base, "event": "BLOCKED_POST_START"})
             continue
 
+        # PASS/REVIEW/N/A are already retained in market snapshot history. Do not
+        # bloat the recommendation audit with non-actionable observations.
         if signal not in {"BET", "LEAN"}:
-            audit_out = _audit_append(audit_out, {**event_base, "event": "NON_ACTIONABLE"})
             continue
 
         matches = ledger.index[ledger["market_key"].astype(str) == market_key].tolist()
