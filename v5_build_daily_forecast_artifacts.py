@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 
@@ -15,15 +16,20 @@ BOARD_PATH = OUTDIR / "latest_board.csv"
 FORECAST_PATH = OUTDIR / "daily_forecasts.csv"
 MARKET_PROB_PATH = OUTDIR / "daily_market_probabilities.csv"
 STATUS_PATH = OUTDIR / "forecast_status.json"
+EASTERN = ZoneInfo("America/New_York")
 
 
-def build_forecast_artifacts(board: pd.DataFrame, *, now_utc=None):
+def production_date(now_utc=None) -> str:
     now = pd.Timestamp(now_utc or datetime.now(timezone.utc))
     if now.tzinfo is None:
         now = now.tz_localize("UTC")
     else:
         now = now.tz_convert("UTC")
-    forecast_date = now.date().isoformat()
+    return now.to_pydatetime().astimezone(EASTERN).date().isoformat()
+
+
+def build_forecast_artifacts(board: pd.DataFrame, *, now_utc=None):
+    forecast_date = production_date(now_utc)
     forecasts = forecast_rows_from_board(board, forecast_date=forecast_date)
     market_probs = market_probability_rows_from_board(board, forecast_date=forecast_date)
     return forecasts, market_probs
@@ -81,7 +87,7 @@ def main() -> int:
         freshness="READY",
         error=None,
         run_timestamp=now.isoformat(),
-    ))
+    ) | {"forecast_date": production_date(now)})
     print(f"daily forecasts: {len(forecasts)} fixtures; frozen market probabilities: {len(market_probs)}")
     return 0
 
