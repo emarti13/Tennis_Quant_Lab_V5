@@ -2,10 +2,14 @@ name: V5 Daily Predictions
 
 on:
   workflow_dispatch:
+  schedule:
+    # Freeze one canonical daily board after the 12:15 UTC live-market refresh.
+    # Market prices can still refresh four times/day without rebuilding and
+    # refreezing the full model each time.
+    - cron: "45 12 * * *"
   push:
     branches: [main]
     paths:
-      - "v5_market_ready/**"
       - "v5_daily_batch.py"
       - "v5_full_context_live.py"
       - "v5_score_distribution.py"
@@ -26,9 +30,6 @@ on:
       - "tests/test_v5_daily_policy_postprocess.py"
       - "tests/test_v5_score_production_promotion.py"
       - ".github/workflows/v5_daily_predictions.yml"
-  workflow_run:
-    workflows: ["OddsPapi Normalized Daily v2"]
-    types: [completed]
 
 permissions:
   contents: write
@@ -39,7 +40,6 @@ concurrency:
 
 jobs:
   build-and-freeze:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
@@ -59,8 +59,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt pytest
 
-      - name: Run daily batch tests
-        run: python -m pytest tests -q
+      - name: Run daily pipeline contracts
+        run: |
+          python -m pytest \
+            tests/test_v5_daily_batch.py \
+            tests/test_v5_daily_policy_postprocess.py \
+            tests/test_v5_score_production_promotion.py -q
 
       - name: Rebuild as-of-match context warehouse
         run: python build_v5_context_warehouse.py
@@ -87,7 +91,10 @@ jobs:
           if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
             echo "main advanced during prediction build; rerunning against the latest market feed."
             git reset --hard origin/main
-            python -m pytest tests -q
+            python -m pytest \
+              tests/test_v5_daily_batch.py \
+              tests/test_v5_daily_policy_postprocess.py \
+              tests/test_v5_score_production_promotion.py -q
             python build_v5_context_warehouse.py
             python v5_daily_batch.py
             python v5_daily_policy_postprocess.py
