@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from datetime import date
-from typing import Iterable
 
 import pandas as pd
 
@@ -35,6 +34,12 @@ MARKET_DEPENDENT_COLUMNS = {
 }
 
 
+def _series_or_na(frame: pd.DataFrame, name: str):
+    if name in frame.columns:
+        return frame[name]
+    return pd.Series([pd.NA] * len(frame), index=frame.index)
+
+
 def forecast_rows_from_board(board: pd.DataFrame, forecast_date: str | None = None) -> pd.DataFrame:
     if board is None or board.empty:
         return pd.DataFrame()
@@ -62,17 +67,20 @@ def market_probability_rows_from_board(board: pd.DataFrame, forecast_date: str |
         "forecast_date": forecast_date,
         "market_group": board["market_group"],
         "selection": board["selection"],
-        "line": board["line"] if "line" in board.columns else None,
+        "line": _series_or_na(board, "line"),
         "model_probability": pd.to_numeric(board["model_probability"], errors="coerce"),
-        "model_win_probability": pd.to_numeric(board.get("model_win_probability"), errors="coerce"),
-        "model_push_probability": pd.to_numeric(board.get("model_push_probability"), errors="coerce"),
-        "model_loss_probability": pd.to_numeric(board.get("model_loss_probability"), errors="coerce"),
-        "model_fair_american": pd.to_numeric(board.get("model_fair_american"), errors="coerce"),
-        "model_version": board.get("model_version"),
-        "selected_model_candidate": board.get("selected_model_candidate"),
-        "score_model_version": board.get("score_model_version"),
-        "selected_score_candidate": board.get("selected_score_candidate"),
-        "generated_at_utc": board.get("frozen_at_utc"),
+        "model_win_probability": pd.to_numeric(_series_or_na(board, "model_win_probability"), errors="coerce"),
+        "model_push_probability": pd.to_numeric(_series_or_na(board, "model_push_probability"), errors="coerce"),
+        "model_loss_probability": pd.to_numeric(_series_or_na(board, "model_loss_probability"), errors="coerce"),
+        "model_fair_american": pd.to_numeric(_series_or_na(board, "model_fair_american"), errors="coerce"),
+        "state_confidence": pd.to_numeric(_series_or_na(board, "state_confidence"), errors="coerce"),
+        "surface_source": _series_or_na(board, "surface_source"),
+        "model_disagreement": _series_or_na(board, "model_disagreement"),
+        "model_version": _series_or_na(board, "model_version"),
+        "selected_model_candidate": _series_or_na(board, "selected_model_candidate"),
+        "score_model_version": _series_or_na(board, "score_model_version"),
+        "selected_score_candidate": _series_or_na(board, "selected_score_candidate"),
+        "generated_at_utc": _series_or_na(board, "frozen_at_utc"),
     })
     out["market_key"] = [
         stable_market_key(r.fixture_id, r.market_group, r.selection, r.line)
