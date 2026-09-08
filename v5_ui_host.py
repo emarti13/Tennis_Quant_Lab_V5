@@ -7,6 +7,7 @@ from typing import Any, Mapping
 import pandas as pd
 
 from v5_interactive_production import run_interactive_production
+from v5_live_market import current_market_rows, future_market_rows, market_feed_status
 from v5_ui_all_markets import render_all_markets_page
 from v5_ui_health import load_model_health, render_model_health_page
 from v5_ui_match_detail import render_match_detail
@@ -59,6 +60,32 @@ def _select_match(st_module, fixture_id: Any) -> None:
     st_module.session_state["v5_selected_fixture_id"] = str(fixture_id)
     st_module.session_state["v5_nav_target"] = "Match Detail"
     st_module.rerun()
+
+
+def _fixture_slate_from_market_rows(frame: pd.DataFrame | None) -> pd.DataFrame:
+    """Build a fixture-only slate without carrying stale sportsbook prices."""
+    if frame is None or frame.empty or "fixture_id" not in frame.columns:
+        return pd.DataFrame()
+    rows = []
+    for fixture_id, group in frame.groupby("fixture_id", sort=False):
+        first = group.iloc[0]
+        raw_tour = str(first.get("tour") or "")
+        tour = "WTA" if "WTA" in raw_tour.upper() else "MEN"
+        rows.append({
+            "Fixture ID": fixture_id,
+            "Start": first.get("start_time_utc"),
+            "Tournament": first.get("tournament"),
+            "Tour": tour,
+            "Surface": "Hard",
+            "Surface Source": "stale feed fixture only — review",
+            "Player 1": first.get("player1"),
+            "Player 2": first.get("player2"),
+            "Best Of": 3,
+        })
+    out = pd.DataFrame(rows)
+    if not out.empty:
+        out = out.sort_values(["Start", "Tournament", "Player 1"], na_position="last")
+    return out.reset_index(drop=True)
 
 
 def _slate_editor(st_module, slate: pd.DataFrame) -> tuple[pd.DataFrame, int]:
@@ -141,10 +168,16 @@ def _render_today_page(st_module, namespace: Mapping[str, Any], base_dir: Path) 
     load_market_board = _required(namespace, "load_market_board")
     load_all_book_prices = _required(namespace, "load_all_book_prices")
     daily_slate = _required(namespace, "_oddspapi_daily_slate")
-    market_feed = load_market_board()
-    all_prices = load_all_book_prices()
-    slate = daily_slate()
-    snapshot = market_snapshot(market_feed)
+
+    try:
+        market_source = load_market_board(include_stale=True)
+    except TypeError:
+        market_source = load_market_board()
+    feed_status = market_feed_status(market_source)
+    market_feed = current_market_rows(market_source)
+    all_prices = load_all_book_prices() if feed_status["fresh"] else pd.DataFrame()
+    slate = daily_slate() if feed_status["fresh"] else _fixture_slate_from_market_rows(future_market_rows(market_source))
+    snapshot = market_snapshot(market_source)
 
     st_module.markdown('<div class="v5-eyebrow">Tennis Quant Lab V5</div>', unsafe_allow_html=True)
     st_module.markdown('<div class="v5-title">Today</div>', unsafe_allow_html=True)
@@ -153,15 +186,28 @@ def _render_today_page(st_module, namespace: Mapping[str, Any], base_dir: Path) 
         unsafe_allow_html=True,
     )
 
-    if slate is None or slate.empty:
-        st_module.info("No repository OddsPapi market feed is available. The normalized market workflow must populate the slate before Today can run.")
-        board = st_module.session_state.get("v5_daily_results")
-        if board is not None and not board.empty:
-            render_today_results(st_module, board, market_feed, snapshot, on_select=lambda fixture: _select_match(st_module, fixture))
+    if feed_status["state"] == "missing":
+        st_module.info("The repository market-feed file is missing or empty. The scheduled OddsPapi workflow must create a valid feed before market recommendations can run.")
         return
 
-    with st_module.expander("Slate setup / advanced", expanded=False):
-        st_module.caption(f"Market snapshot: {snapshot} · {len(slate)} fixtures currently available")
+    if not feed_status["fresh"]:
+        age = feed_status.get("age_hours")
+        age_text = "unknown age" if age is None else f"{age:.1f} hours old"
+        st_module.warning(
+            f"OddsPapi prices are stale ({age_text}; snapshot {snapshot}). Stale prices are blocked from BET/LEAN generation. "
+            "The automatic live-feed workflow will replace them; fixture information remains visible when future fixtures exist."
+        )
+        if slate is None or slate.empty:
+            st_module.info("The stale repository snapshot contains no future fixtures. This is a stale-feed condition, not a missing repository file.")
+            return
+
+    elif feed_status["state"] == "no_future_fixtures" or slate is None or slate.empty:
+        st_module.info("The repository feed is fresh but currently contains no future fixtures. Today will populate automatically when the next eligible fixture set is published.")
+        return
+
+    with st_module.expander("Slate setup / advanced", expanded=not feed_status["fresh"]):
+        freshness = "fresh" if feed_status["fresh"] else "fixture-only; prices disabled"
+        st_module.caption(f"Market snapshot: {snapshot} · {len(slate)} fixtures available · {freshness}")
         st_module.markdown("#### Current market slate")
         preview_cols = [c for c in (
             "Start", "Tournament", "Tour", "Surface", "Surface Source", "Player 1", "Player 2",
@@ -185,11 +231,17 @@ def _render_today_page(st_module, namespace: Mapping[str, Any], base_dir: Path) 
         else:
             st_module.caption("Player-name diagnostic: all current slate names resolve to the V5 ratings database.")
 
-        if st_module.button("Run entire daily board", type="primary", key="v5_run_today_board", use_container_width=True):
-            board = _run_daily_board(st_module, namespace, base_dir, market_feed, edited, sims)
-            st_module.session_state["v5_daily_results"] = board
+        if feed_status["fresh"]:
+            if st_module.button("Run entire daily board", type="primary", key="v5_run_today_board", use_container_width=True):
+                board = _run_daily_board(st_module, namespace, base_dir, market_feed, edited, sims)
+                st_module.session_state["v5_daily_results"] = board
+        else:
+            st_module.warning("Run is disabled until fresh prices arrive. The app will never price or rank recommendations from stale sportsbook data.")
 
-        st_module.caption("All-book prices are loaded and available in Match Detail." if all_prices is not None and not all_prices.empty else "All-book comparison is not available in the current repository snapshot.")
+        st_module.caption("All-book prices are loaded and available in Match Detail." if all_prices is not None and not all_prices.empty else "All-book comparison is unavailable until a fresh market snapshot is present.")
+
+    if not feed_status["fresh"]:
+        return
 
     board = st_module.session_state.get("v5_daily_results")
     if board is None or board.empty:
