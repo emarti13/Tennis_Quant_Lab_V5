@@ -70,10 +70,9 @@ def test_live_workflow_uses_even_six_hour_schedule():
     assert "15 0,12,16,20 * * *" not in text
 
 
-def test_daily_predictions_are_once_daily_not_triggered_twice_per_market_refresh():
+def test_daily_predictions_runs_once_per_successful_market_refresh_without_duplicate_push_trigger():
     text = Path(".github/workflows/v5_daily_predictions.yml").read_text(encoding="utf-8")
-    assert 'cron: "45 12 * * *"' in text
-    assert 'workflows: ["OddsPapi Normalized Daily v2"]' not in text
+    assert 'workflows: ["OddsPapi Normalized Daily v2"]' in text
     assert '- "v5_market_ready/**"' not in text
 
 
