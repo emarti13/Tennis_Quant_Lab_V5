@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 
@@ -20,6 +21,16 @@ RECOMMENDATION_AUDIT_PATH = OUTDIR / "recommendation_audit.csv"
 MARKET_HISTORY_PATH = OUTDIR / "market_snapshot_history.csv"
 STATUS_PATH = OUTDIR / "repricing_status.json"
 HISTORY_DAYS = 14
+EASTERN = ZoneInfo("America/New_York")
+
+
+def production_date(now_utc=None) -> str:
+    now = pd.Timestamp(now_utc or datetime.now(timezone.utc))
+    if now.tzinfo is None:
+        now = now.tz_localize("UTC")
+    else:
+        now = now.tz_convert("UTC")
+    return now.to_pydatetime().astimezone(EASTERN).date().isoformat()
 
 
 def _read_csv(path: Path, *, missing_ok=True) -> pd.DataFrame:
@@ -79,6 +90,17 @@ def main() -> int:
         ))
         return 0
 
+    expected_date = production_date(now)
+    forecast_dates = set(frozen.get("forecast_date", pd.Series(dtype=object)).dropna().astype(str))
+    if expected_date not in forecast_dates:
+        write_status(STATUS_PATH, artifact_status(
+            stage="repricing", state="blocked", source_version=feed.get("snapshot_utc"),
+            rows=0, fixtures=feed.get("future_fixture_count", 0), freshness="STALE_FORECAST",
+            error=f"no frozen model forecast for production date {expected_date}", run_timestamp=now.isoformat(),
+        ) | {"available_forecast_dates": sorted(forecast_dates)})
+        return 0
+    frozen = frozen[frozen["forecast_date"].astype(str).eq(expected_date)].copy()
+
     prices = future_market_rows(raw, now_utc=now)
     official_existing = _read_csv(OFFICIAL_PATH)
     audit_existing = _read_csv(RECOMMENDATION_AUDIT_PATH)
@@ -98,6 +120,8 @@ def main() -> int:
     history_candidate = staging / "market_snapshot_history.csv"
     repriced.to_csv(repriced_candidate, index=False)
     official.to_csv(official_candidate, index=False)
+    if audit.empty:
+        audit = pd.DataFrame(columns=["market_key", "event"])
     audit.to_csv(audit_candidate, index=False)
 
     history_existing = _read_csv(MARKET_HISTORY_PATH)
@@ -116,7 +140,7 @@ def main() -> int:
     )
     promote_csv_last_known_good(
         audit_candidate, RECOMMENDATION_AUDIT_PATH,
-        required_columns=[] if audit.empty else ["market_key", "event"],
+        required_columns=["market_key", "event"],
         require_nonempty=False,
     )
     promote_csv_last_known_good(
@@ -126,7 +150,7 @@ def main() -> int:
     )
 
     actionable = int(repriced["signal"].isin(["BET", "LEAN"]).sum()) if "signal" in repriced.columns else 0
-    matched = int(pd.to_numeric(repriced.get("model_probability"), errors="coerce").notna().sum())
+    matched = int(pd.to_numeric(repriced["model_probability"], errors="coerce").notna().sum())
     write_status(STATUS_PATH, artifact_status(
         stage="repricing",
         state="success",
@@ -136,7 +160,7 @@ def main() -> int:
         freshness="READY",
         error=None,
         run_timestamp=now.isoformat(),
-    ) | {"matched_model_rows": matched, "actionable_rows": actionable, "official_recommendations": int(len(official))})
+    ) | {"forecast_date": expected_date, "matched_model_rows": matched, "actionable_rows": actionable, "official_recommendations": int(len(official))})
     print(f"repriced={len(repriced)} matched={matched} actionable={actionable} official={len(official)}")
     return 0
 
