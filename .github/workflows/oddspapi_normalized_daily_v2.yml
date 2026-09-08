@@ -9,16 +9,14 @@ on:
       - "tests/test_oddspapi_quota_policy.py"
       - ".github/workflows/oddspapi_normalized_daily_v2.yml"
   schedule:
-    # Four quota-budgeted live pulls per day. During EDT these are
-    # 8:15 AM, 12:15 PM, 4:15 PM, and 8:15 PM Eastern.
-    - cron: "15 0,12,16,20 * * *"
+    # Four quota-budgeted pulls, evenly spaced six hours apart. This removes
+    # the prior 12-hour overnight gap that could cross the app's freshness
+    # guard after a single delayed/missed run.
+    - cron: "15 0,6,12,18 * * *"
 
 permissions:
   contents: write
 
-# The live feed must never wait behind historical backfill work. Normal
-# schedules are separated, and a rare overlapping historical commit can retry
-# on its next window if the permanent registry changes underneath it.
 concurrency:
   group: oddspapi-live-market-writer
   cancel-in-progress: false
@@ -72,6 +70,36 @@ jobs:
 
       - name: Build V5-ready market feed immediately
         run: python build_v5_market_board_input.py
+
+      - name: Validate feed before promotion
+        run: |
+          python - <<'PY'
+          import csv
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          path = Path('v5_market_ready/market_board_input.csv')
+          if not path.exists() or path.stat().st_size == 0:
+              raise SystemExit('Refusing to promote missing/empty market feed')
+          with path.open(newline='', encoding='utf-8') as fh:
+              rows = list(csv.DictReader(fh))
+          if not rows:
+              raise SystemExit('Refusing to promote market feed with zero rows')
+          now = datetime.now(timezone.utc)
+          def parse(value):
+              return datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+          snapshots = [parse(r['snapshot_utc']) for r in rows if r.get('snapshot_utc')]
+          if not snapshots:
+              raise SystemExit('Refusing to promote feed without snapshot timestamp')
+          age_hours = (now - max(snapshots)).total_seconds() / 3600
+          if age_hours > 3:
+              raise SystemExit(f'Refusing to promote stale feed: {age_hours:.2f}h old')
+          future = [r for r in rows if r.get('start_time_utc') and parse(r['start_time_utc']) > now]
+          fixtures = {r.get('fixture_id') for r in future if r.get('fixture_id')}
+          if not fixtures:
+              raise SystemExit('Refusing to promote feed with zero future fixtures')
+          print(f'Feed validation OK: age={age_hours:.2f}h future_fixtures={len(fixtures)} rows={len(future)}')
+          PY
 
       - name: Commit market feed and permanent fixture registry
         run: |

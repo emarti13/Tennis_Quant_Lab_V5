@@ -31,44 +31,81 @@ def _as_utc_timestamp(value=None):
     return ts.tz_convert("UTC")
 
 
+def future_market_rows(df, now_utc=None):
+    """Return future fixture/market rows without asserting that prices are fresh."""
+    if df is None or df.empty:
+        return pd.DataFrame() if df is None else df.copy()
+    out = df.copy()
+    if "start_time_utc" not in out.columns:
+        return out.iloc[0:0].copy()
+    now = _as_utc_timestamp(now_utc)
+    starts = pd.to_datetime(out["start_time_utc"], errors="coerce", utc=True)
+    result = out.loc[starts.notna() & (starts > now)].copy()
+    result.attrs.update(out.attrs)
+    return result
+
+
+def market_feed_status(df, now_utc=None, max_snapshot_age_hours=DEFAULT_MAX_SNAPSHOT_AGE_HOURS):
+    """Describe repository availability separately from sportsbook-price freshness."""
+    now = _as_utc_timestamp(now_utc)
+    if df is None or df.empty:
+        return {
+            "state": "missing", "available": False, "fresh": False,
+            "snapshot_utc": None, "age_hours": None,
+            "future_row_count": 0, "future_fixture_count": 0,
+        }
+    out = df.copy()
+    if "snapshot_utc" in out.columns:
+        snapshots = pd.to_datetime(out["snapshot_utc"], errors="coerce", utc=True)
+        latest = snapshots.max()
+    else:
+        latest = pd.NaT
+    age_hours = None if pd.isna(latest) else (now - latest).total_seconds() / 3600.0
+    fresh = age_hours is not None and age_hours <= float(max_snapshot_age_hours)
+    future = future_market_rows(out, now_utc=now)
+    future_fixtures = int(future["fixture_id"].dropna().astype(str).nunique()) if "fixture_id" in future.columns else 0
+    state = "stale_prices" if not fresh else ("no_future_fixtures" if future.empty else "ready")
+    return {
+        "state": state,
+        "available": True,
+        "fresh": bool(fresh),
+        "snapshot_utc": None if pd.isna(latest) else latest.isoformat(),
+        "age_hours": age_hours,
+        "future_row_count": int(len(future)),
+        "future_fixture_count": future_fixtures,
+    }
+
+
 def current_market_rows(df, now_utc=None, max_snapshot_age_hours=DEFAULT_MAX_SNAPSHOT_AGE_HOURS):
     if df is None or df.empty:
         return pd.DataFrame() if df is None else df.copy()
     out = df.copy()
     now = _as_utc_timestamp(now_utc)
-    out.attrs["stale_market_feed"] = False
-    if "snapshot_utc" not in out.columns:
-        out.attrs["stale_market_feed"] = True
-        return out.iloc[0:0].copy()
-    snapshots = pd.to_datetime(out["snapshot_utc"], errors="coerce", utc=True)
-    latest_snapshot = snapshots.max()
-    out.attrs["latest_snapshot_utc"] = None if pd.isna(latest_snapshot) else latest_snapshot.isoformat()
-    if pd.isna(latest_snapshot):
-        out.attrs["stale_market_feed"] = True
-        return out.iloc[0:0].copy()
-    age_hours = (now - latest_snapshot).total_seconds() / 3600.0
-    out.attrs["snapshot_age_hours"] = age_hours
-    if age_hours > float(max_snapshot_age_hours):
+    status = market_feed_status(out, now_utc=now, max_snapshot_age_hours=max_snapshot_age_hours)
+    out.attrs["stale_market_feed"] = not status["fresh"]
+    out.attrs["latest_snapshot_utc"] = status["snapshot_utc"]
+    out.attrs["snapshot_age_hours"] = status["age_hours"]
+    if not status["fresh"]:
         empty = out.iloc[0:0].copy()
         empty.attrs.update(out.attrs)
-        empty.attrs["stale_market_feed"] = True
         return empty
-    if "start_time_utc" not in out.columns:
-        return out.iloc[0:0].copy()
-    starts = pd.to_datetime(out["start_time_utc"], errors="coerce", utc=True)
-    out = out.loc[starts.notna() & (starts > now)].copy()
-    out.attrs["stale_market_feed"] = False
-    out.attrs["latest_snapshot_utc"] = latest_snapshot.isoformat()
-    out.attrs["snapshot_age_hours"] = age_hours
-    return out
+    result = future_market_rows(out, now_utc=now)
+    result.attrs.update(out.attrs)
+    result.attrs["stale_market_feed"] = False
+    return result
 
 
-def load_market_board():
+def load_market_board(include_stale=False):
     if not MARKET_FILE.exists():
         return pd.DataFrame()
-    df = pd.read_csv(MARKET_FILE, low_memory=False)
+    try:
+        df = pd.read_csv(MARKET_FILE, low_memory=False)
+    except pd.errors.EmptyDataError:
+        return pd.DataFrame()
     df.attrs["source_path"] = str(MARKET_FILE)
-    return current_market_rows(df)
+    out = df.copy() if include_stale else current_market_rows(df)
+    out.attrs["source_path"] = str(MARKET_FILE)
+    return out
 
 
 def find_match_rows(df, p1, p2):
@@ -99,7 +136,6 @@ def model_market_components(row, result, selected_p1, selected_p2):
     sel = canonical_name(row.get("selection"))
     p1 = canonical_name(selected_p1)
     p2 = canonical_name(selected_p2)
-
     if group == "moneyline":
         if sel == p1:
             win = float(result["pA_win"])
@@ -107,18 +143,11 @@ def model_market_components(row, result, selected_p1, selected_p2):
             win = 1.0 - float(result["pA_win"])
         else:
             return None
-        return {
-            "conditional_probability": win,
-            "win_probability": win,
-            "push_probability": 0.0,
-            "loss_probability": 1.0 - win,
-        }
-
+        return {"conditional_probability": win, "win_probability": win, "push_probability": 0.0, "loss_probability": 1.0 - win}
     try:
         line = float(row.get("line"))
     except Exception:
         return None
-
     if group == "game_spread":
         spreads = _float_map(result, "spread")
         pushes = _float_map(result, "spread_push")
@@ -152,19 +181,13 @@ def model_market_components(row, result, selected_p1, selected_p2):
             return None
     else:
         return None
-
     win = min(1.0, max(0.0, float(win)))
     push = min(1.0, max(0.0, float(push)))
     loss = min(1.0, max(0.0, 1.0 - win - push))
     no_push = win + loss
     if no_push <= 0:
         return None
-    return {
-        "conditional_probability": win / no_push,
-        "win_probability": win,
-        "push_probability": push,
-        "loss_probability": loss,
-    }
+    return {"conditional_probability": win / no_push, "win_probability": win, "push_probability": push, "loss_probability": loss}
 
 
 def model_probability_for_market(row, result, selected_p1, selected_p2):
@@ -187,28 +210,16 @@ def add_model_pricing(match_rows, result, selected_p1, selected_p2):
     for _, r in out.iterrows():
         components = model_market_components(r, result, selected_p1, selected_p2)
         if components is None:
-            probs.append(None);win_probs.append(None);push_probs.append(None);loss_probs.append(None)
-            fair.append(None);edges.append(None);evs.append(None)
+            probs.append(None);win_probs.append(None);push_probs.append(None);loss_probs.append(None);fair.append(None);edges.append(None);evs.append(None)
             continue
-        p=float(components["conditional_probability"])
-        win=float(components["win_probability"])
-        push=float(components["push_probability"])
-        loss=float(components["loss_probability"])
-        probs.append(p);win_probs.append(win);push_probs.append(push);loss_probs.append(loss)
-        fair.append(fair_american(p))
+        p=float(components["conditional_probability"]);win=float(components["win_probability"]);push=float(components["push_probability"]);loss=float(components["loss_probability"])
+        probs.append(p);win_probs.append(win);push_probs.append(push);loss_probs.append(loss);fair.append(fair_american(p))
         try:nv=float(r.get("consensus_no_vig_prob"))
         except Exception:nv=None
         try:dec=float(r.get("best_decimal_odds"))
         except Exception:dec=None
-        edges.append(None if nv is None else p-nv)
-        evs.append(None if dec is None else win*dec+push-1.0)
-    out["model_probability"]=probs
-    out["model_win_probability"]=win_probs
-    out["model_push_probability"]=push_probs
-    out["model_loss_probability"]=loss_probs
-    out["model_fair_american"]=fair
-    out["edge_vs_consensus"]=edges
-    out["expected_value"]=evs
+        edges.append(None if nv is None else p-nv);evs.append(None if dec is None else win*dec+push-1.0)
+    out["model_probability"]=probs;out["model_win_probability"]=win_probs;out["model_push_probability"]=push_probs;out["model_loss_probability"]=loss_probs;out["model_fair_american"]=fair;out["edge_vs_consensus"]=edges;out["expected_value"]=evs
     return out
 
 
@@ -236,6 +247,7 @@ def load_all_book_prices():
             df.attrs["source_path"] = str(p)
             out=current_market_rows(df);out.attrs["source_path"]=str(p);return out
     return pd.DataFrame()
+
 
 def find_all_match_prices(df,p1,p2):
     if df.empty:return df

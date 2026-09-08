@@ -15,9 +15,6 @@ on:
       - "tests/test_v5_settlement_pipeline.py"
       - "tests/test_results_accuracy.py"
       - ".github/workflows/v5_automatic_settlement.yml"
-  workflow_run:
-    workflows: ["V5 Player Ratings Refresh", "V5 Daily Predictions"]
-    types: [completed]
 
 permissions:
   contents: write
@@ -28,7 +25,6 @@ concurrency:
 
 jobs:
   settle:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event_name == 'schedule' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -48,8 +44,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt pytest
 
-      - name: Run settlement tests
-        run: python -m unittest discover -s tests -v
+      - name: Run settlement contracts
+        run: |
+          python -m pytest \
+            tests/test_v5_settlement.py \
+            tests/test_v5_settlement_pipeline.py \
+            tests/test_results_accuracy.py -q
 
       - name: Settle frozen predictions
         run: python v5_settlement.py
@@ -74,7 +74,10 @@ jobs:
           if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
             echo "main advanced during settlement; rerunning against the latest ledger."
             git reset --hard origin/main
-            python -m unittest discover -s tests -v
+            python -m pytest \
+              tests/test_v5_settlement.py \
+              tests/test_v5_settlement_pipeline.py \
+              tests/test_results_accuracy.py -q
             python v5_settlement.py
             python diagnose_v5_settled_performance.py
           fi

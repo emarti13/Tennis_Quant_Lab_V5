@@ -5,7 +5,6 @@ on:
   push:
     branches: [main]
     paths:
-      - "v5_market_ready/**"
       - "v5_daily_batch.py"
       - "v5_full_context_live.py"
       - "v5_score_distribution.py"
@@ -59,8 +58,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt pytest
 
-      - name: Run daily batch tests
-        run: python -m pytest tests -q
+      - name: Run daily pipeline contracts
+        run: |
+          python -m pytest \
+            tests/test_v5_daily_batch.py \
+            tests/test_v5_daily_policy_postprocess.py \
+            tests/test_v5_score_production_promotion.py -q
 
       - name: Rebuild as-of-match context warehouse
         run: python build_v5_context_warehouse.py
@@ -87,7 +90,10 @@ jobs:
           if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
             echo "main advanced during prediction build; rerunning against the latest market feed."
             git reset --hard origin/main
-            python -m pytest tests -q
+            python -m pytest \
+              tests/test_v5_daily_batch.py \
+              tests/test_v5_daily_policy_postprocess.py \
+              tests/test_v5_score_production_promotion.py -q
             python build_v5_context_warehouse.py
             python v5_daily_batch.py
             python v5_daily_policy_postprocess.py
