@@ -68,3 +68,22 @@ def test_live_workflow_uses_even_six_hour_schedule():
     text = Path(".github/workflows/oddspapi_normalized_daily_v2.yml").read_text(encoding="utf-8")
     assert "15 0,6,12,18 * * *" in text
     assert "15 0,12,16,20 * * *" not in text
+
+
+def test_daily_predictions_are_once_daily_not_triggered_twice_per_market_refresh():
+    text = Path(".github/workflows/v5_daily_predictions.yml").read_text(encoding="utf-8")
+    assert 'cron: "45 12 * * *"' in text
+    assert 'workflows: ["OddsPapi Normalized Daily v2"]' not in text
+    assert '- "v5_market_ready/**"' not in text
+
+
+def test_settlement_is_daily_not_chained_after_every_prediction_refresh():
+    text = Path(".github/workflows/v5_automatic_settlement.yml").read_text(encoding="utf-8")
+    assert 'cron: "30 10 * * *"' in text
+    assert 'workflows: ["V5 Player Ratings Refresh", "V5 Daily Predictions"]' not in text
+
+
+def test_historical_backfill_is_not_an_eight_times_daily_actions_sink():
+    text = Path(".github/workflows/oddspapi_2026_backfill.yml").read_text(encoding="utf-8")
+    assert 'cron: "45 3 * * 1,4,6"' in text
+    assert '45 1,3,5,7,9,13,17,21 * * *' not in text
