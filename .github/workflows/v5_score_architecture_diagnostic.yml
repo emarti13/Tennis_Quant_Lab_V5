@@ -1,19 +1,8 @@
 name: V5 Score Architecture Diagnostic
 
+# Heavy research validation. Run only when score architecture is intentionally
+# being evaluated; ordinary pushes are covered by PR regression.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'diagnose_v5_score_architecture.py'
-      - 'historical_score_calibration.py'
-      - 'v5_score_architecture.py'
-      - 'v5_core.py'
-      - 'v5_strength_conditioning.py'
-      - 'v5_model_calibration.py'
-      - 'v5_daily_batch.py'
-      - 'tests/test_historical_score_calibration.py'
-      - 'tests/test_v5_score_architecture.py'
-      - '.github/workflows/v5_score_architecture_diagnostic.yml'
   workflow_dispatch:
 
 jobs:
@@ -25,9 +14,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install -r requirements.txt pytest
+          cache: 'pip'
+      - run: pip install --disable-pip-version-check -r requirements.txt pytest
       - name: Verify score contracts
-        run: python -m pytest tests/test_historical_score_calibration.py tests/test_v5_score_architecture.py -v
+        run: python -m pytest tests/test_historical_score_calibration.py tests/test_v5_score_architecture.py -q
       - name: Run 2025 fit / 2026 score architecture validation
         run: python diagnose_v5_score_architecture.py
       - name: Print production gates
@@ -45,4 +35,4 @@ jobs:
         with:
           name: v5-score-architecture-diagnostic
           path: v5_score_diagnostic/report.json
-          retention-days: 14
+          retention-days: 3
