@@ -1,20 +1,12 @@
 name: V5 Automatic Settlement
 
+# Production settlement runs once daily against the official recommendation
+# ledger. Legacy/all-market audits are preserved but are not recomputed every
+# day. Tests run in PR CI, not inside routine production settlement.
 on:
   workflow_dispatch:
   schedule:
     - cron: "30 10 * * *"
-  push:
-    branches: [main]
-    paths:
-      - "v5_settlement.py"
-      - "v5_settle_official_recommendations.py"
-      - "v5_official_performance.py"
-      - "diagnose_v5_settled_performance.py"
-      - "tests/test_v5_settlement.py"
-      - "tests/test_v5_official_recommendation_settlement.py"
-      - "tests/test_v5_settlement_pipeline.py"
-      - ".github/workflows/v5_automatic_settlement.yml"
 
 permissions:
   contents: write
@@ -26,7 +18,7 @@ concurrency:
 jobs:
   settle:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 12
 
     steps:
       - name: Checkout repository
@@ -38,68 +30,45 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt pytest
-
-      - name: Run focused settlement contracts
-        run: |
-          python -m pytest \
-            tests/test_v5_settlement.py \
-            tests/test_v5_official_recommendation_settlement.py \
-            tests/test_v5_settlement_pipeline.py -q
+      - name: Install production dependencies
+        run: pip install --disable-pip-version-check -r requirements.txt
 
       - name: Settle official current-engine recommendations
         run: python v5_settle_official_recommendations.py
-
-      - name: Maintain legacy frozen-prediction audit
-        run: |
-          if [ -f v5_daily_ready/frozen_predictions.csv ]; then
-            python v5_settlement.py
-            python diagnose_v5_settled_performance.py
-          fi
 
       - name: Show settlement status
         if: always()
         run: |
           for f in \
             v5_daily_ready/official_settlement_status.json \
-            v5_daily_ready/official_performance.json \
-            v5_daily_ready/settlement_summary.json
+            v5_daily_ready/official_performance.json
           do
             if [ -f "$f" ]; then echo "===== $f ====="; cat "$f"; fi
           done
 
-      - name: Commit settlement updates safely
+      - name: Commit official settlement updates safely
         if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch origin main
           if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
-            echo "main advanced during settlement; rerunning against latest ledgers."
+            echo "main advanced during settlement; rerunning against latest official ledger."
             git reset --hard origin/main
             python v5_settle_official_recommendations.py
-            if [ -f v5_daily_ready/frozen_predictions.csv ]; then
-              python v5_settlement.py
-              python diagnose_v5_settled_performance.py
-            fi
           fi
           for f in \
             v5_daily_ready/official_recommendations.csv \
             v5_daily_ready/official_performance.json \
-            v5_daily_ready/official_settlement_status.json \
-            v5_daily_ready/frozen_predictions.csv \
-            v5_daily_ready/settlement_summary.json \
-            v5_daily_ready/settled_performance_audit.json
+            v5_daily_ready/official_settlement_status.json
           do
             [ -e "$f" ] && git add "$f"
           done
           if git diff --cached --quiet; then
-            echo "No settlement changes to commit."
+            echo "No official settlement changes to commit."
           else
-            git commit -m "Settle official V5 recommendations and refresh performance"
+            git commit -m "Settle official V5 recommendations"
             git push origin HEAD:main
           fi
