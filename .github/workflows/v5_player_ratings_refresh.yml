@@ -3,8 +3,6 @@ name: V5 Player Ratings Refresh
 on:
   workflow_dispatch:
   schedule:
-    # One daily run. 06:00 UTC is 1 AM Eastern in standard time and 2 AM
-    # Eastern in daylight time, avoiding the former second DST probe runner.
     - cron: "0 6 * * *"
 
 permissions:
@@ -17,7 +15,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 35
 
     steps:
       - name: Checkout repository
@@ -29,24 +27,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
 
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install pandas numpy requests scikit-learn
+      - name: Install production dependencies
+        run: pip install --disable-pip-version-check -r requirements.txt
 
       - name: Preflight builder
         run: |
-          test -f build_v5_states.py || {
-            echo "::error::build_v5_states.py is missing from the repository root."
-            exit 1
-          }
-          test -f v5_core.py || {
-            echo "::error::v5_core.py is missing from the repository root."
-            exit 1
-          }
-          echo "V5 builder/runtime found."
+          test -f build_v5_states.py
+          test -f v5_core.py
 
       - name: Restore historical TennisMyLife cache
         id: history-cache
@@ -72,19 +61,12 @@ jobs:
         if: always()
         run: rm -f ATP.csv ATPQualifiers.csv Challenger.csv WTA.csv
 
-      - name: Show refresh summary
-        if: always()
-        run: |
-          if [ -f v5_refresh_last.json ]; then cat v5_refresh_last.json; fi
-
       - name: Commit refreshed player data and V5 ratings
         if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           git add -u
-
           for f in \
             v5_refresh_last.json \
             v5_refresh_log.jsonl \
@@ -96,23 +78,20 @@ jobs:
           do
             [ -e "$f" ] && git add "$f"
           done
-
           git reset -- ATP.csv ATPQualifiers.csv Challenger.csv WTA.csv .v5_history_cache 2>/dev/null || true
-
           if git diff --cached --quiet; then
             echo "No player-data changes to commit."
           else
             git commit -m "Daily V5 player ratings refresh"
-            git push
+            git pull --rebase origin main
+            git push origin HEAD:main
           fi
 
-      - name: Upload refresh audit artifact
+      - name: Upload compact refresh audit
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: v5-player-refresh-audit
-          path: |
-            v5_refresh_last.json
-            v5_refresh_log.jsonl
+          path: v5_refresh_last.json
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 3
