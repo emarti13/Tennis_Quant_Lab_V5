@@ -1,21 +1,11 @@
 name: OddsPapi Normalized Daily v2
 
+# Production-critical live pricing. Four scheduled pulls/day plus manual
+# recovery only. Code pushes are verified in PR CI and must never spend an
+# extra OddsPapi request or live-run minute.
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "pull_oddspapi_quota_aware.py"
-      - "normalize_oddspapi_snapshot.py"
-      - "build_v5_market_board_input.py"
-      - "v5_reprice_markets.py"
-      - "v5_run_repricing.py"
-      - "v5_recommendation_ledger.py"
-      - "v5_production_artifacts.py"
-      - "tests/test_oddspapi_quota_policy.py"
-      - ".github/workflows/oddspapi_normalized_daily_v2.yml"
   schedule:
-    # Four lightweight live pulls/repricings, evenly spaced six hours apart.
     - cron: "15 0,6,12,18 * * *"
 
 permissions:
@@ -40,9 +30,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
 
       - name: Install lightweight dependencies
-        run: pip install requests pandas
+        run: pip install --disable-pip-version-check requests pandas
 
       - name: Restore cached Tennis market dictionary
         id: market-cache
@@ -134,17 +125,13 @@ jobs:
             git push origin HEAD:main
           fi
 
-      - name: Upload live-feed audit artifact
+      - name: Upload compact live-feed audit
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: v5-normalized-market-snapshot
+          name: v5-live-market-status
           path: |
-            oddspapi_daily/
-            oddspapi_normalized/
-            oddspapi_markets_tennis.json
-            oddspapi_registry/
-            v5_market_ready/
+            v5_market_ready/market_feed_qc.json
             v5_daily_ready/repricing_status.json
           if-no-files-found: warn
-          retention-days: 3
+          retention-days: 2
