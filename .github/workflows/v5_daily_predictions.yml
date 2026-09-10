@@ -1,8 +1,7 @@
 name: V5 Daily Predictions
 
-# One sportsbook-independent production forecast per day, plus manual recovery.
-# No push/workflow fanout: code changes are verified in PR CI and take effect on
-# the next scheduled forecast unless a manual recovery run is intentionally used.
+# One full-context production forecast per day, plus manual recovery. Routine
+# code/data pushes do not launch another heavy model build.
 on:
   workflow_dispatch:
   schedule:
@@ -16,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-daily-forecast:
+  build-and-freeze:
     runs-on: ubuntu-latest
     timeout-minutes: 35
 
@@ -38,59 +37,35 @@ jobs:
       - name: Rebuild as-of-match context warehouse
         run: python build_v5_context_warehouse.py
 
-      - name: Build one daily full-context forecast
+      - name: Build ranked board and freeze pre-match predictions
         run: |
           python v5_daily_batch.py
           python v5_daily_policy_postprocess.py
-          python v5_build_daily_forecast_artifacts.py
 
-      - name: Reprice current market snapshot against frozen daily forecast
-        run: python v5_run_repricing.py
-
-      - name: Show production status
+      - name: Show batch summary
         if: always()
         run: |
-          for f in \
-            v5_daily_ready/latest_summary.json \
-            v5_daily_ready/forecast_status.json \
-            v5_daily_ready/repricing_status.json
-          do
-            if [ -f "$f" ]; then echo "===== $f ====="; cat "$f"; fi
-          done
+          if [ -f v5_daily_ready/latest_summary.json ]; then cat v5_daily_ready/latest_summary.json; fi
 
-      - name: Commit daily forecast and repricing safely
+      - name: Commit frozen daily board safely
         if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch origin main
           if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
-            echo "main advanced during forecast build; rerunning against latest production inputs."
+            echo "main advanced during prediction build; rerunning against latest production inputs."
             git reset --hard origin/main
             python build_v5_context_warehouse.py
             python v5_daily_batch.py
             python v5_daily_policy_postprocess.py
-            python v5_build_daily_forecast_artifacts.py
-            python v5_run_repricing.py
           fi
-          for f in \
-            v5_daily_ready/latest_board.csv \
-            v5_daily_ready/latest_summary.json \
-            v5_daily_ready/frozen_predictions.csv \
-            v5_daily_ready/daily_forecasts.csv \
-            v5_daily_ready/daily_market_probabilities.csv \
-            v5_daily_ready/forecast_status.json \
-            v5_daily_ready/latest_repriced_board.csv \
-            v5_daily_ready/official_recommendations.csv \
-            v5_daily_ready/recommendation_audit.csv \
-            v5_daily_ready/market_snapshot_history.csv \
-            v5_daily_ready/repricing_status.json
-          do
-            [ -e "$f" ] && git add "$f"
-          done
+          git add v5_daily_ready/latest_board.csv \
+                  v5_daily_ready/latest_summary.json \
+                  v5_daily_ready/frozen_predictions.csv
           if git diff --cached --quiet; then
-            echo "No daily forecast changes to commit."
+            echo "No new daily predictions to commit."
           else
-            git commit -m "Freeze daily V5 forecast and reprice live markets"
+            git commit -m "Freeze V5 daily predictions"
             git push origin HEAD:main
           fi
