@@ -1,14 +1,7 @@
 name: V5 Margin Calibration Diagnostic
 
+# Research-only diagnostic. Run intentionally when margin calibration changes.
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "diagnose_margin_calibration.py"
-      - "historical_score_calibration.py"
-      - "v5_strength_conditioning.py"
-      - ".github/workflows/v5_margin_calibration_diagnostic.yml"
   workflow_dispatch:
 
 jobs:
@@ -20,7 +13,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -r requirements.txt
+          cache: "pip"
+      - run: pip install --disable-pip-version-check -r requirements.txt
       - name: Fit 2025 margin strength and validate on 2026
         run: python diagnose_margin_calibration.py
       - name: Show diagnostic
