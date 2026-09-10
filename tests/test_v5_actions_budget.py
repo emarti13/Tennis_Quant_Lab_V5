@@ -77,6 +77,7 @@ def test_research_diagnostics_are_manual_only():
         'v5_total_length_diagnostic.yml',
         'v5_model_bias_diagnostics.yml',
         'v5_margin_calibration_diagnostic.yml',
+        'v5_score_architecture_diagnostic.yml',
         'v5_superpowers_completion.yml',
     ):
         text = _text(name)
