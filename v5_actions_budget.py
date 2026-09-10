@@ -2,17 +2,20 @@ from __future__ import annotations
 
 
 ALLOWANCE_MINUTES = 3000
-GUARDRAIL_FRACTION = 0.80
+# Keep recurring automation below 70% so PR verification, recovery runs and
+# occasional model acceptance work have real monthly capacity.
+GUARDRAIL_FRACTION = 0.70
 DAYS_PER_BUDGET_MONTH = 30
 WEEKS_PER_BUDGET_MONTH = DAYS_PER_BUDGET_MONTH / 7.0
 
-# Conservative planning minutes, intentionally above typical happy-path runtime.
+# Conservative planning minutes. Research/acceptance workflows are manual-only
+# and therefore intentionally excluded from recurring burn.
 RECURRING_JOBS = {
-    "live_market_repricing": {"runs_per_day": 4, "minutes_per_run": 3},
+    "live_market_repricing": {"runs_per_day": 4, "minutes_per_run": 2},
     "player_ratings": {"runs_per_day": 1, "minutes_per_run": 12},
     "daily_heavy_forecast": {"runs_per_day": 1, "minutes_per_run": 20},
-    "daily_settlement": {"runs_per_day": 1, "minutes_per_run": 5},
-    "historical_backfill": {"runs_per_week": 3, "minutes_per_run": 45},
+    "daily_settlement": {"runs_per_day": 1, "minutes_per_run": 3},
+    "historical_backfill": {"runs_per_week": 1, "minutes_per_run": 45},
 }
 
 
@@ -38,5 +41,7 @@ def configured_monthly_minutes() -> dict:
         "guardrail_minutes": guardrail,
         "projected_minutes": int(round(total)),
         "headroom_to_guardrail": int(round(guardrail - total)),
+        "headroom_to_allowance": int(round(ALLOWANCE_MINUTES - total)),
+        "reserved_for_ci_recovery_and_acceptance": int(round(ALLOWANCE_MINUTES - total)),
         "jobs": jobs,
     }
