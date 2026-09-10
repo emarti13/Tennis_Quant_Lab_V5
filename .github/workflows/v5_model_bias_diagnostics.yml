@@ -1,45 +1,25 @@
 name: V5 Model Bias Diagnostics
 
+# Research/audit workflow. Run intentionally when selection-bias or calibration
+# analysis is needed. Production data commits must not fan out into this job.
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "diagnose_v5_selection_bias.py"
-      - "diagnose_slam_market_ranges.py"
-      - "diagnose_walkforward_model_scale.py"
-      - "diagnose_state_variation_effect.py"
-      - "diagnose_fixture_result_fields.py"
-      - "diagnose_v5_settled_performance.py"
-      - "v5_core.py"
-      - "v5_live_market.py"
-      - "v5_daily_batch.py"
-      - "tests/test_v5_daily_batch.py"
-      - "tests/test_v5_market_line_pricing.py"
-      - "tests/test_v5_settled_performance.py"
-      - ".github/workflows/v5_model_bias_diagnostics.yml"
-      - "v5_daily_ready/latest_board.csv"
-      - "v5_daily_ready/frozen_predictions.csv"
-      - "v5_men_walkforward.csv"
-      - "v5_wta_walkforward.csv"
   workflow_dispatch:
 
 jobs:
   audit:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
       - name: Install dependencies
-        run: pip install -r requirements.txt pytest
-      - name: Run daily batch regression tests
-        run: python -m unittest discover -s tests -p 'test_v5_daily_batch.py' -v
-      - name: Run exact market line pricing tests
-        run: python -m unittest discover -s tests -p 'test_v5_market_line_pricing.py' -v
-      - name: Verify settled performance reporting contracts
-        run: python -m pytest tests/test_v5_settled_performance.py -q
+        run: pip install --disable-pip-version-check -r requirements.txt pytest
+      - name: Run focused audit contracts
+        run: |
+          python -m pytest tests/test_v5_daily_batch.py tests/test_v5_market_line_pricing.py tests/test_v5_settled_performance.py -q
       - name: Run board bias audit
         run: python diagnose_v5_selection_bias.py
       - name: Audit mens Slam market line ranges
@@ -52,10 +32,3 @@ jobs:
         run: python diagnose_fixture_result_fields.py
       - name: Audit settled and fixture-clustered performance
         run: python diagnose_v5_settled_performance.py
-      - name: Show audit output
-        run: |
-          cat v5_daily_ready/model_bias_diagnostic.json
-          cat v5_daily_ready/slam_market_range_diagnostic.json
-          cat v5_daily_ready/walkforward_model_scale_diagnostic.json
-          cat v5_daily_ready/state_variation_diagnostic.json
-          cat v5_daily_ready/settled_performance_audit.json
