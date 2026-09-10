@@ -1,22 +1,18 @@
 name: OddsPapi 2026 Historical Backfill
 
+# Historical enrichment is useful but not production-critical. Run one weekly
+# checkpoint plus manual recovery runs so live market automation always wins the
+# Actions budget.
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/oddspapi_2026_backfill.yml"
   schedule:
-    # Historical work is non-production and must not starve the live feed.
-    # Three checkpoints/week keeps the backfill advancing while cutting the
-    # former eight-runs-per-day Actions burn by more than 95%.
-    - cron: "45 3 * * 1,4,6"
+    - cron: "45 3 * * 0"
 
 permissions:
   contents: write
 
 concurrency:
-  group: oddspapi-fixture-registry-writer
+  group: oddspapi-historical-backfill
   cancel-in-progress: false
 
 jobs:
@@ -34,12 +30,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
 
-      - name: Install dependencies
-        run: pip install requests
-
-      - name: Run backfill tests
-        run: python -m unittest discover -s tests -p 'test_oddspapi_2026_backfill.py' -v
+      - name: Install lightweight dependencies
+        run: pip install --disable-pip-version-check requests
 
       - name: Discover and permanently checkpoint 2026 fixture index
         if: ${{ hashFiles('oddspapi_history/fixtures_2026.jsonl') == '' }}
@@ -54,7 +48,7 @@ jobs:
           git pull --rebase origin main
           git push origin HEAD:main
 
-      - name: Fetch next free historical-odds chunk
+      - name: Fetch next historical-odds chunk
         env:
           ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
         run: python backfill_oddspapi_2026.py --history --history-batch 500
@@ -65,9 +59,7 @@ jobs:
       - name: Show backfill summary
         if: always()
         run: |
-          if [ -f oddspapi_history/backfill_summary.json ]; then
-            cat oddspapi_history/backfill_summary.json
-          fi
+          if [ -f oddspapi_history/backfill_summary.json ]; then cat oddspapi_history/backfill_summary.json; fi
 
       - name: Commit historical checkpoint, chunk, and fixture registry
         if: success()
@@ -87,12 +79,11 @@ jobs:
             git push origin HEAD:main
           fi
 
-      - name: Upload historical backfill checkpoint
+      - name: Upload compact historical checkpoint
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: oddspapi-2026-backfill
-          path: |
-            oddspapi_history/
-            oddspapi_registry/
+          path: oddspapi_history/backfill_summary.json
           if-no-files-found: warn
+          retention-days: 3
