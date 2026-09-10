@@ -4,7 +4,7 @@ from v5_actions_budget import configured_monthly_minutes
 
 
 def _text(name):
-    return Path('.github/workflows') .joinpath(name).read_text(encoding='utf-8')
+    return Path('.github/workflows').joinpath(name).read_text(encoding='utf-8')
 
 
 def test_configured_recurring_budget_stays_below_80_percent_of_allowance():
@@ -46,3 +46,34 @@ def test_historical_backfill_and_ratings_remain_low_cadence():
     assert '45 3 * * 1,4,6' in backfill
     assert backfill.count('cron:') == 1
     assert ratings.count('cron:') == 1
+
+
+def test_context_and_score_acceptance_are_intentional_manual_gates_not_push_fanout():
+    for name in ('v5_context_diagnostic.yml', 'v5_score_acceptance.yml'):
+        text = _text(name)
+        trigger_block = text.split('permissions:', 1)[0]
+        assert 'workflow_dispatch:' in trigger_block
+        assert '\n  push:' not in trigger_block
+        assert '\n  schedule:' not in trigger_block
+
+
+def test_full_regression_runs_on_pull_requests_or_manual_dispatch_not_every_main_python_push():
+    text = _text('v5_full_test_suite.yml')
+    trigger_block = text.split('permissions:', 1)[0]
+    assert 'workflow_dispatch:' in trigger_block
+    assert 'pull_request:' in trigger_block
+    assert '\n  push:' not in trigger_block
+
+
+def test_probe_and_research_workflows_are_not_scheduled_background_jobs():
+    probe_names = (
+        'oddspapi_fixture_cost_probe.yml',
+        'oddspapi_historical_fixture_probe.yml',
+        'oddspapi_probe.yml',
+        'oddspapi_relevant_slate_probe_v2.yml',
+    )
+    for name in probe_names:
+        text = _text(name)
+        trigger_block = text.split('permissions:', 1)[0] if 'permissions:' in text else text.split('jobs:', 1)[0]
+        assert 'workflow_dispatch:' in trigger_block
+        assert '\n  schedule:' not in trigger_block
