@@ -1,24 +1,8 @@
 name: V5 Score Distribution Acceptance
 
+# Heavy score-model acceptance. Manual-only by design: routine code/data pushes
+# must not rebuild the warehouse and rerun historical score validation.
 on:
-  push:
-    branches: [main, feature/complete-superpowers-v5]
-    paths:
-      - 'diagnose_v5_score_distribution.py'
-      - 'v5_score_distribution.py'
-      - 'v5_score_walkforward.py'
-      - 'build_v5_context_matchups.py'
-      - 'build_v5_context_warehouse.py'
-      - 'build_v5_venue_registry.py'
-      - 'v5_rolling_stats.py'
-      - 'v5_workload_features.py'
-      - 'v5_player_state.py'
-      - 'v5_matchup_features.py'
-      - 'v5_court_speed.py'
-      - 'v5_travel_features.py'
-      - 'tests/test_v5_score_walkforward.py'
-      - 'tests/test_v5_score_production_promotion.py'
-      - '.github/workflows/v5_score_acceptance.yml'
   workflow_dispatch:
 
 permissions:
