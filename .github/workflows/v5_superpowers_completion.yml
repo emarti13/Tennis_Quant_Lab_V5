@@ -1,17 +1,12 @@
 name: V5 Superpowers Completion Gate
 
+# Legacy project-completion gate retained for manual historical verification.
+# The active repository gate is the PR full-regression workflow.
 on:
-  push:
-    branches: [feature/complete-superpowers-v5]
-    paths:
-      - '**.py'
-      - 'experiments/acceptance/production_candidate.json'
-      - 'experiments/acceptance/score_production_candidate.json'
-      - '.github/workflows/v5_superpowers_completion.yml'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   contract:
@@ -19,44 +14,10 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install -r requirements.txt pytest
+          cache: 'pip'
+      - run: pip install --disable-pip-version-check -r requirements.txt pytest
       - name: Run full Superpowers repository gate
-        id: contracts
-        continue-on-error: true
-        run: |
-          set -o pipefail
-          python -m pytest tests -q --junitxml=superpowers-contract.xml 2>&1 | tee superpowers-contract-output.txt
-      - name: Record contract state
-        env:
-          CONTRACT_OUTCOME: ${{ steps.contracts.outcome }}
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          cp superpowers-contract-output.txt /tmp/superpowers-contract-output.txt || true
-          git pull --rebase origin feature/complete-superpowers-v5
-          cp /tmp/superpowers-contract-output.txt superpowers-contract-output.txt || true
-          python - <<'PY'
-          import json, os
-          from pathlib import Path
-          out = Path('experiments/acceptance')
-          out.mkdir(parents=True, exist_ok=True)
-          text = Path('superpowers-contract-output.txt').read_text(encoding='utf-8', errors='replace') if Path('superpowers-contract-output.txt').exists() else ''
-          (out / 'superpowers_contract_status.json').write_text(json.dumps({
-              'status': os.environ['CONTRACT_OUTCOME'],
-              'expected': 'success',
-              'pytest_tail': text[-20000:],
-          }, indent=2))
-          PY
-          git add experiments/acceptance/superpowers_contract_status.json
-          if ! git diff --cached --quiet; then
-            git commit -m "Record Superpowers full repository gate state"
-            git push origin HEAD:feature/complete-superpowers-v5
-          fi
-      - name: Enforce green gate
-        if: steps.contracts.outcome != 'success'
-        run: exit 1
+        run: python -m pytest tests -q
