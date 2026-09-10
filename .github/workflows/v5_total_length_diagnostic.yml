@@ -1,12 +1,8 @@
 name: V5 Total Length Diagnostic
 
+# Research-only diagnostic. Run intentionally when total-length calibration is
+# being changed; routine pushes must not spend production Actions minutes.
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "diagnose_total_length_calibration.py"
-      - ".github/workflows/v5_total_length_diagnostic.yml"
   workflow_dispatch:
 
 jobs:
@@ -18,7 +14,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -r requirements.txt
+          cache: "pip"
+      - run: pip install --disable-pip-version-check -r requirements.txt
       - name: Fit 2025 score-length offset and validate on 2026
         run: python diagnose_total_length_calibration.py
       - name: Show diagnostic

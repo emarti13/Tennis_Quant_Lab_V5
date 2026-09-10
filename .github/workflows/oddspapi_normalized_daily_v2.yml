@@ -1,17 +1,11 @@
 name: OddsPapi Normalized Daily v2
 
+# Production-critical live pricing. Four scheduled pulls/day plus manual
+# recovery only. Code pushes are verified in PR CI and must never spend an
+# extra OddsPapi request or live-run minute.
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "pull_oddspapi_quota_aware.py"
-      - "tests/test_oddspapi_quota_policy.py"
-      - ".github/workflows/oddspapi_normalized_daily_v2.yml"
   schedule:
-    # Four quota-budgeted pulls, evenly spaced six hours apart. This removes
-    # the prior 12-hour overnight gap that could cross the app's freshness
-    # guard after a single delayed/missed run.
     - cron: "15 0,6,12,18 * * *"
 
 permissions:
@@ -22,9 +16,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  pull:
+  pull-and-reprice:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
 
     steps:
       - name: Checkout repository
@@ -36,9 +30,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
 
-      - name: Install dependencies
-        run: pip install requests
+      - name: Install lightweight dependencies
+        run: pip install --disable-pip-version-check requests pandas
 
       - name: Restore cached Tennis market dictionary
         id: market-cache
@@ -68,7 +63,7 @@ jobs:
       - name: Normalize ML, game spreads and total games
         run: python normalize_oddspapi_snapshot.py
 
-      - name: Build V5-ready market feed immediately
+      - name: Build V5-ready market feed
         run: python build_v5_market_board_input.py
 
       - name: Validate feed before promotion
@@ -101,7 +96,10 @@ jobs:
           print(f'Feed validation OK: age={age_hours:.2f}h future_fixtures={len(fixtures)} rows={len(future)}')
           PY
 
-      - name: Commit market feed and permanent fixture registry
+      - name: Reprice against frozen daily model forecast
+        run: python v5_run_repricing.py
+
+      - name: Commit live feed and lightweight production artifacts
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -110,23 +108,30 @@ jobs:
             v5_market_ready/market_board_input.csv \
             v5_market_ready/all_book_prices.csv \
             v5_market_ready/market_feed_qc.json
+          for f in \
+            v5_daily_ready/latest_repriced_board.csv \
+            v5_daily_ready/official_recommendations.csv \
+            v5_daily_ready/recommendation_audit.csv \
+            v5_daily_ready/market_snapshot_history.csv \
+            v5_daily_ready/repricing_status.json
+          do
+            [ -e "$f" ] && git add "$f"
+          done
           if git diff --cached --quiet; then
-            echo "No market-feed or fixture-registry changes to commit."
+            echo "No live-feed or repricing changes to commit."
           else
-            git commit -m "Update V5 market feed and OddsPapi fixture registry"
+            git commit -m "Refresh live market prices and V5 repricing"
             git pull --rebase origin main
             git push origin HEAD:main
           fi
 
-      - name: Upload normalized snapshot and V5-ready feed
+      - name: Upload compact live-feed audit
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: v5-normalized-market-snapshot
+          name: v5-live-market-status
           path: |
-            oddspapi_daily/
-            oddspapi_normalized/
-            oddspapi_markets_tennis.json
-            oddspapi_registry/
-            v5_market_ready/
+            v5_market_ready/market_feed_qc.json
+            v5_daily_ready/repricing_status.json
           if-no-files-found: warn
+          retention-days: 2
