@@ -1,35 +1,12 @@
 name: V5 Daily Predictions
 
+# One sportsbook-independent production forecast per day, plus manual recovery.
+# No push/workflow fanout: code changes are verified in PR CI and take effect on
+# the next scheduled forecast unless a manual recovery run is intentionally used.
 on:
   workflow_dispatch:
   schedule:
-    # One expensive sportsbook-independent forecast per production day, after
-    # the 06:00 UTC ratings refresh and 06:15 UTC live market snapshot.
     - cron: "45 6 * * *"
-  push:
-    branches: [main]
-    paths:
-      - "v5_daily_batch.py"
-      - "v5_daily_forecast.py"
-      - "v5_build_daily_forecast_artifacts.py"
-      - "v5_forecast_context.py"
-      - "v5_full_context_live.py"
-      - "v5_score_distribution.py"
-      - "build_v5_context_warehouse.py"
-      - "v5_context_schema.py"
-      - "v5_rolling_stats.py"
-      - "v5_workload_features.py"
-      - "v5_player_state.py"
-      - "v5_matchup_features.py"
-      - "v5_court_speed.py"
-      - "v5_travel_features.py"
-      - "v5_weather_features.py"
-      - "experiments/acceptance/production_candidate.json"
-      - "experiments/acceptance/score_production_candidate.json"
-      - "v5_production_config.json"
-      - "v5_production_policy.py"
-      - "v5_daily_policy_postprocess.py"
-      - ".github/workflows/v5_daily_predictions.yml"
 
 permissions:
   contents: write
@@ -53,23 +30,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
 
       - name: Install production dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt pytest
-
-      - name: Run focused daily-pipeline contracts
-        run: |
-          python -m pytest \
-            tests/test_v5_daily_batch.py \
-            tests/test_v5_daily_policy_postprocess.py \
-            tests/test_v5_score_production_promotion.py \
-            tests/test_v5_daily_forecast_ledger.py \
-            tests/test_v5_forecast_context.py \
-            tests/test_v5_production_artifacts.py \
-            tests/test_v5_repricing.py \
-            tests/test_v5_recommendation_ledger.py -q
+        run: pip install --disable-pip-version-check -r requirements.txt
 
       - name: Rebuild as-of-match context warehouse
         run: python build_v5_context_warehouse.py
@@ -99,7 +63,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           git fetch origin main
           if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
             echo "main advanced during forecast build; rerunning against latest production inputs."
@@ -110,7 +73,6 @@ jobs:
             python v5_build_daily_forecast_artifacts.py
             python v5_run_repricing.py
           fi
-
           for f in \
             v5_daily_ready/latest_board.csv \
             v5_daily_ready/latest_summary.json \
