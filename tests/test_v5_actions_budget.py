@@ -7,51 +7,80 @@ def _text(name):
     return Path('.github/workflows').joinpath(name).read_text(encoding='utf-8')
 
 
-def test_configured_recurring_budget_stays_below_80_percent_of_allowance():
+def test_configured_recurring_budget_stays_below_70_percent_of_allowance():
     report = configured_monthly_minutes()
     assert report['allowance_minutes'] == 3000
-    assert report['guardrail_minutes'] == 2400
+    assert report['guardrail_minutes'] == 2100
     assert report['projected_minutes'] < report['guardrail_minutes']
+    assert report['headroom_to_allowance'] >= 900
 
 
 def test_live_market_is_four_lightweight_runs_and_performs_repricing():
     text = _text('oddspapi_normalized_daily_v2.yml')
-    assert '15 0,6,12,18 * * *' in text
+    trigger = text.split('permissions:', 1)[0]
+    assert '15 0,6,12,18 * * *' in trigger
+    assert 'workflow_dispatch:' in trigger
+    assert '\n  push:' not in trigger
     assert 'python v5_run_repricing.py' in text
     assert 'build_v5_context_warehouse.py' not in text
-    assert 'python -m pytest tests -q' not in text
+    assert 'python -m pytest' not in text
 
 
-def test_heavy_forecast_runs_once_daily_not_after_every_odds_pull():
+def test_heavy_forecast_runs_once_daily_and_never_on_push():
     text = _text('v5_daily_predictions.yml')
-    assert 'schedule:' in text
-    assert text.count('cron:') == 1
-    assert 'workflows: ["OddsPapi Normalized Daily v2"]' not in text
+    trigger = text.split('permissions:', 1)[0]
+    assert 'schedule:' in trigger
+    assert trigger.count('cron:') == 1
+    assert 'workflow_dispatch:' in trigger
+    assert '\n  push:' not in trigger
+    assert 'workflow_run:' not in trigger
     assert 'python v5_build_daily_forecast_artifacts.py' in text
     assert 'python v5_run_repricing.py' in text
-    assert 'python -m pytest tests -q' not in text
+    assert 'python -m pytest' not in text
 
 
-def test_settlement_is_once_daily_and_official_ledger_is_settled():
+def test_settlement_is_once_daily_and_never_on_push():
     text = _text('v5_automatic_settlement.yml')
-    assert text.count('cron:') == 1
-    assert 'workflow_run:' not in text
+    trigger = text.split('permissions:', 1)[0]
+    assert trigger.count('cron:') == 1
+    assert 'workflow_dispatch:' in trigger
+    assert '\n  push:' not in trigger
+    assert 'workflow_run:' not in trigger
     assert 'python v5_settle_official_recommendations.py' in text
-    assert 'python -m unittest discover -s tests -v' not in text
+    assert 'python -m pytest' not in text
 
 
-def test_historical_backfill_and_ratings_remain_low_cadence():
+def test_historical_backfill_is_weekly_not_daily():
     backfill = _text('oddspapi_2026_backfill.yml')
+    trigger = backfill.split('permissions:', 1)[0]
+    assert '45 3 * * 0' in trigger
+    assert trigger.count('cron:') == 1
+    assert 'workflow_dispatch:' in trigger
+
+
+def test_ratings_remain_one_daily_refresh():
     ratings = _text('v5_player_ratings_refresh.yml')
-    assert '45 3 * * 1,4,6' in backfill
-    assert backfill.count('cron:') == 1
-    assert ratings.count('cron:') == 1
+    assert ratings.split('permissions:', 1)[0].count('cron:') == 1
 
 
 def test_context_and_score_acceptance_are_intentional_manual_gates_not_push_fanout():
     for name in ('v5_context_diagnostic.yml', 'v5_score_acceptance.yml'):
         text = _text(name)
         trigger_block = text.split('permissions:', 1)[0]
+        assert 'workflow_dispatch:' in trigger_block
+        assert '\n  push:' not in trigger_block
+        assert '\n  schedule:' not in trigger_block
+
+
+def test_research_diagnostics_are_manual_only():
+    for name in (
+        'v5_total_length_diagnostic.yml',
+        'v5_model_bias_diagnostics.yml',
+        'v5_margin_calibration_diagnostic.yml',
+        'v5_superpowers_completion.yml',
+    ):
+        text = _text(name)
+        trigger_block = text.split('permissions:', 1)[0] if 'permissions:' in text else text.split('jobs:', 1)[0]
         assert 'workflow_dispatch:' in trigger_block
         assert '\n  push:' not in trigger_block
         assert '\n  schedule:' not in trigger_block
