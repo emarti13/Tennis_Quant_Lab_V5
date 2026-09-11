@@ -7,7 +7,6 @@ import math
 import numpy as np
 import pandas as pd
 
-from build_v5_context_warehouse import build_context_warehouse
 from v5_core import american_from_prob
 from v5_daily_batch import (
     _base_probs_from_ratings,
@@ -178,7 +177,11 @@ def run_interactive_production(market_feed, edited, ratings_by_tour, summary, si
 
     context_path = Path(base_dir) / "context_warehouse" / "player_match_rows.parquet"
     if not context_path.exists():
-        build_context_warehouse(str(base_dir))
+        return pd.DataFrame(), [{
+            "fixture_id": "*",
+            "stage": "context_unavailable",
+            "error": "Persisted context warehouse is unavailable. Streamlit never rebuilds TennisMyLife context over the network; wait for the scheduled backend refresh.",
+        }]
     context_history, tournament_registry, weather_cache, production_candidate, score_candidate = _load_full_context_assets()
 
     prepared_rows, errors = [], []
