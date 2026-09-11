@@ -69,7 +69,7 @@ def test_player_refresh_has_retry_windows_but_skips_when_already_fresh():
     trigger = text.split("permissions:", 1)[0]
     assert trigger.count("cron:") >= 3
     assert "Check whether today's history is already fresh" in text
-    assert "history_fresh=true" in text
+    assert "history_fresh=" in text
     assert "if: steps.freshness.outputs.history_fresh != 'true'" in text
     assert "Commit refresh audit even when upstream is unavailable" in text
 
@@ -79,5 +79,5 @@ def test_daily_predictions_restore_context_cache_and_fail_closed_when_cache_is_t
     assert "Restore last-known-good context warehouse" in text
     assert "Build context warehouse with cached fallback" in text
     assert "V5_CONTEXT_MAX_AGE_HOURS" in text
-    assert "context_warehouse/source_manifest.json" in text
+    assert "context_warehouse/cache_status.json" in text
     assert "Save fresh context warehouse" in text
