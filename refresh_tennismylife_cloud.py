@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import argparse
@@ -8,6 +7,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
@@ -78,14 +78,43 @@ def log(project_dir: Path, event: dict):
         f.write(json.dumps(event, default=str) + "\n")
 
 
-def get_manifest():
-    r = requests.get(MANIFEST_URL, timeout=45)
-    r.raise_for_status()
-    data = r.json()
-    files = data.get("files")
-    if not isinstance(files, list):
-        raise RuntimeError("TennisMyLife manifest did not contain a files list.")
-    return files
+def _read_prior_summary(project_dir: Path) -> dict:
+    path = project_dir / SUMMARY_FILE
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def _last_successful_utc(payload: dict) -> str | None:
+    value = payload.get("last_successful_utc")
+    if value:
+        return str(value)
+    if str(payload.get("status") or "").upper() == "SUCCESS" and payload.get("finished_utc"):
+        return str(payload["finished_utc"])
+    return None
+
+
+def get_manifest(attempts: int = 3, timeout_seconds: int = 12):
+    last_exc: Exception | None = None
+    for attempt in range(1, max(int(attempts), 1) + 1):
+        try:
+            r = requests.get(MANIFEST_URL, timeout=timeout_seconds)
+            r.raise_for_status()
+            data = r.json()
+            files = data.get("files")
+            if not isinstance(files, list):
+                raise RuntimeError("TennisMyLife manifest did not contain a files list.")
+            return files
+        except (requests.RequestException, ValueError, RuntimeError) as exc:
+            last_exc = exc
+            if attempt >= attempts:
+                break
+            time.sleep(min(2 ** (attempt - 1), 4))
+    raise RuntimeError(f"TennisMyLife manifest unavailable after {attempts} attempts: {last_exc}") from last_exc
 
 
 def manifest_lookup(files):
@@ -136,30 +165,36 @@ def resolve_targets(lookup):
     return resolved, missing
 
 
-def download_atomic(url: str, dest: Path):
+def download_atomic(url: str, dest: Path, attempts: int = 3):
     dest.parent.mkdir(parents=True, exist_ok=True)
-    fd, temp_name = tempfile.mkstemp(
-        prefix=dest.name + ".",
-        suffix=".download",
-        dir=str(dest.parent),
-    )
-    os.close(fd)
-    temp = Path(temp_name)
-
-    try:
-        with requests.get(url, stream=True, timeout=120) as r:
-            r.raise_for_status()
-            with temp.open("wb") as f:
-                for chunk in r.iter_content(1024 * 1024):
-                    if chunk:
-                        f.write(chunk)
-
-        if temp.stat().st_size == 0:
-            raise RuntimeError(f"Zero-byte download: {url}")
-
-        temp.replace(dest)
-    finally:
-        temp.unlink(missing_ok=True)
+    last_exc: Exception | None = None
+    for attempt in range(1, max(int(attempts), 1) + 1):
+        fd, temp_name = tempfile.mkstemp(
+            prefix=dest.name + ".",
+            suffix=".download",
+            dir=str(dest.parent),
+        )
+        os.close(fd)
+        temp = Path(temp_name)
+        try:
+            with requests.get(url, stream=True, timeout=(10, 120)) as r:
+                r.raise_for_status()
+                with temp.open("wb") as f:
+                    for chunk in r.iter_content(1024 * 1024):
+                        if chunk:
+                            f.write(chunk)
+            if temp.stat().st_size == 0:
+                raise RuntimeError(f"Zero-byte download: {url}")
+            temp.replace(dest)
+            return
+        except (requests.RequestException, RuntimeError) as exc:
+            last_exc = exc
+            if attempt >= attempts:
+                break
+            time.sleep(min(2 ** (attempt - 1), 4))
+        finally:
+            temp.unlink(missing_ok=True)
+    raise RuntimeError(f"Download unavailable after {attempts} attempts: {url}: {last_exc}") from last_exc
 
 
 def validate_csv(path: Path, prior_rows: int | None, ongoing: bool):
@@ -242,10 +277,12 @@ def main():
     args = ap.parse_args()
 
     project_dir = Path(args.dir).resolve()
+    prior = _read_prior_summary(project_dir)
     summary = {
         "started_utc": utc_now(),
         "year": CURRENT_YEAR,
         "status": "RUNNING",
+        "last_successful_utc": _last_successful_utc(prior),
         "files": {},
         "build": None,
         "outputs": {},
@@ -307,6 +344,7 @@ def main():
 
         summary["status"] = "SUCCESS"
         summary["finished_utc"] = utc_now()
+        summary["last_successful_utc"] = summary["finished_utc"]
 
         (project_dir / SUMMARY_FILE).write_text(
             json.dumps(summary, indent=2, default=str),
