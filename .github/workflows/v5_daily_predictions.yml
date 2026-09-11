@@ -1,11 +1,14 @@
 name: V5 Daily Predictions
 
-# One full-context production forecast per day, plus manual recovery. Routine
-# code/data pushes do not launch another heavy model build.
+# Three recovery windows, but at most one heavy forecast/day: later runs exit
+# immediately once a fresh forecast exists. History/context freshness gates are
+# fail-closed so an upstream outage cannot silently publish stale recommendations.
 on:
   workflow_dispatch:
   schedule:
     - cron: "45 6 * * *"
+    - cron: "45 10 * * *"
+    - cron: "45 14 * * *"
 
 permissions:
   contents: write
@@ -13,6 +16,10 @@ permissions:
 concurrency:
   group: v5-daily-heavy-forecast
   cancel-in-progress: true
+
+env:
+  V5_HISTORY_MAX_AGE_HOURS: "36"
+  V5_CONTEXT_MAX_AGE_HOURS: "36"
 
 jobs:
   build-and-freeze:
@@ -34,10 +41,106 @@ jobs:
       - name: Install production dependencies
         run: pip install --disable-pip-version-check -r requirements.txt
 
-      - name: Rebuild as-of-match context warehouse
+      - name: Check whether today's forecast already exists
+        id: forecast
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          path = Path('v5_daily_ready/latest_summary.json')
+          fresh = False
+          if path.exists():
+              try:
+                  payload = json.loads(path.read_text(encoding='utf-8'))
+                  built = datetime.fromisoformat(str(payload.get('built_at_utc') or '').replace('Z', '+00:00'))
+                  if built.tzinfo is None:
+                      built = built.replace(tzinfo=timezone.utc)
+                  age = (datetime.now(timezone.utc) - built.astimezone(timezone.utc)).total_seconds() / 3600
+                  fresh = age <= 20 and str(payload.get('status') or '').upper() in {'COMPLETE', 'PARTIAL', 'SUCCESS'}
+              except Exception:
+                  fresh = False
+          print(f"forecast_fresh={'true' if fresh else 'false'}")
+          PY
+
+      - name: Validate TennisMyLife history freshness
+        if: steps.forecast.outputs.forecast_fresh != 'true'
+        run: |
+          python - <<'PY'
+          import os
+          from v5_history_freshness import history_status
+          max_age = float(os.environ['V5_HISTORY_MAX_AGE_HOURS'])
+          status = history_status('v5_refresh_last.json', max_age_hours=max_age)
+          print(status)
+          if not status.get('usable'):
+              raise SystemExit(
+                  f"Player history is too stale for a new official forecast: {status}. "
+                  "Preserving the last known-good board and waiting for the next TennisMyLife retry."
+              )
+          PY
+
+      - name: Restore last-known-good context warehouse
+        if: steps.forecast.outputs.forecast_fresh != 'true'
+        id: context-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: context_warehouse
+          key: v5-context-warehouse-${{ github.run_id }}
+          restore-keys: |
+            v5-context-warehouse-
+
+      - name: Build context warehouse with cached fallback
+        if: steps.forecast.outputs.forecast_fresh != 'true'
+        id: context_build
+        continue-on-error: true
         run: python build_v5_context_warehouse.py
 
+      - name: Stamp fresh context warehouse
+        if: steps.forecast.outputs.forecast_fresh != 'true' && steps.context_build.outcome == 'success'
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          path = Path('context_warehouse/cache_status.json')
+          path.parent.mkdir(parents=True, exist_ok=True)
+          path.write_text(json.dumps({
+              'status': 'SUCCESS',
+              'built_at_utc': datetime.now(timezone.utc).isoformat(),
+          }, indent=2), encoding='utf-8')
+          PY
+
+      - name: Validate context fallback freshness
+        if: steps.forecast.outputs.forecast_fresh != 'true'
+        run: |
+          python - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          rows = Path('context_warehouse/player_match_rows.parquet')
+          status_path = Path('context_warehouse/cache_status.json')
+          if not rows.exists() or not status_path.exists():
+              raise SystemExit('No last-known-good context warehouse is available.')
+          payload = json.loads(status_path.read_text(encoding='utf-8'))
+          built = datetime.fromisoformat(str(payload.get('built_at_utc') or '').replace('Z', '+00:00'))
+          if built.tzinfo is None:
+              built = built.replace(tzinfo=timezone.utc)
+          age = (datetime.now(timezone.utc) - built.astimezone(timezone.utc)).total_seconds() / 3600
+          max_age = float(os.environ['V5_CONTEXT_MAX_AGE_HOURS'])
+          print(f'context_build={"${{ steps.context_build.outcome }}"} age_hours={age:.2f} max_age_hours={max_age:.2f}')
+          if age > max_age:
+              raise SystemExit(f'Cached context warehouse is too stale ({age:.2f}h).')
+          PY
+
+      - name: Save fresh context warehouse
+        if: steps.forecast.outputs.forecast_fresh != 'true' && steps.context_build.outcome == 'success'
+        uses: actions/cache/save@v4
+        with:
+          path: context_warehouse
+          key: v5-context-warehouse-${{ github.run_id }}
+
       - name: Build ranked board and freeze pre-match predictions
+        if: steps.forecast.outputs.forecast_fresh != 'true'
         run: |
           python v5_daily_batch.py
           python v5_daily_policy_postprocess.py
@@ -48,15 +151,14 @@ jobs:
           if [ -f v5_daily_ready/latest_summary.json ]; then cat v5_daily_ready/latest_summary.json; fi
 
       - name: Commit frozen daily board safely
-        if: success()
+        if: success() && steps.forecast.outputs.forecast_fresh != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch origin main
           if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
-            echo "main advanced during prediction build; rerunning against latest production inputs."
+            echo "main advanced during prediction build; repricing the frozen model against latest repository inputs."
             git reset --hard origin/main
-            python build_v5_context_warehouse.py
             python v5_daily_batch.py
             python v5_daily_policy_postprocess.py
           fi
