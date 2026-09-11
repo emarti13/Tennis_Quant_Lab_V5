@@ -1,9 +1,14 @@
 name: V5 Player Ratings Refresh
 
+# Multiple recovery windows are cheap because runs exit immediately after a
+# successful refresh. If TennisMyLife is unavailable, later windows retry
+# automatically and the failure audit is persisted without overwriting ratings.
 on:
   workflow_dispatch:
   schedule:
     - cron: "0 6 * * *"
+    - cron: "0 10 * * *"
+    - cron: "0 14 * * *"
 
 permissions:
   contents: write
@@ -32,12 +37,28 @@ jobs:
       - name: Install production dependencies
         run: pip install --disable-pip-version-check -r requirements.txt
 
+      - name: Check whether today's history is already fresh
+        id: freshness
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          from pathlib import Path
+          from v5_history_freshness import history_status
+          status = history_status(Path('v5_refresh_last.json'), max_age_hours=20)
+          fresh = status.get('state') == 'FRESH' and status.get('usable') is True
+          print(f"history_fresh={'true' if fresh else 'false'}")
+          print(f"history_state={status.get('state')}")
+          print(f"history_age_hours={status.get('age_hours')}")
+          PY
+
       - name: Preflight builder
+        if: steps.freshness.outputs.history_fresh != 'true'
         run: |
           test -f build_v5_states.py
           test -f v5_core.py
 
       - name: Restore historical TennisMyLife cache
+        if: steps.freshness.outputs.history_fresh != 'true'
         id: history-cache
         uses: actions/cache/restore@v4
         with:
@@ -45,47 +66,63 @@ jobs:
           key: v5-tennis-history-2010-2025-v3
 
       - name: Build or restore historical V5 inputs
+        if: steps.freshness.outputs.history_fresh != 'true'
         run: python bootstrap_v5_history.py
 
       - name: Save historical TennisMyLife cache
-        if: steps.history-cache.outputs.cache-hit != 'true'
+        if: steps.freshness.outputs.history_fresh != 'true' && steps.history-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: .v5_history_cache
           key: v5-tennis-history-2010-2025-v3
 
       - name: Refresh current TennisMyLife data and rebuild V5 ratings
+        if: steps.freshness.outputs.history_fresh != 'true'
+        id: refresh_current
+        continue-on-error: true
         run: python refresh_tennismylife_cloud.py --dir .
 
       - name: Remove ephemeral historical root copies before commit
-        if: always()
+        if: always() && steps.freshness.outputs.history_fresh != 'true'
         run: rm -f ATP.csv ATPQualifiers.csv Challenger.csv WTA.csv
 
-      - name: Commit refreshed player data and V5 ratings
-        if: success()
+      - name: Commit refresh audit even when upstream is unavailable
+        if: always() && steps.freshness.outputs.history_fresh != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -u
-          for f in \
-            v5_refresh_last.json \
-            v5_refresh_log.jsonl \
-            v5_men_ratings.csv \
-            v5_wta_ratings.csv \
-            v5_men_walkforward.csv \
-            v5_wta_walkforward.csv \
-            v5_build_summary.json
-          do
+          git fetch origin main
+          git reset --soft origin/main
+          for f in v5_refresh_last.json v5_refresh_log.jsonl; do
             [ -e "$f" ] && git add "$f"
           done
+          if [ "${{ steps.refresh_current.outcome }}" = "success" ]; then
+            git add -u
+            for f in \
+              v5_men_ratings.csv \
+              v5_wta_ratings.csv \
+              v5_men_walkforward.csv \
+              v5_wta_walkforward.csv \
+              v5_build_summary.json
+            do
+              [ -e "$f" ] && git add "$f"
+            done
+          fi
           git reset -- ATP.csv ATPQualifiers.csv Challenger.csv WTA.csv .v5_history_cache 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo "No player-data changes to commit."
+            echo "No refresh audit or player-data changes to commit."
           else
-            git commit -m "Daily V5 player ratings refresh"
-            git pull --rebase origin main
+            if [ "${{ steps.refresh_current.outcome }}" = "success" ]; then
+              git commit -m "Daily V5 player ratings refresh"
+            else
+              git commit -m "Record TennisMyLife refresh outage"
+            fi
             git push origin HEAD:main
           fi
+
+      - name: Enforce refresh result
+        if: steps.freshness.outputs.history_fresh != 'true' && steps.refresh_current.outcome != 'success'
+        run: exit 1
 
       - name: Upload compact refresh audit
         if: always()
