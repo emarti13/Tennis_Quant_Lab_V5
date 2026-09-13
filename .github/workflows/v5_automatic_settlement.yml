@@ -1,12 +1,13 @@
 name: V5 Automatic Settlement
 
-# One daily production settlement plus manual recovery. Current-engine headline
-# performance is sourced only from the canonical official recommendation ledger.
-# Legacy frozen history remains preserved for audit, not recomputed as production.
+# One daily production settlement plus manual recovery. Run after the final
+# TennisMyLife/player-history recovery window so delayed upstream recovery can
+# still settle Results the same day. Current-engine headline performance is
+# sourced only from the canonical official recommendation ledger.
 on:
   workflow_dispatch:
   schedule:
-    - cron: "30 10 * * *"
+    - cron: "30 15 * * *"
 
 permissions:
   contents: write
