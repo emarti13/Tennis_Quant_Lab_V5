@@ -1,8 +1,9 @@
 name: V5 Daily Predictions
 
 # Three recovery windows, but at most one heavy forecast/day: later runs
-# short-circuit before dependency installation once a fresh canonical forecast
-# exists. History/context freshness gates fail closed rather than publish stale picks.
+# short-circuit before dependency installation only when the canonical forecast
+# is for the current Eastern production date. History/context freshness gates fail
+# closed rather than publish stale picks.
 on:
   workflow_dispatch:
   schedule:
@@ -45,20 +46,33 @@ jobs:
           import json
           from datetime import datetime, timezone
           from pathlib import Path
+          from zoneinfo import ZoneInfo
+
           status_path = Path('v5_daily_ready/forecast_status.json')
           forecasts = Path('v5_daily_ready/daily_forecasts.csv')
+          now = datetime.now(timezone.utc)
+          expected_date = now.astimezone(ZoneInfo('America/New_York')).date().isoformat()
           fresh = False
+          artifact_date = None
           if status_path.exists() and forecasts.exists() and forecasts.stat().st_size > 0:
               try:
                   payload = json.loads(status_path.read_text(encoding='utf-8'))
+                  artifact_date = str(payload.get('forecast_date') or '')
                   built = datetime.fromisoformat(str(payload.get('run_timestamp') or '').replace('Z', '+00:00'))
                   if built.tzinfo is None:
                       built = built.replace(tzinfo=timezone.utc)
-                  age = (datetime.now(timezone.utc) - built.astimezone(timezone.utc)).total_seconds() / 3600
-                  fresh = age <= 20 and str(payload.get('state') or '').lower() in {'success', 'partial'} and str(payload.get('freshness') or '').upper() == 'READY'
+                  age = (now - built.astimezone(timezone.utc)).total_seconds() / 3600
+                  fresh = (
+                      artifact_date == expected_date
+                      and age <= 20
+                      and str(payload.get('state') or '').lower() in {'success', 'partial'}
+                      and str(payload.get('freshness') or '').upper() == 'READY'
+                  )
               except Exception:
                   fresh = False
           print(f"forecast_fresh={'true' if fresh else 'false'}")
+          print(f"expected_date={expected_date}")
+          print(f"artifact_date={artifact_date or ''}")
           PY
 
       - name: Install production dependencies
@@ -188,8 +202,5 @@ jobs:
             exit 0
           fi
           git commit -m "Freeze daily V5 forecast and reprice live markets"
-          # Preserve the completed heavy model run. If main advanced while it was
-          # building (for example from a live OddsPapi refresh), rebase this small
-          # artifact commit rather than rerunning the model or resetting outputs.
           git pull --rebase origin main
           git push origin HEAD:main
