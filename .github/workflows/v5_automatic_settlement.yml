@@ -13,8 +13,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: v5-daily-settlement
-  cancel-in-progress: true
+  group: v5-production-writer
+  cancel-in-progress: false
 
 jobs:
   settle:
