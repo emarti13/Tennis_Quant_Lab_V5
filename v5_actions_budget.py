@@ -8,12 +8,16 @@ GUARDRAIL_FRACTION = 0.70
 DAYS_PER_BUDGET_MONTH = 30
 WEEKS_PER_BUDGET_MONTH = DAYS_PER_BUDGET_MONTH / 7.0
 
-# Conservative planning minutes. Research/acceptance workflows are manual-only
-# and therefore intentionally excluded from recurring burn.
+# Conservative planning minutes. Heavy history/model work is expected once/day.
+# The two later recovery windows short-circuit after checkout/setup when that
+# day's artifact is already healthy, but their runner time is budgeted explicitly.
+# Research/acceptance workflows are manual-only and excluded from recurring burn.
 RECURRING_JOBS = {
     "live_market_repricing": {"runs_per_day": 4, "minutes_per_run": 2},
     "player_ratings": {"runs_per_day": 1, "minutes_per_run": 12},
+    "player_refresh_recovery_probes": {"runs_per_day": 2, "minutes_per_run": 3},
     "daily_heavy_forecast": {"runs_per_day": 1, "minutes_per_run": 20},
+    "forecast_recovery_probes": {"runs_per_day": 2, "minutes_per_run": 3},
     "daily_settlement": {"runs_per_day": 1, "minutes_per_run": 3},
     "historical_backfill": {"runs_per_week": 1, "minutes_per_run": 45},
 }
