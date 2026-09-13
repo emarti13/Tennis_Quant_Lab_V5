@@ -1,0 +1,197 @@
+name: Bootstrap V5 Production Once
+
+on:
+  push:
+    branches:
+      - ops/bootstrap-v5-production-once
+    paths:
+      - .github/workflows/bootstrap_v5_production_once.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v5-production-writer
+  cancel-in-progress: false
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout current production main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install production dependencies
+        run: pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Restore historical TennisMyLife cache
+        id: history-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .v5_history_cache
+          key: v5-tennis-history-2010-2025-v3
+
+      - name: Restore historical model inputs
+        run: python bootstrap_v5_history.py
+
+      - name: Refresh TennisMyLife and ratings
+        run: python refresh_tennismylife_cloud.py --dir .
+
+      - name: Build canonical persisted results cache
+        run: |
+          SOURCE_SUCCESS=$(python - <<'PY'
+          import json
+          from pathlib import Path
+          payload=json.loads(Path('v5_refresh_last.json').read_text(encoding='utf-8'))
+          print(payload.get('last_successful_utc') or payload.get('finished_utc') or '')
+          PY
+          )
+          python v5_results_cache.py --dir . --source-success-utc "$SOURCE_SUCCESS"
+
+      - name: Restore cached Tennis market dictionary
+        id: market-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: oddspapi_markets_tennis.json
+          key: oddspapi-tennis-markets-v1
+
+      - name: Fetch Tennis market dictionary on cache miss
+        if: steps.market-cache.outputs.cache-hit != 'true'
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: python fetch_oddspapi_markets.py
+
+      - name: Pull fresh OddsPapi slate
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: |
+          python pull_oddspapi_quota_aware.py
+          python normalize_oddspapi_snapshot.py
+          python build_v5_market_board_input.py
+
+      - name: Validate fresh market feed
+        run: |
+          python - <<'PY'
+          import csv
+          from datetime import datetime, timezone
+          from pathlib import Path
+          path=Path('v5_market_ready/market_board_input.csv')
+          if not path.exists() or path.stat().st_size == 0:
+              raise SystemExit('missing/empty market feed')
+          with path.open(newline='', encoding='utf-8') as fh:
+              rows=list(csv.DictReader(fh))
+          now=datetime.now(timezone.utc)
+          parse=lambda v: datetime.fromisoformat(str(v).replace('Z','+00:00'))
+          snapshots=[parse(r['snapshot_utc']) for r in rows if r.get('snapshot_utc')]
+          if not snapshots:
+              raise SystemExit('market feed has no snapshot timestamp')
+          age=(now-max(snapshots)).total_seconds()/3600
+          future=[r for r in rows if r.get('start_time_utc') and parse(r['start_time_utc']) > now]
+          fixtures={r.get('fixture_id') for r in future if r.get('fixture_id')}
+          if age > 3:
+              raise SystemExit(f'market feed is stale: {age:.2f}h')
+          if not fixtures:
+              raise SystemExit('market feed has zero future fixtures')
+          print(f'feed_ready age_hours={age:.2f} future_fixtures={len(fixtures)} rows={len(rows)}')
+          PY
+
+      - name: Build fresh production context
+        run: python build_v5_context_warehouse.py
+
+      - name: Build canonical daily forecast and reprice
+        run: |
+          python v5_daily_batch.py
+          python v5_daily_policy_postprocess.py
+          python v5_build_daily_forecast_artifacts.py
+          python v5_run_repricing.py
+
+      - name: Settle official recommendations
+        run: python v5_settle_official_recommendations.py
+
+      - name: Validate canonical production artifacts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+          required_csv = [
+              'v5_market_ready/market_board_input.csv',
+              'v5_daily_ready/daily_forecasts.csv',
+              'v5_daily_ready/daily_market_probabilities.csv',
+              'v5_daily_ready/latest_repriced_board.csv',
+              'v5_results_ready/tennismylife_results.csv',
+          ]
+          for name in required_csv:
+              path=Path(name)
+              if not path.exists() or path.stat().st_size == 0:
+                  raise SystemExit(f'missing/empty required artifact: {name}')
+              try:
+                  frame=pd.read_csv(path, low_memory=False)
+              except Exception as exc:
+                  raise SystemExit(f'unreadable required artifact {name}: {exc}')
+              if frame.empty:
+                  raise SystemExit(f'zero-row required artifact: {name}')
+              print(f'{name}: {len(frame)} rows')
+          for name in [
+              'v5_daily_ready/forecast_status.json',
+              'v5_daily_ready/repricing_status.json',
+              'v5_results_ready/results_status.json',
+          ]:
+              payload=json.loads(Path(name).read_text(encoding='utf-8'))
+              print(name, payload)
+          PY
+
+      - name: Commit bootstrapped production state to main
+        run: |
+          rm -f ATP.csv ATPQualifiers.csv Challenger.csv WTA.csv
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for f in \
+            v5_refresh_last.json \
+            v5_refresh_log.jsonl \
+            v5_men_ratings.csv \
+            v5_wta_ratings.csv \
+            v5_men_walkforward.csv \
+            v5_wta_walkforward.csv \
+            v5_build_summary.json \
+            v5_results_ready/tennismylife_results.csv \
+            v5_results_ready/results_status.json \
+            oddspapi_registry/fixtures.csv \
+            v5_market_ready/market_board_input.csv \
+            v5_market_ready/all_book_prices.csv \
+            v5_market_ready/market_feed_qc.json \
+            v5_daily_ready/latest_board.csv \
+            v5_daily_ready/latest_summary.json \
+            v5_daily_ready/frozen_predictions.csv \
+            v5_daily_ready/daily_forecasts.csv \
+            v5_daily_ready/daily_market_probabilities.csv \
+            v5_daily_ready/forecast_status.json \
+            v5_daily_ready/latest_repriced_board.csv \
+            v5_daily_ready/official_recommendations.csv \
+            v5_daily_ready/recommendation_audit.csv \
+            v5_daily_ready/market_snapshot_history.csv \
+            v5_daily_ready/repricing_status.json \
+            v5_daily_ready/official_performance.json \
+            v5_daily_ready/official_settlement_status.json
+          do
+            [ -e "$f" ] && git add "$f"
+          done
+          git reset -- .v5_history_cache 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo 'No production changes to commit.'
+            exit 0
+          fi
+          git commit -m "Bootstrap consolidated V5 production artifacts"
+          git pull --rebase origin main
+          git push origin HEAD:main
