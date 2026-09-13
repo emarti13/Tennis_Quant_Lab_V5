@@ -15,10 +15,11 @@ def test_configured_recurring_budget_stays_below_70_percent_of_allowance():
     assert report['headroom_to_allowance'] >= 900
 
 
-def test_live_market_is_four_lightweight_runs_and_performs_repricing():
+def test_live_market_is_one_quota_conserving_run_and_performs_repricing():
     text = _text('oddspapi_normalized_daily_v2.yml')
     trigger = text.split('permissions:', 1)[0]
-    assert '15 0,6,12,18 * * *' in trigger
+    assert '15 18 * * *' in trigger
+    assert trigger.count('cron:') == 1
     assert 'workflow_dispatch:' in trigger
     assert '\n  push:' not in trigger
     assert 'python v5_run_repricing.py' in text
@@ -62,12 +63,11 @@ def test_canonical_production_writers_share_one_serialization_lock():
         assert 'cancel-in-progress: false' in text
 
 
-def test_historical_backfill_is_weekly_not_daily():
+def test_historical_backfill_is_manual_only_while_quota_is_constrained():
     backfill = _text('oddspapi_2026_backfill.yml')
     trigger = backfill.split('permissions:', 1)[0]
-    assert '45 3 * * 0' in trigger
-    assert trigger.count('cron:') == 1
     assert 'workflow_dispatch:' in trigger
+    assert '\n  schedule:' not in trigger
 
 
 def test_ratings_have_recovery_windows_and_skip_after_success():

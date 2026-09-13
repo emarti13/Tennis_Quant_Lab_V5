@@ -1,12 +1,10 @@
 name: OddsPapi 2026 Historical Backfill
 
-# Historical enrichment is useful but not production-critical. Run one weekly
-# checkpoint plus manual recovery runs so live market automation always wins the
-# Actions budget.
+# Historical enrichment is useful but not production-critical. Keep this
+# manual-only while live OddsPapi quota is constrained so research/backfill
+# can never consume production pricing capacity automatically.
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "45 3 * * 0"
 
 permissions:
   contents: write

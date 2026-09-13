@@ -1,19 +1,13 @@
 name: OddsPapi Normalized Daily v2
 
-# Production-critical live pricing. Four scheduled opportunities/day plus
-# manual recovery. Research/backfill protects quota for this workflow; when
-# live quota is genuinely exhausted, preserve last-known-good artifacts and
-# exit cleanly instead of turning a controlled upstream constraint into a
-# production traceback.
+# Production-critical live pricing. Quota-conservation mode uses one scheduled
+# production refresh/day plus intentional manual recovery. Workflow edits do
+# not trigger API calls. When live quota is genuinely unavailable, preserve
+# last-known-good artifacts and exit cleanly instead of corrupting production.
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/oddspapi_normalized_daily_v2.yml"
   schedule:
-    - cron: "15 0,6,12,18 * * *"
+    - cron: "15 18 * * *"
 
 permissions:
   contents: write

@@ -52,10 +52,12 @@ def test_today_never_turns_stale_fixture_fallback_into_a_manual_model_run():
     assert "Run manual recovery board" not in source
 
 
-def test_live_workflow_uses_even_six_hour_schedule():
+def test_live_workflow_uses_one_quota_conserving_daily_schedule():
     text = Path(".github/workflows/oddspapi_normalized_daily_v2.yml").read_text(encoding="utf-8")
-    assert "15 0,6,12,18 * * *" in text
-    assert "15 0,12,16,20 * * *" not in text
+    trigger = text.split("permissions:", 1)[0]
+    assert 'cron: "15 18 * * *"' in trigger
+    assert trigger.count("cron:") == 1
+    assert "\n  push:" not in trigger
 
 
 def test_live_workflow_treats_quota_skip_as_controlled_state():
@@ -83,10 +85,11 @@ def test_settlement_is_daily_after_history_recovery_not_chained_to_predictions()
     assert 'workflows: ["V5 Player Ratings Refresh", "V5 Daily Predictions"]' not in text
 
 
-def test_historical_backfill_is_weekly_not_an_actions_sink():
+def test_historical_backfill_is_manual_only_while_quota_is_constrained():
     text = Path(".github/workflows/oddspapi_2026_backfill.yml").read_text(encoding="utf-8")
-    assert 'cron: "45 3 * * 0"' in text
-    assert '45 1,3,5,7,9,13,17,21 * * *' not in text
+    trigger = text.split("permissions:", 1)[0]
+    assert "workflow_dispatch:" in trigger
+    assert "\n  schedule:" not in trigger
 
 
 def test_player_ratings_use_retry_windows_but_skip_heavy_work_after_success():
