@@ -49,7 +49,6 @@ def test_lean_can_be_superseded_by_bet_before_match_start_without_duplicate_sett
     ledger, audit = update_official_recommendations(pd.DataFrame(), _obs("LEAN", -110, "2026-09-08T11:00:00Z"))
     assert len(ledger) == 1
     assert ledger.iloc[0]["official_signal"] == "LEAN"
-
     ledger, audit = update_official_recommendations(ledger, _obs("BET", 100, "2026-09-08T12:00:00Z"), audit)
     assert len(ledger) == 1
     assert ledger.iloc[0]["official_signal"] == "BET"
@@ -64,3 +63,30 @@ def test_no_official_recommendation_after_match_start():
     )
     assert ledger.empty
     assert (audit["event"] == "BLOCKED_POST_START").any()
+
+
+def test_later_repricing_preserves_settlement_provenance_and_result():
+    ledger, audit = update_official_recommendations(pd.DataFrame(), _obs("BET", 100, "2026-09-08T12:00:00Z"))
+    ledger.loc[0, "result_status"] = "SETTLED"
+    ledger.loc[0, "settled_result"] = "WIN"
+    ledger.loc[0, "profit_units"] = 1.0
+    ledger.loc[0, "settled_at_utc"] = "2026-09-08T20:00:00Z"
+    ledger.loc[0, "result_source"] = "TennisMyLife"
+    ledger.loc[0, "result_winner"] = "Player One"
+    ledger.loc[0, "result_loser"] = "Player Two"
+    ledger.loc[0, "result_score"] = "6-4 6-4"
+
+    updated, _ = update_official_recommendations(
+        ledger,
+        _obs("BET", 140, "2026-09-09T12:00:00Z", start="2026-09-08T18:00:00Z"),
+        audit,
+    )
+
+    assert len(updated) == 1
+    assert updated.loc[0, "result_status"] == "SETTLED"
+    assert updated.loc[0, "settled_result"] == "WIN"
+    assert updated.loc[0, "profit_units"] == 1.0
+    assert updated.loc[0, "settled_at_utc"] == "2026-09-08T20:00:00Z"
+    assert updated.loc[0, "result_source"] == "TennisMyLife"
+    assert updated.loc[0, "result_winner"] == "Player One"
+    assert updated.loc[0, "result_score"] == "6-4 6-4"
