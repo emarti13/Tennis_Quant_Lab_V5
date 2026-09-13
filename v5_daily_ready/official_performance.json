@@ -1,0 +1,58 @@
+{
+  "official_recommendations": 0,
+  "unique_fixtures": 0,
+  "wins": 0,
+  "losses": 0,
+  "pushes": 0,
+  "voids": 0,
+  "win_rate": null,
+  "net_units": 0.0,
+  "roi": null,
+  "median_american_odds": null,
+  "favorite_recommendations": 0,
+  "underdog_recommendations": 0,
+  "max_recommendations_per_fixture": 0,
+  "open_recommendations": 6,
+  "by_signal": {},
+  "by_price_band": {},
+  "fixture_cluster": {
+    "fixtures": 0,
+    "profitable_fixtures": 0,
+    "losing_fixtures": 0,
+    "flat_fixtures": 0,
+    "profitable_fixture_rate": null,
+    "net_units": 0.0
+  },
+  "retirement_sensitivity": {
+    "including_voids": {
+      "official_recommendations": 0,
+      "unique_fixtures": 0,
+      "wins": 0,
+      "losses": 0,
+      "pushes": 0,
+      "voids": 0,
+      "win_rate": null,
+      "net_units": 0.0,
+      "roi": null,
+      "median_american_odds": null,
+      "favorite_recommendations": 0,
+      "underdog_recommendations": 0,
+      "max_recommendations_per_fixture": 0
+    },
+    "excluding_voids": {
+      "official_recommendations": 0,
+      "unique_fixtures": 0,
+      "wins": 0,
+      "losses": 0,
+      "pushes": 0,
+      "voids": 0,
+      "win_rate": null,
+      "net_units": 0.0,
+      "roi": null,
+      "median_american_odds": null,
+      "favorite_recommendations": 0,
+      "underdog_recommendations": 0,
+      "max_recommendations_per_fixture": 0
+    }
+  }
+}

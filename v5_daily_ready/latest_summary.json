@@ -1,19 +1,80 @@
 {
-  "status": "SUCCESS",
-  "built_at_utc": "2026-09-13T12:19:19.454479+00:00",
-  "market_snapshot_utc": "2026-09-11T13:43:40.008400+00:00",
+  "status": "PARTIAL",
+  "built_at_utc": "2026-09-13T17:39:38.399915+00:00",
+  "market_snapshot_utc": "2026-09-13T17:38:40.084566+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 332,
-  "eligible_pre_match_fixtures": 0,
-  "priced_rows": 0,
-  "board_rows": 0,
-  "frozen_ledger_rows": 6821,
-  "new_frozen_rows": 0,
-  "signal_counts": {},
-  "selected_candidate_counts": {},
-  "selected_score_candidate_counts": {},
+  "market_rows_input": 860,
+  "eligible_pre_match_fixtures": 43,
+  "priced_rows": 760,
+  "board_rows": 766,
+  "frozen_ledger_rows": 7581,
+  "new_frozen_rows": 760,
+  "signal_counts": {
+    "REVIEW": 464,
+    "PASS": 290,
+    "N/A": 6,
+    "BET": 5,
+    "LEAN": 1
+  },
+  "selected_candidate_counts": {
+    "residual": 456,
+    "ensemble": 310
+  },
+  "selected_score_candidate_counts": {
+    "gaussian_contextual": 456,
+    "conditioned_mechanistic": 310
+  },
   "context_fallback_rows": 0,
-  "errors": [],
+  "errors": [
+    {
+      "fixture_id": "id1200389974628278",
+      "player1": "Kobelt, Alex",
+      "player2": "Bobichon, Matisse",
+      "tournament": "ATP Challenger Rennes, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Kobelt, Alex"
+    },
+    {
+      "fixture_id": "id1200390574632182",
+      "player1": "Vandecasteele, Quinn",
+      "player2": "Zamora, Noah",
+      "tournament": "ATP Challenger Tiburon, USA Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Zamora, Noah"
+    },
+    {
+      "fixture_id": "id1200389974628280",
+      "player1": "Boulais, Justin",
+      "player2": "Arribage, Theo",
+      "tournament": "ATP Challenger Rennes, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Arribage, Theo"
+    },
+    {
+      "fixture_id": "id1200390574632174",
+      "player1": "Staeheli, Luca",
+      "player2": "Exsted, Maxwell",
+      "tournament": "ATP Challenger Tiburon, USA Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Exsted, Maxwell"
+    },
+    {
+      "fixture_id": "id1200390574632176",
+      "player1": "Grumet, Gus",
+      "player2": "Ostapenkov, Daniil",
+      "tournament": "ATP Challenger Tiburon, USA Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Grumet, Gus"
+    },
+    {
+      "fixture_id": "id1204695374632148",
+      "player1": "Kinoshita, Hayu",
+      "player2": "Brace, Cadence",
+      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Kinoshita, Hayu"
+    }
+  ],
   "model_version": "v5-advanced-nested-chronological-1",
   "score_model_version": "v5-score-walkforward-3",
   "probability_source": "chronologically validated independent full-context candidate; sportsbook inputs joined only after probability freeze",
