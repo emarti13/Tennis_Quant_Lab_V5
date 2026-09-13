@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Convert V5 into a self-functioning production system that stays comfortably under 3,000 GitHub Actions minutes/month while preserving one daily model forecast, four lightweight market repricings, one official recommendation per market, and statistically honest settlement/performance.
+**Goal:** Convert V5 into a self-functioning production system that stays comfortably under 3,000 GitHub Actions minutes/month while preserving one daily model forecast, one lightweight market repricing per day for the time being, one official recommendation per market, and statistically honest settlement/performance.
 
-**Architecture:** Separate expensive sportsbook-independent forecasting from cheap sportsbook-dependent repricing. Freeze one canonical model forecast ledger daily; four OddsPapi refreshes only normalize prices, join them to the frozen forecast, re-evaluate price-dependent policy states, append market history, and update a first-crossing official recommendation ledger. Settlement consumes only official recommendations. All canonical artifacts use last-known-good promotion and explicit health states.
+**Architecture:** Separate expensive sportsbook-independent forecasting from cheap sportsbook-dependent repricing. Freeze one canonical model forecast ledger daily; the current quota-conservation cadence performs one OddsPapi refresh per day, which only normalizes prices, joins them to the frozen forecast, re-evaluates price-dependent policy states, appends market history, and updates a first-crossing official recommendation ledger. Settlement consumes only official recommendations. All canonical artifacts use last-known-good promotion and explicit health states. Market refresh frequency can be increased later when API capacity supports it without compromising production reliability.
 
 **Tech Stack:** Python 3.12, pandas, Streamlit, GitHub Actions, existing V5 model/context/settlement modules.
 
@@ -13,6 +13,7 @@
 ## Global Constraints
 
 - Hard GitHub-hosted Actions budget: 3,000 minutes/month; target comfortably below 80%.
+- Current OddsPapi production cadence: one scheduled market refresh/repricing per day for the time being.
 - Do not change accepted winner/score model mathematics.
 - Do not tune recommendation thresholds on already-observed live outcomes.
 - Do not rewrite historical frozen predictions.
@@ -58,7 +59,7 @@
 - [ ] Verify focused tests GREEN.
 - [ ] Commit.
 
-### Task 3: Lightweight Four-Times-Daily Repricing
+### Task 3: Lightweight Daily Repricing
 
 **Files:**
 - Create: `v5_reprice_markets.py`
@@ -70,11 +71,12 @@
 - Produces `v5_daily_ready/latest_repriced_board.csv`, `v5_daily_ready/market_snapshot_history.csv`, and `v5_daily_ready/repricing_status.json`.
 - Recomputes only market/no-vig probability, edge, EV, and existing signal policy from frozen probabilities/distributions.
 
-- [ ] Write failing tests proving probabilities remain identical across multiple same-day repricing snapshots while EV/signals can change with price.
+- [ ] Write failing tests proving probabilities remain identical across repeated same-day repricing snapshots while EV/signals can change with price.
 - [ ] Write failing test that stale price input cannot emit BET/LEAN.
 - [ ] Verify RED.
 - [ ] Implement repricer using existing `add_model_pricing` / signal policy semantics and frozen forecast outputs.
 - [ ] Wire OddsPapi workflow to run repricing immediately after validated market-feed promotion, without context rebuild/full simulation/full regression.
+- [ ] Configure one scheduled OddsPapi refresh/repricing per day for the time being under the current quota constraint.
 - [ ] Verify focused tests GREEN.
 - [ ] Commit.
 
@@ -108,7 +110,7 @@
 - Settlement consumes `official_recommendations.csv` for current-engine headline performance.
 - Legacy frozen history remains separate and immutable.
 
-- [ ] Write failing tests showing four repricing snapshots for one market settle once, PASS/REVIEW do not enter headline record, and legacy/current scopes remain distinct.
+- [ ] Write failing tests showing repeated repricing snapshots for one market settle once, PASS/REVIEW do not enter headline record, and legacy/current scopes remain distinct.
 - [ ] Verify RED.
 - [ ] Modify settlement/audit pipeline to use official current-engine recommendations.
 - [ ] Add median odds, favorite/underdog mix, price bands, unique fixtures, max recommendations/fixture, and retirement sensitivity when metadata exists.
@@ -149,7 +151,7 @@
 - Encodes configured monthly run counts and expected minute ceilings.
 - Production jobs have isolated concurrency; historical jobs cannot block/cancel production.
 
-- [ ] Write failing tests enforcing four lightweight market runs/day, one heavy forecast/day, one settlement/day, low-cadence backfill, no duplicate triggers, no full suite in routine jobs, and projected monthly usage < 2,400 minutes (80% of budget).
+- [ ] Write failing tests enforcing one lightweight market run/day for the current quota-conservation configuration, one heavy forecast/day, one settlement/day, low-cadence backfill, no duplicate triggers, no full suite in routine jobs, and projected monthly usage < 2,400 minutes (80% of budget).
 - [ ] Verify RED.
 - [ ] Implement budget estimator and finalize workflow cadences/trigger isolation.
 - [ ] Verify focused tests GREEN.
@@ -162,9 +164,9 @@
 - Modify status/artifact modules only if contract exposes a real gap.
 
 **Interfaces:**
-- Synthetic day: one forecast → four prices → changing signals → one official recommendation → one settlement.
+- Synthetic lifecycle: one forecast → one or more price snapshots → changing signals → one official recommendation → one settlement.
 
-- [ ] Write end-to-end test with four price snapshots for one market.
+- [ ] Write end-to-end test with repeated price snapshots for one market so idempotence remains proven independent of the currently configured daily cadence.
 - [ ] Assert model probability never changes, official recommendation count <= 1 per market key, first BET is immutable, settlement count = 1, and performance count = 1.
 - [ ] Verify RED if any integration gap remains.
 - [ ] Fix only identified integration gaps.
