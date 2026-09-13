@@ -55,6 +55,13 @@ def test_settlement_is_once_daily_and_never_on_push():
     assert 'python -m pytest' not in text
 
 
+def test_canonical_production_writers_share_one_serialization_lock():
+    for name in ('oddspapi_normalized_daily_v2.yml', 'v5_daily_predictions.yml', 'v5_automatic_settlement.yml'):
+        text = _text(name)
+        assert 'group: v5-production-writer' in text
+        assert 'cancel-in-progress: false' in text
+
+
 def test_historical_backfill_is_weekly_not_daily():
     backfill = _text('oddspapi_2026_backfill.yml')
     trigger = backfill.split('permissions:', 1)[0]
