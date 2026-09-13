@@ -73,7 +73,6 @@ jobs:
           status = str(payload.get('status') or 'UNKNOWN')
           print(f"pull_status={status}")
           print(f"fresh_snapshot={'true' if status == 'SUCCESS' else 'false'}")
-          print(f"OddsPapi live pull state: {status}")
           PY
 
       - name: Preserve last-known-good feed when live quota is unavailable
