@@ -15,8 +15,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: v5-daily-heavy-forecast
-  cancel-in-progress: true
+  group: v5-production-writer
+  cancel-in-progress: false
 
 env:
   V5_HISTORY_MAX_AGE_HOURS: "36"
