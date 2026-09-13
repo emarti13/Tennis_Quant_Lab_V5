@@ -60,9 +60,9 @@ def test_live_workflow_uses_even_six_hour_schedule():
 
 def test_live_workflow_treats_quota_skip_as_controlled_state():
     text = Path(".github/workflows/oddspapi_normalized_daily_v2.yml").read_text(encoding="utf-8")
-    assert "id: live-pull" in text
+    assert "id: live_pull" in text
     assert "fresh_snapshot" in text
-    assert "if: steps.live-pull.outputs.fresh_snapshot == 'true'" in text
+    assert "if: steps.live_pull.outputs.fresh_snapshot == 'true'" in text
     assert "oddspapi_daily/*_manifest.json" in text
 
 
