@@ -1,9 +1,8 @@
 name: V5 Player Ratings Refresh
 
-# Multiple recovery windows are cheap because runs exit immediately after a
-# successful refresh. If TennisMyLife is unavailable, later windows retry
-# automatically and the failure audit is persisted without overwriting ratings
-# or the canonical last-known-good results cache.
+# Multiple recovery windows are cheap because runs short-circuit before dependency
+# installation after a successful refresh. If TennisMyLife is unavailable, later
+# windows retry automatically without overwriting last-known-good production data.
 on:
   workflow_dispatch:
   schedule:
@@ -35,9 +34,6 @@ jobs:
           python-version: "3.12"
           cache: "pip"
 
-      - name: Install production dependencies
-        run: pip install --disable-pip-version-check -r requirements.txt
-
       - name: Check whether today's history is already fresh
         id: freshness
         shell: bash
@@ -51,6 +47,10 @@ jobs:
           print(f"history_state={status.get('state')}")
           print(f"history_age_hours={status.get('age_hours')}")
           PY
+
+      - name: Install production dependencies
+        if: steps.freshness.outputs.history_fresh != 'true'
+        run: pip install --disable-pip-version-check -r requirements.txt
 
       - name: Preflight builder
         if: steps.freshness.outputs.history_fresh != 'true'
