@@ -21,6 +21,9 @@ OFFICIAL_COLUMNS = [
     "model_version", "selected_model_candidate",
     "score_model_version", "selected_score_candidate",
     "result_status", "settled_result", "profit_units",
+    "settled_at_utc", "result_source", "result_tourney_date", "result_tournament",
+    "result_winner", "result_loser", "result_score", "winner_games", "loser_games",
+    "settlement_note",
 ]
 
 
@@ -89,6 +92,16 @@ def _official_record(row, signal: str, market_key: str) -> dict:
         "result_status": "OPEN",
         "settled_result": "",
         "profit_units": pd.NA,
+        "settled_at_utc": pd.NA,
+        "result_source": pd.NA,
+        "result_tourney_date": pd.NA,
+        "result_tournament": pd.NA,
+        "result_winner": pd.NA,
+        "result_loser": pd.NA,
+        "result_score": pd.NA,
+        "winner_games": pd.NA,
+        "loser_games": pd.NA,
+        "settlement_note": pd.NA,
     }
 
 
@@ -102,7 +115,10 @@ def update_official_recommendations(
     ledger = _empty_official() if existing is None or existing.empty else existing.copy()
     audit_out = pd.DataFrame() if audit is None else audit.copy()
     if observations is None or observations.empty:
-        return ledger.reset_index(drop=True), audit_out.reset_index(drop=True)
+        for col in OFFICIAL_COLUMNS:
+            if col not in ledger.columns:
+                ledger[col] = pd.NA
+        return ledger[OFFICIAL_COLUMNS].reset_index(drop=True), audit_out.reset_index(drop=True)
 
     if "market_key" not in ledger.columns:
         ledger["market_key"] = ledger.apply(
@@ -135,8 +151,6 @@ def update_official_recommendations(
                 audit_out = _audit_append(audit_out, {**event_base, "event": "BLOCKED_POST_START"})
             continue
 
-        # PASS/REVIEW/N/A are already retained in market snapshot history. Do not
-        # bloat the recommendation audit with non-actionable observations.
         if signal not in {"BET", "LEAN"}:
             continue
 
