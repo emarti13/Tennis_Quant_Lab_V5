@@ -69,9 +69,9 @@ def test_daily_predictions_use_recovery_windows_without_market_refresh_fanout():
     assert "python v5_run_repricing.py" in text
 
 
-def test_settlement_is_daily_not_chained_after_every_prediction_refresh():
+def test_settlement_is_daily_after_history_recovery_not_chained_to_predictions():
     text = Path(".github/workflows/v5_automatic_settlement.yml").read_text(encoding="utf-8")
-    assert 'cron: "30 10 * * *"' in text
+    assert 'cron: "30 15 * * *"' in text
     assert 'workflows: ["V5 Player Ratings Refresh", "V5 Daily Predictions"]' not in text
 
 
