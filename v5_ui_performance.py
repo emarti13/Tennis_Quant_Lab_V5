@@ -30,7 +30,12 @@ def load_performance_report(base_dir: str | Path = ".") -> dict[str, Any]:
     if not official and not legacy:
         return {"status": "missing", "source": str(official_path)}
     if official:
-        return {"status": "ok", "source": str(official_path), "official": official, "legacy": legacy}
+        return {
+            "status": "ok",
+            "source": str(official_path),
+            "official": official,
+            "legacy": legacy,
+        }
     legacy.setdefault("status", "ok")
     legacy.setdefault("source", str(legacy_path))
     return legacy
@@ -48,6 +53,8 @@ def headline_metrics(report: dict[str, Any] | None) -> dict[str, Any]:
         profitable = int(fixtures.get("profitable_fixtures") or 0)
         return {
             "scope": "official",
+            "market_label": "Official recommendations",
+            "fixture_label": "Independent fixtures",
             "market_record": f"{wins}-{losses}-{pushes}",
             "market_win_rate": official.get("win_rate"),
             "market_roi": official.get("roi"),
@@ -55,6 +62,7 @@ def headline_metrics(report: dict[str, Any] | None) -> dict[str, Any]:
             "fixture_record": f"{profitable} profitable / {fixture_count}",
             "fixture_profitable_rate": fixtures.get("profitable_fixture_rate"),
             "fixture_net_units": fixtures.get("net_units"),
+            "mean_markets_per_fixture": None,
             "max_correlated_markets": int(official.get("max_recommendations_per_fixture") or 0),
             "median_american_odds": official.get("median_american_odds"),
             "favorite_recommendations": int(official.get("favorite_recommendations") or 0),
@@ -68,11 +76,18 @@ def headline_metrics(report: dict[str, Any] | None) -> dict[str, Any]:
     if current_count == 0:
         current_count = int(current.get("wins") or 0) + int(current.get("losses") or 0) + int(current.get("pushes") or 0)
     if current_count > 0:
-        raw, fixtures, scope = current, current_fixtures, "current_engine"
+        raw = current
+        fixtures = current_fixtures
+        scope = "current_engine"
     elif legacy.get("actionable_markets"):
-        raw, fixtures, scope = legacy.get("actionable_markets") or {}, legacy.get("actionable_fixture_clusters") or {}, "all_actionable"
+        raw = legacy.get("actionable_markets") or {}
+        fixtures = legacy.get("actionable_fixture_clusters") or {}
+        scope = "all_actionable"
     else:
-        raw, fixtures, scope = legacy.get("raw_markets") or {}, legacy.get("fixture_clusters") or {}, "all_settled"
+        raw = legacy.get("raw_markets") or {}
+        fixtures = legacy.get("fixture_clusters") or {}
+        scope = "all_settled"
+
     wins = int(raw.get("wins") or 0)
     losses = int(raw.get("losses") or 0)
     pushes = int(raw.get("pushes") or 0)
@@ -80,6 +95,8 @@ def headline_metrics(report: dict[str, Any] | None) -> dict[str, Any]:
     profitable = int(fixtures.get("profitable_fixtures") or 0)
     return {
         "scope": scope,
+        "market_label": "Current engine results" if scope == "current_engine" else "Recommended market results",
+        "fixture_label": "Current engine fixtures" if scope == "current_engine" else "Recommended fixtures",
         "market_record": f"{wins}-{losses}-{pushes}",
         "market_win_rate": raw.get("win_rate"),
         "market_roi": raw.get("roi"),
@@ -87,6 +104,7 @@ def headline_metrics(report: dict[str, Any] | None) -> dict[str, Any]:
         "fixture_record": f"{profitable} profitable / {fixture_count}",
         "fixture_profitable_rate": fixtures.get("profitable_fixture_rate"),
         "fixture_net_units": fixtures.get("net_units"),
+        "mean_markets_per_fixture": fixtures.get("mean_markets_per_fixture"),
         "max_correlated_markets": int(fixtures.get("max_markets_on_one_fixture") or 0),
         "median_american_odds": None,
         "favorite_recommendations": 0,
@@ -103,18 +121,29 @@ def _percent(value: Any) -> str:
         return "—"
 
 
+def _number(value: Any, digits: int = 2) -> str:
+    try:
+        if value is None or pd.isna(value):
+            return "—"
+        return f"{float(value):.{digits}f}"
+    except (TypeError, ValueError):
+        return "—"
+
+
 def _odds(value: Any) -> str:
     try:
         if value is None or pd.isna(value):
             return "—"
-        return f"{int(round(float(value))):+d}"
+        n = int(round(float(value)))
+        return f"{n:+d}"
     except (TypeError, ValueError):
         return "—"
 
 
 def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[str, Any] | None:
     report = report or {}
-    if str(report.get("status") or "missing").lower() != "ok":
+    status = str(report.get("status") or "missing").lower()
+    if status != "ok":
         st_module.info("Settled official recommendation evidence is not available yet. This page will populate automatically after settlement.")
         return None
 
@@ -122,22 +151,25 @@ def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[st
     st_module.markdown('<div class="v5-eyebrow">Validated results</div>', unsafe_allow_html=True)
     st_module.markdown('<div class="v5-title">Performance</div>', unsafe_allow_html=True)
     if headline["scope"] == "official":
-        subtitle = "Headline results count each official recommendation once. Price-refresh snapshots and PASS / REVIEW observations are audit data, not bets."
+        subtitle = "Headline results count each official market recommendation once. Price-refresh snapshots and PASS / REVIEW observations are audit data, not bets."
+    elif headline["scope"] == "current_engine":
+        subtitle = "Current full-context engine BET + LEAN results are shown while the official recommendation ledger accumulates. Legacy rows remain separate."
     else:
-        subtitle = "Legacy evidence is shown only until the canonical official ledger accumulates settled recommendations."
+        subtitle = "Historical BET + LEAN results are shown while the official recommendation ledger accumulates. PASS / REVIEW rows are audit-only."
     st_module.markdown(f'<div class="v5-subtitle">{subtitle}</div>', unsafe_allow_html=True)
 
-    cols = st_module.columns(4)
-    cols[0].metric("Market record", headline["market_record"])
-    cols[1].metric("Fixture evidence", headline["fixture_record"])
-    cols[2].metric("Market ROI", _percent(headline["market_roi"]))
-    cols[3].metric("Max recs / fixture", str(headline["max_correlated_markets"]))
+    columns = st_module.columns(4)
+    columns[0].metric("Market record", headline["market_record"])
+    columns[1].metric("Fixture evidence", headline["fixture_record"])
+    columns[2].metric("Market ROI", _percent(headline["market_roi"]))
+    columns[3].metric("Max recs / fixture", str(headline["max_correlated_markets"]))
 
     if headline["scope"] == "official":
         meta = st_module.columns(3)
         meta[0].metric("Median odds", _odds(headline["median_american_odds"]))
         meta[1].metric("Favorites", str(headline["favorite_recommendations"]))
         meta[2].metric("Underdogs", str(headline["underdog_recommendations"]))
+
         official = report.get("official") or {}
         by_signal = official.get("by_signal") or {}
         if by_signal:
@@ -148,19 +180,20 @@ def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[st
             with st_module.expander("Official performance by price band", expanded=False):
                 st_module.dataframe(pd.DataFrame.from_dict(by_price, orient="index"), use_container_width=True)
 
-    st_module.caption("Fixture-cluster evidence is reported separately so multiple markets from one match are not mistaken for independent proof of model quality.")
+    st_module.caption("Multiple correlated markets from one match remain valid recommendations, but fixture-cluster evidence is reported separately from raw market outcomes.")
 
     legacy = report.get("legacy") or ({} if headline["scope"] == "official" else report)
     with st_module.expander("Legacy and all-market audit", expanded=False):
         if not legacy:
             st_module.caption("No legacy audit is available.")
         else:
-            for label, key in [
+            breakdowns = [
                 ("Historical audit — by market", "by_market_group"),
                 ("Historical audit — by signal", "by_signal"),
                 ("Historical audit — by tour", "by_tour"),
                 ("Historical audit — by format", "by_best_of"),
-            ]:
+            ]
+            for label, key in breakdowns:
                 payload = legacy.get(key)
                 if payload:
                     st_module.markdown(f'<div class="v5-section-title">{label}</div>', unsafe_allow_html=True)
