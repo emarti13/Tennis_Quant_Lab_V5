@@ -1,7 +1,8 @@
 name: V5 Automatic Settlement
 
-# One daily settlement run plus manual recovery. Routine code/data pushes do not
-# launch settlement or its performance audit.
+# One daily production settlement plus manual recovery. Current-engine headline
+# performance is sourced only from the canonical official recommendation ledger.
+# Legacy frozen history remains preserved for audit, not recomputed as production.
 on:
   workflow_dispatch:
   schedule:
@@ -17,7 +18,7 @@ concurrency:
 jobs:
   settle:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 12
 
     steps:
       - name: Checkout repository
@@ -34,35 +35,36 @@ jobs:
       - name: Install production dependencies
         run: pip install --disable-pip-version-check -r requirements.txt
 
-      - name: Settle frozen predictions
-        run: python v5_settlement.py
+      - name: Settle official current-engine recommendations
+        run: python v5_settle_official_recommendations.py
 
-      - name: Build fixture-clustered performance audit
-        run: python diagnose_v5_settled_performance.py
-
-      - name: Show settlement summary
+      - name: Show settlement status
         if: always()
         run: |
-          if [ -f v5_daily_ready/settlement_summary.json ]; then cat v5_daily_ready/settlement_summary.json; fi
+          for f in \
+            v5_results_ready/results_status.json \
+            v5_daily_ready/official_settlement_status.json \
+            v5_daily_ready/official_performance.json
+          do
+            if [ -f "$f" ]; then echo "===== $f ====="; cat "$f"; fi
+          done
 
-      - name: Commit settlement updates safely
+      - name: Commit official settlement updates safely
         if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git fetch origin main
-          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
-            echo "main advanced during settlement; rerunning against latest ledger."
-            git reset --hard origin/main
-            python v5_settlement.py
-            python diagnose_v5_settled_performance.py
-          fi
-          git add v5_daily_ready/frozen_predictions.csv \
-                  v5_daily_ready/settlement_summary.json \
-                  v5_daily_ready/settled_performance_audit.json
+          for f in \
+            v5_daily_ready/official_recommendations.csv \
+            v5_daily_ready/official_performance.json \
+            v5_daily_ready/official_settlement_status.json
+          do
+            [ -e "$f" ] && git add "$f"
+          done
           if git diff --cached --quiet; then
-            echo "No settlement changes to commit."
-          else
-            git commit -m "Settle V5 frozen predictions and refresh performance"
-            git push origin HEAD:main
+            echo "No official settlement changes to commit."
+            exit 0
           fi
+          git commit -m "Settle official V5 recommendations"
+          git pull --rebase origin main
+          git push origin HEAD:main
