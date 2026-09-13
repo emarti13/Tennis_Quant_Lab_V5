@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: oddspapi-live-market-writer
+  group: v5-production-writer
   cancel-in-progress: false
 
 jobs:
