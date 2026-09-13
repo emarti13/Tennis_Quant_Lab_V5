@@ -2,6 +2,17 @@ name: Streamlit App Smoke Test
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "tennis_quant_app_v5.py"
+      - "v5_*.py"
+      - "experiments/acceptance/production_candidate.json"
+      - "experiments/acceptance/score_production_candidate.json"
+      - "requirements.txt"
+      - "tests/test_streamlit_app_smoke.py"
+      - ".github/workflows/streamlit_app_smoke.yml"
   push:
     branches:
       - codex/streamlit-smoke-test
