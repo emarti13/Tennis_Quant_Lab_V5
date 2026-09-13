@@ -7,6 +7,11 @@ name: OddsPapi Normalized Daily v2
 # production traceback.
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/oddspapi_normalized_daily_v2.yml"
   schedule:
     - cron: "15 0,6,12,18 * * *"
 
