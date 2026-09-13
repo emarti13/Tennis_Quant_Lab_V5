@@ -58,6 +58,14 @@ def test_live_workflow_uses_even_six_hour_schedule():
     assert "15 0,12,16,20 * * *" not in text
 
 
+def test_live_workflow_treats_quota_skip_as_controlled_state():
+    text = Path(".github/workflows/oddspapi_normalized_daily_v2.yml").read_text(encoding="utf-8")
+    assert "id: live_pull" in text
+    assert "fresh_snapshot" in text
+    assert "if: steps.live_pull.outputs.fresh_snapshot == 'true'" in text
+    assert "oddspapi_daily/*_manifest.json" in text
+
+
 def test_daily_predictions_use_recovery_windows_without_market_refresh_fanout():
     text = Path(".github/workflows/v5_daily_predictions.yml").read_text(encoding="utf-8")
     trigger = text.split("permissions:", 1)[0]

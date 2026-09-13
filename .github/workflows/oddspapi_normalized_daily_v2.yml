@@ -1,8 +1,10 @@
 name: OddsPapi Normalized Daily v2
 
-# Production-critical live pricing. Four scheduled pulls/day plus manual
-# recovery only. Code pushes are verified in PR CI and must never spend an
-# extra OddsPapi request or live-run minute.
+# Production-critical live pricing. Four scheduled opportunities/day plus
+# manual recovery. Research/backfill protects quota for this workflow; when
+# live quota is genuinely exhausted, preserve last-known-good artifacts and
+# exit cleanly instead of turning a controlled upstream constraint into a
+# production traceback.
 on:
   workflow_dispatch:
   schedule:
@@ -56,17 +58,40 @@ jobs:
           key: oddspapi-tennis-markets-v1
 
       - name: Pull quota-aware odds and persist fixture IDs
+        id: live_pull
         env:
           ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
-        run: python pull_oddspapi_quota_aware.py
+        run: |
+          python pull_oddspapi_quota_aware.py
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+          manifests = sorted(Path('oddspapi_daily').glob('*_manifest.json'))
+          if not manifests:
+              raise SystemExit('Live pull did not produce a manifest')
+          payload = json.loads(manifests[-1].read_text(encoding='utf-8'))
+          status = str(payload.get('status') or 'UNKNOWN')
+          print(f"pull_status={status}")
+          print(f"fresh_snapshot={'true' if status == 'SUCCESS' else 'false'}")
+          print(f"OddsPapi live pull state: {status}")
+          PY
+
+      - name: Preserve last-known-good feed when live quota is unavailable
+        if: steps.live_pull.outputs.fresh_snapshot != 'true'
+        run: |
+          echo "No fresh OddsPapi snapshot: ${{ steps.live_pull.outputs.pull_status }}"
+          echo "Preserving canonical last-known-good market and repricing artifacts."
 
       - name: Normalize ML, game spreads and total games
+        if: steps.live_pull.outputs.fresh_snapshot == 'true'
         run: python normalize_oddspapi_snapshot.py
 
       - name: Build V5-ready market feed
+        if: steps.live_pull.outputs.fresh_snapshot == 'true'
         run: python build_v5_market_board_input.py
 
       - name: Validate feed before promotion
+        if: steps.live_pull.outputs.fresh_snapshot == 'true'
         run: |
           python - <<'PY'
           import csv
@@ -97,9 +122,11 @@ jobs:
           PY
 
       - name: Reprice against frozen daily model forecast
+        if: steps.live_pull.outputs.fresh_snapshot == 'true'
         run: python v5_run_repricing.py
 
       - name: Commit live feed and lightweight production artifacts
+        if: steps.live_pull.outputs.fresh_snapshot == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -131,6 +158,7 @@ jobs:
         with:
           name: v5-live-market-status
           path: |
+            oddspapi_daily/*_manifest.json
             v5_market_ready/market_feed_qc.json
             v5_daily_ready/repricing_status.json
           if-no-files-found: warn
