@@ -8,7 +8,8 @@ import pandas as pd
 
 from v5_official_performance import official_performance_report
 from v5_production_artifacts import artifact_status, promote_csv_last_known_good, write_status
-from v5_settlement import load_tennismylife_results, settle_ledger
+from v5_results_cache import load_results_cache
+from v5_settlement import settle_ledger
 
 
 BASE = Path(__file__).resolve().parent
@@ -40,7 +41,20 @@ def main() -> int:
         PERFORMANCE_PATH.write_text(json.dumps(official_performance_report(ledger), indent=2), encoding="utf-8")
         return 0
 
-    results = load_tennismylife_results()
+    results = load_results_cache()
+    if results.empty:
+        write_status(STATUS_PATH, artifact_status(
+            stage="official_settlement",
+            state="failed",
+            source_version=None,
+            rows=len(ledger),
+            fixtures=ledger["fixture_id"].astype(str).nunique() if "fixture_id" in ledger.columns else 0,
+            freshness="RESULTS_UNAVAILABLE",
+            error="Canonical results cache is missing or empty; existing official ledger preserved.",
+            run_timestamp=now.isoformat(),
+        ))
+        return 1
+
     settled, stats = settle_ledger(ledger, results, settled_at=now.isoformat())
     staging = OUTDIR / ".staging"
     staging.mkdir(parents=True, exist_ok=True)
