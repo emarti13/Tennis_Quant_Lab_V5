@@ -11,10 +11,10 @@ def test_settlement_workflow_updates_official_ledger_and_performance_only():
     assert "python v5_settlement.py" not in text
 
 
-def test_settlement_runs_on_daily_schedule_without_prediction_chain_fanout():
+def test_settlement_runs_after_final_history_recovery_without_prediction_fanout():
     text = Path(".github/workflows/v5_automatic_settlement.yml").read_text(encoding="utf-8")
     assert "schedule:" in text
-    assert 'cron: "30 10 * * *"' in text
+    assert 'cron: "30 15 * * *"' in text
     assert 'workflows: ["V5 Player Ratings Refresh", "V5 Daily Predictions"]' not in text
 
 
