@@ -13,12 +13,13 @@ Make Tennis Quant Lab V5 operate as a durable production system under a hard Git
 - Freeze sportsbook-independent match probabilities and score distributions for the day's eligible fixtures.
 - Full-model outputs are immutable for the day unless an explicit manual recovery run is invoked.
 
-### Lightweight market work — four times daily
-- Pull fresh OddsPapi fixtures and sportsbook prices.
+### Lightweight market work — once daily for the time being
+- Pull fresh OddsPapi fixtures and sportsbook prices once daily while operating under the current API quota constraint.
 - Normalize market rows.
 - Join current prices to the day's already-frozen model outputs.
 - Recompute only price-dependent values: implied/no-vig market probability, edge, EV, and BET/LEAN/REVIEW/PASS policy state.
 - Do not rebuild ratings, context warehouse, simulations, or production model probabilities during routine repricing.
+- This is a temporary quota-conservation cadence; increase market refresh frequency only when API capacity supports it without compromising hands-off production reliability.
 
 ### Settlement — once daily
 - Settle official frozen recommendations against completed match results.
@@ -114,7 +115,7 @@ STALE_PRICES may preserve fixture visibility but must block BET/LEAN generation 
 The architecture must target comfortably below 3,000 GitHub-hosted Actions minutes/month.
 
 Budget principles:
-- four lightweight market jobs/day;
+- one lightweight market job/day for the time being under the current OddsPapi quota constraint;
 - one heavy model job/day;
 - one settlement job/day;
 - one ratings/data refresh folded into the heavy daily model job where practical;
@@ -151,7 +152,7 @@ The UI must never infer that a stale feed is missing and must never create recom
 Required automated contracts include:
 - stale feed != missing feed;
 - stale odds cannot produce BET/LEAN;
-- four price pulls do not create four official bets;
+- repeated price pulls do not create duplicate official bets;
 - first BET crossing freezes exactly one official recommendation;
 - later price changes cannot mutate the frozen official recommendation;
 - daily model probabilities are unchanged across same-day repricing runs;
@@ -160,7 +161,7 @@ Required automated contracts include:
 - performance headline excludes PASS/REVIEW and duplicate snapshots;
 - fixture-cluster metrics remain distinct from raw market metrics;
 - workflow trigger tests prevent duplicate fan-out;
-- recurring workflow cadence remains within the 3,000-minute design constraint.
+- recurring workflow cadence remains within the 3,000-minute design constraint and configured API quota.
 
 ## Non-goals
 
