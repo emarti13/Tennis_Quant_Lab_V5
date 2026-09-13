@@ -1,7 +1,8 @@
 name: OddsPapi Normalized Daily v2
 
 # Production-critical live pricing. Four scheduled pulls/day plus manual
-# recovery only. Code pushes must never spend an extra OddsPapi request.
+# recovery only. Code pushes are verified in PR CI and must never spend an
+# extra OddsPapi request or live-run minute.
 on:
   workflow_dispatch:
   schedule:
@@ -15,7 +16,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  pull:
+  pull-and-reprice:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -95,7 +96,10 @@ jobs:
           print(f'Feed validation OK: age={age_hours:.2f}h future_fixtures={len(fixtures)} rows={len(future)}')
           PY
 
-      - name: Commit market feed and fixture registry
+      - name: Reprice against frozen daily model forecast
+        run: python v5_run_repricing.py
+
+      - name: Commit live feed and lightweight production artifacts
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -104,10 +108,19 @@ jobs:
             v5_market_ready/market_board_input.csv \
             v5_market_ready/all_book_prices.csv \
             v5_market_ready/market_feed_qc.json
+          for f in \
+            v5_daily_ready/latest_repriced_board.csv \
+            v5_daily_ready/official_recommendations.csv \
+            v5_daily_ready/recommendation_audit.csv \
+            v5_daily_ready/market_snapshot_history.csv \
+            v5_daily_ready/repricing_status.json
+          do
+            [ -e "$f" ] && git add "$f"
+          done
           if git diff --cached --quiet; then
-            echo "No live-feed changes to commit."
+            echo "No live-feed or repricing changes to commit."
           else
-            git commit -m "Update V5 market feed and OddsPapi fixture registry"
+            git commit -m "Refresh live market prices and V5 repricing"
             git pull --rebase origin main
             git push origin HEAD:main
           fi
@@ -117,6 +130,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: v5-live-market-status
-          path: v5_market_ready/market_feed_qc.json
+          path: |
+            v5_market_ready/market_feed_qc.json
+            v5_daily_ready/repricing_status.json
           if-no-files-found: warn
           retention-days: 2
