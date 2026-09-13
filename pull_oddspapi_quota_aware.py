@@ -8,7 +8,11 @@ from oddspapi_fixture_registry import FixtureRegistry
 SPORT_ID = 12
 PRIMARY_BOOK = "pinnacle"
 SECONDARY_BOOK = "betrivers"
-PROTECTED_RESERVE = 50
+# Research/backfill protects 50 calls for live production. Live production is
+# therefore allowed to consume this reserve; it only stops when a minimally
+# useful live request can no longer fit.
+RESEARCH_PROTECTED_RESERVE = 50
+MIN_LIVE_REMAINING = 2
 SECONDARY_MIN_REMAINING = 100
 OUTDIR = Path("oddspapi_daily")
 OUTDIR.mkdir(exist_ok=True)
@@ -64,12 +68,18 @@ def tournament_request_groups(tournament_ids):
 
 
 def books_for_today(now, remaining):
-    if remaining <= PROTECTED_RESERVE:
+    if remaining < MIN_LIVE_REMAINING:
         return []
     books = [PRIMARY_BOOK]
     if now.weekday() == 6 and remaining >= SECONDARY_MIN_REMAINING:
         books.append(SECONDARY_BOOK)
     return books
+
+
+def _write_manifest(stamp: str, manifest: dict) -> None:
+    (OUTDIR / f"{stamp}_manifest.json").write_text(
+        json.dumps(manifest, indent=2, default=str), encoding="utf-8"
+    )
 
 
 def main():
@@ -86,12 +96,13 @@ def main():
     if not books:
         manifest = {
             "captured_at_utc": now.isoformat(),
-            "status": "SKIPPED_QUOTA_RESERVE",
+            "status": "SKIPPED_INSUFFICIENT_LIVE_QUOTA",
             "quota_before": quota_before,
-            "protected_reserve": PROTECTED_RESERVE,
+            "research_protected_reserve": RESEARCH_PROTECTED_RESERVE,
+            "minimum_live_remaining": MIN_LIVE_REMAINING,
             "estimated_billable_calls_today": 0,
         }
-        (OUTDIR / f"{stamp}_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+        _write_manifest(stamp, manifest)
         print(json.dumps(manifest, indent=2))
         return
 
@@ -114,8 +125,24 @@ def main():
     )
 
     estimated_calls = 1 + len(groups) * len(books)
+    if estimated_calls > quota_before["remaining"]:
+        manifest = {
+            "captured_at_utc": now.isoformat(),
+            "status": "SKIPPED_INSUFFICIENT_QUOTA_FOR_FULL_SLATE",
+            "quota_before": quota_before,
+            "research_protected_reserve": RESEARCH_PROTECTED_RESERVE,
+            "fixture_count_relevant": len(relevant),
+            "tournament_ids": tids,
+            "books_today": books,
+            "estimated_billable_calls_today": estimated_calls,
+        }
+        _write_manifest(stamp, manifest)
+        print(json.dumps(manifest, indent=2))
+        return
+
     manifest = {
         "captured_at_utc": now.isoformat(),
+        "status": "SUCCESS",
         "window_from_utc": f0,
         "window_to_utc": f1,
         "scope": {
@@ -126,12 +153,12 @@ def main():
         "quota_policy": {
             "billing_rule": "one billable endpoint call = one request regardless of response size",
             "historical_odds": "free but blocked if total quota is exhausted",
-            "protected_reserve": PROTECTED_RESERVE,
+            "research_protected_reserve": RESEARCH_PROTECTED_RESERVE,
+            "live_can_consume_research_reserve": True,
+            "minimum_live_remaining": MIN_LIVE_REMAINING,
             "primary_book": PRIMARY_BOOK,
             "secondary_book": SECONDARY_BOOK,
             "secondary_schedule": "Sunday UTC only when remaining quota >= 100",
-            "normal_live_cost": 2,
-            "weekly_secondary_cost": 3,
         },
         "quota_before": quota_before,
         "fixture_registry": registry_result,
@@ -169,10 +196,9 @@ def main():
     manifest["quota_after"] = quota_after
     manifest["billable_calls_observed"] = quota_after["used"] - quota_before["used"]
 
-    (OUTDIR / f"{stamp}_manifest.json").write_text(
-        json.dumps(manifest, indent=2, default=str), encoding="utf-8"
-    )
+    _write_manifest(stamp, manifest)
     print(json.dumps({
+        "status": manifest["status"],
         "relevant_fixtures": len(relevant),
         "registry_rows": registry_result["registry_rows"],
         "registry_inserted": registry_result["inserted"],
