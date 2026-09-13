@@ -35,6 +35,8 @@ def test_heavy_forecast_has_recovery_windows_but_at_most_one_heavy_build_daily()
     assert '\n  push:' not in trigger
     assert 'workflow_run:' not in trigger
     assert "Check whether today's canonical forecast already exists" in text
+    assert "artifact_date == expected_date" in text
+    assert "America/New_York" in text
     assert "if: steps.forecast.outputs.forecast_fresh != 'true'" in text
     assert 'python v5_build_daily_forecast_artifacts.py' in text
     assert 'python v5_run_repricing.py' in text
