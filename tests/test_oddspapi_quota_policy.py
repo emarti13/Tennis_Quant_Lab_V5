@@ -33,9 +33,15 @@ class OddsPapiQuotaPolicyTests(unittest.TestCase):
         self.assertEqual(books_for_today(now, remaining=172), ["pinnacle", "betrivers"])
         self.assertEqual(books_for_today(now, remaining=70), ["pinnacle"])
 
-    def test_live_pull_stops_at_protected_reserve(self):
+    def test_live_production_can_consume_quota_reserved_from_backfill(self):
+        # The 50-call reserve exists to protect live production FROM backfill.
+        # Live production itself must be allowed to use those protected calls.
         now = datetime(2026, 9, 1, tzinfo=timezone.utc)
-        self.assertEqual(books_for_today(now, remaining=50), [])
+        self.assertEqual(books_for_today(now, remaining=50), ["pinnacle"])
+
+    def test_live_pull_stops_only_when_minimum_live_request_cannot_fit(self):
+        now = datetime(2026, 9, 1, tzinfo=timezone.utc)
+        self.assertEqual(books_for_today(now, remaining=1), [])
 
 
 if __name__ == "__main__":
