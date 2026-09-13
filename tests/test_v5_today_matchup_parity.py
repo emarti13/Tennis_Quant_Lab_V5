@@ -67,14 +67,10 @@ def test_daily_batch_carries_matchup_lab_state_fields():
         assert field in source
 
 
-def test_today_advanced_section_retains_requested_operational_features():
+def test_today_is_decision_surface_and_matchup_lab_remains_deep_analysis():
     source = Path("v5_ui_host.py").read_text(encoding="utf-8")
-    for text in (
-        "Slate setup / advanced",
-        "Simulation precision",
-        "Current market slate",
-        "Surface inference",
-        "could not be matched to the V5 ratings database",
-        "Tour", "Surface", "Best Of",
-    ):
-        assert text in source
+    today_block = source[source.index("def _render_today_page"):source.index("\ndef _canonical_prepared_board")]
+    assert "load_canonical_today_board(" in today_block
+    assert "Simulation precision" not in today_block
+    assert "Slate setup / advanced" not in today_block
+    assert '"matchup_lab"' in source
