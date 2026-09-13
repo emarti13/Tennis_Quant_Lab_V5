@@ -1,8 +1,8 @@
 name: V5 Daily Predictions
 
-# Three recovery windows, but at most one heavy forecast/day: later runs exit
-# immediately once a fresh canonical forecast exists. History/context freshness
-# gates fail closed so an upstream outage cannot silently publish stale picks.
+# Three recovery windows, but at most one heavy forecast/day: later runs
+# short-circuit before dependency installation once a fresh canonical forecast
+# exists. History/context freshness gates fail closed rather than publish stale picks.
 on:
   workflow_dispatch:
   schedule:
@@ -38,9 +38,6 @@ jobs:
           python-version: "3.12"
           cache: "pip"
 
-      - name: Install production dependencies
-        run: pip install --disable-pip-version-check -r requirements.txt
-
       - name: Check whether today's canonical forecast already exists
         id: forecast
         run: |
@@ -63,6 +60,10 @@ jobs:
                   fresh = False
           print(f"forecast_fresh={'true' if fresh else 'false'}")
           PY
+
+      - name: Install production dependencies
+        if: steps.forecast.outputs.forecast_fresh != 'true'
+        run: pip install --disable-pip-version-check -r requirements.txt
 
       - name: Validate TennisMyLife history freshness
         if: steps.forecast.outputs.forecast_fresh != 'true'
