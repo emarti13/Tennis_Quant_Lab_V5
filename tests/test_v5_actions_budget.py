@@ -26,14 +26,16 @@ def test_live_market_is_four_lightweight_runs_and_performs_repricing():
     assert 'python -m pytest' not in text
 
 
-def test_heavy_forecast_runs_once_daily_and_never_on_push():
+def test_heavy_forecast_has_recovery_windows_but_at_most_one_heavy_build_daily():
     text = _text('v5_daily_predictions.yml')
     trigger = text.split('permissions:', 1)[0]
     assert 'schedule:' in trigger
-    assert trigger.count('cron:') == 1
+    assert trigger.count('cron:') == 3
     assert 'workflow_dispatch:' in trigger
     assert '\n  push:' not in trigger
     assert 'workflow_run:' not in trigger
+    assert "Check whether today's canonical forecast already exists" in text
+    assert "if: steps.forecast.outputs.forecast_fresh != 'true'" in text
     assert 'python v5_build_daily_forecast_artifacts.py' in text
     assert 'python v5_run_repricing.py' in text
     assert 'python -m pytest' not in text
@@ -47,6 +49,7 @@ def test_settlement_is_once_daily_and_never_on_push():
     assert '\n  push:' not in trigger
     assert 'workflow_run:' not in trigger
     assert 'python v5_settle_official_recommendations.py' in text
+    assert 'python v5_settlement.py' not in text
     assert 'python -m pytest' not in text
 
 
@@ -58,9 +61,13 @@ def test_historical_backfill_is_weekly_not_daily():
     assert 'workflow_dispatch:' in trigger
 
 
-def test_ratings_remain_one_daily_refresh():
+def test_ratings_have_recovery_windows_and_skip_after_success():
     ratings = _text('v5_player_ratings_refresh.yml')
-    assert ratings.split('permissions:', 1)[0].count('cron:') == 1
+    trigger = ratings.split('permissions:', 1)[0]
+    assert trigger.count('cron:') == 3
+    assert "Check whether today's history is already fresh" in ratings
+    assert "if: steps.freshness.outputs.history_fresh != 'true'" in ratings
+    assert 'python v5_results_cache.py' in ratings
 
 
 def test_context_and_score_acceptance_are_intentional_manual_gates_not_push_fanout():
