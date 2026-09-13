@@ -1,8 +1,8 @@
 name: V5 Player Ratings Refresh
 
-# Multiple recovery windows are cheap because runs exit immediately after a
-# successful refresh. If TennisMyLife is unavailable, later windows retry
-# automatically and the failure audit is persisted without overwriting ratings.
+# Multiple recovery windows are cheap because runs short-circuit before dependency
+# installation after a successful refresh. If TennisMyLife is unavailable, later
+# windows retry automatically without overwriting last-known-good production data.
 on:
   workflow_dispatch:
   schedule:
@@ -34,9 +34,6 @@ jobs:
           python-version: "3.12"
           cache: "pip"
 
-      - name: Install production dependencies
-        run: pip install --disable-pip-version-check -r requirements.txt
-
       - name: Check whether today's history is already fresh
         id: freshness
         shell: bash
@@ -51,11 +48,16 @@ jobs:
           print(f"history_age_hours={status.get('age_hours')}")
           PY
 
+      - name: Install production dependencies
+        if: steps.freshness.outputs.history_fresh != 'true'
+        run: pip install --disable-pip-version-check -r requirements.txt
+
       - name: Preflight builder
         if: steps.freshness.outputs.history_fresh != 'true'
         run: |
           test -f build_v5_states.py
           test -f v5_core.py
+          test -f v5_results_cache.py
 
       - name: Restore historical TennisMyLife cache
         if: steps.freshness.outputs.history_fresh != 'true'
@@ -82,6 +84,18 @@ jobs:
         continue-on-error: true
         run: python refresh_tennismylife_cloud.py --dir .
 
+      - name: Build canonical results cache
+        if: steps.freshness.outputs.history_fresh != 'true' && steps.refresh_current.outcome == 'success'
+        run: |
+          SOURCE_SUCCESS=$(python - <<'PY'
+          import json
+          from pathlib import Path
+          payload=json.loads(Path('v5_refresh_last.json').read_text(encoding='utf-8'))
+          print(payload.get('last_successful_utc') or payload.get('finished_utc') or '')
+          PY
+          )
+          python v5_results_cache.py --dir . --source-success-utc "$SOURCE_SUCCESS"
+
       - name: Remove ephemeral historical root copies before commit
         if: always() && steps.freshness.outputs.history_fresh != 'true'
         run: rm -f ATP.csv ATPQualifiers.csv Challenger.csv WTA.csv
@@ -101,7 +115,9 @@ jobs:
               v5_wta_ratings.csv \
               v5_men_walkforward.csv \
               v5_wta_walkforward.csv \
-              v5_build_summary.json
+              v5_build_summary.json \
+              v5_results_ready/tennismylife_results.csv \
+              v5_results_ready/results_status.json
             do
               [ -e "$f" ] && git add "$f"
             done
@@ -111,7 +127,7 @@ jobs:
             echo "No refresh audit or player-data changes to commit."
           else
             if [ "${{ steps.refresh_current.outcome }}" = "success" ]; then
-              git commit -m "Daily V5 player ratings refresh"
+              git commit -m "Daily V5 player ratings and results refresh"
             else
               git commit -m "Record TennisMyLife refresh outage"
             fi
@@ -128,6 +144,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: v5-player-refresh-audit
-          path: v5_refresh_last.json
+          path: |
+            v5_refresh_last.json
+            v5_results_ready/results_status.json
           if-no-files-found: warn
           retention-days: 3

@@ -52,11 +52,13 @@ def test_production_board_adapter_preserves_models_and_context():
     assert row["Travel Context"] != "Unavailable"
 
 
-def test_today_host_uses_production_bridge_not_legacy_batch_one_match():
+def test_today_host_reads_canonical_production_artifacts_only():
     source = Path("v5_ui_host.py").read_text(encoding="utf-8")
-    run_block = source[source.index("def _run_daily_board"):source.index("\ndef _render_today_page")]
-    assert "run_interactive_production(" in run_block
-    assert '"_batch_one_match"' not in run_block
+    render_block = source[source.index("def _render_today_page"):source.index("\ndef _canonical_prepared_board")]
+    assert "load_canonical_today_board(" in render_block
+    assert "run_interactive_production(" not in render_block
+    assert "build_context_warehouse(" not in render_block
+    assert '"_batch_one_match"' not in render_block
 
 
 def test_interactive_production_declares_context_fields_for_match_detail():

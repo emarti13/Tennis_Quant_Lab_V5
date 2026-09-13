@@ -4,34 +4,29 @@ import pandas as pd
 
 
 def _sample(snapshot="2026-09-07T04:00:00Z", start="2026-09-08T14:00:00Z"):
-    return pd.DataFrame([
-        {
-            "snapshot_utc": snapshot,
-            "fixture_id": "fx1",
-            "start_time_utc": start,
-            "tournament": "Test",
-            "tour": "ATP",
-            "player1": "A",
-            "player2": "B",
-            "market_group": "moneyline",
-            "selection": "A",
-            "best_american_odds": -120,
-        }
-    ])
+    return pd.DataFrame([{
+        "snapshot_utc": snapshot,
+        "fixture_id": "fx1",
+        "start_time_utc": start,
+        "tournament": "Test",
+        "tour": "ATP",
+        "player1": "A",
+        "player2": "B",
+        "market_group": "moneyline",
+        "selection": "A",
+        "best_american_odds": -120,
+    }])
 
 
 def test_stale_prices_do_not_erase_future_fixture_rows():
     from v5_live_market import current_market_rows, future_market_rows, market_feed_status
-
     frame = _sample()
     now = "2026-09-08T11:25:00Z"
-
     strict = current_market_rows(frame, now_utc=now)
     fixtures = future_market_rows(frame, now_utc=now)
     status = market_feed_status(frame, now_utc=now)
-
-    assert strict.empty, "stale prices must remain unusable for market recommendations"
-    assert len(fixtures) == 1, "future fixtures must survive even when prices are stale"
+    assert strict.empty
+    assert len(fixtures) == 1
     assert status["available"] is True
     assert status["fresh"] is False
     assert status["future_fixture_count"] == 1
@@ -40,28 +35,21 @@ def test_stale_prices_do_not_erase_future_fixture_rows():
 
 def test_missing_feed_and_no_future_fixtures_are_distinct_states():
     from v5_live_market import market_feed_status
-
     missing = market_feed_status(pd.DataFrame(), now_utc="2026-09-08T11:25:00Z")
     expired = market_feed_status(
         _sample(snapshot="2026-09-08T10:00:00Z", start="2026-09-08T10:30:00Z"),
         now_utc="2026-09-08T11:25:00Z",
     )
-
     assert missing["state"] == "missing"
     assert expired["fresh"] is True
     assert expired["state"] == "no_future_fixtures"
 
 
-def test_stale_fixture_fallback_contains_no_odds_fields():
-    from v5_ui_host import _fixture_slate_from_market_rows
-
-    slate = _fixture_slate_from_market_rows(_sample())
-    assert len(slate) == 1
-    assert slate.iloc[0]["Fixture ID"] == "fx1"
-    assert slate.iloc[0]["Player 1"] == "A"
-    assert slate.iloc[0]["Player 2"] == "B"
-    assert "P1 ML" not in slate.columns
-    assert "P2 ML" not in slate.columns
+def test_today_never_turns_stale_fixture_fallback_into_a_manual_model_run():
+    source = Path("v5_ui_host.py").read_text(encoding="utf-8")
+    assert "run_interactive_production" not in source
+    assert "Run entire daily board" not in source
+    assert "Run manual recovery board" not in source
 
 
 def test_live_workflow_uses_even_six_hour_schedule():
@@ -76,12 +64,14 @@ def test_daily_predictions_use_recovery_windows_without_market_refresh_fanout():
     assert trigger.count("cron:") == 3
     assert "workflow_run:" not in trigger
     assert "\n  push:" not in trigger
-    assert "Check whether today's forecast already exists" in text
+    assert "Check whether today's canonical forecast already exists" in text
+    assert "python v5_build_daily_forecast_artifacts.py" in text
+    assert "python v5_run_repricing.py" in text
 
 
-def test_settlement_is_daily_not_chained_after_every_prediction_refresh():
+def test_settlement_is_daily_after_history_recovery_not_chained_to_predictions():
     text = Path(".github/workflows/v5_automatic_settlement.yml").read_text(encoding="utf-8")
-    assert 'cron: "30 10 * * *"' in text
+    assert 'cron: "30 15 * * *"' in text
     assert 'workflows: ["V5 Player Ratings Refresh", "V5 Daily Predictions"]' not in text
 
 
@@ -100,3 +90,4 @@ def test_player_ratings_use_retry_windows_but_skip_heavy_work_after_success():
     assert 'cron: "0 14 * * *"' in trigger
     assert "Check whether today's history is already fresh" in text
     assert "if: steps.freshness.outputs.history_fresh != 'true'" in text
+    assert "python v5_results_cache.py" in text

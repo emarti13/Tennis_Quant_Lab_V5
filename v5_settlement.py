@@ -3,12 +3,12 @@ from __future__ import annotations
 from datetime import datetime, timezone
 import re
 import unicodedata
-from io import StringIO
 from pathlib import Path
 import json
 
 import pandas as pd
-import requests
+
+from v5_results_cache import load_results_cache
 
 VOID_MARKERS = ("RET", "W/O", "WO", "WALKOVER", "DEF", "DEFAULT", "ABD", "ABANDONED")
 
@@ -140,11 +140,6 @@ def match_result_row(prediction, results):
             continue
         rd = _parse_tourney_date(r.get("tourney_date"))
         if pd.notna(start) and pd.notna(rd):
-            # TennisMyLife tourney_date is the event start date, not necessarily
-            # the exact match date. Later rounds of a two-week event can occur
-            # well after that stored date. Allow the match to occur up to 18
-            # days after event start, while still rejecting unrelated old events
-            # and dates materially after the prediction start.
             event_day_offset = (start.normalize() - rd.normalize()).days
             if event_day_offset < -2 or event_day_offset > 18:
                 continue
@@ -213,42 +208,15 @@ def settle_ledger(ledger, results, settled_at=None):
     return out, {"settled": settled_count, "open": open_count, "ambiguous_or_missing": missing}
 
 
-def load_tennismylife_results():
-    from refresh_tennismylife_cloud import get_manifest, manifest_lookup, resolve_targets
-    lookup = manifest_lookup(get_manifest())
-    resolved, _ = resolve_targets(lookup)
-    frames = []
-    for local_name, meta in resolved.items():
-        try:
-            response = requests.get(meta["url"], timeout=120)
-            response.raise_for_status()
-            df = pd.read_csv(StringIO(response.text), low_memory=False)
-        except Exception:
-            continue
-        required = {"winner_name", "loser_name", "tourney_date", "score"}
-        if not required.issubset(df.columns):
-            continue
-        if "tourney_name" not in df.columns:
-            df["tourney_name"] = ""
-        df["result_file"] = local_name
-        frames.append(df)
-    if not frames:
-        return pd.DataFrame()
-    out = pd.concat(frames, ignore_index=True, sort=False)
-    out = out[out["winner_name"].notna() & out["loser_name"].notna()].copy()
-    keys = [c for c in ["tourney_id", "match_num", "winner_name", "loser_name", "score"] if c in out.columns]
-    if keys:
-        out = out.drop_duplicates(keys, keep="last")
-    return out
-
-
 def main(ledger_path="v5_daily_ready/frozen_predictions.csv", summary_path="v5_daily_ready/settlement_summary.json"):
     ledger_path = Path(ledger_path)
     summary_path = Path(summary_path)
     if not ledger_path.exists():
         raise FileNotFoundError(ledger_path)
     ledger = pd.read_csv(ledger_path, low_memory=False)
-    results = load_tennismylife_results()
+    results = load_results_cache()
+    if results.empty:
+        raise RuntimeError("Canonical results cache is missing or empty; preserving existing settlement artifacts.")
     settled_at = datetime.now(timezone.utc).isoformat()
     updated, stats = settle_ledger(ledger, results, settled_at=settled_at)
     updated.to_csv(ledger_path, index=False)

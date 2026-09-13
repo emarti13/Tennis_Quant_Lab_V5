@@ -1,8 +1,9 @@
 name: V5 Daily Predictions
 
-# Three recovery windows, but at most one heavy forecast/day: later runs exit
-# immediately once a fresh forecast exists. History/context freshness gates are
-# fail-closed so an upstream outage cannot silently publish stale recommendations.
+# Three recovery windows, but at most one heavy forecast/day: later runs
+# short-circuit before dependency installation only when the canonical forecast
+# is for the current Eastern production date. History/context freshness gates fail
+# closed rather than publish stale picks.
 on:
   workflow_dispatch:
   schedule:
@@ -14,8 +15,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: v5-daily-heavy-forecast
-  cancel-in-progress: true
+  group: v5-production-writer
+  cancel-in-progress: false
 
 env:
   V5_HISTORY_MAX_AGE_HOURS: "36"
@@ -38,30 +39,45 @@ jobs:
           python-version: "3.12"
           cache: "pip"
 
-      - name: Install production dependencies
-        run: pip install --disable-pip-version-check -r requirements.txt
-
-      - name: Check whether today's forecast already exists
+      - name: Check whether today's canonical forecast already exists
         id: forecast
         run: |
           python - <<'PY' >> "$GITHUB_OUTPUT"
           import json
           from datetime import datetime, timezone
           from pathlib import Path
-          path = Path('v5_daily_ready/latest_summary.json')
+          from zoneinfo import ZoneInfo
+
+          status_path = Path('v5_daily_ready/forecast_status.json')
+          forecasts = Path('v5_daily_ready/daily_forecasts.csv')
+          now = datetime.now(timezone.utc)
+          expected_date = now.astimezone(ZoneInfo('America/New_York')).date().isoformat()
           fresh = False
-          if path.exists():
+          artifact_date = None
+          if status_path.exists() and forecasts.exists() and forecasts.stat().st_size > 0:
               try:
-                  payload = json.loads(path.read_text(encoding='utf-8'))
-                  built = datetime.fromisoformat(str(payload.get('built_at_utc') or '').replace('Z', '+00:00'))
+                  payload = json.loads(status_path.read_text(encoding='utf-8'))
+                  artifact_date = str(payload.get('forecast_date') or '')
+                  built = datetime.fromisoformat(str(payload.get('run_timestamp') or '').replace('Z', '+00:00'))
                   if built.tzinfo is None:
                       built = built.replace(tzinfo=timezone.utc)
-                  age = (datetime.now(timezone.utc) - built.astimezone(timezone.utc)).total_seconds() / 3600
-                  fresh = age <= 20 and str(payload.get('status') or '').upper() in {'COMPLETE', 'PARTIAL', 'SUCCESS'}
+                  age = (now - built.astimezone(timezone.utc)).total_seconds() / 3600
+                  fresh = (
+                      artifact_date == expected_date
+                      and age <= 20
+                      and str(payload.get('state') or '').lower() in {'success', 'partial'}
+                      and str(payload.get('freshness') or '').upper() == 'READY'
+                  )
               except Exception:
                   fresh = False
           print(f"forecast_fresh={'true' if fresh else 'false'}")
+          print(f"expected_date={expected_date}")
+          print(f"artifact_date={artifact_date or ''}")
           PY
+
+      - name: Install production dependencies
+        if: steps.forecast.outputs.forecast_fresh != 'true'
+        run: pip install --disable-pip-version-check -r requirements.txt
 
       - name: Validate TennisMyLife history freshness
         if: steps.forecast.outputs.forecast_fresh != 'true'
@@ -75,7 +91,7 @@ jobs:
           if not status.get('usable'):
               raise SystemExit(
                   f"Player history is too stale for a new official forecast: {status}. "
-                  "Preserving the last known-good board and waiting for the next TennisMyLife retry."
+                  "Preserving the last known-good production artifacts."
               )
           PY
 
@@ -139,35 +155,52 @@ jobs:
           path: context_warehouse
           key: v5-context-warehouse-${{ github.run_id }}
 
-      - name: Build ranked board and freeze pre-match predictions
+      - name: Build one sportsbook-independent daily forecast
         if: steps.forecast.outputs.forecast_fresh != 'true'
         run: |
           python v5_daily_batch.py
           python v5_daily_policy_postprocess.py
+          python v5_build_daily_forecast_artifacts.py
 
-      - name: Show batch summary
+      - name: Reprice latest valid market snapshot against frozen forecast
+        if: steps.forecast.outputs.forecast_fresh != 'true'
+        run: python v5_run_repricing.py
+
+      - name: Show production status
         if: always()
         run: |
-          if [ -f v5_daily_ready/latest_summary.json ]; then cat v5_daily_ready/latest_summary.json; fi
+          for f in \
+            v5_daily_ready/latest_summary.json \
+            v5_daily_ready/forecast_status.json \
+            v5_daily_ready/repricing_status.json
+          do
+            if [ -f "$f" ]; then echo "===== $f ====="; cat "$f"; fi
+          done
 
-      - name: Commit frozen daily board safely
+      - name: Commit canonical daily production artifacts safely
         if: success() && steps.forecast.outputs.forecast_fresh != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git fetch origin main
-          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
-            echo "main advanced during prediction build; repricing the frozen model against latest repository inputs."
-            git reset --hard origin/main
-            python v5_daily_batch.py
-            python v5_daily_policy_postprocess.py
-          fi
-          git add v5_daily_ready/latest_board.csv \
-                  v5_daily_ready/latest_summary.json \
-                  v5_daily_ready/frozen_predictions.csv
+          for f in \
+            v5_daily_ready/latest_board.csv \
+            v5_daily_ready/latest_summary.json \
+            v5_daily_ready/frozen_predictions.csv \
+            v5_daily_ready/daily_forecasts.csv \
+            v5_daily_ready/daily_market_probabilities.csv \
+            v5_daily_ready/forecast_status.json \
+            v5_daily_ready/latest_repriced_board.csv \
+            v5_daily_ready/official_recommendations.csv \
+            v5_daily_ready/recommendation_audit.csv \
+            v5_daily_ready/market_snapshot_history.csv \
+            v5_daily_ready/repricing_status.json
+          do
+            [ -e "$f" ] && git add "$f"
+          done
           if git diff --cached --quiet; then
-            echo "No new daily predictions to commit."
-          else
-            git commit -m "Freeze V5 daily predictions"
-            git push origin HEAD:main
+            echo "No new daily production artifacts to commit."
+            exit 0
           fi
+          git commit -m "Freeze daily V5 forecast and reprice live markets"
+          git pull --rebase origin main
+          git push origin HEAD:main
