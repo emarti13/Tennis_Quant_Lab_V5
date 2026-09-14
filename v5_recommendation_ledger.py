@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
-
 import pandas as pd
 
 from v5_production_artifacts import stable_market_key
@@ -31,9 +29,22 @@ _SIGNAL_PRIORITY = {"BET": 0, "LEAN": 1}
 
 def _utc(value):
     ts = pd.Timestamp(value)
+    if pd.isna(ts):
+        raise ValueError("missing timestamp")
     if ts.tzinfo is None:
         return ts.tz_localize("UTC")
     return ts.tz_convert("UTC")
+
+
+def _present(value, fallback=None):
+    try:
+        if value is None or pd.isna(value):
+            return fallback
+    except (TypeError, ValueError):
+        pass
+    if isinstance(value, str) and not value.strip():
+        return fallback
+    return value
 
 
 def _empty_official() -> pd.DataFrame:
@@ -46,8 +57,8 @@ def _audit_append(audit: pd.DataFrame | None, row: dict) -> pd.DataFrame:
 
 
 def _observation_market_key(row) -> str:
-    value = row.get("market_key")
-    if value is not None and str(value).strip():
+    value = _present(row.get("market_key"))
+    if value is not None:
         return str(value).strip()
     return stable_market_key(row.get("fixture_id"), row.get("market_group"), row.get("selection"), row.get("line"))
 
@@ -59,14 +70,16 @@ def _official_record(row, signal: str, market_key: str) -> dict:
     expected_value = row.get("expected_value")
     edge = row.get("edge_vs_consensus")
     snapshot = row.get("snapshot_utc")
+    player1 = row.get("player1")
+    player2 = row.get("player2")
     return {
         "fixture_id": row.get("fixture_id"),
         "tournament": row.get("tournament"),
         "tour": row.get("tour"),
-        "player1": row.get("player1"),
-        "player2": row.get("player2"),
-        "resolved_player1": row.get("resolved_player1") or row.get("player1"),
-        "resolved_player2": row.get("resolved_player2") or row.get("player2"),
+        "player1": player1,
+        "player2": player2,
+        "resolved_player1": _present(row.get("resolved_player1"), player1),
+        "resolved_player2": _present(row.get("resolved_player2"), player2),
         "market_group": row.get("market_group"),
         "selection": row.get("selection"),
         "line": row.get("line"),
@@ -108,7 +121,7 @@ def _official_record(row, signal: str, market_key: str) -> dict:
 
 
 def _normalize_open_fixture_duplicates(ledger: pd.DataFrame) -> pd.DataFrame:
-    """Keep at most one OPEN official row per fixture without rewriting history."""
+    """Keep at most one OPEN official row per fixture without rewriting settled history."""
     if ledger is None or ledger.empty or "fixture_id" not in ledger.columns:
         return _empty_official() if ledger is None else ledger.copy()
 
@@ -166,11 +179,12 @@ def update_official_recommendations(
         )
 
     for _, obs in observations.iterrows():
-        signal = str(obs.get("signal", "")).upper().strip()
+        signal = str(_present(obs.get("signal"), "")).upper().strip()
         market_key = _observation_market_key(obs)
-        fixture_id = str(obs.get("fixture_id") or "").strip()
-        snapshot = obs.get("snapshot_utc")
-        start = obs.get("start_time_utc")
+        fixture_value = _present(obs.get("fixture_id"))
+        fixture_id = "" if fixture_value is None else str(fixture_value).strip()
+        snapshot = _present(obs.get("snapshot_utc"))
+        start = _present(obs.get("start_time_utc"))
         event_base = {
             "market_key": market_key,
             "fixture_id": obs.get("fixture_id"),
@@ -180,23 +194,25 @@ def update_official_recommendations(
             "model_probability": obs.get("model_probability"),
         }
 
-        if not fixture_id:
-            if signal in {"BET", "LEAN"}:
-                audit_out = _audit_append(audit_out, {**event_base, "event": "BLOCKED_MISSING_FIXTURE"})
-            continue
-
-        if snapshot is None:
-            snapshot = now_utc or datetime.now(timezone.utc).isoformat()
-        try:
-            after_start = start is not None and _utc(snapshot) >= _utc(start)
-        except Exception:
-            after_start = True
-        if after_start:
-            if signal in {"BET", "LEAN"}:
-                audit_out = _audit_append(audit_out, {**event_base, "event": "BLOCKED_POST_START"})
-            continue
-
         if signal not in {"BET", "LEAN"}:
+            continue
+        if not fixture_id:
+            audit_out = _audit_append(audit_out, {**event_base, "event": "BLOCKED_MISSING_FIXTURE"})
+            continue
+        if start is None:
+            audit_out = _audit_append(audit_out, {**event_base, "event": "BLOCKED_MISSING_START"})
+            continue
+        if snapshot is None:
+            audit_out = _audit_append(audit_out, {**event_base, "event": "BLOCKED_MISSING_SNAPSHOT"})
+            continue
+
+        try:
+            after_start = _utc(snapshot) >= _utc(start)
+        except Exception:
+            audit_out = _audit_append(audit_out, {**event_base, "event": "BLOCKED_INVALID_TIME"})
+            continue
+        if after_start:
+            audit_out = _audit_append(audit_out, {**event_base, "event": "BLOCKED_POST_START"})
             continue
 
         matches = ledger.index[ledger["fixture_id"].astype(str) == fixture_id].tolist()
@@ -206,16 +222,17 @@ def update_official_recommendations(
             audit_out = _audit_append(audit_out, {**event_base, "event": f"OFFICIAL_{signal}_CREATED"})
             continue
 
-        open_matches = [
-            idx for idx in matches
-            if str(ledger.at[idx, "result_status"] or "OPEN").upper().strip() == "OPEN"
-        ]
+        open_matches = []
+        for idx in matches:
+            status = str(_present(ledger.at[idx, "result_status"], "OPEN")).upper().strip()
+            if status == "OPEN":
+                open_matches.append(idx)
         if not open_matches:
             audit_out = _audit_append(audit_out, {**event_base, "event": "DUPLICATE_ACTIONABLE_IGNORED"})
             continue
 
         idx = open_matches[0]
-        current_signal = str(ledger.at[idx, "official_signal"]).upper().strip()
+        current_signal = str(_present(ledger.at[idx, "official_signal"], "")).upper().strip()
         if current_signal == "LEAN" and signal == "BET":
             record = _official_record(obs, "BET", market_key)
             for key, value in record.items():
