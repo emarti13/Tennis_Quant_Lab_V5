@@ -15,6 +15,7 @@ from v5_advanced_model import (
     uncertainty_score,
 )
 from v5_context_model import predict_symmetric_logistic
+from v5_court_conditions_source import lookup_court_conditions
 from v5_matchup_features import build_matchup_features
 from v5_player_state import build_player_state
 from v5_weather_features import attach_live_weather
@@ -90,17 +91,51 @@ def predict_with_production_candidate(candidate: dict, *, tour: str, baseline_pr
     }
 
 
+def _fixture_year(fixture: dict) -> int:
+    start_utc = pd.to_datetime(fixture.get("start_time_utc"), errors="coerce", utc=True)
+    if pd.notna(start_utc):
+        return int(start_utc.year)
+    return int(pd.Timestamp.utcnow().year)
+
+
 def _target_rows(fixture: dict) -> pd.DataFrame:
     match_id = f"live_{fixture.get('fixture_id') or 'unknown'}"
     start_utc = pd.to_datetime(fixture.get("start_time_utc"), errors="coerce", utc=True)
     match_date = start_utc.tz_convert("UTC").tz_localize(None) if pd.notna(start_utc) else pd.NaT
+    conditions = lookup_court_conditions(fixture.get("tournament") or "", _fixture_year(fixture))
+
+    fixture_surface = str(fixture.get("surface") or "").title().strip()
+    source_surface = str(conditions.get("surface_type") or "").title().strip()
+    surface = fixture_surface if fixture_surface in {"Hard", "Clay", "Grass"} else source_surface
+    environment = str(fixture.get("environment") or conditions.get("environment") or "Unknown").title().strip()
+    if environment not in {"Indoor", "Outdoor"}:
+        environment = "Unknown"
+    indoor = True if environment == "Indoor" else (False if environment == "Outdoor" else np.nan)
+
     common = {
         "match_id": match_id,
         "tour": "WTA" if str(fixture.get("tour") or "").upper() == "WTA" or "women" in str(fixture.get("tournament") or "").lower() else "MEN",
         "match_date": match_date,
         "scheduled_start_utc": None if pd.isna(start_utc) else start_utc.isoformat(),
         "tourney_id": fixture.get("tournament_id"), "tourney_name": fixture.get("tournament") or "", "match_num": np.nan,
-        "round": fixture.get("round"), "surface": fixture.get("surface"), "best_of": fixture.get("best_of", 3),
+        "round": fixture.get("round"), "surface": surface, "best_of": fixture.get("best_of", 3),
+        "indoor": indoor, "indoor_outdoor": environment, "environment": environment,
+        "court_speed_override": fixture.get("court_speed_override", np.nan),
+        "external_cpi": conditions.get("cpi"),
+        "external_ace_rate_pct": conditions.get("ace_rate_pct"),
+        "external_rally_length": conditions.get("rally_length"),
+        "external_relative_air_density": conditions.get("relative_air_density"),
+        "external_altitude_m": conditions.get("altitude_m"),
+        "external_ball_type": conditions.get("ball_type"),
+        "external_overall_speed_rating": conditions.get("overall_speed_rating"),
+        "court_conditions_source": conditions.get("source_name"),
+        "court_conditions_source_quality": conditions.get("source_quality"),
+        "court_conditions_target_year": conditions.get("target_year"),
+        "cpi_source_year": conditions.get("cpi_source_year"),
+        "ace_rate_pct_source_year": conditions.get("ace_rate_pct_source_year"),
+        "rally_length_source_year": conditions.get("rally_length_source_year"),
+        "relative_air_density_source_year": conditions.get("relative_air_density_source_year"),
+        "ball_type_source_year": conditions.get("ball_type_source_year"),
         "result_file": "LIVE_TARGET", "source_quality": "live_pre_match_target", "match_games": np.nan, "match_sets": np.nan,
         "match_duration_minutes": np.nan,
     }
@@ -148,18 +183,36 @@ def build_live_matchup_features_from_enriched(enriched_history: pd.DataFrame, fi
         for name in names:
             if name in target_context.index and pd.notna(target_context.get(name)): return target_context.get(name)
         return np.nan
+
+    environment = str(pick("environment", "indoor_outdoor") or "Unknown").title()
+    indoor = environment == "Indoor"
     context = {
-        "court_speed": pick("court_speed_blended", "court_speed"), "altitude_m": pick("venue_altitude_m", "altitude_m"),
-        "weather_temperature_c": pick("weather_temperature_c"), "weather_humidity_pct": pick("weather_humidity_pct"),
-        "weather_wind_speed_kmh": pick("weather_wind_speed_kmh"), "weather_wind_gust_kmh": pick("weather_wind_gust_kmh"),
+        "court_speed": pick("court_speed_override", "court_speed_blended", "court_speed"),
+        "altitude_m": pick("external_altitude_m", "venue_altitude_m", "altitude_m"),
+        "weather_temperature_c": np.nan if indoor else pick("weather_temperature_c"),
+        "weather_humidity_pct": np.nan if indoor else pick("weather_humidity_pct"),
+        "weather_wind_speed_kmh": np.nan if indoor else pick("weather_wind_speed_kmh"),
+        "weather_wind_gust_kmh": np.nan if indoor else pick("weather_wind_gust_kmh"),
     }
     output = {
         "player_a": a_name, "player_b": b_name, "player1_is_a": bool(p1_is_a), "baseline_a_probability": baseline_a,
         "x_sr_a": sign * float(x_sr_p1), "x_elo_a": sign * float(x_elo_p1), "context_quality_a": float(state_a.get("context_quality", 0.0)),
         "context_quality_b": float(state_b.get("context_quality", 0.0)), "state_uncertainty_a": float(state_a.get("state_uncertainty", np.nan)),
-        "state_uncertainty_b": float(state_b.get("state_uncertainty", np.nan)), "weather_source_quality": str(target_context.get("weather_source_quality") or "missing"),
-        "weather_forecast_hour": str(target_context.get("weather_forecast_hour") or ""),
-        "court_speed_source_quality": str(target_context.get("court_speed_source_quality") or target_context.get("court_speed_prior_level") or "missing"),
+        "state_uncertainty_b": float(state_b.get("state_uncertainty", np.nan)),
+        "environment": environment,
+        "weather_source_quality": "not_applicable_indoor" if indoor else str(target_context.get("weather_source_quality") or "missing"),
+        "weather_forecast_hour": "" if indoor else str(target_context.get("weather_forecast_hour") or ""),
+        "court_speed_source_quality": "user_override" if pd.notna(pick("court_speed_override")) else str(target_context.get("court_speed_source_quality") or target_context.get("court_speed_prior_level") or "missing"),
+        "court_conditions_source": target_context.get("court_conditions_source"),
+        "court_conditions_source_quality": target_context.get("court_conditions_source_quality"),
+        "external_cpi": pick("external_cpi"),
+        "external_ace_rate_pct": pick("external_ace_rate_pct"),
+        "external_rally_length": pick("external_rally_length"),
+        "external_relative_air_density": pick("external_relative_air_density"),
+        "external_altitude_m": pick("external_altitude_m"),
+        "external_ball_type": target_context.get("external_ball_type"),
+        "external_overall_speed_rating": target_context.get("external_overall_speed_rating"),
+        "effective_court_speed": context["court_speed"],
     }
     output.update({f"ctx_{k}": v for k, v in build_matchup_features(state_a, state_b, context).items()})
     return output
