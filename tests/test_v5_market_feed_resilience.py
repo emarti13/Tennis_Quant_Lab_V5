@@ -89,6 +89,13 @@ def test_daily_predictions_use_recovery_windows_without_market_refresh_fanout():
     assert "python v5_run_repricing.py" in text
 
 
+def test_daily_forecast_publication_discards_ephemeral_generated_changes_before_rebase():
+    text = Path(".github/workflows/v5_daily_predictions.yml").read_text(encoding="utf-8")
+    commit_step = text.split("Commit canonical daily production artifacts safely", 1)[1]
+    assert "git reset --hard HEAD" in commit_step
+    assert commit_step.index("git reset --hard HEAD") < commit_step.index("git pull --rebase origin main")
+
+
 def test_settlement_is_daily_after_history_recovery_not_chained_to_predictions():
     text = Path(".github/workflows/v5_automatic_settlement.yml").read_text(encoding="utf-8")
     assert 'cron: "30 15 * * *"' in text
