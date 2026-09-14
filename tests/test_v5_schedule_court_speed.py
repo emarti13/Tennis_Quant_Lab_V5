@@ -53,3 +53,6 @@ def test_altitude_band_prevents_false_structural_pooling():
     target = out.iloc[1]
     assert target["court_speed_structural_sample_size"] == 0
     assert target["court_speed_prior_level"] in {"tour_surface_indoor", "none"}
+
+# This regression file intentionally exercises schedule-derived structural fallback independently
+# from same-event history so source-name reconciliation and court dynamics cannot silently diverge.
