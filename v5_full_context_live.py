@@ -120,9 +120,8 @@ def _target_rows(fixture: dict) -> pd.DataFrame:
 
     source_surface = str(conditions.get("surface_type") or "").title().strip()
     surface = source_surface if source_surface in {"Hard", "Clay", "Grass"} else (fixture_surface if fixture_surface in {"Hard", "Clay", "Grass"} else "Hard")
-    environment = str(conditions.get("environment") or fixture_environment or "Unknown").title().strip()
-    if environment not in {"Indoor", "Outdoor"}:
-        environment = "Unknown"
+    resolved_environment = str(conditions.get("environment") or fixture_environment or "").title().strip()
+    environment = resolved_environment if resolved_environment in {"Indoor", "Outdoor"} else np.nan
     indoor = True if environment == "Indoor" else (False if environment == "Outdoor" else np.nan)
 
     common = {
@@ -188,6 +187,20 @@ def build_live_enriched_history(historical_player_rows: pd.DataFrame, fixtures: 
     return enriched
 
 
+def _effective_environment(target_context: pd.Series) -> tuple[str, str]:
+    for field in ("environment", "indoor_outdoor"):
+        value = target_context.get(field)
+        text = str(value).title().strip() if pd.notna(value) else ""
+        if text in {"Indoor", "Outdoor"}:
+            source_value = target_context.get("environment_source")
+            source = str(source_value).strip() if pd.notna(source_value) else ""
+            return text, source if source and source.lower() != "missing" else "V5 fixture"
+    venue_indoor = target_context.get("venue_indoor")
+    if pd.notna(venue_indoor):
+        return ("Indoor" if bool(venue_indoor) else "Outdoor"), "V5 registry"
+    return "Unknown", "missing"
+
+
 def build_live_matchup_features_from_enriched(enriched_history: pd.DataFrame, fixture: dict, *, baseline_probability: float, x_sr_p1: float, x_elo_p1: float) -> dict:
     target_id = f"live_{fixture.get('fixture_id') or 'unknown'}"
     live = enriched_history[enriched_history["match_id"].astype(str) == target_id].copy()
@@ -205,7 +218,7 @@ def build_live_matchup_features_from_enriched(enriched_history: pd.DataFrame, fi
             if name in target_context.index and pd.notna(target_context.get(name)): return target_context.get(name)
         return np.nan
 
-    environment = str(pick("environment", "indoor_outdoor") or "Unknown").title()
+    environment, environment_source = _effective_environment(target_context)
     indoor = environment == "Indoor"
     context = {
         "court_speed": pick("court_speed_override", "court_speed_blended", "court_speed"),
@@ -221,6 +234,15 @@ def build_live_matchup_features_from_enriched(enriched_history: pd.DataFrame, fi
         "context_quality_b": float(state_b.get("context_quality", 0.0)), "state_uncertainty_a": float(state_a.get("state_uncertainty", np.nan)),
         "state_uncertainty_b": float(state_b.get("state_uncertainty", np.nan)),
         "environment": environment,
+        "surface_source": target_context.get("surface_source"),
+        "environment_source": environment_source,
+        "cpi_source": target_context.get("cpi_source"),
+        "ace_rate_source": target_context.get("ace_rate_source"),
+        "rally_source": target_context.get("rally_source"),
+        "rad_source": target_context.get("rad_source"),
+        "altitude_source": target_context.get("altitude_source"),
+        "ball_source": target_context.get("ball_source"),
+        "overall_speed_source": target_context.get("overall_speed_source"),
         "weather_source_quality": "not_applicable_indoor" if indoor else str(target_context.get("weather_source_quality") or "missing"),
         "weather_forecast_hour": "" if indoor else str(target_context.get("weather_forecast_hour") or ""),
         "court_speed_source_quality": "user_override" if pd.notna(pick("court_speed_override")) else str(target_context.get("court_speed_source_quality") or target_context.get("court_speed_prior_level") or "missing"),

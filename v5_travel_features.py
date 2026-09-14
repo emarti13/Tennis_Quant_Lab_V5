@@ -86,6 +86,8 @@ def build_travel_features(player_rows: pd.DataFrame, tournament_registry: pd.Dat
                 "venue_longitude": current.longitude,
                 "venue_timezone": current.timezone,
                 "venue_altitude_m": current.altitude_m,
+                "venue_surface": current.surface,
+                "venue_indoor": current.indoor,
                 "venue_source_quality": current.source_quality,
                 "venue_resolution_method": resolution_method,
             }
