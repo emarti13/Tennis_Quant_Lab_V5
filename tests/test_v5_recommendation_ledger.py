@@ -1,6 +1,7 @@
 import pandas as pd
 
 from v5_recommendation_ledger import update_official_recommendations
+from v5_recommendation_policy import select_primary_market_rows
 
 
 def _obs(signal, odds, ts, *, start="2026-09-08T18:00:00Z", prob=0.60):
@@ -90,3 +91,69 @@ def test_later_repricing_preserves_settlement_provenance_and_result():
     assert updated.loc[0, "result_source"] == "TennisMyLife"
     assert updated.loc[0, "result_winner"] == "Player One"
     assert updated.loc[0, "result_score"] == "6-4 6-4"
+
+
+def test_two_bet_candidates_same_fixture_create_only_selected_official_row():
+    observations = pd.concat([
+        _obs("BET", 110, "2026-09-08T12:00:00Z", prob=.58).assign(expected_value=.10),
+        _obs("BET", 154, "2026-09-08T12:00:00Z", prob=.74).assign(
+            market_group="game_spread",
+            selection="Player Two",
+            line=3.5,
+            market_key="fx1|game_spread|player two|3.5",
+            expected_value=.40,
+        ),
+    ], ignore_index=True)
+    selected = select_primary_market_rows(observations)
+    ledger, _ = update_official_recommendations(pd.DataFrame(), selected)
+    assert len(ledger) == 1
+    assert ledger.iloc[0]["market_key"] == "fx1|game_spread|player two|3.5"
+
+
+def test_later_primary_bet_on_different_market_cannot_add_second_official_row():
+    ledger, audit = update_official_recommendations(pd.DataFrame(), _obs("BET", 100, "2026-09-08T11:00:00Z"))
+    later = _obs("BET", 154, "2026-09-08T12:00:00Z", prob=.74).assign(
+        market_group="game_spread",
+        selection="Player Two",
+        line=3.5,
+        market_key="fx1|game_spread|player two|3.5",
+        expected_value=.40,
+    )
+    updated, audit = update_official_recommendations(ledger, later, audit)
+    assert len(updated) == 1
+    assert updated.iloc[0]["market_key"] == "fx1|moneyline|player one|"
+    assert (audit["event"] == "DUPLICATE_ACTIONABLE_IGNORED").any()
+
+
+def test_lean_can_be_superseded_by_primary_bet_on_different_market():
+    ledger, audit = update_official_recommendations(pd.DataFrame(), _obs("LEAN", -110, "2026-09-08T11:00:00Z"))
+    later = _obs("BET", 154, "2026-09-08T12:00:00Z", prob=.74).assign(
+        market_group="game_spread",
+        selection="Player Two",
+        line=3.5,
+        market_key="fx1|game_spread|player two|3.5",
+        expected_value=.40,
+    )
+    updated, audit = update_official_recommendations(ledger, later, audit)
+    assert len(updated) == 1
+    assert updated.iloc[0]["official_signal"] == "BET"
+    assert updated.iloc[0]["market_key"] == "fx1|game_spread|player two|3.5"
+    assert (audit["event"] == "LEAN_SUPERSEDED_BY_BET").any()
+
+
+def test_existing_open_duplicate_fixture_rows_normalize_to_one_strongest_row():
+    first, _ = update_official_recommendations(pd.DataFrame(), _obs("BET", 100, "2026-09-08T11:00:00Z"))
+    duplicate = first.iloc[0].copy()
+    duplicate["market_group"] = "game_spread"
+    duplicate["selection"] = "Player Two"
+    duplicate["line"] = 3.5
+    duplicate["market_key"] = "fx1|game_spread|player two|3.5"
+    duplicate["official_price_american"] = 154
+    duplicate["official_expected_value"] = .40
+    duplicate["expected_value"] = .40
+    existing = pd.concat([first, pd.DataFrame([duplicate])], ignore_index=True)
+
+    normalized, _ = update_official_recommendations(existing, pd.DataFrame())
+
+    assert len(normalized) == 1
+    assert normalized.iloc[0]["market_key"] == "fx1|game_spread|player two|3.5"
