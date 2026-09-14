@@ -2,8 +2,9 @@ name: V5 Automatic Settlement
 
 # One daily production settlement plus manual recovery. Run after the final
 # TennisMyLife/player-history recovery window so delayed upstream recovery can
-# still settle Results the same day. Current-engine headline performance is
-# sourced only from the canonical official recommendation ledger.
+# still settle Results the same day. Official recommendation performance is
+# sourced only from the canonical official ledger; Results Accuracy is sourced
+# from the settled frozen fixture forecast ledger.
 on:
   workflow_dispatch:
   schedule:
@@ -36,7 +37,7 @@ jobs:
       - name: Install production dependencies
         run: pip install --disable-pip-version-check -r requirements.txt
 
-      - name: Settle official current-engine recommendations
+      - name: Settle official recommendations and frozen fixture forecasts
         run: python v5_settle_official_recommendations.py
 
       - name: Show settlement status
@@ -50,22 +51,23 @@ jobs:
             if [ -f "$f" ]; then echo "===== $f ====="; cat "$f"; fi
           done
 
-      - name: Commit official settlement updates safely
+      - name: Commit settlement updates safely
         if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for f in \
             v5_daily_ready/official_recommendations.csv \
+            v5_daily_ready/frozen_predictions.csv \
             v5_daily_ready/official_performance.json \
             v5_daily_ready/official_settlement_status.json
           do
             [ -e "$f" ] && git add "$f"
           done
           if git diff --cached --quiet; then
-            echo "No official settlement changes to commit."
+            echo "No settlement changes to commit."
             exit 0
           fi
-          git commit -m "Settle official V5 recommendations"
+          git commit -m "Settle V5 recommendations and forecasts"
           git pull --rebase origin main
           git push origin HEAD:main
