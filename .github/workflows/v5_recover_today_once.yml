@@ -18,4 +18,4 @@ jobs:
       - name: Dispatch canonical daily predictions workflow
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run v5_daily_predictions.yml --ref main
+        run: gh workflow run v5_daily_predictions.yml --ref main -R emarti13/Tennis_Quant_Lab_V5
