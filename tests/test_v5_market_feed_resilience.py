@@ -72,10 +72,15 @@ def test_fresh_live_market_promotion_dispatches_daily_forecast_recovery():
     text = Path(".github/workflows/oddspapi_normalized_daily_v2.yml").read_text(encoding="utf-8")
     assert "actions: write" in text
     assert "Trigger daily forecast after fresh market promotion" in text
-    assert "gh workflow run v5_daily_predictions.yml --ref main" in text
+    assert "gh workflow run v5_daily_predictions.yml --ref main -R emarti13/Tennis_Quant_Lab_V5" in text
     assert text.index("Commit live feed and lightweight production artifacts") < text.index(
         "Trigger daily forecast after fresh market promotion"
     )
+
+
+def test_one_time_recovery_dispatch_is_repository_explicit():
+    text = Path(".github/workflows/v5_recover_today_once.yml").read_text(encoding="utf-8")
+    assert "gh workflow run v5_daily_predictions.yml --ref main -R emarti13/Tennis_Quant_Lab_V5" in text
 
 
 def test_daily_predictions_use_recovery_windows_without_market_refresh_fanout():
