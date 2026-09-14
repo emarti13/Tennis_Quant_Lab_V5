@@ -1,10 +1,14 @@
 from pathlib import Path
-import json
 
 import pandas as pd
 
 from v5_courtspeed_fetch import parse_metric_table
-from v5_refresh_court_conditions import merge_courtspeed_snapshot, validate_snapshot
+from v5_refresh_court_conditions import (
+    count_updated_fields,
+    discover_target_events,
+    merge_courtspeed_snapshot,
+    validate_snapshot,
+)
 
 
 def test_parse_metric_table_extracts_year_values_and_conditions():
@@ -22,6 +26,21 @@ def test_parse_metric_table_extracts_year_values_and_conditions():
     assert set(out["surface_type"]) == {"Hard"}
     assert set(out["environment"]) == {"Indoor"}
     assert out.loc[out["year"].eq(2026), "cpi"].iloc[0] == 40.2
+
+
+def test_unknown_source_event_is_reported_not_persisted():
+    html = """
+    <table>
+      <thead><tr><th>Tournament</th><th>’26</th></tr></thead>
+      <tbody>
+        <tr><td>Paris Hard · indoor</td><td>40.2</td></tr>
+        <tr><td>Mystery Invitational Hard</td><td>38.8</td></tr>
+      </tbody>
+    </table>
+    """
+    out = parse_metric_table(html, metric="cpi", fetched_at_utc="2026-09-14T04:00:00+00:00")
+    assert set(out["event_key"]) == {"paris_masters"}
+    assert out.attrs["unresolved_events"] == ["Mystery Invitational Hard"]
 
 
 def test_partial_refresh_preserves_existing_non_null_values():
@@ -47,6 +66,17 @@ def test_partial_refresh_preserves_existing_non_null_values():
     assert row["ace_rate_pct"] == 10.5
     assert row["ball_type"] == "Penn/Head"
     assert row["source_refreshed_at"] == "2026-09-14T04:00:00+00:00"
+    assert count_updated_fields(existing, fresh) == 1
+
+
+def test_target_discovery_uses_canonical_future_market_fixture(tmp_path):
+    path = tmp_path / "market_board_input.csv"
+    pd.DataFrame([
+        {"tournament": "Paris Masters", "start_time_utc": "2026-09-20T12:00:00Z"},
+        {"tournament": "Cincinnati", "start_time_utc": "2026-11-20T12:00:00Z"},
+    ]).to_csv(path, index=False)
+    out = discover_target_events(path, now_utc="2026-09-14T00:00:00Z", horizon_days=21)
+    assert out == ["paris_masters"]
 
 
 def test_validation_rejects_duplicate_event_year_rows():
