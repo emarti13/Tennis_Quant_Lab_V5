@@ -68,6 +68,16 @@ def test_live_workflow_treats_quota_skip_as_controlled_state():
     assert "oddspapi_daily/*_manifest.json" in text
 
 
+def test_fresh_live_market_promotion_dispatches_daily_forecast_recovery():
+    text = Path(".github/workflows/oddspapi_normalized_daily_v2.yml").read_text(encoding="utf-8")
+    assert "actions: write" in text
+    assert "Trigger daily forecast after fresh market promotion" in text
+    assert "gh workflow run v5_daily_predictions.yml --ref main" in text
+    assert text.index("Commit live feed and lightweight production artifacts") < text.index(
+        "Trigger daily forecast after fresh market promotion"
+    )
+
+
 def test_daily_predictions_use_recovery_windows_without_market_refresh_fanout():
     text = Path(".github/workflows/v5_daily_predictions.yml").read_text(encoding="utf-8")
     trigger = text.split("permissions:", 1)[0]
