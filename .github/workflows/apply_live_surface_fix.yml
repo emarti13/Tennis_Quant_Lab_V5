@@ -1,0 +1,82 @@
+name: Apply Live Surface Resolution Fix
+
+on:
+  push:
+    branches:
+      - fix/live-review-surface-resolution
+    paths:
+      - '.github/workflows/apply_live_surface_fix.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/live-review-surface-resolution
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest
+      - name: Confirm RED contract
+        run: |
+          if python -m pytest tests/test_v5_surface_resolution_fallback.py -q; then
+            echo 'Expected RED contract unexpectedly passed before implementation.'
+            exit 1
+          fi
+      - name: Apply minimal production fix
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('v5_daily_batch.py')
+          text = path.read_text(encoding='utf-8')
+
+          old_import = 'from v5_model_calibration import calibrated_match_probability, calibration_record\n'
+          new_import = old_import + 'from v5_court_conditions_source import resolve_court_conditions\n'
+          if 'from v5_court_conditions_source import resolve_court_conditions' not in text:
+              if old_import not in text:
+                  raise SystemExit('Import anchor missing')
+              text = text.replace(old_import, new_import, 1)
+
+          anchor = '    return "Hard", "Auto default — review"\n\n\ndef infer_best_of(tournament, tour):\n'
+          helper = '''    return "Hard", "Auto default — review"\n\n\ndef _event_surface_key(value):\n    tokens = canonical_name(value).split()\n    generic = {"atp", "wta", "men", "women", "singles", "challenger", "qualification", "qualifying", "qualifier"}\n    return " ".join(token for token in tokens if token not in generic)\n\n\ndef _historical_event_surface(tournament, start_time_utc=None, context_history=None):\n    if context_history is None or context_history.empty or "surface" not in context_history.columns:\n        return None\n    name_col = next((c for c in ("tourney_name", "tournament", "event_name") if c in context_history.columns), None)\n    if name_col is None:\n        return None\n\n    target = _event_surface_key(tournament)\n    if not target:\n        return None\n    names = context_history[name_col].fillna("").astype(str).map(_event_surface_key)\n    exact = names.eq(target)\n    if not exact.any():\n        # Provider titles often add tour/country/category decorations. Allow only\n        # a reasonably specific containment match; short generic event names stay fail-closed.\n        exact = names.map(lambda value: bool(value) and min(len(value), len(target)) >= 7 and (value in target or target in value))\n    history = context_history.loc[exact].copy()\n    if history.empty:\n        return None\n\n    if start_time_utc is not None and "match_date" in history.columns:\n        cutoff = pd.to_datetime(start_time_utc, errors="coerce", utc=True)\n        dates = pd.to_datetime(history["match_date"], errors="coerce", utc=True)\n        if pd.notna(cutoff):\n            history = history.loc[dates.notna() & (dates < cutoff)].copy()\n    if history.empty:\n        return None\n\n    surfaces = history["surface"].dropna().astype(str).str.title()\n    surfaces = surfaces[surfaces.isin({"Hard", "Clay", "Grass"})]\n    if surfaces.empty or surfaces.nunique() != 1:\n        return None\n    return str(surfaces.iloc[0])\n\n\ndef resolve_fixture_surface(tournament, *, start_time_utc=None, context_history=None):\n    mapped_surface, mapped_source = infer_surface(tournament)\n    historical_surface = _historical_event_surface(tournament, start_time_utc, context_history)\n    fallback_surface = historical_surface\n    if fallback_surface is None and mapped_source != "Auto default — review":\n        fallback_surface = mapped_surface\n\n    start = pd.to_datetime(start_time_utc, errors="coerce", utc=True)\n    year = int(start.year) if pd.notna(start) else int(pd.Timestamp.now(tz="UTC").year)\n    fallback = {"surface_type": fallback_surface} if fallback_surface is not None else {}\n    try:\n        resolved = resolve_court_conditions(tournament, year, v5_fallback=fallback)\n    except Exception:\n        resolved = {}\n    surface = str(resolved.get("surface_type") or "").title()\n    source = str(resolved.get("surface_source") or "")\n    if surface in {"Hard", "Clay", "Grass"}:\n        if source == "CourtSpeed":\n            return surface, "CourtSpeed canonical conditions"\n        if source == "V5" and historical_surface is not None:\n            return surface, "V5 historical event surface"\n        if source == "V5" and mapped_source != "Auto default — review":\n            return surface, mapped_source\n\n    if historical_surface is not None:\n        return historical_surface, "V5 historical event surface"\n    return mapped_surface, mapped_source\n\n\ndef infer_best_of(tournament, tour):\n'''
+          if 'def resolve_fixture_surface(' not in text:
+              if anchor not in text:
+                  raise SystemExit('Surface helper anchor missing')
+              text = text.replace(anchor, helper, 1)
+
+          old_def = 'def _prepare_fixture(fixture_rows, ratings_by_tour, summary):\n'
+          new_def = 'def _prepare_fixture(fixture_rows, ratings_by_tour, summary, context_history=None):\n'
+          if old_def in text:
+              text = text.replace(old_def, new_def, 1)
+
+          old_surface = '    surface, surface_source = infer_surface(tournament)\n'
+          new_surface = '    surface, surface_source = resolve_fixture_surface(\n        tournament,\n        start_time_utc=first.get("start_time_utc"),\n        context_history=context_history,\n    )\n'
+          if old_surface in text:
+              text = text.replace(old_surface, new_surface, 1)
+
+          old_prepare = '            prepared_rows.append((fixture_id, group, _prepare_fixture(group, ratings_by_tour, summary)))\n'
+          new_prepare = '            prepared_rows.append((fixture_id, group, _prepare_fixture(\n                group, ratings_by_tour, summary, context_history=context_history\n            )))\n'
+          if old_prepare in text:
+              text = text.replace(old_prepare, new_prepare, 1)
+
+          path.write_text(text, encoding='utf-8')
+          PY
+      - name: Verify GREEN focused contract
+        run: python -m pytest tests/test_v5_surface_resolution_fallback.py tests/test_v5_daily_batch.py -q
+      - name: Verify full regression suite
+        run: python -m pytest tests -q
+      - name: Commit verified fix and remove one-time workflow
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/apply_live_surface_fix.yml
+          git add v5_daily_batch.py tests/test_v5_surface_resolution_fallback.py
+          git commit -m 'Fix canonical live surface fallback before review gating'
+          git push origin HEAD:fix/live-review-surface-resolution
