@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+import v5_full_context_live as live_context
 from v5_full_context_live import _target_rows
 from v5_interactive_production import _interactive_context_fixture
 
@@ -40,6 +41,19 @@ def test_indoor_and_surface_are_independent_dimensions():
     })
     assert rows.iloc[0]["surface"] == "Hard"
     assert rows.iloc[0]["indoor_outdoor"] == "Indoor"
+
+
+def test_v5_registry_environment_fallback_is_explicit_when_courtspeed_is_missing():
+    helper = getattr(live_context, "_effective_environment", None)
+    assert helper is not None
+    environment, source = helper(pd.Series({
+        "environment": np.nan,
+        "indoor_outdoor": np.nan,
+        "venue_indoor": True,
+        "environment_source": "missing",
+    }))
+    assert environment == "Indoor"
+    assert source == "V5 registry"
 
 
 def test_interactive_context_passes_environment_and_internal_court_speed_override():

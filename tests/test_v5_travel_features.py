@@ -45,6 +45,8 @@ def test_travel_resolution_prefers_stable_event_id_and_year_specific_venue():
     assert out.iloc[0]["venue_city"] == "Toronto"
     assert out.iloc[1]["venue_city"] == "Montreal"
     assert out.iloc[1]["travel_km_from_previous_event"] > 400
+    assert out.iloc[0]["venue_surface"] == "Hard"
+    assert bool(out.iloc[0]["venue_indoor"]) is False
 
 
 def test_future_event_cannot_change_earlier_travel_features():
