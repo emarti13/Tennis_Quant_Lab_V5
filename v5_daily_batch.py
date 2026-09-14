@@ -19,6 +19,7 @@ from v5_full_context_live import (
 )
 from v5_live_market import canonical_name, add_model_pricing, signal_row
 from v5_model_calibration import calibrated_match_probability, calibration_record
+from v5_court_conditions_source import resolve_court_conditions
 from v5_score_distribution import predict_score_distribution
 
 
@@ -110,6 +111,76 @@ def infer_surface(tournament):
     return "Hard", "Auto default — review"
 
 
+def _event_surface_key(value):
+    tokens = canonical_name(value).split()
+    generic = {"atp", "wta", "men", "women", "singles", "challenger", "qualification", "qualifying", "qualifier"}
+    return " ".join(token for token in tokens if token not in generic)
+
+
+def _historical_event_surface(tournament, start_time_utc=None, context_history=None):
+    if context_history is None or context_history.empty or "surface" not in context_history.columns:
+        return None
+    name_col = next((c for c in ("tourney_name", "tournament", "event_name") if c in context_history.columns), None)
+    if name_col is None:
+        return None
+
+    target = _event_surface_key(tournament)
+    if not target:
+        return None
+    names = context_history[name_col].fillna("").astype(str).map(_event_surface_key)
+    exact = names.eq(target)
+    if not exact.any():
+        # Provider titles often add tour/country/category decorations. Allow only
+        # a reasonably specific containment match; short generic event names stay fail-closed.
+        exact = names.map(lambda value: bool(value) and min(len(value), len(target)) >= 7 and (value in target or target in value))
+    history = context_history.loc[exact].copy()
+    if history.empty:
+        return None
+
+    if start_time_utc is not None and "match_date" in history.columns:
+        cutoff = pd.to_datetime(start_time_utc, errors="coerce", utc=True)
+        dates = pd.to_datetime(history["match_date"], errors="coerce", utc=True)
+        if pd.notna(cutoff):
+            history = history.loc[dates.notna() & (dates < cutoff)].copy()
+    if history.empty:
+        return None
+
+    surfaces = history["surface"].dropna().astype(str).str.title()
+    surfaces = surfaces[surfaces.isin({"Hard", "Clay", "Grass"})]
+    if surfaces.empty or surfaces.nunique() != 1:
+        return None
+    return str(surfaces.iloc[0])
+
+
+def resolve_fixture_surface(tournament, *, start_time_utc=None, context_history=None):
+    mapped_surface, mapped_source = infer_surface(tournament)
+    historical_surface = _historical_event_surface(tournament, start_time_utc, context_history)
+    fallback_surface = historical_surface
+    if fallback_surface is None and mapped_source != "Auto default — review":
+        fallback_surface = mapped_surface
+
+    start = pd.to_datetime(start_time_utc, errors="coerce", utc=True)
+    year = int(start.year) if pd.notna(start) else int(pd.Timestamp.now(tz="UTC").year)
+    fallback = {"surface_type": fallback_surface} if fallback_surface is not None else {}
+    try:
+        resolved = resolve_court_conditions(tournament, year, v5_fallback=fallback)
+    except Exception:
+        resolved = {}
+    surface = str(resolved.get("surface_type") or "").title()
+    source = str(resolved.get("surface_source") or "")
+    if surface in {"Hard", "Clay", "Grass"}:
+        if source == "CourtSpeed":
+            return surface, "CourtSpeed canonical conditions"
+        if source == "V5" and historical_surface is not None:
+            return surface, "V5 historical event surface"
+        if source == "V5" and mapped_source != "Auto default — review":
+            return surface, mapped_source
+
+    if historical_surface is not None:
+        return historical_surface, "V5 historical event surface"
+    return mapped_surface, mapped_source
+
+
 def infer_best_of(tournament, tour):
     """Men's Grand Slam main draws are Bo5; qualifying and all WTA are Bo3."""
     t = str(tournament or "").lower()
@@ -198,12 +269,16 @@ def _requested_market_lines(fixture_rows, market_group):
     return sorted({float(x) for x in values})
 
 
-def _prepare_fixture(fixture_rows, ratings_by_tour, summary):
+def _prepare_fixture(fixture_rows, ratings_by_tour, summary, context_history=None):
     first = fixture_rows.iloc[0]
     tournament = first.get("tournament")
     tour = _tour_to_v5(first.get("tour"), tournament)
     ratings = ratings_by_tour[tour]
-    surface, surface_source = infer_surface(tournament)
+    surface, surface_source = resolve_fixture_surface(
+        tournament,
+        start_time_utc=first.get("start_time_utc"),
+        context_history=context_history,
+    )
     best_of = infer_best_of(tournament, tour)
     lookup = _player_lookup(ratings)
     p1 = _resolve_player(first.get("player1"), lookup)
@@ -495,7 +570,9 @@ def build_daily_outputs(
     prepared_rows = []
     for fixture_id, group in eligible.groupby("fixture_id", sort=False):
         try:
-            prepared_rows.append((fixture_id, group, _prepare_fixture(group, ratings_by_tour, summary)))
+            prepared_rows.append((fixture_id, group, _prepare_fixture(
+                group, ratings_by_tour, summary, context_history=context_history
+            )))
         except Exception as exc:
             first = group.iloc[0]
             errors.append({

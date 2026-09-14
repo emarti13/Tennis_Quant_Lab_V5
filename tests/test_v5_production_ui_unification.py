@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 
@@ -22,6 +23,28 @@ def test_prepare_fixture_honors_explicit_ui_overrides():
     assert prepared["surface"] == "Clay"
     assert prepared["surface_source"] == "User override"
     assert prepared["best_of"] == 3
+
+
+def test_prepare_fixture_without_override_uses_historical_surface_context():
+    from v5_interactive_production import _prepare_with_overrides
+    ratings = _ratings().copy()
+    ratings["surface"] = "Clay"
+    rows = pd.DataFrame([{
+        "fixture_id":"fx-historical","tournament":"WTA Testville Women Singles","tour":"WTA",
+        "start_time_utc":"2026-09-14T14:00:00Z","player1":"Alpha","player2":"Beta",
+    }])
+    history = pd.DataFrame([
+        {"tourney_name":"WTA Testville Women Singles","match_date":"2025-09-10","surface":"Clay"},
+        {"tourney_name":"WTA Testville Women Singles","match_date":"2025-09-11","surface":"Clay"},
+    ])
+    prepared = _prepare_with_overrides(
+        rows,
+        {"WTA":ratings},
+        {"WTA":{"baseline":{"Clay":0.60}}},
+        context_history=history,
+    )
+    assert prepared["surface"] == "Clay"
+    assert prepared["surface_source"] == "V5 historical event surface"
 
 
 def test_production_board_adapter_preserves_models_and_context():
@@ -50,6 +73,24 @@ def test_production_board_adapter_preserves_models_and_context():
     assert row["P1 ML EV"] == 0.19
     assert row["Matchup Context"] != "Unavailable"
     assert row["Travel Context"] != "Unavailable"
+
+
+def test_production_board_adapter_falls_back_from_nan_enriched_identity_fields():
+    from v5_interactive_production import production_board_to_today
+    production = pd.DataFrame([{
+        "fixture_id":"fx-null","tournament":"WTA Testville Women Singles","start_time_utc":"2026-09-14T14:00:00Z",
+        "tour":"WTA","tour_v5":np.nan,"surface":"Hard","best_of":np.nan,
+        "player1":"Alpha, Alice","player2":"Beta, Bob","resolved_player1":np.nan,"resolved_player2":np.nan,
+        "market_group":"moneyline","selection":"Alpha, Alice","line":None,
+        "best_american_odds":-110,"expected_value":0.05,"signal":"LEAN",
+    }])
+    row = production_board_to_today(production).iloc[0]
+    assert row["Player 1"] == "Alpha, Alice"
+    assert row["Player 2"] == "Beta, Bob"
+    assert row["Tour"] == "WTA"
+    assert row["Best Of"] == 3
+    assert row["Player 1"] != "nan"
+    assert row["Player 2"] != "nan"
 
 
 def test_decision_feed_reads_active_or_canonical_artifacts_without_running_model():
