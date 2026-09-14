@@ -334,11 +334,13 @@ def match_card_html(row: pd.Series) -> str:
     p2_vol_num = "—" if p2_vol is None else f"σ {p2_vol:.3f}"
     p1_conf_text = "—" if p1_conf is None else f"{p1_conf:.0%}"
     p2_conf_text = "—" if p2_conf is None else f"{p2_conf:.0%}"
+    primary_label = "Official top play" if signal in {"BET", "LEAN"} else "Primary model view"
 
     html = f"""
     <div class="v5-card">
       <div class="v5-match-name">{p1} <span style="color:#86868b;font-weight:500;">vs</span> {p2}</div>
       <div class="v5-meta">{tournament} · {start} · {tour} · {bo}</div>
+      <div class="v5-why"><strong>{primary_label}</strong></div>
       <div class="v5-primary-market">{primary_market}<span class="v5-signal {signal_class(signal)}">{escape(signal)}</span></div>
 
       <div class="v5-why"><strong>Match projection</strong></div>
@@ -350,9 +352,9 @@ def match_card_html(row: pd.Series) -> str:
       <div class="v5-metric-line"><strong>{p2}</strong> — Recent form {_form_label(p2_form)} ({p2_form_num}, {_ordinal(row.get('P2 Form Percentile'))} pct) · Match-day volatility {escape(str(row.get('P2 Volatility Label') or 'Unknown'))} ({p2_vol_num}, {_ordinal(row.get('P2 Volatility Percentile'))} pct) · State confidence {escape(str(row.get('P2 State Conf Label') or 'Unknown'))} ({p2_conf_text})</div>
       <div class="v5-metric-line">Simulator vs Surface Elo <strong>{agreement}</strong> · {gap_text} probability gap</div>
 
-      <div class="v5-why"><strong>Current pricing output</strong></div>
+      <div class="v5-why"><strong>Current pricing candidates</strong> — not separately logged as official bets</div>
       {_market_output_html(row)}
-      <div class="v5-metric-line">Best market <strong>{format_american_odds(market_odds)}</strong> · EV/edge <strong>{format_edge(edge)}</strong></div>
+      <div class="v5-metric-line">Selected market price <strong>{format_american_odds(market_odds)}</strong> · EV/edge <strong>{format_edge(edge)}</strong></div>
       <div class="v5-why"><strong>Why it stands out:</strong> {explanation}</div>
     </div>
     """
@@ -374,7 +376,6 @@ def _render_match_card(st_module, row: pd.Series) -> None:
     if hasattr(st_module, "html"):
         st_module.html(card)
     else:
-        # Compatibility for lightweight test adapters / older Streamlit only.
         st_module.markdown(card, unsafe_allow_html=True)
 
 
@@ -410,7 +411,7 @@ def render_today_results(
         cols = st_module.columns(4)
         cards = [
             ("Best Edge", format_edge(summary["best_edge"]), "strongest current qualified edge"),
-            ("Qualified Plays", str(summary["qualified_plays"]), "BET + LEAN"),
+            ("Qualified Plays", str(summary["qualified_plays"]), "BET + LEAN top plays"),
             ("Model Health", "Live", "production outputs loaded"),
             ("Markets Live", str(summary["markets_live"]), "books in current feed"),
         ]
