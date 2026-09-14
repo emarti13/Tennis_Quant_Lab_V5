@@ -56,3 +56,4 @@ def test_altitude_band_prevents_false_structural_pooling():
 
 # This regression file intentionally exercises schedule-derived structural fallback independently
 # from same-event history so source-name reconciliation and court dynamics cannot silently diverge.
+# Trigger the branch patch workflow after its simplified definition is present.
