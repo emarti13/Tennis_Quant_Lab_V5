@@ -7,7 +7,7 @@ import pandas as pd
 
 BASE = Path(__file__).resolve().parent
 MARKET_FILE = BASE / "v5_market_ready" / "market_board_input.csv"
-DEFAULT_MAX_SNAPSHOT_AGE_HOURS = 13
+DEFAULT_MAX_SNAPSHOT_AGE_HOURS = 24
 
 
 def canonical_name(name):
