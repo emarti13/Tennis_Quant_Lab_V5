@@ -202,5 +202,9 @@ jobs:
             exit 0
           fi
           git commit -m "Freeze daily V5 forecast and reprice live markets"
+          echo "Discarding non-canonical generated worktree changes before rebase:"
+          git status --short
+          git reset --hard HEAD
+          git clean -fd
           git pull --rebase origin main
           git push origin HEAD:main
