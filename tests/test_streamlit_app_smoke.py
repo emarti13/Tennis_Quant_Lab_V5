@@ -90,3 +90,11 @@ def test_primary_navigation_exposes_daily_board_and_decision_feed(rendered_app):
         "Matchup Lab",
     ]
     assert rendered_app.sidebar.radio[0].value == "Daily Board"
+
+
+def test_decision_feed_renders_without_uncaught_exception():
+    app = AppTest.from_file(str(APP_PATH), default_timeout=120).run()
+    app.sidebar.radio[0].set_value("Decision Feed")
+    app.run()
+    assert app.sidebar.radio[0].value == "Decision Feed"
+    assert not app.exception, [exception.value for exception in app.exception]
