@@ -19,7 +19,7 @@ def test_configured_recurring_budget_stays_below_70_percent_of_allowance():
 def test_live_market_is_one_quota_conserving_run_and_performs_repricing():
     text = _text('oddspapi_normalized_daily_v2.yml')
     trigger = text.split('permissions:', 1)[0]
-    assert '15 18 * * *' in trigger
+    assert '2 0 * * *' in trigger
     assert trigger.count('cron:') == 1
     assert 'workflow_dispatch:' in trigger
     assert '\n  push:' not in trigger

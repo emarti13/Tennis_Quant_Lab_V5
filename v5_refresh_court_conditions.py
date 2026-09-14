@@ -59,7 +59,8 @@ def merge_courtspeed_snapshot(existing: pd.DataFrame, fresh: pd.DataFrame) -> pd
             out[col] = pd.NA
         values = new[col].reindex(all_index)
         mask = values.notna() & values.astype(str).str.strip().ne("")
-        out.loc[mask, col] = values[mask]
+        fresh_values = values.where(mask)
+        out[col] = fresh_values.combine_first(out[col])
     out = out.reset_index()
     validate_snapshot(out)
     ordered = KEYS + [c for c in FIELDS if c in out.columns] + [c for c in out.columns if c not in KEYS + FIELDS]
