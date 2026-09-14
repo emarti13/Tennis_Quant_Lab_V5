@@ -175,10 +175,26 @@ def match_schedule_event(event: pd.Series | dict, schedule: pd.DataFrame) -> dic
     ranked.sort(reverse=True, key=lambda x: x[0])
     top_score, top_method, top_idx = ranked[0]
     second = ranked[1][0] if len(ranked) > 1 else -1.0
-    if top_method not in {"exact", "alias"} and (top_score < 0.72 or (second >= 0 and top_score - second < 0.08)):
-        empty["schedule_match_method"] = "ambiguous" if top_score >= 0.55 else "unmatched"
+
+    ambiguous = False
+    if top_method == "exact":
+        ambiguous = second >= 0.995
+    elif top_method == "alias":
+        # Sponsor-stripped aliases are useful only when they uniquely identify an event.
+        # A city/generic name shared by multiple candidates must not bypass ambiguity checks.
+        ambiguous = second >= top_score - 0.04
+    else:
+        ambiguous = top_score >= 0.55 and second >= 0 and top_score - second < 0.08
+        if top_score < 0.72:
+            empty["schedule_match_method"] = "ambiguous" if top_score >= 0.55 else "unmatched"
+            empty["schedule_match_score"] = float(top_score)
+            return empty
+
+    if ambiguous:
+        empty["schedule_match_method"] = "ambiguous"
         empty["schedule_match_score"] = float(top_score)
         return empty
+
     chosen = candidates.loc[top_idx]
     return {
         "schedule_tournament_name": chosen.get("schedule_tournament_name"),
