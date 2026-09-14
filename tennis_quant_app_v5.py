@@ -1703,15 +1703,16 @@ def daily_board():
         "High — 10,000 per match": 10000,
     }[precision]
 
+    market_source = load_market_board(include_stale=True)
     market_feed = load_market_board()
     all_prices = load_all_book_prices()
     slate = _oddspapi_daily_slate()
 
+    if market_source.empty:
+        st.error("OddsPapi market artifacts are missing from the repository.")
+        return
     if slate.empty:
-        st.error(
-            "No repository OddsPapi market feed is available. "
-            "Run the normalized OddsPapi workflow and V5 Market Feed Build."
-        )
+        st.info("No future eligible fixtures are available in the current OddsPapi snapshot.")
         return
 
     snapshot = market_feed["snapshot_utc"].dropna().iloc[0] if "snapshot_utc" in market_feed.columns and not market_feed["snapshot_utc"].dropna().empty else "Unknown"
