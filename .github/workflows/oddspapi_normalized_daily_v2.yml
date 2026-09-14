@@ -1,13 +1,17 @@
 name: OddsPapi Normalized Daily v2
 
-# Production-critical live pricing. One scheduled production refresh/day at
-# 00:02 UTC, before the day's match slate, plus intentional manual recovery.
-# Workflow edits do not trigger API calls. When live quota is genuinely
-# unavailable, preserve last-known-good artifacts and exit cleanly.
+# Production-critical live pricing. Four scheduled price refreshes/day keep the
+# market snapshot inside the 13-hour application freshness window while staying
+# within the intended 120-pull/month budget. Only the first daily window (or a
+# manual recovery) may dispatch the frozen daily forecast workflow; later pulls
+# only reprice the existing frozen forecast.
 on:
   workflow_dispatch:
   schedule:
     - cron: "2 0 * * *"
+    - cron: "2 6 * * *"
+    - cron: "2 12 * * *"
+    - cron: "2 18 * * *"
 
 permissions:
   contents: write
@@ -152,7 +156,9 @@ jobs:
           fi
 
       - name: Trigger daily forecast after fresh market promotion
-        if: steps.live_pull.outputs.fresh_snapshot == 'true'
+        if: >-
+          steps.live_pull.outputs.fresh_snapshot == 'true' &&
+          (github.event_name == 'workflow_dispatch' || github.event.schedule == '2 0 * * *')
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run v5_daily_predictions.yml --ref main -R emarti13/Tennis_Quant_Lab_V5
