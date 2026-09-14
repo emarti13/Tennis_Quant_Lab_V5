@@ -45,6 +45,13 @@ def test_missing_feed_and_no_future_fixtures_are_distinct_states():
     assert expired["state"] == "no_future_fixtures"
 
 
+def test_legacy_daily_board_does_not_call_existing_feed_missing_when_no_future_rows():
+    source = Path("tennis_quant_app_v5.py").read_text(encoding="utf-8")
+    assert 'load_market_board(include_stale=True)' in source
+    assert "No repository OddsPapi market feed is available." not in source
+    assert "No future eligible fixtures are available in the current OddsPapi snapshot." in source
+
+
 def test_today_never_turns_stale_fixture_fallback_into_a_manual_model_run():
     source = Path("v5_ui_host.py").read_text(encoding="utf-8")
     assert "run_interactive_production" not in source
