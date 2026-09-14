@@ -31,7 +31,7 @@ jobs:
           pip install -r requirements.txt
           pip install pytest lxml
       - run: |
-          pytest \
+          python -m pytest \
             tests/test_v5_courtspeed_refresh.py \
             tests/test_v5_court_conditions_source.py \
             tests/test_v5_court_conditions_resolution.py \
