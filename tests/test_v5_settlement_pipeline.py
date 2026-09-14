@@ -19,6 +19,15 @@ def test_combined_settlement_code_updates_frozen_forecast_ledger_for_results_acc
     assert "forecast_settled" in text
 
 
+def test_fixture_level_frozen_forecast_promotion_does_not_require_market_key():
+    text = Path("v5_settle_official_recommendations.py").read_text(encoding="utf-8")
+    frozen_promotion = text.split('"frozen_predictions.csv",', 1)[1].split(")\n", 1)[0]
+    assert '"fixture_id"' in frozen_promotion
+    assert '"result_status"' in frozen_promotion
+    assert '"settled_result"' in frozen_promotion
+    assert '"market_key"' not in frozen_promotion
+
+
 def test_settlement_runs_after_final_history_recovery_without_prediction_fanout():
     text = Path(".github/workflows/v5_automatic_settlement.yml").read_text(encoding="utf-8")
     assert "schedule:" in text
