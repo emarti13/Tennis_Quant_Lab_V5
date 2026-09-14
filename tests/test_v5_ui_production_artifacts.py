@@ -46,6 +46,24 @@ def _repriced():
     }])
 
 
+def _official():
+    return pd.DataFrame([{
+        "fixture_id": "fx1",
+        "market_group": "game_spread",
+        "selection": "Player Two",
+        "line": 3.5,
+        "market_key": "fx1|game_spread|player two|3.5",
+        "official_signal": "BET",
+        "signal": "BET",
+        "official_price_american": 154,
+        "official_price_decimal": 2.54,
+        "official_expected_value": 0.889,
+        "official_edge": 0.889,
+        "official_at_utc": "2026-09-08T12:00:00Z",
+        "result_status": "OPEN",
+    }])
+
+
 def test_canonical_today_board_loads_without_interactive_run(tmp_path):
     ready = tmp_path / "v5_daily_ready"
     ready.mkdir()
@@ -61,6 +79,34 @@ def test_canonical_today_board_loads_without_interactive_run(tmp_path):
     assert row["Matchup Context"] != "Unavailable"
     assert row["Workload Context"] != "Unavailable"
     assert row["Travel Context"] != "Unavailable"
+
+
+def test_canonical_today_board_overlays_frozen_official_recommendation(tmp_path):
+    ready = tmp_path / "v5_daily_ready"
+    ready.mkdir()
+    _repriced().to_csv(ready / "latest_repriced_board.csv", index=False)
+    _official().to_csv(ready / "official_recommendations.csv", index=False)
+
+    board = load_canonical_today_board(tmp_path)
+    row = board.iloc[0]
+
+    assert bool(row["Official Locked"]) is True
+    assert row["Official Market"] == "Player Two +3.5"
+    assert row["Official Signal"] == "BET"
+    assert row["Official Price"] == 154
+    assert row["Official Edge"] == 0.889
+    assert row["Official Market Key"] == "fx1|game_spread|player two|3.5"
+
+
+def test_settled_or_non_actionable_rows_do_not_override_live_top_play(tmp_path):
+    ready = tmp_path / "v5_daily_ready"
+    ready.mkdir()
+    _repriced().to_csv(ready / "latest_repriced_board.csv", index=False)
+    settled = _official().assign(result_status="SETTLED")
+    settled.to_csv(ready / "official_recommendations.csv", index=False)
+
+    board = load_canonical_today_board(tmp_path)
+    assert "Official Locked" not in board.columns or not bool(board.iloc[0].get("Official Locked", False))
 
 
 def test_production_ui_state_distinguishes_ready_stale_missing_and_no_future():
