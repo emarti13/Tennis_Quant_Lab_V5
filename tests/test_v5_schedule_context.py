@@ -11,10 +11,28 @@ def _schedule():
     ])
 
 
-def test_repository_schedule_is_complete_three_year_source():
+def test_repository_schedule_is_supplemental_not_event_universe():
     schedule = load_schedule()
-    assert len(schedule) == 354
-    assert set(schedule["schedule_year"].dropna().astype(int)) == {2025, 2026, 2027}
+    assert not schedule.empty
+    assert {2025, 2026, 2027}.issubset(set(schedule["schedule_year"].dropna().astype(int)))
+
+
+def test_unmatched_historical_event_is_preserved_and_only_lacks_schedule_enrichment():
+    events = pd.DataFrame([{
+        "tourney_name": "Warehouse Only Challenger",
+        "tour": "MEN",
+        "match_date": "2026-07-11",
+        "surface": "Hard",
+        "city": "Somewhere",
+        "winner_name": "Player A",
+        "loser_name": "Player B",
+    }])
+    out = enrich_events_with_schedule(events, _schedule())
+    assert len(out) == 1
+    assert out.iloc[0]["tourney_name"] == "Warehouse Only Challenger"
+    assert out.iloc[0]["winner_name"] == "Player A"
+    assert out.iloc[0]["schedule_match_method"] == "unmatched"
+    assert pd.isna(out.iloc[0]["schedule_tournament_name"])
 
 
 def test_normalize_schedule_derives_matching_fields():
@@ -81,6 +99,5 @@ def test_ambiguous_candidates_fail_closed():
         "city": "Indian Wells",
     }])
     out = enrich_events_with_schedule(events, schedule)
-    assert out.iloc[0]["schedule_match_method"] in {"ambiguous", "fuzzy_high"}
-    if out.iloc[0]["schedule_match_method"] == "ambiguous":
-        assert pd.isna(out.iloc[0]["schedule_tournament_name"])
+    assert out.iloc[0]["schedule_match_method"] == "ambiguous"
+    assert pd.isna(out.iloc[0]["schedule_tournament_name"])
