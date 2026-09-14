@@ -7,7 +7,10 @@ on:
       - "v5_courtspeed_fetch.py"
       - "v5_refresh_court_conditions.py"
       - "v5_court_conditions_source.py"
+      - "v5_full_context_live.py"
       - "tests/test_v5_courtspeed_refresh.py"
+      - "tests/test_v5_court_conditions_resolution.py"
+      - "tests/test_v5_court_conditions_integration.py"
       - ".github/workflows/courtspeed_conditions_*.yml"
 
 permissions:
@@ -27,4 +30,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest lxml
-      - run: pytest tests/test_v5_courtspeed_refresh.py tests/test_v5_court_conditions_source.py tests/test_v5_court_conditions_no_network.py -q
+      - run: |
+          pytest \
+            tests/test_v5_courtspeed_refresh.py \
+            tests/test_v5_court_conditions_source.py \
+            tests/test_v5_court_conditions_resolution.py \
+            tests/test_v5_court_conditions_integration.py \
+            tests/test_v5_court_conditions_no_network.py -q
