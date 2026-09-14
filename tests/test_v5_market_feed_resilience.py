@@ -68,6 +68,16 @@ def test_live_workflow_treats_quota_skip_as_controlled_state():
     assert "oddspapi_daily/*_manifest.json" in text
 
 
+def test_fresh_live_market_promotion_dispatches_daily_forecast_recovery():
+    text = Path(".github/workflows/oddspapi_normalized_daily_v2.yml").read_text(encoding="utf-8")
+    assert "actions: write" in text
+    assert "Trigger daily forecast after fresh market promotion" in text
+    assert "gh workflow run v5_daily_predictions.yml --ref main" in text
+    assert text.index("Commit live feed and lightweight production artifacts") < text.index(
+        "Trigger daily forecast after fresh market promotion"
+    )
+
+
 def test_daily_predictions_use_recovery_windows_without_market_refresh_fanout():
     text = Path(".github/workflows/v5_daily_predictions.yml").read_text(encoding="utf-8")
     trigger = text.split("permissions:", 1)[0]
@@ -77,6 +87,13 @@ def test_daily_predictions_use_recovery_windows_without_market_refresh_fanout():
     assert "Check whether today's canonical forecast already exists" in text
     assert "python v5_build_daily_forecast_artifacts.py" in text
     assert "python v5_run_repricing.py" in text
+
+
+def test_daily_forecast_publication_discards_ephemeral_generated_changes_before_rebase():
+    text = Path(".github/workflows/v5_daily_predictions.yml").read_text(encoding="utf-8")
+    commit_step = text.split("Commit canonical daily production artifacts safely", 1)[1]
+    assert "git reset --hard HEAD" in commit_step
+    assert commit_step.index("git reset --hard HEAD") < commit_step.index("git pull --rebase origin main")
 
 
 def test_settlement_is_daily_after_history_recovery_not_chained_to_predictions():
