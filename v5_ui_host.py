@@ -6,14 +6,14 @@ from typing import Any, Mapping
 import pandas as pd
 
 from v5_active_board import get_active_board
-from v5_live_market import current_market_rows, market_feed_status
+from v5_live_market import current_market_rows
 from v5_ui_all_markets import render_all_markets_page
 from v5_ui_daily_board import render_daily_board
 from v5_ui_health import load_model_health, render_model_health_page
 from v5_ui_match_detail import render_match_detail
 from v5_ui_navigation import PAGE_ORDER
 from v5_ui_performance import load_performance_report, render_performance_page
-from v5_ui_production import load_canonical_today_board, load_repricing_status, production_ui_state
+from v5_ui_production import load_canonical_today_board, load_repricing_status, runtime_production_state
 from v5_ui_theme import apply_v5_theme
 from v5_ui_today import prepare_today_board, render_today_results
 
@@ -52,16 +52,6 @@ def _select_match(st_module, fixture_id: Any) -> None:
     st_module.rerun()
 
 
-def _effective_production_state(feed_status: dict, repricing_status: dict) -> str:
-    if feed_status.get("state") == "missing":
-        return "MISSING"
-    if not feed_status.get("fresh"):
-        return "STALE_PRICES"
-    if feed_status.get("state") == "no_future_fixtures":
-        return "NO_FUTURE_FIXTURES"
-    return production_ui_state(repricing_status)
-
-
 def _render_decision_feed_page(st_module, namespace: Mapping[str, Any], base_dir: Path) -> None:
     load_market_board = _required(namespace, "load_market_board")
     try:
@@ -69,11 +59,11 @@ def _render_decision_feed_page(st_module, namespace: Mapping[str, Any], base_dir
     except TypeError:
         market_source = load_market_board()
 
-    feed_status = market_feed_status(market_source)
+    runtime = runtime_production_state(market_source, load_repricing_status(base_dir))
+    feed_status = runtime["feed_status"]
+    production_state = runtime["state"]
     market_feed = current_market_rows(market_source)
     snapshot = market_snapshot(market_source)
-    repricing_status = load_repricing_status(base_dir)
-    production_state = _effective_production_state(feed_status, repricing_status)
 
     st_module.markdown('<div class="v5-eyebrow">Tennis Quant Lab V5</div>', unsafe_allow_html=True)
     st_module.markdown('<div class="v5-title">Decision Feed</div>', unsafe_allow_html=True)

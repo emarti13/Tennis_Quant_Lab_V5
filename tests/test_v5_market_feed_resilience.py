@@ -73,6 +73,9 @@ def test_fresh_live_market_promotion_dispatches_daily_forecast_recovery():
     assert "actions: write" in text
     assert "Trigger daily forecast after fresh market promotion" in text
     assert "gh workflow run v5_daily_predictions.yml --ref main -R emarti13/Tennis_Quant_Lab_V5" in text
+    dispatch = text.split("Trigger daily forecast after fresh market promotion", 1)[1]
+    assert "steps.live_pull.outputs.fresh_snapshot == 'true'" in dispatch
+    assert "github.event.schedule" not in dispatch
     assert text.index("Commit live feed and lightweight production artifacts") < text.index(
         "Trigger daily forecast after fresh market promotion"
     )

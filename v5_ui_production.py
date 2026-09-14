@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 
 from v5_interactive_production import production_board_to_today
+from v5_live_market import market_feed_status
 
 
 def _read_json(path: Path) -> dict:
@@ -70,13 +71,9 @@ def _overlay_official_recommendations(today: pd.DataFrame, official: pd.DataFram
     if work.empty:
         return today.copy()
 
-    # The production ledger contract guarantees at most one OPEN official row per
-    # fixture. Keep the earliest frozen row defensively if legacy data still has
-    # duplicates before the next repricing normalization.
     if "official_at_utc" in work.columns:
         work["_official_at"] = pd.to_datetime(work["official_at_utc"], errors="coerce", utc=True)
         work = work.sort_values(["fixture_id", "_official_at"], kind="stable", na_position="last")
-    work = work.drop_duplicates("fixture_id", keep="first")
 
     out = today.copy()
     index = {str(value): idx for idx, value in out["Fixture ID"].items() if _present(value)}
@@ -101,6 +98,24 @@ def production_ui_state(status: dict | None) -> str:
     if freshness in {"READY", "STALE_PRICES", "NO_FUTURE_FIXTURES", "MISSING", "STALE_FORECAST", "MISSING_FORECAST"}:
         return freshness
     return "MISSING"
+
+
+def runtime_production_state(market_source: pd.DataFrame | None, repricing_status: dict | None, *, now_utc=None) -> dict:
+    """Single live-health contract shared by Daily Board and Decision Feed."""
+    feed = market_feed_status(market_source, now_utc=now_utc)
+    if feed.get("state") == "missing":
+        state = "MISSING"
+    elif not feed.get("fresh"):
+        state = "STALE_PRICES"
+    elif feed.get("state") == "no_future_fixtures":
+        state = "NO_FUTURE_FIXTURES"
+    else:
+        state = production_ui_state(repricing_status)
+    return {
+        "state": state,
+        "feed_status": feed,
+        "repricing_status": repricing_status or {},
+    }
 
 
 def load_repricing_status(base_dir: str | Path) -> dict:

@@ -1,9 +1,9 @@
 name: OddsPapi Normalized Daily v2
 
 # Production-critical live pricing. One scheduled production refresh/day at
-# 00:02 UTC, before the day's match slate, plus intentional manual recovery.
-# Workflow edits do not trigger API calls. When live quota is genuinely
-# unavailable, preserve last-known-good artifacts and exit cleanly.
+# 00:02 UTC establishes the canonical market snapshot for the production day.
+# Daily Board and Decision Feed consume the same promoted snapshot/repricing
+# artifacts. Last-known-good pricing remains actionable until it is >24h old.
 on:
   workflow_dispatch:
   schedule:
