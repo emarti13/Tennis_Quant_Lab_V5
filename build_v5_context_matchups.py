@@ -14,6 +14,7 @@ from v5_model_calibration import calibrated_match_probability
 from v5_player_state import add_trajectory_features, build_player_state
 from v5_rolling_stats import build_rolling_stats
 from v5_settlement import canonical_name
+from v5_schedule_context import enrich_events_with_schedule
 from v5_travel_features import build_travel_features
 from v5_workload_features import build_workload_features
 
@@ -33,6 +34,7 @@ def enrich_player_history(player_rows: pd.DataFrame, tournament_registry: pd.Dat
     enriched = build_rolling_stats(player_rows)
     enriched = build_workload_features(enriched)
     enriched = add_trajectory_features(enriched)
+    enriched = enrich_events_with_schedule(enriched)
     if tournament_registry is not None and not tournament_registry.empty:
         enriched = build_travel_features(enriched, tournament_registry)
     enriched = add_derived_court_speed_features(enriched)
