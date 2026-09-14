@@ -1,0 +1,1 @@
+PR verification target: source adapter, snapshot, full-context ingestion, indoor weather suppression, internal court-speed override path, source diagnostics, and focused tests. Production API workflows must not be triggered for verification.
