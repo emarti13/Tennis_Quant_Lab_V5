@@ -1,0 +1,713 @@
+{
+  "status": "ok",
+  "board_rows": 766,
+  "review_rows": 469,
+  "pricing_actionable_rows_before_review_gates": 356,
+  "review_reason_counts": {
+    "SCORE_MARKET_NOT_PROMOTED": 324,
+    "OTHER_OR_LEGACY": 114,
+    "SURFACE_AUTO_DEFAULT_REVIEW": 20,
+    "STATE_CONFIDENCE_LT_45": 11
+  },
+  "surface_auto_default_review_rows": 754,
+  "low_confidence_rows": 260,
+  "production_market_disabled_rows": 692,
+  "tournaments": [
+    {
+      "tournament": "ATP Challenger Biella, Italy Men Singles",
+      "rows": 130,
+      "signals": {
+        "REVIEW": 86,
+        "PASS": 44
+      },
+      "review_reasons": {
+        "SCORE_MARKET_NOT_PROMOTED": 54,
+        "OTHER_OR_LEGACY": 27,
+        "SURFACE_AUTO_DEFAULT_REVIEW": 4,
+        "STATE_CONFIDENCE_LT_45": 1
+      },
+      "surface_sources": {
+        "Auto default \u2014 review": 130
+      },
+      "historical_surface_evidence": {
+        "rows": 0,
+        "surfaces": {},
+        "names": []
+      }
+    },
+    {
+      "tournament": "ATP Challenger Rennes, France Men Singles",
+      "rows": 44,
+      "signals": {
+        "PASS": 28,
+        "REVIEW": 16
+      },
+      "review_reasons": {
+        "SCORE_MARKET_NOT_PROMOTED": 15,
+        "SURFACE_AUTO_DEFAULT_REVIEW": 1
+      },
+      "surface_sources": {
+        "Auto default \u2014 review": 44
+      },
+      "historical_surface_evidence": {
+        "rows": 0,
+        "surfaces": {},
+        "names": []
+      }
+    },
+    {
+      "tournament": "ATP Challenger Tiburon, USA Men Singles",
+      "rows": 124,
+      "signals": {
+        "REVIEW": 79,
+        "PASS": 39,
+        "MISSING": 6
+      },
+      "review_reasons": {
+        "SCORE_MARKET_NOT_PROMOTED": 52,
+        "OTHER_OR_LEGACY": 22,
+        "STATE_CONFIDENCE_LT_45": 3,
+        "SURFACE_AUTO_DEFAULT_REVIEW": 2
+      },
+      "surface_sources": {
+        "Auto default \u2014 review": 124
+      },
+      "historical_surface_evidence": {
+        "rows": 0,
+        "surfaces": {},
+        "names": []
+      }
+    },
+    {
+      "tournament": "US Open Men Singles",
+      "rows": 12,
+      "signals": {
+        "PASS": 6,
+        "REVIEW": 5,
+        "BET": 1
+      },
+      "review_reasons": {
+        "SCORE_MARKET_NOT_PROMOTED": 5
+      },
+      "surface_sources": {
+        "Auto \u2014 tournament map": 12
+      },
+      "historical_surface_evidence": {
+        "rows": 5602,
+        "surfaces": {
+          "Hard": 5602
+        },
+        "names": [
+          "Australian Open",
+          "US Open"
+        ]
+      }
+    },
+    {
+      "tournament": "WTA Guadalajara, Mexico Women Singles",
+      "rows": 176,
+      "signals": {
+        "PASS": 94,
+        "REVIEW": 82
+      },
+      "review_reasons": {
+        "SCORE_MARKET_NOT_PROMOTED": 75,
+        "SURFACE_AUTO_DEFAULT_REVIEW": 7
+      },
+      "surface_sources": {
+        "Auto default \u2014 review": 176
+      },
+      "historical_surface_evidence": {
+        "rows": 0,
+        "surfaces": {},
+        "names": []
+      }
+    },
+    {
+      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "rows": 280,
+      "signals": {
+        "REVIEW": 201,
+        "PASS": 79
+      },
+      "review_reasons": {
+        "SCORE_MARKET_NOT_PROMOTED": 123,
+        "OTHER_OR_LEGACY": 65,
+        "STATE_CONFIDENCE_LT_45": 7,
+        "SURFACE_AUTO_DEFAULT_REVIEW": 6
+      },
+      "surface_sources": {
+        "Auto default \u2014 review": 280
+      },
+      "historical_surface_evidence": {
+        "rows": 0,
+        "surfaces": {},
+        "names": []
+      }
+    }
+  ],
+  "low_confidence_fixtures": [
+    {
+      "fixture_id": "id1204695374628480",
+      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "state_confidence_min": 0.0627705627705627,
+      "player1": {
+        "found": true,
+        "player": "Teodora Kostovic",
+        "surface": "Hard",
+        "form_matches": "3",
+        "surface_form_matches": "1",
+        "global_points": 400.0,
+        "surface_points": 195.0,
+        "state_confidence": 0.1166007905138339,
+        "state_confidence_label": "Low",
+        "form_logit": -0.0588773874830215,
+        "day_vol_logit": 0.1566035277981923,
+        "vol_percentile": 0.6299212598425197
+      },
+      "player2": {
+        "found": true,
+        "player": "Victoria Luiza Barros",
+        "surface": "Hard",
+        "form_matches": "1",
+        "surface_form_matches": "1",
+        "global_points": 115.0,
+        "surface_points": 115.0,
+        "state_confidence": 0.0627705627705627,
+        "state_confidence_label": "Low",
+        "form_logit": -0.03245,
+        "day_vol_logit": 0.164730339262841,
+        "vol_percentile": 0.6299212598425197
+      }
+    },
+    {
+      "fixture_id": "id1200390574632178",
+      "tournament": "ATP Challenger Tiburon, USA Men Singles",
+      "state_confidence_min": 0.0627705627705627,
+      "player1": {
+        "found": true,
+        "player": "Timo Legout",
+        "surface": "Hard",
+        "form_matches": "13",
+        "surface_form_matches": "11",
+        "global_points": 1675.0,
+        "surface_points": 1386.0,
+        "state_confidence": 0.4393939393939393,
+        "state_confidence_label": "Low",
+        "form_logit": 0.0740730685752794,
+        "day_vol_logit": 0.1789042299068179,
+        "vol_percentile": 68.77705627705627
+      },
+      "player2": {
+        "found": true,
+        "player": "Evan Bynoe",
+        "surface": "Hard",
+        "form_matches": "1",
+        "surface_form_matches": "1",
+        "global_points": 104.0,
+        "surface_points": 104.0,
+        "state_confidence": 0.0627705627705627,
+        "state_confidence_label": "Low",
+        "form_logit": -0.03245,
+        "day_vol_logit": 0.1676297777867327,
+        "vol_percentile": 2.5974025974025974
+      }
+    },
+    {
+      "fixture_id": "id1204695374628472",
+      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "state_confidence_min": 0.0627705627705627,
+      "player1": {
+        "found": true,
+        "player": "Vendula Valdmannova",
+        "surface": "Hard",
+        "form_matches": "1",
+        "surface_form_matches": "1",
+        "global_points": 126.0,
+        "surface_points": 126.0,
+        "state_confidence": 0.0627705627705627,
+        "state_confidence_label": "Low",
+        "form_logit": -0.03245,
+        "day_vol_logit": 0.164730339262841,
+        "vol_percentile": 0.6299212598425197
+      },
+      "player2": {
+        "found": true,
+        "player": "Laura Pigossi",
+        "surface": "Hard",
+        "form_matches": "43",
+        "surface_form_matches": "18",
+        "global_points": 6364.0,
+        "surface_points": 2672.0,
+        "state_confidence": 0.6686507936507937,
+        "state_confidence_label": "Medium",
+        "form_logit": -0.0481571996614101,
+        "day_vol_logit": 0.1696183297725007,
+        "vol_percentile": 49.60629921259843
+      }
+    },
+    {
+      "fixture_id": "id1204695374628464",
+      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "state_confidence_min": 0.4055555555555555,
+      "player1": {
+        "found": true,
+        "player": "Suzan Lamens",
+        "surface": "Hard",
+        "form_matches": "67",
+        "surface_form_matches": "42",
+        "global_points": 9522.0,
+        "surface_points": 5792.0,
+        "state_confidence": 0.7832670203359858,
+        "state_confidence_label": "High",
+        "form_logit": -0.0618225423042507,
+        "day_vol_logit": 0.1764761137065941,
+        "vol_percentile": 64.7244094488189
+      },
+      "player2": {
+        "found": true,
+        "player": "Carolina Alves",
+        "surface": "Hard",
+        "form_matches": "16",
+        "surface_form_matches": "5",
+        "global_points": 2041.0,
+        "surface_points": 610.0,
+        "state_confidence": 0.4055555555555555,
+        "state_confidence_label": "Low",
+        "form_logit": -0.0777600676741303,
+        "day_vol_logit": 0.1662775175287577,
+        "vol_percentile": 40.0
+      }
+    },
+    {
+      "fixture_id": "id1200390574632186",
+      "tournament": "ATP Challenger Tiburon, USA Men Singles",
+      "state_confidence_min": 0.2175324675324675,
+      "player1": {
+        "found": true,
+        "player": "Ozan Baris",
+        "surface": "Hard",
+        "form_matches": "15",
+        "surface_form_matches": "14",
+        "global_points": 2210.0,
+        "surface_points": 2110.0,
+        "state_confidence": 0.4827380952380952,
+        "state_confidence_label": "Medium",
+        "form_logit": -0.0040393872845625,
+        "day_vol_logit": 0.1785595319086067,
+        "vol_percentile": 66.88311688311688
+      },
+      "player2": {
+        "found": true,
+        "player": "Lorenzo Claverie",
+        "surface": "Hard",
+        "form_matches": "8",
+        "surface_form_matches": "1",
+        "global_points": 1238.0,
+        "surface_points": 133.0,
+        "state_confidence": 0.2175324675324675,
+        "state_confidence_label": "Low",
+        "form_logit": -0.068033002600946,
+        "day_vol_logit": 0.1544757374974123,
+        "vol_percentile": 7.467532467532467
+      }
+    },
+    {
+      "fixture_id": "id1204695374628458",
+      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "state_confidence_min": 0.4232026143790849,
+      "player1": {
+        "found": true,
+        "player": "Darja Semenistaja",
+        "surface": "Hard",
+        "form_matches": "14",
+        "surface_form_matches": "8",
+        "global_points": 1742.0,
+        "surface_points": 919.0,
+        "state_confidence": 0.4232026143790849,
+        "state_confidence_label": "Low",
+        "form_logit": -0.1309757832865409,
+        "day_vol_logit": 0.1656704807253378,
+        "vol_percentile": 37.00787401574803
+      },
+      "player2": {
+        "found": true,
+        "player": "Paula Badosa",
+        "surface": "Hard",
+        "form_matches": "287",
+        "surface_form_matches": "160",
+        "global_points": 41331.0,
+        "surface_points": 22651.0,
+        "state_confidence": 0.9370664878329182,
+        "state_confidence_label": "High",
+        "form_logit": 0.0352818621477707,
+        "day_vol_logit": 0.1626173705509603,
+        "vol_percentile": 37.32283464566929
+      }
+    },
+    {
+      "fixture_id": "id1204695374629888",
+      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "state_confidence_min": 0.1083333333333333,
+      "player1": {
+        "found": true,
+        "player": "Xiaodi You",
+        "surface": "Hard",
+        "form_matches": "15",
+        "surface_form_matches": "13",
+        "global_points": 1780.0,
+        "surface_points": 1571.0,
+        "state_confidence": 0.4763975155279503,
+        "state_confidence_label": "Medium",
+        "form_logit": -0.1443988571442281,
+        "day_vol_logit": 0.1612362404046672,
+        "vol_percentile": 26.456692913385822
+      },
+      "player2": {
+        "found": true,
+        "player": "Victoria Bosio",
+        "surface": "Hard",
+        "form_matches": "4",
+        "surface_form_matches": "0",
+        "global_points": 731.0,
+        "surface_points": 0.0,
+        "state_confidence": 0.1083333333333333,
+        "state_confidence_label": "Low",
+        "form_logit": 0.01334696058361,
+        "day_vol_logit": 0.155391731460897,
+        "vol_percentile": 2.677165354330709
+      }
+    },
+    {
+      "fixture_id": "id1204695374639922",
+      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "state_confidence_min": 0.2083333333333333,
+      "player1": {
+        "found": true,
+        "player": "Whitney Osuigwe",
+        "surface": "Hard",
+        "form_matches": "18",
+        "surface_form_matches": "17",
+        "global_points": 2303.0,
+        "surface_points": 2197.0,
+        "state_confidence": 0.5282651072124757,
+        "state_confidence_label": "Medium",
+        "form_logit": -0.1301766355168395,
+        "day_vol_logit": 0.1533189172923731,
+        "vol_percentile": 14.330708661417324
+      },
+      "player2": {
+        "found": true,
+        "player": "Anastasia Tikhonova",
+        "surface": "Hard",
+        "form_matches": "6",
+        "surface_form_matches": "2",
+        "global_points": 809.0,
+        "surface_points": 202.0,
+        "state_confidence": 0.2083333333333333,
+        "state_confidence_label": "Low",
+        "form_logit": -0.1152160810882444,
+        "day_vol_logit": 0.1477402989946832,
+        "vol_percentile": 0.6299212598425197
+      }
+    },
+    {
+      "fixture_id": "id1200390574632184",
+      "tournament": "ATP Challenger Tiburon, USA Men Singles",
+      "state_confidence_min": 0.1166007905138339,
+      "player1": {
+        "found": true,
+        "player": "Fryderyk Lechno-Wasiutynski",
+        "surface": "Hard",
+        "form_matches": "3",
+        "surface_form_matches": "1",
+        "global_points": 373.0,
+        "surface_points": 116.0,
+        "state_confidence": 0.1166007905138339,
+        "state_confidence_label": "Low",
+        "form_logit": -0.0758621748760429,
+        "day_vol_logit": 0.1605103328783571,
+        "vol_percentile": 3.463203463203463
+      },
+      "player2": {
+        "found": true,
+        "player": "Evan Zhu",
+        "surface": "Hard",
+        "form_matches": "73",
+        "surface_form_matches": "52",
+        "global_points": 10760.0,
+        "surface_points": 7702.0,
+        "state_confidence": 0.803763440860215,
+        "state_confidence_label": "High",
+        "form_logit": -0.1728107156619913,
+        "day_vol_logit": 0.1185143902145529,
+        "vol_percentile": 1.1363636363636365
+      }
+    },
+    {
+      "fixture_id": "id1204695374630222",
+      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "state_confidence_min": 0.1655518394648829,
+      "player1": {
+        "found": true,
+        "player": "Justina Mikulskyte",
+        "surface": "Hard",
+        "form_matches": "3",
+        "surface_form_matches": "3",
+        "global_points": 312.0,
+        "surface_points": 312.0,
+        "state_confidence": 0.1655518394648829,
+        "state_confidence_label": "Low",
+        "form_logit": 0.0097032021359302,
+        "day_vol_logit": 0.1632904129518764,
+        "vol_percentile": 11.023622047244094
+      },
+      "player2": {
+        "found": true,
+        "player": "Chloe Paquet",
+        "surface": "Hard",
+        "form_matches": "65",
+        "surface_form_matches": "26",
+        "global_points": 9133.0,
+        "surface_points": 3432.0,
+        "state_confidence": 0.7498366013071895,
+        "state_confidence_label": "Medium",
+        "form_logit": -0.1484036293124797,
+        "day_vol_logit": 0.142629007290697,
+        "vol_percentile": 11.653543307086617
+      }
+    },
+    {
+      "fixture_id": "id1200390574632180",
+      "tournament": "ATP Challenger Tiburon, USA Men Singles",
+      "state_confidence_min": 0.0627705627705627,
+      "player1": {
+        "found": true,
+        "player": "Bryce Nakashima",
+        "surface": "Hard",
+        "form_matches": "1",
+        "surface_form_matches": "1",
+        "global_points": 127.0,
+        "surface_points": 127.0,
+        "state_confidence": 0.0627705627705627,
+        "state_confidence_label": "Low",
+        "form_logit": -0.03245,
+        "day_vol_logit": 0.1676297777867327,
+        "vol_percentile": 2.5974025974025974
+      },
+      "player2": {
+        "found": true,
+        "player": "Kaylan Bigun",
+        "surface": "Hard",
+        "form_matches": "23",
+        "surface_form_matches": "16",
+        "global_points": 3057.0,
+        "surface_points": 2156.0,
+        "state_confidence": 0.5630590339892665,
+        "state_confidence_label": "Medium",
+        "form_logit": -0.1063845563173169,
+        "day_vol_logit": 0.1556312496847111,
+        "vol_percentile": 17.965367965367964
+      }
+    },
+    {
+      "fixture_id": "id1204695374628474",
+      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "state_confidence_min": 0.312636165577342,
+      "player1": {
+        "found": true,
+        "player": "Anna Blinkova",
+        "surface": "Hard",
+        "form_matches": "262",
+        "surface_form_matches": "172",
+        "global_points": 37522.0,
+        "surface_points": 24333.0,
+        "state_confidence": 0.934669939989089,
+        "state_confidence_label": "High",
+        "form_logit": -0.0633517162080803,
+        "day_vol_logit": 0.1642499823178906,
+        "vol_percentile": 40.78740157480315
+      },
+      "player2": {
+        "found": true,
+        "player": "Carol Young Suh Lee",
+        "surface": "Hard",
+        "form_matches": "7",
+        "surface_form_matches": "7",
+        "global_points": 849.0,
+        "surface_points": 849.0,
+        "state_confidence": 0.312636165577342,
+        "state_confidence_label": "Low",
+        "form_logit": -0.0202873296115015,
+        "day_vol_logit": 0.1754016512314124,
+        "vol_percentile": 75.43307086614173
+      }
+    },
+    {
+      "fixture_id": "id1204695374628460",
+      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "state_confidence_min": 0.2299999999999999,
+      "player1": {
+        "found": true,
+        "player": "Mary Stoiana",
+        "surface": "Hard",
+        "form_matches": "5",
+        "surface_form_matches": "4",
+        "global_points": 753.0,
+        "surface_points": 590.0,
+        "state_confidence": 0.2299999999999999,
+        "state_confidence_label": "Low",
+        "form_logit": -0.0842642770245143,
+        "day_vol_logit": 0.1492920595878666,
+        "vol_percentile": 0.4724409448818897
+      },
+      "player2": {
+        "found": true,
+        "player": "Claire Liu",
+        "surface": "Hard",
+        "form_matches": "107",
+        "surface_form_matches": "67",
+        "global_points": 15748.0,
+        "surface_points": 9683.0,
+        "state_confidence": 0.8521832498210451,
+        "state_confidence_label": "High",
+        "form_logit": -0.0434083199420933,
+        "day_vol_logit": 0.1608616388205066,
+        "vol_percentile": 32.91338582677165
+      }
+    },
+    {
+      "fixture_id": "id1204695374628478",
+      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "state_confidence_min": 0.1174242424242424,
+      "player1": {
+        "found": true,
+        "player": "Nauhany Vitoria Leme Da Silva",
+        "surface": "Hard",
+        "form_matches": "2",
+        "surface_form_matches": "2",
+        "global_points": 296.0,
+        "surface_points": 296.0,
+        "state_confidence": 0.1174242424242424,
+        "state_confidence_label": "Low",
+        "form_logit": -0.0341299879086862,
+        "day_vol_logit": 0.1601890353096671,
+        "vol_percentile": 0.6299212598425197
+      },
+      "player2": {
+        "found": true,
+        "player": "Astra Sharma",
+        "surface": "Hard",
+        "form_matches": "75",
+        "surface_form_matches": "29",
+        "global_points": 10991.0,
+        "surface_points": 4182.0,
+        "state_confidence": 0.7734143049932525,
+        "state_confidence_label": "High",
+        "form_logit": -0.0773220607189279,
+        "day_vol_logit": 0.1670864128087238,
+        "vol_percentile": 45.03937007874016
+      }
+    },
+    {
+      "fixture_id": "id1200342574628294",
+      "tournament": "ATP Challenger Biella, Italy Men Singles",
+      "state_confidence_min": 0.3103896103896104,
+      "player1": {
+        "found": true,
+        "player": "Mika Petkovic",
+        "surface": "Hard",
+        "form_matches": "15",
+        "surface_form_matches": "1",
+        "global_points": 2185.0,
+        "surface_points": 204.0,
+        "state_confidence": 0.3103896103896104,
+        "state_confidence_label": "Low",
+        "form_logit": -0.0493450258568529,
+        "day_vol_logit": 0.1532379958108378,
+        "vol_percentile": 12.012987012987011
+      },
+      "player2": {
+        "found": true,
+        "player": "Felix Gill",
+        "surface": "Hard",
+        "form_matches": "72",
+        "surface_form_matches": "16",
+        "global_points": 11330.0,
+        "surface_points": 2540.0,
+        "state_confidence": 0.7240802675585285,
+        "state_confidence_label": "Medium",
+        "form_logit": -0.0681094429696014,
+        "day_vol_logit": 0.1783605418473626,
+        "vol_percentile": 61.36363636363637
+      }
+    },
+    {
+      "fixture_id": "id1200342574628306",
+      "tournament": "ATP Challenger Biella, Italy Men Singles",
+      "state_confidence_min": 0.2785714285714286,
+      "player1": {
+        "found": true,
+        "player": "Gabriele Piraino",
+        "surface": "Hard",
+        "form_matches": "47",
+        "surface_form_matches": "7",
+        "global_points": 6618.0,
+        "surface_points": 1055.0,
+        "state_confidence": 0.6000877963125548,
+        "state_confidence_label": "Medium",
+        "form_logit": -0.0417866184835743,
+        "day_vol_logit": 0.1858998488315519,
+        "vol_percentile": 76.24458874458875
+      },
+      "player2": {
+        "found": true,
+        "player": "Samuele Pieri",
+        "surface": "Hard",
+        "form_matches": "15",
+        "surface_form_matches": "0",
+        "global_points": 2316.0,
+        "surface_points": 0.0,
+        "state_confidence": 0.2785714285714286,
+        "state_confidence_label": "Low",
+        "form_logit": -0.0619819999827902,
+        "day_vol_logit": 0.1560059977239336,
+        "vol_percentile": 15.0974025974026
+      }
+    },
+    {
+      "fixture_id": "id1200342574628312",
+      "tournament": "ATP Challenger Biella, Italy Men Singles",
+      "state_confidence_min": 0.4296610169491525,
+      "player1": {
+        "found": true,
+        "player": "Gianluca Cadenasso",
+        "surface": "Hard",
+        "form_matches": "39",
+        "surface_form_matches": "0",
+        "global_points": 5279.0,
+        "surface_points": 0.0,
+        "state_confidence": 0.4296610169491525,
+        "state_confidence_label": "Low",
+        "form_logit": -0.0659493731065472,
+        "day_vol_logit": 0.1621065567180061,
+        "vol_percentile": 30.1948051948052
+      },
+      "player2": {
+        "found": true,
+        "player": "Francesco Forti",
+        "surface": "Hard",
+        "form_matches": "89",
+        "surface_form_matches": "14",
+        "global_points": 12436.0,
+        "surface_points": 2190.0,
+        "state_confidence": 0.734900611620795,
+        "state_confidence_label": "Medium",
+        "form_logit": -0.050341037926384,
+        "day_vol_logit": 0.1823153362906123,
+        "vol_percentile": 67.58658008658008
+      }
+    }
+  ],
+  "forecast_rows": 37
+}
