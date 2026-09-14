@@ -7,6 +7,7 @@ on:
     paths:
       - 'diagnose_signal_confidence_gate.py'
       - 'run_signal_confidence_gate_audit.py'
+      - 'diagnose_live_review_root_causes.py'
       - 'tests/test_signal_confidence_gate_diagnostic.py'
       - '.github/workflows/state_confidence_gate_audit.yml'
   workflow_dispatch:
@@ -31,17 +32,19 @@ jobs:
           python-version: '3.12'
           cache: pip
       - name: Install focused dependencies
-        run: pip install pandas numpy pytest
+        run: pip install pandas numpy pytest pyarrow
       - name: Test diagnostic contract
         run: python -m pytest tests/test_signal_confidence_gate_diagnostic.py -q
       - name: Run frozen-history audit
         run: python run_signal_confidence_gate_audit.py
+      - name: Trace live REVIEW root causes
+        run: python diagnose_live_review_root_causes.py
       - name: Persist audit evidence
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add experiments/acceptance/signal_confidence_gate_audit.json docs/experiments/2026-09-14-signal-confidence-gate.md
+          git add experiments/acceptance/signal_confidence_gate_audit.json docs/experiments/2026-09-14-signal-confidence-gate.md docs/experiments/2026-09-14-live-review-root-cause.json
           if ! git diff --cached --quiet; then
-            git commit -m 'Record state confidence gate audit'
+            git commit -m 'Record confidence and live REVIEW diagnostics'
             git push origin HEAD:diagnostics/state-confidence-gate-audit
           fi
