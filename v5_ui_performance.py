@@ -162,7 +162,7 @@ def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[st
     columns[0].metric("Official record" if headline["scope"] == "official" else "Market record", headline["market_record"])
     columns[1].metric("Fixture evidence", headline["fixture_record"])
     columns[2].metric("Official ROI" if headline["scope"] == "official" else "Market ROI", _percent(headline["market_roi"]))
-    columns[3].metric("Max plays / fixture", str(headline["max_correlated_markets"]))
+    columns[3].metric("Max correlated markets", str(headline["max_correlated_markets"]))
 
     if headline["scope"] == "official":
         meta = st_module.columns(3)
