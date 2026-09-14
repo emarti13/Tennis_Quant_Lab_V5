@@ -5,6 +5,8 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+from v5_fixture_accuracy import fixture_accuracy_metrics, fixture_accuracy_records
+
 BASE = Path(__file__).resolve().parent
 DEFAULT_LEDGER = BASE / "v5_daily_ready" / "frozen_predictions.csv"
 PRODUCTION_CANDIDATE_PATH = BASE / "experiments" / "acceptance" / "production_candidate.json"
@@ -35,12 +37,7 @@ def filter_current_engine_rows(df, current_model_version):
 
 
 def results_ledger_views(df, current_model_version):
-    """Return mutually understandable result scopes for the UI.
-
-    current_engine: settled BET/LEAN rows made by the presently promoted model version.
-    historical_actionable: settled BET/LEAN rows from every older model version.
-    all_settled: every settled modeled market row, including PASS/REVIEW audit observations.
-    """
+    """Return legacy market-level audit scopes without using them as accuracy headlines."""
     if df is None or df.empty:
         empty = pd.DataFrame(columns=list(df.columns) if df is not None else [])
         return {"current_engine": empty.copy(), "historical_actionable": empty.copy(), "all_settled": empty.copy()}
@@ -76,7 +73,8 @@ def load_accuracy_ledger(path=DEFAULT_LEDGER):
         if col in df.columns:
             df[col] = pd.to_datetime(df[col], errors="coerce", utc=True)
     for col in (
-        "model_probability", "edge_vs_consensus", "expected_value",
+        "model_probability", "full_context_probability_p1", "edge_vs_consensus", "expected_value",
+        "expected_margin", "expected_total", "winner_games", "loser_games",
         "state_confidence", "profit_units", "best_american_odds",
         "model_fair_american", "line",
     ):
@@ -86,6 +84,7 @@ def load_accuracy_ledger(path=DEFAULT_LEDGER):
 
 
 def accuracy_metrics(df, *, actionable_only=True):
+    """Legacy market-outcome metric helper retained for audit compatibility."""
     if df is None or df.empty:
         return {
             "frozen": 0, "settled": 0, "decisions": 0, "wins": 0,
@@ -115,6 +114,11 @@ def accuracy_metrics(df, *, actionable_only=True):
         "units": float(units),
         "roi": _safe_div(units, decisions),
     }
+
+
+def fixture_headline_metrics(records):
+    """Public UI helper: headline accuracy is one observation per settled fixture."""
+    return fixture_accuracy_metrics(records)
 
 
 def _performance_table(decisions, group_col, label):
@@ -177,11 +181,38 @@ def _display_ledger(frame):
     )
 
 
+def _display_fixture_accuracy(records):
+    if records is None or records.empty:
+        st.info("No settled fixture forecasts are available yet.")
+        return
+    columns = [
+        c for c in [
+            "settled_at_utc", "tournament", "tour", "surface", "player1", "player2",
+            "p1_probability", "predicted_winner", "actual_winner", "winner_correct",
+            "expected_margin", "actual_margin", "abs_margin_error",
+            "expected_total", "actual_total", "abs_total_error", "result_score",
+        ] if c in records.columns
+    ]
+    st.dataframe(
+        records[columns].style.format({
+            "p1_probability": "{:.1%}",
+            "expected_margin": "{:+.2f}",
+            "actual_margin": "{:+.2f}",
+            "abs_margin_error": "{:.2f}",
+            "expected_total": "{:.2f}",
+            "actual_total": "{:.0f}",
+            "abs_total_error": "{:.2f}",
+        }),
+        use_container_width=True,
+        hide_index=True,
+    )
+
+
 def render_results_accuracy(ledger_path=DEFAULT_LEDGER):
     st.title("Results & Accuracy")
     st.caption(
-        "Frozen pre-match V5 predictions only. Results are settled automatically from "
-        "TennisMyLife and the original model probabilities and sportsbook prices are never rewritten."
+        "One frozen pre-match forecast per settled fixture. This page grades V5's tennis prediction — "
+        "winner probability, game margin and total games — independently of which market became the official bet."
     )
 
     df = load_accuracy_ledger(ledger_path)
@@ -189,115 +220,70 @@ def render_results_accuracy(ledger_path=DEFAULT_LEDGER):
         st.info("No frozen predictions have been logged yet.")
         return
 
-    current_version = _current_model_version()
-    views = results_ledger_views(df, current_version)
-    current_df = views["current_engine"]
-    current_metrics = accuracy_metrics(current_df)
-    historical_metrics = accuracy_metrics(df)
-    use_current = current_metrics["decisions"] > 0
-    headline = current_metrics if use_current else historical_metrics
+    fixtures = fixture_accuracy_records(df)
+    headline = fixture_headline_metrics(fixtures)
 
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Current Engine Decisions" if use_current else "Recommended Decisions", f"{headline['decisions']:,}")
-    c2.metric(
-        "Current Engine Win Rate" if use_current else "Recommended Win Rate",
-        "—" if pd.isna(headline["win_rate"]) else f"{headline['win_rate']:.1%}",
-        help="WIN/(WIN+LOSS). Pushes and voids are excluded.",
-    )
-    c3.metric(
-        "Current Engine ROI" if use_current else "Recommended ROI",
-        "—" if pd.isna(headline["roi"]) else f"{headline['roi']:+.1%}",
-        help="Profit units divided by settled WIN/LOSS recommendations. Pushes and voids are excluded.",
-    )
-    c4.metric("Units", f"{headline['units']:+.2f}")
-
-    if use_current:
-        st.caption(
-            f"Current full-context engine {current_version}: {headline['wins']}-{headline['losses']} across "
-            f"{headline['decisions']} settled BET/LEAN recommendations. Historical recommendation results are retained below for audit."
-        )
-    else:
-        st.caption(
-            f"Recommended settled: {headline['settled']:,} • Recommended decisions: {headline['decisions']:,}. "
-            "Headline performance includes BET + LEAN only; PASS and REVIEW are audit observations, not recommendations."
-        )
+    c1, c2, c3, c4, c5 = st.columns(5)
+    c1.metric("Settled fixtures", f"{headline['settled_fixtures']:,}")
+    c2.metric("Winner accuracy", "—" if pd.isna(headline["winner_accuracy"]) else f"{headline['winner_accuracy']:.1%}")
+    c3.metric("Brier score", "—" if pd.isna(headline["brier_score"]) else f"{headline['brier_score']:.3f}")
+    c4.metric("Margin MAE", "—" if pd.isna(headline["margin_mae"]) else f"{headline['margin_mae']:.2f} games")
+    c5.metric("Total MAE", "—" if pd.isna(headline["total_mae"]) else f"{headline['total_mae']:.2f} games")
 
     st.info(
-        "The thousands of stored rows are not thousands of recommendations. They include alternate spreads/totals and PASS/REVIEW model observations. "
-        "The current-engine record below uses only settled BET/LEAN rows produced by the presently promoted model version."
+        "Each match counts once here even though the frozen ledger contains moneyline, spread and total rows. "
+        "Betting ROI and official recommendation results belong on Performance, not in these headline accuracy metrics."
     )
 
-    decisions = _decision_rows(current_df if use_current else df)
-    scope_label = "Current Engine" if use_current else "Recommended"
+    st.subheader("Fixture forecast results")
+    _display_fixture_accuracy(fixtures)
 
-    st.subheader(f"{scope_label} Performance by Signal")
-    perf_signal = _performance_table(decisions, "signal", "Signal")
-    if perf_signal.empty:
-        st.info("Performance tables populate after settled WIN/LOSS decisions are available.")
-    else:
-        st.dataframe(
-            perf_signal.style.format({
-                "Win Rate": "{:.1%}", "Units": "{:+.2f}", "ROI": "{:+.1%}",
-                "Avg Model Edge": "{:+.1%}", "Avg Model EV": "{:+.1%}",
-            }),
-            use_container_width=True,
-            hide_index=True,
-        )
-
-    st.subheader(f"{scope_label} Performance by Market")
-    perf_market = _performance_table(decisions, "market_group", "Market")
-    if not perf_market.empty:
-        st.dataframe(
-            perf_market.style.format({
-                "Win Rate": "{:.1%}", "Units": "{:+.2f}", "ROI": "{:+.1%}",
-                "Avg Model Edge": "{:+.1%}", "Avg Model EV": "{:+.1%}",
-            }),
-            use_container_width=True,
-            hide_index=True,
-        )
-
-    st.subheader("Calibration")
-    calibration = decisions[pd.to_numeric(decisions.get("model_probability"), errors="coerce").notna()].copy()
+    st.subheader("Match-winner calibration")
+    calibration = fixtures[
+        pd.to_numeric(fixtures.get("p1_probability"), errors="coerce").notna()
+        & pd.to_numeric(fixtures.get("actual_p1_win"), errors="coerce").notna()
+    ].copy() if not fixtures.empty else pd.DataFrame()
     if len(calibration) >= 20:
-        calibration["actual"] = (calibration["settled_result"].astype(str).str.upper() == "WIN").astype(int)
-        calibration["model_probability"] = pd.to_numeric(calibration["model_probability"], errors="coerce")
         calibration["bucket"] = pd.cut(
-            calibration["model_probability"],
+            pd.to_numeric(calibration["p1_probability"], errors="coerce"),
             bins=[0, .4, .45, .5, .55, .6, .65, .7, .75, .8, 1.0],
             include_lowest=True,
         )
         cal = calibration.groupby("bucket", observed=True).agg(
-            N=("actual", "size"),
-            Avg_Prediction=("model_probability", "mean"),
-            Actual_Win_Rate=("actual", "mean"),
+            N=("actual_p1_win", "size"),
+            Avg_Prediction=("p1_probability", "mean"),
+            Actual_P1_Win_Rate=("actual_p1_win", "mean"),
         ).reset_index()
-        cal["Calibration_Error"] = cal["Actual_Win_Rate"] - cal["Avg_Prediction"]
+        cal["Calibration_Error"] = cal["Actual_P1_Win_Rate"] - cal["Avg_Prediction"]
         st.dataframe(
             cal.style.format({
                 "Avg_Prediction": "{:.1%}",
-                "Actual_Win_Rate": "{:.1%}",
+                "Actual_P1_Win_Rate": "{:.1%}",
                 "Calibration_Error": "{:+.1%}",
             }),
             use_container_width=True,
             hide_index=True,
         )
     else:
-        st.info(f"Calibration table begins at 20 WIN/LOSS decisions in this scope. Current: {len(calibration)}.")
+        st.info(f"Calibration table begins at 20 settled fixture forecasts. Current: {len(calibration)}.")
 
-    st.subheader("Current Engine Settled Recommendations")
-    st.caption(
-        f"Only settled BET/LEAN rows from {current_version or 'the current promoted model'} are shown here. "
-        f"Rows in this table: {len(views['current_engine'])}."
-    )
-    _display_ledger(views["current_engine"])
-
-    with st.expander(f"Legacy BET + LEAN recommendations ({len(views['historical_actionable'])})", expanded=False):
-        st.caption("These are real historical recommendations from older V5 generations. They are preserved, but they do not measure the current engine.")
-        _display_ledger(views["historical_actionable"])
-
-    with st.expander(f"All settled model-market rows — audit only ({len(views['all_settled'])})", expanded=False):
+    current_version = _current_model_version()
+    views = results_ledger_views(df, current_version)
+    with st.expander("Market-level settlement audit — not Results Accuracy headline", expanded=False):
         st.caption(
-            "This is the large table: every settled modeled market row, including PASS/REVIEW and alternate lines. "
-            "It is diagnostic evidence only and is intentionally excluded from the current-engine recommendation record."
+            "These rows preserve historical market settlement evidence. BET/LEAN/PASS/REVIEW and alternate lines may all exist here, "
+            "but they do not multiply the fixture-level model accuracy observation above."
         )
+        current_df = views["current_engine"]
+        decisions = _decision_rows(current_df if not current_df.empty else df)
+        perf_signal = _performance_table(decisions, "signal", "Signal")
+        if not perf_signal.empty:
+            st.dataframe(
+                perf_signal.style.format({
+                    "Win Rate": "{:.1%}", "Units": "{:+.2f}", "ROI": "{:+.1%}",
+                    "Avg Model Edge": "{:+.1%}", "Avg Model EV": "{:+.1%}",
+                }),
+                use_container_width=True,
+                hide_index=True,
+            )
         _display_ledger(views["all_settled"])
