@@ -52,10 +52,11 @@ def test_production_board_adapter_preserves_models_and_context():
     assert row["Travel Context"] != "Unavailable"
 
 
-def test_today_host_reads_canonical_production_artifacts_only():
+def test_decision_feed_reads_active_or_canonical_artifacts_without_running_model():
     source = Path("v5_ui_host.py").read_text(encoding="utf-8")
-    render_block = source[source.index("def _render_today_page"):source.index("\ndef _canonical_prepared_board")]
+    render_block = source[source.index("def _render_decision_feed_page"):source.index("\ndef _canonical_prepared_board")]
     assert "load_canonical_today_board(" in render_block
+    assert "get_active_board(" in render_block
     assert "run_interactive_production(" not in render_block
     assert "build_context_warehouse(" not in render_block
     assert '"_batch_one_match"' not in render_block
