@@ -151,18 +151,18 @@ def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[st
     st_module.markdown('<div class="v5-eyebrow">Validated results</div>', unsafe_allow_html=True)
     st_module.markdown('<div class="v5-title">Performance</div>', unsafe_allow_html=True)
     if headline["scope"] == "official":
-        subtitle = "Headline results count each official market recommendation once. Price-refresh snapshots and PASS / REVIEW observations are audit data, not bets."
+        subtitle = "Headline results count one official top play per fixture. Supporting pricing candidates, price-refresh snapshots and PASS / REVIEW observations are audit data, not additional bets."
     elif headline["scope"] == "current_engine":
-        subtitle = "Current full-context engine BET + LEAN results are shown while the official recommendation ledger accumulates. Legacy rows remain separate."
+        subtitle = "Current full-context engine BET + LEAN results are shown while the one-play official recommendation ledger accumulates. Legacy rows remain separate."
     else:
-        subtitle = "Historical BET + LEAN results are shown while the official recommendation ledger accumulates. PASS / REVIEW rows are audit-only."
+        subtitle = "Historical BET + LEAN results are shown while the one-play official recommendation ledger accumulates. PASS / REVIEW rows are audit-only."
     st_module.markdown(f'<div class="v5-subtitle">{subtitle}</div>', unsafe_allow_html=True)
 
     columns = st_module.columns(4)
-    columns[0].metric("Market record", headline["market_record"])
+    columns[0].metric("Official record" if headline["scope"] == "official" else "Market record", headline["market_record"])
     columns[1].metric("Fixture evidence", headline["fixture_record"])
-    columns[2].metric("Market ROI", _percent(headline["market_roi"]))
-    columns[3].metric("Max correlated markets", str(headline["max_correlated_markets"]))
+    columns[2].metric("Official ROI" if headline["scope"] == "official" else "Market ROI", _percent(headline["market_roi"]))
+    columns[3].metric("Max plays / fixture", str(headline["max_correlated_markets"]))
 
     if headline["scope"] == "official":
         meta = st_module.columns(3)
@@ -180,7 +180,7 @@ def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[st
             with st_module.expander("Official performance by price band", expanded=False):
                 st_module.dataframe(pd.DataFrame.from_dict(by_price, orient="index"), use_container_width=True)
 
-    st_module.caption("Multiple correlated markets from one match remain valid recommendations, but fixture-cluster evidence is reported separately from raw market outcomes.")
+    st_module.caption("Production Performance settles one official top play per fixture. Supporting pricing candidates are excluded from the betting record and remain available only as audit evidence.")
 
     legacy = report.get("legacy") or ({} if headline["scope"] == "official" else report)
     with st_module.expander("Legacy and all-market audit", expanded=False):
