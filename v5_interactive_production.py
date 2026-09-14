@@ -20,6 +20,7 @@ from v5_daily_batch import (
     eligible_pre_match,
     infer_best_of,
     infer_surface,
+    resolve_fixture_surface,
     rank_board,
 )
 from v5_full_context_live import build_live_enriched_history, build_live_matchup_features_from_enriched
@@ -43,7 +44,7 @@ COURT_CONDITION_DISPLAY_FIELDS = (
 _SIGNAL_PRIORITY = {"BET": 0, "LEAN": 1, "REVIEW": 2, "PASS": 3, "N/A": 4, "NO PRICE": 5}
 
 
-def _prepare_with_overrides(fixture_rows, ratings_by_tour, summary):
+def _prepare_with_overrides(fixture_rows, ratings_by_tour, summary, context_history=None):
     first = fixture_rows.iloc[0]
     tournament = first.get("tournament")
     tour_override = str(first.get("v5_tour_override") or "").upper().strip()
@@ -54,7 +55,11 @@ def _prepare_with_overrides(fixture_rows, ratings_by_tour, summary):
     if surface_override in {"Hard", "Clay", "Grass"}:
         surface, surface_source = surface_override, "User override"
     else:
-        surface, surface_source = infer_surface(tournament)
+        surface, surface_source = resolve_fixture_surface(
+            tournament,
+            start_time_utc=first.get("start_time_utc"),
+            context_history=context_history,
+        )
 
     bo = pd.to_numeric(pd.Series([first.get("v5_best_of_override")]), errors="coerce").iloc[0]
     best_of = int(bo) if pd.notna(bo) and int(bo) in (3, 5) else infer_best_of(tournament, tour)
@@ -140,22 +145,44 @@ def _context_summary(first: pd.Series, fields):
     return " · ".join(parts) if parts else "Unavailable"
 
 
+def _first_present(*values):
+    for value in values:
+        if value is None:
+            continue
+        try:
+            if pd.isna(value):
+                continue
+        except Exception:
+            pass
+        if isinstance(value, str) and not value.strip():
+            continue
+        return value
+    return None
+
+
 def production_board_to_today(board: pd.DataFrame) -> pd.DataFrame:
     if board is None or board.empty:
         return pd.DataFrame()
     rows = []
     for fixture_id, group in board.groupby("fixture_id", sort=False, dropna=False):
         first = group.iloc[0]
-        p1 = str(first.get("resolved_player1") or first.get("player1") or "Player 1")
-        p2 = str(first.get("resolved_player2") or first.get("player2") or "Player 2")
+        tournament = _first_present(first.get("tournament"), "")
+        p1 = str(_first_present(first.get("resolved_player1"), first.get("player1"), "Player 1"))
+        p2 = str(_first_present(first.get("resolved_player2"), first.get("player2"), "Player 2"))
+        tour = _first_present(first.get("tour_v5"))
+        if tour is None:
+            tour = _tour_to_v5(_first_present(first.get("tour"), ""), tournament)
+        best_of = _first_present(first.get("best_of"))
+        if best_of is None:
+            best_of = infer_best_of(tournament, tour)
         p1p = pd.to_numeric(pd.Series([first.get("full_context_probability_p1")]), errors="coerce").iloc[0]
         p1p = None if pd.isna(p1p) else float(p1p)
         p2p = None if p1p is None else 1.0 - p1p
         disagreement = str(first.get("model_disagreement") or "UNKNOWN").upper()
         row = {
-            "Status": "OK", "Fixture ID": fixture_id, "Tournament": first.get("tournament"),
-            "Start": first.get("start_time_utc"), "Tour": first.get("tour_v5"), "Surface": first.get("surface"),
-            "Surface Source": first.get("surface_source"), "Best Of": first.get("best_of"),
+            "Status": "OK", "Fixture ID": fixture_id, "Tournament": tournament,
+            "Start": first.get("start_time_utc"), "Tour": tour, "Surface": first.get("surface"),
+            "Surface Source": first.get("surface_source"), "Best Of": best_of,
             "Environment": first.get("environment"), "Court Speed": first.get("effective_court_speed"),
             "CPI": first.get("external_cpi"), "Ace Rate %": first.get("external_ace_rate_pct"),
             "Rally Length": first.get("external_rally_length"), "Relative Air Density": first.get("external_relative_air_density"),
@@ -244,7 +271,9 @@ def run_interactive_production(market_feed, edited, ratings_by_tour, summary, si
     prepared_rows, errors = [], []
     for fixture_id, group in feed.groupby("fixture_id", sort=False):
         try:
-            prepared_rows.append((fixture_id, group, _prepare_with_overrides(group, ratings_by_tour, summary)))
+            prepared_rows.append((fixture_id, group, _prepare_with_overrides(
+                group, ratings_by_tour, summary, context_history=context_history
+            )))
         except Exception as exc:
             errors.append({"fixture_id": str(fixture_id), "stage":"prepare_fixture", "error":str(exc)})
 
