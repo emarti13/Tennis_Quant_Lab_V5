@@ -78,9 +78,8 @@ def test_fresh_live_market_promotion_dispatches_daily_forecast_recovery():
     )
 
 
-def test_one_time_recovery_dispatch_is_repository_explicit():
-    text = Path(".github/workflows/v5_recover_today_once.yml").read_text(encoding="utf-8")
-    assert "gh workflow run v5_daily_predictions.yml --ref main -R emarti13/Tennis_Quant_Lab_V5" in text
+def test_one_time_recovery_workflow_is_removed_after_successful_use():
+    assert not Path(".github/workflows/v5_recover_today_once.yml").exists()
 
 
 def test_daily_predictions_use_recovery_windows_without_market_refresh_fanout():

@@ -6,6 +6,8 @@ from typing import Any
 
 import pandas as pd
 
+from v5_results_reset import load_reset_timestamp
+
 
 LEGACY_PERFORMANCE_PATH = Path("v5_daily_ready") / "settled_performance_audit.json"
 OFFICIAL_PERFORMANCE_PATH = Path("v5_daily_ready") / "official_performance.json"
@@ -25,8 +27,18 @@ def load_performance_report(base_dir: str | Path = ".") -> dict[str, Any]:
     base = Path(base_dir)
     official_path = base / OFFICIAL_PERFORMANCE_PATH
     legacy_path = base / LEGACY_PERFORMANCE_PATH
+    reset_path = base / "v5_daily_ready" / "results_reset.json"
+    reset_at = load_reset_timestamp(reset_path)
     official = _read_report(official_path)
     legacy = _read_report(legacy_path)
+    if reset_at is not None:
+        return {
+            "status": "ok",
+            "source": str(official_path),
+            "official": official,
+            "legacy": {},
+            "reset_at_utc": reset_at.isoformat(),
+        }
     if not official and not legacy:
         return {"status": "missing", "source": str(official_path)}
     if official:
@@ -44,7 +56,8 @@ def load_performance_report(base_dir: str | Path = ".") -> dict[str, Any]:
 def headline_metrics(report: dict[str, Any] | None) -> dict[str, Any]:
     report = report or {}
     official = report.get("official") or {}
-    if official and int(official.get("official_recommendations") or 0) > 0:
+    reset_active = bool(report.get("reset_at_utc") or official.get("reset_at_utc"))
+    if official and (int(official.get("official_recommendations") or 0) > 0 or reset_active):
         fixtures = official.get("fixture_cluster") or {}
         wins = int(official.get("wins") or 0)
         losses = int(official.get("losses") or 0)
@@ -62,7 +75,7 @@ def headline_metrics(report: dict[str, Any] | None) -> dict[str, Any]:
             "fixture_record": f"{profitable} profitable / {fixture_count}",
             "fixture_profitable_rate": fixtures.get("profitable_fixture_rate"),
             "fixture_net_units": fixtures.get("net_units"),
-            "mean_markets_per_fixture": None,
+            "mean_markets_per_fixture": fixtures.get("mean_markets_per_fixture"),
             "max_correlated_markets": int(official.get("max_recommendations_per_fixture") or 0),
             "median_american_odds": official.get("median_american_odds"),
             "favorite_recommendations": int(official.get("favorite_recommendations") or 0),
@@ -150,18 +163,21 @@ def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[st
     headline = headline_metrics(report)
     st_module.markdown('<div class="v5-eyebrow">Validated results</div>', unsafe_allow_html=True)
     st_module.markdown('<div class="v5-title">Performance</div>', unsafe_allow_html=True)
+    reset_at = report.get("reset_at_utc") or (report.get("official") or {}).get("reset_at_utc")
     if headline["scope"] == "official":
-        subtitle = "Headline results count each official market recommendation once. Price-refresh snapshots and PASS / REVIEW observations are audit data, not bets."
+        subtitle = "Headline results include every independently qualified official market recommendation. A single fixture may contribute multiple official markets when each clears production policy; fixture clustering shows their correlation."
     elif headline["scope"] == "current_engine":
-        subtitle = "Current full-context engine BET + LEAN results are shown while the official recommendation ledger accumulates. Legacy rows remain separate."
+        subtitle = "Current full-context engine BET + LEAN results are shown while the official recommendation ledger accumulates."
     else:
-        subtitle = "Historical BET + LEAN results are shown while the official recommendation ledger accumulates. PASS / REVIEW rows are audit-only."
+        subtitle = "Historical BET + LEAN results are shown while the official recommendation ledger accumulates."
+    if reset_at:
+        subtitle += f" Production results were reset at {pd.Timestamp(reset_at).strftime('%Y-%m-%d %H:%M UTC')}; pre-reset results are excluded."
     st_module.markdown(f'<div class="v5-subtitle">{subtitle}</div>', unsafe_allow_html=True)
 
     columns = st_module.columns(4)
-    columns[0].metric("Market record", headline["market_record"])
+    columns[0].metric("Official record" if headline["scope"] == "official" else "Market record", headline["market_record"])
     columns[1].metric("Fixture evidence", headline["fixture_record"])
-    columns[2].metric("Market ROI", _percent(headline["market_roi"]))
+    columns[2].metric("Official ROI" if headline["scope"] == "official" else "Market ROI", _percent(headline["market_roi"]))
     columns[3].metric("Max correlated markets", str(headline["max_correlated_markets"]))
 
     if headline["scope"] == "official":
@@ -180,13 +196,11 @@ def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[st
             with st_module.expander("Official performance by price band", expanded=False):
                 st_module.dataframe(pd.DataFrame.from_dict(by_price, orient="index"), use_container_width=True)
 
-    st_module.caption("Multiple correlated markets from one match remain valid recommendations, but fixture-cluster evidence is reported separately from raw market outcomes.")
+    st_module.caption("Performance counts only frozen official recommendations. Ancillary pricing observations remain in permanent market history for research but do not affect W/L, units or ROI.")
 
-    legacy = report.get("legacy") or ({} if headline["scope"] == "official" else report)
-    with st_module.expander("Legacy and all-market audit", expanded=False):
-        if not legacy:
-            st_module.caption("No legacy audit is available.")
-        else:
+    legacy = {} if reset_at else (report.get("legacy") or ({} if headline["scope"] == "official" else report))
+    if legacy:
+        with st_module.expander("Legacy and all-market audit", expanded=False):
             breakdowns = [
                 ("Historical audit — by market", "by_market_group"),
                 ("Historical audit — by signal", "by_signal"),

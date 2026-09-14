@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 
 def test_performance_headline_keeps_raw_markets_and_fixture_results_separate():
@@ -57,10 +58,10 @@ def test_official_recommendations_override_legacy_audit_for_headline():
     assert out["scope"] == "official"
     assert out["market_record"] == "3-1-0"
     assert out["fixture_record"] == "2 profitable / 3"
-    assert out["market_roi"] == 0.40
+    assert out["max_correlated_markets"] == 2
 
 
-def test_load_performance_report_prefers_official_and_keeps_legacy_audit(tmp_path):
+def test_load_performance_report_prefers_official_and_keeps_legacy_audit_without_reset(tmp_path):
     from v5_ui_performance import load_performance_report
 
     missing = load_performance_report(tmp_path)
@@ -81,3 +82,36 @@ def test_load_performance_report_prefers_official_and_keeps_legacy_audit(tmp_pat
     assert loaded["status"] == "ok"
     assert loaded["official"]["official_recommendations"] == 1
     assert loaded["legacy"]["raw_markets"]["bets"] == 2
+
+
+def test_reset_epoch_suppresses_legacy_fallback_and_allows_zero_official_record(tmp_path):
+    from v5_ui_performance import headline_metrics, load_performance_report
+
+    target = tmp_path / "v5_daily_ready"
+    target.mkdir(parents=True)
+    (target / "results_reset.json").write_text(json.dumps({"reset_at_utc": "2026-09-14T16:26:28Z"}), encoding="utf-8")
+    (target / "official_performance.json").write_text(json.dumps({
+        "official_recommendations": 0,
+        "unique_fixtures": 0,
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "roi": None,
+        "net_units": 0.0,
+        "fixture_cluster": {"fixtures": 0, "profitable_fixtures": 0},
+    }), encoding="utf-8")
+    (target / "settled_performance_audit.json").write_text(json.dumps({
+        "raw_markets": {"bets": 999, "wins": 999, "losses": 0},
+    }), encoding="utf-8")
+
+    loaded = load_performance_report(tmp_path)
+    assert loaded["legacy"] == {}
+    out = headline_metrics(loaded)
+    assert out["scope"] == "official"
+    assert out["market_record"] == "0-0-0"
+
+
+def test_performance_page_copy_allows_multiple_official_markets_and_excludes_ancillary_observations():
+    source = Path("v5_ui_performance.py").read_text(encoding="utf-8")
+    assert "multiple official markets" in source.lower()
+    assert "ancillary pricing observations" in source.lower()
