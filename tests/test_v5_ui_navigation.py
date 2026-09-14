@@ -3,13 +3,20 @@ from __future__ import annotations
 import pandas as pd
 
 
-def test_page_registry_makes_today_default_and_preserves_expert_workflow():
+def test_page_registry_makes_daily_board_default_and_keeps_decision_feed_separate():
     from v5_ui_navigation import PAGE_ORDER, page_registry
 
     registry = page_registry()
 
-    assert PAGE_ORDER[0] == "Today"
-    assert PAGE_ORDER[:5] == ["Today", "Match Detail", "All Markets", "Performance", "Model Health"]
+    assert PAGE_ORDER[0] == "Daily Board"
+    assert PAGE_ORDER[:6] == [
+        "Daily Board",
+        "Decision Feed",
+        "Match Detail",
+        "All Markets",
+        "Performance",
+        "Model Health",
+    ]
     assert "Matchup Lab" in PAGE_ORDER
     assert set(PAGE_ORDER).issubset(registry)
 
