@@ -56,3 +56,4 @@ def test_altitude_band_prevents_false_structural_pooling():
 
 # Structural-cohort tests intentionally stay independent of event-name tests: both layers
 # must pass before schedule context can influence the model.
+# Trigger verified exact-source restoration and integration.
