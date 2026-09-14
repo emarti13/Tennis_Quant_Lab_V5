@@ -34,6 +34,12 @@ LIVE_CONTEXT_DISPLAY_FIELDS = (
     "ctx_court_speed_x_serve_dominance_diff", "ctx_court_speed_x_return_dominance_diff", "ctx_big_server_x_altitude",
     "ctx_state_uncertainty_diff", "ctx_context_quality_diff",
 )
+COURT_CONDITION_DISPLAY_FIELDS = (
+    "environment", "external_cpi", "external_ace_rate_pct", "external_rally_length",
+    "external_relative_air_density", "external_altitude_m", "external_ball_type",
+    "external_overall_speed_rating", "effective_court_speed", "court_conditions_source",
+    "court_conditions_source_quality",
+)
 _SIGNAL_PRIORITY = {"BET": 0, "LEAN": 1, "REVIEW": 2, "PASS": 3, "N/A": 4, "NO PRICE": 5}
 
 
@@ -79,6 +85,43 @@ def _prepare_with_overrides(fixture_rows, ratings_by_tour, summary):
     }
 
 
+def _present_value(value):
+    if value is None:
+        return None
+    try:
+        if pd.isna(value):
+            return None
+    except Exception:
+        pass
+    return value
+
+
+def _interactive_context_fixture(prepared):
+    fixture = _context_fixture(prepared)
+    first = prepared["first"]
+    environment = str(first.get("v5_environment_override") or "").title().strip()
+    if environment in {"Indoor", "Outdoor"}:
+        fixture["environment"] = environment
+
+    numeric_overrides = {
+        "court_speed_override": "v5_court_speed_override",
+        "external_cpi_override": "v5_cpi_override",
+        "external_ace_rate_pct_override": "v5_ace_rate_override",
+        "external_rally_length_override": "v5_rally_length_override",
+        "external_relative_air_density_override": "v5_rad_override",
+        "external_altitude_m_override": "v5_altitude_override",
+    }
+    for target, source in numeric_overrides.items():
+        value = pd.to_numeric(pd.Series([first.get(source)]), errors="coerce").iloc[0]
+        if pd.notna(value):
+            fixture[target] = float(value)
+
+    ball = _present_value(first.get("v5_ball_type_override"))
+    if ball is not None and str(ball).strip():
+        fixture["external_ball_type_override"] = str(ball).strip()
+    return fixture
+
+
 def _best_market(frame: pd.DataFrame):
     if frame is None or frame.empty:
         return None
@@ -113,6 +156,12 @@ def production_board_to_today(board: pd.DataFrame) -> pd.DataFrame:
             "Status": "OK", "Fixture ID": fixture_id, "Tournament": first.get("tournament"),
             "Start": first.get("start_time_utc"), "Tour": first.get("tour_v5"), "Surface": first.get("surface"),
             "Surface Source": first.get("surface_source"), "Best Of": first.get("best_of"),
+            "Environment": first.get("environment"), "Court Speed": first.get("effective_court_speed"),
+            "CPI": first.get("external_cpi"), "Ace Rate %": first.get("external_ace_rate_pct"),
+            "Rally Length": first.get("external_rally_length"), "Relative Air Density": first.get("external_relative_air_density"),
+            "Altitude m": first.get("external_altitude_m"), "Ball Type": first.get("external_ball_type"),
+            "Overall Speed Rating": first.get("external_overall_speed_rating"),
+            "Court Conditions Source": first.get("court_conditions_source"),
             "Player 1": p1, "Player 2": p2, "P1 V5 %": p1p, "P2 V5 %": p2p,
             "P1 Fair": None if p1p is None else american_from_prob(p1p),
             "P2 Fair": None if p2p is None else american_from_prob(p2p),
@@ -171,8 +220,16 @@ def run_interactive_production(market_feed, edited, ratings_by_tour, summary, si
     valid_ids = set(valid["Fixture ID"].astype(str))
     feed = market_feed[market_feed["fixture_id"].astype(str).isin(valid_ids)].copy()
     override = valid.copy(); override.index = override["Fixture ID"].astype(str)
-    for target, source in (("v5_tour_override","Tour"),("v5_surface_override","Surface"),("v5_best_of_override","Best Of")):
-        feed[target] = feed["fixture_id"].astype(str).map(override[source].to_dict())
+    override_fields = (
+        ("v5_tour_override", "Tour"), ("v5_surface_override", "Surface"), ("v5_best_of_override", "Best Of"),
+        ("v5_environment_override", "Environment"), ("v5_court_speed_override", "Court Speed"),
+        ("v5_cpi_override", "CPI"), ("v5_ace_rate_override", "Ace Rate %"),
+        ("v5_rally_length_override", "Rally Length"), ("v5_rad_override", "Relative Air Density"),
+        ("v5_altitude_override", "Altitude m"), ("v5_ball_type_override", "Ball Type"),
+    )
+    for target, source in override_fields:
+        if source in override.columns:
+            feed[target] = feed["fixture_id"].astype(str).map(override[source].to_dict())
     feed = eligible_pre_match(feed, now=datetime.now(timezone.utc))
 
     context_path = Path(base_dir) / "context_warehouse" / "player_match_rows.parquet"
@@ -192,7 +249,7 @@ def run_interactive_production(market_feed, edited, ratings_by_tour, summary, si
             errors.append({"fixture_id": str(fixture_id), "stage":"prepare_fixture", "error":str(exc)})
 
     enriched = build_live_enriched_history(
-        context_history, [_context_fixture(p) for _, _, p in prepared_rows],
+        context_history, [_interactive_context_fixture(p) for _, _, p in prepared_rows],
         tournament_registry=tournament_registry, weather_cache=weather_cache,
     ) if prepared_rows else None
 
@@ -204,10 +261,10 @@ def run_interactive_production(market_feed, edited, ratings_by_tour, summary, si
                 enriched_context=enriched, production_candidate=production_candidate, score_candidate=score_candidate,
             )
             live = build_live_matchup_features_from_enriched(
-                enriched, _context_fixture(prepared), baseline_probability=prepared["baseline_probability_p1"],
+                enriched, _interactive_context_fixture(prepared), baseline_probability=prepared["baseline_probability_p1"],
                 x_sr_p1=prepared["x_sr_p1"], x_elo_p1=prepared["x_elo_p1"],
             )
-            for field in LIVE_CONTEXT_DISPLAY_FIELDS:
+            for field in LIVE_CONTEXT_DISPLAY_FIELDS + COURT_CONDITION_DISPLAY_FIELDS:
                 priced[field] = live.get(field, np.nan)
             a, b = prepared["rating_p1"], prepared["rating_p2"]
             diagnostics = {

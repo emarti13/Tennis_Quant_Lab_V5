@@ -15,6 +15,20 @@ LIVE_CONTEXT_FIELDS = (
     "ctx_state_uncertainty_diff", "ctx_context_quality_diff",
 )
 
+COURT_CONDITION_FIELDS = (
+    "environment",
+    "external_cpi",
+    "external_ace_rate_pct",
+    "external_rally_length",
+    "external_relative_air_density",
+    "external_altitude_m",
+    "external_ball_type",
+    "external_overall_speed_rating",
+    "effective_court_speed",
+    "court_conditions_source",
+    "court_conditions_source_quality",
+)
+
 STATE_FIELDS = (
     "state_confidence_p1", "state_confidence_p2",
     "form_logit_p1", "form_logit_p2",
@@ -73,7 +87,7 @@ def enrich_daily_board_context(
                 x_sr_p1=prepared["x_sr_p1"],
                 x_elo_p1=prepared["x_elo_p1"],
             )
-            values = {field: live.get(field, np.nan) for field in LIVE_CONTEXT_FIELDS}
+            values = {field: live.get(field, np.nan) for field in LIVE_CONTEXT_FIELDS + COURT_CONDITION_FIELDS}
             a, b = prepared["rating_p1"], prepared["rating_p2"]
             values.update({
                 "state_confidence_p1": float(a.get("state_confidence", 0.0)),
