@@ -6,6 +6,7 @@ on:
       - diagnostics/state-confidence-gate-audit
     paths:
       - 'diagnose_signal_confidence_gate.py'
+      - 'run_signal_confidence_gate_audit.py'
       - 'tests/test_signal_confidence_gate_diagnostic.py'
       - '.github/workflows/state_confidence_gate_audit.yml'
   workflow_dispatch:
@@ -24,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -34,7 +35,7 @@ jobs:
       - name: Test diagnostic contract
         run: python -m pytest tests/test_signal_confidence_gate_diagnostic.py -q
       - name: Run frozen-history audit
-        run: python diagnose_signal_confidence_gate.py
+        run: python run_signal_confidence_gate_audit.py
       - name: Persist audit evidence
         run: |
           git config user.name 'github-actions[bot]'
