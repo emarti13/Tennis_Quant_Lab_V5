@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: v5-production-writer
@@ -149,6 +150,12 @@ jobs:
             git pull --rebase origin main
             git push origin HEAD:main
           fi
+
+      - name: Trigger daily forecast after fresh market promotion
+        if: steps.live_pull.outputs.fresh_snapshot == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run v5_daily_predictions.yml --ref main
 
       - name: Upload compact live-feed audit
         if: always()
