@@ -14,6 +14,7 @@ WEEKS_PER_BUDGET_MONTH = DAYS_PER_BUDGET_MONTH / 7.0
 # Research/acceptance workflows are manual-only and excluded from recurring burn.
 RECURRING_JOBS = {
     "live_market_repricing": {"runs_per_day": 4, "minutes_per_run": 2},
+    "courtspeed_conditions": {"runs_per_day": 1, "minutes_per_run": 2},
     "player_ratings": {"runs_per_day": 1, "minutes_per_run": 12},
     "player_refresh_recovery_probes": {"runs_per_day": 2, "minutes_per_run": 3},
     "daily_heavy_forecast": {"runs_per_day": 1, "minutes_per_run": 20},

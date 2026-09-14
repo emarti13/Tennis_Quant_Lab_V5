@@ -55,7 +55,7 @@ def test_today_never_turns_stale_fixture_fallback_into_a_manual_model_run():
 def test_live_workflow_uses_one_quota_conserving_daily_schedule():
     text = Path(".github/workflows/oddspapi_normalized_daily_v2.yml").read_text(encoding="utf-8")
     trigger = text.split("permissions:", 1)[0]
-    assert 'cron: "15 18 * * *"' in trigger
+    assert 'cron: "2 0 * * *"' in trigger
     assert trigger.count("cron:") == 1
     assert "\n  push:" not in trigger
 

@@ -17,6 +17,15 @@ LIVE_CONTEXT_FIELDS = (
 
 COURT_CONDITION_FIELDS = (
     "environment",
+    "surface_source",
+    "environment_source",
+    "cpi_source",
+    "ace_rate_source",
+    "rally_source",
+    "rad_source",
+    "altitude_source",
+    "ball_source",
+    "overall_speed_source",
     "external_cpi",
     "external_ace_rate_pct",
     "external_rally_length",

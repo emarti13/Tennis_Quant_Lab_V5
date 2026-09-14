@@ -12,5 +12,5 @@ def test_court_conditions_runtime_is_snapshot_only():
 
 def test_full_context_runtime_uses_adapter_not_web_calls():
     source = Path("v5_full_context_live.py").read_text(encoding="utf-8")
-    assert "lookup_court_conditions" in source
+    assert "resolve_court_conditions" in source
     assert "courtspeed.com" not in source.lower()

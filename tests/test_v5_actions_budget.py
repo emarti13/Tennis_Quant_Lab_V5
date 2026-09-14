@@ -13,12 +13,13 @@ def test_configured_recurring_budget_stays_below_70_percent_of_allowance():
     assert report['guardrail_minutes'] == 2100
     assert report['projected_minutes'] < report['guardrail_minutes']
     assert report['headroom_to_allowance'] >= 900
+    assert report['jobs']['courtspeed_conditions']['runs_per_day'] == 1
 
 
 def test_live_market_is_one_quota_conserving_run_and_performs_repricing():
     text = _text('oddspapi_normalized_daily_v2.yml')
     trigger = text.split('permissions:', 1)[0]
-    assert '15 18 * * *' in trigger
+    assert '2 0 * * *' in trigger
     assert trigger.count('cron:') == 1
     assert 'workflow_dispatch:' in trigger
     assert '\n  push:' not in trigger
@@ -57,7 +58,7 @@ def test_settlement_is_once_daily_and_never_on_push():
 
 
 def test_canonical_production_writers_share_one_serialization_lock():
-    for name in ('oddspapi_normalized_daily_v2.yml', 'v5_daily_predictions.yml', 'v5_automatic_settlement.yml'):
+    for name in ('oddspapi_normalized_daily_v2.yml', 'v5_daily_predictions.yml', 'v5_automatic_settlement.yml', 'courtspeed_conditions_refresh.yml'):
         text = _text(name)
         assert 'group: v5-production-writer' in text
         assert 'cancel-in-progress: false' in text
