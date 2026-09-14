@@ -12,7 +12,7 @@
   "favorite_recommendations": 0,
   "underdog_recommendations": 0,
   "max_recommendations_per_fixture": 0,
-  "open_recommendations": 6,
+  "open_recommendations": 0,
   "by_signal": {},
   "by_price_band": {},
   "fixture_cluster": {
@@ -54,5 +54,7 @@
       "underdog_recommendations": 0,
       "max_recommendations_per_fixture": 0
     }
-  }
+  },
+  "reset_at_utc": "2026-09-14T16:26:28+00:00",
+  "pre_reset_rows_excluded": 0
 }
