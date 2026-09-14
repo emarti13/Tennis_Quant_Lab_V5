@@ -1,6 +1,6 @@
 import pandas as pd
 
-from v5_schedule_context import enrich_events_with_schedule, normalize_schedule, speed_profile_family
+from v5_schedule_context import enrich_events_with_schedule, load_schedule, normalize_schedule, speed_profile_family
 
 
 def _schedule():
@@ -9,6 +9,12 @@ def _schedule():
         {"Year": 2026, "Circuit Tour": "ATP MASTERS 1000", "Tournament Name": "BNP Paribas Open (2026)", "City Venue": "Indian Wells", "Surface": "Hard", "Setting": "Outdoor", "Altitude (m)": -27, "Altitude (ft)": -89, "Speed Profile": "Slow Court / Fast Air", "Ball Characteristics": "Extra Duty Hard"},
         {"Year": 2026, "Circuit Tour": "WTA 1000", "Tournament Name": "BNP Paribas Open (2026)", "City Venue": "Indian Wells", "Surface": "Hard", "Setting": "Outdoor", "Altitude (m)": -27, "Altitude (ft)": -89, "Speed Profile": "Slow Court / Fast Air", "Ball Characteristics": "Extra Duty Hard"},
     ])
+
+
+def test_repository_schedule_is_complete_three_year_source():
+    schedule = load_schedule()
+    assert len(schedule) == 354
+    assert set(schedule["schedule_year"].dropna().astype(int)) == {2025, 2026, 2027}
 
 
 def test_normalize_schedule_derives_matching_fields():
