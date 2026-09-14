@@ -207,6 +207,13 @@ def test_match_card_html_contains_primary_decision_fields():
             "Primary Market": "Jannik Sinner -4.5",
             "Primary Edge": 0.135,
             "Primary Market Odds": -115,
+            "P1 ML Signal": "BET",
+            "P1 ML EV": 0.08,
+            "P1 ML": -175,
+            "P1 Spread Signal": "BET",
+            "P1 Spread EV": 0.135,
+            "P1 Spread": -4.5,
+            "P1 Spread Odds": -115,
             "Agreement": 0.90,
             "Expected Margin": 5.1,
         }
@@ -224,6 +231,9 @@ def test_match_card_html_contains_primary_decision_fields():
     assert "-203" in html
     assert "-115" in html
     assert "+13.5%" in html
+    assert "Official top play" in html
+    assert "Current pricing candidates" in html
+    assert "not separately logged" in html
 
 
 def test_match_card_html_cannot_be_parsed_as_indented_markdown_code():
