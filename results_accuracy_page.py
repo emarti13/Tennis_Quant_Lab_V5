@@ -81,6 +81,12 @@ def load_accuracy_ledger(path=DEFAULT_LEDGER):
     ):
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
+    try:
+        is_production_ledger = path.resolve() == DEFAULT_LEDGER.resolve()
+    except OSError:
+        is_production_ledger = path == DEFAULT_LEDGER
+    if not is_production_ledger:
+        return df
     reset_at = load_reset_timestamp()
     return filter_since_reset(
         df,
