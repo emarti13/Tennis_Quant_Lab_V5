@@ -15,7 +15,7 @@ from v5_advanced_model import (
     uncertainty_score,
 )
 from v5_context_model import predict_symmetric_logistic
-from v5_court_conditions_source import lookup_court_conditions
+from v5_court_conditions_source import resolve_court_conditions
 from v5_matchup_features import build_matchup_features
 from v5_player_state import build_player_state
 from v5_weather_features import attach_live_weather
@@ -102,12 +102,25 @@ def _target_rows(fixture: dict) -> pd.DataFrame:
     match_id = f"live_{fixture.get('fixture_id') or 'unknown'}"
     start_utc = pd.to_datetime(fixture.get("start_time_utc"), errors="coerce", utc=True)
     match_date = start_utc.tz_convert("UTC").tz_localize(None) if pd.notna(start_utc) else pd.NaT
-    conditions = lookup_court_conditions(fixture.get("tournament") or "", _fixture_year(fixture))
-
     fixture_surface = str(fixture.get("surface") or "").title().strip()
+    fixture_environment = str(fixture.get("environment") or "").title().strip()
+    fallback = {}
+    if fixture_surface in {"Hard", "Clay", "Grass"}:
+        fallback["surface_type"] = fixture_surface
+    if fixture_environment in {"Indoor", "Outdoor"}:
+        fallback["environment"] = fixture_environment
+    for key in ("cpi", "ace_rate_pct", "rally_length", "relative_air_density", "altitude_m", "ball_type", "overall_speed_rating"):
+        if fixture.get(key) is not None and not pd.isna(fixture.get(key)):
+            fallback[key] = fixture.get(key)
+    conditions = resolve_court_conditions(
+        fixture.get("tournament") or "",
+        _fixture_year(fixture),
+        v5_fallback=fallback,
+    )
+
     source_surface = str(conditions.get("surface_type") or "").title().strip()
-    surface = fixture_surface if fixture_surface in {"Hard", "Clay", "Grass"} else source_surface
-    environment = str(fixture.get("environment") or conditions.get("environment") or "Unknown").title().strip()
+    surface = source_surface if source_surface in {"Hard", "Clay", "Grass"} else (fixture_surface if fixture_surface in {"Hard", "Clay", "Grass"} else "Hard")
+    environment = str(conditions.get("environment") or fixture_environment or "Unknown").title().strip()
     if environment not in {"Indoor", "Outdoor"}:
         environment = "Unknown"
     indoor = True if environment == "Indoor" else (False if environment == "Outdoor" else np.nan)
@@ -128,14 +141,24 @@ def _target_rows(fixture: dict) -> pd.DataFrame:
         "external_altitude_m": conditions.get("altitude_m"),
         "external_ball_type": conditions.get("ball_type"),
         "external_overall_speed_rating": conditions.get("overall_speed_rating"),
-        "court_conditions_source": conditions.get("source_name"),
-        "court_conditions_source_quality": conditions.get("source_quality"),
+        "court_conditions_source": "CourtSpeed" if any(conditions.get(x) == "CourtSpeed" for x in ("surface_source", "environment_source", "cpi_source", "ace_rate_source", "rally_source", "rad_source", "altitude_source", "ball_source", "overall_speed_source")) else "V5",
+        "court_conditions_source_quality": conditions.get("source_freshness"),
         "court_conditions_target_year": conditions.get("target_year"),
+        "court_conditions_refreshed_at": conditions.get("source_refreshed_at"),
         "cpi_source_year": conditions.get("cpi_source_year"),
         "ace_rate_pct_source_year": conditions.get("ace_rate_pct_source_year"),
         "rally_length_source_year": conditions.get("rally_length_source_year"),
         "relative_air_density_source_year": conditions.get("relative_air_density_source_year"),
         "ball_type_source_year": conditions.get("ball_type_source_year"),
+        "surface_source": conditions.get("surface_source"),
+        "environment_source": conditions.get("environment_source"),
+        "cpi_source": conditions.get("cpi_source"),
+        "ace_rate_source": conditions.get("ace_rate_source"),
+        "rally_source": conditions.get("rally_source"),
+        "rad_source": conditions.get("rad_source"),
+        "altitude_source": conditions.get("altitude_source"),
+        "ball_source": conditions.get("ball_source"),
+        "overall_speed_source": conditions.get("overall_speed_source"),
         "result_file": "LIVE_TARGET", "source_quality": "live_pre_match_target", "match_games": np.nan, "match_sets": np.nan,
         "match_duration_minutes": np.nan,
     }
@@ -157,8 +180,6 @@ def build_live_enriched_history(historical_player_rows: pd.DataFrame, fixtures: 
     target_frame = pd.concat(targets, ignore_index=True, sort=False) if targets else pd.DataFrame()
     history = historical_player_rows.copy() if historical_player_rows is not None else pd.DataFrame()
     combined = pd.concat([history, target_frame], ignore_index=True, sort=False)
-    # Shared feature builders use a timezone-naive chronological key. Convert every row
-    # to naive UTC once so historical dates and live first-serve timestamps are comparable.
     combined["match_date"] = pd.to_datetime(combined["match_date"], errors="coerce", utc=True).dt.tz_localize(None)
     enriched = enrich_player_history(combined, tournament_registry=tournament_registry)
     if weather_cache is not None:
