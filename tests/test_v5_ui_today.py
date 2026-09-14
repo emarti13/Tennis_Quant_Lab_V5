@@ -63,6 +63,38 @@ def test_prepare_today_board_preserves_source_values_and_ranks_signal_first():
     assert out.loc[out["Fixture ID"] == "a", "Expected Total"].iloc[0] == 22.4
 
 
+def test_prepare_today_board_uses_frozen_official_play_instead_of_later_candidate_shift():
+    from v5_ui_today import prepare_today_board
+
+    source = pd.DataFrame([{
+        "Fixture ID": "fx1",
+        "Player 1": "A",
+        "Player 2": "B",
+        "P1 ML": 200,
+        "P1 ML EV": .60,
+        "P1 ML Signal": "BET",
+        "P2 Spread": 3.5,
+        "P2 Spread Odds": 154,
+        "P2 Spread EV": .40,
+        "P2 Spread Signal": "BET",
+        "Official Locked": True,
+        "Official Market": "B +3.5",
+        "Official Signal": "BET",
+        "Official Price": 154,
+        "Official Edge": .40,
+        "Official Market Key": "fx1|game_spread|b|3.5",
+    }])
+
+    out = prepare_today_board(source)
+    row = out.iloc[0]
+
+    assert row["Primary Market"] == "B +3.5"
+    assert row["Best Signal"] == "BET"
+    assert row["Primary Market Odds"] == 154
+    assert row["Primary Edge"] == .40
+    assert bool(row["Official Locked"]) is True
+
+
 def test_prepare_today_board_preserves_all_model_and_market_decision_outputs_exactly():
     from v5_ui_today import prepare_today_board
 
@@ -207,6 +239,7 @@ def test_match_card_html_contains_primary_decision_fields():
             "Primary Market": "Jannik Sinner -4.5",
             "Primary Edge": 0.135,
             "Primary Market Odds": -115,
+            "Official Locked": True,
             "P1 ML Signal": "BET",
             "P1 ML EV": 0.08,
             "P1 ML": -175,
@@ -234,6 +267,20 @@ def test_match_card_html_contains_primary_decision_fields():
     assert "Official top play" in html
     assert "Current pricing candidates" in html
     assert "not separately logged" in html
+
+
+def test_unfrozen_actionable_card_is_labeled_top_play_candidate_not_official():
+    from v5_ui_today import match_card_html
+
+    html = match_card_html(pd.Series({
+        "Player 1": "A",
+        "Player 2": "B",
+        "Best Signal": "BET",
+        "Primary Market": "A ML",
+    }))
+
+    assert "Top play candidate" in html
+    assert "Official top play" not in html
 
 
 def test_match_card_html_cannot_be_parsed_as_indented_markdown_code():
