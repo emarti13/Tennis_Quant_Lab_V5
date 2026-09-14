@@ -1,6 +1,8 @@
 name: V5 Context Warehouse
 
 on:
+  schedule:
+    - cron: '32 0 * * *'
   push:
     branches:
       - main
@@ -8,20 +10,33 @@ on:
       - 'build_v5_context_warehouse.py'
       - 'v5_context_schema.py'
       - 'tests/test_v5_context_warehouse.py'
+      - 'tests/test_v5_context_warehouse_persistence_contract.py'
       - '.github/workflows/v5_context_warehouse.yml'
   workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v5-production-writer
+  cancel-in-progress: false
 
 jobs:
   test-and-build:
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: pip install -r requirements.txt pytest
       - name: Test warehouse contract
-        run: python -m pytest tests/test_v5_context_warehouse.py -v
+        run: |
+          python -m pytest tests/test_v5_context_warehouse.py -v
+          python -m pytest tests/test_v5_context_warehouse_persistence_contract.py -v
       - name: Build warehouse
         run: python build_v5_context_warehouse.py
       - name: Verify outputs
@@ -30,3 +45,28 @@ jobs:
           test -f context_warehouse/player_match_rows.parquet
           test -f context_warehouse/source_manifest.json
           test -f context_warehouse/schema.json
+          python - <<'PY'
+          from pathlib import Path
+          limit = 95 * 1024 * 1024
+          for name in ('matches.parquet', 'player_match_rows.parquet'):
+              p = Path('context_warehouse') / name
+              size = p.stat().st_size
+              print(f'{p}: {size / 1024 / 1024:.1f} MiB')
+              if size >= limit:
+                  raise SystemExit(f'{p} is too large for durable repository publication ({size} bytes)')
+          PY
+      - name: Publish canonical warehouse
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git pull --rebase origin main
+          git add context_warehouse/matches.parquet
+          git add context_warehouse/player_match_rows.parquet
+          git add context_warehouse/source_manifest.json
+          git add context_warehouse/schema.json
+          if git diff --cached --quiet; then
+            echo 'Context warehouse unchanged; nothing to publish.'
+          else
+            git commit -m 'Refresh canonical context warehouse'
+            git push origin HEAD:main
+          fi

@@ -2,7 +2,8 @@ from __future__ import annotations
 
 
 PAGE_ORDER = [
-    "Today",
+    "Daily Board",
+    "Decision Feed",
     "Match Detail",
     "All Markets",
     "Performance",
@@ -18,7 +19,8 @@ def page_registry() -> dict[str, str]:
     orchestration; this module only defines the product navigation contract.
     """
     return {
-        "Today": "today",
+        "Daily Board": "daily_board",
+        "Decision Feed": "decision_feed",
         "Match Detail": "match_detail",
         "All Markets": "all_markets",
         "Performance": "performance",

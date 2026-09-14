@@ -67,10 +67,11 @@ def test_daily_batch_carries_matchup_lab_state_fields():
         assert field in source
 
 
-def test_today_is_decision_surface_and_matchup_lab_remains_deep_analysis():
+def test_decision_feed_is_card_surface_and_daily_board_remains_deep_workspace():
     source = Path("v5_ui_host.py").read_text(encoding="utf-8")
-    today_block = source[source.index("def _render_today_page"):source.index("\ndef _canonical_prepared_board")]
-    assert "load_canonical_today_board(" in today_block
-    assert "Simulation precision" not in today_block
-    assert "Slate setup / advanced" not in today_block
+    feed_block = source[source.index("def _render_decision_feed_page"):source.index("\ndef _canonical_prepared_board")]
+    assert "load_canonical_today_board(" in feed_block
+    assert "run_interactive_production(" not in feed_block
+    assert '"Daily Board"' in source
+    assert '"Decision Feed"' in source
     assert '"matchup_lab"' in source
