@@ -103,7 +103,7 @@ def main() -> int:
             settled_frozen,
             FROZEN_PATH,
             "frozen_predictions.csv",
-            ["fixture_id", "market_key", "result_status", "settled_result", "winner_games", "loser_games"],
+            ["fixture_id", "result_status", "settled_result", "winner_games", "loser_games"],
         )
 
     performance_frame = filter_since_reset(
