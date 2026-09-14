@@ -156,18 +156,19 @@ def lookup_court_conditions(tournament: str, year: int, snapshot: pd.DataFrame |
     return base
 
 
-def _status_is_fresh(status: dict, now_utc: str | None, max_source_age_hours: int) -> tuple[bool, str]:
+def _source_is_fresh(status: dict, court: dict, now_utc: str | None, max_source_age_hours: int) -> tuple[bool, str]:
     state = str((status or {}).get("state") or "").upper()
-    run_timestamp = (status or {}).get("run_timestamp")
-    if not run_timestamp:
+    timestamp = (status or {}).get("run_timestamp") or court.get("source_refreshed_at") or court.get("source_updated_at")
+    if not timestamp:
         return False, "FALLBACK_V5"
-    ts = pd.to_datetime(run_timestamp, errors="coerce", utc=True)
+    ts = pd.to_datetime(timestamp, errors="coerce", utc=True)
     now = pd.to_datetime(now_utc, errors="coerce", utc=True) if now_utc else pd.Timestamp.now(tz="UTC")
     if pd.isna(ts) or pd.isna(now):
         return False, "FALLBACK_V5"
     age_hours = (now - ts).total_seconds() / 3600.0
-    if age_hours <= max_source_age_hours and state in {"READY", "STALE_LKG"}:
-        return True, state
+    effective_state = state if state in {"READY", "STALE_LKG"} else "STALE_LKG"
+    if age_hours <= max_source_age_hours:
+        return True, effective_state
     return False, "FALLBACK_V5"
 
 
@@ -177,19 +178,19 @@ def resolve_court_conditions(
     *,
     v5_fallback: dict | None = None,
     now_utc: str | None = None,
-    max_source_age_hours: int = 72,
+    max_source_age_hours: int = 720,
     snapshot: pd.DataFrame | None = None,
     refresh_status: dict | None = None,
 ) -> dict:
     court = lookup_court_conditions(tournament, year, snapshot=snapshot)
     status = refresh_status if refresh_status is not None else load_refresh_status()
-    fresh, freshness = _status_is_fresh(status, now_utc, max_source_age_hours)
+    fresh, freshness = _source_is_fresh(status, court, now_utc, max_source_age_hours)
     fallback = dict(v5_fallback or {})
     out = {
         "event_key": court.get("event_key"),
         "event_name": court.get("event_name"),
         "target_year": int(year),
-        "source_refreshed_at": (status or {}).get("run_timestamp") or court.get("source_refreshed_at"),
+        "source_refreshed_at": (status or {}).get("run_timestamp") or court.get("source_refreshed_at") or court.get("source_updated_at"),
         "source_freshness": freshness,
     }
     any_court = False
