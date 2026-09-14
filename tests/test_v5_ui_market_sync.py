@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 
 
-def _feed(snapshot="2026-09-14T00:02:00Z", start="2026-09-14T18:00:00Z"):
+def _feed(snapshot="2026-09-14T00:02:00Z", start="2026-09-15T18:00:00Z"):
     return pd.DataFrame([{
         "snapshot_utc": snapshot,
         "fixture_id": "fx1",
@@ -11,13 +11,26 @@ def _feed(snapshot="2026-09-14T00:02:00Z", start="2026-09-14T18:00:00Z"):
     }])
 
 
-def test_shared_runtime_state_marks_stale_prices_before_ui_rendering():
+def test_shared_runtime_state_keeps_prices_actionable_until_24_hours_old():
     from v5_ui_production import runtime_production_state
 
     state = runtime_production_state(
         _feed(),
         {"freshness": "READY"},
-        now_utc="2026-09-14T13:30:00Z",
+        now_utc="2026-09-14T23:59:00Z",
+    )
+
+    assert state["state"] == "READY"
+    assert state["feed_status"]["fresh"] is True
+
+
+def test_shared_runtime_state_marks_prices_stale_after_24_hours():
+    from v5_ui_production import runtime_production_state
+
+    state = runtime_production_state(
+        _feed(),
+        {"freshness": "READY"},
+        now_utc="2026-09-15T00:03:00Z",
     )
 
     assert state["state"] == "STALE_PRICES"
@@ -32,19 +45,13 @@ def test_daily_board_and_decision_feed_use_same_runtime_state_helper():
     assert "runtime_production_state(" in daily
 
 
-def test_live_workflow_refreshes_prices_four_times_per_day_without_rebuilding_frozen_forecast_each_time():
+def test_live_workflow_refreshes_prices_once_per_day_and_dispatches_forecast_from_that_pull():
     text = Path(".github/workflows/oddspapi_normalized_daily_v2.yml").read_text(encoding="utf-8")
     trigger = text.split("permissions:", 1)[0]
 
-    for cron in (
-        'cron: "2 0 * * *"',
-        'cron: "2 6 * * *"',
-        'cron: "2 12 * * *"',
-        'cron: "2 18 * * *"',
-    ):
-        assert cron in trigger
-    assert trigger.count("cron:") == 4
+    assert 'cron: "2 0 * * *"' in trigger
+    assert trigger.count("cron:") == 1
 
     dispatch = text.split("Trigger daily forecast after fresh market promotion", 1)[1]
-    assert "github.event_name == 'workflow_dispatch'" in dispatch
-    assert "github.event.schedule == '2 0 * * *'" in dispatch
+    assert "steps.live_pull.outputs.fresh_snapshot == 'true'" in dispatch
+    assert "github.event.schedule" not in dispatch
