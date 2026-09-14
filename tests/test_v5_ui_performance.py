@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 
 def test_performance_headline_keeps_raw_markets_and_fixture_results_separate():
@@ -32,20 +33,20 @@ def test_official_recommendations_override_legacy_audit_for_headline():
 
     report = {
         "official": {
-            "official_recommendations": 4,
+            "official_recommendations": 3,
             "unique_fixtures": 3,
-            "wins": 3,
+            "wins": 2,
             "losses": 1,
             "pushes": 0,
-            "win_rate": 0.75,
-            "net_units": 1.6,
-            "roi": 0.40,
-            "max_recommendations_per_fixture": 2,
+            "win_rate": 2 / 3,
+            "net_units": 1.1,
+            "roi": 1.1 / 3,
+            "max_recommendations_per_fixture": 1,
             "fixture_cluster": {
                 "fixtures": 3,
                 "profitable_fixtures": 2,
                 "profitable_fixture_rate": 2 / 3,
-                "net_units": 1.6,
+                "net_units": 1.1,
             },
         },
         "legacy": {
@@ -55,9 +56,9 @@ def test_official_recommendations_override_legacy_audit_for_headline():
     }
     out = headline_metrics(report)
     assert out["scope"] == "official"
-    assert out["market_record"] == "3-1-0"
+    assert out["market_record"] == "2-1-0"
     assert out["fixture_record"] == "2 profitable / 3"
-    assert out["market_roi"] == 0.40
+    assert out["max_correlated_markets"] == 1
 
 
 def test_load_performance_report_prefers_official_and_keeps_legacy_audit(tmp_path):
@@ -81,3 +82,9 @@ def test_load_performance_report_prefers_official_and_keeps_legacy_audit(tmp_pat
     assert loaded["status"] == "ok"
     assert loaded["official"]["official_recommendations"] == 1
     assert loaded["legacy"]["raw_markets"]["bets"] == 2
+
+
+def test_performance_page_copy_excludes_supporting_pricing_candidates():
+    source = Path("v5_ui_performance.py").read_text(encoding="utf-8")
+    assert "one official top play per fixture" in source.lower()
+    assert "supporting pricing candidates" in source.lower()
