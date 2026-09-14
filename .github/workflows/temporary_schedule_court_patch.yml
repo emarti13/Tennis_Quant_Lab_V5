@@ -29,7 +29,7 @@ jobs:
       - name: Apply integration patch
         run: python scripts/apply_schedule_court_patch.py
       - name: Run targeted tests
-        run: pytest -q tests/test_v5_schedule_context.py tests/test_v5_schedule_court_speed.py tests/test_v5_court_speed.py tests/test_v5_context_matchups.py
+        run: PYTHONPATH=. pytest -q tests/test_v5_schedule_context.py tests/test_v5_schedule_court_speed.py tests/test_v5_court_speed.py tests/test_v5_context_matchups.py
       - name: Commit patch
         run: |
           git config user.name "github-actions[bot]"
