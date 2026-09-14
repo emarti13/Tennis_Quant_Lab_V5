@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: courtspeed-conditions-refresh
+  group: v5-production-writer
   cancel-in-progress: false
 
 jobs:
@@ -38,7 +38,13 @@ jobs:
         run: python v5_refresh_court_conditions.py
 
       - name: Run focused CourtSpeed tests
-        run: pytest tests/test_v5_courtspeed_refresh.py tests/test_v5_court_conditions_source.py tests/test_v5_court_conditions_no_network.py -q
+        run: |
+          pytest \
+            tests/test_v5_courtspeed_refresh.py \
+            tests/test_v5_court_conditions_source.py \
+            tests/test_v5_court_conditions_resolution.py \
+            tests/test_v5_court_conditions_integration.py \
+            tests/test_v5_court_conditions_no_network.py -q
 
       - name: Commit refreshed conditions artifacts
         run: |
