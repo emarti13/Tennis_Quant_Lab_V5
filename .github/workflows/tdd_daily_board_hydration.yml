@@ -1,0 +1,90 @@
+name: TDD Daily Board Hydration Fix
+
+on:
+  push:
+    branches: [fix/live-review-surface-resolution]
+    paths:
+      - 'tests/test_v5_production_ui_unification.py'
+      - '.github/workflows/tdd_daily_board_hydration.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tdd-daily-board-hydration
+  cancel-in-progress: true
+
+jobs:
+  red-green:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/live-review-surface-resolution
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest
+
+      - name: Verify RED for hydration regressions
+        run: |
+          set +e
+          python -m pytest tests/test_v5_production_ui_unification.py -q > /tmp/red.txt 2>&1
+          code=$?
+          cat /tmp/red.txt
+          test "$code" -ne 0
+          grep -Eq 'test_prepare_fixture_without_override_uses_historical_surface_context|test_production_board_adapter_falls_back_from_nan_enriched_identity_fields' /tmp/red.txt
+
+      - name: Apply minimal production fix
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('v5_interactive_production.py')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('    infer_surface,\n    rank_board,', '    infer_surface,\n    resolve_fixture_surface,\n    rank_board,')
+          s = s.replace(
+              'def _prepare_with_overrides(fixture_rows, ratings_by_tour, summary):',
+              'def _prepare_with_overrides(fixture_rows, ratings_by_tour, summary, context_history=None):'
+          )
+          s = s.replace(
+              '    else:\n        surface, surface_source = infer_surface(tournament)\n\n    bo =',
+              '    else:\n        surface, surface_source = resolve_fixture_surface(\n            tournament,\n            start_time_utc=first.get("start_time_utc"),\n            context_history=context_history,\n        )\n\n    bo ='
+          )
+          marker = 'def production_board_to_today(board: pd.DataFrame) -> pd.DataFrame:\n'
+          helper = '''def _first_present(*values):\n    for value in values:\n        if value is None:\n            continue\n        try:\n            if pd.isna(value):\n                continue\n        except Exception:\n            pass\n        if isinstance(value, str) and not value.strip():\n            continue\n        return value\n    return None\n\n\n'''
+          if helper not in s:
+              s = s.replace(marker, helper + marker)
+          old = '''        p1 = str(first.get("resolved_player1") or first.get("player1") or "Player 1")\n        p2 = str(first.get("resolved_player2") or first.get("player2") or "Player 2")\n        p1p = pd.to_numeric(pd.Series([first.get("full_context_probability_p1")]), errors="coerce").iloc[0]\n'''
+          new = '''        tournament = _first_present(first.get("tournament"), "")\n        p1 = str(_first_present(first.get("resolved_player1"), first.get("player1"), "Player 1"))\n        p2 = str(_first_present(first.get("resolved_player2"), first.get("player2"), "Player 2"))\n        tour = _first_present(first.get("tour_v5"))\n        if tour is None:\n            tour = _tour_to_v5(_first_present(first.get("tour"), ""), tournament)\n        best_of = _first_present(first.get("best_of"))\n        if best_of is None:\n            best_of = infer_best_of(tournament, tour)\n        p1p = pd.to_numeric(pd.Series([first.get("full_context_probability_p1")]), errors="coerce").iloc[0]\n'''
+          if old not in s:
+              raise SystemExit('identity adapter target not found')
+          s = s.replace(old, new)
+          s = s.replace(
+              '            "Status": "OK", "Fixture ID": fixture_id, "Tournament": first.get("tournament"),\n            "Start": first.get("start_time_utc"), "Tour": first.get("tour_v5"), "Surface": first.get("surface"),\n            "Surface Source": first.get("surface_source"), "Best Of": first.get("best_of"),',
+              '            "Status": "OK", "Fixture ID": fixture_id, "Tournament": tournament,\n            "Start": first.get("start_time_utc"), "Tour": tour, "Surface": first.get("surface"),\n            "Surface Source": first.get("surface_source"), "Best Of": best_of,'
+          )
+          s = s.replace(
+              'prepared_rows.append((fixture_id, group, _prepare_with_overrides(group, ratings_by_tour, summary)))',
+              'prepared_rows.append((fixture_id, group, _prepare_with_overrides(\n                group, ratings_by_tour, summary, context_history=context_history\n            )))'
+          )
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Verify GREEN focused contract
+        run: python -m pytest tests/test_v5_production_ui_unification.py tests/test_v5_surface_resolution_fallback.py -q
+
+      - name: Verify full regression suite
+        run: python -m pytest tests -q
+
+      - name: Commit verified fix and remove one-time workflow
+        run: |
+          rm .github/workflows/tdd_daily_board_hydration.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add v5_interactive_production.py .github/workflows/tdd_daily_board_hydration.yml
+          git commit -m 'Fix Daily Board hydration and canonical surface wiring'
+          git push origin HEAD:fix/live-review-surface-resolution
