@@ -7,7 +7,7 @@ import pandas as pd
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 
-from results_accuracy_page import accuracy_metrics, load_accuracy_ledger
+from results_accuracy_page import accuracy_metrics, fixture_headline_metrics, load_accuracy_ledger
 
 
 class ResultsAccuracyTests(unittest.TestCase):
@@ -50,6 +50,18 @@ class ResultsAccuracyTests(unittest.TestCase):
         self.assertAlmostEqual(metrics["win_rate"], 0.5)
         self.assertAlmostEqual(metrics["units"], 0.5)
         self.assertAlmostEqual(metrics["roi"], 0.25)
+
+    def test_fixture_headline_counts_each_fixture_once(self):
+        frame = pd.DataFrame([
+            {"fixture_id": "fx1", "winner_correct": True, "brier_score": .18, "abs_margin_error": 3.46, "abs_total_error": .5},
+            {"fixture_id": "fx2", "winner_correct": False, "brier_score": .36, "abs_margin_error": 2.0, "abs_total_error": 1.5},
+        ])
+        metrics = fixture_headline_metrics(frame)
+        self.assertEqual(metrics["settled_fixtures"], 2)
+        self.assertAlmostEqual(metrics["winner_accuracy"], .5)
+        self.assertAlmostEqual(metrics["brier_score"], .27)
+        self.assertAlmostEqual(metrics["margin_mae"], 2.73)
+        self.assertAlmostEqual(metrics["total_mae"], 1.0)
 
 
 if __name__ == "__main__":
