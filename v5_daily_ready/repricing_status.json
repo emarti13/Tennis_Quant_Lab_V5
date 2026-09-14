@@ -1,14 +1,14 @@
 {
   "stage": "repricing",
-  "run_timestamp": "2026-09-14T03:41:03.614867+00:00",
+  "run_timestamp": "2026-09-14T13:54:47.485008+00:00",
   "source_version": "2026-09-14T03:40:56.320656+00:00",
   "state": "success",
-  "rows": 1322,
-  "fixtures": 64,
+  "rows": 302,
+  "fixtures": 15,
   "freshness": "READY",
   "error": null,
-  "forecast_date": "2026-09-13",
-  "matched_model_rows": 402,
-  "actionable_rows": 0,
-  "official_recommendations": 6
+  "forecast_date": "2026-09-14",
+  "matched_model_rows": 302,
+  "actionable_rows": 97,
+  "official_recommendations": 103
 }
