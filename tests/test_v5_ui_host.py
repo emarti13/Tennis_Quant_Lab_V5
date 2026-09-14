@@ -21,12 +21,19 @@ def test_resolve_selected_match_uses_fixture_id_without_mutating_board():
     pd.testing.assert_frame_equal(board, source)
 
 
-def test_page_labels_make_today_default_and_keep_matchup_lab():
+def test_page_labels_make_daily_board_default_and_keep_decision_feed_and_matchup_lab():
     from v5_ui_host import navigation_pages
 
     pages = navigation_pages()
-    assert pages[0] == "Today"
-    assert pages[:5] == ["Today", "Match Detail", "All Markets", "Performance", "Model Health"]
+    assert pages[0] == "Daily Board"
+    assert pages[:6] == [
+        "Daily Board",
+        "Decision Feed",
+        "Match Detail",
+        "All Markets",
+        "Performance",
+        "Model Health",
+    ]
     assert "Matchup Lab" in pages
 
 
@@ -38,7 +45,7 @@ def test_market_snapshot_is_explicit_when_missing():
     assert market_snapshot(feed) == "2026-09-03T12:00:00Z"
 
 
-def test_streamlit_entrypoint_delegates_to_today_ui_host():
+def test_streamlit_entrypoint_delegates_to_v5_ui_host():
     source = Path("tennis_quant_app_v5.py").read_text(encoding="utf-8")
     assert "from v5_ui_host import run_v5_ui_app" in source
     assert "run_v5_ui_app(st, BASE, globals())" in source
