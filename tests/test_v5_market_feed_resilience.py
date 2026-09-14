@@ -52,11 +52,17 @@ def test_today_never_turns_stale_fixture_fallback_into_a_manual_model_run():
     assert "Run manual recovery board" not in source
 
 
-def test_live_workflow_uses_one_quota_conserving_daily_schedule():
+def test_live_workflow_uses_four_quota_budgeted_daily_price_refreshes():
     text = Path(".github/workflows/oddspapi_normalized_daily_v2.yml").read_text(encoding="utf-8")
     trigger = text.split("permissions:", 1)[0]
-    assert 'cron: "2 0 * * *"' in trigger
-    assert trigger.count("cron:") == 1
+    for cron in (
+        'cron: "2 0 * * *"',
+        'cron: "2 6 * * *"',
+        'cron: "2 12 * * *"',
+        'cron: "2 18 * * *"',
+    ):
+        assert cron in trigger
+    assert trigger.count("cron:") == 4
     assert "\n  push:" not in trigger
 
 
@@ -68,11 +74,14 @@ def test_live_workflow_treats_quota_skip_as_controlled_state():
     assert "oddspapi_daily/*_manifest.json" in text
 
 
-def test_fresh_live_market_promotion_dispatches_daily_forecast_recovery():
+def test_fresh_live_market_promotion_dispatches_daily_forecast_recovery_only_at_first_window_or_manual():
     text = Path(".github/workflows/oddspapi_normalized_daily_v2.yml").read_text(encoding="utf-8")
     assert "actions: write" in text
     assert "Trigger daily forecast after fresh market promotion" in text
     assert "gh workflow run v5_daily_predictions.yml --ref main -R emarti13/Tennis_Quant_Lab_V5" in text
+    dispatch = text.split("Trigger daily forecast after fresh market promotion", 1)[1]
+    assert "github.event_name == 'workflow_dispatch'" in dispatch
+    assert "github.event.schedule == '2 0 * * *'" in dispatch
     assert text.index("Commit live feed and lightweight production artifacts") < text.index(
         "Trigger daily forecast after fresh market promotion"
     )
