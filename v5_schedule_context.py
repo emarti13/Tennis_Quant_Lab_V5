@@ -180,8 +180,6 @@ def match_schedule_event(event: pd.Series | dict, schedule: pd.DataFrame) -> dic
     if top_method == "exact":
         ambiguous = second >= 0.995
     elif top_method == "alias":
-        # Sponsor-stripped aliases are useful only when they uniquely identify an event.
-        # A city/generic name shared by multiple candidates must not bypass ambiguity checks.
         ambiguous = second >= top_score - 0.04
     else:
         ambiguous = top_score >= 0.55 and second >= 0 and top_score - second < 0.08
@@ -189,6 +187,16 @@ def match_schedule_event(event: pd.Series | dict, schedule: pd.DataFrame) -> dic
             empty["schedule_match_method"] = "ambiguous" if top_score >= 0.55 else "unmatched"
             empty["schedule_match_score"] = float(top_score)
             return empty
+
+    # A warehouse source may identify an event only by venue/city while the schedule
+    # uses a sponsor brand. If more than one compatible tournament shares that venue,
+    # a name that is effectively just the venue cannot uniquely identify the event.
+    event_name_norm = normalize_event_name(event_name)
+    city_norm = normalize_event_name(city)
+    if top_method != "exact" and city_norm and event_name_norm == city_norm:
+        same_city_count = int((candidates["schedule_city_normalized"] == city_norm).sum())
+        if same_city_count > 1:
+            ambiguous = True
 
     if ambiguous:
         empty["schedule_match_method"] = "ambiguous"
