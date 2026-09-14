@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from v5_fixture_accuracy import fixture_accuracy_metrics, fixture_accuracy_records
+from v5_results_reset import filter_since_reset, load_reset_timestamp
 
 BASE = Path(__file__).resolve().parent
 DEFAULT_LEDGER = BASE / "v5_daily_ready" / "frozen_predictions.csv"
@@ -37,7 +38,7 @@ def filter_current_engine_rows(df, current_model_version):
 
 
 def results_ledger_views(df, current_model_version):
-    """Return legacy market-level audit scopes without using them as accuracy headlines."""
+    """Return market-level audit scopes for the active results epoch only."""
     if df is None or df.empty:
         empty = pd.DataFrame(columns=list(df.columns) if df is not None else [])
         return {"current_engine": empty.copy(), "historical_actionable": empty.copy(), "all_settled": empty.copy()}
@@ -80,7 +81,12 @@ def load_accuracy_ledger(path=DEFAULT_LEDGER):
     ):
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
-    return df
+    reset_at = load_reset_timestamp()
+    return filter_since_reset(
+        df,
+        reset_at,
+        timestamp_columns=("frozen_at_utc", "snapshot_utc", "start_time_utc"),
+    )
 
 
 def accuracy_metrics(df, *, actionable_only=True):
@@ -210,14 +216,16 @@ def _display_fixture_accuracy(records):
 
 def render_results_accuracy(ledger_path=DEFAULT_LEDGER):
     st.title("Results & Accuracy")
+    reset_at = load_reset_timestamp()
+    reset_text = "" if reset_at is None else f" Active production epoch: {reset_at.strftime('%Y-%m-%d %H:%M UTC')}."
     st.caption(
         "One frozen pre-match forecast per settled fixture. This page grades V5's tennis prediction — "
-        "winner probability, game margin and total games — independently of which market became the official bet."
+        "winner probability, game margin and total games — independently of which market became the official bet." + reset_text
     )
 
     df = load_accuracy_ledger(ledger_path)
     if df.empty:
-        st.info("No frozen predictions have been logged yet.")
+        st.info("No post-reset frozen predictions have settled yet.")
         return
 
     fixtures = fixture_accuracy_records(df)
@@ -269,10 +277,10 @@ def render_results_accuracy(ledger_path=DEFAULT_LEDGER):
 
     current_version = _current_model_version()
     views = results_ledger_views(df, current_version)
-    with st.expander("Market-level settlement audit — not Results Accuracy headline", expanded=False):
+    with st.expander("Market-level settlement audit — active epoch only", expanded=False):
         st.caption(
-            "These rows preserve historical market settlement evidence. BET/LEAN/PASS/REVIEW and alternate lines may all exist here, "
-            "but they do not multiply the fixture-level model accuracy observation above."
+            "These rows preserve market settlement evidence from the current production epoch only. "
+            "Older raw history remains stored outside this tab for research/audit use."
         )
         current_df = views["current_engine"]
         decisions = _decision_rows(current_df if not current_df.empty else df)
