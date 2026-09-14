@@ -55,6 +55,14 @@ def _missing(value: Any) -> bool:
     return str(value).strip() == ""
 
 
+def _is_true(value: Any) -> bool:
+    if _missing(value):
+        return False
+    if isinstance(value, bool):
+        return value
+    return str(value).strip().lower() in {"true", "1", "yes"}
+
+
 def _float_or_none(value: Any) -> float | None:
     if _missing(value):
         return None
@@ -124,12 +132,31 @@ def primary_market_for_row(row: pd.Series) -> dict[str, Any]:
     return ranked[0][3]
 
 
+def _display_primary_for_row(row: pd.Series) -> dict[str, Any]:
+    """Use the immutable official play once one has been frozen for this fixture."""
+    candidate = primary_market_for_row(row)
+    official_signal = str(row.get("Official Signal") or "").upper().strip()
+    official_market = row.get("Official Market")
+    if _is_true(row.get("Official Locked")) and not _missing(official_market) and official_signal in {"BET", "LEAN"}:
+        return {
+            "family": "official",
+            "selection": str(official_market),
+            "signal": official_signal,
+            "edge": _float_or_none(row.get("Official Edge")),
+            "market_odds": _float_or_none(row.get("Official Price")),
+            "signal_col": None,
+            "ev_col": None,
+            "odds_col": None,
+        }
+    return candidate
+
+
 def prepare_today_board(board: pd.DataFrame) -> pd.DataFrame:
     if board is None or board.empty:
         return pd.DataFrame(columns=list(board.columns) if board is not None else [])
 
     out = board.copy()
-    primary = [primary_market_for_row(row) for _, row in out.iterrows()]
+    primary = [_display_primary_for_row(row) for _, row in out.iterrows()]
     out["Best Signal"] = [item["signal"] for item in primary]
     out["Primary Market"] = [item["selection"] for item in primary]
     out["Primary Market Family"] = [item["family"] for item in primary]
@@ -334,7 +361,12 @@ def match_card_html(row: pd.Series) -> str:
     p2_vol_num = "—" if p2_vol is None else f"σ {p2_vol:.3f}"
     p1_conf_text = "—" if p1_conf is None else f"{p1_conf:.0%}"
     p2_conf_text = "—" if p2_conf is None else f"{p2_conf:.0%}"
-    primary_label = "Official top play" if signal in {"BET", "LEAN"} else "Primary model view"
+    if _is_true(row.get("Official Locked")):
+        primary_label = "Official top play"
+    elif signal in {"BET", "LEAN"}:
+        primary_label = "Top play candidate"
+    else:
+        primary_label = "Primary model view"
 
     html = f"""
     <div class="v5-card">
@@ -410,8 +442,8 @@ def render_today_results(
     if hasattr(st_module, "columns"):
         cols = st_module.columns(4)
         cards = [
-            ("Best Edge", format_edge(summary["best_edge"]), "strongest current qualified edge"),
-            ("Qualified Plays", str(summary["qualified_plays"]), "BET + LEAN top plays"),
+            ("Best Edge", format_edge(summary["best_edge"]), "strongest frozen/candidate edge"),
+            ("Qualified Plays", str(summary["qualified_plays"]), "official or current BET + LEAN top plays"),
             ("Model Health", "Live", "production outputs loaded"),
             ("Markets Live", str(summary["markets_live"]), "books in current feed"),
         ]
