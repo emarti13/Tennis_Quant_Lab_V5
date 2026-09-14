@@ -1,0 +1,1133 @@
+{
+  "audit_version": "state-confidence-gate-v1",
+  "source": "v5_daily_ready/frozen_predictions.csv",
+  "source_rows": 7581,
+  "settled_rows": 4832,
+  "current_model_version": "v5-advanced-nested-chronological-1",
+  "candidate_thresholds": [
+    0.0,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6
+  ],
+  "production_threshold": 0.45,
+  "primary_scope": {
+    "scope": "current_model_version",
+    "settled_market_rows": 2182,
+    "fixtures": 111,
+    "state_confidence_non_null_fraction": 1.0,
+    "state_confidence_quantiles": {
+      "0.1": 0.5086486486486487,
+      "0.25": 0.6701388888888888,
+      "0.5": 0.8693387681159421,
+      "0.75": 0.9368062806976836,
+      "0.9": 0.9594485563966879
+    },
+    "current_45_gate_impact": {
+      "market_rows_downgraded": 5,
+      "fixtures_with_downgraded_market": 5,
+      "no_gate_fixture_actions": {
+        "bets": 72,
+        "wins": 30,
+        "losses": 42,
+        "pushes": 0,
+        "win_rate": 0.4166666666666667,
+        "net_units": 17.735,
+        "roi": 0.24631944444444442,
+        "units_per_fixture": 0.15977477477477478,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.28113259642967176,
+        "avg_edge": 0.09223043309528065,
+        "avg_state_confidence": 0.8161284183812595
+      },
+      "threshold_45_fixture_actions": {
+        "bets": 67,
+        "wins": 28,
+        "losses": 39,
+        "pushes": 0,
+        "win_rate": 0.417910447761194,
+        "net_units": 15.754999999999999,
+        "roi": 0.23514925373134327,
+        "units_per_fixture": 0.14193693693693693,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.27541506889432604,
+        "avg_edge": 0.09013851620380056,
+        "avg_state_confidence": 0.8524749760184783
+      },
+      "paired_no_gate_vs_45": {
+        "delta_units_per_fixture": 0.017837837837837836,
+        "ci95": [
+          -0.04504504504504504,
+          0.09306306306306307
+        ],
+        "fixtures": 111
+      }
+    },
+    "thresholds_all": [
+      {
+        "threshold": 0.0,
+        "bets": 72,
+        "wins": 30,
+        "losses": 42,
+        "pushes": 0,
+        "win_rate": 0.4166666666666667,
+        "net_units": 17.735,
+        "roi": 0.24631944444444442,
+        "units_per_fixture": 0.15977477477477478,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.28113259642967176,
+        "avg_edge": 0.09223043309528065,
+        "avg_state_confidence": 0.8161284183812595,
+        "roi_ci95": [
+          -0.14509305555555557,
+          0.6297086805555552
+        ]
+      },
+      {
+        "threshold": 0.3,
+        "bets": 70,
+        "wins": 29,
+        "losses": 41,
+        "pushes": 0,
+        "win_rate": 0.4142857142857143,
+        "net_units": 16.125,
+        "roi": 0.23035714285714284,
+        "units_per_fixture": 0.14527027027027026,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.2713267635187748,
+        "avg_edge": 0.08920082713966937,
+        "avg_state_confidence": 0.8323987541445335,
+        "roi_ci95": [
+          -0.15353499999999998,
+          0.6481967857142851
+        ]
+      },
+      {
+        "threshold": 0.35,
+        "bets": 69,
+        "wins": 28,
+        "losses": 41,
+        "pushes": 0,
+        "win_rate": 0.4057971014492754,
+        "net_units": 13.755,
+        "roi": 0.19934782608695653,
+        "units_per_fixture": 0.12391891891891893,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.27343826533188076,
+        "avg_edge": 0.08979137665869442,
+        "avg_state_confidence": 0.8394289994515993,
+        "roi_ci95": [
+          -0.1824699275362319,
+          0.5875463768115937
+        ]
+      },
+      {
+        "threshold": 0.4,
+        "bets": 68,
+        "wins": 28,
+        "losses": 40,
+        "pushes": 0,
+        "win_rate": 0.4117647058823529,
+        "net_units": 14.755,
+        "roi": 0.21698529411764708,
+        "units_per_fixture": 0.13292792792792793,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.27169980115451964,
+        "avg_edge": 0.08927191366567631,
+        "avg_state_confidence": 0.8464732984631425,
+        "roi_ci95": [
+          -0.17047132352941183,
+          0.6139632352941166
+        ]
+      },
+      {
+        "threshold": 0.45,
+        "bets": 67,
+        "wins": 28,
+        "losses": 39,
+        "pushes": 0,
+        "win_rate": 0.417910447761194,
+        "net_units": 15.754999999999999,
+        "roi": 0.23514925373134327,
+        "units_per_fixture": 0.14193693693693693,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.27541506889432604,
+        "avg_edge": 0.09013851620380056,
+        "avg_state_confidence": 0.8524749760184783,
+        "roi_ci95": [
+          -0.17476828358208954,
+          0.6427261194029845
+        ]
+      },
+      {
+        "threshold": 0.5,
+        "bets": 64,
+        "wins": 26,
+        "losses": 38,
+        "pushes": 0,
+        "win_rate": 0.40625,
+        "net_units": 12.825,
+        "roi": 0.200390625,
+        "units_per_fixture": 0.11554054054054054,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.2797062372801817,
+        "avg_edge": 0.09161871017258749,
+        "avg_state_confidence": 0.8701950567052722,
+        "roi_ci95": [
+          -0.204056640625,
+          0.6336589843749996
+        ]
+      },
+      {
+        "threshold": 0.55,
+        "bets": 61,
+        "wins": 25,
+        "losses": 36,
+        "pushes": 0,
+        "win_rate": 0.4098360655737705,
+        "net_units": 12.955,
+        "roi": 0.21237704918032788,
+        "units_per_fixture": 0.11671171171171171,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.27560568718897327,
+        "avg_edge": 0.08928237893885976,
+        "avg_state_confidence": 0.887506472287682,
+        "roi_ci95": [
+          -0.20537008196721313,
+          0.655356557377049
+        ]
+      },
+      {
+        "threshold": 0.6,
+        "bets": 61,
+        "wins": 25,
+        "losses": 36,
+        "pushes": 0,
+        "win_rate": 0.4098360655737705,
+        "net_units": 12.955,
+        "roi": 0.21237704918032788,
+        "units_per_fixture": 0.11671171171171171,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.27560568718897327,
+        "avg_edge": 0.08928237893885976,
+        "avg_state_confidence": 0.887506472287682,
+        "roi_ci95": [
+          -0.20537008196721313,
+          0.655356557377049
+        ]
+      }
+    ],
+    "chronological_split": {
+      "status": "ok",
+      "development_fixtures": 77,
+      "holdout_fixtures": 34,
+      "development_end": "2026-09-07 04:30:00+00:00",
+      "holdout_start": "2026-09-07 08:10:00+00:00"
+    },
+    "thresholds_development": [
+      {
+        "threshold": 0.0,
+        "bets": 61,
+        "wins": 24,
+        "losses": 37,
+        "pushes": 0,
+        "win_rate": 0.39344262295081966,
+        "net_units": 12.521,
+        "roi": 0.20526229508196722,
+        "units_per_fixture": 0.16261038961038962,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.2884413426230153,
+        "avg_edge": 0.09249016658706068,
+        "avg_state_confidence": 0.8236222229281159,
+        "roi_ci95": [
+          -0.20583811475409838,
+          0.6357655737704915
+        ]
+      },
+      {
+        "threshold": 0.3,
+        "bets": 59,
+        "wins": 23,
+        "losses": 36,
+        "pushes": 0,
+        "win_rate": 0.3898305084745763,
+        "net_units": 10.911000000000001,
+        "roi": 0.18493220338983052,
+        "units_per_fixture": 0.14170129870129872,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.2770550576844374,
+        "avg_edge": 0.08890452336826017,
+        "avg_state_confidence": 0.8431800383946058,
+        "roi_ci95": [
+          -0.2355377118644068,
+          0.6411135593220333
+        ]
+      },
+      {
+        "threshold": 0.35,
+        "bets": 58,
+        "wins": 22,
+        "losses": 36,
+        "pushes": 0,
+        "win_rate": 0.3793103448275862,
+        "net_units": 8.541,
+        "roi": 0.14725862068965517,
+        "units_per_fixture": 0.11092207792207792,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.2796657804304714,
+        "avg_edge": 0.08960196497242086,
+        "avg_state_confidence": 0.8517294902987027,
+        "roi_ci95": [
+          -0.2672297413793103,
+          0.5972168103448273
+        ]
+      },
+      {
+        "threshold": 0.4,
+        "bets": 57,
+        "wins": 22,
+        "losses": 35,
+        "pushes": 0,
+        "win_rate": 0.38596491228070173,
+        "net_units": 9.540999999999999,
+        "roi": 0.16738596491228067,
+        "units_per_fixture": 0.12390909090909089,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.2777010778171036,
+        "avg_edge": 0.08897893172309622,
+        "avg_state_confidence": 0.8603490135203173,
+        "roi_ci95": [
+          -0.26000964912280705,
+          0.6208368421052616
+        ]
+      },
+      {
+        "threshold": 0.45,
+        "bets": 56,
+        "wins": 22,
+        "losses": 34,
+        "pushes": 0,
+        "win_rate": 0.39285714285714285,
+        "net_units": 10.540999999999999,
+        "roi": 0.18823214285714282,
+        "units_per_fixture": 0.13689610389610388,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.2822532959462038,
+        "avg_edge": 0.09001052793937736,
+        "avg_state_confidence": 0.8677773726500437,
+        "roi_ci95": [
+          -0.22265357142857142,
+          0.6152928571428568
+        ]
+      },
+      {
+        "threshold": 0.5,
+        "bets": 54,
+        "wins": 20,
+        "losses": 34,
+        "pushes": 0,
+        "win_rate": 0.37037037037037035,
+        "net_units": 6.610999999999997,
+        "roi": 0.12242592592592587,
+        "units_per_fixture": 0.08585714285714283,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.2897451169159438,
+        "avg_edge": 0.09184001497279944,
+        "avg_state_confidence": 0.8819644406910915,
+        "roi_ci95": [
+          -0.31822361111111114,
+          0.5593648148148143
+        ]
+      },
+      {
+        "threshold": 0.55,
+        "bets": 52,
+        "wins": 20,
+        "losses": 32,
+        "pushes": 0,
+        "win_rate": 0.38461538461538464,
+        "net_units": 8.611,
+        "roi": 0.16559615384615387,
+        "units_per_fixture": 0.11183116883116884,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.2901683458112147,
+        "avg_edge": 0.09116088048362535,
+        "avg_state_confidence": 0.8956877785000698,
+        "roi_ci95": [
+          -0.2763038461538462,
+          0.6459173076923077
+        ]
+      },
+      {
+        "threshold": 0.6,
+        "bets": 52,
+        "wins": 20,
+        "losses": 32,
+        "pushes": 0,
+        "win_rate": 0.38461538461538464,
+        "net_units": 8.611,
+        "roi": 0.16559615384615387,
+        "units_per_fixture": 0.11183116883116884,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.2901683458112147,
+        "avg_edge": 0.09116088048362535,
+        "avg_state_confidence": 0.8956877785000698,
+        "roi_ci95": [
+          -0.2763038461538462,
+          0.6459173076923077
+        ]
+      }
+    ],
+    "thresholds_holdout": [
+      {
+        "threshold": 0.0,
+        "bets": 11,
+        "wins": 6,
+        "losses": 5,
+        "pushes": 0,
+        "win_rate": 0.5454545454545454,
+        "net_units": 5.214,
+        "roi": 0.47400000000000003,
+        "units_per_fixture": 0.1533529411764706,
+        "max_drawdown_units": 2.0,
+        "avg_expected_value": 0.24060227663022102,
+        "avg_edge": 0.09079009282268226,
+        "avg_state_confidence": 0.774571865894146,
+        "roi_ci95": [
+          -0.37736363636363635,
+          1.4177704545454544
+        ]
+      },
+      {
+        "threshold": 0.3,
+        "bets": 11,
+        "wins": 6,
+        "losses": 5,
+        "pushes": 0,
+        "win_rate": 0.5454545454545454,
+        "net_units": 5.214,
+        "roi": 0.47400000000000003,
+        "units_per_fixture": 0.1533529411764706,
+        "max_drawdown_units": 2.0,
+        "avg_expected_value": 0.24060227663022102,
+        "avg_edge": 0.09079009282268226,
+        "avg_state_confidence": 0.774571865894146,
+        "roi_ci95": [
+          -0.37736363636363635,
+          1.4177704545454544
+        ]
+      },
+      {
+        "threshold": 0.35,
+        "bets": 11,
+        "wins": 6,
+        "losses": 5,
+        "pushes": 0,
+        "win_rate": 0.5454545454545454,
+        "net_units": 5.214,
+        "roi": 0.47400000000000003,
+        "units_per_fixture": 0.1533529411764706,
+        "max_drawdown_units": 2.0,
+        "avg_expected_value": 0.24060227663022102,
+        "avg_edge": 0.09079009282268226,
+        "avg_state_confidence": 0.774571865894146,
+        "roi_ci95": [
+          -0.37736363636363635,
+          1.4177704545454544
+        ]
+      },
+      {
+        "threshold": 0.4,
+        "bets": 11,
+        "wins": 6,
+        "losses": 5,
+        "pushes": 0,
+        "win_rate": 0.5454545454545454,
+        "net_units": 5.214,
+        "roi": 0.47400000000000003,
+        "units_per_fixture": 0.1533529411764706,
+        "max_drawdown_units": 2.0,
+        "avg_expected_value": 0.24060227663022102,
+        "avg_edge": 0.09079009282268226,
+        "avg_state_confidence": 0.774571865894146,
+        "roi_ci95": [
+          -0.37736363636363635,
+          1.4177704545454544
+        ]
+      },
+      {
+        "threshold": 0.45,
+        "bets": 11,
+        "wins": 6,
+        "losses": 5,
+        "pushes": 0,
+        "win_rate": 0.5454545454545454,
+        "net_units": 5.214,
+        "roi": 0.47400000000000003,
+        "units_per_fixture": 0.1533529411764706,
+        "max_drawdown_units": 2.0,
+        "avg_expected_value": 0.24060227663022102,
+        "avg_edge": 0.09079009282268226,
+        "avg_state_confidence": 0.774571865894146,
+        "roi_ci95": [
+          -0.37736363636363635,
+          1.4177704545454544
+        ]
+      },
+      {
+        "threshold": 0.5,
+        "bets": 10,
+        "wins": 6,
+        "losses": 4,
+        "pushes": 0,
+        "win_rate": 0.6,
+        "net_units": 6.214,
+        "roi": 0.6214000000000001,
+        "units_per_fixture": 0.18276470588235294,
+        "max_drawdown_units": 2.0,
+        "avg_expected_value": 0.22549628724706627,
+        "avg_edge": 0.09042366425144305,
+        "avg_state_confidence": 0.8066403831818478,
+        "roi_ci95": [
+          -0.3066675,
+          1.599167499999998
+        ]
+      },
+      {
+        "threshold": 0.55,
+        "bets": 9,
+        "wins": 5,
+        "losses": 4,
+        "pushes": 0,
+        "win_rate": 0.5555555555555556,
+        "net_units": 4.343999999999999,
+        "roi": 0.4826666666666666,
+        "units_per_fixture": 0.12776470588235292,
+        "max_drawdown_units": 2.0,
+        "avg_expected_value": 0.1914658818160222,
+        "avg_edge": 0.07842881445799205,
+        "avg_state_confidence": 0.8402367030605525,
+        "roi_ci95": [
+          null,
+          null
+        ]
+      },
+      {
+        "threshold": 0.6,
+        "bets": 9,
+        "wins": 5,
+        "losses": 4,
+        "pushes": 0,
+        "win_rate": 0.5555555555555556,
+        "net_units": 4.343999999999999,
+        "roi": 0.4826666666666666,
+        "units_per_fixture": 0.12776470588235292,
+        "max_drawdown_units": 2.0,
+        "avg_expected_value": 0.1914658818160222,
+        "avg_edge": 0.07842881445799205,
+        "avg_state_confidence": 0.8402367030605525,
+        "roi_ci95": [
+          null,
+          null
+        ]
+      }
+    ],
+    "development_selected_threshold": 0.0,
+    "development_selection_basis": "maximum net units per available fixture; minimum 30 development bets; drawdown tie-breaker",
+    "holdout_selected_vs_45": {
+      "delta_units_per_fixture": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "fixtures": 34
+    },
+    "holdout_stability_blocks": [
+      {
+        "block": 1,
+        "fixtures": 12,
+        "candidate_units": 3.41,
+        "baseline_units": 3.41,
+        "delta_units": 0.0
+      },
+      {
+        "block": 2,
+        "fixtures": 11,
+        "candidate_units": 0.0,
+        "baseline_units": 0.0,
+        "delta_units": 0.0
+      },
+      {
+        "block": 3,
+        "fixtures": 11,
+        "candidate_units": 1.8039999999999998,
+        "baseline_units": 1.8039999999999998,
+        "delta_units": 0.0
+      }
+    ],
+    "decision": "KEEP_45_INSUFFICIENT_HOLDOUT",
+    "promotion_rule": "A non-45 threshold must be selected on development, have >=20 bets for both policies on holdout, paired fixture-bootstrap 95% CI for incremental units/fixture entirely above zero, higher holdout ROI, and positive incremental units in >=2/3 holdout time blocks."
+  },
+  "all_history_scope": {
+    "scope": "all_settled",
+    "settled_market_rows": 4832,
+    "fixtures": 251,
+    "state_confidence_non_null_fraction": 1.0,
+    "state_confidence_quantiles": {
+      "0.1": 0.4763975155279503,
+      "0.25": 0.6765377096022257,
+      "0.5": 0.8742901393908105,
+      "0.75": 0.9395489158492514,
+      "0.9": 0.9622649453617396
+    },
+    "current_45_gate_impact": {
+      "market_rows_downgraded": 19,
+      "fixtures_with_downgraded_market": 19,
+      "no_gate_fixture_actions": {
+        "bets": 189,
+        "wins": 66,
+        "losses": 123,
+        "pushes": 0,
+        "win_rate": 0.3492063492063492,
+        "net_units": -3.7500000000000107,
+        "roi": -0.0198412698412699,
+        "units_per_fixture": -0.014940239043824743,
+        "max_drawdown_units": 37.473000000000006,
+        "avg_expected_value": 0.5175697842204672,
+        "avg_edge": 0.12199425348039619,
+        "avg_state_confidence": 0.7885548976158888
+      },
+      "threshold_45_fixture_actions": {
+        "bets": 170,
+        "wins": 60,
+        "losses": 110,
+        "pushes": 0,
+        "win_rate": 0.35294117647058826,
+        "net_units": -1.9300000000000068,
+        "roi": -0.011352941176470628,
+        "units_per_fixture": -0.007689243027888474,
+        "max_drawdown_units": 30.678,
+        "avg_expected_value": 0.4706260657524693,
+        "avg_edge": 0.11702590589343231,
+        "avg_state_confidence": 0.8427395562113983
+      },
+      "paired_no_gate_vs_45": {
+        "delta_units_per_fixture": -0.007250996015936256,
+        "ci95": [
+          -0.0502390438247012,
+          0.040759960159362556
+        ],
+        "fixtures": 251
+      }
+    },
+    "thresholds_all": [
+      {
+        "threshold": 0.0,
+        "bets": 189,
+        "wins": 66,
+        "losses": 123,
+        "pushes": 0,
+        "win_rate": 0.3492063492063492,
+        "net_units": -3.7500000000000107,
+        "roi": -0.0198412698412699,
+        "units_per_fixture": -0.014940239043824743,
+        "max_drawdown_units": 37.473000000000006,
+        "avg_expected_value": 0.5175697842204672,
+        "avg_edge": 0.12199425348039619,
+        "avg_state_confidence": 0.7885548976158888,
+        "roi_ci95": [
+          -0.25159748677248683,
+          0.23725092592592556
+        ]
+      },
+      {
+        "threshold": 0.3,
+        "bets": 180,
+        "wins": 63,
+        "losses": 117,
+        "pushes": 0,
+        "win_rate": 0.35,
+        "net_units": -4.800000000000008,
+        "roi": -0.02666666666666671,
+        "units_per_fixture": -0.019123505976095648,
+        "max_drawdown_units": 34.25300000000001,
+        "avg_expected_value": 0.4886430500461899,
+        "avg_edge": 0.11805811464297188,
+        "avg_state_confidence": 0.8166843461428313,
+        "roi_ci95": [
+          -0.26271930555555556,
+          0.24262916666666662
+        ]
+      },
+      {
+        "threshold": 0.35,
+        "bets": 176,
+        "wins": 60,
+        "losses": 116,
+        "pushes": 0,
+        "win_rate": 0.3409090909090909,
+        "net_units": -7.930000000000003,
+        "roi": -0.0450568181818182,
+        "units_per_fixture": -0.03159362549800798,
+        "max_drawdown_units": 34.678,
+        "avg_expected_value": 0.494173408351703,
+        "avg_edge": 0.11885196414316104,
+        "avg_state_confidence": 0.8276485851070569,
+        "roi_ci95": [
+          -0.2815710227272728,
+          0.217674289772727
+        ]
+      },
+      {
+        "threshold": 0.4,
+        "bets": 174,
+        "wins": 60,
+        "losses": 114,
+        "pushes": 0,
+        "win_rate": 0.3448275862068966,
+        "net_units": -5.929999999999996,
+        "roi": -0.034080459770114924,
+        "units_per_fixture": -0.02362549800796811,
+        "max_drawdown_units": 33.678,
+        "avg_expected_value": 0.49589746000291546,
+        "avg_edge": 0.11878856292168419,
+        "avg_state_confidence": 0.8329782798882762,
+        "roi_ci95": [
+          -0.27467198275862076,
+          0.22504640804597692
+        ]
+      },
+      {
+        "threshold": 0.45,
+        "bets": 170,
+        "wins": 60,
+        "losses": 110,
+        "pushes": 0,
+        "win_rate": 0.35294117647058826,
+        "net_units": -1.9300000000000068,
+        "roi": -0.011352941176470628,
+        "units_per_fixture": -0.007689243027888474,
+        "max_drawdown_units": 30.678,
+        "avg_expected_value": 0.4706260657524693,
+        "avg_edge": 0.11702590589343231,
+        "avg_state_confidence": 0.8427395562113983,
+        "roi_ci95": [
+          -0.2538635294117647,
+          0.25711823529411754
+        ]
+      },
+      {
+        "threshold": 0.5,
+        "bets": 162,
+        "wins": 56,
+        "losses": 106,
+        "pushes": 0,
+        "win_rate": 0.345679012345679,
+        "net_units": -4.171000000000003,
+        "roi": -0.02574691358024693,
+        "units_per_fixture": -0.0166175298804781,
+        "max_drawdown_units": 29.244,
+        "avg_expected_value": 0.4823693447804212,
+        "avg_edge": 0.11831578583243338,
+        "avg_state_confidence": 0.8605528959731737,
+        "roi_ci95": [
+          -0.27399567901234567,
+          0.26482993827160445
+        ]
+      },
+      {
+        "threshold": 0.55,
+        "bets": 154,
+        "wins": 52,
+        "losses": 102,
+        "pushes": 0,
+        "win_rate": 0.33766233766233766,
+        "net_units": -7.379999999999999,
+        "roi": -0.047922077922077914,
+        "units_per_fixture": -0.02940239043824701,
+        "max_drawdown_units": 29.212999999999997,
+        "avg_expected_value": 0.48904392149433035,
+        "avg_edge": 0.11822123817163052,
+        "avg_state_confidence": 0.8781877550652722,
+        "roi_ci95": [
+          -0.31380194805194805,
+          0.251671266233766
+        ]
+      },
+      {
+        "threshold": 0.6,
+        "bets": 150,
+        "wins": 52,
+        "losses": 98,
+        "pushes": 0,
+        "win_rate": 0.3466666666666667,
+        "net_units": -3.3800000000000026,
+        "roi": -0.02253333333333335,
+        "units_per_fixture": -0.013466135458167341,
+        "max_drawdown_units": 26.627999999999997,
+        "avg_expected_value": 0.49061733463884993,
+        "avg_edge": 0.11865824576411933,
+        "avg_state_confidence": 0.886391272815861,
+        "roi_ci95": [
+          -0.29326216666666666,
+          0.2760223333333332
+        ]
+      }
+    ],
+    "chronological_split": {
+      "status": "ok",
+      "development_fixtures": 175,
+      "holdout_fixtures": 76,
+      "development_end": "2026-09-05 00:10:00+00:00",
+      "holdout_start": "2026-09-05 00:40:00+00:00"
+    },
+    "thresholds_development": [
+      {
+        "threshold": 0.0,
+        "bets": 144,
+        "wins": 50,
+        "losses": 94,
+        "pushes": 0,
+        "win_rate": 0.3472222222222222,
+        "net_units": -9.713000000000003,
+        "roi": -0.06745138888888891,
+        "units_per_fixture": -0.05550285714285716,
+        "max_drawdown_units": 37.473000000000006,
+        "avg_expected_value": 0.580623606195477,
+        "avg_edge": 0.12783305650804067,
+        "avg_state_confidence": 0.7796719486810734,
+        "roi_ci95": [
+          -0.3315578125,
+          0.2255447916666664
+        ]
+      },
+      {
+        "threshold": 0.3,
+        "bets": 136,
+        "wins": 47,
+        "losses": 89,
+        "pushes": 0,
+        "win_rate": 0.34558823529411764,
+        "net_units": -11.763000000000003,
+        "roi": -0.08649264705882355,
+        "units_per_fixture": -0.06721714285714288,
+        "max_drawdown_units": 34.25300000000001,
+        "avg_expected_value": 0.5471355607983218,
+        "avg_edge": 0.12373092862097611,
+        "avg_state_confidence": 0.8123951024488816,
+        "roi_ci95": [
+          -0.3504902573529412,
+          0.21231047794117638
+        ]
+      },
+      {
+        "threshold": 0.35,
+        "bets": 132,
+        "wins": 44,
+        "losses": 88,
+        "pushes": 0,
+        "win_rate": 0.3333333333333333,
+        "net_units": -14.893000000000002,
+        "roi": -0.1128257575757576,
+        "units_per_fixture": -0.08510285714285716,
+        "max_drawdown_units": 34.678,
+        "avg_expected_value": 0.5562818721981614,
+        "avg_edge": 0.12496129807510724,
+        "avg_state_confidence": 0.8268841106528805,
+        "roi_ci95": [
+          -0.38038863636363635,
+          0.19971571969696963
+        ]
+      },
+      {
+        "threshold": 0.4,
+        "bets": 131,
+        "wins": 44,
+        "losses": 87,
+        "pushes": 0,
+        "win_rate": 0.33587786259541985,
+        "net_units": -13.893000000000004,
+        "roi": -0.10605343511450385,
+        "units_per_fixture": -0.07938857142857145,
+        "max_drawdown_units": 33.678,
+        "avg_expected_value": 0.5582633521386055,
+        "avg_edge": 0.12497153026927313,
+        "avg_state_confidence": 0.8303907556837021,
+        "roi_ci95": [
+          -0.37914770992366414,
+          0.20152118320610657
+        ]
+      },
+      {
+        "threshold": 0.45,
+        "bets": 127,
+        "wins": 44,
+        "losses": 83,
+        "pushes": 0,
+        "win_rate": 0.3464566929133858,
+        "net_units": -9.893000000000004,
+        "roi": -0.07789763779527563,
+        "units_per_fixture": -0.056531428571428594,
+        "max_drawdown_units": 30.678,
+        "avg_expected_value": 0.526399781634408,
+        "avg_edge": 0.12280680723452937,
+        "avg_state_confidence": 0.8433755342515166,
+        "roi_ci95": [
+          -0.34579055118110236,
+          0.2284822834645669
+        ]
+      },
+      {
+        "threshold": 0.5,
+        "bets": 121,
+        "wins": 41,
+        "losses": 80,
+        "pushes": 0,
+        "win_rate": 0.33884297520661155,
+        "net_units": -11.744000000000002,
+        "roi": -0.09705785123966944,
+        "units_per_fixture": -0.06710857142857143,
+        "max_drawdown_units": 29.244,
+        "avg_expected_value": 0.540953907231987,
+        "avg_edge": 0.12404895398574647,
+        "avg_state_confidence": 0.8611527247126589,
+        "roi_ci95": [
+          -0.36929132231404954,
+          0.22941756198347
+        ]
+      },
+      {
+        "threshold": 0.55,
+        "bets": 116,
+        "wins": 38,
+        "losses": 78,
+        "pushes": 0,
+        "win_rate": 0.3275862068965517,
+        "net_units": -15.083000000000004,
+        "roi": -0.13002586206896555,
+        "units_per_fixture": -0.08618857142857145,
+        "max_drawdown_units": 29.212999999999997,
+        "avg_expected_value": 0.5492552163635634,
+        "avg_edge": 0.12470869949678767,
+        "avg_state_confidence": 0.8757363245018819,
+        "roi_ci95": [
+          -0.4134510775862069,
+          0.2113377155172409
+        ]
+      },
+      {
+        "threshold": 0.6,
+        "bets": 112,
+        "wins": 38,
+        "losses": 74,
+        "pushes": 0,
+        "win_rate": 0.3392857142857143,
+        "net_units": -11.082999999999998,
+        "roi": -0.09895535714285712,
+        "units_per_fixture": -0.06333142857142857,
+        "max_drawdown_units": 26.627999999999997,
+        "avg_expected_value": 0.5535128694988747,
+        "avg_edge": 0.12552567256976938,
+        "avg_state_confidence": 0.8866356275405856,
+        "roi_ci95": [
+          -0.3908214285714286,
+          0.2709828124999999
+        ]
+      }
+    ],
+    "thresholds_holdout": [
+      {
+        "threshold": 0.0,
+        "bets": 45,
+        "wins": 16,
+        "losses": 29,
+        "pushes": 0,
+        "win_rate": 0.35555555555555557,
+        "net_units": 5.962999999999999,
+        "roi": 0.13251111111111108,
+        "units_per_fixture": 0.07846052631578947,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.31579755390043523,
+        "avg_edge": 0.1033100837919337,
+        "avg_state_confidence": 0.8169803342072983,
+        "roi_ci95": [
+          -0.3757033333333333,
+          0.6927777777777774
+        ]
+      },
+      {
+        "threshold": 0.3,
+        "bets": 44,
+        "wins": 16,
+        "losses": 28,
+        "pushes": 0,
+        "win_rate": 0.36363636363636365,
+        "net_units": 6.962999999999999,
+        "roi": 0.15824999999999997,
+        "units_per_fixture": 0.09161842105263157,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.30784801681232765,
+        "avg_edge": 0.10052396234732251,
+        "avg_state_confidence": 0.8299420084695854,
+        "roi_ci95": [
+          -0.3097465909090909,
+          0.6785471590909089
+        ]
+      },
+      {
+        "threshold": 0.35,
+        "bets": 44,
+        "wins": 16,
+        "losses": 28,
+        "pushes": 0,
+        "win_rate": 0.36363636363636365,
+        "net_units": 6.962999999999999,
+        "roi": 0.15824999999999997,
+        "units_per_fixture": 0.09161842105263157,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.30784801681232765,
+        "avg_edge": 0.10052396234732251,
+        "avg_state_confidence": 0.8299420084695854,
+        "roi_ci95": [
+          -0.3097465909090909,
+          0.6785471590909089
+        ]
+      },
+      {
+        "threshold": 0.4,
+        "bets": 43,
+        "wins": 16,
+        "losses": 27,
+        "pushes": 0,
+        "win_rate": 0.37209302325581395,
+        "net_units": 7.963000000000001,
+        "roi": 0.18518604651162793,
+        "units_per_fixture": 0.1047763157894737,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.3058990444267437,
+        "avg_edge": 0.09995208100228527,
+        "avg_state_confidence": 0.8408612024650021,
+        "roi_ci95": [
+          -0.3211726744186047,
+          0.712216860465116
+        ]
+      },
+      {
+        "threshold": 0.45,
+        "bets": 43,
+        "wins": 16,
+        "losses": 27,
+        "pushes": 0,
+        "win_rate": 0.37209302325581395,
+        "net_units": 7.963000000000001,
+        "roi": 0.18518604651162793,
+        "units_per_fixture": 0.1047763157894737,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.3058990444267437,
+        "avg_edge": 0.09995208100228527,
+        "avg_state_confidence": 0.8408612024650021,
+        "roi_ci95": [
+          -0.3211726744186047,
+          0.712216860465116
+        ]
+      },
+      {
+        "threshold": 0.5,
+        "bets": 41,
+        "wins": 15,
+        "losses": 26,
+        "pushes": 0,
+        "win_rate": 0.36585365853658536,
+        "net_units": 7.573,
+        "roi": 0.18470731707317073,
+        "units_per_fixture": 0.09964473684210527,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.30947344095994594,
+        "avg_edge": 0.10139594811168012,
+        "avg_state_confidence": 0.8587826696932296,
+        "roi_ci95": [
+          -0.34155914634146345,
+          0.7229957317073168
+        ]
+      },
+      {
+        "threshold": 0.55,
+        "bets": 38,
+        "wins": 14,
+        "losses": 24,
+        "pushes": 0,
+        "win_rate": 0.3684210526315789,
+        "net_units": 7.702999999999999,
+        "roi": 0.20271052631578945,
+        "units_per_fixture": 0.10135526315789473,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.30524102136719794,
+        "avg_edge": 0.0984174088632561,
+        "avg_state_confidence": 0.8856710694166736,
+        "roi_ci95": [
+          -0.34034868421052633,
+          0.7819171052631573
+        ]
+      },
+      {
+        "threshold": 0.6,
+        "bets": 38,
+        "wins": 14,
+        "losses": 24,
+        "pushes": 0,
+        "win_rate": 0.3684210526315789,
+        "net_units": 7.702999999999999,
+        "roi": 0.20271052631578945,
+        "units_per_fixture": 0.10135526315789473,
+        "max_drawdown_units": 7.0,
+        "avg_expected_value": 0.30524102136719794,
+        "avg_edge": 0.0984174088632561,
+        "avg_state_confidence": 0.8856710694166736,
+        "roi_ci95": [
+          -0.34034868421052633,
+          0.7819171052631573
+        ]
+      }
+    ],
+    "development_selected_threshold": 0.0,
+    "development_selection_basis": "maximum net units per available fixture; minimum 30 development bets; drawdown tie-breaker",
+    "holdout_selected_vs_45": {
+      "delta_units_per_fixture": -0.02631578947368421,
+      "ci95": [
+        -0.06578947368421052,
+        0.0
+      ],
+      "fixtures": 76
+    },
+    "holdout_stability_blocks": [
+      {
+        "block": 1,
+        "fixtures": 26,
+        "candidate_units": 5.398999999999999,
+        "baseline_units": 7.398999999999999,
+        "delta_units": -2.0
+      },
+      {
+        "block": 2,
+        "fixtures": 25,
+        "candidate_units": -1.2400000000000002,
+        "baseline_units": -1.2400000000000002,
+        "delta_units": 0.0
+      },
+      {
+        "block": 3,
+        "fixtures": 25,
+        "candidate_units": 1.8039999999999998,
+        "baseline_units": 1.8039999999999998,
+        "delta_units": 0.0
+      }
+    ],
+    "decision": "KEEP_45_NO_SIGNIFICANT_HOLDOUT_GAIN",
+    "promotion_rule": "A non-45 threshold must be selected on development, have >=20 bets for both policies on holdout, paired fixture-bootstrap 95% CI for incremental units/fixture entirely above zero, higher holdout ROI, and positive incremental units in >=2/3 holdout time blocks."
+  },
+  "production_policy_changed": false
+}
