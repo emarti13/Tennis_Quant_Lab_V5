@@ -9,7 +9,7 @@ import pandas as pd
 
 from v5_active_board import clear_adjusted_board, get_active_board, set_active_board
 from v5_interactive_production import run_interactive_production
-from v5_ui_production import load_canonical_today_board
+from v5_ui_production import load_canonical_today_board, load_repricing_status, runtime_production_state
 
 
 EDITABLE_CONTEXT_COLUMNS = [
@@ -101,10 +101,22 @@ def _with_best_signal(board: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def _market_runtime(namespace: Mapping[str, Any], base_dir: Path) -> dict:
+    load_market_board = _required(namespace, "load_market_board")
+    try:
+        market_source = load_market_board(include_stale=True)
+    except TypeError:
+        market_source = load_market_board()
+    return runtime_production_state(market_source, load_repricing_status(base_dir))
+
+
 def render_daily_board(st_module, base_dir: str | Path, namespace: Mapping[str, Any]) -> pd.DataFrame:
     base_dir = Path(base_dir)
     production = load_canonical_today_board(base_dir)
     active, active_mode = get_active_board(st_module.session_state, production)
+    runtime = _market_runtime(namespace, base_dir)
+    production_state = runtime["state"]
+    feed_status = runtime["feed_status"]
 
     st_module.markdown('<div class="v5-eyebrow">Tennis Quant Lab V5</div>', unsafe_allow_html=True)
     st_module.markdown('<div class="v5-title">Daily Board</div>', unsafe_allow_html=True)
@@ -115,6 +127,27 @@ def render_daily_board(st_module, base_dir: str | Path, namespace: Mapping[str, 
     st_module.caption(
         "Active board: Adjusted Scenario" if active_mode == "adjusted" else "Active board: Production Forecast"
     )
+
+    if active_mode == "production":
+        if production_state == "STALE_PRICES":
+            age = feed_status.get("age_hours")
+            age_text = "unknown age" if age is None else f"{age:.1f} hours old"
+            snapshot = feed_status.get("snapshot_utc") or "unknown"
+            st_module.warning(
+                f"OddsPapi prices are stale ({age_text}; snapshot {snapshot}). The board below is the last frozen production output and is not currently actionable. Decision Feed is blocked until the next live refresh."
+            )
+        elif production_state == "MISSING":
+            st_module.warning(
+                "Live market production artifacts are missing. The last frozen board may remain visible for inspection, but it is not currently actionable."
+            )
+        elif production_state == "NO_FUTURE_FIXTURES":
+            st_module.info(
+                "The live market feed is current but contains no future eligible fixtures. Any frozen rows below are retained only for inspection."
+            )
+        elif production_state in {"STALE_FORECAST", "MISSING_FORECAST"}:
+            st_module.warning(
+                "Live prices are current, but the canonical daily forecast is not ready. The displayed frozen board is not currently actionable."
+            )
 
     if active_mode == "adjusted":
         if st_module.button("Return to Production Forecast", key="v5_reset_adjusted_board"):
@@ -189,7 +222,12 @@ def render_daily_board(st_module, base_dir: str | Path, namespace: Mapping[str, 
         return pd.DataFrame()
 
     st_module.markdown("### Active Daily Board Results")
-    st_module.caption("Adjusted Scenario — session only" if active_mode == "adjusted" else "Production Forecast — frozen canonical output")
+    if active_mode == "adjusted":
+        st_module.caption("Adjusted Scenario — session only")
+    elif production_state == "READY":
+        st_module.caption("Production Forecast — LIVE/ACTIONABLE frozen canonical output")
+    else:
+        st_module.caption(f"Production Forecast — {production_state.replace('_', ' ')} — last frozen output, not actionable")
     cols = [c for c in DISPLAY_PRIORITY if c in active.columns]
     extra = [c for c in active.columns if c not in cols and c not in {"Board Mode", "Board As Of"}]
     st_module.dataframe(active[cols + extra], use_container_width=True, hide_index=True)
