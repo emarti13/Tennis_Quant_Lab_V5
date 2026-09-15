@@ -1,0 +1,101 @@
+{
+  "version": "2026-oddspapi-spread-total-oos-1",
+  "method": "2025 fit / 2026 validation; pre-match closing OddsPapi snapshots; score model contains no market prices",
+  "distribution_validation": {
+    "MEN": {
+      "validation_rows": 8061,
+      "selected_candidate": "conditioned_mechanistic",
+      "distribution_metrics": {
+        "n": 8061,
+        "margin_crps": 3.0202122457778864,
+        "total_crps": 3.7277371816317726,
+        "margin_bias": 0.07743073556121562,
+        "total_bias": 2.3941344957705453,
+        "margin_rmse": 5.098583846883389,
+        "total_rmse": 6.405424314029583,
+        "margin_mae": 4.493745458512346,
+        "total_mae": 5.575711922953169
+      }
+    },
+    "WTA": {
+      "validation_rows": 1868,
+      "selected_candidate": "gaussian_contextual",
+      "distribution_metrics": {
+        "n": 1868,
+        "margin_crps": 2.549697703216073,
+        "total_crps": 3.34812729473432,
+        "margin_bias": -0.011373185696361424,
+        "total_bias": 0.10433500571063287,
+        "margin_rmse": 4.487940167590707,
+        "total_rmse": 5.95885150477787,
+        "margin_mae": 3.666980606095694,
+        "total_mae": 4.7886680238651405
+      }
+    }
+  },
+  "coverage": {
+    "cached_history_records": 13227,
+    "matched_model_fixtures": 1993,
+    "spread_fixtures": 1947,
+    "total_fixtures": 1635,
+    "both_fixtures": 1630
+  },
+  "spread": {
+    "ALL": {
+      "n": 27430,
+      "decisions": 26953,
+      "wins": 15207,
+      "losses": 11746,
+      "pushes": 477,
+      "accuracy": 0.5642043557303454,
+      "unique_fixtures": 1947
+    },
+    "MEN": {
+      "n": 23220,
+      "decisions": 22794,
+      "wins": 12388,
+      "losses": 10406,
+      "pushes": 426,
+      "accuracy": 0.5434763534263403,
+      "unique_fixtures": 1702
+    },
+    "WTA": {
+      "n": 4210,
+      "decisions": 4159,
+      "wins": 2819,
+      "losses": 1340,
+      "pushes": 51,
+      "accuracy": 0.6778071651839385,
+      "unique_fixtures": 245
+    }
+  },
+  "totals": {
+    "ALL": {
+      "n": 21077,
+      "decisions": 20817,
+      "wins": 10315,
+      "losses": 10502,
+      "pushes": 260,
+      "accuracy": 0.49550847864725944,
+      "unique_fixtures": 1635
+    },
+    "MEN": {
+      "n": 17348,
+      "decisions": 17122,
+      "wins": 8189,
+      "losses": 8933,
+      "pushes": 226,
+      "accuracy": 0.47827356617217615,
+      "unique_fixtures": 1390
+    },
+    "WTA": {
+      "n": 3729,
+      "decisions": 3695,
+      "wins": 2126,
+      "losses": 1569,
+      "pushes": 34,
+      "accuracy": 0.5753721244925575,
+      "unique_fixtures": 245
+    }
+  }
+}
