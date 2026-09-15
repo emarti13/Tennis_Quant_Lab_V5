@@ -1,30 +1,38 @@
 {
-  "status": "SUCCESS",
-  "built_at_utc": "2026-09-14T13:48:39.780796+00:00",
-  "market_snapshot_utc": "2026-09-14T03:40:56.320656+00:00",
+  "status": "PARTIAL",
+  "built_at_utc": "2026-09-15T12:10:59.595254+00:00",
+  "market_snapshot_utc": "2026-09-15T03:41:56.083090+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 1322,
-  "eligible_pre_match_fixtures": 15,
-  "priced_rows": 302,
-  "board_rows": 302,
-  "frozen_ledger_rows": 7611,
-  "new_frozen_rows": 30,
+  "market_rows_input": 1584,
+  "eligible_pre_match_fixtures": 20,
+  "priced_rows": 378,
+  "board_rows": 378,
+  "frozen_ledger_rows": 7793,
+  "new_frozen_rows": 182,
   "signal_counts": {
-    "PASS": 137,
-    "REVIEW": 135,
-    "BET": 27,
-    "LEAN": 3
+    "REVIEW": 247,
+    "PASS": 109,
+    "BET": 22
   },
   "selected_candidate_counts": {
-    "residual": 236,
-    "ensemble": 66
+    "residual": 334,
+    "ensemble": 44
   },
   "selected_score_candidate_counts": {
-    "gaussian_contextual": 236,
-    "conditioned_mechanistic": 66
+    "gaussian_contextual": 334,
+    "conditioned_mechanistic": 44
   },
   "context_fallback_rows": 0,
-  "errors": [],
+  "errors": [
+    {
+      "fixture_id": "id1204695374706718",
+      "player1": "Semenistaja, Darja",
+      "player2": "Kinoshita, Hayu",
+      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Kinoshita, Hayu"
+    }
+  ],
   "model_version": "v5-advanced-nested-chronological-1",
   "score_model_version": "v5-score-walkforward-3",
   "probability_source": "chronologically validated independent full-context candidate; sportsbook inputs joined only after probability freeze",
