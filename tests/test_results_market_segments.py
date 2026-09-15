@@ -1,17 +1,17 @@
 import pandas as pd
-from results_accuracy_page import recommendation_accuracy_tables
+from v5_results_segments import recommendation_accuracy_tables
 
 
-def _row(market, tour, signal, result, units):
-    return {"market_group": market, "tour_v5": tour, "signal": signal, "result_status": "SETTLED", "settled_result": result, "profit_units": units}
+def _row(market, tour, signal, result, units, odds=None):
+    return {"market_group": market, "tour_v5": tour, "signal": signal, "result_status": "SETTLED", "settled_result": result, "profit_units": units, "best_american_odds": odds}
 
 
 def test_tables_split_market_tour_and_signal_with_units_roi():
     df = pd.DataFrame([
-        _row("moneyline", "ATP", "BET", "WIN", 0.9),
-        _row("moneyline", "ATP", "BET", "LOSS", -1.0),
-        _row("game_spread", "WTA", "REVIEW", "WIN", 0.8),
-        _row("total_games", "CHALLENGER", "PASS", "LOSS", -1.0),
+        _row("moneyline", "ATP", "BET", "WIN", 0.9, 90),
+        _row("moneyline", "ATP", "BET", "LOSS", -1.0, -110),
+        _row("game_spread", "WTA", "REVIEW", "WIN", 0.8, -125),
+        _row("total_games", "CHALLENGER", "PASS", "LOSS", -1.0, -110),
     ])
     tables = recommendation_accuracy_tables(df)
     assert set(tables) == {"Moneyline", "Spread", "Totals"}
@@ -29,8 +29,8 @@ def test_tables_split_market_tour_and_signal_with_units_roi():
 
 def test_push_is_counted_in_sample_but_excluded_from_win_rate_and_units_zero():
     df = pd.DataFrame([
-        _row("moneyline", "ATP", "LEAN", "WIN", 1.0),
-        _row("moneyline", "ATP", "LEAN", "PUSH", 0.0),
+        _row("moneyline", "ATP", "LEAN", "WIN", 1.0, 100),
+        _row("moneyline", "ATP", "LEAN", "PUSH", 0.0, -110),
     ])
     cell = recommendation_accuracy_tables(df)["Moneyline"].loc["ATP", "LEAN"]
     assert "100.0%" in cell
