@@ -25,9 +25,9 @@ def predictions():
   va['pred_margin_a']=p['margin_mean']; va['pred_total']=p['total_mean']; va['tour_eval']=tour; out.append(va)
  return pd.concat(out,ignore_index=True)
 def summary(df):
- o={}
  if df.empty:
   return {label:{'fixtures':0,'decisions':0,'wins':0,'losses':0,'pushes':0,'accuracy':None} for label in ('ALL','MEN','WTA')}
+ o={}
  for label,s in [('ALL',df),('MEN',df[df['tour'].eq('MEN')]),('WTA',df[df['tour'].eq('WTA')])]:
   d=s[~s.outcome.eq('PUSH')]; o[label]={'fixtures':int(s.fixture_id.nunique()),'decisions':int(len(d)),'wins':int(d.outcome.eq('WIN').sum()),'losses':int(d.outcome.eq('LOSS').sum()),'pushes':int(s.outcome.eq('PUSH').sum()),'accuracy':float(d.outcome.eq('WIN').mean()) if len(d) else None}
  return o
@@ -43,7 +43,8 @@ def main():
   r=pred.loc[ids[0]]; fid=str(payload.get('fixtureId') or fixture.get('fixtureId')); mapped=map_snapshot_rows(select_snapshot(flatten_history(payload),start_time=fixture['startTime'],closing=True),fixture,meta)
   for x in mapped:
    if x.get('line') is None: continue
-   if x.get('market_group')=='game_spread': spreads.append({'fixture_id':fid,'tour':r.tour_eval,'selection':x.get('selection'),'player_a':r.player_a,'line':float(x['line']),'pred_margin_a':float(r.pred_margin_a),'actual_margin_a':float(r.actual_margin_a)})
-   elif x.get('market_group')=='total_games': totals.append({'fixture_id':fid,'tour':r.tour_eval,'line':float(x['line']),'pred_total':float(r.pred_total),'actual_total':float(r.actual_total)})
- cs=consensus_spread(pd.DataFrame(spreads)); ct=consensus_total(pd.DataFrame(totals)); report={'version':'2026-consensus-lines-oos-1','method':'one median pre-match closing line per fixture across available OddsPapi books; 2025 fit / untouched 2026 validation','spread':summary(cs),'totals':summary(ct)}; OUT.parent.mkdir(parents=True,exist_ok=True); OUT.write_text(json.dumps(report,indent=2)); print(json.dumps(report,indent=2))
+   common={'fixture_id':fid,'tour':r.tour_eval,'bookmaker':x.get('bookmaker'),'market_id':x.get('market_id'),'line':float(x['line']),'no_vig_prob':x.get('no_vig_prob')}
+   if x.get('market_group')=='game_spread': spreads.append({**common,'selection':x.get('selection'),'player_a':r.player_a,'pred_margin_a':float(r.pred_margin_a),'actual_margin_a':float(r.actual_margin_a)})
+   elif x.get('market_group')=='total_games': totals.append({**common,'pred_total':float(r.pred_total),'actual_total':float(r.actual_total)})
+ cs=consensus_spread(pd.DataFrame(spreads)); ct=consensus_total(pd.DataFrame(totals)); report={'version':'2026-consensus-lines-oos-2','method':'one most-balanced pre-match closing line per bookmaker, then median consensus line per fixture; 2025 fit / untouched 2026 validation','spread':summary(cs),'totals':summary(ct)}; OUT.parent.mkdir(parents=True,exist_ok=True); OUT.write_text(json.dumps(report,indent=2)); print(json.dumps(report,indent=2))
 if __name__=='__main__': main()
