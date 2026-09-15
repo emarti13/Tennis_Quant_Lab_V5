@@ -1,11 +1,15 @@
 name: V5 Context Model Diagnostic
 
-# Heavy acceptance workflow. This is intentionally manual-only so ordinary
-# production/data commits cannot consume the Actions budget. Run it when the
-# full-context model architecture or accepted candidate is intentionally being
-# changed and needs a new acceptance decision.
+# Heavy acceptance workflow. Manual by default; this analysis branch push is a
+# one-off trigger to rerun the accepted walk-forward comparison against the
+# newly expanded court/context warehouse.
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - analysis/rerun-context-walkforward-2026-09-15
+    paths:
+      - '.github/workflows/v5_context_diagnostic.yml'
 
 permissions:
   contents: write
