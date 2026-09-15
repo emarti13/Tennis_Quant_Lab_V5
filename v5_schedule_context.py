@@ -175,10 +175,18 @@ def match_schedule_event(event: pd.Series | dict, schedule: pd.DataFrame) -> dic
     ranked.sort(reverse=True, key=lambda x: x[0])
     top_score, top_method, top_idx = ranked[0]
     second = ranked[1][0] if len(ranked) > 1 else -1.0
-    if top_method not in {"exact", "alias"} and (top_score < 0.72 or (second >= 0 and top_score - second < 0.08)):
+
+    # Exact normalized-name identity is deterministic. Alias/core-name identity is
+    # not: generic city/event labels can collapse multiple legitimate schedule
+    # rows to the same core (for example, "Indian Wells"). Fail closed whenever
+    # another candidate is close enough that the alias does not uniquely identify
+    # the tournament.
+    ambiguous_gap = second >= 0 and top_score - second < 0.08
+    if top_method != "exact" and (top_score < 0.72 or ambiguous_gap):
         empty["schedule_match_method"] = "ambiguous" if top_score >= 0.55 else "unmatched"
         empty["schedule_match_score"] = float(top_score)
         return empty
+
     chosen = candidates.loc[top_idx]
     return {
         "schedule_tournament_name": chosen.get("schedule_tournament_name"),
