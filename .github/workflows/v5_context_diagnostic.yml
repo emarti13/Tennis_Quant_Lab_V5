@@ -23,16 +23,41 @@ jobs:
       - run: pip install -r requirements.txt pytest
       - name: Verify consensus logic
         run: python -m pytest tests/test_consensus_line_analysis.py -v
+      - name: Restore canonical OddsPapi tennis market metadata
+        uses: actions/cache@v4
+        with:
+          path: oddspapi_markets_tennis.json
+          key: oddspapi-tennis-markets-v1
+      - name: Validate market metadata
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: |
+          python - <<'PY'
+          import json, subprocess, sys
+          from pathlib import Path
+          p = Path('oddspapi_markets_tennis.json')
+          def valid():
+              if not p.exists() or p.stat().st_size == 0:
+                  return False
+              try:
+                  x = json.loads(p.read_text())
+                  return isinstance(x, list) and len(x) > 0
+              except Exception:
+                  return False
+          if not valid():
+              subprocess.run([sys.executable, 'fetch_oddspapi_markets.py'], check=True)
+          if not valid():
+              raise SystemExit('No valid OddsPapi tennis market metadata available from cache or API')
+          print(f'Validated {len(json.loads(p.read_text()))} market definitions')
+          PY
       - name: Build prerequisite context and consensus validation
         env:
           V5_SCORE_DIAGNOSTIC_SIMS: '80'
-          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
         run: |
           python build_v5_context_warehouse.py
           python build_v5_venue_registry.py
           python build_v5_weather_cache.py
           python diagnose_v5_context_model.py
-          python fetch_oddspapi_markets.py
           python consensus_line_probe.py
       - uses: actions/upload-artifact@v4
         with:
