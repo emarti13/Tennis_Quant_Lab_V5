@@ -22,6 +22,10 @@ _SPONSOR_TOKENS = {
     "wortmann", "cinch", "boss", "plava", "laguna", "generali", "rogers", "itaú", "itau",
     "tiriac", "abn", "amro", "ersteh", "erste", "bank", "swiss", "indoors", "nordic",
 }
+_EXPLICIT_TOURNAMENT_ALIASES = {
+    "indian wells": "bnp paribas open",
+    "indian wells open": "bnp paribas open",
+}
 
 
 def _strip_year(value: str) -> str:
@@ -127,6 +131,9 @@ def _similarity(event_name: str, schedule_row: pd.Series, city: str = "") -> tup
     sched_core = str(schedule_row.get("schedule_name_core") or "")
     if name and name == sched_name:
         return 1.0, "exact"
+    canonical_alias = _EXPLICIT_TOURNAMENT_ALIASES.get(name)
+    if canonical_alias and canonical_alias == sched_name:
+        return 0.98, "alias"
     if core and core == sched_core:
         return 0.96, "alias"
     seq = SequenceMatcher(None, name, sched_name).ratio() if name and sched_name else 0.0
@@ -176,13 +183,16 @@ def match_schedule_event(event: pd.Series | dict, schedule: pd.DataFrame) -> dic
     top_score, top_method, top_idx = ranked[0]
     second = ranked[1][0] if len(ranked) > 1 else -1.0
 
-    # Exact normalized-name identity is deterministic. Alias/core-name identity is
-    # not: generic city/event labels can collapse multiple legitimate schedule
-    # rows to the same core (for example, "Indian Wells"). Fail closed whenever
-    # another candidate is close enough that the alias does not uniquely identify
-    # the tournament.
+    # Exact normalized-name identity is deterministic. Explicit tournament aliases
+    # are deterministic after year/tour/surface filtering. Generic core-name aliases
+    # and fuzzy matches still fail closed when another candidate is too close.
+    explicit_alias = _EXPLICIT_TOURNAMENT_ALIASES.get(normalize_event_name(str(event_name)))
+    explicit_alias_match = bool(
+        explicit_alias
+        and explicit_alias == str(candidates.loc[top_idx].get("schedule_name_normalized") or "")
+    )
     ambiguous_gap = second >= 0 and top_score - second < 0.08
-    if top_method != "exact" and (top_score < 0.72 or ambiguous_gap):
+    if top_method != "exact" and not explicit_alias_match and (top_score < 0.72 or ambiguous_gap):
         empty["schedule_match_method"] = "ambiguous" if top_score >= 0.55 else "unmatched"
         empty["schedule_match_score"] = float(top_score)
         return empty
