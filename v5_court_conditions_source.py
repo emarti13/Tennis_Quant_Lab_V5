@@ -27,27 +27,14 @@ _EVENT_ALIASES = [
 ]
 
 _METRICS = (
-    "surface_type",
-    "environment",
-    "cpi",
-    "ace_rate_pct",
-    "rally_length",
-    "relative_air_density",
-    "altitude_m",
-    "ball_type",
-    "overall_speed_rating",
+    "surface_type", "environment", "cpi", "ace_rate_pct", "rally_length",
+    "relative_air_density", "altitude_m", "ball_type", "overall_speed_rating",
 )
-
 _SOURCE_NAMES = {
-    "surface_type": "surface_source",
-    "environment": "environment_source",
-    "cpi": "cpi_source",
-    "ace_rate_pct": "ace_rate_source",
-    "rally_length": "rally_source",
-    "relative_air_density": "rad_source",
-    "altitude_m": "altitude_source",
-    "ball_type": "ball_source",
-    "overall_speed_rating": "overall_speed_source",
+    "surface_type": "surface_source", "environment": "environment_source", "cpi": "cpi_source",
+    "ace_rate_pct": "ace_rate_source", "rally_length": "rally_source",
+    "relative_air_density": "rad_source", "altitude_m": "altitude_source",
+    "ball_type": "ball_source", "overall_speed_rating": "overall_speed_source",
 }
 
 
@@ -88,7 +75,7 @@ def load_refresh_status(path: str | Path | None = None) -> dict:
 
 
 def _py_value(value):
-    if pd.isna(value):
+    if value is None or pd.isna(value):
         return None
     if isinstance(value, str):
         value = value.strip()
@@ -101,19 +88,11 @@ def _py_value(value):
 
 def lookup_court_conditions(tournament: str, year: int, snapshot: pd.DataFrame | None = None) -> dict:
     event_key = normalize_event_name(tournament)
-    base = {
-        "event_key": None,
-        "event_name": None,
-        "target_year": int(year),
-        "source_name": None,
-        "source_updated_at": None,
-        "source_refreshed_at": None,
-        "source_quality": "missing",
-    }
+    base = {"event_key": None, "event_name": None, "target_year": int(year), "source_name": None,
+            "source_updated_at": None, "source_refreshed_at": None, "source_quality": "missing"}
     for metric in _METRICS:
         base[metric] = None
         base[f"{metric}_source_year"] = None
-
     if not event_key:
         return base
     df = snapshot.copy() if snapshot is not None else load_condition_snapshot()
@@ -122,16 +101,13 @@ def lookup_court_conditions(tournament: str, year: int, snapshot: pd.DataFrame |
     rows = df[df["event_key"].astype(str).eq(event_key)].copy()
     if rows.empty:
         return base
-
     rows["year"] = pd.to_numeric(rows["year"], errors="coerce")
     rows = rows[rows["year"].notna() & (rows["year"] <= int(year))].sort_values("year", ascending=False)
     base["event_key"] = event_key
     base["event_name"] = _py_value(df[df["event_key"].astype(str).eq(event_key)].iloc[-1].get("event_name"))
     if rows.empty:
         return base
-
-    best_source_years = []
-    refreshed_values = []
+    best_source_years, refreshed_values = [], []
     for metric in _METRICS:
         if metric not in rows.columns:
             continue
@@ -146,7 +122,6 @@ def lookup_court_conditions(tournament: str, year: int, snapshot: pd.DataFrame |
                 if rv:
                     refreshed_values.append(rv)
                 break
-
     first = rows.iloc[0]
     base["source_name"] = _py_value(first.get("source_name"))
     base["source_updated_at"] = _py_value(first.get("source_updated_at"))
@@ -156,20 +131,51 @@ def lookup_court_conditions(tournament: str, year: int, snapshot: pd.DataFrame |
     return base
 
 
+def lookup_canonical_court_file(tournament: str, year: int, *, surface: str | None = None, schedule=None) -> dict:
+    """Resolve static pre-match court metadata from the versioned master schedule.
+
+    This source is deliberately independent of CourtSpeed freshness. Failure to
+    resolve it returns an empty mapping and never blocks forecast generation.
+    """
+    try:
+        from v5_schedule_context import load_schedule, match_schedule_event
+        sched = load_schedule() if schedule is None else schedule
+        if sched is None or sched.empty:
+            return {}
+        event = {"tournament": tournament, "year": int(year)}
+        if surface:
+            event["surface"] = surface
+        matched = match_schedule_event(event, sched)
+        if str(matched.get("schedule_match_method") or "") not in {"exact", "alias", "fuzzy_high"}:
+            return {}
+        setting = _py_value(matched.get("schedule_setting"))
+        return {
+            "surface_type": _py_value(matched.get("schedule_surface")),
+            "environment": setting if setting in {"Indoor", "Outdoor"} else None,
+            "altitude_m": _py_value(matched.get("schedule_altitude_m")),
+            "ball_type": _py_value(matched.get("schedule_ball_characteristics")),
+            "overall_speed_rating": _py_value(matched.get("schedule_speed_profile")),
+            "match_method": matched.get("schedule_match_method"),
+            "match_score": matched.get("schedule_match_score"),
+        }
+    except Exception:
+        return {}
+
+
 def _source_is_fresh(status: dict, court: dict, now_utc: str | None, max_source_age_hours: int) -> tuple[bool, str]:
     state = str((status or {}).get("state") or "").upper()
     timestamp = (status or {}).get("run_timestamp") or court.get("source_refreshed_at") or court.get("source_updated_at")
     if not timestamp:
-        return False, "FALLBACK_V5"
+        return False, "COURTSPEED_UNAVAILABLE"
     ts = pd.to_datetime(timestamp, errors="coerce", utc=True)
     now = pd.to_datetime(now_utc, errors="coerce", utc=True) if now_utc else pd.Timestamp.now(tz="UTC")
     if pd.isna(ts) or pd.isna(now):
-        return False, "FALLBACK_V5"
+        return False, "COURTSPEED_UNAVAILABLE"
     age_hours = (now - ts).total_seconds() / 3600.0
     effective_state = state if state in {"READY", "STALE_LKG"} else "STALE_LKG"
-    if age_hours <= max_source_age_hours:
+    if age_hours <= max_source_age_hours and court.get("event_key"):
         return True, effective_state
-    return False, "FALLBACK_V5"
+    return False, "COURTSPEED_UNAVAILABLE"
 
 
 def resolve_court_conditions(
@@ -177,50 +183,62 @@ def resolve_court_conditions(
     year: int,
     *,
     v5_fallback: dict | None = None,
+    manual_override: dict | None = None,
     now_utc: str | None = None,
     max_source_age_hours: int = 720,
     snapshot: pd.DataFrame | None = None,
     refresh_status: dict | None = None,
+    schedule=None,
 ) -> dict:
+    """Resolve court enrichment without making it a production dependency.
+
+    Per-field precedence: fresh CourtSpeed -> canonical court file -> optional
+    manual override -> existing V5 fixture fallback -> unknown. Missing enrichment
+    never raises and therefore never prevents the Daily Board from operating.
+    """
+    fallback = dict(v5_fallback or {})
+    manual = dict(manual_override or {})
     court = lookup_court_conditions(tournament, year, snapshot=snapshot)
     status = refresh_status if refresh_status is not None else load_refresh_status()
-    fresh, freshness = _source_is_fresh(status, court, now_utc, max_source_age_hours)
-    fallback = dict(v5_fallback or {})
+    fresh, courtspeed_health = _source_is_fresh(status, court, now_utc, max_source_age_hours)
+    surface_hint = fallback.get("surface_type") or manual.get("surface_type")
+    canonical = lookup_canonical_court_file(tournament, year, surface=surface_hint, schedule=schedule)
     out = {
-        "event_key": court.get("event_key"),
-        "event_name": court.get("event_name"),
+        "event_key": court.get("event_key") or normalize_event_name(tournament) or None,
+        "event_name": court.get("event_name") or tournament or None,
         "target_year": int(year),
         "source_refreshed_at": (status or {}).get("run_timestamp") or court.get("source_refreshed_at") or court.get("source_updated_at"),
-        "source_freshness": freshness,
+        "courtspeed_health": courtspeed_health,
+        "canonical_court_match_method": canonical.get("match_method"),
+        "canonical_court_match_score": canonical.get("match_score"),
     }
-    any_court = False
-    any_v5 = False
+    used_sources = []
     for metric in _METRICS:
         source_field = _SOURCE_NAMES[metric]
-        court_value = court.get(metric) if fresh else None
-        if court_value is not None:
-            out[metric] = court_value
-            out[source_field] = "CourtSpeed"
-            out[f"{metric}_source_year"] = court.get(f"{metric}_source_year")
-            out[f"{metric}_fallback"] = False
-            any_court = True
-            continue
-        v5_value = fallback.get(metric)
-        if v5_value is not None:
-            out[metric] = v5_value
-            out[source_field] = "V5"
-            out[f"{metric}_source_year"] = int(year)
-            out[f"{metric}_fallback"] = True
-            any_v5 = True
-        else:
-            out[metric] = None
-            out[source_field] = "missing"
-            out[f"{metric}_source_year"] = None
-            out[f"{metric}_fallback"] = True
-    if any_v5:
+        value = court.get(metric) if fresh else None
+        source = "CourtSpeed" if value is not None else None
+        source_year = court.get(f"{metric}_source_year") if value is not None else None
+        if value is None and canonical.get(metric) is not None:
+            value, source, source_year = canonical.get(metric), "CanonicalCourtFile", int(year)
+        if value is None and manual.get(metric) is not None:
+            value, source, source_year = manual.get(metric), "Manual", int(year)
+        if value is None and fallback.get(metric) is not None:
+            value, source, source_year = fallback.get(metric), "V5", int(year)
+        out[metric] = value
+        out[source_field] = source or "missing"
+        out[f"{metric}_source_year"] = source_year
+        out[f"{metric}_fallback"] = source != "CourtSpeed"
+        if source:
+            used_sources.append(source)
+    if "CourtSpeed" in used_sources:
+        out["source_freshness"] = courtspeed_health
+    elif "CanonicalCourtFile" in used_sources:
+        out["source_freshness"] = "CANONICAL_COURT_FILE"
+    elif "Manual" in used_sources:
+        out["source_freshness"] = "MANUAL_OPTIONAL"
+    elif "V5" in used_sources:
         out["source_freshness"] = "FALLBACK_V5"
-    elif any_court:
-        out["source_freshness"] = freshness
     else:
-        out["source_freshness"] = "MISSING"
+        out["source_freshness"] = "UNKNOWN_NONBLOCKING"
+    out["production_blocking"] = False
     return out
