@@ -64,9 +64,10 @@ def test_incompatible_surface_fails_closed():
     assert out.iloc[0]["schedule_match_method"] == "unmatched"
 
 
-def test_ambiguous_candidates_fail_closed():
-    schedule = pd.concat([_schedule(), pd.DataFrame([{
-        "Year": 2026, "Circuit Tour": "ATP MASTERS 1000", "Tournament Name": "Indian Wells Open (2026)", "City Venue": "Indian Wells", "Surface": "Hard", "Setting": "Outdoor", "Altitude (m)": -27, "Altitude (ft)": -89, "Speed Profile": "Slow Court / Fast Air", "Ball Characteristics": "Extra Duty Hard"}])], ignore_index=True)
+def test_indian_wells_alias_resolves_to_bnp_paribas_open():
+    # Indian Wells / Indian Wells Open are common names for the BNP Paribas Open,
+    # not separate tournaments. The canonical schedule therefore contains one ATP
+    # event identity and the common location/event name must resolve to it.
     events = pd.DataFrame([{
         "tourney_name": "Indian Wells",
         "tour": "MEN",
@@ -74,7 +75,24 @@ def test_ambiguous_candidates_fail_closed():
         "surface": "Hard",
         "city": "Indian Wells",
     }])
+    out = enrich_events_with_schedule(events, _schedule())
+    row = out.iloc[0]
+    assert row["schedule_tournament_name"] == "BNP Paribas Open (2026)"
+    assert row["schedule_match_method"] in {"alias", "fuzzy_high", "exact"}
+
+
+def test_genuinely_ambiguous_candidates_fail_closed():
+    schedule = pd.concat([_schedule(), pd.DataFrame([
+        {"Year": 2026, "Circuit Tour": "ATP 250", "Tournament Name": "Metro City Classic (2026)", "City Venue": "Metro City", "Surface": "Hard", "Setting": "Outdoor", "Altitude (m)": 100, "Altitude (ft)": 328, "Speed Profile": "Medium", "Ball Characteristics": "Extra Duty Hard"},
+        {"Year": 2026, "Circuit Tour": "ATP 250", "Tournament Name": "Metro City Open (2026)", "City Venue": "Metro City", "Surface": "Hard", "Setting": "Outdoor", "Altitude (m)": 100, "Altitude (ft)": 328, "Speed Profile": "Medium", "Ball Characteristics": "Extra Duty Hard"},
+    ])], ignore_index=True)
+    events = pd.DataFrame([{
+        "tourney_name": "Metro City",
+        "tour": "MEN",
+        "match_date": "2026-07-10",
+        "surface": "Hard",
+        "city": "Metro City",
+    }])
     out = enrich_events_with_schedule(events, schedule)
-    assert out.iloc[0]["schedule_match_method"] in {"ambiguous", "fuzzy_high"}
-    if out.iloc[0]["schedule_match_method"] == "ambiguous":
-        assert pd.isna(out.iloc[0]["schedule_tournament_name"])
+    assert out.iloc[0]["schedule_match_method"] == "ambiguous"
+    assert pd.isna(out.iloc[0]["schedule_tournament_name"])
