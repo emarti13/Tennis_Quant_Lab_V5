@@ -11,12 +11,13 @@ Every meaningful architecture, model, workflow, UI, data, settlement, or product
 When instructions appear to conflict, use this order:
 
 1. **This governing mandate**
-2. **Approved architecture/design specs in `docs/superpowers/specs/`**
-3. **Approved implementation plans in `docs/superpowers/plans/`**
-4. **Current production code and workflows**
-5. **Local bug fixes, experiments, and convenience changes**
+2. **`docs/superpowers/specs/2026-09-15-current-production-architecture.md` — current accepted production architecture / anti-regression baseline**
+3. **Other approved architecture/design specs in `docs/superpowers/specs/`, interpreted consistently with the current baseline**
+4. **Approved implementation plans in `docs/superpowers/plans/`; older plans are historical guidance when superseded**
+5. **Current production code and workflows, inspected as implementation evidence**
+6. **Local bug fixes, experiments, and convenience changes**
 
-A local fix may solve an immediate problem, but it must not violate the governing mandate or the approved architecture.
+A local fix may solve an immediate problem, but it must not violate the governing mandate or the approved architecture. An older plan/spec must not be used to revert later accepted architecture. When documentation conflicts, reconcile and update the stale document rather than regressing production.
 
 ---
 
@@ -56,6 +57,7 @@ The following are hard requirements:
 - External-source failures must degrade safely using explicit freshness states and last-known-good artifacts where mathematically appropriate.
 - Stale data must never silently appear fresh.
 - If required inputs are beyond their allowed freshness window, the system must fail closed rather than publish misleading official recommendations.
+- Optional enrichment sources must not be promoted into hard dependencies when the approved architecture defines a safe neutral fallback.
 - Automatic recovery should occur when dependencies recover.
 - Production workflows get priority over research, diagnostics, and historical backfills.
 - GitHub Actions usage must stay within the available recurring budget without sacrificing useful production freshness.
@@ -85,7 +87,8 @@ Required principles:
 - Keep sportsbook-independent model probabilities separate from market prices until the pricing/recommendation stage.
 - Evaluate calibration, Brier score, log loss, hit rate where meaningful, net units, ROI, drawdown, price bands, favorite/underdog behavior, and fixture clustering.
 - Account for correlated recommendations from the same match rather than inflating performance with multiple related markets.
-- Report official recommendations separately from PASS, REVIEW, legacy, research, and diagnostic rows.
+- Multiple official markets on one match are allowed when each independently satisfies the statistically approved recommendation policy; there is no architectural one-bet-per-match rule.
+- Report official recommendations separately from PASS, REVIEW, ancillary, legacy, research, and diagnostic rows.
 - Preserve historical frozen predictions; do not rewrite history to make a new policy look better.
 - Use realistic available prices and vig-aware comparisons.
 - Require enough sample size and stability across time windows before calling an edge durable.
@@ -104,6 +107,7 @@ Before mathematical proof, reliability and model validity take priority over cos
 Once the recommendation policy has earned trust, the product should evolve from engineering/debugging tables into a clean customer experience centered on:
 
 - Today’s official recommendations;
+- a full Daily Forecast Board for slate-wide analysis plus a separate focused Decision Feed for strongest selections;
 - clear model probability and fair price;
 - market price and quantified edge;
 - useful confidence/context without overwhelming the user;
@@ -159,6 +163,7 @@ Examples:
 - A UI fix is not complete if the UI still depends on a broken hidden production path.
 - A workflow fix is not complete if it creates excessive recurring Actions usage or another duplicate trigger.
 - A model-policy change is not complete until it has appropriate out-of-sample validation and performance reporting.
+- A PR being green is necessary evidence but does not substitute for production runtime verification when the change concerns scheduled production execution.
 
 If a required external dependency prevents full verification, say exactly what remains unverified. Do not claim completion prematurely.
 
@@ -185,6 +190,7 @@ After any meaningful cluster of changes, explicitly evaluate:
 2. **Did this preserve one canonical source of truth?**
 3. **Did this improve or preserve statistical validity?**
 4. **Did this move the project toward a proven, sellable MVP?**
+5. **Did this preserve the current accepted architecture rather than revive a superseded implementation?**
 
 If the answer to one of these is no, the work should be reconsidered before additional complexity is built on top of it.
 
@@ -195,12 +201,17 @@ If the answer to one of these is no, the work should be reconsidered before addi
 When working on Tennis Quant Lab V5:
 
 - Read this mandate before making meaningful architecture/model/production decisions.
+- Read `docs/superpowers/specs/2026-09-15-current-production-architecture.md` before changing production behavior.
 - Read the relevant approved spec(s) in `docs/superpowers/specs/` before changing behavior governed by them.
-- Read the relevant plan(s) in `docs/superpowers/plans/` before continuing previously planned implementation work.
+- Read the relevant plan(s) in `docs/superpowers/plans/` before continuing previously planned implementation work, but treat older plans as superseded where they conflict with later accepted architecture.
+- Inspect current `main` code/workflows before assuming an old implementation target is still current.
 - Prefer execution and concrete outputs over repeated proposals.
 - Do not wait for a new prompt between obvious approved implementation steps unless a real user decision is required.
 - Do not reactively swing the model toward favorites, underdogs, overs, unders, or any other market because of recent outcomes.
 - Do not introduce a second production source of truth as a convenience workaround.
+- Do not turn optional enrichment such as live court conditions into a manual/hard dependency when neutral fallback is approved.
+- Do not collapse the full Daily Board into the Decision Feed or restore a one-bet-per-match assumption.
+- Do not rewrite frozen official recommendations or cross the post-reset performance boundary with legacy results.
 - Do not claim that something is fixed without verification evidence.
 - Do not optimize a local component in a way that makes the complete product less reliable or less statistically defensible.
 - Preserve historical auditability.
@@ -232,4 +243,4 @@ The governing outcome is:
 
 When starting or resuming work, use this instruction:
 
-> Before doing any Tennis Quant Lab V5 work, read `PROJECT_MANDATE.md` and the relevant approved documents in `docs/superpowers/specs/` and `docs/superpowers/plans/`. Treat the mandate as the highest-level acceptance contract. Classify the task as Production Reliability, Model Profitability, Product UX, and/or Research. Then execute the work in a way that preserves one source of truth, hands-off daily operation, rigorous out-of-sample profitability validation, and forward progress toward a sellable MVP. Do not solve a local problem in a way that violates the overall architecture. Do not stop at advice when the next implementation step is already approved, and do not call the work complete without relevant end-to-end verification.
+> Before doing any Tennis Quant Lab V5 work, read `PROJECT_MANDATE.md`, `docs/superpowers/specs/2026-09-15-current-production-architecture.md`, and the relevant approved domain specs/plans. Treat the mandate as the highest-level acceptance contract and the current-production document as the anti-regression baseline. Inspect current `main` before implementing an older plan. Classify the task as Production Reliability, Model Profitability, Product UX, and/or Research. Execute in a way that preserves one source of truth, hands-off daily operation, rigorous out-of-sample profitability validation, historical auditability, and forward progress toward a sellable MVP. Do not solve a local problem by reviving a superseded path. Do not stop at advice when the next implementation step is already approved, and do not call work complete without relevant end-to-end verification.
