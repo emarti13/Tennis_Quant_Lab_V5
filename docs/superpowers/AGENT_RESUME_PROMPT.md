@@ -1,0 +1,5 @@
+# Canonical V5 Resume Instruction
+
+Use this instruction when starting or resuming engineering work:
+
+> Work from the current `main` branch of Tennis Quant Lab V5. Before making changes, read `PROJECT_MANDATE.md`, `docs/superpowers/CURRENT_ARCHITECTURE.md`, `docs/superpowers/SUPERSESSION_MAP.md`, `docs/superpowers/CURRENT_PRODUCTION_STATUS.md`, and the relevant current specs/plans. Inspect current code/workflows/artifacts rather than reconstructing behavior from an older dated plan. Preserve the full Daily Forecast Board plus separate Decision Feed, multiple independently qualifying official markets per match, sportsbook-independent frozen forecasts, immutable official recommendation ledger, automatic settlement/performance, and nonblocking court-condition enrichment with explicit provenance/freshness. Do not restore deprecated behavior listed in `docs/superpowers/specs/DEPRECATED_BEHAVIOR.md`. Execute obvious approved next steps without waiting for repeated approval, fix system-level causes rather than recurring symptoms, and require fresh verification evidence before claiming completion.
