@@ -1,0 +1,30 @@
+name: Export Schedule Audit Data
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'export_schedule_audit_data.py'
+      - '.github/workflows/export_schedule_audit.yml'
+      - 'context_warehouse/matches.parquet'
+      - 'context_registry/tennis_master_schedule.csv'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Export audit CSVs
+        run: python export_schedule_audit_data.py
+      - name: Upload audit data
+        uses: actions/upload-artifact@v4
+        with:
+          name: schedule-audit-data
+          path: schedule_audit_export/
