@@ -5,7 +5,7 @@ OUT = Path('schedule_audit_export')
 OUT.mkdir(exist_ok=True)
 
 matches = pd.read_parquet('context_warehouse/matches.parquet')
-# Keep the exact target universe used by the schedule forward ablation: 2025-2026.
+# Export the exact 2025-2026 warehouse universe for manual reconciliation review.
 date_col = 'match_date' if 'match_date' in matches.columns else 'match_start'
 dates = pd.to_datetime(matches[date_col], errors='coerce')
 target = matches.loc[dates.dt.year.isin([2025, 2026])].copy()
