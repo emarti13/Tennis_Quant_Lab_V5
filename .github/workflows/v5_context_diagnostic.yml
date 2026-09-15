@@ -9,17 +9,18 @@ on:
       - '.github/workflows/v5_context_diagnostic.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  consensus:
+  context-diagnostic:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.11'
+          cache: 'pip'
       - run: pip install -r requirements.txt pytest
       - name: Verify consensus logic
         run: python -m pytest tests/test_consensus_line_analysis.py -v
@@ -50,17 +51,32 @@ jobs:
               raise SystemExit('No valid OddsPapi tennis market metadata available from cache or API')
           print(f'Validated {len(json.loads(p.read_text()))} market definitions')
           PY
-      - name: Build prerequisite context and consensus validation
-        env:
-          V5_SCORE_DIAGNOSTIC_SIMS: '80'
+      - name: Restore expensive context prerequisites
+        id: context-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            context_warehouse
+            v5_context_diagnostic
+          key: consensus-context-prereqs-2026-09-15-v1
+      - name: Build context prerequisites only on cache miss
+        if: steps.context-cache.outputs.cache-hit != 'true'
         run: |
           python build_v5_context_warehouse.py
           python build_v5_venue_registry.py
           python build_v5_weather_cache.py
           python diagnose_v5_context_model.py
-          python consensus_line_probe.py
-      - uses: actions/upload-artifact@v4
+      - name: Run consensus validation
+        env:
+          V5_SCORE_DIAGNOSTIC_SIMS: '80'
+        run: python consensus_line_probe.py
+      - name: Preserve consensus result even when validation fails
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: v5-consensus-lines-2026
-          path: experiments/acceptance/consensus_lines_2026_report.json
-          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            experiments/acceptance/consensus_lines_2026_report.json
+            v5_context_diagnostic/report.json
+            context_warehouse/source_manifest.json
