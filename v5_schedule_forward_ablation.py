@@ -11,9 +11,15 @@ from v5_advanced_model import binary_log_loss, brier_score, fit_offset_logistic,
 from v5_schedule_context import schedule_coverage_report
 
 OUTDIR = Path("v5_schedule_forward_ablation")
+# Schedule court conditions enter the matchup model through these interaction terms.
+# Do not look for raw ctx_* columns: assemble_matchup_dataset intentionally converts
+# event context into player-vs-player interactions before model fitting.
 SCHEDULE_FEATURES = [
-    "ctx_court_speed",
-    "ctx_altitude_m",
+    "big_server_x_fast_court",
+    "big_server_x_slow_court",
+    "big_server_x_altitude",
+    "court_speed_x_return_dominance_diff",
+    "court_speed_x_serve_dominance_diff",
 ]
 
 
@@ -32,7 +38,7 @@ def _metrics(frame: pd.DataFrame, probability_col: str) -> dict:
 
 def _fit_predict(train: pd.DataFrame, test: pd.DataFrame, feature_cols: list[str]) -> np.ndarray:
     if not feature_cols:
-        return pd.to_numeric(test["baseline_a_probability"], errors="coerce").to_numpy(dtype=float)
+        raise RuntimeError("Schedule ablation resolved zero incremental matchup features")
     y = pd.to_numeric(train["target_a_win"], errors="coerce").to_numpy(dtype=float)
     base_train = pd.to_numeric(train["baseline_a_probability"], errors="coerce").to_numpy(dtype=float)
     base_test = pd.to_numeric(test["baseline_a_probability"], errors="coerce").to_numpy(dtype=float)
@@ -40,7 +46,7 @@ def _fit_predict(train: pd.DataFrame, test: pd.DataFrame, feature_cols: list[str
     return predict_offset_logistic(model, base_test, test[feature_cols])
 
 
-def _forward_predictions(frame: pd.DataFrame, feature_cols: list[str]) -> pd.DataFrame:
+def _forward_predictions(frame: pd.DataFrame, feature_cols: list[str], *, fit_increment: bool) -> pd.DataFrame:
     """Expanding-year walk_forward evaluation: every test year uses only earlier years."""
     df = frame.copy()
     df["match_date"] = pd.to_datetime(df["match_date"], errors="coerce")
@@ -52,7 +58,10 @@ def _forward_predictions(frame: pd.DataFrame, feature_cols: list[str]) -> pd.Dat
         test = df[df["year"] == test_year].copy()
         if train.empty or test.empty:
             continue
-        test["ablation_probability"] = _fit_predict(train, test, feature_cols)
+        if fit_increment:
+            test["ablation_probability"] = _fit_predict(train, test, feature_cols)
+        else:
+            test["ablation_probability"] = pd.to_numeric(test["baseline_a_probability"], errors="coerce").to_numpy(dtype=float)
         test["prediction_origin"] = "walk_forward"
         test["train_end"] = str(train["match_date"].max())
         pieces.append(test)
@@ -60,19 +69,17 @@ def _forward_predictions(frame: pd.DataFrame, feature_cols: list[str]) -> pd.Dat
 
 
 def _schedule_context_columns(frame: pd.DataFrame) -> list[str]:
-    # These are the downstream numeric court-condition features influenced by schedule enrichment.
-    return [c for c in SCHEDULE_FEATURES if c in frame.columns]
+    cols = [c for c in SCHEDULE_FEATURES if c in frame.columns]
+    if not cols:
+        raise RuntimeError("No schedule-derived matchup interaction columns found; ablation would be a false no-op")
+    return cols
 
 
 def _pass(player_rows: pd.DataFrame, walkforward: pd.DataFrame, *, schedule_context: bool) -> tuple[pd.DataFrame, dict]:
     enriched = enrich_player_history(player_rows)
     if not schedule_context:
-        # Preserve the warehouse and historical feature pipeline while removing only the new
-        # schedule enrichment before matchup assembly. This is the control pass.
         for col in [c for c in enriched.columns if c.startswith("schedule_")]:
             enriched[col] = np.nan
-        # altitude is schedule-derived in this branch; court speed still retains the existing
-        # same-event/tour-surface historical fallbacks when schedule structural context is absent.
         if "schedule_altitude_m" in enriched.columns:
             enriched["schedule_altitude_m"] = np.nan
     matchups, qc = assemble_matchup_dataset(enriched, walkforward, target_years=(2025, 2026))
@@ -96,18 +103,13 @@ def run(base_dir: str | Path = ".") -> dict:
     if baseline_match_ids != enriched_match_ids:
         raise RuntimeError("Two-pass ablation changed the evaluated match universe")
 
-    baseline = baseline.sort_values("match_id").reset_index(drop=True)
-    enriched = enriched.sort_values("match_id").reset_index(drop=True)
     common_ids = sorted(baseline_match_ids)
     baseline = baseline.set_index("match_id").loc[common_ids].reset_index()
     enriched = enriched.set_index("match_id").loc[common_ids].reset_index()
 
-    # Baseline pass uses the accepted V5 probability with no newly supplied schedule context.
-    baseline_pred = _forward_predictions(baseline, [])
-    # Enriched pass trains only the incremental numeric court-condition terms on top of the
-    # exact same accepted baseline probability, preserving a clean two-pass attribution.
+    baseline_pred = _forward_predictions(baseline, [], fit_increment=False)
     enriched_features = _schedule_context_columns(enriched)
-    enriched_pred = _forward_predictions(enriched, enriched_features)
+    enriched_pred = _forward_predictions(enriched, enriched_features, fit_increment=True)
 
     baseline_metrics = _metrics(baseline_pred, "ablation_probability")
     enriched_metrics = _metrics(enriched_pred, "ablation_probability")
@@ -116,28 +118,37 @@ def run(base_dir: str | Path = ".") -> dict:
         on="match_id", how="inner", validate="one_to_one",
     )
     joined = joined.merge(enriched[[c for c in ["match_id", "match_date", "tour", "surface", "tourney_name", "target_a_win"] if c in enriched.columns]], on="match_id", how="left")
+    joined["probability_change"] = joined["enriched_probability"] - joined["baseline_probability"]
 
-    # Coverage is measured on the underlying enriched player-event rows because schedule
-    # matching metadata is intentionally not required to exist on every warehouse event.
     enriched_player_rows = enrich_player_history(player_rows)
     coverage = schedule_coverage_report(enriched_player_rows)
     if "schedule_match_score" in enriched_player_rows.columns:
         resolved = enriched_player_rows[enriched_player_rows.get("schedule_match_method").isin(["exact", "alias", "fuzzy_high"])].copy()
         coverage["mean_schedule_match_score"] = None if resolved.empty else float(pd.to_numeric(resolved["schedule_match_score"], errors="coerce").mean())
 
+    abs_change = joined["probability_change"].abs()
+    probability_change = {
+        "mean_abs": float(abs_change.mean()),
+        "median_abs": float(abs_change.median()),
+        "p95_abs": float(abs_change.quantile(0.95)),
+        "max_abs": float(abs_change.max()),
+        "changed_over_1pp": int((abs_change >= 0.01).sum()),
+        "changed_over_3pp": int((abs_change >= 0.03).sum()),
+    }
     delta = {
         "brier_improvement": float(baseline_metrics["brier"] - enriched_metrics["brier"]),
         "log_loss_improvement": float(baseline_metrics["log_loss"] - enriched_metrics["log_loss"]),
         "accuracy_delta": float(enriched_metrics["accuracy"] - baseline_metrics["accuracy"]),
     }
     report = {
-        "version": "v5-schedule-court-forward-ablation-1",
+        "version": "v5-schedule-court-forward-ablation-2",
         "design": "two pass expanding-year walk_forward on identical warehouse match universe",
         "schedule_context_is_enrichment_only": True,
         "warehouse_event_coverage_is_authoritative": True,
         "baseline": baseline_metrics,
         "schedule_enriched": enriched_metrics,
         "delta": delta,
+        "probability_change": probability_change,
         "schedule_coverage": coverage,
         "incremental_features": enriched_features,
         "baseline_join_qc": baseline_qc,
