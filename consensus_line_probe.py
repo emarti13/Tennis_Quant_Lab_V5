@@ -26,7 +26,9 @@ def predictions():
  return pd.concat(out,ignore_index=True)
 def summary(df):
  o={}
- for label,s in [('ALL',df),('MEN',df[df.tour.eq('MEN')]),('WTA',df[df.tour.eq('WTA')])]:
+ if df.empty:
+  return {label:{'fixtures':0,'decisions':0,'wins':0,'losses':0,'pushes':0,'accuracy':None} for label in ('ALL','MEN','WTA')}
+ for label,s in [('ALL',df),('MEN',df[df['tour'].eq('MEN')]),('WTA',df[df['tour'].eq('WTA')])]:
   d=s[~s.outcome.eq('PUSH')]; o[label]={'fixtures':int(s.fixture_id.nunique()),'decisions':int(len(d)),'wins':int(d.outcome.eq('WIN').sum()),'losses':int(d.outcome.eq('LOSS').sum()),'pushes':int(s.outcome.eq('PUSH').sum()),'accuracy':float(d.outcome.eq('WIN').mean()) if len(d) else None}
  return o
 def main():
