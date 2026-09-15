@@ -1,0 +1,35 @@
+name: V5 Schedule Court Forward Ablation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'v5_schedule_forward_ablation.py'
+      - 'v5_schedule_context.py'
+      - 'v5_court_speed.py'
+      - 'build_v5_context_matchups.py'
+      - 'context_registry/tennis_master_schedule.csv'
+      - '.github/workflows/v5_schedule_forward_ablation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ablation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run two-pass forward ablation
+        run: python v5_schedule_forward_ablation.py
+      - name: Upload ablation results
+        uses: actions/upload-artifact@v4
+        with:
+          name: v5-schedule-forward-ablation
+          path: v5_schedule_forward_ablation/
