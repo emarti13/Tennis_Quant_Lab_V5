@@ -1,8 +1,5 @@
 name: V5 Context Model Diagnostic
 
-# Heavy acceptance workflow. Manual by default; this analysis branch push is a
-# one-off trigger to rerun the accepted walk-forward comparison against the
-# newly expanded court/context warehouse.
 on:
   workflow_dispatch:
   push:
@@ -31,11 +28,12 @@ jobs:
           python-version: '3.12'
       - name: Install dependencies
         run: pip install -r requirements.txt pytest
-      - name: Run complete full-context acceptance pipeline
+      - name: Run complete full-context acceptance pipeline and market validation
         id: validation
         continue-on-error: true
         env:
           V5_SCORE_DIAGNOSTIC_SIMS: '80'
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
         run: |
           set -o pipefail
           {
@@ -53,8 +51,12 @@ jobs:
             python diagnose_v5_advanced_model.py
             echo '=== SCORE DISTRIBUTION 2025 FIT / 2026 VALIDATION ==='
             python diagnose_v5_score_distribution.py
+            echo '=== TENNIS MARKET DEFINITIONS ==='
+            python fetch_oddspapi_markets.py
+            echo '=== 2026 SPREAD / TOTAL ODDS VALIDATION ==='
+            python analyze_2026_spread_totals.py
           } 2>&1 | tee /tmp/full-context-validation.txt
-      - name: Persist acceptance evidence on the dispatched branch
+      - name: Persist acceptance evidence on the analysis branch
         if: always()
         env:
           VALIDATION_OUTCOME: ${{ steps.validation.outcome }}
@@ -69,18 +71,14 @@ jobs:
           cp v5_advanced_diagnostic/production_candidate.json /tmp/full-context-artifacts/production_candidate.json || true
           cp v5_score_diagnostic/report.json /tmp/full-context-artifacts/score_model_report.json || true
           cp v5_score_diagnostic/production_candidate.json /tmp/full-context-artifacts/score_production_candidate.json || true
+          cp experiments/acceptance/spread_totals_2026_report.json /tmp/full-context-artifacts/spread_totals_2026_report.json || true
           git pull --rebase origin "$TARGET_BRANCH"
           mkdir -p experiments/acceptance
           python - <<'PY'
           import json, os
           from pathlib import Path
-          log_path=Path('/tmp/full-context-artifacts/validation.txt')
-          text=log_path.read_text(encoding='utf-8', errors='replace') if log_path.exists() else ''
-          Path('experiments/acceptance/context_diagnostic_status.json').write_text(json.dumps({
-              'status': os.environ['VALIDATION_OUTCOME'],
-              'expected': 'success',
-              'log_tail': text[-20000:],
-          }, indent=2))
+          p=Path('/tmp/full-context-artifacts/validation.txt'); text=p.read_text(encoding='utf-8',errors='replace') if p.exists() else ''
+          Path('experiments/acceptance/context_diagnostic_status.json').write_text(json.dumps({'status':os.environ['VALIDATION_OUTCOME'],'expected':'success','log_tail':text[-20000:]},indent=2))
           PY
           git add experiments/acceptance/context_diagnostic_status.json
           if [ "$VALIDATION_OUTCOME" = "success" ]; then
@@ -89,10 +87,11 @@ jobs:
             cp /tmp/full-context-artifacts/production_candidate.json experiments/acceptance/production_candidate.json
             cp /tmp/full-context-artifacts/score_model_report.json experiments/acceptance/score_model_report.json
             cp /tmp/full-context-artifacts/score_production_candidate.json experiments/acceptance/score_production_candidate.json
-            git add experiments/acceptance/context_model_report.json experiments/acceptance/advanced_model_report.json experiments/acceptance/production_candidate.json experiments/acceptance/score_model_report.json experiments/acceptance/score_production_candidate.json
+            cp /tmp/full-context-artifacts/spread_totals_2026_report.json experiments/acceptance/spread_totals_2026_report.json
+            git add experiments/acceptance/*.json
           fi
           if ! git diff --cached --quiet; then
-            git commit -m 'Record full-context production acceptance evidence'
+            git commit -m 'Record spread and totals validation evidence'
             git push origin HEAD:"$TARGET_BRANCH"
           fi
       - name: Enforce acceptance gate
@@ -103,20 +102,11 @@ jobs:
         with:
           name: v5-context-diagnostic
           path: |
-            v5_context_diagnostic/report.json
-            v5_context_diagnostic/validation_predictions_2026.csv
-            v5_context_diagnostic/prediction_flips_2026.csv
-            v5_context_diagnostic/matched_context_rows.parquet
-            v5_advanced_diagnostic/report.json
-            v5_advanced_diagnostic/advanced_predictions_2026.csv
-            v5_advanced_diagnostic/production_candidate.json
-            v5_score_diagnostic/report.json
-            v5_score_diagnostic/production_candidate.json
+            v5_context_diagnostic/
+            v5_advanced_diagnostic/
+            v5_score_diagnostic/
+            experiments/acceptance/spread_totals_2026_report.json
             context_warehouse/source_manifest.json
             context_warehouse/schema.json
-            context_registry/tournaments.csv
-            context_registry/venue_registry_report.json
-            context_weather/weather_by_event_date.parquet
-            context_weather/weather_cache_report.json
           if-no-files-found: warn
           retention-days: 7
