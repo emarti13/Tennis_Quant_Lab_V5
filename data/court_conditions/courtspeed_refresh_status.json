@@ -1,0 +1,34 @@
+{
+  "state": "STALE_LKG",
+  "run_timestamp": "2026-09-15T04:53:32.433891+00:00",
+  "source": "CourtSpeed",
+  "source_endpoints": [
+    "https://courtspeed.com/",
+    "https://courtspeed.com/ace-rate/",
+    "https://courtspeed.com/rally-length/",
+    "https://courtspeed.com/weather-altitude/",
+    "https://courtspeed.com/overall-speed-rating/",
+    "https://courtspeed.com/balls/"
+  ],
+  "target_events": [
+    "atp_challenger_biella_italy_men_singles",
+    "atp_challenger_guangzhou_china_men_singles",
+    "atp_challenger_guangzhou_huangpu_china_men_singles",
+    "atp_challenger_phan_thiet_4_vietnam_men_singles",
+    "atp_challenger_rennes_france_men_singles",
+    "atp_challenger_szczecin_poland_men_singles",
+    "wta_125k_caldas_da_rainha_portugal_women_singles",
+    "wta_125k_ljubljana_slovenia_women_singles",
+    "wta_125k_valencia_spain_women_singles",
+    "wta_guadalajara_mexico_women_singles",
+    "wta_sao_paulo_brazil_women_singles"
+  ],
+  "events_requested": 11,
+  "events_matched": 0,
+  "rows_fetched": 0,
+  "rows_persisted": 42,
+  "fields_updated": 0,
+  "unresolved_events": [],
+  "last_known_good_retained": true,
+  "error": "KeyError: \"None of [Index(['event_key', 'event_name', 'year', 'surface_type', 'environment',\\n       'source_name', 'source_refreshed_at'],\\n      dtype='str')] are in the [columns]\""
+}
