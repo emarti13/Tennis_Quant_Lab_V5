@@ -12,7 +12,7 @@ def test_forward_ablation_runner_exists_and_is_leak_safe():
     assert "brier" in source.lower()
     assert "log_loss" in source.lower()
     assert "coverage" in source.lower()
-    assert "schedule_match_confidence" in source
+    assert "schedule_match_score" in source
     assert "forward_ablation_summary.json" in source
 
 
