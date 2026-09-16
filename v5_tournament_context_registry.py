@@ -21,6 +21,8 @@ CONTEXT_FIELDS = (
     "external_ball_type",
 )
 
+TEXT_CONTEXT_FIELDS = {"surface", "environment", "external_ball_type"}
+
 _DECORATION = {"atp", "wta", "men", "women", "singles", "challenger", "qualification", "qualifying", "qualifier"}
 
 
@@ -92,9 +94,19 @@ def apply_overrides(frame: pd.DataFrame, overrides: pd.DataFrame) -> pd.DataFram
     for field in CONTEXT_FIELDS:
         if field not in latest.columns:
             continue
-        if field not in out.columns:
+        if field in TEXT_CONTEXT_FIELDS:
+            if field not in out.columns:
+                out[field] = pd.Series(pd.NA, index=out.index, dtype="string")
+            else:
+                out[field] = out[field].astype("string")
+        elif field not in out.columns:
             out[field] = np.nan
         mapped = keys.map(latest[field])
         use = mapped.map(_present)
-        out.loc[use, field] = mapped.loc[use]
+        if not use.any():
+            continue
+        if field in TEXT_CONTEXT_FIELDS:
+            out.loc[use, field] = mapped.loc[use].astype("string")
+        else:
+            out.loc[use, field] = pd.to_numeric(mapped.loc[use], errors="coerce")
     return out
