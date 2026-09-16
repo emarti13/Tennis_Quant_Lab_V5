@@ -7,7 +7,7 @@ import unicodedata
 import pandas as pd
 
 _DECORATION = {"atp","wta","challenger","men","women","singles","qualifying","qualification","usa","austria","france","brazil","mexico","colombia","spain","portugal"}
-_TEXT_CONTEXT_COLUMNS = ("Surface", "Environment", "Ball Type", "Court Conditions Source")
+_TEXT_CONTEXT_COLUMNS = ("Surface", "Surface Source", "Environment", "Ball Type", "Court Conditions Source")
 _NUMERIC_CONTEXT_COLUMNS = ("Court Speed", "CPI", "Ace Rate %", "Rally Length", "Relative Air Density", "Altitude m")
 
 
@@ -41,8 +41,7 @@ def resolve_master_schedule_context(provider_tournament, provider_tour, *, year=
     target = _event_core(provider_tournament)
     candidates["_core"] = candidates["Tournament"].map(_event_core)
     exact = candidates.loc[candidates["_core"].eq(target)]
-    if len(exact) == 1:
-        row = exact.iloc[0]
+    if len(exact) == 1: row = exact.iloc[0]
     else:
         scored, target_tokens = [], set(target.split())
         for idx, candidate in candidates.iterrows():
@@ -67,35 +66,35 @@ def _has(value):
 
 
 def _normalize_context_dtypes(frame: pd.DataFrame) -> pd.DataFrame:
-    """Give context columns stable semantic dtypes before schedule values are assigned.
-
-    CSV inputs whose context columns are entirely blank are inferred by pandas as float64.
-    Pandas 3.x correctly rejects assigning strings such as a ball type into those columns,
-    so text context is explicitly stored as object while numeric context remains numeric.
-    """
     out = frame.copy(deep=True)
     for col in _TEXT_CONTEXT_COLUMNS:
-        if col not in out.columns:
-            out[col] = pd.Series(pd.NA, index=out.index, dtype="object")
-        elif out[col].dtype != object:
-            out[col] = out[col].astype("object")
+        if col not in out.columns: out[col] = pd.Series(pd.NA, index=out.index, dtype="object")
+        elif out[col].dtype != object: out[col] = out[col].astype("object")
     for col in _NUMERIC_CONTEXT_COLUMNS:
-        if col not in out.columns:
-            out[col] = pd.Series(float("nan"), index=out.index, dtype="float64")
-        else:
-            out[col] = pd.to_numeric(out[col], errors="coerce")
+        if col not in out.columns: out[col] = pd.Series(float("nan"), index=out.index, dtype="float64")
+        else: out[col] = pd.to_numeric(out[col], errors="coerce")
     return out
 
 
 def enrich_daily_board_context(frame: pd.DataFrame, *, year=2026, schedule_path=None) -> pd.DataFrame:
+    """Attach authoritative schedule identity without replacing dynamic court evidence.
+
+    Surface/environment come from the canonical schedule. Altitude/ball fill only
+    missing values. Court speed and the CourtSpeed-derived condition metrics are
+    deliberately untouched: those belong to the leak-safe production context path.
+    Existing Court Conditions Source provenance is also preserved.
+    """
     out = _normalize_context_dtypes(frame)
     if out.empty or "Tournament" not in out.columns: return out
     for idx, row in out.iterrows():
         resolved = resolve_master_schedule_context(row.get("Tournament"), row.get("Tour"), year=year, schedule_path=schedule_path)
         if not resolved: continue
-        for col, value in {"Surface":resolved["surface"], "Environment":resolved["environment"]}.items():
-            if _has(value): out.at[idx, col] = value
+        if _has(resolved["surface"]):
+            out.at[idx, "Surface"] = resolved["surface"]
+            out.at[idx, "Surface Source"] = resolved["source"]
+        if _has(resolved["environment"]): out.at[idx, "Environment"] = resolved["environment"]
         for col, value in {"Altitude m":resolved["altitude_m"], "Ball Type":resolved["ball_type"]}.items():
             if not _has(out.at[idx, col]) and _has(value): out.at[idx, col] = value
-        out.at[idx, "Court Conditions Source"] = resolved["source"]
+        if not _has(out.at[idx, "Court Conditions Source"]):
+            out.at[idx, "Court Conditions Source"] = resolved["source"]
     return out
