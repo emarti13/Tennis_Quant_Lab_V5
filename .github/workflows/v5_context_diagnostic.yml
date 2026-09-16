@@ -71,3 +71,4 @@ jobs:
           name: v5-context-market-ab-2026
           if-no-files-found: warn
           path: experiments/acceptance/context_market_ab_2026_report.json
+# corrected A/B probe import; cached prerequisites retained
