@@ -6,27 +6,27 @@
       "Clay": 0.6038736733104829,
       "Grass": 0.6545235247982056
     },
-    "matches": 151509,
-    "holdout_matches": 19464,
-    "players": 4340,
+    "matches": 151552,
+    "holdout_matches": 19507,
+    "players": 4343,
     "volatility_calibration": {
       "Hard": {
-        "prior_volatility": 0.17295960699853108,
-        "q05": 0.11849207125540685,
-        "q95": 0.20641982602237868,
-        "reference_n": 1849
+        "prior_volatility": 0.1728599057608079,
+        "q05": 0.11849613914880136,
+        "q95": 0.20649728554985547,
+        "reference_n": 1851
       },
       "Clay": {
-        "prior_volatility": 0.17023607298015836,
-        "q05": 0.11479570170620876,
-        "q95": 0.2049083266154537,
-        "reference_n": 1849
+        "prior_volatility": 0.17032530246620636,
+        "q05": 0.11497647753663814,
+        "q95": 0.20490251180726549,
+        "reference_n": 1851
       },
       "Grass": {
-        "prior_volatility": 0.15630591896090087,
-        "q05": 0.10645118407107036,
-        "q95": 0.19383618684301443,
-        "reference_n": 1849
+        "prior_volatility": 0.15635029299206385,
+        "q05": 0.10656905557445265,
+        "q95": 0.19394870787290164,
+        "reference_n": 1851
       }
     }
   },
@@ -37,14 +37,14 @@
       "Clay": 0.552999353211016,
       "Grass": 0.5884295913148093
     },
-    "matches": 44501,
-    "holdout_matches": 4626,
-    "players": 1685,
+    "matches": 44509,
+    "holdout_matches": 4634,
+    "players": 1686,
     "volatility_calibration": {
       "Hard": {
-        "prior_volatility": 0.1696725634335216,
+        "prior_volatility": 0.16980828501431156,
         "q05": 0.1222687990008048,
-        "q95": 0.20046109001980733,
+        "q95": 0.2001836844683585,
         "reference_n": 635
       },
       "Clay": {
@@ -54,7 +54,7 @@
         "reference_n": 635
       },
       "Grass": {
-        "prior_volatility": 0.15872334792444964,
+        "prior_volatility": 0.15878600009308494,
         "q05": 0.11186136109593837,
         "q95": 0.19391338789403967,
         "reference_n": 635
