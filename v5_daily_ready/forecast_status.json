@@ -1,12 +1,13 @@
 {
   "stage": "daily_forecast",
-  "run_timestamp": "2026-09-16T12:38:58.656099+00:00",
-  "source_version": "2026-09-16T12:34:39.686712+00:00",
+  "run_timestamp": "2026-09-16T13:40:04.966603+00:00",
+  "source_version": "2026-09-16T13:35:47.531409+00:00",
   "state": "success",
   "rows": 15,
   "fixtures": 15,
   "freshness": "READY",
   "error": null,
   "forecast_date": "2026-09-16",
-  "context_errors": []
+  "context_errors": [],
+  "source_commit_sha": "a0d138031588f7fabb1a7f4d79b31a4c894bfbb9"
 }
