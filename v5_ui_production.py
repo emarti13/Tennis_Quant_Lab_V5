@@ -97,12 +97,8 @@ def load_canonical_today_board(base_dir: str | Path) -> pd.DataFrame:
     overrides = load_overrides(base / "context_registry" / "tournament_context_overrides.csv")
     production = apply_overrides(production, overrides)
     today = production_board_to_today(production)
-    # Official schedule/master registry owns tournament surface/environment and supplies
-    # durable venue context even when the current repricing artifact has no model match.
-    today = enrich_daily_board_context(
-        today,
-        year=2026,
-        schedule_path=base / "context_registry" / "tennis_master_schedule.csv",
-    )
+    # Canonical schedule context is attached at read time as well as production time so
+    # a fresh market slate can never render generic None/default venue context.
+    today = enrich_daily_board_context(today, year=2026, schedule_path=base / "context_registry" / "tennis_master_schedule.csv")
     official = _read_csv(base / "v5_daily_ready" / "official_recommendations.csv")
     return _overlay_official_recommendations(today, official)
