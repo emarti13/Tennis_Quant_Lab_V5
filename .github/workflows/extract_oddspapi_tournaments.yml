@@ -1,0 +1,85 @@
+name: Extract OddsPapi Tournament Registry
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/extract_oddspapi_tournaments.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Extract tournament identities from retained raw fixtures
+        run: |
+          python - <<'PY'
+          import csv, json
+          from collections import defaultdict
+          from datetime import datetime
+          from pathlib import Path
+
+          src = Path('oddspapi_history/fixtures_2026.jsonl')
+          out = Path('oddspapi_history/tournament_identity_registry.csv')
+          groups = defaultdict(lambda: {'dates': [], 'fixtures': set(), 'names': set(), 'slugs': set(), 'categories': set(), 'category_slugs': set()})
+
+          with src.open(encoding='utf-8') as f:
+              for line in f:
+                  if not line.strip():
+                      continue
+                  r = json.loads(line)
+                  tid = r.get('tournamentId')
+                  if tid is None:
+                      continue
+                  start = r.get('startTime') or ''
+                  year = start[:4] if len(start) >= 4 else ''
+                  sid = r.get('seasonId')
+                  key = (year, str(tid), '' if sid is None else str(sid))
+                  g = groups[key]
+                  if start: g['dates'].append(start)
+                  if r.get('fixtureId'): g['fixtures'].add(str(r['fixtureId']))
+                  if r.get('tournamentName'): g['names'].add(str(r['tournamentName']))
+                  if r.get('tournamentSlug'): g['slugs'].add(str(r['tournamentSlug']))
+                  if r.get('categoryName'): g['categories'].add(str(r['categoryName']))
+                  if r.get('categorySlug'): g['category_slugs'].add(str(r['categorySlug']))
+
+          fields = ['year','tournament_id','season_id','tournament_name','tournament_slug','category_name','category_slug','first_fixture_utc','last_fixture_utc','fixture_count']
+          rows=[]
+          for (year,tid,sid),g in groups.items():
+              rows.append({
+                  'year':year,'tournament_id':tid,'season_id':sid,
+                  'tournament_name':' | '.join(sorted(g['names'])),
+                  'tournament_slug':' | '.join(sorted(g['slugs'])),
+                  'category_name':' | '.join(sorted(g['categories'])),
+                  'category_slug':' | '.join(sorted(g['category_slugs'])),
+                  'first_fixture_utc':min(g['dates']) if g['dates'] else '',
+                  'last_fixture_utc':max(g['dates']) if g['dates'] else '',
+                  'fixture_count':len(g['fixtures']),
+              })
+          rows.sort(key=lambda r:(r['year'],r['category_name'],r['tournament_name'],r['tournament_id']))
+          out.parent.mkdir(parents=True,exist_ok=True)
+          with out.open('w',newline='',encoding='utf-8') as f:
+              w=csv.DictWriter(f,fieldnames=fields); w.writeheader(); w.writerows(rows)
+          print(json.dumps({'raw_fixture_file':str(src),'raw_fixtures':sum(r['fixture_count'] for r in rows),'tournament_season_rows':len(rows),'season_ids_present':sum(bool(r['season_id']) for r in rows)}))
+          sao=[r for r in rows if 'sao paulo' in (r['tournament_name']+' '+r['tournament_slug']).lower()]
+          print('SAO_PAULO='+json.dumps(sao,ensure_ascii=False))
+          PY
+      - name: Commit extracted registry
+        run: |
+          if git diff --quiet -- oddspapi_history/tournament_identity_registry.csv; then
+            echo 'No registry changes.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add oddspapi_history/tournament_identity_registry.csv
+          git commit -m 'data: extract OddsPapi tournament identity registry'
+          git push
