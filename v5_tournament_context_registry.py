@@ -8,6 +8,8 @@ import tempfile
 import numpy as np
 import pandas as pd
 
+from v5_canonical_schedule import resolve_canonical_tournament
+
 
 CONTEXT_FIELDS = (
     "surface",
@@ -22,11 +24,20 @@ CONTEXT_FIELDS = (
 )
 
 TEXT_CONTEXT_FIELDS = {"surface", "environment", "external_ball_type"}
-
 _DECORATION = {"atp", "wta", "men", "women", "singles", "challenger", "qualification", "qualifying", "qualifier"}
 
 
-def canonical_tournament_key(name) -> str:
+def canonical_tournament_key(name, *, season=None, tour=None, category=None, event_date=None) -> str:
+    """Return collision-safe official identity when resolvable, legacy key otherwise.
+
+    The legacy fallback remains only for unscheduled historical rows so existing enrichment
+    is not discarded. Scheduled aliases resolve to season/tour/category-aware IDs first.
+    """
+    resolved = resolve_canonical_tournament(
+        name, season=season, tour=tour, category=category, event_date=event_date
+    )
+    if resolved is not None:
+        return resolved["canonical_id"]
     text = re.sub(r"[^a-z0-9]+", " ", str(name or "").lower()).strip()
     tokens = [token for token in text.split() if token not in _DECORATION]
     return " ".join(sorted(tokens))
@@ -65,10 +76,10 @@ def _atomic_csv(frame: pd.DataFrame, path: Path) -> None:
             os.unlink(temp_name)
 
 
-def upsert_tournament_context(path, tournament, values) -> pd.DataFrame:
+def upsert_tournament_context(path, tournament, values, *, season=None, tour=None, category=None, event_date=None) -> pd.DataFrame:
     p = Path(path)
     frame = load_overrides(p)
-    key = canonical_tournament_key(tournament)
+    key = canonical_tournament_key(tournament, season=season, tour=tour, category=category, event_date=event_date)
     if not key:
         raise ValueError("tournament identity is required")
     mask = frame["tournament_key"].astype(str).eq(key) if not frame.empty else pd.Series(dtype=bool)
