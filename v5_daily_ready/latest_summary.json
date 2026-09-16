@@ -1,27 +1,26 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-09-16T12:06:52.972944+00:00",
+  "built_at_utc": "2026-09-16T12:34:39.686712+00:00",
   "market_snapshot_utc": "2026-09-16T03:38:28.658553+00:00",
   "simulations_per_fixture": 5000,
   "market_rows_input": 976,
-  "eligible_pre_match_fixtures": 19,
-  "priced_rows": 382,
-  "board_rows": 382,
+  "eligible_pre_match_fixtures": 16,
+  "priced_rows": 316,
+  "board_rows": 316,
   "frozen_ledger_rows": 8019,
-  "new_frozen_rows": 226,
+  "new_frozen_rows": 0,
   "signal_counts": {
-    "REVIEW": 188,
-    "PASS": 149,
-    "BET": 44,
-    "LEAN": 1
+    "REVIEW": 166,
+    "PASS": 111,
+    "BET": 39
   },
   "selected_candidate_counts": {
     "residual": 294,
-    "ensemble": 88
+    "ensemble": 22
   },
   "selected_score_candidate_counts": {
     "gaussian_contextual": 294,
-    "conditioned_mechanistic": 88
+    "conditioned_mechanistic": 22
   },
   "context_fallback_rows": 0,
   "errors": [
