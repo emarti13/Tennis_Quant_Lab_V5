@@ -1,36 +1,37 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-09-15T12:10:59.595254+00:00",
-  "market_snapshot_utc": "2026-09-15T03:41:56.083090+00:00",
+  "built_at_utc": "2026-09-16T12:06:52.972944+00:00",
+  "market_snapshot_utc": "2026-09-16T03:38:28.658553+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 1584,
-  "eligible_pre_match_fixtures": 20,
-  "priced_rows": 378,
-  "board_rows": 378,
-  "frozen_ledger_rows": 7793,
-  "new_frozen_rows": 182,
+  "market_rows_input": 976,
+  "eligible_pre_match_fixtures": 19,
+  "priced_rows": 382,
+  "board_rows": 382,
+  "frozen_ledger_rows": 8019,
+  "new_frozen_rows": 226,
   "signal_counts": {
-    "REVIEW": 247,
-    "PASS": 109,
-    "BET": 22
+    "REVIEW": 188,
+    "PASS": 149,
+    "BET": 44,
+    "LEAN": 1
   },
   "selected_candidate_counts": {
-    "residual": 334,
-    "ensemble": 44
+    "residual": 294,
+    "ensemble": 88
   },
   "selected_score_candidate_counts": {
-    "gaussian_contextual": 334,
-    "conditioned_mechanistic": 44
+    "gaussian_contextual": 294,
+    "conditioned_mechanistic": 88
   },
   "context_fallback_rows": 0,
   "errors": [
     {
-      "fixture_id": "id1204695374706718",
-      "player1": "Semenistaja, Darja",
-      "player2": "Kinoshita, Hayu",
-      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "fixture_id": "id1203638974656020",
+      "player1": "Steur, Joelle Lilly Sophie",
+      "player2": "Curmi, Francesca",
+      "tournament": "WTA 125K Valencia, Spain Women Singles",
       "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): Kinoshita, Hayu"
+      "error": "Unmatched V5 player(s): Steur, Joelle Lilly Sophie"
     }
   ],
   "model_version": "v5-advanced-nested-chronological-1",
