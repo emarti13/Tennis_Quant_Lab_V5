@@ -1,11 +1,24 @@
 name: V5 Daily Predictions
 
-# Three recovery windows, but at most one heavy forecast/day: later runs
-# short-circuit before dependency installation only when the canonical forecast
-# is for the current Eastern production date. History/context freshness gates fail
-# closed rather than publish stale picks.
+# Three recovery windows, but at most one heavy forecast/day unless production
+# context inputs/code changed after the frozen forecast. In that case the stale
+# same-day forecast is rebuilt automatically so Daily Board cannot keep serving
+# pre-context artifacts after a context/schedule deployment.
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "v5_court_speed.py"
+      - "v5_court_conditions_source.py"
+      - "v5_schedule_context.py"
+      - "v5_master_schedule_context.py"
+      - "v5_full_context_live.py"
+      - "v5_forecast_context.py"
+      - "build_v5_context_matchups.py"
+      - "build_v5_context_warehouse.py"
+      - "context_registry/tennis_master_schedule.csv"
+      - ".github/workflows/v5_daily_predictions.yml"
   schedule:
     - cron: "45 6 * * *"
     - cron: "45 10 * * *"
@@ -43,7 +56,7 @@ jobs:
         id: forecast
         run: |
           python - <<'PY' >> "$GITHUB_OUTPUT"
-          import json
+          import json, subprocess
           from datetime import datetime, timezone
           from pathlib import Path
           from zoneinfo import ZoneInfo
@@ -54,6 +67,13 @@ jobs:
           expected_date = now.astimezone(ZoneInfo('America/New_York')).date().isoformat()
           fresh = False
           artifact_date = None
+          context_newer = False
+          context_inputs = [
+              'v5_court_speed.py', 'v5_court_conditions_source.py', 'v5_schedule_context.py',
+              'v5_master_schedule_context.py', 'v5_full_context_live.py', 'v5_forecast_context.py',
+              'build_v5_context_matchups.py', 'build_v5_context_warehouse.py',
+              'context_registry/tennis_master_schedule.csv',
+          ]
           if status_path.exists() and forecasts.exists() and forecasts.stat().st_size > 0:
               try:
                   payload = json.loads(status_path.read_text(encoding='utf-8'))
@@ -61,10 +81,19 @@ jobs:
                   built = datetime.fromisoformat(str(payload.get('run_timestamp') or '').replace('Z', '+00:00'))
                   if built.tzinfo is None:
                       built = built.replace(tzinfo=timezone.utc)
-                  age = (now - built.astimezone(timezone.utc)).total_seconds() / 3600
+                  built = built.astimezone(timezone.utc)
+                  age = (now - built).total_seconds() / 3600
+                  newest_context_epoch = 0
+                  for path in context_inputs:
+                      if Path(path).exists():
+                          raw = subprocess.check_output(['git', 'log', '-1', '--format=%ct', '--', path], text=True).strip()
+                          if raw:
+                              newest_context_epoch = max(newest_context_epoch, int(raw))
+                  context_newer = newest_context_epoch > int(built.timestamp())
                   fresh = (
                       artifact_date == expected_date
                       and age <= 20
+                      and not context_newer
                       and str(payload.get('state') or '').lower() in {'success', 'partial'}
                       and str(payload.get('freshness') or '').upper() == 'READY'
                   )
@@ -73,6 +102,7 @@ jobs:
           print(f"forecast_fresh={'true' if fresh else 'false'}")
           print(f"expected_date={expected_date}")
           print(f"artifact_date={artifact_date or ''}")
+          print(f"context_newer_than_forecast={'true' if context_newer else 'false'}")
           PY
 
       - name: Install production dependencies
@@ -89,10 +119,7 @@ jobs:
           status = history_status('v5_refresh_last.json', max_age_hours=max_age)
           print(status)
           if not status.get('usable'):
-              raise SystemExit(
-                  f"Player history is too stale for a new official forecast: {status}. "
-                  "Preserving the last known-good production artifacts."
-              )
+              raise SystemExit(f"Player history is too stale for a new official forecast: {status}. Preserving the last known-good production artifacts.")
           PY
 
       - name: Restore last-known-good context warehouse
@@ -120,10 +147,7 @@ jobs:
           from pathlib import Path
           path = Path('context_warehouse/cache_status.json')
           path.parent.mkdir(parents=True, exist_ok=True)
-          path.write_text(json.dumps({
-              'status': 'SUCCESS',
-              'built_at_utc': datetime.now(timezone.utc).isoformat(),
-          }, indent=2), encoding='utf-8')
+          path.write_text(json.dumps({'status':'SUCCESS','built_at_utc':datetime.now(timezone.utc).isoformat()}, indent=2), encoding='utf-8')
           PY
 
       - name: Validate context fallback freshness
@@ -135,17 +159,14 @@ jobs:
           from pathlib import Path
           rows = Path('context_warehouse/player_match_rows.parquet')
           status_path = Path('context_warehouse/cache_status.json')
-          if not rows.exists() or not status_path.exists():
-              raise SystemExit('No last-known-good context warehouse is available.')
+          if not rows.exists() or not status_path.exists(): raise SystemExit('No last-known-good context warehouse is available.')
           payload = json.loads(status_path.read_text(encoding='utf-8'))
           built = datetime.fromisoformat(str(payload.get('built_at_utc') or '').replace('Z', '+00:00'))
-          if built.tzinfo is None:
-              built = built.replace(tzinfo=timezone.utc)
+          if built.tzinfo is None: built = built.replace(tzinfo=timezone.utc)
           age = (datetime.now(timezone.utc) - built.astimezone(timezone.utc)).total_seconds() / 3600
           max_age = float(os.environ['V5_CONTEXT_MAX_AGE_HOURS'])
           print(f'context_build={"${{ steps.context_build.outcome }}"} age_hours={age:.2f} max_age_hours={max_age:.2f}')
-          if age > max_age:
-              raise SystemExit(f'Cached context warehouse is too stale ({age:.2f}h).')
+          if age > max_age: raise SystemExit(f'Cached context warehouse is too stale ({age:.2f}h).')
           PY
 
       - name: Save fresh context warehouse
@@ -169,11 +190,7 @@ jobs:
       - name: Show production status
         if: always()
         run: |
-          for f in \
-            v5_daily_ready/latest_summary.json \
-            v5_daily_ready/forecast_status.json \
-            v5_daily_ready/repricing_status.json
-          do
+          for f in v5_daily_ready/latest_summary.json v5_daily_ready/forecast_status.json v5_daily_ready/repricing_status.json; do
             if [ -f "$f" ]; then echo "===== $f ====="; cat "$f"; fi
           done
 
@@ -197,10 +214,7 @@ jobs:
           do
             [ -e "$f" ] && git add "$f"
           done
-          if git diff --cached --quiet; then
-            echo "No new daily production artifacts to commit."
-            exit 0
-          fi
+          if git diff --cached --quiet; then echo "No new daily production artifacts to commit."; exit 0; fi
           git commit -m "Freeze daily V5 forecast and reprice live markets"
           echo "Discarding non-canonical generated worktree changes before rebase:"
           git status --short
