@@ -7,6 +7,7 @@ import pandas as pd
 
 from v5_interactive_production import production_board_to_today
 from v5_live_market import market_feed_status
+from v5_master_schedule_context import enrich_daily_board_context
 from v5_tournament_context_registry import apply_overrides, load_overrides
 
 
@@ -96,5 +97,12 @@ def load_canonical_today_board(base_dir: str | Path) -> pd.DataFrame:
     overrides = load_overrides(base / "context_registry" / "tournament_context_overrides.csv")
     production = apply_overrides(production, overrides)
     today = production_board_to_today(production)
+    # Official schedule/master registry owns tournament surface/environment and supplies
+    # durable venue context even when the current repricing artifact has no model match.
+    today = enrich_daily_board_context(
+        today,
+        year=2026,
+        schedule_path=base / "context_registry" / "tennis_master_schedule.csv",
+    )
     official = _read_csv(base / "v5_daily_ready" / "official_recommendations.csv")
     return _overlay_official_recommendations(today, official)
