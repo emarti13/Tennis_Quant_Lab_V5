@@ -24,7 +24,6 @@ jobs:
           python - <<'PY'
           import csv, json
           from collections import defaultdict
-          from datetime import datetime
           from pathlib import Path
 
           src = Path('oddspapi_history/fixtures_2026.jsonl')
@@ -69,12 +68,10 @@ jobs:
           with out.open('w',newline='',encoding='utf-8') as f:
               w=csv.DictWriter(f,fieldnames=fields); w.writeheader(); w.writerows(rows)
           print(json.dumps({'raw_fixture_file':str(src),'raw_fixtures':sum(r['fixture_count'] for r in rows),'tournament_season_rows':len(rows),'season_ids_present':sum(bool(r['season_id']) for r in rows)}))
-          sao=[r for r in rows if 'sao paulo' in (r['tournament_name']+' '+r['tournament_slug']).lower()]
-          print('SAO_PAULO='+json.dumps(sao,ensure_ascii=False))
           PY
       - name: Commit extracted registry
         run: |
-          if git diff --quiet -- oddspapi_history/tournament_identity_registry.csv; then
+          if [ -z "$(git status --porcelain -- oddspapi_history/tournament_identity_registry.csv)" ]; then
             echo 'No registry changes.'
             exit 0
           fi
