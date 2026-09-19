@@ -1,41 +1,41 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-09-18T11:52:06.525786+00:00",
-  "market_snapshot_utc": "2026-09-18T03:29:41.586250+00:00",
+  "built_at_utc": "2026-09-19T11:35:57.597708+00:00",
+  "market_snapshot_utc": "2026-09-19T03:26:27.912307+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 856,
-  "eligible_pre_match_fixtures": 24,
-  "priced_rows": 482,
-  "board_rows": 482,
-  "frozen_ledger_rows": 8633,
-  "new_frozen_rows": 482,
+  "market_rows_input": 574,
+  "eligible_pre_match_fixtures": 10,
+  "priced_rows": 174,
+  "board_rows": 174,
+  "frozen_ledger_rows": 8807,
+  "new_frozen_rows": 174,
   "signal_counts": {
-    "REVIEW": 242,
-    "PASS": 173,
-    "BET": 65,
+    "PASS": 82,
+    "REVIEW": 67,
+    "BET": 23,
     "LEAN": 2
   },
   "selected_candidate_counts": {
-    "ensemble": 262,
-    "residual": 220
+    "ensemble": 110,
+    "residual": 64
   },
   "selected_score_candidate_counts": {
-    "conditioned_mechanistic": 262,
-    "gaussian_contextual": 220
+    "conditioned_mechanistic": 110,
+    "gaussian_contextual": 64
   },
   "context_fallback_rows": 0,
   "errors": [
     {
-      "fixture_id": "id1200390574532982",
-      "player1": "Wolf, Jeffrey John",
-      "player2": "Gorzny, Sebastian",
+      "fixture_id": "id1200390574532972",
+      "player1": "Mmoh, Michael",
+      "player2": "Wolf, Jeffrey John",
       "tournament": "ATP Challenger Tiburon, USA Men Singles",
       "stage": "prepare_fixture",
       "error": "Unmatched V5 player(s): Wolf, Jeffrey John"
     },
     {
-      "fixture_id": "id1203638974656012",
-      "player1": "Lazaro Garcia, Andrea",
+      "fixture_id": "id1203638974656016",
+      "player1": "Burel, Clara",
       "player2": "Steur, Joelle Lilly Sophie",
       "tournament": "WTA 125K Valencia, Spain Women Singles",
       "stage": "prepare_fixture",
