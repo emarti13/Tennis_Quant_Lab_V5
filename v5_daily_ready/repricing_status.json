@@ -1,15 +1,15 @@
 {
   "stage": "repricing",
-  "run_timestamp": "2026-09-19T11:40:32.435109+00:00",
-  "source_version": "2026-09-19T03:26:27.912307+00:00",
+  "run_timestamp": "2026-09-20T03:43:40.076283+00:00",
+  "source_version": "2026-09-20T03:43:31.668515+00:00",
   "state": "success",
-  "rows": 216,
-  "fixtures": 10,
+  "rows": 908,
+  "fixtures": 53,
   "freshness": "READY",
   "error": null,
   "forecast_date": "2026-09-19",
-  "matched_model_rows": 174,
-  "actionable_rows": 54,
+  "matched_model_rows": 0,
+  "actionable_rows": 0,
   "official_recommendations": 419,
   "market_history_retention": "permanent"
 }
