@@ -1,45 +1,68 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-09-19T11:35:57.597708+00:00",
-  "market_snapshot_utc": "2026-09-19T03:26:27.912307+00:00",
+  "built_at_utc": "2026-09-20T11:51:44.074080+00:00",
+  "market_snapshot_utc": "2026-09-20T03:43:31.668515+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 574,
-  "eligible_pre_match_fixtures": 10,
-  "priced_rows": 174,
-  "board_rows": 174,
-  "frozen_ledger_rows": 8807,
-  "new_frozen_rows": 174,
+  "market_rows_input": 908,
+  "eligible_pre_match_fixtures": 12,
+  "priced_rows": 136,
+  "board_rows": 136,
+  "frozen_ledger_rows": 8943,
+  "new_frozen_rows": 136,
   "signal_counts": {
-    "PASS": 82,
-    "REVIEW": 67,
-    "BET": 23,
-    "LEAN": 2
+    "REVIEW": 89,
+    "PASS": 36,
+    "BET": 11
   },
   "selected_candidate_counts": {
-    "ensemble": 110,
-    "residual": 64
+    "residual": 88,
+    "ensemble": 48
   },
   "selected_score_candidate_counts": {
-    "conditioned_mechanistic": 110,
-    "gaussian_contextual": 64
+    "gaussian_contextual": 88,
+    "conditioned_mechanistic": 48
   },
   "context_fallback_rows": 0,
   "errors": [
     {
-      "fixture_id": "id1200390574532972",
-      "player1": "Mmoh, Michael",
-      "player2": "Wolf, Jeffrey John",
-      "tournament": "ATP Challenger Tiburon, USA Men Singles",
+      "fixture_id": "id1203477074859530",
+      "player1": "Cassone, Murphy",
+      "player2": "Car, Hugo",
+      "tournament": "ATP Challenger Saint Tropez, France Men Singles",
       "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): Wolf, Jeffrey John"
+      "error": "Unmatched V5 player(s): Car, Hugo"
     },
     {
-      "fixture_id": "id1203638974656016",
-      "player1": "Burel, Clara",
-      "player2": "Steur, Joelle Lilly Sophie",
-      "tournament": "WTA 125K Valencia, Spain Women Singles",
+      "fixture_id": "id1204638174858534",
+      "player1": "Laboutkova, Aneta",
+      "player2": "Toma, Maria",
+      "tournament": "WTA 125K Tolentino, Italy Women Singles",
       "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): Steur, Joelle Lilly Sophie"
+      "error": "Unmatched V5 player(s): Laboutkova, Aneta, Toma, Maria"
+    },
+    {
+      "fixture_id": "id1204638174858536",
+      "player1": "Dalle Molle, Silvia",
+      "player2": "Kucmova, Aneta",
+      "tournament": "WTA 125K Tolentino, Italy Women Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Dalle Molle, Silvia, Kucmova, Aneta"
+    },
+    {
+      "fixture_id": "id1204695974859266",
+      "player1": "Yamalapalli, Sahaja",
+      "player2": "Martinez Vaquero, Maria",
+      "tournament": "WTA 125K Porto, Portugal Women Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Martinez Vaquero, Maria"
+    },
+    {
+      "fixture_id": "id1205202274859580",
+      "player1": "Ciavarella, Niccolo",
+      "player2": "D`Agostino, Stefano",
+      "tournament": "ATP Challenger Genoa 2, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "Unmatched V5 player(s): Ciavarella, Niccolo, D`Agostino, Stefano"
     }
   ],
   "model_version": "v5-advanced-nested-chronological-1",
