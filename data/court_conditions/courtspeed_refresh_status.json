@@ -1,6 +1,6 @@
 {
   "state": "STALE_LKG",
-  "run_timestamp": "2026-09-19T04:36:30.639227+00:00",
+  "run_timestamp": "2026-09-20T04:53:02.851665+00:00",
   "source": "CourtSpeed",
   "source_endpoints": [
     "https://courtspeed.com/",
@@ -12,18 +12,22 @@
   ],
   "target_events": [
     "atp_challenger_biella_italy_men_singles",
+    "atp_challenger_genoa_2_italy_men_singles",
     "atp_challenger_guangzhou_china_men_singles",
+    "atp_challenger_plovdiv_4_bulgaria_men_singles",
     "atp_challenger_rennes_france_men_singles",
+    "atp_challenger_saint_tropez_france_men_singles",
     "atp_challenger_szczecin_poland_men_singles",
-    "atp_challenger_tiburon_usa_men_singles",
+    "wta_125k_ankara_turkiye_women_singles",
     "wta_125k_caldas_da_rainha_portugal_women_singles",
     "wta_125k_ljubljana_slovenia_women_singles",
+    "wta_125k_porto_portugal_women_singles",
+    "wta_125k_tolentino_italy_women_singles",
     "wta_125k_valencia_spain_women_singles",
     "wta_sao_paulo_brazil_women_singles",
-    "wta_seoul_korea_republic_women_singles",
     "wta_singapore_singapore_women_singles"
   ],
-  "events_requested": 11,
+  "events_requested": 15,
   "events_matched": 0,
   "rows_fetched": 0,
   "rows_persisted": 42,
