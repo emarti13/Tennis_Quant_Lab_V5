@@ -120,3 +120,22 @@ class DailyBatchModuleTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_unseen_player_uses_explicit_zero_confidence_cold_start():
+    from v5_daily_batch import _prepare_fixture
+    ratings = DailyBatchTests._ratings()
+    feed = pd.DataFrame([{
+        "fixture_id":"cold-1","start_time_utc":"2099-01-01T12:00:00Z",
+        "tournament":"Example Open","tour":"MEN",
+        "player1":"Alice Alpha","player2":"New Player",
+    }])
+    summary = {"MEN":{"baseline":{"Hard":0.62,"Clay":0.60,"Grass":0.65}}}
+    prepared = _prepare_fixture(feed, {"MEN":ratings,"WTA":ratings.iloc[0:0]}, summary)
+    assert prepared["player2_cold_start"] is True
+    assert prepared["player1_cold_start"] is False
+    assert prepared["rating_p2"]["state_confidence"] == 0.0
+    assert prepared["rating_p2"]["elo"] == 1500.0
+    assert prepared["rating_p2"]["surface_elo"] == 1500.0
+    assert prepared["rating_p2"]["serve_global"] == 0.0
+    assert prepared["rating_p2"]["return_global"] == 0.0
