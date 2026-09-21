@@ -34,6 +34,27 @@ def _clean(frame: pd.DataFrame) -> pd.DataFrame:
     out["official_price_american"] = pd.to_numeric(
         out.get("official_price_american", out.get("best_american_odds")), errors="coerce"
     )
+
+    # Before the market-family contract, alternate lines from the same fixture
+    # were frozen independently. Reconstruct the decision that the current
+    # policy would have logged: at most one moneyline, spread and total.
+    if {"fixture_id", "market_group"}.issubset(out.columns):
+        out["_source_order"] = range(len(out))
+        signal = out.get("official_signal", out.get("signal", "")).fillna("").astype(str).str.upper().str.strip()
+        out["_signal_rank"] = signal.map({"BET": 0, "LEAN": 1}).fillna(9)
+        out["_official_time"] = pd.to_datetime(out.get("official_at_utc"), errors="coerce", utc=True)
+        out["_ev_rank"] = pd.to_numeric(
+            out.get("official_expected_value", out.get("expected_value")), errors="coerce"
+        ).fillna(float("-inf"))
+        out = out.sort_values(
+            ["fixture_id", "market_group", "_signal_rank", "_official_time", "_ev_rank", "_source_order"],
+            ascending=[True, True, True, True, False, True],
+            kind="stable",
+            na_position="last",
+        ).drop_duplicates(["fixture_id", "market_group"], keep="first")
+        out = out.sort_values("_source_order", kind="stable").drop(
+            columns=["_source_order", "_signal_rank", "_official_time", "_ev_rank"]
+        )
     return out
 
 
@@ -89,6 +110,10 @@ def official_performance_report(frame: pd.DataFrame) -> dict:
     if not settled.empty and "official_signal" in settled.columns:
         for signal, group in settled.groupby(settled["official_signal"].fillna("MISSING").astype(str).str.upper()):
             report["by_signal"][str(signal)] = _summary(group)
+    report["by_market_group"] = {}
+    if not settled.empty and "market_group" in settled.columns:
+        for market, group in settled.groupby(settled["market_group"].fillna("MISSING").astype(str)):
+            report["by_market_group"][str(market)] = _summary(group)
     report["by_price_band"] = {}
     if not settled.empty:
         settled = settled.copy()
