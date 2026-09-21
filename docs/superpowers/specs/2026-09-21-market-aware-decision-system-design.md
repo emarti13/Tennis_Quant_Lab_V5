@@ -32,6 +32,17 @@ Historical full-market data are used to evaluate candidate 1-, 2-, 3-, and 4-boo
 
 The selected production subset must be the same subset used to construct market features during decision-model training. No train/serve mismatch is permitted.
 
+#### Executable-book constraint
+The decision system must distinguish **information books** from **execution books**.
+
+- Pinnacle remains a high-value market-information candidate because it was intentionally chosen as the sharp reference book; its usefulness must still be measured historically rather than assumed.
+- The user's currently executable sportsbook set is **Bet365 and BetRivers**.
+- **Kalshi, Polymarket, and Novig** may also be executable venues when they list a compatible tennis market, but exchange/prediction-market prices, fees, liquidity, contract settlement, and line definitions must be normalized separately rather than treated as ordinary sportsbook quotes.
+- DraftKings may remain useful as historical/reference information, but it is not currently an execution venue for the user.
+- A production recommendation must never present an unavailable book's quote as the user's executable price.
+- Research may use non-executable books to improve market-state estimation only when the resulting feature can be reproduced within the production data budget.
+- Final execution pricing and reported actionable EV must be computed from an actually accessible venue. If no accessible venue offers the required market/line at a positive credible edge, the opportunity is not an actionable BET even if a non-executable reference book does.
+
 ### 4. Market engine
 The production market model creates P_market, book count, market dispersion, sharp-anchor probability if justified by research, opening/current/closing probability where available, price age, line movement, and data-quality flags.
 
