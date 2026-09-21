@@ -1,68 +1,53 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-09-20T11:51:44.074080+00:00",
-  "market_snapshot_utc": "2026-09-20T03:43:31.668515+00:00",
+  "built_at_utc": "2026-09-21T11:38:52.840862+00:00",
+  "market_snapshot_utc": "2026-09-21T03:38:12.870741+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 908,
-  "eligible_pre_match_fixtures": 12,
-  "priced_rows": 136,
-  "board_rows": 136,
-  "frozen_ledger_rows": 8943,
-  "new_frozen_rows": 136,
+  "market_rows_input": 1372,
+  "eligible_pre_match_fixtures": 26,
+  "priced_rows": 498,
+  "board_rows": 498,
+  "frozen_ledger_rows": 9423,
+  "new_frozen_rows": 480,
   "signal_counts": {
-    "REVIEW": 89,
-    "PASS": 36,
-    "BET": 11
+    "REVIEW": 182,
+    "PASS": 169,
+    "BET": 140,
+    "LEAN": 7
   },
   "selected_candidate_counts": {
-    "residual": 88,
-    "ensemble": 48
+    "residual": 300,
+    "ensemble": 198
   },
   "selected_score_candidate_counts": {
-    "gaussian_contextual": 88,
-    "conditioned_mechanistic": 48
+    "gaussian_contextual": 300,
+    "conditioned_mechanistic": 198
   },
   "context_fallback_rows": 0,
   "errors": [
     {
-      "fixture_id": "id1203477074859530",
-      "player1": "Cassone, Murphy",
-      "player2": "Car, Hugo",
-      "tournament": "ATP Challenger Saint Tropez, France Men Singles",
+      "fixture_id": "id1202010274861368",
+      "player1": "Aguilar Cardozo, Joaquin",
+      "player2": "Del Pino, Mateo",
+      "tournament": "ATP Challenger Buenos Aires II, ARG Men Singles",
       "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): Car, Hugo"
+      "error": "Unmatched V5 player(s): Del Pino, Mateo"
     },
     {
-      "fixture_id": "id1204638174858534",
-      "player1": "Laboutkova, Aneta",
-      "player2": "Toma, Maria",
-      "tournament": "WTA 125K Tolentino, Italy Women Singles",
+      "fixture_id": "id1204431774857736",
+      "player1": "Wolff, Vivian",
+      "player2": "Oliynykova, Oleksandra",
+      "tournament": "WTA Singapore, Singapore Women Singles",
       "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): Laboutkova, Aneta, Toma, Maria"
+      "error": "Unmatched V5 player(s): Wolff, Vivian"
     },
     {
-      "fixture_id": "id1204638174858536",
-      "player1": "Dalle Molle, Silvia",
-      "player2": "Kucmova, Aneta",
-      "tournament": "WTA 125K Tolentino, Italy Women Singles",
+      "fixture_id": "id1205223274876556",
+      "player1": "Mert, Aysegul",
+      "player2": "Shinikova, Isabella",
+      "tournament": "WTA 125k Ankara, Turkiye Women Singles",
       "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): Dalle Molle, Silvia, Kucmova, Aneta"
-    },
-    {
-      "fixture_id": "id1204695974859266",
-      "player1": "Yamalapalli, Sahaja",
-      "player2": "Martinez Vaquero, Maria",
-      "tournament": "WTA 125K Porto, Portugal Women Singles",
-      "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): Martinez Vaquero, Maria"
-    },
-    {
-      "fixture_id": "id1205202274859580",
-      "player1": "Ciavarella, Niccolo",
-      "player2": "D`Agostino, Stefano",
-      "tournament": "ATP Challenger Genoa 2, Italy Men Singles",
-      "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): Ciavarella, Niccolo, D`Agostino, Stefano"
+      "error": "Unmatched V5 player(s): Mert, Aysegul"
     }
   ],
   "model_version": "v5-advanced-nested-chronological-1",
