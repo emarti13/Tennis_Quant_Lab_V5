@@ -492,8 +492,6 @@ def build_fixture_board(
         confs.append(conf)
         # Model disagreement remains diagnostic until market-policy validation proves a threshold.
         sig = signal_row(r, disagreement_level=None, state_confidence=conf)
-        if prepared["surface_source"] == "Auto default — review" and sig in ("BET", "LEAN"):
-            sig = "REVIEW"
         signals.append(sig)
 
     strength_meta = score.conditioning_metadata
