@@ -1,8 +1,6 @@
 name: V5 Context Warehouse
 
 on:
-  schedule:
-    - cron: '32 0 * * *'
   push:
     branches:
       - main
@@ -12,6 +10,8 @@ on:
       - 'tests/test_v5_context_warehouse.py'
       - 'tests/test_v5_context_warehouse_persistence_contract.py'
       - '.github/workflows/v5_context_warehouse.yml'
+      - 'v5_results_ready/tennismylife_results.csv'
+      - 'v5_results_ready/results_status.json'
   workflow_dispatch:
 
 permissions:
@@ -39,7 +39,19 @@ jobs:
         run: |
           python -m pytest tests/test_v5_context_warehouse.py -v
           python -m pytest tests/test_v5_context_warehouse_persistence_contract.py -v
-      - name: Build warehouse
+      - name: Require canonical current results snapshot
+        run: |
+          test -s v5_results_ready/tennismylife_results.csv
+          test -s v5_results_ready/results_status.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('v5_results_ready/results_status.json').read_text())
+          if p.get('state') != 'READY' or not p.get('source_success_utc'):
+              raise SystemExit('canonical results snapshot is not READY')
+          print('canonical source success:', p['source_success_utc'])
+          PY
+      - name: Build warehouse from canonical refreshed results snapshot
         run: python build_v5_context_warehouse.py
       - name: Verify outputs
         run: |
