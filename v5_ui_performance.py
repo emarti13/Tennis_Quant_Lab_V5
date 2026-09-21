@@ -153,6 +153,28 @@ def _odds(value: Any) -> str:
         return "—"
 
 
+def _breakdown_frame(payload: dict[str, Any]) -> pd.DataFrame:
+    rows = []
+    for label, stats in (payload or {}).items():
+        wins = int(stats.get("wins") or 0)
+        losses = int(stats.get("losses") or 0)
+        pushes = int(stats.get("pushes") or 0)
+        voids = int(stats.get("voids") or 0)
+        n = int(stats.get("official_recommendations") or 0)
+        rows.append({
+            "Category": label,
+            "Record (W-L-P)": f"{wins}-{losses}-{pushes}",
+            "Voids": voids,
+            "Total": n,
+            "Check": wins + losses + pushes + voids,
+            "Fixtures": int(stats.get("unique_fixtures") or 0),
+            "Win rate": _percent(stats.get("win_rate")),
+            "Net units": _number(stats.get("net_units")),
+            "ROI": _percent(stats.get("roi")),
+        })
+    return pd.DataFrame(rows)
+
+
 def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[str, Any] | None:
     report = report or {}
     status = str(report.get("status") or "missing").lower()
@@ -165,7 +187,7 @@ def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[st
     st_module.markdown('<div class="v5-title">Performance</div>', unsafe_allow_html=True)
     reset_at = report.get("reset_at_utc") or (report.get("official") or {}).get("reset_at_utc")
     if headline["scope"] == "official":
-        subtitle = "Headline results include every independently qualified official market recommendation. A single fixture may contribute multiple official markets when each clears production policy; fixture clustering shows their correlation."
+        subtitle = "Performance counts at most one official moneyline, one spread and one total per fixture. Alternate lines are pricing candidates, not separate bets."
     elif headline["scope"] == "current_engine":
         subtitle = "Current full-context engine BET + LEAN results are shown while the official recommendation ledger accumulates."
     else:
@@ -178,7 +200,7 @@ def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[st
     columns[0].metric("Official record" if headline["scope"] == "official" else "Market record", headline["market_record"])
     columns[1].metric("Fixture evidence", headline["fixture_record"])
     columns[2].metric("Official ROI" if headline["scope"] == "official" else "Market ROI", _percent(headline["market_roi"]))
-    columns[3].metric("Max correlated markets", str(headline["max_correlated_markets"]))
+    columns[3].metric("Max plays on one match", str(headline["max_correlated_markets"]))
 
     if headline["scope"] == "official":
         meta = st_module.columns(3)
@@ -187,16 +209,24 @@ def render_performance_page(st_module, report: dict[str, Any] | None) -> dict[st
         meta[2].metric("Underdogs", str(headline["underdog_recommendations"]))
 
         official = report.get("official") or {}
+        st_module.caption("Reconciliation rule: for every row below, Total = Wins + Losses + Pushes + Voids. Category totals reconcile to the headline official recommendation count.")
+
+        by_market = official.get("by_market_group") or {}
+        if by_market:
+            st_module.markdown('<div class="v5-section-title">Performance by market family</div>', unsafe_allow_html=True)
+            st_module.dataframe(_breakdown_frame(by_market), use_container_width=True, hide_index=True)
+
         by_signal = official.get("by_signal") or {}
         if by_signal:
-            st_module.markdown('<div class="v5-section-title">Official recommendations by signal</div>', unsafe_allow_html=True)
-            st_module.dataframe(pd.DataFrame.from_dict(by_signal, orient="index"), use_container_width=True)
+            st_module.markdown('<div class="v5-section-title">Performance by recommendation strength</div>', unsafe_allow_html=True)
+            st_module.dataframe(_breakdown_frame(by_signal), use_container_width=True, hide_index=True)
+
         by_price = official.get("by_price_band") or {}
         if by_price:
-            with st_module.expander("Official performance by price band", expanded=False):
-                st_module.dataframe(pd.DataFrame.from_dict(by_price, orient="index"), use_container_width=True)
+            with st_module.expander("Performance by price band", expanded=False):
+                st_module.dataframe(_breakdown_frame(by_price), use_container_width=True, hide_index=True)
 
-    st_module.caption("Performance counts only frozen official recommendations. Ancillary pricing observations remain in permanent market history for research but do not affect W/L, units or ROI.")
+    st_module.caption("Performance counts only the selected official line in each market family. Alternate lines remain in market history for research but do not affect the displayed W/L, units or ROI.")
 
     legacy = {} if reset_at else (report.get("legacy") or ({} if headline["scope"] == "official" else report))
     if legacy:
