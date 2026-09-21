@@ -65,3 +65,16 @@ The repository is **not yet certified data-complete** for the next layer. The re
 
 ## Rule
 No new market-aware meta-model training begins until this preflight is green for all required inputs. PARTIAL optional context may remain only when it has explicit missingness/quality handling and was validated that way.
+
+
+## 2026-09-21 court-data reset
+Existing/legacy court-characteristics enrichment is retired from the readiness baseline at user direction. It must not be used to satisfy preflight coverage or as fallback data. This includes legacy court altitude, court setting/environment, court speed/CPI, ball characteristics, ace/rally court characteristics, relative-air-density court fields, and reconciled derivatives whose authority depends on the retired court table.
+
+A new user-supplied court table will be audited as a new authoritative source before any court-specific feature is reintroduced. Until that audit passes:
+- court-specific inputs are DEFERRED, not FAIL, for the independent-tennis preflight;
+- no legacy court value may silently populate historical or live rows;
+- no market-aware work may depend on a court-specific field;
+- Elo, surface Elo, serve/return, ranking, form/state, workload/rest, schedule surface, and other non-court model inputs remain in scope;
+- latitude, longitude, timezone, and authoritative venue/location data supplied independently of the retired court table remain eligible for their own provenance audit.
+
+This reset changes data authority, not the accepted predictive model coefficients. Any eventual reintroduction of new court features requires chronological challenger validation rather than automatic substitution into the existing model.
