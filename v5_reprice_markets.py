@@ -45,7 +45,6 @@ def reprice_market_snapshot(prices, frozen_market_probs, *, prices_fresh):
         try: conf = float(conf) if pd.notna(conf) else None
         except Exception: conf = None
         sig = signal_row(row, disagreement_level=None, state_confidence=conf)
-        if str(row.get("surface_source", "")) == "Auto default — review" and sig in {"BET", "LEAN"}: sig = "REVIEW"
         signals.append(sig)
     out["signal"] = signals
     return out
