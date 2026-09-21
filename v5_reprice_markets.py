@@ -5,6 +5,7 @@ import pandas as pd
 from v5_live_market import fair_american, signal_row
 from v5_production_artifacts import stable_market_key
 from v5_recommendation_ledger import update_official_recommendations
+from v5_recommendation_policy import select_primary_market_rows
 
 
 def _decimal_from_american(value):
@@ -52,7 +53,8 @@ def reprice_market_snapshot(prices, frozen_market_probs, *, prices_fresh):
 
 def update_repricing_artifacts(prices, frozen_market_probs, *, prices_fresh, existing_official=None, existing_audit=None):
     repriced = reprice_market_snapshot(prices, frozen_market_probs, prices_fresh=prices_fresh)
-    actionable = repriced
+    selected = select_primary_market_rows(repriced)
+    actionable = selected
     if not actionable.empty and "signal" in actionable.columns:
         actionable = actionable[actionable["signal"].fillna("").astype(str).str.upper().isin({"BET", "LEAN"})].copy()
     official, audit = update_official_recommendations(existing_official, actionable, existing_audit)
