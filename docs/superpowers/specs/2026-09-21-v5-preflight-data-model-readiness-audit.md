@@ -78,3 +78,35 @@ A new user-supplied court table will be audited as a new authoritative source be
 - latitude, longitude, timezone, and authoritative venue/location data supplied independently of the retired court table remain eligible for their own provenance audit.
 
 This reset changes data authority, not the accepted predictive model coefficients. Any eventual reintroduction of new court features requires chronological challenger validation rather than automatic substitution into the existing model.
+
+
+## Preflight execution update — source/state/warehouse audit
+Repository evidence was checked against the current production artifacts on 2026-09-21.
+
+### Current-source refresh — PASS
+The latest recorded refresh completed successfully at 2026-09-21T12:16:48Z. Every 2026/current source reports 50 columns, no missing required columns, no warnings, and hard_fail=false:
+- 2026 ATP main: 2,132 rows.
+- 2026 ATP qualifying: 1,105 rows.
+- 2026 Challenger: 5,790 rows.
+- 2026 WTA: 2,095 rows.
+- ongoing ATP/main: 58 rows.
+- ongoing Challenger: 0 rows (valid schema, not treated as missing).
+- ongoing WTA: 11 rows.
+The resulting combined results cache is READY with 11,189 rows.
+
+### Chronological state build — PASS
+The same successful refresh rebuilt states after source refresh:
+- MEN source rows before deduplication: 151,696; after deduplication: 151,693; chronological matches processed: 151,569; current players: 4,344; persisted rating rows: 13,032.
+- WTA source rows: 44,500; chronological matches processed: 44,500; current players: 1,686; persisted rating rows: 5,058.
+This proves the current state artifacts were regenerated from the refreshed source set; fixture-player coverage still requires a fixture-level audit rather than being inferred from successful state generation.
+
+### Canonical context warehouse continuity — PARTIAL / STALE
+The persisted warehouse does contain 2026 and all four expected 2026 source families with no missing/failed source files in its manifest. It contains 10,935 canonical 2026 matches and reports broad stat coverage. However, its persisted date_max is 2026-09-07 while the current source/state refresh is 2026-09-21. Therefore the warehouse is not certified current and must be refreshed/audited before downstream historical/live parity or new decision-model training.
+
+The current warehouse schema contains match identity, tour/date/tournament/round/surface/best-of/result, score outcomes, rank, match duration, serve stats, return-derived stats, player/opponent identity and role. Its feature namespace explicitly reserves feature_* for pre-first-serve information.
+
+### Dormant player/tournament features — classification tightened
+The persisted canonical warehouse schema does not contain player age, hand, height, or H2H fields. The accepted winner/score candidate feature lists inspected for this preflight also do not establish those fields as active inputs. They are therefore NOT ACTIVE IN THE CURRENT ACCEPTED CONTRACT; repository evidence inspected so far does not support calling them previously rejected. Tournament round is stored in the canonical warehouse but is not established as an active accepted-model feature. Tournament tier/level is not part of the persisted canonical schema shown here. Any of these fields can only enter later as separately sourced chronological challenger features; none is a blocker for reproducing the accepted non-court model.
+
+### Court reset interaction
+No legacy court field is allowed to turn the above PASS/PARTIAL findings green. Court-specific enrichment remains deferred until the new authoritative court table is supplied and audited.
