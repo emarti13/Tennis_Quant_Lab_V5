@@ -1,6 +1,6 @@
 {
   "schema_version": "v5-context-1",
-  "source": "TennisMyLife manifest historical season files",
+  "source": "TennisMyLife historical manifest + canonical current results snapshot",
   "source_detail": {
     "requested_years": [
       2023,
@@ -67,11 +67,11 @@
       },
       {
         "file": "2026_challenger.csv",
-        "rows": 5605
+        "rows": 5790
       },
       {
         "file": "2026_wta.csv",
-        "rows": 2095
+        "rows": 2153
       }
     ],
     "missing": [],
@@ -397,37 +397,52 @@
         "w_df",
         "w_svpt"
       ]
+    },
+    "canonical_current_snapshot": {
+      "path": "v5_results_ready/tennismylife_results.csv",
+      "status_path": "v5_results_ready/results_status.json",
+      "source_success_utc": "2026-09-21T12:16:48.265153+00:00",
+      "rows": 11189,
+      "source_files": [
+        "2026.csv",
+        "2026_atp_quali.csv",
+        "2026_challenger.csv",
+        "2026_wta.csv",
+        "ongoing_tourneys.csv",
+        "challenger_ongoing_tourneys.csv",
+        "wta_ongoing_tourneys.csv"
+      ]
     }
   },
-  "raw_rows": 50177,
-  "match_rows": 50053,
-  "season_date_rejected_rows": 124,
-  "player_match_rows": 100106,
+  "raw_rows": 61609,
+  "match_rows": 50365,
+  "season_date_rejected_rows": 11244,
+  "player_match_rows": 100730,
   "tour_counts": {
-    "MEN": 39868,
-    "WTA": 10185
+    "MEN": 40111,
+    "WTA": 10254
   },
   "year_counts": {
     "2022": 18,
     "2023": 12843,
     "2024": 13297,
     "2025": 12960,
-    "2026": 10935
+    "2026": 11247
   },
   "stat_non_null_counts": {
-    "stat_aces": 97738,
-    "stat_double_faults": 97738,
-    "stat_service_points": 97738,
-    "stat_first_serves_in": 97738,
-    "stat_first_serve_points_won": 97585,
-    "stat_second_serve_points_won": 97584,
-    "stat_break_points_saved": 97584,
-    "stat_break_points_faced": 97581,
-    "stat_return_points_total": 97738,
-    "stat_return_points_won": 97584,
-    "stat_break_points_opportunities": 97581,
-    "stat_break_points_converted": 97581
+    "stat_aces": 98360,
+    "stat_double_faults": 98360,
+    "stat_service_points": 98360,
+    "stat_first_serves_in": 98360,
+    "stat_first_serve_points_won": 98207,
+    "stat_second_serve_points_won": 98206,
+    "stat_break_points_saved": 98206,
+    "stat_break_points_faced": 98203,
+    "stat_return_points_total": 98360,
+    "stat_return_points_won": 98206,
+    "stat_break_points_opportunities": 98203,
+    "stat_break_points_converted": 98203
   },
   "date_min": "2022-12-29 00:00:00",
-  "date_max": "2026-09-07 00:00:00"
+  "date_max": "2026-09-21 00:00:00"
 }
