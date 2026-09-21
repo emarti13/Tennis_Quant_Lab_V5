@@ -75,11 +75,28 @@ def production_ui_state(status: dict | None) -> str:
 
 
 def runtime_production_state(market_source: pd.DataFrame | None, repricing_status: dict | None, *, now_utc=None) -> dict:
+    """Build UI state with one authority per freshness domain.
+
+    The promoted market feed is the sole authority for sportsbook-price age.
+    Repricing status may report forecast/repricing readiness, but an older
+    downstream artifact must never override a fresh canonical price snapshot.
+    """
     feed = market_feed_status(market_source, now_utc=now_utc)
-    if feed.get("state") == "missing": state = "MISSING"
-    elif not feed.get("fresh"): state = "STALE_PRICES"
-    elif feed.get("state") == "no_future_fixtures": state = "NO_FUTURE_FIXTURES"
-    else: state = production_ui_state(repricing_status)
+    downstream = production_ui_state(repricing_status)
+
+    if feed.get("state") == "missing":
+        state = "MISSING"
+    elif not feed.get("fresh"):
+        state = "STALE_PRICES"
+    elif feed.get("state") == "no_future_fixtures":
+        state = "NO_FUTURE_FIXTURES"
+    elif downstream in {"STALE_FORECAST", "MISSING_FORECAST", "MISSING"}:
+        state = downstream
+    else:
+        # READY and any legacy downstream STALE_PRICES value defer to the
+        # canonical market feed for price freshness.
+        state = "READY"
+
     return {"state": state, "feed_status": feed, "repricing_status": repricing_status or {}}
 
 
