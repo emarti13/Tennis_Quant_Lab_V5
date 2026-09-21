@@ -22,6 +22,27 @@
 
 ---
 
+### Task 0: Independent-tennis data/model preflight — BLOCKING
+
+**Audit:** docs/superpowers/specs/2026-09-21-v5-preflight-data-model-readiness-audit.md
+
+- [x] Inventory accepted model/data contracts from repository evidence.
+- [x] Classify core feature families as READY / PARTIAL / NOT PROVEN ACTIVE / NOT VERIFIED.
+- [ ] Audit current ATP/WTA/qualifying/Challenger/ongoing source files for existence, latest date, row counts, duplicates, and schema.
+- [ ] Verify 2026 continuity of the canonical context warehouse.
+- [ ] Verify current MEN/WTA state freshness and fixture-player coverage for Elo, surface Elo, serve/return, form, volatility, and confidence.
+- [ ] Calculate tour/year coverage for every feature consumed by the accepted winner and score candidates.
+- [ ] Audit canonical tournament/venue coverage: surface, environment, altitude, latitude, longitude, timezone.
+- [ ] Audit historical fixture-to-OddsPapi identity join coverage and ambiguity.
+- [ ] Classify H2H, age, hand, height, tournament tier, and round as tested/rejected, available-but-untested, or unavailable.
+- [ ] Run leakage and historical/live parity checks.
+- [ ] Emit machine-readable PASS/PARTIAL/FAIL preflight report.
+- [ ] Do not begin decision/meta-model training until required-input FAIL items are zero.
+
+**Acceptance:** every required tennis-model input is present, current, reproducible, and coverage-audited; optional partial inputs have explicit missingness/quality behavior validated historically.
+
+---
+
 ### Task 1: Inventory and normalize the historical OddsPapi cache
 
 **Files:** Create v5_historical_market_reference.py and tests/test_v5_historical_market_reference.py. Produce v5_research/historical_market_reference.parquet and v5_research/historical_market_reference_qc.json.
