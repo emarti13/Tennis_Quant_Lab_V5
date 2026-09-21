@@ -110,3 +110,19 @@ The persisted canonical warehouse schema does not contain player age, hand, heig
 
 ### Court reset interaction
 No legacy court field is allowed to turn the above PASS/PARTIAL findings green. Court-specific enrichment remains deferred until the new authoritative court table is supplied and audited.
+
+
+## Fixture-player state coverage audit — 2026-09-21 production board
+The current production board summary was audited after the successful source/state refresh and synchronized context-warehouse rebuild.
+
+- Eligible pre-match fixtures: 26.
+- Successfully prepared/priced fixtures: 23.
+- Fixture-level preparation failures caused by unmatched player identity: 3.
+- Fixture coverage: 23/26 = 88.46%.
+- Player slots represented: 52; unmatched player slots: 3; raw player-slot identity coverage = 49/52 = 94.23%.
+- Unmatched identities: Del Pino, Mateo (MEN Challenger); Wolff, Vivian (WTA); Mert, Aysegul (WTA).
+- For fixtures that successfully prepared, the production path requires both player/surface rating rows and consumes serve_global, return_global, serve_surface, return_surface, surface_points and state_confidence; the board completed without context fallback rows (context_fallback_rows=0).
+
+Classification: PARTIAL, not PASS. The state build itself is current, but fixture-player identity resolution is below 100%. The three unmatched identities must be resolved through deterministic player-identity handling or explicitly classified as genuinely unseen/no-history players before this gate can pass. No fuzzy many-to-one alias should be added without evidence.
+
+The production summary also confirms market prices are not used in the predictive model and the accepted winner/score model versions remain v5-advanced-nested-chronological-1 and v5-score-walkforward-3.
