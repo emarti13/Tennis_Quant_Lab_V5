@@ -228,6 +228,57 @@ def _resolve_player(name, lookup):
     return None
 
 
+def _cold_start_rating(name, surface):
+    """Conservative no-history state for a genuinely unseen player.
+
+    This is a population-neutral prior, not an inferred player identity. It keeps
+    the fixture modelable while forcing state confidence to zero so downstream
+    policy can treat the prediction as high uncertainty.
+    """
+    return pd.Series({
+        "player": str(name),
+        "surface": surface,
+        "serve_global": 0.0,
+        "return_global": 0.0,
+        "global_points": 0.0,
+        "serve_surface": 0.0,
+        "return_surface": 0.0,
+        "surface_points": 0.0,
+        "form_logit": 0.0,
+        "raw_day_vol_logit": np.nan,
+        "form_matches": 0,
+        "surface_form_matches": 0,
+        "day_vol_logit": np.nan,
+        "vol_reliability": 0.0,
+        "elo": 1500.0,
+        "surface_elo": 1500.0,
+        "state_confidence": 0.0,
+        "state_confidence_label": "Cold Start",
+        "cold_start": True,
+    })
+
+
+def _rating_state(df, resolved_name, feed_name, surface):
+    if resolved_name is None:
+        return str(feed_name), _cold_start_rating(feed_name, surface), True
+    row = df[(df.player == resolved_name) & (df.surface == surface)]
+    if row.empty:
+        # Identity exists but lacks this surface row. This should be exceptional;
+        # use the same explicit zero-confidence prior rather than silently failing.
+        return resolved_name, _cold_start_rating(resolved_name, surface), True
+    state = row.iloc[-1].copy()
+    state["cold_start"] = False
+    return resolved_name, state, False
+
+
+def _base_probs_from_states(a, b, surface, baseline):
+    from v5_core import logistic, logit
+    wa = min(1.0, (float(a.surface_points) + float(b.surface_points)) / 700.0)
+    eta_a = logit(baseline[surface]) + float(a.serve_global) - float(b.return_global) + 0.55 * wa * (float(a.serve_surface) - float(b.return_surface))
+    eta_b = logit(baseline[surface]) + float(b.serve_global) - float(a.return_global) + 0.55 * wa * (float(b.serve_surface) - float(a.return_surface))
+    return logistic(eta_a), logistic(eta_b)
+
+
 def _base_probs_from_ratings(df, p1, p2, surface, baseline):
     from v5_core import logistic, logit
 
@@ -281,20 +332,15 @@ def _prepare_fixture(fixture_rows, ratings_by_tour, summary, context_history=Non
     )
     best_of = infer_best_of(tournament, tour)
     lookup = _player_lookup(ratings)
-    p1 = _resolve_player(first.get("player1"), lookup)
-    p2 = _resolve_player(first.get("player2"), lookup)
-    if p1 is None or p2 is None:
-        missing = []
-        if p1 is None:
-            missing.append(str(first.get("player1")))
-        if p2 is None:
-            missing.append(str(first.get("player2")))
-        raise ValueError("Unmatched V5 player(s): " + ", ".join(missing))
-    if p1 == p2:
+    p1_resolved = _resolve_player(first.get("player1"), lookup)
+    p2_resolved = _resolve_player(first.get("player2"), lookup)
+    if p1_resolved is not None and p1_resolved == p2_resolved:
         raise ValueError("Players resolved to the same V5 identity.")
 
+    p1, a, p1_cold = _rating_state(ratings, p1_resolved, first.get("player1"), surface)
+    p2, b, p2_cold = _rating_state(ratings, p2_resolved, first.get("player2"), surface)
     baseline = summary.get(tour, {}).get("baseline", {"Hard": 0.62, "Clay": 0.60, "Grass": 0.65})
-    p1_serve, p2_serve, a, b = _base_probs_from_ratings(ratings, p1, p2, surface, baseline)
+    p1_serve, p2_serve = _base_probs_from_states(a, b, surface, baseline)
     elo_a = 0.35 * float(a.elo) + 0.65 * float(a.surface_elo)
     elo_b = 0.35 * float(b.elo) + 0.65 * float(b.surface_elo)
     p_elo = 1 / (1 + 10 ** ((elo_b - elo_a) / 400))
@@ -312,6 +358,8 @@ def _prepare_fixture(fixture_rows, ratings_by_tour, summary, context_history=Non
         "p2_serve": p2_serve,
         "rating_p1": a,
         "rating_p2": b,
+        "player1_cold_start": p1_cold,
+        "player2_cold_start": p2_cold,
         "p_elo": p_elo,
         "baseline_probability_p1": calibrated_p,
         "calibration": calibration_record(tour),
@@ -506,6 +554,8 @@ def build_fixture_board(
     priced["best_of"] = prepared["best_of"]
     priced["resolved_player1"] = p1
     priced["resolved_player2"] = p2
+    priced["player1_cold_start"] = bool(prepared.get("player1_cold_start", False))
+    priced["player2_cold_start"] = bool(prepared.get("player2_cold_start", False))
     priced["simulations"] = int(sims)
     priced["serve_probability_p1"] = prepared["p1_serve"]
     priced["serve_probability_p2"] = prepared["p2_serve"]
