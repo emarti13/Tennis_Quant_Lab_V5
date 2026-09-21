@@ -16,12 +16,12 @@ _SIGNAL_PRIORITY = {
 
 
 def select_primary_market_rows(observations: pd.DataFrame | None) -> pd.DataFrame:
-    """Return one deterministic primary market row per fixture.
+    """Return one deterministic primary row per fixture and market family.
 
     Selection mirrors the Decision Feed contract: strongest signal tier first,
     then highest expected value inside that tier, then original source order.
     Rows without a fixture id are excluded because they cannot form an official
-    fixture-level decision.
+    fixture-level market-family decision.
     """
     if observations is None or observations.empty:
         return pd.DataFrame(columns=list(observations.columns) if observations is not None else [])
@@ -40,10 +40,10 @@ def select_primary_market_rows(observations: pd.DataFrame | None) -> pd.DataFram
     work["_ev_rank"] = pd.to_numeric(work.get("expected_value"), errors="coerce").fillna(float("-inf"))
 
     ranked = work.sort_values(
-        ["fixture_id", "_signal_rank", "_ev_rank", "_source_order"],
-        ascending=[True, True, False, True],
+        ["fixture_id", "market_group", "_signal_rank", "_ev_rank", "_source_order"],
+        ascending=[True, True, True, False, True],
         kind="stable",
     )
-    selected = ranked.drop_duplicates("fixture_id", keep="first")
+    selected = ranked.drop_duplicates(["fixture_id", "market_group"], keep="first")
     selected = selected.sort_values("_source_order", kind="stable")
     return selected.drop(columns=["_source_order", "_signal_rank", "_ev_rank"]).reset_index(drop=True)
