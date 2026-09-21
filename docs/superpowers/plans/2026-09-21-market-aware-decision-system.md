@@ -32,14 +32,14 @@
 - [ ] Verify 2026 continuity of the canonical context warehouse.
 - [ ] Verify current MEN/WTA state freshness and fixture-player coverage for Elo, surface Elo, serve/return, form, volatility, and confidence.
 - [ ] Calculate tour/year coverage for every feature consumed by the accepted winner and score candidates.
-- [ ] Audit canonical tournament/venue coverage: surface, environment, altitude, latitude, longitude, timezone.
+- [ ] Audit canonical tournament/venue coverage: schedule surface plus independently authoritative latitude, longitude, timezone, and venue/location altitude. Legacy court-characteristics fields are retired; new court data is deferred pending a new authoritative table.
 - [ ] Audit historical fixture-to-OddsPapi identity join coverage and ambiguity.
 - [ ] Classify H2H, age, hand, height, tournament tier, and round as tested/rejected, available-but-untested, or unavailable.
 - [ ] Run leakage and historical/live parity checks.
 - [ ] Emit machine-readable PASS/PARTIAL/FAIL preflight report.
 - [ ] Do not begin decision/meta-model training until required-input FAIL items are zero.
 
-**Acceptance:** every required tennis-model input is present, current, reproducible, and coverage-audited; optional partial inputs have explicit missingness/quality behavior validated historically.
+**Acceptance:** every required non-retired tennis-model input is present, current, reproducible, and coverage-audited; optional partial inputs have explicit missingness/quality behavior validated historically. Legacy court-characteristics data cannot satisfy this gate; new court data is a separate later audit/revalidation.
 
 ---
 
