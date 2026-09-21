@@ -29,6 +29,8 @@ def select_primary_market_rows(observations: pd.DataFrame | None) -> pd.DataFram
         return observations.iloc[0:0].copy()
 
     work = observations.copy()
+    if "market_group" not in work.columns:
+        work["market_group"] = "__all__"
     work["_source_order"] = range(len(work))
     fixture = work["fixture_id"].fillna("").astype(str).str.strip()
     work = work.loc[fixture.ne("")].copy()
