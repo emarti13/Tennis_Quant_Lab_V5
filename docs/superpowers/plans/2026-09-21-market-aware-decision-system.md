@@ -28,13 +28,13 @@
 
 - [x] Inventory accepted model/data contracts from repository evidence.
 - [x] Classify core feature families as READY / PARTIAL / NOT PROVEN ACTIVE / NOT VERIFIED.
-- [ ] Audit current ATP/WTA/qualifying/Challenger/ongoing source files for existence, latest date, row counts, duplicates, and schema.
-- [ ] Verify 2026 continuity of the canonical context warehouse.
-- [ ] Verify current MEN/WTA state freshness and fixture-player coverage for Elo, surface Elo, serve/return, form, volatility, and confidence.
+- [x] Audit current ATP/WTA/qualifying/Challenger/ongoing source artifacts for refresh status, row counts, required schema, warnings, and state-build deduplication. Latest refresh: SUCCESS 2026-09-21T12:16:48Z; detailed findings in preflight audit.
+- [ ] Verify 2026 continuity/currentness of the canonical context warehouse. PARTIAL: all 2026 source families are represented and 10,935 canonical 2026 matches exist, but persisted date_max is 2026-09-07 versus 2026-09-21 source/state refresh; warehouse refresh is required.
+- [ ] Verify current MEN/WTA state freshness and fixture-player coverage for Elo, surface Elo, serve/return, form, volatility, and confidence. State freshness/build PASS (MEN 151,569 chronological matches; WTA 44,500); fixture-player coverage remains to be measured.
 - [ ] Calculate tour/year coverage for every feature consumed by the accepted winner and score candidates.
 - [ ] Audit canonical tournament/venue coverage: schedule surface plus independently authoritative latitude, longitude, timezone, and venue/location altitude. Legacy court-characteristics fields are retired; new court data is deferred pending a new authoritative table.
 - [ ] Audit historical fixture-to-OddsPapi identity join coverage and ambiguity.
-- [ ] Classify H2H, age, hand, height, tournament tier, and round as tested/rejected, available-but-untested, or unavailable.
+- [x] Classify H2H, age, hand, height, tournament tier, and round against the accepted persisted/model contract. H2H/age/hand/height are not in the current canonical schema or accepted feature lists; round is stored but not proven active; tier/level is not in the shown persisted schema. No evidence inspected supports labeling them previously rejected.
 - [ ] Run leakage and historical/live parity checks.
 - [ ] Emit machine-readable PASS/PARTIAL/FAIL preflight report.
 - [ ] Do not begin decision/meta-model training until required-input FAIL items are zero.
