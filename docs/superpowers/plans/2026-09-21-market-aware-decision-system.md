@@ -29,8 +29,8 @@
 - [x] Inventory accepted model/data contracts from repository evidence.
 - [x] Classify core feature families as READY / PARTIAL / NOT PROVEN ACTIVE / NOT VERIFIED.
 - [x] Audit current ATP/WTA/qualifying/Challenger/ongoing source artifacts for refresh status, row counts, required schema, warnings, and state-build deduplication. Latest refresh: SUCCESS 2026-09-21T12:16:48Z; detailed findings in preflight audit.
-- [ ] Verify 2026 continuity/currentness of the canonical context warehouse. PARTIAL: all 2026 source families are represented and 10,935 canonical 2026 matches exist, but persisted date_max is 2026-09-07 versus 2026-09-21 source/state refresh; warehouse refresh is required.
-- [ ] Verify current MEN/WTA state freshness and fixture-player coverage for Elo, surface Elo, serve/return, form, volatility, and confidence. State freshness/build PASS (MEN 151,569 chronological matches; WTA 44,500); fixture-player coverage remains to be measured.
+- [x] Verify 2026 continuity/currentness of the canonical context warehouse. PASS after pipeline repair: rebuilt from the canonical successful results snapshot; persisted date_max is 2026-09-21 with 11,247 canonical 2026 matches.
+- [ ] Verify current MEN/WTA state freshness and fixture-player coverage for Elo, surface Elo, serve/return, form, volatility, and confidence. State freshness/build PASS. Current production fixture audit is PARTIAL: 23/26 fixtures prepare successfully (88.46%); 49/52 player slots resolve (94.23%). Unmatched: Del Pino, Mateo; Wolff, Vivian; Mert, Aysegul. Resolve/classify these identities before PASS.
 - [ ] Calculate tour/year coverage for every feature consumed by the accepted winner and score candidates.
 - [ ] Audit canonical tournament/venue coverage: schedule surface plus independently authoritative latitude, longitude, timezone, and venue/location altitude. Legacy court-characteristics fields are retired; new court data is deferred pending a new authoritative table.
 - [ ] Audit historical fixture-to-OddsPapi identity join coverage and ambiguity.
