@@ -104,7 +104,10 @@ def update_official_recommendations(existing, observations, audit=None, *, now_u
         except Exception:
             audit_out = _audit_append(audit_out, {**event, "event": "BLOCKED_INVALID_TIME"}); continue
 
-        matches = ledger.index[ledger["market_key"].astype(str) == market_key].tolist()
+        market_group = str(_present(obs.get("market_group"), "")).strip()
+        fixture_mask = ledger["fixture_id"].fillna("").astype(str).str.strip().eq(fixture_id)
+        group_mask = ledger["market_group"].fillna("").astype(str).str.strip().eq(market_group)
+        matches = ledger.index[fixture_mask & group_mask].tolist()
         if not matches:
             ledger = pd.concat([ledger, pd.DataFrame([_official_record(obs, signal, market_key)])], ignore_index=True, sort=False)
             audit_out = _audit_append(audit_out, {**event, "event": f"OFFICIAL_{signal}_CREATED"})
@@ -117,7 +120,7 @@ def update_official_recommendations(existing, observations, audit=None, *, now_u
             for key, value in record.items(): ledger.at[idx, key] = value
             audit_out = _audit_append(audit_out, {**event, "event": "LEAN_SUPERSEDED_BY_BET"})
         else:
-            audit_out = _audit_append(audit_out, {**event, "event": "DUPLICATE_ACTIONABLE_IGNORED"})
+            audit_out = _audit_append(audit_out, {**event, "event": "MARKET_FAMILY_ALREADY_OFFICIAL"})
 
     for col in OFFICIAL_COLUMNS:
         if col not in ledger.columns: ledger[col] = pd.NA
