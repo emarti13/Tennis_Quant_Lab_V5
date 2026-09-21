@@ -21,6 +21,7 @@ from v5_live_market import canonical_name, add_model_pricing, signal_row
 from v5_model_calibration import calibrated_match_probability, calibration_record
 from v5_court_conditions_source import resolve_court_conditions
 from v5_score_distribution import predict_score_distribution
+from v5_player_identity import load_aliases, resolve_identity
 
 
 BASE = Path(__file__).resolve().parent
@@ -31,6 +32,7 @@ LATEST_SUMMARY_PATH = OUTDIR / "latest_summary.json"
 FROZEN_LEDGER_PATH = OUTDIR / "frozen_predictions.csv"
 CONTEXT_HISTORY_PATH = BASE / "context_warehouse" / "player_match_rows.parquet"
 TOURNAMENT_REGISTRY_PATH = BASE / "context_registry" / "tournaments.csv"
+PLAYER_ALIAS_PATH = BASE / "context_registry" / "player_aliases.csv"
 PRODUCTION_CANDIDATE_PATH = BASE / "experiments" / "acceptance" / "production_candidate.json"
 SCORE_PRODUCTION_CANDIDATE_PATH = BASE / "experiments" / "acceptance" / "score_production_candidate.json"
 
@@ -331,9 +333,16 @@ def _prepare_fixture(fixture_rows, ratings_by_tour, summary, context_history=Non
         context_history=context_history,
     )
     best_of = infer_best_of(tournament, tour)
-    lookup = _player_lookup(ratings)
-    p1_resolved = _resolve_player(first.get("player1"), lookup)
-    p2_resolved = _resolve_player(first.get("player2"), lookup)
+    aliases = load_aliases(PLAYER_ALIAS_PATH)
+    historical_players = ratings["player"].dropna().unique()
+    id1 = resolve_identity(first.get("player1"), historical_players, aliases, provider="oddspapi", provider_player_id=first.get("player1_id", ""))
+    id2 = resolve_identity(first.get("player2"), historical_players, aliases, provider="oddspapi", provider_player_id=first.get("player2_id", ""))
+    review = [x for x in (id1, id2) if x["status"] == "IDENTITY_REVIEW"]
+    if review:
+        details = "; ".join(f'{x["method"]}: {", ".join(x["candidates"][:3])}' for x in review)
+        raise ValueError("IDENTITY_REVIEW required before cold start: " + details)
+    p1_resolved = id1["canonical_player"]
+    p2_resolved = id2["canonical_player"]
     if p1_resolved is not None and p1_resolved == p2_resolved:
         raise ValueError("Players resolved to the same V5 identity.")
 
@@ -360,6 +369,10 @@ def _prepare_fixture(fixture_rows, ratings_by_tour, summary, context_history=Non
         "rating_p2": b,
         "player1_cold_start": p1_cold,
         "player2_cold_start": p2_cold,
+        "player1_identity_status": id1["status"],
+        "player2_identity_status": id2["status"],
+        "player1_identity_method": id1["method"],
+        "player2_identity_method": id2["method"],
         "p_elo": p_elo,
         "baseline_probability_p1": calibrated_p,
         "calibration": calibration_record(tour),
@@ -556,6 +569,10 @@ def build_fixture_board(
     priced["resolved_player2"] = p2
     priced["player1_cold_start"] = bool(prepared.get("player1_cold_start", False))
     priced["player2_cold_start"] = bool(prepared.get("player2_cold_start", False))
+    priced["player1_identity_status"] = prepared.get("player1_identity_status", "")
+    priced["player2_identity_status"] = prepared.get("player2_identity_status", "")
+    priced["player1_identity_method"] = prepared.get("player1_identity_method", "")
+    priced["player2_identity_method"] = prepared.get("player2_identity_method", "")
     priced["simulations"] = int(sims)
     priced["serve_probability_p1"] = prepared["p1_serve"]
     priced["serve_probability_p2"] = prepared["p2_serve"]
