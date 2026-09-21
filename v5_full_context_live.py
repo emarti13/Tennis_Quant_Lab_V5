@@ -18,7 +18,6 @@ from v5_context_model import predict_symmetric_logistic
 from v5_court_conditions_source import resolve_court_conditions
 from v5_matchup_features import build_matchup_features
 from v5_player_state import build_player_state
-from v5_weather_features import attach_live_weather
 
 
 DEFAULT_CANDIDATE_PATH = Path("experiments/acceptance/production_candidate.json")
@@ -183,7 +182,6 @@ def build_live_enriched_history(historical_player_rows: pd.DataFrame, fixtures: 
     enriched = enrich_player_history(combined, tournament_registry=tournament_registry)
     if weather_cache is not None:
         enriched = attach_weather_cache(enriched, weather_cache)
-    enriched = attach_live_weather(enriched, client=forecast_client)
     return enriched
 
 
