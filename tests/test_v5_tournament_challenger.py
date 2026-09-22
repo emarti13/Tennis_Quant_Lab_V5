@@ -1,7 +1,12 @@
 import numpy as np
 import pandas as pd
 
-from v5_tournament_challenger import add_authority_features, fit_ball_categories, non_court_context_columns
+from v5_tournament_challenger import (
+    add_authority_features,
+    evaluate_challenger_frame,
+    fit_ball_categories,
+    non_court_context_columns,
+)
 
 
 def test_non_court_control_excludes_retired_environment_and_travel_features():
@@ -69,3 +74,32 @@ def test_ball_categories_are_fit_from_2025_only():
         {"year": 2026, "authority_ball_model": "Future Ball"},
     ])
     assert fit_ball_categories(frame, fit_year=2025, min_rows=2) == ["Ball A"]
+
+
+def test_chronological_evaluator_compares_new_authority_group_to_clean_control():
+    rows = []
+    for year in (2025, 2026):
+        for i in range(80):
+            high = (i % 2) == 0
+            rows.append({
+                "year": year,
+                "target_a_win": 1 if high else 0,
+                "baseline_a_probability": 0.5,
+                "x_sr_a": 0.0,
+                "x_elo_a": 0.0,
+                "ctx_serve_dominance_diff": 1.0,
+                "ctx_return_dominance_diff": 0.0,
+                "ctx_serve_dependence_diff": 1.0,
+                "ctx_rank_diff": 0.0,
+                "authority_altitude_m": 0.0,
+                "authority_setting": "Outdoor",
+                "authority_cpi": 45.0 if high else 25.0,
+                "authority_ta": 1.0,
+                "authority_ball_model": None,
+            })
+    frame = add_authority_features(pd.DataFrame(rows), ball_categories=[])
+    report = evaluate_challenger_frame(frame, fit_year=2025, validation_year=2026)
+    assert report["models"]["cpi_ta"]["brier"] < report["models"]["control"]["brier"]
+    assert report["deltas_vs_control"]["cpi_ta"]["brier_gain"] > 0
+    assert report["eligibility"]["cpi_ta"] is True
+    assert all("court_speed" not in column for column in report["control_features"])
