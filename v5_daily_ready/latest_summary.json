@@ -1,53 +1,53 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-09-21T11:38:52.840862+00:00",
-  "market_snapshot_utc": "2026-09-21T03:38:12.870741+00:00",
+  "built_at_utc": "2026-09-22T03:38:54.678349+00:00",
+  "market_snapshot_utc": "2026-09-22T03:36:50.059529+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 1372,
-  "eligible_pre_match_fixtures": 26,
-  "priced_rows": 498,
-  "board_rows": 498,
-  "frozen_ledger_rows": 9423,
-  "new_frozen_rows": 480,
+  "market_rows_input": 1696,
+  "eligible_pre_match_fixtures": 84,
+  "priced_rows": 1630,
+  "board_rows": 1630,
+  "frozen_ledger_rows": 10931,
+  "new_frozen_rows": 1508,
   "signal_counts": {
-    "REVIEW": 182,
-    "PASS": 169,
-    "BET": 140,
-    "LEAN": 7
+    "REVIEW": 680,
+    "PASS": 551,
+    "BET": 373,
+    "LEAN": 26
   },
   "selected_candidate_counts": {
-    "residual": 300,
-    "ensemble": 198
+    "ensemble": 862,
+    "residual": 768
   },
   "selected_score_candidate_counts": {
-    "gaussian_contextual": 300,
-    "conditioned_mechanistic": 198
+    "conditioned_mechanistic": 862,
+    "gaussian_contextual": 768
   },
   "context_fallback_rows": 0,
   "errors": [
     {
-      "fixture_id": "id1202010274861368",
-      "player1": "Aguilar Cardozo, Joaquin",
-      "player2": "Del Pino, Mateo",
-      "tournament": "ATP Challenger Buenos Aires II, ARG Men Singles",
+      "fixture_id": "id1201413374926894",
+      "player1": "Harris, Lloyd",
+      "player2": "Miyoshi, Kenta (2004)",
+      "tournament": "ATP Chengdu, China Men Singles",
       "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): Del Pino, Mateo"
+      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Kenta Miyoshi"
     },
     {
-      "fixture_id": "id1204431774857736",
-      "player1": "Wolff, Vivian",
-      "player2": "Oliynykova, Oleksandra",
-      "tournament": "WTA Singapore, Singapore Women Singles",
+      "fixture_id": "id1203477074859974",
+      "player1": "Bertola, Remy",
+      "player2": "De Jong, Jesper",
+      "tournament": "ATP Challenger Saint Tropez, France Men Singles",
       "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): Wolff, Vivian"
+      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Jesper de Jong, Jesper De Jong"
     },
     {
-      "fixture_id": "id1205223274876556",
-      "player1": "Mert, Aysegul",
-      "player2": "Shinikova, Isabella",
-      "tournament": "WTA 125k Ankara, Turkiye Women Singles",
+      "fixture_id": "id1205233274858696",
+      "player1": "Taberner, Carlos",
+      "player2": "Nesterov, Pyotr",
+      "tournament": "ATP Challenger Plovdiv 4, Bulgaria Men Singles",
       "stage": "prepare_fixture",
-      "error": "Unmatched V5 player(s): Mert, Aysegul"
+      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Petr Nesterov"
     }
   ],
   "model_version": "v5-advanced-nested-chronological-1",
