@@ -1,5 +1,6 @@
 name: V5 Tournament Authority Challenger
 
+# Research/acceptance workflow only. It never calls the live OddsPapi API.
 on:
   push:
     branches: [main]
