@@ -61,8 +61,14 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           cp /tmp/tournament-challenger.txt /tmp/tournament-challenger-log.txt || true
           cp v5_tournament_challenger_diagnostic/report.json /tmp/tournament-challenger-report.json || true
+          cp v5_tournament_challenger_diagnostic/matched_authority_rows.parquet /tmp/tournament-challenger-matched.parquet || true
+          # The diagnostic intentionally regenerates warehouse/output files. Clear those
+          # working-tree changes before rebasing so evidence persistence cannot fail on
+          # unrelated generated artifacts. Required evidence is already staged in /tmp.
+          git reset --hard HEAD
+          git clean -fd
           git pull --rebase origin main
-          mkdir -p experiments/acceptance
+          mkdir -p experiments/acceptance v5_tournament_challenger_diagnostic
           python - <<'PY'
           import json, os
           from pathlib import Path
@@ -79,6 +85,9 @@ jobs:
             cp /tmp/tournament-challenger-report.json experiments/acceptance/tournament_challenger_report.json
             git add experiments/acceptance/tournament_challenger_report.json
           fi
+          # Restore disposable diagnostic files for the artifact upload without tracking them.
+          cp /tmp/tournament-challenger-report.json v5_tournament_challenger_diagnostic/report.json || true
+          cp /tmp/tournament-challenger-matched.parquet v5_tournament_challenger_diagnostic/matched_authority_rows.parquet || true
           if ! git diff --cached --quiet; then
             git commit -m 'Record tournament authority challenger evidence'
             git push origin HEAD:main
