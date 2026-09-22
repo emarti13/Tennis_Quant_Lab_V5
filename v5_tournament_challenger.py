@@ -45,11 +45,6 @@ def _family(name: str) -> str:
 
 
 def non_court_context_columns(frame: pd.DataFrame) -> list[str]:
-    """Whitelisted clean-control inputs.
-
-    Travel/environment are intentionally excluded so retired court, altitude,
-    weather, or venue-derived values cannot enter the challenger indirectly.
-    """
     return sorted(
         column
         for column in frame.columns
@@ -78,12 +73,6 @@ def fit_ball_categories(frame: pd.DataFrame, *, fit_year: int = 2025, min_rows: 
 
 
 def add_authority_features(frame: pd.DataFrame, *, ball_categories: list[str] | None = None) -> pd.DataFrame:
-    """Add only new-authority court interactions.
-
-    Tournament-level properties are interacted with signed player geometry so the
-    symmetric model remains orientation-safe. Missing authority values are neutral
-    zero rather than values borrowed from any retired source.
-    """
     out = frame.copy()
     serve = _num(out.get("ctx_serve_dominance_diff", pd.Series(0.0, index=out.index)))
     ret = _num(out.get("ctx_return_dominance_diff", pd.Series(0.0, index=out.index)))
@@ -134,7 +123,6 @@ def evaluate_challenger_frame(
     validation_year: int = 2026,
     l2: float = 8.0,
 ) -> dict:
-    """Fit a clean non-court control and authority challengers chronologically."""
     from v5_context_model import fit_symmetric_logistic, predict_symmetric_logistic, probability_metrics
 
     df = frame.copy()
@@ -154,9 +142,7 @@ def evaluate_challenger_frame(
     control_model = fit_symmetric_logistic(train[control_features], y_train, l2=l2)
     control_probability = predict_symmetric_logistic(control_model, valid[control_features])
     models = {
-        "accepted_baseline": probability_metrics(
-            y_valid, pd.to_numeric(valid["baseline_a_probability"], errors="coerce")
-        ),
+        "accepted_baseline": probability_metrics(y_valid, pd.to_numeric(valid["baseline_a_probability"], errors="coerce")),
         "control": probability_metrics(y_valid, control_probability),
     }
 
@@ -195,3 +181,89 @@ def evaluate_challenger_frame(
         "deltas_vs_control": deltas,
         "eligibility": eligibility,
     }
+
+
+def attach_authority_context(frame: pd.DataFrame, authority: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
+    """Attach only fields from the approved authority table.
+
+    Resolution uses the authority resolver and optional OddsPapi identity evidence.
+    Unresolved rows remain missing; there is no legacy schedule/court fallback.
+    """
+    from v5_tournament_authority import resolve_authority
+
+    out = frame.copy()
+    defaults = {
+        "authority_match_method": None,
+        "authority_tournament_name": None,
+        "authority_altitude_m": np.nan,
+        "authority_setting": None,
+        "authority_ball_model": None,
+        "authority_cpi": np.nan,
+        "authority_ta": np.nan,
+        "authority_latitude": np.nan,
+        "authority_longitude": np.nan,
+        "authority_timezone": None,
+        "authority_oddspapi_tournament_id": None,
+        "authority_oddspapi_season_id": None,
+    }
+    for column, default in defaults.items():
+        if column not in out.columns:
+            out[column] = default
+
+    cache = {}
+    methods = {}
+    resolved = 0
+    for idx, row in out.iterrows():
+        date = pd.to_datetime(row.get("match_date"), errors="coerce")
+        date_key = None if pd.isna(date) else date.strftime("%Y-%m-%d")
+        key = (
+            row.get("tourney_name"), row.get("year"), row.get("tour"),
+            row.get("surface"), date_key, row.get("oddspapi_tournament_id"),
+        )
+        if key not in cache:
+            cache[key] = resolve_authority(
+                row.get("tourney_name"),
+                row.get("year"),
+                tour=row.get("tour") or "",
+                surface=row.get("surface"),
+                match_date=row.get("match_date"),
+                oddspapi_tournament_id=row.get("oddspapi_tournament_id"),
+                table=authority,
+            )
+        match = cache[key]
+        if match is None:
+            continue
+        resolved += 1
+        method = match.get("authority_match_method")
+        methods[method] = methods.get(method, 0) + 1
+        values = {
+            "authority_match_method": method,
+            "authority_tournament_name": match.get("Tournament Name"),
+            "authority_altitude_m": match.get("Altitude (m)"),
+            "authority_setting": match.get("Setting"),
+            "authority_ball_model": match.get("Official_Ball_Model"),
+            "authority_cpi": match.get("Actual_CPI_Rating"),
+            "authority_ta": match.get("Tennis_Abstract_Rating"),
+            "authority_latitude": match.get("Latitude"),
+            "authority_longitude": match.get("Longitude"),
+            "authority_timezone": match.get("Time Zone"),
+            "authority_oddspapi_tournament_id": match.get("OddsPapi Tournament ID"),
+            "authority_oddspapi_season_id": match.get("OddsPapi Season ID"),
+        }
+        for column, value in values.items():
+            out.at[idx, column] = value
+
+    coverage = {
+        "rows": int(len(out)),
+        "resolved": int(resolved),
+        "unresolved": int(len(out) - resolved),
+        "resolution_rate": float(resolved / len(out)) if len(out) else 0.0,
+        "methods": methods,
+    }
+    for column in (
+        "authority_altitude_m", "authority_setting", "authority_ball_model",
+        "authority_cpi", "authority_ta", "authority_latitude",
+        "authority_longitude", "authority_timezone",
+    ):
+        coverage[f"{column}_coverage"] = float(out[column].notna().mean()) if len(out) else 0.0
+    return out, coverage
