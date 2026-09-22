@@ -15,3 +15,11 @@ def test_oddspapi_identity_is_only_external_resolution():
 
 def test_unknown_fails_closed_no_legacy_fallback():
     assert resolve_authority("Unknown",2026,table=sample()) is None
+
+
+def test_missing_oddspapi_id_does_not_block_authority_resolution():
+    df=sample().copy()
+    df["OddsPapi Tournament ID"]=pd.NA
+    r=resolve_authority("Test Open",2026,table=df)
+    assert r is not None
+    assert r["authority_match_method"]=="exact_name"
