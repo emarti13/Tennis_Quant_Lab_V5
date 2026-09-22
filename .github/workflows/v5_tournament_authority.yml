@@ -1,0 +1,24 @@
+name: Tournament Authority Contract
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'v5_tournament_authority.py'
+      - 'diagnose_v5_tournament_authority.py'
+      - 'tests/test_v5_tournament_authority.py'
+      - 'context_registry/tournament_authority.csv'
+      - '.github/workflows/v5_tournament_authority.yml'
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pandas numpy pytest
+      - run: python -m pytest tests/test_v5_tournament_authority.py -v
+      - name: Audit authority when installed
+        run: |
+          if [ -f context_registry/tournament_authority.csv ]; then python diagnose_v5_tournament_authority.py; fi
