@@ -126,3 +126,15 @@ The current production board summary was audited after the successful source/sta
 Classification: PARTIAL, not PASS. The state build itself is current, but fixture-player identity resolution is below 100%. The three unmatched identities must be resolved through deterministic player-identity handling or explicitly classified as genuinely unseen/no-history players before this gate can pass. No fuzzy many-to-one alias should be added without evidence.
 
 The production summary also confirms market prices are not used in the predictive model and the accepted winner/score model versions remain v5-advanced-nested-chronological-1 and v5-score-walkforward-3.
+
+
+## 2026-09-22 tournament authority activated
+The user supplied and approved a replacement 2025-2026 tournament table as the new truth for tournament/court context. The authority contract is now:
+
+1. `context_registry/tournament_authority.csv` is the sole tournament/court authority once installed.
+2. OddsPapi may be used only for tournament/fixture identity linkage where needed.
+3. Missing authority values remain missing. No legacy CourtSpeed/court-condition value, inferred replacement, or reconciliation to another court file is permitted.
+4. The retired court files may remain for audit/history but cannot populate model features.
+5. New court features enter only through chronological challenger validation before production promotion.
+
+The approved table schema includes surface/setting, location/timezone, altitude, OddsPapi tournament/season IDs, official ball model, CPI category, actual CPI rating, and Tennis Abstract rating. Repository code now contains `v5_tournament_authority.py` and a contract test that fails closed on unresolved identities rather than falling back to legacy court data.
