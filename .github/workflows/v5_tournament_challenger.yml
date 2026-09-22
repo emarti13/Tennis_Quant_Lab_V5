@@ -1,0 +1,96 @@
+name: V5 Tournament Authority Challenger
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'v5_tournament_authority.py'
+      - 'v5_tournament_challenger.py'
+      - 'diagnose_v5_tournament_challenger.py'
+      - 'tests/test_v5_tournament_authority.py'
+      - 'tests/test_v5_tournament_challenger.py'
+      - 'context_registry/tournament_authority.csv'
+      - '.github/workflows/v5_tournament_challenger.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v5-production-writer
+  cancel-in-progress: false
+
+jobs:
+  challenger:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Synchronize with canonical main
+        run: git pull --rebase origin main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest
+      - name: Run authority and challenger contracts
+        run: |
+          python -m pytest tests/test_v5_tournament_authority.py tests/test_v5_tournament_challenger.py -v
+      - name: Run chronological challenger
+        id: challenger
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          {
+            echo '=== CURRENT CONTEXT WAREHOUSE ==='
+            python build_v5_context_warehouse.py
+            echo '=== MATCHUP DATASET ==='
+            python diagnose_v5_context_model.py
+            echo '=== NEW TOURNAMENT AUTHORITY CHALLENGER ==='
+            python diagnose_v5_tournament_challenger.py
+          } 2>&1 | tee /tmp/tournament-challenger.txt
+      - name: Persist challenger evidence
+        if: always()
+        env:
+          CHALLENGER_OUTCOME: ${{ steps.challenger.outcome }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          cp /tmp/tournament-challenger.txt /tmp/tournament-challenger-log.txt || true
+          cp v5_tournament_challenger_diagnostic/report.json /tmp/tournament-challenger-report.json || true
+          git pull --rebase origin main
+          mkdir -p experiments/acceptance
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          log = Path('/tmp/tournament-challenger-log.txt')
+          text = log.read_text(encoding='utf-8', errors='replace') if log.exists() else ''
+          Path('experiments/acceptance/tournament_challenger_status.json').write_text(json.dumps({
+              'status': os.environ['CHALLENGER_OUTCOME'],
+              'expected': 'success',
+              'log_tail': text[-20000:],
+          }, indent=2), encoding='utf-8')
+          PY
+          git add experiments/acceptance/tournament_challenger_status.json
+          if [ "$CHALLENGER_OUTCOME" = "success" ]; then
+            cp /tmp/tournament-challenger-report.json experiments/acceptance/tournament_challenger_report.json
+            git add experiments/acceptance/tournament_challenger_report.json
+          fi
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record tournament authority challenger evidence'
+            git push origin HEAD:main
+          fi
+      - name: Enforce executable diagnostic
+        if: steps.challenger.outcome != 'success'
+        run: exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v5-tournament-authority-challenger
+          path: |
+            v5_tournament_challenger_diagnostic/report.json
+            v5_tournament_challenger_diagnostic/matched_authority_rows.parquet
+          if-no-files-found: warn
+          retention-days: 7
