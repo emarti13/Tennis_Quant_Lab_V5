@@ -1,55 +1,30 @@
 {
-  "status": "PARTIAL",
-  "built_at_utc": "2026-09-22T03:38:54.678349+00:00",
+  "status": "SUCCESS",
+  "built_at_utc": "2026-09-22T12:05:03.138160+00:00",
   "market_snapshot_utc": "2026-09-22T03:36:50.059529+00:00",
   "simulations_per_fixture": 5000,
   "market_rows_input": 1696,
-  "eligible_pre_match_fixtures": 84,
-  "priced_rows": 1630,
-  "board_rows": 1630,
+  "eligible_pre_match_fixtures": 12,
+  "priced_rows": 248,
+  "board_rows": 248,
   "frozen_ledger_rows": 10931,
-  "new_frozen_rows": 1508,
+  "new_frozen_rows": 0,
   "signal_counts": {
-    "REVIEW": 680,
-    "PASS": 551,
-    "BET": 373,
-    "LEAN": 26
+    "REVIEW": 150,
+    "PASS": 55,
+    "BET": 34,
+    "LEAN": 9
   },
   "selected_candidate_counts": {
-    "ensemble": 862,
-    "residual": 768
+    "residual": 138,
+    "ensemble": 110
   },
   "selected_score_candidate_counts": {
-    "conditioned_mechanistic": 862,
-    "gaussian_contextual": 768
+    "gaussian_contextual": 138,
+    "conditioned_mechanistic": 110
   },
   "context_fallback_rows": 0,
-  "errors": [
-    {
-      "fixture_id": "id1201413374926894",
-      "player1": "Harris, Lloyd",
-      "player2": "Miyoshi, Kenta (2004)",
-      "tournament": "ATP Chengdu, China Men Singles",
-      "stage": "prepare_fixture",
-      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Kenta Miyoshi"
-    },
-    {
-      "fixture_id": "id1203477074859974",
-      "player1": "Bertola, Remy",
-      "player2": "De Jong, Jesper",
-      "tournament": "ATP Challenger Saint Tropez, France Men Singles",
-      "stage": "prepare_fixture",
-      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Jesper de Jong, Jesper De Jong"
-    },
-    {
-      "fixture_id": "id1205233274858696",
-      "player1": "Taberner, Carlos",
-      "player2": "Nesterov, Pyotr",
-      "tournament": "ATP Challenger Plovdiv 4, Bulgaria Men Singles",
-      "stage": "prepare_fixture",
-      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Petr Nesterov"
-    }
-  ],
+  "errors": [],
   "model_version": "v5-advanced-nested-chronological-1",
   "score_model_version": "v5-score-walkforward-3",
   "probability_source": "chronologically validated independent full-context candidate; sportsbook inputs joined only after probability freeze",
