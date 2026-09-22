@@ -1,0 +1,791 @@
+{
+  "diagnostic_version": "v5-tournament-authority-challenger-1",
+  "authority_contract": "tournament_authority.csv is the sole court/tournament truth; OddsPapi ID is optional identity evidence; unresolved or missing values remain missing; retired court/schedule values are prohibited as fallback",
+  "fit_year": 2025,
+  "validation_year": 2026,
+  "matchup_rows": 24253,
+  "authority_table": {
+    "rows": 546,
+    "years": {
+      "2025": 250,
+      "2026": 296
+    },
+    "coverage": {
+      "Year": 1.0,
+      "Circuit Tour": 1.0,
+      "Tournament Name": 1.0,
+      "Surface": 0.9926739926739927,
+      "Setting": 0.9926739926739927,
+      "Altitude (m)": 0.989010989010989,
+      "Official_Ball_Model": 0.46886446886446886,
+      "General_CPI_Category": 0.46886446886446886,
+      "Actual_CPI_Rating": 0.46886446886446886,
+      "Tennis_Abstract_Rating": 0.46886446886446886
+    },
+    "duplicate_rows": 0
+  },
+  "match_coverage": {
+    "rows": 24253,
+    "resolved": 13885,
+    "unresolved": 10368,
+    "resolution_rate": 0.5725064940419742,
+    "methods": {
+      "city_alias": 9959,
+      "exact_name": 3425,
+      "name_alias": 501
+    },
+    "authority_altitude_m_coverage": 0.5725064940419742,
+    "authority_setting_coverage": 0.5725064940419742,
+    "authority_ball_model_coverage": 0.39017853461427454,
+    "authority_cpi_coverage": 0.39017853461427454,
+    "authority_ta_coverage": 0.39017853461427454,
+    "authority_latitude_coverage": 0.5725064940419742,
+    "authority_longitude_coverage": 0.5725064940419742,
+    "authority_timezone_coverage": 0.5725064940419742
+  },
+  "coverage_by_year_tour": {
+    "2025:MEN": {
+      "rows": 10409,
+      "authority_match_method": 0.4846767220674416,
+      "authority_altitude_m": 0.4846767220674416,
+      "authority_setting": 0.4846767220674416,
+      "authority_ball_model": 0.31645691228744355,
+      "authority_cpi": 0.31645691228744355,
+      "authority_ta": 0.31645691228744355,
+      "authority_latitude": 0.4846767220674416,
+      "authority_longitude": 0.4846767220674416,
+      "authority_timezone": 0.4846767220674416
+    },
+    "2025:WTA": {
+      "rows": 2519,
+      "authority_match_method": 0.9007542675664947,
+      "authority_altitude_m": 0.9007542675664947,
+      "authority_setting": 0.9007542675664947,
+      "authority_ball_model": 0.6347757046447002,
+      "authority_cpi": 0.6347757046447002,
+      "authority_ta": 0.6347757046447002,
+      "authority_latitude": 0.9007542675664947,
+      "authority_longitude": 0.9007542675664947,
+      "authority_timezone": 0.9007542675664947
+    },
+    "2026:MEN": {
+      "rows": 9147,
+      "authority_match_method": 0.4988520826500492,
+      "authority_altitude_m": 0.4988520826500492,
+      "authority_setting": 0.4988520826500492,
+      "authority_ball_model": 0.34262599759483986,
+      "authority_cpi": 0.34262599759483986,
+      "authority_ta": 0.34262599759483986,
+      "authority_latitude": 0.4988520826500492,
+      "authority_longitude": 0.4988520826500492,
+      "authority_timezone": 0.4988520826500492
+    },
+    "2026:WTA": {
+      "rows": 2178,
+      "authority_match_method": 0.9219467401285583,
+      "authority_altitude_m": 0.9219467401285583,
+      "authority_setting": 0.9219467401285583,
+      "authority_ball_model": 0.6593204775022957,
+      "authority_cpi": 0.6593204775022957,
+      "authority_ta": 0.6593204775022957,
+      "authority_latitude": 0.9219467401285583,
+      "authority_longitude": 0.9219467401285583,
+      "authority_timezone": 0.9219467401285583
+    }
+  },
+  "unresolved_top": [
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Cincinnati Masters",
+      "matches": 131
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Indian Wells Masters",
+      "matches": 131
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Madrid Masters",
+      "matches": 131
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Miami Masters",
+      "matches": 131
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Rome Masters",
+      "matches": 131
+    },
+    {
+      "year": 2026,
+      "tour": "MEN",
+      "tourney_name": "Cincinnati Masters",
+      "matches": 131
+    },
+    {
+      "year": 2026,
+      "tour": "MEN",
+      "tourney_name": "Indian Wells Masters",
+      "matches": 131
+    },
+    {
+      "year": 2026,
+      "tour": "MEN",
+      "tourney_name": "Madrid Masters",
+      "matches": 131
+    },
+    {
+      "year": 2026,
+      "tour": "MEN",
+      "tourney_name": "Miami Masters",
+      "matches": 131
+    },
+    {
+      "year": 2026,
+      "tour": "MEN",
+      "tourney_name": "Rome Masters",
+      "matches": 131
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Canada Masters",
+      "matches": 111
+    },
+    {
+      "year": 2026,
+      "tour": "MEN",
+      "tourney_name": "Canada Masters",
+      "matches": 111
+    },
+    {
+      "year": 2026,
+      "tour": "WTA",
+      "tourney_name": "Madrid",
+      "matches": 95
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Washington",
+      "matches": 65
+    },
+    {
+      "year": 2026,
+      "tour": "MEN",
+      "tourney_name": "Istanbul",
+      "matches": 62
+    },
+    {
+      "year": 2026,
+      "tour": "MEN",
+      "tourney_name": "Oeiras 2",
+      "matches": 62
+    },
+    {
+      "year": 2026,
+      "tour": "MEN",
+      "tourney_name": "Washington",
+      "matches": 49
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Queen's Club",
+      "matches": 43
+    },
+    {
+      "year": 2026,
+      "tour": "MEN",
+      "tourney_name": "Queen's Club",
+      "matches": 43
+    },
+    {
+      "year": 2026,
+      "tour": "MEN",
+      "tourney_name": "Kitzbuhel",
+      "matches": 40
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Santiago",
+      "matches": 39
+    },
+    {
+      "year": 2026,
+      "tour": "MEN",
+      "tourney_name": "Estoril",
+      "matches": 39
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Abidjan 1",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Abidjan 2",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Antofagasta",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Astana",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Athens",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Augsburg",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Barranquilla",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Bengaluru",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Bergamo",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Biella",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Birmingham",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Bogota",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Bogota (Los Lagartos)",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Braga",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Bratislava",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Bratislava 2",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Brest",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Brisbane 1",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Brisbane 2",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Brisbane 3",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Bunschoten",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Cary",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Chennai",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Chicago",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Columbus",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Como",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Concepcion",
+      "matches": 31
+    },
+    {
+      "year": 2025,
+      "tour": "MEN",
+      "tourney_name": "Cordenons",
+      "matches": 31
+    }
+  ],
+  "ball_categories_fit_on_2025_only": [
+    "Dunlop ATP Clay Court",
+    "Dunlop ATP Extra Duty",
+    "Dunlop Australian Open",
+    "Dunlop Fort All Court",
+    "Head Tour XT",
+    "Slazenger Wimbledon",
+    "Wilson Roland Garros",
+    "Wilson US Open Extra Duty",
+    "Wilson US Open Regular Duty"
+  ],
+  "tours": {
+    "MEN": {
+      "fit_year": 2025,
+      "validation_year": 2026,
+      "fit_rows": 10409,
+      "validation_rows": 9147,
+      "control_features": [
+        "x_sr_a",
+        "x_elo_a",
+        "ctx_ace_rate_diff",
+        "ctx_comeback_recency_30d_diff",
+        "ctx_comeback_recency_60d_diff",
+        "ctx_comeback_recency_90d_diff",
+        "ctx_consecutive_play_days_diff",
+        "ctx_context_quality_diff",
+        "ctx_double_fault_rate_diff",
+        "ctx_games_14d_diff",
+        "ctx_games_30d_diff",
+        "ctx_games_3d_diff",
+        "ctx_games_7d_diff",
+        "ctx_layoff_30d_diff",
+        "ctx_layoff_60d_diff",
+        "ctx_layoff_90d_diff",
+        "ctx_layoff_response_30d_context_diff",
+        "ctx_layoff_response_30d_evidence_diff",
+        "ctx_layoff_response_60d_context_diff",
+        "ctx_layoff_response_60d_evidence_diff",
+        "ctx_layoff_response_90d_context_diff",
+        "ctx_layoff_response_90d_evidence_diff",
+        "ctx_matches_14d_diff",
+        "ctx_matches_30d_diff",
+        "ctx_matches_3d_diff",
+        "ctx_matches_7d_diff",
+        "ctx_minutes_7d_diff",
+        "ctx_previous_match_duration_diff",
+        "ctx_previous_match_games_diff",
+        "ctx_rank_diff",
+        "ctx_rest_3_to_7d_diff",
+        "ctx_rest_bucket_diff",
+        "ctx_rest_log1p_diff",
+        "ctx_return_dominance_diff",
+        "ctx_return_strength_diff",
+        "ctx_serve_dependence_diff",
+        "ctx_serve_dominance_diff",
+        "ctx_serve_first_won_diff",
+        "ctx_serve_second_won_diff",
+        "ctx_short_rest_0d_diff",
+        "ctx_short_rest_1d_diff",
+        "ctx_short_rest_2d_diff",
+        "ctx_state_uncertainty_diff",
+        "ctx_trajectory_return_diff",
+        "ctx_trajectory_serve_diff",
+        "ctx_weak_second_serve_x_elite_returner"
+      ],
+      "authority_feature_groups": {
+        "altitude": [
+          "ctx_auth_altitude_x_serve_dep",
+          "ctx_auth_altitude_x_serve_dom"
+        ],
+        "setting": [
+          "ctx_auth_indoor_x_serve_dep",
+          "ctx_auth_indoor_x_serve_dom"
+        ],
+        "cpi_ta": [
+          "ctx_auth_cpi_x_return_dom",
+          "ctx_auth_cpi_x_serve_dom",
+          "ctx_auth_ta_x_return_dom",
+          "ctx_auth_ta_x_serve_dom"
+        ],
+        "ball": [
+          "ctx_auth_ball_dunlop_atp_clay_court_x_serve_dep",
+          "ctx_auth_ball_dunlop_atp_extra_duty_x_serve_dep",
+          "ctx_auth_ball_dunlop_australian_open_x_serve_dep",
+          "ctx_auth_ball_dunlop_fort_all_court_x_serve_dep",
+          "ctx_auth_ball_head_tour_xt_x_serve_dep",
+          "ctx_auth_ball_slazenger_wimbledon_x_serve_dep",
+          "ctx_auth_ball_wilson_roland_garros_x_serve_dep",
+          "ctx_auth_ball_wilson_us_open_extra_duty_x_serve_dep",
+          "ctx_auth_ball_wilson_us_open_regular_duty_x_serve_dep"
+        ],
+        "combined": [
+          "ctx_auth_altitude_x_serve_dep",
+          "ctx_auth_altitude_x_serve_dom",
+          "ctx_auth_ball_dunlop_atp_clay_court_x_serve_dep",
+          "ctx_auth_ball_dunlop_atp_extra_duty_x_serve_dep",
+          "ctx_auth_ball_dunlop_australian_open_x_serve_dep",
+          "ctx_auth_ball_dunlop_fort_all_court_x_serve_dep",
+          "ctx_auth_ball_head_tour_xt_x_serve_dep",
+          "ctx_auth_ball_slazenger_wimbledon_x_serve_dep",
+          "ctx_auth_ball_wilson_roland_garros_x_serve_dep",
+          "ctx_auth_ball_wilson_us_open_extra_duty_x_serve_dep",
+          "ctx_auth_ball_wilson_us_open_regular_duty_x_serve_dep",
+          "ctx_auth_cpi_x_return_dom",
+          "ctx_auth_cpi_x_serve_dom",
+          "ctx_auth_indoor_x_serve_dep",
+          "ctx_auth_indoor_x_serve_dom",
+          "ctx_auth_ta_x_return_dom",
+          "ctx_auth_ta_x_serve_dom"
+        ]
+      },
+      "models": {
+        "accepted_baseline": {
+          "n": 9147,
+          "brier": 0.22315037729978895,
+          "log_loss": 0.6363758640714078,
+          "accuracy": 0.6323384716300426
+        },
+        "control": {
+          "n": 9147,
+          "brier": 0.16784564931286877,
+          "log_loss": 0.5081207456201376,
+          "accuracy": 0.7518312014868263
+        },
+        "altitude": {
+          "n": 9147,
+          "brier": 0.16774026402713835,
+          "log_loss": 0.5078039572098518,
+          "accuracy": 0.7518312014868263
+        },
+        "setting": {
+          "n": 9147,
+          "brier": 0.16785733455121873,
+          "log_loss": 0.5081936837553545,
+          "accuracy": 0.7519405269487264
+        },
+        "cpi_ta": {
+          "n": 9147,
+          "brier": 0.16798838583967887,
+          "log_loss": 0.5084684424951447,
+          "accuracy": 0.7510659232535257
+        },
+        "ball": {
+          "n": 9147,
+          "brier": 0.16769563252306932,
+          "log_loss": 0.507623044403101,
+          "accuracy": 0.7522685033344266
+        },
+        "combined": {
+          "n": 9147,
+          "brier": 0.1679990979113543,
+          "log_loss": 0.5084616942162612,
+          "accuracy": 0.7525964797201268
+        }
+      },
+      "deltas_vs_control": {
+        "altitude": {
+          "brier_gain": 0.00010538528573042494,
+          "log_loss_gain": 0.0003167884102858176,
+          "accuracy_delta": 0.0
+        },
+        "setting": {
+          "brier_gain": -1.1685238349962157e-05,
+          "log_loss_gain": -7.293813521680459e-05,
+          "accuracy_delta": 0.00010932546190012271
+        },
+        "cpi_ta": {
+          "brier_gain": -0.00014273652681009996,
+          "log_loss_gain": -0.00034769687500701973,
+          "accuracy_delta": -0.0007652782333005259
+        },
+        "ball": {
+          "brier_gain": 0.00015001678979945088,
+          "log_loss_gain": 0.000497701217036628,
+          "accuracy_delta": 0.0004373018476003798
+        },
+        "combined": {
+          "brier_gain": -0.00015344859848553938,
+          "log_loss_gain": -0.000340948596123547,
+          "accuracy_delta": 0.0007652782333005259
+        }
+      },
+      "eligibility": {
+        "altitude": true,
+        "setting": false,
+        "cpi_ta": false,
+        "ball": true,
+        "combined": false
+      },
+      "status": "evaluated"
+    },
+    "WTA": {
+      "fit_year": 2025,
+      "validation_year": 2026,
+      "fit_rows": 2519,
+      "validation_rows": 2178,
+      "control_features": [
+        "x_sr_a",
+        "x_elo_a",
+        "ctx_ace_rate_diff",
+        "ctx_comeback_recency_30d_diff",
+        "ctx_comeback_recency_60d_diff",
+        "ctx_comeback_recency_90d_diff",
+        "ctx_consecutive_play_days_diff",
+        "ctx_context_quality_diff",
+        "ctx_double_fault_rate_diff",
+        "ctx_games_14d_diff",
+        "ctx_games_30d_diff",
+        "ctx_games_3d_diff",
+        "ctx_games_7d_diff",
+        "ctx_layoff_30d_diff",
+        "ctx_layoff_60d_diff",
+        "ctx_layoff_90d_diff",
+        "ctx_layoff_response_30d_context_diff",
+        "ctx_layoff_response_30d_evidence_diff",
+        "ctx_layoff_response_60d_context_diff",
+        "ctx_layoff_response_60d_evidence_diff",
+        "ctx_layoff_response_90d_context_diff",
+        "ctx_layoff_response_90d_evidence_diff",
+        "ctx_matches_14d_diff",
+        "ctx_matches_30d_diff",
+        "ctx_matches_3d_diff",
+        "ctx_matches_7d_diff",
+        "ctx_minutes_7d_diff",
+        "ctx_previous_match_duration_diff",
+        "ctx_previous_match_games_diff",
+        "ctx_rank_diff",
+        "ctx_rest_3_to_7d_diff",
+        "ctx_rest_bucket_diff",
+        "ctx_rest_log1p_diff",
+        "ctx_return_dominance_diff",
+        "ctx_return_strength_diff",
+        "ctx_serve_dependence_diff",
+        "ctx_serve_dominance_diff",
+        "ctx_serve_first_won_diff",
+        "ctx_serve_second_won_diff",
+        "ctx_short_rest_0d_diff",
+        "ctx_short_rest_1d_diff",
+        "ctx_short_rest_2d_diff",
+        "ctx_state_uncertainty_diff",
+        "ctx_trajectory_return_diff",
+        "ctx_trajectory_serve_diff",
+        "ctx_weak_second_serve_x_elite_returner"
+      ],
+      "authority_feature_groups": {
+        "altitude": [
+          "ctx_auth_altitude_x_serve_dep",
+          "ctx_auth_altitude_x_serve_dom"
+        ],
+        "setting": [
+          "ctx_auth_indoor_x_serve_dep",
+          "ctx_auth_indoor_x_serve_dom"
+        ],
+        "cpi_ta": [
+          "ctx_auth_cpi_x_return_dom",
+          "ctx_auth_cpi_x_serve_dom",
+          "ctx_auth_ta_x_return_dom",
+          "ctx_auth_ta_x_serve_dom"
+        ],
+        "ball": [
+          "ctx_auth_ball_dunlop_atp_clay_court_x_serve_dep",
+          "ctx_auth_ball_dunlop_atp_extra_duty_x_serve_dep",
+          "ctx_auth_ball_dunlop_australian_open_x_serve_dep",
+          "ctx_auth_ball_dunlop_fort_all_court_x_serve_dep",
+          "ctx_auth_ball_head_tour_xt_x_serve_dep",
+          "ctx_auth_ball_slazenger_wimbledon_x_serve_dep",
+          "ctx_auth_ball_wilson_roland_garros_x_serve_dep",
+          "ctx_auth_ball_wilson_us_open_extra_duty_x_serve_dep",
+          "ctx_auth_ball_wilson_us_open_regular_duty_x_serve_dep"
+        ],
+        "combined": [
+          "ctx_auth_altitude_x_serve_dep",
+          "ctx_auth_altitude_x_serve_dom",
+          "ctx_auth_ball_dunlop_atp_clay_court_x_serve_dep",
+          "ctx_auth_ball_dunlop_atp_extra_duty_x_serve_dep",
+          "ctx_auth_ball_dunlop_australian_open_x_serve_dep",
+          "ctx_auth_ball_dunlop_fort_all_court_x_serve_dep",
+          "ctx_auth_ball_head_tour_xt_x_serve_dep",
+          "ctx_auth_ball_slazenger_wimbledon_x_serve_dep",
+          "ctx_auth_ball_wilson_roland_garros_x_serve_dep",
+          "ctx_auth_ball_wilson_us_open_extra_duty_x_serve_dep",
+          "ctx_auth_ball_wilson_us_open_regular_duty_x_serve_dep",
+          "ctx_auth_cpi_x_return_dom",
+          "ctx_auth_cpi_x_serve_dom",
+          "ctx_auth_indoor_x_serve_dep",
+          "ctx_auth_indoor_x_serve_dom",
+          "ctx_auth_ta_x_return_dom",
+          "ctx_auth_ta_x_serve_dom"
+        ]
+      },
+      "models": {
+        "accepted_baseline": {
+          "n": 2178,
+          "brier": 0.20863294115796405,
+          "log_loss": 0.6029238790374265,
+          "accuracy": 0.6616161616161617
+        },
+        "control": {
+          "n": 2178,
+          "brier": 0.1331412952548292,
+          "log_loss": 0.4121090470104269,
+          "accuracy": 0.8025711662075299
+        },
+        "altitude": {
+          "n": 2178,
+          "brier": 0.13335928289890855,
+          "log_loss": 0.41255774257195676,
+          "accuracy": 0.8011937557392103
+        },
+        "setting": {
+          "n": 2178,
+          "brier": 0.1330163187477422,
+          "log_loss": 0.41177908368663424,
+          "accuracy": 0.8021120293847567
+        },
+        "cpi_ta": {
+          "n": 2178,
+          "brier": 0.13333415166410195,
+          "log_loss": 0.4129370773350563,
+          "accuracy": 0.7998163452708907
+        },
+        "ball": {
+          "n": 2178,
+          "brier": 0.13274072162226247,
+          "log_loss": 0.41184612238129514,
+          "accuracy": 0.8067033976124885
+        },
+        "combined": {
+          "n": 2178,
+          "brier": 0.13336924886599624,
+          "log_loss": 0.4134424864324044,
+          "accuracy": 0.8021120293847567
+        }
+      },
+      "deltas_vs_control": {
+        "altitude": {
+          "brier_gain": -0.00021798764407934823,
+          "log_loss_gain": -0.0004486955615298771,
+          "accuracy_delta": -0.0013774104683196287
+        },
+        "setting": {
+          "brier_gain": 0.00012497650708701014,
+          "log_loss_gain": 0.00032996332379264803,
+          "accuracy_delta": -0.00045913682277320955
+        },
+        "cpi_ta": {
+          "brier_gain": -0.00019285640927274583,
+          "log_loss_gain": -0.0008280303246294141,
+          "accuracy_delta": -0.0027548209366391463
+        },
+        "ball": {
+          "brier_gain": 0.0004005736325667364,
+          "log_loss_gain": 0.0002629246291317444,
+          "accuracy_delta": 0.004132231404958664
+        },
+        "combined": {
+          "brier_gain": -0.0002279536111670366,
+          "log_loss_gain": -0.0013334394219775003,
+          "accuracy_delta": -0.00045913682277320955
+        }
+      },
+      "eligibility": {
+        "altitude": false,
+        "setting": true,
+        "cpi_ta": false,
+        "ball": true,
+        "combined": false
+      },
+      "status": "evaluated"
+    }
+  },
+  "cross_tour_eligibility": {
+    "altitude": {
+      "MEN": true,
+      "WTA": false
+    },
+    "ball": {
+      "MEN": true,
+      "WTA": true
+    },
+    "combined": {
+      "MEN": false,
+      "WTA": false
+    },
+    "cpi_ta": {
+      "MEN": false,
+      "WTA": false
+    },
+    "setting": {
+      "MEN": false,
+      "WTA": true
+    }
+  }
+}
