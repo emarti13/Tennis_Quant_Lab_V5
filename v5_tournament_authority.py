@@ -44,7 +44,10 @@ def resolve_authority(tournament,year,*,tour="",oddspapi_tournament_id=None,tabl
     key=_norm(tournament)
     hit=cand[cand["_name_key"].eq(key)]
     if len(hit)==1: return hit.iloc[0].to_dict() | {"authority_match_method":"exact_name"}
-    # Fail closed. No legacy court source and no fuzzy value fill.
+    # OddsPapi identity is optional enrichment, never a coverage requirement.
+    # If it is absent/unmatched, continue using the authoritative table identity.
+    # Only genuinely unresolved tournament identity fails closed; there is never
+    # a legacy court-source fallback.
     return None
 
 def court_context(row):
