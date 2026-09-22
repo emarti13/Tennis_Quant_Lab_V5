@@ -3,6 +3,7 @@ import pandas as pd
 
 from v5_tournament_challenger import (
     add_authority_features,
+    attach_authority_context,
     evaluate_challenger_frame,
     fit_ball_categories,
     non_court_context_columns,
@@ -103,3 +104,32 @@ def test_chronological_evaluator_compares_new_authority_group_to_clean_control()
     assert report["deltas_vs_control"]["cpi_ta"]["brier_gain"] > 0
     assert report["eligibility"]["cpi_ta"] is True
     assert all("court_speed" not in column for column in report["control_features"])
+
+
+def test_attach_authority_context_records_match_and_missingness_without_fallback():
+    authority = pd.DataFrame([
+        {
+            "Year": 2026,
+            "Circuit Tour": "ATP 250",
+            "Tournament Name": "Test Open",
+            "City": "Test City",
+            "Date": "1-Jan",
+            "End Date": "7-Jan",
+            "Surface": "Hard",
+            "Setting": "Indoor",
+            "Altitude (m)": 500,
+            "Official_Ball_Model": "Ball X",
+            "Actual_CPI_Rating": 40,
+            "Tennis_Abstract_Rating": 1.1,
+        },
+    ])
+    matches = pd.DataFrame([
+        {"year": 2026, "tour": "MEN", "surface": "Hard", "tourney_name": "Test Open", "match_date": "2026-01-03"},
+        {"year": 2026, "tour": "MEN", "surface": "Hard", "tourney_name": "Unknown", "match_date": "2026-01-03"},
+    ])
+    out, coverage = attach_authority_context(matches, authority)
+    assert out.loc[0, "authority_match_method"] == "exact_name"
+    assert out.loc[0, "authority_altitude_m"] == 500
+    assert pd.isna(out.loc[1, "authority_match_method"])
+    assert coverage["resolved"] == 1
+    assert coverage["unresolved"] == 1
