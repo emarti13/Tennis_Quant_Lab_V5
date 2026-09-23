@@ -15,7 +15,7 @@ from v5_advanced_model import (
     uncertainty_score,
 )
 from v5_context_model import predict_symmetric_logistic
-from v5_court_conditions_source import resolve_court_conditions
+from v5_tournament_authority import resolve_authority
 from v5_matchup_features import build_matchup_features
 from v5_player_state import build_player_state
 
@@ -101,26 +101,19 @@ def _target_rows(fixture: dict) -> pd.DataFrame:
     match_id = f"live_{fixture.get('fixture_id') or 'unknown'}"
     start_utc = pd.to_datetime(fixture.get("start_time_utc"), errors="coerce", utc=True)
     match_date = start_utc.tz_convert("UTC").tz_localize(None) if pd.notna(start_utc) else pd.NaT
-    fixture_surface = str(fixture.get("surface") or "").title().strip()
-    fixture_environment = str(fixture.get("environment") or "").title().strip()
-    fallback = {}
-    if fixture_surface in {"Hard", "Clay", "Grass"}:
-        fallback["surface_type"] = fixture_surface
-    if fixture_environment in {"Indoor", "Outdoor"}:
-        fallback["environment"] = fixture_environment
-    for key in ("cpi", "ace_rate_pct", "rally_length", "relative_air_density", "altitude_m", "ball_type", "overall_speed_rating"):
-        if fixture.get(key) is not None and not pd.isna(fixture.get(key)):
-            fallback[key] = fixture.get(key)
-    conditions = resolve_court_conditions(
+    authority = resolve_authority(
         fixture.get("tournament") or "",
         _fixture_year(fixture),
-        v5_fallback=fallback,
+        tour=fixture.get("tour") or "",
+        surface=fixture.get("surface"),
+        match_date=fixture.get("start_time_utc"),
+        oddspapi_tournament_id=fixture.get("tournament_id") or fixture.get("oddspapi_tournament_id"),
     )
-
-    source_surface = str(conditions.get("surface_type") or "").title().strip()
-    surface = source_surface if source_surface in {"Hard", "Clay", "Grass"} else (fixture_surface if fixture_surface in {"Hard", "Clay", "Grass"} else "Hard")
-    resolved_environment = str(conditions.get("environment") or fixture_environment or "").title().strip()
-    environment = resolved_environment if resolved_environment in {"Indoor", "Outdoor"} else np.nan
+    authority = authority or {}
+    source_surface = str(authority.get("Surface") or "").title().strip()
+    surface = source_surface if source_surface in {"Hard", "Clay", "Grass"} else np.nan
+    source_environment = str(authority.get("Setting") or "").title().strip()
+    environment = source_environment if source_environment in {"Indoor", "Outdoor"} else np.nan
     indoor = True if environment == "Indoor" else (False if environment == "Outdoor" else np.nan)
 
     common = {
@@ -128,43 +121,65 @@ def _target_rows(fixture: dict) -> pd.DataFrame:
         "tour": "WTA" if str(fixture.get("tour") or "").upper() == "WTA" or "women" in str(fixture.get("tournament") or "").lower() else "MEN",
         "match_date": match_date,
         "scheduled_start_utc": None if pd.isna(start_utc) else start_utc.isoformat(),
-        "tourney_id": fixture.get("tournament_id"), "tourney_name": fixture.get("tournament") or "", "match_num": np.nan,
-        "round": fixture.get("round"), "surface": surface, "best_of": fixture.get("best_of", 3),
-        "indoor": indoor, "indoor_outdoor": environment, "environment": environment,
-        "court_speed_override": fixture.get("court_speed_override", np.nan),
-        "external_cpi": conditions.get("cpi"),
-        "external_ace_rate_pct": conditions.get("ace_rate_pct"),
-        "external_rally_length": conditions.get("rally_length"),
-        "external_relative_air_density": conditions.get("relative_air_density"),
-        "external_altitude_m": conditions.get("altitude_m"),
-        "external_ball_type": conditions.get("ball_type"),
-        "external_overall_speed_rating": conditions.get("overall_speed_rating"),
-        "court_conditions_source": "CourtSpeed" if any(conditions.get(x) == "CourtSpeed" for x in ("surface_source", "environment_source", "cpi_source", "ace_rate_source", "rally_source", "rad_source", "altitude_source", "ball_source", "overall_speed_source")) else "V5",
-        "court_conditions_source_quality": conditions.get("source_freshness"),
-        "court_conditions_target_year": conditions.get("target_year"),
-        "court_conditions_refreshed_at": conditions.get("source_refreshed_at"),
-        "cpi_source_year": conditions.get("cpi_source_year"),
-        "ace_rate_pct_source_year": conditions.get("ace_rate_pct_source_year"),
-        "rally_length_source_year": conditions.get("rally_length_source_year"),
-        "relative_air_density_source_year": conditions.get("relative_air_density_source_year"),
-        "ball_type_source_year": conditions.get("ball_type_source_year"),
-        "surface_source": conditions.get("surface_source"),
-        "environment_source": conditions.get("environment_source"),
-        "cpi_source": conditions.get("cpi_source"),
-        "ace_rate_source": conditions.get("ace_rate_source"),
-        "rally_source": conditions.get("rally_source"),
-        "rad_source": conditions.get("rad_source"),
-        "altitude_source": conditions.get("altitude_source"),
-        "ball_source": conditions.get("ball_source"),
-        "overall_speed_source": conditions.get("overall_speed_source"),
-        "result_file": "LIVE_TARGET", "source_quality": "live_pre_match_target", "match_games": np.nan, "match_sets": np.nan,
+        "tourney_id": fixture.get("tournament_id"),
+        "tourney_name": fixture.get("tournament") or "",
+        "match_num": np.nan,
+        "round": fixture.get("round"),
+        "surface": surface,
+        "best_of": fixture.get("best_of", 3),
+        "indoor": indoor,
+        "indoor_outdoor": environment,
+        "environment": environment,
+        "authority_altitude_m": authority.get("Altitude (m)", np.nan),
+        "authority_cpi": authority.get("Actual_CPI_Rating", np.nan),
+        "authority_tennis_abstract_rating": authority.get("Tennis_Abstract_Rating", np.nan),
+        "authority_ball_model": authority.get("Official_Ball_Model"),
+        "authority_match_method": authority.get("authority_match_method"),
+        "court_speed_override": np.nan,
+        "external_cpi": np.nan,
+        "external_ace_rate_pct": np.nan,
+        "external_rally_length": np.nan,
+        "external_relative_air_density": np.nan,
+        "external_altitude_m": np.nan,
+        "external_ball_type": np.nan,
+        "external_overall_speed_rating": np.nan,
+        "court_conditions_source": "TournamentAuthority" if authority else "missing",
+        "court_conditions_source_quality": "authority" if authority else "missing",
+        "court_conditions_target_year": _fixture_year(fixture),
+        "court_conditions_refreshed_at": None,
+        "cpi_source_year": None,
+        "ace_rate_pct_source_year": None,
+        "rally_length_source_year": None,
+        "relative_air_density_source_year": None,
+        "ball_type_source_year": None,
+        "surface_source": "TournamentAuthority" if pd.notna(surface) else "missing",
+        "environment_source": "TournamentAuthority" if pd.notna(environment) else "missing",
+        "cpi_source": "missing",
+        "ace_rate_source": "missing",
+        "rally_source": "missing",
+        "rad_source": "missing",
+        "altitude_source": "missing",
+        "ball_source": "missing",
+        "overall_speed_source": "missing",
+        "result_file": "LIVE_TARGET",
+        "source_quality": "live_pre_match_target",
+        "match_games": np.nan,
+        "match_sets": np.nan,
         "match_duration_minutes": np.nan,
     }
     blank_stats = {
-        "stat_aces": np.nan, "stat_double_faults": np.nan, "stat_service_points": np.nan, "stat_first_serves_in": np.nan,
-        "stat_first_serve_points_won": np.nan, "stat_second_serve_points_won": np.nan, "stat_break_points_saved": np.nan,
-        "stat_break_points_faced": np.nan, "stat_return_points_total": np.nan, "stat_return_points_won": np.nan,
-        "stat_break_points_opportunities": np.nan, "stat_break_points_converted": np.nan,
+        "stat_aces": np.nan,
+        "stat_double_faults": np.nan,
+        "stat_service_points": np.nan,
+        "stat_first_serves_in": np.nan,
+        "stat_first_serve_points_won": np.nan,
+        "stat_second_serve_points_won": np.nan,
+        "stat_break_points_saved": np.nan,
+        "stat_break_points_faced": np.nan,
+        "stat_return_points_total": np.nan,
+        "stat_return_points_won": np.nan,
+        "stat_break_points_opportunities": np.nan,
+        "stat_break_points_converted": np.nan,
     }
     p1, p2 = str(fixture.get("player1") or ""), str(fixture.get("player2") or "")
     return pd.DataFrame([
@@ -219,8 +234,10 @@ def build_live_matchup_features_from_enriched(enriched_history: pd.DataFrame, fi
     environment, environment_source = _effective_environment(target_context)
     indoor = environment == "Indoor"
     context = {
-        "court_speed": pick("court_speed_override", "court_speed_blended", "court_speed"),
-        "altitude_m": pick("external_altitude_m", "venue_altitude_m", "altitude_m"),
+        # New authority court characteristics remain shadow features until
+        # their individual challenger gates pass. Production gets no retired fallback.
+        "court_speed": np.nan,
+        "altitude_m": np.nan,
         "weather_temperature_c": np.nan if indoor else pick("weather_temperature_c"),
         "weather_humidity_pct": np.nan if indoor else pick("weather_humidity_pct"),
         "weather_wind_speed_kmh": np.nan if indoor else pick("weather_wind_speed_kmh"),

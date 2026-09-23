@@ -9,7 +9,6 @@ import numpy as np
 import pandas as pd
 
 from v5_context_model import orient_matchup_row
-from v5_court_speed import add_derived_court_speed_features
 from v5_model_calibration import calibrated_match_probability
 from v5_player_state import add_trajectory_features, build_player_state
 from v5_rolling_stats import build_rolling_stats
@@ -35,7 +34,6 @@ def enrich_player_history(player_rows: pd.DataFrame, tournament_registry: pd.Dat
     enriched = add_trajectory_features(enriched)
     if tournament_registry is not None and not tournament_registry.empty:
         enriched = build_travel_features(enriched, tournament_registry)
-    enriched = add_derived_court_speed_features(enriched)
     return enriched
 
 
@@ -91,8 +89,11 @@ def _shared_context(row: pd.Series) -> dict[str, float]:
                 return row.get(name)
         return np.nan
     return {
-        "court_speed": pick("court_speed_blended", "court_speed"),
-        "altitude_m": pick("altitude_m", "venue_altitude_m"),
+        # Retired court characteristics are deliberately neutral here.
+        # New authority features are evaluated in their own challenger and are
+        # not silently substituted into the accepted production model.
+        "court_speed": np.nan,
+        "altitude_m": np.nan,
         "weather_temperature_c": pick("weather_temperature_c"),
         "weather_humidity_pct": pick("weather_humidity_pct"),
         "weather_wind_speed_kmh": pick("weather_wind_speed_kmh"),
