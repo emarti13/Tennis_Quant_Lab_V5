@@ -3,7 +3,7 @@
   "authority_contract": "tournament_authority.csv is the sole court/tournament truth; OddsPapi ID is optional identity evidence; unresolved or missing values remain missing; retired court/schedule values are prohibited as fallback",
   "fit_year": 2025,
   "validation_year": 2026,
-  "matchup_rows": 24253,
+  "matchup_rows": 24232,
   "authority_table": {
     "rows": 546,
     "years": {
@@ -25,23 +25,23 @@
     "duplicate_rows": 0
   },
   "match_coverage": {
-    "rows": 24253,
-    "resolved": 13885,
-    "unresolved": 10368,
-    "resolution_rate": 0.5725064940419742,
+    "rows": 24232,
+    "resolved": 13938,
+    "unresolved": 10294,
+    "resolution_rate": 0.5751898316275998,
     "methods": {
-      "city_alias": 9959,
-      "exact_name": 3425,
+      "city_alias": 9994,
+      "exact_name": 3443,
       "name_alias": 501
     },
-    "authority_altitude_m_coverage": 0.5725064940419742,
-    "authority_setting_coverage": 0.5725064940419742,
-    "authority_ball_model_coverage": 0.39017853461427454,
-    "authority_cpi_coverage": 0.39017853461427454,
-    "authority_ta_coverage": 0.39017853461427454,
-    "authority_latitude_coverage": 0.5725064940419742,
-    "authority_longitude_coverage": 0.5725064940419742,
-    "authority_timezone_coverage": 0.5725064940419742
+    "authority_altitude_m_coverage": 0.5751898316275998,
+    "authority_setting_coverage": 0.5751898316275998,
+    "authority_ball_model_coverage": 0.3920023109937273,
+    "authority_cpi_coverage": 0.3920023109937273,
+    "authority_ta_coverage": 0.3920023109937273,
+    "authority_latitude_coverage": 0.5751898316275998,
+    "authority_longitude_coverage": 0.5751898316275998,
+    "authority_timezone_coverage": 0.5751898316275998
   },
   "coverage_by_year_tour": {
     "2025:MEN": {
@@ -69,28 +69,28 @@
       "authority_timezone": 0.9007542675664947
     },
     "2026:MEN": {
-      "rows": 9147,
-      "authority_match_method": 0.4988520826500492,
-      "authority_altitude_m": 0.4988520826500492,
-      "authority_setting": 0.4988520826500492,
-      "authority_ball_model": 0.34262599759483986,
-      "authority_cpi": 0.34262599759483986,
-      "authority_ta": 0.34262599759483986,
-      "authority_latitude": 0.4988520826500492,
-      "authority_longitude": 0.4988520826500492,
-      "authority_timezone": 0.4988520826500492
+      "rows": 9115,
+      "authority_match_method": 0.5054306088864509,
+      "authority_altitude_m": 0.5054306088864509,
+      "authority_setting": 0.5054306088864509,
+      "authority_ball_model": 0.3477783872737246,
+      "authority_cpi": 0.3477783872737246,
+      "authority_ta": 0.3477783872737246,
+      "authority_latitude": 0.5054306088864509,
+      "authority_longitude": 0.5054306088864509,
+      "authority_timezone": 0.5054306088864509
     },
     "2026:WTA": {
-      "rows": 2178,
-      "authority_match_method": 0.9219467401285583,
-      "authority_altitude_m": 0.9219467401285583,
-      "authority_setting": 0.9219467401285583,
-      "authority_ball_model": 0.6593204775022957,
-      "authority_cpi": 0.6593204775022957,
-      "authority_ta": 0.6593204775022957,
-      "authority_latitude": 0.9219467401285583,
-      "authority_longitude": 0.9219467401285583,
-      "authority_timezone": 0.9219467401285583
+      "rows": 2189,
+      "authority_match_method": 0.9214253083599817,
+      "authority_altitude_m": 0.9214253083599817,
+      "authority_setting": 0.9214253083599817,
+      "authority_ball_model": 0.6560073092736409,
+      "authority_cpi": 0.6560073092736409,
+      "authority_ta": 0.6560073092736409,
+      "authority_latitude": 0.9214253083599817,
+      "authority_longitude": 0.9214253083599817,
+      "authority_timezone": 0.9214253083599817
     }
   },
   "unresolved_top": [
@@ -411,7 +411,7 @@
       "fit_year": 2025,
       "validation_year": 2026,
       "fit_rows": 10409,
-      "validation_rows": 9147,
+      "validation_rows": 9115,
       "control_features": [
         "x_sr_a",
         "x_elo_a",
@@ -508,73 +508,73 @@
       },
       "models": {
         "accepted_baseline": {
-          "n": 9147,
-          "brier": 0.22315037729978895,
-          "log_loss": 0.6363758640714078,
-          "accuracy": 0.6323384716300426
+          "n": 9115,
+          "brier": 0.22346975136581554,
+          "log_loss": 0.6371629164295705,
+          "accuracy": 0.6325836533187055
         },
         "control": {
-          "n": 9147,
-          "brier": 0.16784564931286877,
-          "log_loss": 0.5081207456201376,
-          "accuracy": 0.7518312014868263
+          "n": 9115,
+          "brier": 0.16838254261355323,
+          "log_loss": 0.5094066229536539,
+          "accuracy": 0.7507405375754251
         },
         "altitude": {
-          "n": 9147,
-          "brier": 0.16774026402713835,
-          "log_loss": 0.5078039572098518,
-          "accuracy": 0.7518312014868263
+          "n": 9115,
+          "brier": 0.16828165410012305,
+          "log_loss": 0.5090976201900874,
+          "accuracy": 0.7509599561162918
         },
         "setting": {
-          "n": 9147,
-          "brier": 0.16785733455121873,
-          "log_loss": 0.5081936837553545,
-          "accuracy": 0.7519405269487264
+          "n": 9115,
+          "brier": 0.1683922203652188,
+          "log_loss": 0.5094759150158307,
+          "accuracy": 0.750411409764125
         },
         "cpi_ta": {
-          "n": 9147,
-          "brier": 0.16798838583967887,
-          "log_loss": 0.5084684424951447,
-          "accuracy": 0.7510659232535257
+          "n": 9115,
+          "brier": 0.16854982985321593,
+          "log_loss": 0.5098109091882868,
+          "accuracy": 0.7490948985189249
         },
         "ball": {
-          "n": 9147,
-          "brier": 0.16769563252306932,
-          "log_loss": 0.507623044403101,
-          "accuracy": 0.7522685033344266
+          "n": 9115,
+          "brier": 0.16823362533224875,
+          "log_loss": 0.5089075453212594,
+          "accuracy": 0.7513987931980253
         },
         "combined": {
-          "n": 9147,
-          "brier": 0.1679990979113543,
-          "log_loss": 0.5084616942162612,
-          "accuracy": 0.7525964797201268
+          "n": 9115,
+          "brier": 0.1685811981225064,
+          "log_loss": 0.509846438030008,
+          "accuracy": 0.7511793746571586
         }
       },
       "deltas_vs_control": {
         "altitude": {
-          "brier_gain": 0.00010538528573042494,
-          "log_loss_gain": 0.0003167884102858176,
-          "accuracy_delta": 0.0
+          "brier_gain": 0.00010088851343018068,
+          "log_loss_gain": 0.0003090027635664905,
+          "accuracy_delta": 0.00021941854086671153
         },
         "setting": {
-          "brier_gain": -1.1685238349962157e-05,
-          "log_loss_gain": -7.293813521680459e-05,
-          "accuracy_delta": 0.00010932546190012271
+          "brier_gain": -9.677751665576606e-06,
+          "log_loss_gain": -6.929206217676231e-05,
+          "accuracy_delta": -0.0003291278113001228
         },
         "cpi_ta": {
-          "brier_gain": -0.00014273652681009996,
-          "log_loss_gain": -0.00034769687500701973,
-          "accuracy_delta": -0.0007652782333005259
+          "brier_gain": -0.00016728723966269454,
+          "log_loss_gain": -0.00040428623463284463,
+          "accuracy_delta": -0.001645639056500281
         },
         "ball": {
-          "brier_gain": 0.00015001678979945088,
-          "log_loss_gain": 0.000497701217036628,
-          "accuracy_delta": 0.0004373018476003798
+          "brier_gain": 0.00014891728130447812,
+          "log_loss_gain": 0.0004990776323945401,
+          "accuracy_delta": 0.0006582556226001346
         },
         "combined": {
-          "brier_gain": -0.00015344859848553938,
-          "log_loss_gain": -0.000340948596123547,
-          "accuracy_delta": 0.0007652782333005259
+          "brier_gain": -0.00019865550895317718,
+          "log_loss_gain": -0.00043981507635404427,
+          "accuracy_delta": 0.00043883708173342306
         }
       },
       "eligibility": {
@@ -590,7 +590,7 @@
       "fit_year": 2025,
       "validation_year": 2026,
       "fit_rows": 2519,
-      "validation_rows": 2178,
+      "validation_rows": 2189,
       "control_features": [
         "x_sr_a",
         "x_elo_a",
@@ -687,73 +687,73 @@
       },
       "models": {
         "accepted_baseline": {
-          "n": 2178,
-          "brier": 0.20863294115796405,
-          "log_loss": 0.6029238790374265,
-          "accuracy": 0.6616161616161617
+          "n": 2189,
+          "brier": 0.2084760655228581,
+          "log_loss": 0.6025926421174295,
+          "accuracy": 0.6614892645043399
         },
         "control": {
-          "n": 2178,
-          "brier": 0.1331412952548292,
-          "log_loss": 0.4121090470104269,
-          "accuracy": 0.8025711662075299
+          "n": 2189,
+          "brier": 0.13351421559721252,
+          "log_loss": 0.4132701750710702,
+          "accuracy": 0.8021927820922796
         },
         "altitude": {
-          "n": 2178,
-          "brier": 0.13335928289890855,
-          "log_loss": 0.41255774257195676,
-          "accuracy": 0.8011937557392103
+          "n": 2189,
+          "brier": 0.13372965405173304,
+          "log_loss": 0.4137197442815285,
+          "accuracy": 0.8008222932846049
         },
         "setting": {
-          "n": 2178,
-          "brier": 0.1330163187477422,
-          "log_loss": 0.41177908368663424,
-          "accuracy": 0.8021120293847567
+          "n": 2189,
+          "brier": 0.1333665241633897,
+          "log_loss": 0.4128702748978142,
+          "accuracy": 0.8008222932846049
         },
         "cpi_ta": {
-          "n": 2178,
-          "brier": 0.13333415166410195,
-          "log_loss": 0.4129370773350563,
-          "accuracy": 0.7998163452708907
+          "n": 2189,
+          "brier": 0.13370578791858573,
+          "log_loss": 0.4140969005264005,
+          "accuracy": 0.7989949748743719
         },
         "ball": {
-          "n": 2178,
-          "brier": 0.13274072162226247,
-          "log_loss": 0.41184612238129514,
-          "accuracy": 0.8067033976124885
+          "n": 2189,
+          "brier": 0.13312063541501923,
+          "log_loss": 0.4130205360061543,
+          "accuracy": 0.8063042485153038
         },
         "combined": {
-          "n": 2178,
-          "brier": 0.13336924886599624,
-          "log_loss": 0.4134424864324044,
-          "accuracy": 0.8021120293847567
+          "n": 2189,
+          "brier": 0.133764213666938,
+          "log_loss": 0.41466052718652663,
+          "accuracy": 0.8021927820922796
         }
       },
       "deltas_vs_control": {
         "altitude": {
-          "brier_gain": -0.00021798764407934823,
-          "log_loss_gain": -0.0004486955615298771,
-          "accuracy_delta": -0.0013774104683196287
+          "brier_gain": -0.0002154384545205168,
+          "log_loss_gain": -0.00044956921045830045,
+          "accuracy_delta": -0.0013704888076747634
         },
         "setting": {
-          "brier_gain": 0.00012497650708701014,
-          "log_loss_gain": 0.00032996332379264803,
-          "accuracy_delta": -0.00045913682277320955
+          "brier_gain": 0.00014769143382281635,
+          "log_loss_gain": 0.0003999001732560292,
+          "accuracy_delta": -0.0013704888076747634
         },
         "cpi_ta": {
-          "brier_gain": -0.00019285640927274583,
-          "log_loss_gain": -0.0008280303246294141,
-          "accuracy_delta": -0.0027548209366391463
+          "brier_gain": -0.0001915723213732068,
+          "log_loss_gain": -0.0008267254553303016,
+          "accuracy_delta": -0.0031978072179077444
         },
         "ball": {
-          "brier_gain": 0.0004005736325667364,
-          "log_loss_gain": 0.0002629246291317444,
-          "accuracy_delta": 0.004132231404958664
+          "brier_gain": 0.0003935801821932927,
+          "log_loss_gain": 0.0002496390649159297,
+          "accuracy_delta": 0.004111466423024179
         },
         "combined": {
-          "brier_gain": -0.0002279536111670366,
-          "log_loss_gain": -0.0013334394219775003,
-          "accuracy_delta": -0.00045913682277320955
+          "brier_gain": -0.00024999806972547667,
+          "log_loss_gain": -0.0013903521154564058,
+          "accuracy_delta": 0.0
         }
       },
       "eligibility": {
