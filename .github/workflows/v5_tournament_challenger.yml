@@ -8,9 +8,16 @@ on:
       - 'v5_tournament_authority.py'
       - 'v5_tournament_challenger.py'
       - 'diagnose_v5_tournament_challenger.py'
+      - 'diagnose_v5_tournament_score_challenger.py'
+      - 'build_v5_context_matchups.py'
+      - 'v5_daily_batch.py'
+      - 'v5_full_context_live.py'
       - 'tests/test_v5_tournament_authority.py'
       - 'tests/test_v5_tournament_challenger.py'
+      - 'tests/test_v5_tournament_score_challenger.py'
+      - 'tests/test_v5_legacy_court_retirement.py'
       - 'context_registry/tournament_authority.csv'
+      - '.github/workflows/courtspeed_conditions_refresh.yml'
       - '.github/workflows/v5_tournament_challenger.yml'
   workflow_dispatch:
 
@@ -36,10 +43,12 @@ jobs:
           python-version: '3.12'
       - name: Install dependencies
         run: pip install -r requirements.txt pytest
-      - name: Run authority and challenger contracts
+      - name: Run authority, retirement, and challenger contracts
         run: |
-          python -m pytest tests/test_v5_tournament_authority.py tests/test_v5_tournament_challenger.py -v
-      - name: Run chronological challenger
+          tests=(tests/test_v5_tournament_authority.py tests/test_v5_tournament_challenger.py tests/test_v5_legacy_court_retirement.py)
+          if [ -f tests/test_v5_tournament_score_challenger.py ]; then tests+=(tests/test_v5_tournament_score_challenger.py); fi
+          python -m pytest "${tests[@]}" -v
+      - name: Run chronological challengers
         id: challenger
         continue-on-error: true
         run: |
@@ -49,8 +58,12 @@ jobs:
             python build_v5_context_warehouse.py
             echo '=== MATCHUP DATASET ==='
             python diagnose_v5_context_model.py
-            echo '=== NEW TOURNAMENT AUTHORITY CHALLENGER ==='
+            echo '=== NEW TOURNAMENT AUTHORITY WINNER CHALLENGER ==='
             python diagnose_v5_tournament_challenger.py
+            if [ -f diagnose_v5_tournament_score_challenger.py ]; then
+              echo '=== NEW TOURNAMENT AUTHORITY SPREAD/TOTAL CHALLENGER ==='
+              python diagnose_v5_tournament_score_challenger.py
+            fi
           } 2>&1 | tee /tmp/tournament-challenger.txt
       - name: Persist challenger evidence
         if: always()
@@ -62,13 +75,11 @@ jobs:
           cp /tmp/tournament-challenger.txt /tmp/tournament-challenger-log.txt || true
           cp v5_tournament_challenger_diagnostic/report.json /tmp/tournament-challenger-report.json || true
           cp v5_tournament_challenger_diagnostic/matched_authority_rows.parquet /tmp/tournament-challenger-matched.parquet || true
-          # The diagnostic intentionally regenerates warehouse/output files. Clear those
-          # working-tree changes before rebasing so evidence persistence cannot fail on
-          # unrelated generated artifacts. Required evidence is already staged in /tmp.
+          cp v5_tournament_score_challenger_diagnostic/report.json /tmp/tournament-score-challenger-report.json || true
           git reset --hard HEAD
           git clean -fd
           git pull --rebase origin main
-          mkdir -p experiments/acceptance v5_tournament_challenger_diagnostic
+          mkdir -p experiments/acceptance v5_tournament_challenger_diagnostic v5_tournament_score_challenger_diagnostic
           python - <<'PY'
           import json, os
           from pathlib import Path
@@ -82,12 +93,18 @@ jobs:
           PY
           git add experiments/acceptance/tournament_challenger_status.json
           if [ "$CHALLENGER_OUTCOME" = "success" ]; then
-            cp /tmp/tournament-challenger-report.json experiments/acceptance/tournament_challenger_report.json
-            git add experiments/acceptance/tournament_challenger_report.json
+            if [ -f /tmp/tournament-challenger-report.json ]; then
+              cp /tmp/tournament-challenger-report.json experiments/acceptance/tournament_challenger_report.json
+              git add experiments/acceptance/tournament_challenger_report.json
+            fi
+            if [ -f /tmp/tournament-score-challenger-report.json ]; then
+              cp /tmp/tournament-score-challenger-report.json experiments/acceptance/tournament_score_challenger_report.json
+              git add experiments/acceptance/tournament_score_challenger_report.json
+            fi
           fi
-          # Restore disposable diagnostic files for the artifact upload without tracking them.
           cp /tmp/tournament-challenger-report.json v5_tournament_challenger_diagnostic/report.json || true
           cp /tmp/tournament-challenger-matched.parquet v5_tournament_challenger_diagnostic/matched_authority_rows.parquet || true
+          cp /tmp/tournament-score-challenger-report.json v5_tournament_score_challenger_diagnostic/report.json || true
           if ! git diff --cached --quiet; then
             git commit -m 'Record tournament authority challenger evidence'
             git push origin HEAD:main
@@ -102,5 +119,6 @@ jobs:
           path: |
             v5_tournament_challenger_diagnostic/report.json
             v5_tournament_challenger_diagnostic/matched_authority_rows.parquet
+            v5_tournament_score_challenger_diagnostic/report.json
           if-no-files-found: warn
           retention-days: 7
