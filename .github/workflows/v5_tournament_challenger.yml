@@ -1,6 +1,7 @@
 name: V5 Tournament Authority Challenger
 
 # Research/acceptance workflow only. It never calls the live OddsPapi API.
+# Independent from production-writer concurrency so acceptance reruns cannot be starved.
 on:
   push:
     branches: [main]
@@ -25,7 +26,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: v5-production-writer
+  group: v5-tournament-authority-challenger
   cancel-in-progress: false
 
 jobs:
