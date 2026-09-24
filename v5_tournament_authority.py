@@ -77,9 +77,50 @@ def _prepare(frame: pd.DataFrame) -> pd.DataFrame:
         out["_name_core"] = out["Tournament Name"].map(_core)
     if "_city_key" not in out:
         out["_city_key"] = out.get("City", pd.Series("", index=out.index)).map(_norm)
+    if "_country_key" not in out:
+        out["_country_key"] = out.get("Country", pd.Series("", index=out.index)).map(_norm)
     if "_tour_family" not in out:
         out["_tour_family"] = out["Circuit Tour"].map(_tour_family)
+    if "_is_challenger" not in out:
+        out["_is_challenger"] = out["Circuit Tour"].map(lambda value: "challenger" in _norm(value).split())
     return out
+
+_COUNTRY_ALIASES = {
+    "korea republic": "south korea",
+    "republic of korea": "south korea",
+    "usa": "united states",
+    "us": "united states",
+    "u s a": "united states",
+}
+
+def _country_key(value) -> str:
+    key = _norm(value)
+    return _COUNTRY_ALIASES.get(key, key)
+
+def _provider_identity(value) -> dict:
+    """Parse the stable identity evidence carried by provider tournament labels."""
+    raw = _norm(value)
+    tokens = raw.split()
+    family = _tour_family(value)
+    challenger = "challenger" in tokens
+    # Provider grammar is generally:
+    # [ATP|WTA] [Challenger] <event/location>, <country> [Men|Women] Singles.
+    original = str(value or "")
+    parts = [part.strip() for part in original.split(",")]
+    left = _norm(parts[0] if parts else original)
+    left_tokens = [t for t in left.split() if t not in {"atp", "wta", "challenger"}]
+    place = " ".join(left_tokens)
+    country = ""
+    if len(parts) > 1:
+        right = _norm(parts[1])
+        right_tokens = [t for t in right.split() if t not in {"men", "women", "singles"}]
+        country = " ".join(right_tokens)
+    return {
+        "family": family,
+        "challenger": challenger,
+        "place": place,
+        "country": _country_key(country),
+    }
 
 
 def audit_authority(frame: pd.DataFrame) -> dict:
@@ -104,8 +145,9 @@ def resolve_authority(
     """Resolve a tournament only against the approved authority table.
 
     OddsPapi ID is optional identity evidence. Missing IDs never reject an otherwise
-    resolvable tournament. No legacy court/schedule source is consulted or used as
-    fallback.
+    resolvable tournament. Schedule date/tour/location identify the canonical event;
+    the matched authority row then supplies surface and all court context. Surface is
+    never used to choose tournament identity.
     """
     frame = _prepare(load_authority() if table is None else table)
     numeric_year = pd.to_numeric(pd.Series([year]), errors="coerce").iloc[0]
@@ -118,12 +160,6 @@ def resolve_authority(
         filtered = candidates[candidates["_tour_family"].eq(family)]
         if not filtered.empty:
             candidates = filtered
-    if surface:
-        surface_key = _norm(surface)
-        filtered = candidates[candidates["Surface"].map(_norm).eq(surface_key)]
-        if not filtered.empty:
-            candidates = filtered
-
     if oddspapi_tournament_id is not None and "OddsPapi Tournament ID" in candidates:
         target_id = str(oddspapi_tournament_id).strip().removesuffix(".0")
         ids = candidates["OddsPapi Tournament ID"].map(
@@ -138,9 +174,13 @@ def resolve_authority(
     if len(hit) == 1:
         return hit.iloc[0].to_dict() | {"authority_match_method": "exact_name"}
 
+    # Date is identity evidence, not context. Narrow to the scheduled event
+    # window before considering location/name aliases. Surface is deliberately
+    # NOT used here: the matched schedule row is authoritative for surface.
     if match_date is not None:
-        event_date = pd.to_datetime(match_date, errors="coerce")
+        event_date = pd.to_datetime(match_date, errors="coerce", utc=True)
         if pd.notna(event_date):
+            event_date = event_date.tz_convert("UTC").tz_localize(None)
             in_window = []
             for _, row in candidates.iterrows():
                 start = _parse_date(row.get("Date"), row.get("Year"))
@@ -155,8 +195,30 @@ def resolve_authority(
             if not window.empty:
                 candidates = window
 
-    # Providers often identify an event by its city (e.g. Indian Wells). This is
-    # still an authority-table match, not external reconciliation.
+    provider = _provider_identity(tournament)
+    if provider["challenger"]:
+        challenger = candidates[candidates["_is_challenger"]]
+        if not challenger.empty:
+            candidates = challenger
+
+    if provider["country"]:
+        country = candidates[candidates["_country_key"].map(_country_key).eq(provider["country"])]
+        if not country.empty:
+            candidates = country
+
+    # Provider labels often use location rather than the schedule's marketing
+    # name (for example WTA Seoul -> Korea Open). Location only narrows the
+    # candidate set; it never identifies an event by itself when >1 survive.
+    place = provider["place"]
+    if place:
+        location_hit = candidates[candidates["_city_key"].map(
+            lambda city: bool(city) and (city == place or city in place.split(" ") or place in city)
+        )]
+        if len(location_hit) == 1:
+            return location_hit.iloc[0].to_dict() | {"authority_match_method": "schedule_identity"}
+        if len(location_hit) > 1:
+            candidates = location_hit
+
     city_hit = candidates[candidates["_city_key"].eq(tournament_key)]
     if len(city_hit) == 1:
         return city_hit.iloc[0].to_dict() | {"authority_match_method": "city_alias"}
