@@ -116,7 +116,7 @@ def resolve_fixture_surface(tournament, *, start_time_utc=None, context_history=
     surface = str((row or {}).get("Surface") or "").title().strip()
     if surface in {"Hard", "Clay", "Grass"}:
         return surface, "Tournament authority"
-    raise ValueError(f"TOURNAMENT_AUTHORITY_SURFACE_MISSING:{tournament}:{year}")
+    raise ValueError(f"TOURNAMENT_IDENTITY_UNRESOLVED:{tournament}:{year}")
 
 
 def infer_best_of(tournament, tour):
