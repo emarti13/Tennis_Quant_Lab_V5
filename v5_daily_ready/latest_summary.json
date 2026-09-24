@@ -1,30 +1,63 @@
 {
-  "status": "SUCCESS",
-  "built_at_utc": "2026-09-22T12:05:03.138160+00:00",
-  "market_snapshot_utc": "2026-09-22T03:36:50.059529+00:00",
+  "status": "PARTIAL",
+  "built_at_utc": "2026-09-24T12:14:58.919749+00:00",
+  "market_snapshot_utc": "2026-09-24T03:27:29.244003+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 1696,
-  "eligible_pre_match_fixtures": 12,
-  "priced_rows": 248,
-  "board_rows": 248,
-  "frozen_ledger_rows": 10931,
-  "new_frozen_rows": 0,
+  "market_rows_input": 1112,
+  "eligible_pre_match_fixtures": 11,
+  "priced_rows": 150,
+  "board_rows": 150,
+  "frozen_ledger_rows": 11081,
+  "new_frozen_rows": 150,
   "signal_counts": {
-    "REVIEW": 150,
-    "PASS": 55,
-    "BET": 34,
-    "LEAN": 9
+    "PASS": 53,
+    "BET": 47,
+    "REVIEW": 44,
+    "LEAN": 6
   },
   "selected_candidate_counts": {
-    "residual": 138,
-    "ensemble": 110
+    "residual": 128,
+    "ensemble": 22
   },
   "selected_score_candidate_counts": {
-    "gaussian_contextual": 138,
-    "conditioned_mechanistic": 110
+    "gaussian_contextual": 128,
+    "conditioned_mechanistic": 22
   },
   "context_fallback_rows": 0,
-  "errors": [],
+  "errors": [
+    {
+      "fixture_id": "id1203477074753142",
+      "player1": "Guerrieri, Andrea",
+      "player2": "De Jong, Jesper",
+      "tournament": "ATP Challenger Saint Tropez, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Jesper de Jong, Jesper De Jong"
+    },
+    {
+      "fixture_id": "id1205202274753090",
+      "player1": "Clarke, Jay",
+      "player2": "La Vela, Giuseppe",
+      "tournament": "ATP Challenger Genoa 2, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Genoa 2, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1205202274753092",
+      "player1": "Caniato, Carlo Alberto",
+      "player2": "Gentzsch, Tom",
+      "tournament": "ATP Challenger Genoa 2, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Genoa 2, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1205257274753216",
+      "player1": "Boyer, Tristan",
+      "player2": "Gorzny, Sebastian",
+      "tournament": "ATP Challenger San Diego 2, USA, Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger San Diego 2, USA, Men Singles:2026"
+    }
+  ],
   "model_version": "v5-advanced-nested-chronological-1",
   "score_model_version": "v5-score-walkforward-3",
   "probability_source": "chronologically validated independent full-context candidate; sportsbook inputs joined only after probability freeze",
