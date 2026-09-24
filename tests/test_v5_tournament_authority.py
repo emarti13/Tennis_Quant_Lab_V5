@@ -109,3 +109,89 @@ def test_unrelated_name_still_fails_closed_even_in_date_window():
         match_date="2026-03-10",
         table=_alias_table(),
     ) is None
+
+
+def test_provider_location_plus_schedule_date_resolves_marketing_name_without_id():
+    df = pd.DataFrame([
+        {
+            "Year": 2026, "Circuit Tour": "WTA 500", "Tournament Name": "Korea Open",
+            "City": "Seoul", "Country": "South Korea", "Date": "21-Sep", "End Date": "27-Sep",
+            "Surface": "Hard", "Setting": "Outdoor", "Altitude (m)": 38,
+            "OddsPapi Tournament ID": pd.NA,
+        },
+        {
+            "Year": 2026, "Circuit Tour": "WTA 250", "Tournament Name": "Other Korea Event",
+            "City": "Busan", "Country": "South Korea", "Date": "21-Sep", "End Date": "27-Sep",
+            "Surface": "Clay", "Setting": "Outdoor", "Altitude (m)": 5,
+            "OddsPapi Tournament ID": pd.NA,
+        },
+    ])
+    r = resolve_authority(
+        "WTA Seoul, Korea Republic Women Singles", 2026,
+        tour="WTA", match_date="2026-09-24", table=df,
+    )
+    assert r is not None
+    assert r["Tournament Name"] == "Korea Open"
+    assert r["Surface"] == "Hard"
+    assert r["authority_match_method"] == "schedule_identity"
+
+
+def test_surface_argument_never_selects_tournament_identity():
+    df = pd.DataFrame([{
+        "Year": 2026, "Circuit Tour": "WTA 500", "Tournament Name": "Korea Open",
+        "City": "Seoul", "Country": "South Korea", "Date": "21-Sep", "End Date": "27-Sep",
+        "Surface": "Hard", "Setting": "Outdoor", "Altitude (m)": 38,
+        "OddsPapi Tournament ID": pd.NA,
+    }])
+    r = resolve_authority(
+        "WTA Seoul, Korea Republic Women Singles", 2026,
+        tour="WTA", surface="Clay", match_date="2026-09-24", table=df,
+    )
+    assert r is not None
+    assert r["Surface"] == "Hard"
+
+
+def test_same_city_multiple_events_are_disambiguated_by_date_not_city_alone():
+    df = pd.DataFrame([
+        {
+            "Year": 2026, "Circuit Tour": "ATP GRAND SLAM", "Tournament Name": "Roland Garros",
+            "City": "Paris", "Country": "France", "Date": "24-May", "End Date": "7-Jun",
+            "Surface": "Clay", "Setting": "Outdoor", "Altitude (m)": 35,
+            "OddsPapi Tournament ID": pd.NA,
+        },
+        {
+            "Year": 2026, "Circuit Tour": "ATP MASTERS 1000", "Tournament Name": "Paris Masters",
+            "City": "Paris", "Country": "France", "Date": "26-Oct", "End Date": "1-Nov",
+            "Surface": "Hard", "Setting": "Indoor", "Altitude (m)": 35,
+            "OddsPapi Tournament ID": pd.NA,
+        },
+    ])
+    r = resolve_authority(
+        "ATP Paris, France Men Singles", 2026,
+        tour="MEN", match_date="2026-10-28", table=df,
+    )
+    assert r is not None
+    assert r["Tournament Name"] == "Paris Masters"
+    assert r["Surface"] == "Hard"
+
+
+def test_same_city_overlapping_events_fail_closed_instead_of_guessing():
+    df = pd.DataFrame([
+        {
+            "Year": 2026, "Circuit Tour": "ATP 250", "Tournament Name": "Paris Event A",
+            "City": "Paris", "Country": "France", "Date": "1-Sep", "End Date": "7-Sep",
+            "Surface": "Hard", "Setting": "Indoor", "Altitude (m)": 35,
+            "OddsPapi Tournament ID": pd.NA,
+        },
+        {
+            "Year": 2026, "Circuit Tour": "ATP 250", "Tournament Name": "Paris Event B",
+            "City": "Paris", "Country": "France", "Date": "1-Sep", "End Date": "7-Sep",
+            "Surface": "Clay", "Setting": "Outdoor", "Altitude (m)": 35,
+            "OddsPapi Tournament ID": pd.NA,
+        },
+    ])
+    r = resolve_authority(
+        "ATP Paris, France Men Singles", 2026,
+        tour="MEN", match_date="2026-09-03", table=df,
+    )
+    assert r is None
