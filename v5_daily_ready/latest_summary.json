@@ -1,58 +1,106 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-09-24T12:14:58.919749+00:00",
-  "market_snapshot_utc": "2026-09-24T03:27:29.244003+00:00",
+  "built_at_utc": "2026-09-25T12:17:53.856763+00:00",
+  "market_snapshot_utc": "2026-09-25T03:44:25.868359+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 1112,
-  "eligible_pre_match_fixtures": 11,
-  "priced_rows": 150,
-  "board_rows": 150,
-  "frozen_ledger_rows": 11081,
-  "new_frozen_rows": 150,
+  "market_rows_input": 1048,
+  "eligible_pre_match_fixtures": 21,
+  "priced_rows": 220,
+  "board_rows": 220,
+  "frozen_ledger_rows": 11301,
+  "new_frozen_rows": 220,
   "signal_counts": {
-    "PASS": 53,
-    "BET": 47,
-    "REVIEW": 44,
-    "LEAN": 6
+    "PASS": 95,
+    "BET": 60,
+    "REVIEW": 60,
+    "LEAN": 5
   },
   "selected_candidate_counts": {
-    "residual": 128,
-    "ensemble": 22
+    "ensemble": 130,
+    "residual": 90
   },
   "selected_score_candidate_counts": {
-    "gaussian_contextual": 128,
-    "conditioned_mechanistic": 22
+    "conditioned_mechanistic": 130,
+    "gaussian_contextual": 90
   },
   "context_fallback_rows": 0,
   "errors": [
     {
-      "fixture_id": "id1203477074753142",
-      "player1": "Guerrieri, Andrea",
-      "player2": "De Jong, Jesper",
-      "tournament": "ATP Challenger Saint Tropez, France Men Singles",
+      "fixture_id": "id1202010274753068",
+      "player1": "Boscardin Dias, Pedro",
+      "player2": "Ribeiro, Eduardo",
+      "tournament": "ATP Challenger Buenos Aires II, ARG Men Singles",
       "stage": "prepare_fixture",
-      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Jesper de Jong, Jesper De Jong"
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Buenos Aires II, ARG Men Singles:2026"
     },
     {
-      "fixture_id": "id1205202274753090",
+      "fixture_id": "id1202010274753054",
+      "player1": "Mena, Facundo",
+      "player2": "Kicker, Nicolas",
+      "tournament": "ATP Challenger Buenos Aires II, ARG Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Buenos Aires II, ARG Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1202010274753064",
+      "player1": "Aguilar Cardozo, Joaquin",
+      "player2": "Varillas, Juan Pablo",
+      "tournament": "ATP Challenger Buenos Aires II, ARG Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Buenos Aires II, ARG Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1202010274753066",
+      "player1": "Prado Angelo, Juan Carlos",
+      "player2": "Barrena, Alex",
+      "tournament": "ATP Challenger Buenos Aires II, ARG Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Buenos Aires II, ARG Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201413374753338",
+      "player1": "Damm Jr, Martin",
+      "player2": "Hurkacz, Hubert",
+      "tournament": "ATP Chengdu, China Men Singles",
+      "stage": "prepare_fixture",
+      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Martin Damm"
+    },
+    {
+      "fixture_id": "id1205202274753114",
+      "player1": "Petkovic, Mika",
+      "player2": "Forti, Francesco",
+      "tournament": "ATP Challenger Genoa 2, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Genoa 2, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1205202274753116",
       "player1": "Clarke, Jay",
-      "player2": "La Vela, Giuseppe",
+      "player2": "Caniato, Carlo Alberto",
       "tournament": "ATP Challenger Genoa 2, Italy Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Genoa 2, Italy Men Singles:2026"
     },
     {
-      "fixture_id": "id1205202274753092",
-      "player1": "Caniato, Carlo Alberto",
-      "player2": "Gentzsch, Tom",
-      "tournament": "ATP Challenger Genoa 2, Italy Men Singles",
+      "fixture_id": "id1205257274753214",
+      "player1": "Marcondes, Igor",
+      "player2": "Gomez, Federico Agustin",
+      "tournament": "ATP Challenger San Diego 2, USA, Men Singles",
       "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Genoa 2, Italy Men Singles:2026"
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger San Diego 2, USA, Men Singles:2026"
     },
     {
-      "fixture_id": "id1205257274753216",
+      "fixture_id": "id1205257274753212",
       "player1": "Boyer, Tristan",
-      "player2": "Gorzny, Sebastian",
+      "player2": "Legout, Timo",
+      "tournament": "ATP Challenger San Diego 2, USA, Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger San Diego 2, USA, Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1205257274753210",
+      "player1": "Dietrich, Dylan",
+      "player2": "Searle, Henry",
       "tournament": "ATP Challenger San Diego 2, USA, Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger San Diego 2, USA, Men Singles:2026"
