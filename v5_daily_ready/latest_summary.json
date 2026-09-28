@@ -1,141 +1,133 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-09-27T04:01:58.482309+00:00",
-  "market_snapshot_utc": "2026-09-27T03:59:47.380444+00:00",
+  "built_at_utc": "2026-09-28T04:02:48.126452+00:00",
+  "market_snapshot_utc": "2026-09-28T04:00:29.347193+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 1000,
-  "eligible_pre_match_fixtures": 50,
-  "priced_rows": 744,
-  "board_rows": 744,
-  "frozen_ledger_rows": 12157,
-  "new_frozen_rows": 662,
+  "market_rows_input": 698,
+  "eligible_pre_match_fixtures": 32,
+  "priced_rows": 412,
+  "board_rows": 412,
+  "frozen_ledger_rows": 12569,
+  "new_frozen_rows": 412,
   "signal_counts": {
-    "REVIEW": 342,
-    "PASS": 262,
-    "BET": 134,
-    "LEAN": 6
+    "PASS": 172,
+    "BET": 143,
+    "REVIEW": 92,
+    "LEAN": 5
   },
   "selected_candidate_counts": {
-    "ensemble": 524,
-    "residual": 220
+    "ensemble": 390,
+    "residual": 22
   },
   "selected_score_candidate_counts": {
-    "conditioned_mechanistic": 524,
-    "gaussian_contextual": 220
+    "conditioned_mechanistic": 390,
+    "gaussian_contextual": 22
   },
   "context_fallback_rows": 0,
   "errors": [
     {
-      "fixture_id": "id1201082375068520",
-      "player1": "Zahraj, Patrick",
-      "player2": "Poling, Karl",
+      "fixture_id": "id1200302575088744",
+      "player1": "Van de Zandschulp, Botic",
+      "player2": "Royer, Valentin",
+      "tournament": "ATP Beijing, China Men Singles",
+      "stage": "prepare_fixture",
+      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Botic van de Zandschulp, Botic Van De Zandschulp, otic van de Zandschulp"
+    },
+    {
+      "fixture_id": "id1201082375068830",
+      "player1": "Harris, Billy",
+      "player2": "Balshaw, Felix",
       "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
     },
     {
-      "fixture_id": "id1201082375068522",
-      "player1": "Boulais, Justin",
-      "player2": "Reco, Alexandre",
+      "fixture_id": "id1201082375068832",
+      "player1": "Broady, Liam",
+      "player2": "Stricker, Dominic",
       "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
     },
     {
-      "fixture_id": "id1201082375068524",
-      "player1": "Cado, Zaccharie",
+      "fixture_id": "id1201082375068834",
+      "player1": "Glinka, Daniil",
+      "player2": "Bernet, Henry",
+      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201082375068836",
+      "player1": "Henning, Philip",
+      "player2": "Schoolkate, Tristan",
+      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201082375068838",
+      "player1": "Chidekh, Clement",
+      "player2": "Goffin, David",
+      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201082375068840",
+      "player1": "Added, Dan",
+      "player2": "Onclin, Gauthier",
+      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201082375068844",
+      "player1": "Pinnington Jones, Jack",
+      "player2": "Faurel, Thomas",
+      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201082375068846",
+      "player1": "Tabur, Clement",
+      "player2": "Martineau, Matteo",
+      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201082375068848",
+      "player1": "Lajal, Mark",
+      "player2": "Poullain, Lucas",
+      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201082375088930",
+      "player1": "Reco, Alexandre",
+      "player2": "Zahraj, Patrick",
+      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201082375088958",
+      "player1": "Visker, Niels",
       "player2": "McDonald, Niels",
       "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
     },
     {
-      "fixture_id": "id1201082375068526",
-      "player1": "Visker, Niels",
-      "player2": "Paris, Tom",
+      "fixture_id": "id1201082375068842",
+      "player1": "Herbert, Pierre-Hugues",
+      "player2": "Gueymard Wayenburg, Sascha",
       "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1201082375068536",
-      "player1": "Sels, Jelle",
-      "player2": "Peniston, Ryan",
-      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1201082375068538",
-      "player1": "Romano, Filippo",
-      "player2": "De Schepper, Kenny",
-      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1201082375068528",
-      "player1": "Bobichon, Matisse",
-      "player2": "Durasovic, Viktor",
-      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1201082375068530",
-      "player1": "Dhamne, Manas",
-      "player2": "Janvier, Maxime",
-      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1201082375068532",
-      "player1": "Barroso Campos, Alberto",
-      "player2": "Boogaard, Thijs",
-      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1201082375068534",
-      "player1": "Erhard, Mathys",
-      "player2": "Theate, Paul",
-      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1201082375068516",
-      "player1": "Ghazouani Durand, Yanis",
-      "player2": "Hudd, Emile",
-      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1201082375068518",
-      "player1": "Bittoun Kouzmine, Constantin",
-      "player2": "Rossi, Leonardo",
-      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1202010274753060",
-      "player1": "Barrena, Alex",
-      "player2": "Mena, Facundo",
-      "tournament": "ATP Challenger Buenos Aires II, ARG Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Buenos Aires II, ARG Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1205202274753106",
-      "player1": "Mikrut, Luka",
-      "player2": "Caniato, Carlo Alberto",
-      "tournament": "ATP Challenger Genoa 2, Italy Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Genoa 2, Italy Men Singles:2026"
     }
   ],
   "model_version": "v5-advanced-nested-chronological-1",
