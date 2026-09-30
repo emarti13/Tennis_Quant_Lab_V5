@@ -1,13 +1,13 @@
 {
   "stage": "daily_forecast",
-  "run_timestamp": "2026-09-29T04:40:03.507345+00:00",
-  "source_version": "2026-09-29T04:36:55.464952+00:00",
+  "run_timestamp": "2026-09-30T04:23:22.754884+00:00",
+  "source_version": "2026-09-30T04:19:52.978864+00:00",
   "state": "success",
-  "rows": 52,
-  "fixtures": 52,
+  "rows": 63,
+  "fixtures": 63,
   "freshness": "READY",
   "error": null,
-  "forecast_date": "2026-09-29",
+  "forecast_date": "2026-09-30",
   "context_errors": [],
-  "source_commit_sha": "13a95e2a082fb7ab480eb0858da730a475b304d1"
+  "source_commit_sha": "35049fec799c7901050bd431c121096226b6964a"
 }
