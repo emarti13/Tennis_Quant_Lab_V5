@@ -1,85 +1,133 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-10-01T04:32:02.250270+00:00",
-  "market_snapshot_utc": "2026-10-01T04:29:38.599946+00:00",
+  "built_at_utc": "2026-10-02T04:24:43.849545+00:00",
+  "market_snapshot_utc": "2026-10-02T04:22:09.689075+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 1040,
-  "eligible_pre_match_fixtures": 43,
-  "priced_rows": 748,
-  "board_rows": 748,
-  "frozen_ledger_rows": 15321,
-  "new_frozen_rows": 418,
+  "market_rows_input": 1304,
+  "eligible_pre_match_fixtures": 63,
+  "priced_rows": 1038,
+  "board_rows": 1038,
+  "frozen_ledger_rows": 16299,
+  "new_frozen_rows": 978,
   "signal_counts": {
-    "PASS": 366,
-    "BET": 215,
-    "REVIEW": 139,
-    "LEAN": 28
+    "PASS": 549,
+    "BET": 399,
+    "REVIEW": 64,
+    "LEAN": 26
   },
   "selected_candidate_counts": {
-    "ensemble": 506,
-    "residual": 242
+    "residual": 560,
+    "ensemble": 478
   },
   "selected_score_candidate_counts": {
-    "conditioned_mechanistic": 506,
-    "gaussian_contextual": 242
+    "gaussian_contextual": 560,
+    "conditioned_mechanistic": 478
   },
   "context_fallback_rows": 0,
   "errors": [
     {
-      "fixture_id": "id1201082374983054",
-      "player1": "Schwaerzler, Joel",
-      "player2": "Wendelken, Harry",
+      "fixture_id": "id1200884375051500",
+      "player1": "Noskova, Linda",
+      "player2": "Ruse, Elena-Gabriela",
+      "tournament": "WTA Beijing, China Women Singles",
+      "stage": "prepare_fixture",
+      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Elena-Gabriela Ruse, Elena Gabriela Ruse"
+    },
+    {
+      "fixture_id": "id1201082374983036",
+      "player1": "Poullain, Lucas",
+      "player2": "Schwaerzler, Joel",
       "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
     },
     {
-      "fixture_id": "id1201082374983048",
+      "fixture_id": "id1201082374983038",
+      "player1": "Tabur, Clement",
+      "player2": "Gueymard Wayenburg, Sascha",
+      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201285574983730",
+      "player1": "Rottgering, Mees",
+      "player2": "Andrade, Andres",
+      "tournament": "ATP Challenger Columbus, USA Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Columbus, USA Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201285574983734",
+      "player1": "Krueger, Mitchell",
+      "player2": "Smith, Keegan",
+      "tournament": "ATP Challenger Columbus, USA Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Columbus, USA Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201285574983728",
+      "player1": "Blanch, Darwin",
+      "player2": "Dietrich, Dylan",
+      "tournament": "ATP Challenger Columbus, USA Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Columbus, USA Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201285574983732",
+      "player1": "Shelbayh, Abdullah",
+      "player2": "Mayo, Aidan",
+      "tournament": "ATP Challenger Columbus, USA Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Columbus, USA Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201082374983042",
       "player1": "Bernet, Henry",
-      "player2": "Stricker, Dominic",
+      "player2": "Balshaw, Felix",
       "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
     },
     {
-      "fixture_id": "id1201082374983050",
-      "player1": "Balshaw, Felix",
-      "player2": "Budkov Kjaer, Nicolai",
-      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1201082374983044",
+      "fixture_id": "id1201082374983040",
       "player1": "Chidekh, Clement",
-      "player2": "Blanchet, Ugo",
+      "player2": "Mayot, Harold",
       "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
     },
     {
-      "fixture_id": "id1201082374983046",
-      "player1": "Mayot, Harold",
-      "player2": "Schoolkate, Tristan",
-      "tournament": "ATP Challenger Mouilleron-Le-Captif, France Men Singles",
+      "fixture_id": "id1200302575051374",
+      "player1": "de Minaur, Alex",
+      "player2": "Halys, Quentin",
+      "tournament": "ATP Beijing, China Men Singles",
       "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Mouilleron-Le-Captif, France Men Singles:2026"
+      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Alex de Minaur, Alex De Minaur"
     },
     {
-      "fixture_id": "id1204734774983622",
-      "player1": "Ymer, Elias",
-      "player2": "Cina, Federico",
+      "fixture_id": "id1204734774983626",
+      "player1": "Bolt, Alex",
+      "player2": "Sweeny, Dane",
       "tournament": "ATP Challenger Jingshan, China, Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Jingshan, China, Men Singles:2026"
     },
     {
-      "fixture_id": "id1204734774983624",
-      "player1": "Shimizu, Yuta",
-      "player2": "Tomic, Bernard",
+      "fixture_id": "id1204734774983640",
+      "player1": "Harris, Lloyd",
+      "player2": "Ilagan, Andre",
       "tournament": "ATP Challenger Jingshan, China, Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Jingshan, China, Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1201406174983676",
+      "player1": "Pucinelli de Almeida, Matheus",
+      "player2": "Barrios Vera, Marcelo Tomas",
+      "tournament": "ATP Challenger Curitiba, Brazil Men Singles",
+      "stage": "prepare_fixture",
+      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Matheus Pucinelli de Almeida, Matheus Pucinelli De Almeida; fuzzy_candidates_only: Tomas Barrios Vera"
     }
   ],
   "model_version": "v5-advanced-nested-chronological-1",
