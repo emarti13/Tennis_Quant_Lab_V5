@@ -1,0 +1,46 @@
+name: BTC Coinbase Real-Data Test
+
+on:
+  push:
+    branches: [btc-bot-test]
+    paths:
+      - 'btc_bot/**'
+      - '.github/workflows/btc-coinbase-real-data-test.yml'
+  workflow_dispatch:
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: btc_bot
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: btc_bot/requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Compile
+        run: python -m py_compile coinbase_discover_test.py
+      - name: Coinbase smoke + full discovery
+        run: python coinbase_discover_test.py
+      - name: Show result files
+        if: always()
+        run: |
+          echo "=== windows.json ==="
+          test -f windows.json && cat windows.json || true
+          echo "=== diagnostics ==="
+          test -f coinbase_data_diagnostics.json && cat coinbase_data_diagnostics.json || true
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-coinbase-discovery
+          path: |
+            btc_bot/windows.json
+            btc_bot/coinbase_data_diagnostics.json
+          if-no-files-found: warn
