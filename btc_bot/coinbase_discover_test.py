@@ -207,6 +207,8 @@ def main():
         raise SystemExit("Duplicate timestamps in full history")
     if len(bad):
         print("WARNING: full history contains non-hourly gaps; first gap ms:",bad.head(20).tolist())
+        for idx in bad.index[:20]:
+            print("GAP", str(df.loc[idx-1, "dt"]), "->", str(df.loc[idx, "dt"]), "delta_ms=", int(df.loc[idx, "ts"]-df.loc[idx-1, "ts"]))
 
     found=find_windows(df)
     WINDOWS_FILE.write_text(json.dumps(found,indent=2))
