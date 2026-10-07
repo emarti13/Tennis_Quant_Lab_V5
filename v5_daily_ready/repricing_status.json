@@ -1,15 +1,13 @@
 {
   "stage": "repricing",
-  "run_timestamp": "2026-10-05T04:30:30.162004+00:00",
-  "source_version": "2026-10-05T04:23:45.391028+00:00",
-  "state": "success",
-  "rows": 1738,
-  "fixtures": 81,
-  "freshness": "READY",
-  "error": null,
-  "forecast_date": "2026-10-05",
-  "matched_model_rows": 1240,
-  "actionable_rows": 423,
-  "official_recommendations": 1292,
-  "market_history_retention": "permanent"
+  "run_timestamp": "2026-10-07T04:38:39.452571+00:00",
+  "source_version": "2026-10-07T04:38:33.229767+00:00",
+  "state": "blocked",
+  "rows": 0,
+  "fixtures": 64,
+  "freshness": "STALE_FORECAST",
+  "error": "no frozen model forecast for production date 2026-10-07",
+  "available_forecast_dates": [
+    "2026-10-05"
+  ]
 }
