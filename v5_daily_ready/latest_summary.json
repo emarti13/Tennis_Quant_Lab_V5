@@ -1,62 +1,30 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-10-07T04:40:30.814415+00:00",
-  "market_snapshot_utc": "2026-10-07T04:38:33.229767+00:00",
+  "built_at_utc": "2026-10-08T04:51:10.879376+00:00",
+  "market_snapshot_utc": "2026-10-08T04:49:13.301724+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 1406,
-  "eligible_pre_match_fixtures": 64,
-  "priced_rows": 1208,
-  "board_rows": 1208,
-  "frozen_ledger_rows": 19975,
-  "new_frozen_rows": 1208,
+  "market_rows_input": 1190,
+  "eligible_pre_match_fixtures": 55,
+  "priced_rows": 970,
+  "board_rows": 970,
+  "frozen_ledger_rows": 20651,
+  "new_frozen_rows": 676,
   "signal_counts": {
-    "PASS": 616,
-    "BET": 468,
-    "REVIEW": 96,
-    "LEAN": 28
+    "PASS": 509,
+    "BET": 373,
+    "REVIEW": 56,
+    "LEAN": 32
   },
   "selected_candidate_counts": {
-    "ensemble": 944,
-    "residual": 264
+    "ensemble": 834,
+    "residual": 136
   },
   "selected_score_candidate_counts": {
-    "conditioned_mechanistic": 944,
-    "gaussian_contextual": 264
+    "conditioned_mechanistic": 834,
+    "gaussian_contextual": 136
   },
   "context_fallback_rows": 0,
   "errors": [
-    {
-      "fixture_id": "id1200787775152472",
-      "player1": "Forejtek, Jonas",
-      "player2": "Krumich, Martin",
-      "tournament": "ATP Challenger Palermo, Italy Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Palermo, Italy Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1200787775152470",
-      "player1": "Kolar, Zdenek",
-      "player2": "Ribecai, Michele",
-      "tournament": "ATP Challenger Palermo, Italy Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Palermo, Italy Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1200787775152476",
-      "player1": "Martin, Andrej",
-      "player2": "Moro Canas, Alejandro",
-      "tournament": "ATP Challenger Palermo, Italy Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Palermo, Italy Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1200787775152474",
-      "player1": "Cadenasso, Gianluca",
-      "player2": "Giunta, Massimo",
-      "tournament": "ATP Challenger Palermo, Italy Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Palermo, Italy Men Singles:2026"
-    },
     {
       "fixture_id": "id1200308575314398",
       "player1": "Van de Zandschulp, Botic",
@@ -64,6 +32,54 @@
       "tournament": "ATP Shanghai, China Men Singles",
       "stage": "prepare_fixture",
       "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Botic van de Zandschulp, Botic Van De Zandschulp, otic van de Zandschulp"
+    },
+    {
+      "fixture_id": "id1200787775152496",
+      "player1": "Gadamauri, Buvaysar",
+      "player2": "Milev, Yanaki",
+      "tournament": "ATP Challenger Palermo, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Palermo, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1200787775152498",
+      "player1": "Sanchez Jover, Carlos",
+      "player2": "Giustino, Lorenzo",
+      "tournament": "ATP Challenger Palermo, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Palermo, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1202423975151708",
+      "player1": "Llamas Ruiz, Pablo",
+      "player2": "Nesterov, Pyotr",
+      "tournament": "ATP Challenger Villena, Spain Men Singles",
+      "stage": "prepare_fixture",
+      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Petr Nesterov"
+    },
+    {
+      "fixture_id": "id1200787775152494",
+      "player1": "Caniato, Carlo Alberto",
+      "player2": "Passaro, Francesco",
+      "tournament": "ATP Challenger Palermo, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Palermo, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1200787775152492",
+      "player1": "Piraino, Gabriele",
+      "player2": "Dalla Valle, Enrico",
+      "tournament": "ATP Challenger Palermo, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Palermo, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1200308575151682",
+      "player1": "de Minaur, Alex",
+      "player2": "Molcan, Alex",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "stage": "prepare_fixture",
+      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Alex de Minaur, Alex De Minaur"
     },
     {
       "fixture_id": "id1205292475153316",
@@ -74,25 +90,17 @@
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Wuning 3, China Men Singles:2026"
     },
     {
-      "fixture_id": "id1205292475153312",
-      "player1": "Seggerman, Ryan",
-      "player2": "Uchida, Kaichi",
+      "fixture_id": "id1205292475153306",
+      "player1": "Saitoh, Keisuke",
+      "player2": "Santillan, Akira",
       "tournament": "ATP Challenger Wuning 3, China Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Wuning 3, China Men Singles:2026"
     },
     {
-      "fixture_id": "id1205292475153314",
-      "player1": "Sun, Fajing",
-      "player2": "Samrej, Kasidit",
-      "tournament": "ATP Challenger Wuning 3, China Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Wuning 3, China Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1205292475153324",
-      "player1": "Friend, Jay",
-      "player2": "Leong, Mitsuki Wei Kang",
+      "fixture_id": "id1205292475153326",
+      "player1": "Derepasko, Timofei",
+      "player2": "Jasika, Omar",
       "tournament": "ATP Challenger Wuning 3, China Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Wuning 3, China Men Singles:2026"
