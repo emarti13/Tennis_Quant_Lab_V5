@@ -1,62 +1,31 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-10-10T04:39:51.486278+00:00",
-  "market_snapshot_utc": "2026-10-10T04:37:36.216821+00:00",
+  "built_at_utc": "2026-10-11T04:24:54.526214+00:00",
+  "market_snapshot_utc": "2026-10-11T04:22:25.166977+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 770,
-  "eligible_pre_match_fixtures": 36,
-  "priced_rows": 632,
-  "board_rows": 632,
-  "frozen_ledger_rows": 21769,
-  "new_frozen_rows": 390,
+  "market_rows_input": 2183,
+  "eligible_pre_match_fixtures": 115,
+  "priced_rows": 1532,
+  "board_rows": 1533,
+  "frozen_ledger_rows": 23301,
+  "new_frozen_rows": 1532,
   "signal_counts": {
-    "PASS": 330,
-    "BET": 253,
-    "REVIEW": 32,
-    "LEAN": 17
+    "PASS": 603,
+    "REVIEW": 520,
+    "BET": 365,
+    "LEAN": 40,
+    "N/A": 5
   },
   "selected_candidate_counts": {
-    "ensemble": 324,
-    "residual": 308
+    "ensemble": 784,
+    "residual": 749
   },
   "selected_score_candidate_counts": {
-    "conditioned_mechanistic": 324,
-    "gaussian_contextual": 308
+    "conditioned_mechanistic": 784,
+    "gaussian_contextual": 749
   },
   "context_fallback_rows": 0,
   "errors": [
-    {
-      "fixture_id": "id1201111775439512",
-      "player1": "Ruse, Elena-Gabriela",
-      "player2": "Putintseva, Yulia",
-      "tournament": "WTA Wuhan, China Women Singles",
-      "stage": "prepare_fixture",
-      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Elena-Gabriela Ruse, Elena Gabriela Ruse"
-    },
-    {
-      "fixture_id": "id1200308575413688",
-      "player1": "Van de Zandschulp, Botic",
-      "player2": "Michelsen, Alex",
-      "tournament": "ATP Shanghai, China Men Singles",
-      "stage": "prepare_fixture",
-      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Botic van de Zandschulp, Botic Van De Zandschulp, otic van de Zandschulp"
-    },
-    {
-      "fixture_id": "id1200787775152478",
-      "player1": "Forejtek, Jonas",
-      "player2": "Moro Canas, Alejandro",
-      "tournament": "ATP Challenger Palermo, Italy Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Palermo, Italy Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1200787775152480",
-      "player1": "Passaro, Francesco",
-      "player2": "Milev, Yanaki",
-      "tournament": "ATP Challenger Palermo, Italy Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Palermo, Italy Men Singles:2026"
-    },
     {
       "fixture_id": "id1200308575431494",
       "player1": "de Minaur, Alex",
@@ -66,20 +35,284 @@
       "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Alex de Minaur, Alex De Minaur"
     },
     {
-      "fixture_id": "id1204030375153086",
-      "player1": "Midon, Lautaro",
-      "player2": "Seyboth Wild, Thiago",
+      "fixture_id": "id1200308575478490",
+      "player1": "Fils, Arthur",
+      "player2": "Van de Zandschulp, Botic",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "stage": "prepare_fixture",
+      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Botic van de Zandschulp, Botic Van De Zandschulp, otic van de Zandschulp"
+    },
+    {
+      "fixture_id": "id1203086975481492",
+      "player1": "Ajdukovic, Duje",
+      "player2": "Marques, Goncalo",
+      "tournament": "ATP Challenger Maia, Portugal Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Maia, Portugal Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1203086975481494",
+      "player1": "Cacao, Tiago",
+      "player2": "Perez Contri, Sergi",
+      "tournament": "ATP Challenger Maia, Portugal Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Maia, Portugal Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1203086975481496",
+      "player1": "Broska, Florian",
+      "player2": "Oetzbach, Adrian",
+      "tournament": "ATP Challenger Maia, Portugal Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Maia, Portugal Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1203086975481486",
+      "player1": "Barranco Cosano, Javier",
+      "player2": "Nijboer, Ryan",
+      "tournament": "ATP Challenger Maia, Portugal Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Maia, Portugal Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1203086975481488",
+      "player1": "Taberner, Carlos",
+      "player2": "Hassan, Benjamin",
+      "tournament": "ATP Challenger Maia, Portugal Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Maia, Portugal Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1203086975481490",
+      "player1": "Domingues, Joao",
+      "player2": "Martin, Andrej",
+      "tournament": "ATP Challenger Maia, Portugal Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Maia, Portugal Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1204070975480284",
+      "player1": "Gonzalez Fernandez, Mario",
+      "player2": "Durasovic, Viktor",
+      "tournament": "ATP Challenger Olbia, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Olbia, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1204070975480286",
+      "player1": "Nesterov, Pyotr",
+      "player2": "Langmo, Christian",
+      "tournament": "ATP Challenger Olbia, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Olbia, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1204070975480270",
+      "player1": "Marrero Curbelo, Ivan",
+      "player2": "Colombo, Andrea",
+      "tournament": "ATP Challenger Olbia, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Olbia, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1204070975480274",
+      "player1": "Kuzmanov, Dimitar",
+      "player2": "Peniston, Ryan",
+      "tournament": "ATP Challenger Olbia, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Olbia, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1204070975480264",
+      "player1": "Raquillet, Leo",
+      "player2": "Boitan, Gabi Adrian",
+      "tournament": "ATP Challenger Olbia, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Olbia, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1205207875482716",
+      "player1": "Turcanu, Radu David",
+      "player2": "Vives Marcos, Pedro",
+      "tournament": "ATP Challenger Catania, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Catania, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1205207875482718",
+      "player1": "Jones, Maximus",
+      "player2": "Gima, Sebastian",
+      "tournament": "ATP Challenger Catania, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Catania, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1205207875482720",
+      "player1": "Marino, Paolo Gabriele",
+      "player2": "Siniakov, Daniel",
+      "tournament": "ATP Challenger Catania, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Catania, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1200787775152482",
+      "player1": "Forejtek, Jonas",
+      "player2": "Passaro, Francesco",
+      "tournament": "ATP Challenger Palermo, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Palermo, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1203086975481480",
+      "player1": "Sanchez Quilez, Alejo",
+      "player2": "Leote Prata, Vasco",
+      "tournament": "ATP Challenger Maia, Portugal Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Maia, Portugal Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1203086975481482",
+      "player1": "Vrbensky, Michael",
+      "player2": "Wallin, Olle",
+      "tournament": "ATP Challenger Maia, Portugal Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Maia, Portugal Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1203086975481484",
+      "player1": "Schoen, Patrick",
+      "player2": "Valdoleiros, Guilherme",
+      "tournament": "ATP Challenger Maia, Portugal Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Maia, Portugal Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1203086975481478",
+      "player1": "Silva, Joao Dinis",
+      "player2": "Gakhov, Ivan",
+      "tournament": "ATP Challenger Maia, Portugal Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Maia, Portugal Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1203086975481498",
+      "player1": "Marques, Diogo",
+      "player2": "Krutykh, Oleksii",
+      "tournament": "ATP Challenger Maia, Portugal Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Maia, Portugal Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1203086975481500",
+      "player1": "Blanch, Dali",
+      "player2": "Karol, Milos",
+      "tournament": "ATP Challenger Maia, Portugal Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Maia, Portugal Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1204070975480268",
+      "player1": "Vargiu, Davide",
+      "player2": "Visker, Niels",
+      "tournament": "ATP Challenger Olbia, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Olbia, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1204070975480282",
+      "player1": "Kravchenko, Georgii",
+      "player2": "Donski, Alexander",
+      "tournament": "ATP Challenger Olbia, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Olbia, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1204070975480276",
+      "player1": "Pieczonka, Filip",
+      "player2": "Loffhagen, George",
+      "tournament": "ATP Challenger Olbia, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Olbia, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1204070975480278",
+      "player1": "Lokoli, Laurent",
+      "player2": "Dessi, Marco",
+      "tournament": "ATP Challenger Olbia, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Olbia, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1204070975480280",
+      "player1": "Dominko, Sebastian",
+      "player2": "Masur, Daniel",
+      "tournament": "ATP Challenger Olbia, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Olbia, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1204711375479900",
+      "player1": "Novak, Kristina",
+      "player2": "Werner, Caroline",
+      "tournament": "WTA 125K Rovereto, Italy Women Singles",
+      "stage": "prepare_fixture",
+      "error": "IDENTITY_REVIEW required before cold start: fuzzy_candidates_only: Kristina Kucova, Kristina Liutova"
+    },
+    {
+      "fixture_id": "id1204030375152942",
+      "player1": "Seyboth Wild, Thiago",
+      "player2": "Reis Da Silva, Joao Lucas",
       "tournament": "ATP Challenger Antofagasta, Chile Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Antofagasta, Chile Men Singles:2026"
     },
     {
-      "fixture_id": "id1204030375153088",
-      "player1": "Prado Angelo, Juan Carlos",
-      "player2": "Reis Da Silva, Joao Lucas",
-      "tournament": "ATP Challenger Antofagasta, Chile Men Singles",
+      "fixture_id": "id1205207875482722",
+      "player1": "Madaras, Dragos Nicolae",
+      "player2": "Vrba, Jakub",
+      "tournament": "ATP Challenger Catania, Italy Men Singles",
       "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Antofagasta, Chile Men Singles:2026"
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Catania, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1205207875482732",
+      "player1": "Kovac, Tilen",
+      "player2": "Gulin, Svyatoslav",
+      "tournament": "ATP Challenger Catania, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Catania, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1205207875482730",
+      "player1": "Lagutin, Pavel",
+      "player2": "Parisca Romera, Ignacio",
+      "tournament": "ATP Challenger Catania, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Catania, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1205207875482714",
+      "player1": "Marti Pujolras, Alex",
+      "player2": "Sperle, John",
+      "tournament": "ATP Challenger Catania, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Catania, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1205207875482726",
+      "player1": "Chazal, Maxime",
+      "player2": "Milev, Yanaki",
+      "tournament": "ATP Challenger Catania, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Catania, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1205207875482712",
+      "player1": "Wehnelt, Kai",
+      "player2": "Angelini, Lorenzo",
+      "tournament": "ATP Challenger Catania, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Catania, Italy Men Singles:2026"
     }
   ],
   "model_version": "v5-advanced-nested-chronological-1",
