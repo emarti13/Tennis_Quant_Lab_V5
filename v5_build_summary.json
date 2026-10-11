@@ -6,24 +6,24 @@
       "Clay": 0.6038736733104829,
       "Grass": 0.6545235247982056
     },
-    "matches": 152168,
-    "holdout_matches": 20123,
+    "matches": 152188,
+    "holdout_matches": 20143,
     "players": 4356,
     "volatility_calibration": {
       "Hard": {
         "prior_volatility": 0.17281590049485407,
         "q05": 0.11846647099666405,
-        "q95": 0.20582235316245287,
+        "q95": 0.20637104851137986,
         "reference_n": 1858
       },
       "Clay": {
-        "prior_volatility": 0.1700010625464501,
+        "prior_volatility": 0.16994473923171516,
         "q05": 0.11451519736035462,
-        "q95": 0.2038884509575217,
+        "q95": 0.20421820456142467,
         "reference_n": 1858
       },
       "Grass": {
-        "prior_volatility": 0.15618097998694158,
+        "prior_volatility": 0.15625852264340018,
         "q05": 0.10662086994838675,
         "q95": 0.19337588225646807,
         "reference_n": 1858
@@ -37,8 +37,8 @@
       "Clay": 0.552999353211016,
       "Grass": 0.5884295913148093
     },
-    "matches": 44711,
-    "holdout_matches": 4836,
+    "matches": 44712,
+    "holdout_matches": 4837,
     "players": 1695,
     "volatility_calibration": {
       "Hard": {
