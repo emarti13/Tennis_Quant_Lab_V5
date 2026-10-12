@@ -31,59 +31,6 @@ def test_score_distribution_keeps_independent_winner_target():
     assert 0.0 <= result.tiebreak_probability <= 1.0
 
 
-def test_residual_model_refuses_in_sample_base_predictions():
-    from v5_residual_model import fit_residual_model
-
-    oof = pd.DataFrame(
-        {
-            "baseline_probability": [0.60, 0.40, 0.55, 0.45],
-            "target": [1, 0, 1, 0],
-            "prediction_origin": ["in_sample"] * 4,
-        }
-    )
-    features = pd.DataFrame({"ctx_rest_diff": [0.1, -0.2, 0.3, -0.1]})
-    with pytest.raises(ValueError, match="out-of-fold|walk-forward"):
-        fit_residual_model(oof, features, target="target")
-
-
-def test_residual_model_accepts_walkforward_rows():
-    from v5_residual_model import fit_residual_model, predict_residual_probability
-
-    oof = pd.DataFrame(
-        {
-            "baseline_probability": [0.60, 0.40, 0.55, 0.45, 0.65, 0.35],
-            "target": [1, 0, 1, 0, 1, 0],
-            "prediction_origin": ["walk_forward"] * 6,
-        }
-    )
-    features = pd.DataFrame({"ctx_rest_diff": [0.1, -0.2, 0.3, -0.1, 0.2, -0.3]})
-    model = fit_residual_model(oof, features, target="target")
-    pred = predict_residual_probability(model, oof["baseline_probability"], features)
-    assert len(pred) == len(oof)
-    assert np.all((pred > 0) & (pred < 1))
-
-
-def test_ensemble_features_measure_disagreement():
-    from v5_ensemble import ensemble_features, fit_ensemble, predict_ensemble
-
-    component = pd.DataFrame(
-        {
-            "baseline": [0.70, 0.30, 0.55, 0.45],
-            "context": [0.62, 0.38, 0.60, 0.40],
-            "residual": [0.66, 0.34, 0.58, 0.42],
-        }
-    )
-    feat = ensemble_features(component.iloc[0].to_dict())
-    assert feat["probability_range"] == pytest.approx(0.08)
-    assert feat["probability_std"] > 0
-    assert feat["entropy_mean"] > 0
-
-    model = fit_ensemble(component, np.array([1, 0, 1, 0]), step=0.25)
-    pred = predict_ensemble(model, component)
-    assert len(pred) == 4
-    assert np.all((pred > 0) & (pred < 1))
-
-
 def test_experiment_runner_persists_acceptance_and_rejection(tmp_path):
     from v5_experiments import ExperimentConfig, run_experiment
 

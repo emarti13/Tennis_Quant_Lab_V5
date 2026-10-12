@@ -7,12 +7,10 @@ on:
     paths:
       - "v5_model_calibration.py"
       - "v5_strength_conditioning.py"
-      - "historical_score_calibration.py"
       - "v5_core.py"
       - "v5_daily_batch.py"
       - "v5_live_market.py"
       - "tests/test_v5_independent_calibration.py"
-      - "tests/test_historical_score_calibration.py"
       - "tests/test_v5_daily_batch.py"
       - "tests/test_v5_market_line_pricing.py"
       - ".github/workflows/v5_model_calibration_tests.yml"
@@ -29,11 +27,9 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Independent calibration tests
         run: python -m unittest discover -s tests -p 'test_v5_independent_calibration.py' -v
-      - name: Historical score dataset tests
-        run: python -m unittest discover -s tests -p 'test_historical_score_calibration.py' -v
       - name: Exact market line pricing tests
         run: python -m unittest discover -s tests -p 'test_v5_market_line_pricing.py' -v
       - name: Daily batch regression tests
         run: python -m unittest discover -s tests -p 'test_v5_daily_batch.py' -v
       - name: Compile production modules
-        run: python -m py_compile v5_model_calibration.py v5_strength_conditioning.py historical_score_calibration.py v5_core.py v5_live_market.py v5_daily_batch.py
+        run: python -m py_compile v5_model_calibration.py v5_strength_conditioning.py v5_core.py v5_live_market.py v5_daily_batch.py

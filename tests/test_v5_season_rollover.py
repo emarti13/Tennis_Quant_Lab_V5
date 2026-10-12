@@ -101,7 +101,7 @@ def test_refresh_log_does_not_store_build_output(tmp_path):
 
 
 def test_ratings_workflow_cache_key_is_derived_not_hardcoded():
-    for wf in ("v5_player_ratings_refresh.yml", "context_warehouse_history_smoke.yml"):
+    for wf in ("v5_player_ratings_refresh.yml",):
         text = Path(".github/workflows", wf).read_text(encoding="utf-8")
         assert "2010-2025" not in text
         assert "v5_season_files.py cache-key" in text

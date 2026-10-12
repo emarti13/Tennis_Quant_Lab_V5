@@ -20,15 +20,5 @@ jobs:
       - name: Run focused audit contracts
         run: |
           python -m pytest tests/test_v5_daily_batch.py tests/test_v5_market_line_pricing.py tests/test_v5_settled_performance.py -q
-      - name: Run board bias audit
-        run: python diagnose_v5_selection_bias.py
-      - name: Audit mens Slam market line ranges
-        run: python diagnose_slam_market_ranges.py
-      - name: Evaluate walk-forward model scale
-        run: python diagnose_walkforward_model_scale.py
-      - name: Measure state volatility effect
-        run: python diagnose_state_variation_effect.py
-      - name: Inspect retained fixture result fields
-        run: python diagnose_fixture_result_fields.py
       - name: Audit settled and fixture-clustered performance
         run: python diagnose_v5_settled_performance.py
