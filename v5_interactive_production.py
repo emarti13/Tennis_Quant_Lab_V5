@@ -19,7 +19,6 @@ from v5_daily_batch import (
     build_fixture_board,
     eligible_pre_match,
     infer_best_of,
-    infer_surface,
     resolve_fixture_surface,
     rank_board,
 )

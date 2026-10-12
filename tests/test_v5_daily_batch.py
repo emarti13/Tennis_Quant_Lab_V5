@@ -8,7 +8,7 @@ import v5_daily_batch
 
 class DailyBatchModuleTests(unittest.TestCase):
     def test_daily_batch_exports_core_functions(self):
-        for name in ("freeze_key", "eligible_pre_match", "merge_frozen", "rank_board", "infer_surface", "infer_best_of"):
+        for name in ("freeze_key", "eligible_pre_match", "merge_frozen", "rank_board", "resolve_fixture_surface", "infer_best_of"):
             self.assertTrue(callable(getattr(v5_daily_batch, name, None)), name)
 
     def test_freeze_key_is_stable_across_name_formatting_and_numeric_line(self):
@@ -45,11 +45,16 @@ class DailyBatchModuleTests(unittest.TestCase):
         ])
         self.assertEqual(v5_daily_batch.rank_board(board)["selection"].tolist(),["c","b","a","d"])
 
-    def test_surface_map_marks_known_tournaments_as_known(self):
-        self.assertEqual(v5_daily_batch.infer_surface("US Open Men Singles"),("Hard","Auto — tournament map"))
-        self.assertEqual(v5_daily_batch.infer_surface("ATP Challenger Como, Italy Men Singles"),("Clay","Auto — tournament map"))
-        self.assertEqual(v5_daily_batch.infer_surface("Wimbledon Men Singles"),("Grass","Auto — tournament map"))
-        self.assertEqual(v5_daily_batch.infer_surface("Mystery Open"),("Hard","Auto default — review"))
+    def test_surface_comes_only_from_tournament_authority(self):
+        # The legacy hardcoded map (infer_surface) was retired with the 2026-09-21 court-data reset:
+        # surface now comes only from context_registry/tournament_authority.csv and fails closed.
+        self.assertFalse(hasattr(v5_daily_batch, "infer_surface"))
+        self.assertEqual(v5_daily_batch.resolve_fixture_surface("US Open Men Singles", start_time_utc="2026-08-31T15:00:00Z", tour="ATP"),
+                         ("Hard", "Tournament authority"))
+        self.assertEqual(v5_daily_batch.resolve_fixture_surface("Wimbledon Men Singles", start_time_utc="2026-07-01T12:00:00Z", tour="ATP"),
+                         ("Grass", "Tournament authority"))
+        with self.assertRaises(ValueError):
+            v5_daily_batch.resolve_fixture_surface("Mystery Open", start_time_utc="2026-08-31T15:00:00Z", tour="ATP")
 
     def test_infer_best_of_uses_five_sets_only_for_mens_slam_main_draw(self):
         self.assertEqual(v5_daily_batch.infer_best_of("US Open Men Singles","MEN"),5)

@@ -14,7 +14,7 @@ from v5_daily_batch import (
     _confidence_for_market,
     _requested_market_lines,
     infer_best_of,
-    infer_surface,
+    resolve_fixture_surface,
 )
 from v5_live_market import add_model_pricing, canonical_name, signal_row
 
@@ -139,7 +139,8 @@ def main():
     for fixture_id, g in board.groupby("fixture_id", sort=False):
         first = g.iloc[0]
         tour = tour_key(first)
-        surface = str(first.get("surface") or infer_surface(first.get("tournament"))[0])
+        surface = str(first.get("surface") or resolve_fixture_surface(
+            first.get("tournament"), start_time_utc=first.get("start_time_utc"), tour=str(first.get("tour") or ""))[0])
         best_of = infer_best_of(first.get("tournament"), tour)
         p1 = first.get("resolved_player1")
         p2 = first.get("resolved_player2")
