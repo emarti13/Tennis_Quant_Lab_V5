@@ -72,27 +72,19 @@ A step is done only when all of these hold:
   `v5_master_schedule_context`,
   `v5_tournament_registry` and `v5_tournament_context_registry` are removed; one module
   reads the file.
-  - **Stable event id** per tournament that stays the same across years, so a new year's
-    event links to its history. Built from TennisMyLife's `tourney_id` event code, which
-    is already stable (for example Doha is `451` in all 16 seasons 2010–2025). That also
-    gives each event's surface history: 84 of 929 ATP event codes changed surface at
-    some point, and those are flagged instead of carried forward blindly.
-  - **Build order:** event list and surface history from TennisMyLife results
-    (2010–current), then 2026 dates/category/city from the official calendars, then
-    OddsPapi tournament IDs from the fixture registry, then location columns (D7), then
-    the manual columns (ball, CPI, notes).
+  - **Identity across sources** follows `docs/superpowers/specs/2026-10-12-tournament-identity-design.md`
+    (draft): canonical event and edition ids owned by the master schedule, one stored
+    crosswalk per source (OddsPapi, TennisMyLife), a resolver that matches on tour, date
+    window, location and player overlap (names only as a tiebreaker), a confirmation loop
+    from results, and review/override in the app. No source's own id or name is the key.
   - **ISO dates** (`2026-04-05`) and **IANA time zones** (`Australia/Brisbane`, not
     `UTC+10`, so daylight saving is correct).
   - **2026 reconciliation report:** every 2026 row checked against TennisMyLife 2026
     results (tournament name, surface) and OddsPapi fixtures (tournament names and IDs).
     Output lists events with no match, surface disagreements, and missing OddsPapi IDs.
-- **Resolving a fixture to an event**, in order, with the method shown in the app:
-  1. this year's row (OddsPapi tournament ID, then tour + name/city + date window);
-  2. **carried forward**: no row for this year, but the same event id exists in an
-     earlier year, so surface, setting, time zone, altitude and coordinates are copied
-     and labeled "from <year>";
-  3. **unknown**: no match. The fixture gets no price (fail closed) and is listed in the
-     app as needing an override.
+- **Resolving a fixture:** through the crosswalk (spec §2.2–2.5). Unmatched or ambiguous
+  → no price, listed for review (fail closed). No row for this year → carried forward from
+  the same event, labeled "from <year>".
 - **Overrides:** set in the app when the choice is wrong or unknown. An override is stored
   only for a value the user changed, keyed by event id and year, and labeled as an
   override. Overrides are kept in a reviewable file and can be promoted into the master
