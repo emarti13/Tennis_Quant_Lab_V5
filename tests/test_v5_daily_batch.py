@@ -129,10 +129,11 @@ if __name__ == "__main__":
 
 def test_unseen_player_uses_explicit_zero_confidence_cold_start():
     from v5_daily_batch import _prepare_fixture
-    ratings = DailyBatchTests._ratings()
+    ratings = DailyBatchModuleTests._ratings()
     feed = pd.DataFrame([{
-        "fixture_id":"cold-1","start_time_utc":"2099-01-01T12:00:00Z",
-        "tournament":"Example Open","tour":"MEN",
+        # A tournament the authority resolves: this test is about cold start, not surface.
+        "fixture_id":"cold-1","start_time_utc":"2026-09-01T07:00:00Z",
+        "tournament":"US Open Men Singles","tour":"MEN",
         "player1":"Alice Alpha","player2":"New Player",
     }])
     summary = {"MEN":{"baseline":{"Hard":0.62,"Clay":0.60,"Grass":0.65}}}

@@ -23,16 +23,24 @@ def _price_band(odds):
     return ">+200"
 
 
+def _column(frame: pd.DataFrame, *names: str, default=None) -> pd.Series:
+    """First present column among names, else a Series of default (never a scalar)."""
+    for name in names:
+        if name in frame.columns:
+            return frame[name]
+    return pd.Series(default, index=frame.index, dtype="object")
+
+
 def _clean(frame: pd.DataFrame) -> pd.DataFrame:
     if frame is None or frame.empty:
         return pd.DataFrame()
     out = frame.copy()
     if "market_key" in out.columns:
         out = out.drop_duplicates("market_key", keep="last")
-    out["settled_result"] = out.get("settled_result", "").fillna("").astype(str).str.upper()
-    out["profit_units"] = pd.to_numeric(out.get("profit_units"), errors="coerce").fillna(0.0)
+    out["settled_result"] = _column(out, "settled_result", default="").fillna("").astype(str).str.upper()
+    out["profit_units"] = pd.to_numeric(_column(out, "profit_units"), errors="coerce").fillna(0.0)
     out["official_price_american"] = pd.to_numeric(
-        out.get("official_price_american", out.get("best_american_odds")), errors="coerce"
+        _column(out, "official_price_american", "best_american_odds"), errors="coerce"
     )
 
     # Before the market-family contract, alternate lines from the same fixture
@@ -40,11 +48,11 @@ def _clean(frame: pd.DataFrame) -> pd.DataFrame:
     # policy would have logged: at most one moneyline, spread and total.
     if {"fixture_id", "market_group"}.issubset(out.columns):
         out["_source_order"] = range(len(out))
-        signal = out.get("official_signal", out.get("signal", "")).fillna("").astype(str).str.upper().str.strip()
+        signal = _column(out, "official_signal", "signal", default="").fillna("").astype(str).str.upper().str.strip()
         out["_signal_rank"] = signal.map({"BET": 0, "LEAN": 1}).fillna(9)
-        out["_official_time"] = pd.to_datetime(out.get("official_at_utc"), errors="coerce", utc=True)
+        out["_official_time"] = pd.to_datetime(_column(out, "official_at_utc"), errors="coerce", utc=True)
         out["_ev_rank"] = pd.to_numeric(
-            out.get("official_expected_value", out.get("expected_value")), errors="coerce"
+            _column(out, "official_expected_value", "expected_value"), errors="coerce"
         ).fillna(float("-inf"))
         out = out.sort_values(
             ["fixture_id", "market_group", "_signal_rank", "_official_time", "_ev_rank", "_source_order"],
