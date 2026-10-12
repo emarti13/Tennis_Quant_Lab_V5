@@ -13,7 +13,7 @@ The goal: a fair-price engine that beats the market, proven first as a taker and
 - Never push to `main`. One logical change per branch and PR.
 - Branch names: `fix/…`, `feat/…`, `repair/…`, `docs/…`, `research/…`.
 - New or changed specs are marked `DRAFT — pending user approval` until the user approves them in chat.
-- In this environment `gh pr create` (GraphQL) fails. Use `gh api repos/emarti13/Tennis_Quant_Lab_V5/pulls -X POST`.
+- If `gh pr create` fails with a GraphQL 403 (some sandboxed agent workspaces only allow GitHub's REST API), open the PR with `gh api repos/emarti13/Tennis_Quant_Lab_V5/pulls -X POST` instead.
 
 ## Model and feature rules
 - **No leakage.** Never order matches by `tourney_date` plus file order: winner-first files leak the result. Use `v5_fatigue_features.py` ordering (tennis week, then stage, then round; same round = concurrent).
