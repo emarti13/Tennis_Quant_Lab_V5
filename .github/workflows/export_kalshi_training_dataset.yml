@@ -38,14 +38,14 @@ jobs:
           path: |
             exports/kalshi_training_matches.csv
             exports/kalshi_training_sides.csv
-            exports/kalshi_training_export_qc.json
+            exports/kalshi_training_export_qc.json\n            exports/model_layer_diagnostic.json
           retention-days: 7
 
       - name: Commit exports
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add exports/kalshi_training_matches.csv exports/kalshi_training_sides.csv exports/kalshi_training_export_qc.json
+          git add exports/kalshi_training_matches.csv exports/kalshi_training_sides.csv exports/kalshi_training_export_qc.json exports/model_layer_diagnostic.json
           if git diff --cached --quiet; then
             echo "No export changes."
           else
