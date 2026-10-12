@@ -73,7 +73,7 @@ A step is done only when all of these hold:
   `v5_tournament_registry` and `v5_tournament_context_registry` are removed; one module
   reads the file.
   - **Identity across sources** follows `docs/superpowers/specs/2026-10-12-tournament-identity-design.md`
-    (draft): canonical event and edition ids owned by the master schedule, one stored
+    (approved; amendment A on block keys and confirmation pending): canonical event and edition ids owned by the master schedule, one stored
     crosswalk per source (OddsPapi, TennisMyLife), a resolver that matches on tour, date
     window, location and player overlap (names only as a tiebreaker), a confirmation loop
     from results, and review/override in the app. No source's own id or name is the key.
@@ -82,6 +82,10 @@ A step is done only when all of these hold:
   - **2026 reconciliation report:** every 2026 row checked against TennisMyLife 2026
     results (tournament name, surface) and OddsPapi fixtures (tournament names and IDs).
     Output lists events with no match, surface disagreements, and missing OddsPapi IDs.
+- **Crosswalks (done 2026-10-12):** `context_registry/master_schedule/crosswalk_oddspapi.csv`
+  and `crosswalk_tennismylife.csv`, written by `scripts/reconcile_master_schedule.py`,
+  confirmed by shared matches, read with `v5_tournament_identity.resolve_edition`.
+  Production does not read them yet; replacing the four old lookups is next.
 - **Resolving a fixture:** through the crosswalk (spec §2.2–2.5). Unmatched or ambiguous
   → no price, listed for review (fail closed). No row for this year → carried forward from
   the same event, labeled "from <year>".
