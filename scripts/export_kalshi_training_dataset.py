@@ -13,7 +13,7 @@ FROZEN = BASE / "v5_daily_ready" / "frozen_predictions.csv"
 OUTDIR = BASE / "exports"
 MATCH_OUT = OUTDIR / "kalshi_training_matches.csv"
 SIDE_OUT = OUTDIR / "kalshi_training_sides.csv"
-QC_OUT = OUTDIR / "kalshi_training_export_qc.json"
+QC_OUT = OUTDIR / "kalshi_training_export_qc.json"\nDIAG_OUT = OUTDIR / "model_layer_diagnostic.json"
 
 
 def cname(value):
@@ -247,6 +247,64 @@ def main():
         "match_output": str(MATCH_OUT.relative_to(BASE)),
         "side_output": str(SIDE_OUT.relative_to(BASE)),
     })
+
+    def layer_metrics(frame):
+        if frame.empty:
+            return {}
+        f = frame.copy()
+        y = pd.to_numeric(f["player1_won"], errors="coerce")
+        q1 = pd.to_numeric(f["first_observed_no_vig_probability_player1"], errors="coerce")
+        q2 = pd.to_numeric(f["first_observed_no_vig_probability_player2"], errors="coerce")
+        market = q1 / (q1 + q2)
+        layers = {
+            "final_v5": pd.to_numeric(f["v5_probability_player1"], errors="coerce"),
+            "accepted_baseline": pd.to_numeric(f["accepted_baseline_probability_p1"], errors="coerce"),
+            "elo": pd.to_numeric(f["elo_probability_p1"], errors="coerce"),
+            "full_context": pd.to_numeric(f["full_context_probability_p1"], errors="coerce"),
+            "market": market,
+        }
+        out = {"n": int(len(f))}
+        for name, prob in layers.items():
+            valid = y.notna() & prob.notna()
+            if not valid.any():
+                out[name] = {"n": 0, "brier": None, "accuracy": None}
+                continue
+            yy = y[valid].astype(float)
+            pp = prob[valid].astype(float).clip(1e-8, 1-1e-8)
+            out[name] = {
+                "n": int(valid.sum()),
+                "brier": float(((pp - yy) ** 2).mean()),
+                "accuracy": float(((pp >= .5) == (yy >= .5)).mean()),
+                "mean_probability": float(pp.mean()),
+            }
+        return out
+
+    diagnostic = {"overall": layer_metrics(matches), "by_cutoff": {}, "by_tournament": {}}
+    if not matches.empty:
+        starts = pd.to_datetime(matches["start_time_utc"], errors="coerce", utc=True)
+        for cutoff in ("2026-09-21", "2026-09-28", "2026-10-01", "2026-10-05", "2026-10-07"):
+            diagnostic["by_cutoff"][cutoff] = layer_metrics(matches[starts >= pd.Timestamp(cutoff, tz="UTC")])
+        for name, group in matches.groupby("tournament"):
+            if len(group) >= 8:
+                diagnostic["by_tournament"][str(name)] = layer_metrics(group)
+        diagnostic["extreme_disagreements"] = (
+            matches.assign(
+                market_p1=pd.to_numeric(matches["first_observed_no_vig_probability_player1"], errors="coerce") /
+                          (pd.to_numeric(matches["first_observed_no_vig_probability_player1"], errors="coerce") +
+                           pd.to_numeric(matches["first_observed_no_vig_probability_player2"], errors="coerce")),
+                final_p1=pd.to_numeric(matches["v5_probability_player1"], errors="coerce"),
+            )
+            .assign(abs_gap=lambda x: (x["final_p1"] - x["market_p1"]).abs())
+            .sort_values("abs_gap", ascending=False)
+            .head(30)[[
+                "fixture_id","start_time_utc","tournament","player1","player2","winner",
+                "player1_won","final_p1","accepted_baseline_probability_p1","elo_probability_p1",
+                "full_context_probability_p1","market_p1","abs_gap","selected_model_candidate",
+                "player1_cold_start","player2_cold_start","player1_identity_status","player2_identity_status"
+            ]].to_dict("records")
+        )
+    DIAG_OUT.write_text(json.dumps(diagnostic, indent=2, default=str), encoding="utf-8")
+
     QC_OUT.write_text(json.dumps(qc, indent=2, default=str), encoding="utf-8")
     print(json.dumps({k: qc[k] for k in [
         "history_rows", "frozen_rows", "moneyline_history_rows_valid_pre_match",
