@@ -1,0 +1,4758 @@
+{
+  "n": 440,
+  "overall": {
+    "market_p1": {
+      "n": 440,
+      "brier": 0.2086713826045966,
+      "accuracy": 0.6704545454545454
+    },
+    "accepted_baseline_p1": {
+      "n": 436,
+      "brier": 0.2244488522919054,
+      "accuracy": 0.6490825688073395
+    },
+    "elo_p1": {
+      "n": 436,
+      "brier": 0.2253349621464979,
+      "accuracy": 0.6605504587155964
+    },
+    "full_context_p1": {
+      "n": 436,
+      "brier": 0.25567606863080766,
+      "accuracy": 0.5963302752293578
+    },
+    "final_v5_p1": {
+      "n": 436,
+      "brier": 0.25567606863080766,
+      "accuracy": 0.5963302752293578
+    }
+  },
+  "cutoffs": {
+    "2026-09-21": {
+      "market_p1": {
+        "n": 368,
+        "brier": 0.21161276521212113,
+        "accuracy": 0.657608695652174
+      },
+      "accepted_baseline_p1": {
+        "n": 367,
+        "brier": 0.22687131579472075,
+        "accuracy": 0.6430517711171662
+      },
+      "elo_p1": {
+        "n": 367,
+        "brier": 0.22740051529407856,
+        "accuracy": 0.6566757493188011
+      },
+      "full_context_p1": {
+        "n": 367,
+        "brier": 0.2625398355699661,
+        "accuracy": 0.5885558583106267
+      },
+      "final_v5_p1": {
+        "n": 367,
+        "brier": 0.2625398355699661,
+        "accuracy": 0.5885558583106267
+      },
+      "n": 368
+    },
+    "2026-09-28": {
+      "market_p1": {
+        "n": 283,
+        "brier": 0.21083179517394468,
+        "accuracy": 0.6643109540636042
+      },
+      "accepted_baseline_p1": {
+        "n": 283,
+        "brier": 0.22632952545634052,
+        "accuracy": 0.6501766784452296
+      },
+      "elo_p1": {
+        "n": 283,
+        "brier": 0.22594102630573198,
+        "accuracy": 0.6678445229681979
+      },
+      "full_context_p1": {
+        "n": 283,
+        "brier": 0.26961207283147526,
+        "accuracy": 0.5759717314487632
+      },
+      "final_v5_p1": {
+        "n": 283,
+        "brier": 0.26961207283147526,
+        "accuracy": 0.5759717314487632
+      },
+      "n": 283
+    },
+    "2026-10-01": {
+      "market_p1": {
+        "n": 222,
+        "brier": 0.2116676735600453,
+        "accuracy": 0.6621621621621622
+      },
+      "accepted_baseline_p1": {
+        "n": 222,
+        "brier": 0.2251342763670063,
+        "accuracy": 0.6396396396396397
+      },
+      "elo_p1": {
+        "n": 222,
+        "brier": 0.22507003914024853,
+        "accuracy": 0.6621621621621622
+      },
+      "full_context_p1": {
+        "n": 222,
+        "brier": 0.2776193883962753,
+        "accuracy": 0.5720720720720721
+      },
+      "final_v5_p1": {
+        "n": 222,
+        "brier": 0.2776193883962753,
+        "accuracy": 0.5720720720720721
+      },
+      "n": 222
+    },
+    "2026-10-05": {
+      "market_p1": {
+        "n": 123,
+        "brier": 0.20659249017436943,
+        "accuracy": 0.6747967479674797
+      },
+      "accepted_baseline_p1": {
+        "n": 123,
+        "brier": 0.22195047139738908,
+        "accuracy": 0.6666666666666666
+      },
+      "elo_p1": {
+        "n": 123,
+        "brier": 0.22177567813322538,
+        "accuracy": 0.6829268292682927
+      },
+      "full_context_p1": {
+        "n": 123,
+        "brier": 0.29692927345732245,
+        "accuracy": 0.5691056910569106
+      },
+      "final_v5_p1": {
+        "n": 123,
+        "brier": 0.29692927345732245,
+        "accuracy": 0.5691056910569106
+      },
+      "n": 123
+    },
+    "2026-10-07": {
+      "market_p1": {
+        "n": 93,
+        "brier": 0.20851723455955753,
+        "accuracy": 0.6774193548387096
+      },
+      "accepted_baseline_p1": {
+        "n": 93,
+        "brier": 0.22813445064441426,
+        "accuracy": 0.6559139784946236
+      },
+      "elo_p1": {
+        "n": 93,
+        "brier": 0.22862334889655836,
+        "accuracy": 0.6666666666666666
+      },
+      "full_context_p1": {
+        "n": 93,
+        "brier": 0.3239629737219191,
+        "accuracy": 0.5376344086021505
+      },
+      "final_v5_p1": {
+        "n": 93,
+        "brier": 0.3239629737219191,
+        "accuracy": 0.5376344086021505
+      },
+      "n": 93
+    }
+  },
+  "extremes": [
+    {
+      "fixture_id": "id1200308575364270",
+      "start_time_utc": "2026-10-08T04:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Coppejans, Kimmer",
+      "player2": "Tsitsipas, Stefanos",
+      "winner": "Stefanos Tsitsipas",
+      "player1_won": 0,
+      "market_p1": 0.1089309193890967,
+      "accepted_baseline_p1": 0.1855919373708718,
+      "elo_p1": 0.1521749282263116,
+      "full_context_p1": 0.8323582981977365,
+      "final_v5_p1": 0.8323582981977365,
+      "gap": 0.7234273788086398,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 1.8256541434164633,
+      "max_abs_residual_z": 1.8256541434164633,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0613991157508014,
+          "scale": 0.037270457558593435,
+          "z": 1.6473936670692853,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.1646222991653912
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -0.8472978603872037,
+          "scale": 2.0310694402505627,
+          "z": -0.4171683368357297,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": 0.12268549721361076
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0613991157508014,
+          "scale": 0.036729664126480724,
+          "z": 1.6716492571064627,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.12066846337177335
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -23.0,
+          "scale": 53.03729026506204,
+          "z": -0.4336571473590365,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": 0.11616920716327787
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.1821110161782651,
+          "scale": 0.09975110391800121,
+          "z": -1.8256541434164633,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.09222618608023614
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -175.0,
+          "scale": 180.43252734917493,
+          "z": -0.9698916407757131,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": -0.03296844037416808
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 0.0002022006486973,
+          "scale": 0.04585612292334372,
+          "z": 0.004409458013607313,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": -0.0009508335036219634
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0613991157508014,
+          "scale": 0.037270457558593435,
+          "z": 1.6473936670692853,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.13071538459281976
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0613991157508014,
+          "scale": 0.036729664126480724,
+          "z": 1.6716492571064627,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.12728269415167212
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -0.8472978603872037,
+          "scale": 2.0310694402505627,
+          "z": -0.4171683368357297,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": 0.11985195785197358
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -23.0,
+          "scale": 53.03729026506204,
+          "z": -0.4336571473590365,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": 0.10164644135925135
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.1821110161782651,
+          "scale": 0.09975110391800121,
+          "z": -1.8256541434164633,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.06525873114621106
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -175.0,
+          "scale": 180.43252734917493,
+          "z": -0.9698916407757131,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": -0.031790204700178896
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 0.0002022006486973,
+          "scale": 0.04585612292334372,
+          "z": 0.004409458013607313,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": -0.0009920755867583759
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200303175135968",
+      "start_time_utc": "2026-10-01T08:10:00.000Z",
+      "tournament": "ATP Tokyo, Japan Men Singles",
+      "tour": "MEN",
+      "player1": "Vallejo, Adolfo Daniel",
+      "player2": "Jodar, Rafael",
+      "winner": "Adolfo Daniel Vallejo",
+      "player1_won": 1,
+      "market_p1": 0.211611130195809,
+      "accepted_baseline_p1": 0.1569540484326514,
+      "elo_p1": 0.1217170573620462,
+      "full_context_p1": 0.8652362043769302,
+      "final_v5_p1": 0.8652362043769302,
+      "gap": 0.6536250741811211,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 1.3222479212324938,
+      "max_abs_residual_z": 1.3222479212324938,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -2.6855773452501515,
+          "scale": 2.0310694402505627,
+          "z": -1.3222479212324938,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": 0.38886135243756553
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 51.0,
+          "scale": 53.03729026506204,
+          "z": 0.9615875876222113,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": -0.2575925897968335
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 2.0,
+          "scale": 2.2248996436638473,
+          "z": 0.8989169492186648,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": 0.24026585732357206
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.1159029450007904,
+          "scale": 0.09975110391800121,
+          "z": -1.1619214269154008,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.05869654015013965
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0091747917173672,
+          "scale": 0.037270457558593435,
+          "z": 0.2461679388546109,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.02459930063173365
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0091747917173672,
+          "scale": 0.036729664126480724,
+          "z": 0.24979242080116154,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.01803133489387953
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 0.0002720547078745,
+          "scale": 0.04585612292334372,
+          "z": 0.005932789135472389,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": -0.0012793170186729216
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -2.6855773452501515,
+          "scale": 2.0310694402505627,
+          "z": -1.3222479212324938,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": 0.3798802261155778
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 51.0,
+          "scale": 53.03729026506204,
+          "z": 0.9615875876222113,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": -0.22538993518790515
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 2.0,
+          "scale": 2.2248996436638473,
+          "z": 0.8989169492186648,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": 0.20852403701969802
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.1159029450007904,
+          "scale": 0.09975110391800121,
+          "z": -1.1619214269154008,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.041533342054698774
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0091747917173672,
+          "scale": 0.037270457558593435,
+          "z": 0.2461679388546109,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.019532633544140535
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0091747917173672,
+          "scale": 0.036729664126480724,
+          "z": 0.24979242080116154,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.019019690980675102
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 0.0002720547078745,
+          "scale": 0.04585612292334372,
+          "z": 0.005932789135472389,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": -0.0013348069636958447
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575151668",
+      "start_time_utc": "2026-10-09T04:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Sakamoto, Rei",
+      "player2": "Rublev, Andrey",
+      "winner": "Rei Sakamoto",
+      "player1_won": 1,
+      "market_p1": 0.3011103853690398,
+      "accepted_baseline_p1": 0.3880972655517457,
+      "elo_p1": 0.2918465890505636,
+      "full_context_p1": 0.9353823268214848,
+      "final_v5_p1": 0.9353823268214848,
+      "gap": 0.634271941452445,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 0.5090757816823471,
+      "max_abs_residual_z": 0.5090757816823471,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -27.0,
+          "scale": 53.03729026506204,
+          "z": -0.5090757816823471,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": 0.1363725475395001
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -1.0,
+          "scale": 2.2248996436638473,
+          "z": -0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": -0.12013292866178603
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.6931471805599454,
+          "scale": 2.0310694402505627,
+          "z": 0.3412720248867687,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.10036506695573102
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0143471290443005,
+          "scale": 0.037270457558593435,
+          "z": 0.38494641558250703,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.038467286390268286
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0143471290443005,
+          "scale": 0.036729664126480724,
+          "z": 0.3906142183847729,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.028196595250635736
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0187874042888389,
+          "scale": 0.09975110391800121,
+          "z": 0.18834282079006148,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": 0.00951447463348941
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -14.0,
+          "scale": 180.43252734917493,
+          "z": -0.07759133126205704,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": -0.0026374752299334462
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -0.0002132612723908,
+          "scale": 0.04585612292334372,
+          "z": -0.004650660779745867,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": 0.0010028452634579998
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -27.0,
+          "scale": 53.03729026506204,
+          "z": -0.5090757816823471,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": 0.1193240833347733
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -1.0,
+          "scale": 2.2248996436638473,
+          "z": -0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": -0.10426201850984901
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.6931471805599454,
+          "scale": 2.0310694402505627,
+          "z": 0.3412720248867687,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.0980470393631358
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0143471290443005,
+          "scale": 0.037270457558593435,
+          "z": 0.38494641558250703,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.0305442589505709
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0143471290443005,
+          "scale": 0.036729664126480724,
+          "z": 0.3906142183847729,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.02974214230563145
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0187874042888389,
+          "scale": 0.09975110391800121,
+          "z": 0.18834282079006148,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": 0.00673238879860162
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -14.0,
+          "scale": 180.43252734917493,
+          "z": -0.07759133126205704,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": -0.0025432163760143113
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -0.0002132612723908,
+          "scale": 0.04585612292334372,
+          "z": -0.004650660779745867,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": 0.0010463433391683572
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575364268",
+      "start_time_utc": "2026-10-08T02:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Tomic, Bernard",
+      "player2": "Arnaldi, Matteo",
+      "winner": "Matteo Arnaldi",
+      "player1_won": 0,
+      "market_p1": 0.3439178146159234,
+      "accepted_baseline_p1": 0.4818610386379836,
+      "elo_p1": 0.3223583704583997,
+      "full_context_p1": 0.9459192531537716,
+      "final_v5_p1": 0.9459192531537716,
+      "gap": 0.6020014385378482,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 0.5467850988440025,
+      "max_abs_residual_z": 0.5467850988440025,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 29.0,
+          "scale": 53.03729026506204,
+          "z": 0.5467850988440025,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": -0.14647421772761124
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": 0.12013292866178603
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -0.6931471805599454,
+          "scale": 2.0310694402505627,
+          "z": -0.3412720248867687,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": 0.10036506695573102
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.014007689332094,
+          "scale": 0.037270457558593435,
+          "z": -0.3758389418770163,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": -0.03755718621751876
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.014007689332094,
+          "scale": 0.036729664126480724,
+          "z": -0.3813726497432079,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": 0.027529490065512925
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0262598276446857,
+          "scale": 0.09975110391800121,
+          "z": 0.2632535041042971,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": 0.013298721854492395
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -18.0,
+          "scale": 180.43252734917493,
+          "z": -0.0997602830512162,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": -0.003391039581343002
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 2.1556487225071752e-05,
+          "scale": 0.04585612292334372,
+          "z": 0.00047008961619164955,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": -0.00010136777703755589
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 29.0,
+          "scale": 53.03729026506204,
+          "z": 0.5467850988440025,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": -0.1281629043225343
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": 0.10426201850984901
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -0.6931471805599454,
+          "scale": 2.0310694402505627,
+          "z": -0.3412720248867687,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": 0.0980470393631358
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.014007689332094,
+          "scale": 0.037270457558593435,
+          "z": -0.3758389418770163,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": -0.02982161022860507
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.014007689332094,
+          "scale": 0.036729664126480724,
+          "z": -0.3813726497432079,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": 0.02903847091650159
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0262598276446857,
+          "scale": 0.09975110391800121,
+          "z": 0.2632535041042971,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": 0.00941010087238705
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -18.0,
+          "scale": 180.43252734917493,
+          "z": -0.0997602830512162,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": -0.003269849626304115
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 2.1556487225071752e-05,
+          "scale": 0.04585612292334372,
+          "z": 0.00047008961619164955,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": -0.00010576457024268716
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575364274",
+      "start_time_utc": "2026-10-08T02:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Kotov, Pavel",
+      "player2": "Griekspoor, Tallon",
+      "winner": "Pavel Kotov",
+      "player1_won": 1,
+      "market_p1": 0.3336397058823529,
+      "accepted_baseline_p1": 0.3808973220160865,
+      "elo_p1": 0.3152170974713656,
+      "full_context_p1": 0.9299334003057624,
+      "final_v5_p1": 0.9299334003057624,
+      "gap": 0.5962936944234095,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 0.9922628133765881,
+      "max_abs_residual_z": 0.9922628133765881,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -0.9808292530117262,
+          "scale": 2.0310694402505627,
+          "z": -0.48291271266960045,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": 0.1420203333599913
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": 0.12013292866178603
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0364454798605189,
+          "scale": 0.037270457558593435,
+          "z": 0.977865104103496,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.09771702109156631
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 18.0,
+          "scale": 53.03729026506204,
+          "z": 0.3393838544548981,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": -0.09091503169300007
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0364454798605189,
+          "scale": 0.036729664126480724,
+          "z": 0.9922628133765881,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.07162676526914522
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0989252821370167,
+          "scale": 0.09975110391800121,
+          "z": -0.9917211765228848,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.050098569926585526
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -82.0,
+          "scale": 180.43252734917493,
+          "z": -0.4544635116777627,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": -0.0154480692038959
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 4.2467604596085895e-05,
+          "scale": 0.04585612292334372,
+          "z": 0.0009261054334462094,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": -0.0001997007503619732
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -0.9808292530117262,
+          "scale": 2.0310694402505627,
+          "z": -0.48291271266960045,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": 0.13874023739210603
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": 0.10426201850984901
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 18.0,
+          "scale": 53.03729026506204,
+          "z": 0.3393838544548981,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": -0.07954938888984887
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0364454798605189,
+          "scale": 0.037270457558593435,
+          "z": 0.977865104103496,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.07759044830503792
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0364454798605189,
+          "scale": 0.036729664126480724,
+          "z": 0.9922628133765881,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.07555286113769163
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0989252821370167,
+          "scale": 0.09975110391800121,
+          "z": -0.9917211765228848,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.03544946662767092
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -82.0,
+          "scale": 180.43252734917493,
+          "z": -0.4544635116777627,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": -0.014895981630940969
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 4.2467604596085895e-05,
+          "scale": 0.04585612292334372,
+          "z": 0.0009261054334462094,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": -0.00020836270318279744
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575364230",
+      "start_time_utc": "2026-10-08T02:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Norrie, Cameron",
+      "player2": "Svrcina, Dalibor",
+      "winner": "Dalibor Svrcina",
+      "player1_won": 0,
+      "market_p1": 0.6350347471842798,
+      "accepted_baseline_p1": 0.5809827618327422,
+      "elo_p1": 0.700237989436336,
+      "full_context_p1": 0.0584075613950402,
+      "final_v5_p1": 0.0584075613950402,
+      "gap": 0.5766271857892395,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 2.051269486681162,
+      "max_abs_residual_z": 2.051269486681162,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0753424392786976,
+          "scale": 0.037270457558593435,
+          "z": -2.0215056163517886,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": -0.20200690884748104
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0753424392786976,
+          "scale": 0.036729664126480724,
+          "z": -2.051269486681162,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": 0.14807145450336417
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.9808292530117262,
+          "scale": 2.0310694402505627,
+          "z": 0.48291271266960045,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.1420203333599913
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -1.0,
+          "scale": 2.2248996436638473,
+          "z": -0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": -0.12013292866178603
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -19.0,
+          "scale": 53.03729026506204,
+          "z": -0.3582385130357258,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": 0.09596586678705564
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.1805754808657051,
+          "scale": 0.09975110391800121,
+          "z": 1.8102604760559269,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": 0.09144854742640365
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": 52.0,
+          "scale": 180.43252734917493,
+          "z": 0.28819637325906905,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": 0.009796336568324229
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -4.50049840381439e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.0009814389261250315,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": 0.00021163258836770645
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0753424392786976,
+          "scale": 0.037270457558593435,
+          "z": -2.0215056163517886,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": -0.16039996351816488
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0753424392786976,
+          "scale": 0.036729664126480724,
+          "z": -2.051269486681162,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": 0.15618773231642555
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.9808292530117262,
+          "scale": 2.0310694402505627,
+          "z": 0.48291271266960045,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.13874023739210603
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -1.0,
+          "scale": 2.2248996436638473,
+          "z": -0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": -0.10426201850984901
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -19.0,
+          "scale": 53.03729026506204,
+          "z": -0.3582385130357258,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": 0.08396879938372938
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.1805754808657051,
+          "scale": 0.09975110391800121,
+          "z": 1.8102604760559269,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": 0.06470847840351165
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": 52.0,
+          "scale": 180.43252734917493,
+          "z": 0.28819637325906905,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": 0.009446232253767443
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -4.50049840381439e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.0009814389261250315,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": 0.0002208120806453632
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575364266",
+      "start_time_utc": "2026-10-08T02:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Cerundolo, Juan Manuel",
+      "player2": "Mejia, Nicolas",
+      "winner": "Juan Manuel Cerundolo",
+      "player1_won": 1,
+      "market_p1": 0.6494117647058822,
+      "accepted_baseline_p1": 0.6491355853338246,
+      "elo_p1": 0.6946855991381623,
+      "full_context_p1": 0.0827251139814035,
+      "final_v5_p1": 0.0827251139814035,
+      "gap": 0.5666866507244788,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 0.8989169492186648,
+      "max_abs_residual_z": 0.8989169492186648,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -2.0,
+          "scale": 2.2248996436638473,
+          "z": -0.8989169492186648,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": -0.24026585732357206
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 1.09861228866811,
+          "scale": 2.0310694402505627,
+          "z": 0.5409033619907057,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.15907486750720173
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -29.0,
+          "scale": 53.03729026506204,
+          "z": -0.5467850988440025,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": 0.14647421772761124
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0160094026184645,
+          "scale": 0.037270457558593435,
+          "z": 0.4295467152045526,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.0429241469537232
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0160094026184645,
+          "scale": 0.036729664126480724,
+          "z": 0.43587119564543786,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.03146348265520324
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0272381482517242,
+          "scale": 0.09975110391800121,
+          "z": -0.2730611209487454,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.013794171170213861
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 0.0001406418819085,
+          "scale": 0.04585612292334372,
+          "z": 0.003067025141737489,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": -0.0006613579837285218
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -2.0,
+          "scale": 2.2248996436638473,
+          "z": -0.8989169492186648,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": -0.20852403701969802
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 1.09861228866811,
+          "scale": 2.0310694402505627,
+          "z": 0.5409033619907057,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.15540088069730137
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -29.0,
+          "scale": 53.03729026506204,
+          "z": -0.5467850988440025,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": 0.1281629043225343
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0160094026184645,
+          "scale": 0.037270457558593435,
+          "z": 0.4295467152045526,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.03408314915914027
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0160094026184645,
+          "scale": 0.036729664126480724,
+          "z": 0.43587119564543786,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.03318809842974651
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0272381482517242,
+          "scale": 0.09975110391800121,
+          "z": -0.2730611209487454,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.009760678024771
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 0.0001406418819085,
+          "scale": 0.04585612292334372,
+          "z": 0.003067025141737489,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": -0.0006900441636369512
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575391166",
+      "start_time_utc": "2026-10-09T06:20:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Khachanov, Karen",
+      "player2": "Fery, Arthur",
+      "winner": "Karen Khachanov",
+      "player1_won": 1,
+      "market_p1": 0.6752484191508581,
+      "accepted_baseline_p1": 0.5150285532187606,
+      "elo_p1": 0.531933808974507,
+      "full_context_p1": 0.108663356127263,
+      "final_v5_p1": 0.108663356127263,
+      "gap": 0.5665850630235951,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 0.703053675667569,
+      "max_abs_residual_z": 0.703053675667569,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -1.0,
+          "scale": 2.2248996436638473,
+          "z": -0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": -0.12013292866178603
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -22.0,
+          "scale": 53.03729026506204,
+          "z": -0.4148024887782088,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": 0.11111837206922232
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -0.6931471805599454,
+          "scale": 2.0310694402505627,
+          "z": -0.3412720248867687,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": 0.10036506695573102
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0156166898620795,
+          "scale": 0.037270457558593435,
+          "z": 0.41900987766324765,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.041871211971238
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0701303802614484,
+          "scale": 0.09975110391800121,
+          "z": -0.703053675667569,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.03551601454762513
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0156166898620795,
+          "scale": 0.036729664126480724,
+          "z": 0.4251792177653061,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.03069167927855847
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -75.0,
+          "scale": 180.43252734917493,
+          "z": -0.4156678460467342,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": -0.014129331588929176
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 0.0002053026749277,
+          "scale": 0.04585612292334372,
+          "z": 0.004477104949995406,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": -0.0009654205511313606
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -1.0,
+          "scale": 2.2248996436638473,
+          "z": -0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": -0.10426201850984901
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -0.6931471805599454,
+          "scale": 2.0310694402505627,
+          "z": -0.3412720248867687,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": 0.0980470393631358
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -22.0,
+          "scale": 53.03729026506204,
+          "z": -0.4148024887782088,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": 0.09722703086537085
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0156166898620795,
+          "scale": 0.037270457558593435,
+          "z": 0.41900987766324765,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.033247085017863096
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0156166898620795,
+          "scale": 0.036729664126480724,
+          "z": 0.4251792177653061,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.03237399000083546
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0701303802614484,
+          "scale": 0.09975110391800121,
+          "z": -0.703053675667569,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.025130932365911567
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -75.0,
+          "scale": 180.43252734917493,
+          "z": -0.4156678460467342,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": -0.013624373442933812
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 0.0002053026749277,
+          "scale": 0.04585612292334372,
+          "z": 0.004477104949995406,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": -0.0010072953425429925
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575151642",
+      "start_time_utc": "2026-10-10T04:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Ugo Carabelli, Camilo",
+      "player2": "Auger-Aliassime, Felix",
+      "winner": "Felix Auger-Aliassime",
+      "player1_won": 0,
+      "market_p1": 0.0656934306569343,
+      "accepted_baseline_p1": 0.1478295390423708,
+      "elo_p1": 0.0953699404354158,
+      "full_context_p1": 0.6321151025619183,
+      "final_v5_p1": 0.6321151025619183,
+      "gap": 0.5664216719049839,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 1.825639898809321,
+      "max_abs_residual_z": 1.825639898809321,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -1.299282984130261,
+          "scale": 2.0310694402505627,
+          "z": -0.6397038714589567,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": 0.18813121852610357
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 28.0,
+          "scale": 53.03729026506204,
+          "z": 0.5279304402631748,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": -0.14142338263355567
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0448694969850317,
+          "scale": 0.037270457558593435,
+          "z": 1.2038890833173084,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.12030335723481644
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": 0.12013292866178603
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.1821095952629778,
+          "scale": 0.09975110391800121,
+          "z": -1.825639898809321,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.09222546648841548
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0448694969850317,
+          "scale": 0.036729664126480724,
+          "z": 1.2216146826314824,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.08818259330351223
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 0.0001819394849722,
+          "scale": 0.04585612292334372,
+          "z": 0.003967615955590984,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": -0.0008555568889507847
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -1.299282984130261,
+          "scale": 2.0310694402505627,
+          "z": -0.6397038714589567,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": 0.18378614738930632
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 28.0,
+          "scale": 53.03729026506204,
+          "z": 0.5279304402631748,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": -0.12374349382865381
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": 0.10426201850984901
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0448694969850317,
+          "scale": 0.037270457558593435,
+          "z": 1.2038890833173084,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.09552472349421794
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0448694969850317,
+          "scale": 0.036729664126480724,
+          "z": 1.2216146826314824,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.09301616793089762
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.1821095952629778,
+          "scale": 0.09975110391800121,
+          "z": -1.825639898809321,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.0652582219670814
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 0.0001819394849722,
+          "scale": 0.04585612292334372,
+          "z": 0.003967615955590984,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": -0.0008926663809992132
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575151586",
+      "start_time_utc": "2026-10-10T04:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Baez, Sebastian",
+      "player2": "Vacherot, Valentin",
+      "winner": "Valentin Vacherot",
+      "player1_won": 0,
+      "market_p1": 0.285111767186841,
+      "accepted_baseline_p1": 0.3730410184754291,
+      "elo_p1": 0.3222078435093231,
+      "full_context_p1": 0.8280328782743098,
+      "final_v5_p1": 0.8280328782743098,
+      "gap": 0.5429211110874688,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 1.243308158547877,
+      "max_abs_residual_z": 1.243308158547877,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -24.0,
+          "scale": 53.03729026506204,
+          "z": -0.4525118059398642,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": 0.12122004225733343
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -1.0,
+          "scale": 2.2248996436638473,
+          "z": -0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": -0.12013292866178603
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -0.6931471805599454,
+          "scale": 2.0310694402505627,
+          "z": -0.3412720248867687,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": 0.10036506695573102
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0253267849759077,
+          "scale": 0.037270457558593435,
+          "z": 0.6795404895711593,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.06790575926408178
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.124021361325408,
+          "scale": 0.09975110391800121,
+          "z": -1.243308158547877,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.06280793654088897
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0253267849759077,
+          "scale": 0.036729664126480724,
+          "z": 0.6895457820875641,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.04977505274821825
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -92.0,
+          "scale": 180.43252734917493,
+          "z": -0.5098858911506606,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": -0.01733198008241979
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -7.266575808395626e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.0015846467919982984,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": 0.0003417053199257948
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -24.0,
+          "scale": 53.03729026506204,
+          "z": -0.4525118059398642,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": 0.10606585185313185
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -1.0,
+          "scale": 2.2248996436638473,
+          "z": -0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": -0.10426201850984901
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -0.6931471805599454,
+          "scale": 2.0310694402505627,
+          "z": -0.3412720248867687,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": 0.0980470393631358
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0253267849759077,
+          "scale": 0.037270457558593435,
+          "z": 0.6795404895711593,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.053919350435958247
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0253267849759077,
+          "scale": 0.036729664126480724,
+          "z": 0.6895457820875641,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.05250338521188798
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.124021361325408,
+          "scale": 0.09975110391800121,
+          "z": -1.243308158547877,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.04444254304308172
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -92.0,
+          "scale": 180.43252734917493,
+          "z": -0.5098858911506606,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": -0.016712564756665476
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -7.266575808395626e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.0015846467919982984,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": 0.0003565266731478381
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200302575051370",
+      "start_time_utc": "2026-10-03T09:00:00.000Z",
+      "tournament": "ATP Beijing, China Men Singles",
+      "tour": "MEN",
+      "player1": "Medvedev, Daniil",
+      "player2": "Struff, Jan-Lennard",
+      "winner": "Daniil Medvedev",
+      "player1_won": 1,
+      "market_p1": 0.8321356711698764,
+      "accepted_baseline_p1": 0.8032383407822036,
+      "elo_p1": 0.8565727577818887,
+      "full_context_p1": 0.2895213408880148,
+      "final_v5_p1": 0.2895213408880148,
+      "gap": 0.5426143302818616,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 1.1560831602893962,
+      "max_abs_residual_z": 1.1560831602893962,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0424625461797099,
+          "scale": 0.037270457558593435,
+          "z": 1.139308421769545,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.11384988032876031
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -0.6931471805599453,
+          "scale": 2.0310694402505627,
+          "z": -0.34127202488676867,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": 0.10036506695573101
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0424625461797099,
+          "scale": 0.036729664126480724,
+          "z": 1.1560831602893962,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.08345218226195188
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0475147661764954,
+          "scale": 0.09975110391800121,
+          "z": -0.4763332365279301,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.024062825846091665
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 1.0,
+          "scale": 53.03729026506204,
+          "z": 0.018854658580827674,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": -0.00505083509405556
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": 15.0,
+          "scale": 180.43252734917493,
+          "z": 0.08313356920934684,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": 0.002825866317785835
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -5.534225525238856e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.0012068672998129938,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": 0.00026024283699873355
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -0.6931471805599453,
+          "scale": 2.0310694402505627,
+          "z": -0.34127202488676867,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": 0.09804703936313579
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0424625461797099,
+          "scale": 0.037270457558593435,
+          "z": 1.139308421769545,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.09040045588276574
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0424625461797099,
+          "scale": 0.036729664126480724,
+          "z": 1.1560831602893962,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.08802646768121777
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0475147661764954,
+          "scale": 0.09975110391800121,
+          "z": -0.4763332365279301,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.017026720384404018
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 1.0,
+          "scale": 53.03729026506204,
+          "z": 0.018854658580827674,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": -0.004419410493880493
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": 15.0,
+          "scale": 180.43252734917493,
+          "z": 0.08313356920934684,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": 0.0027248746885867622
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -5.534225525238856e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.0012068672998129938,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": 0.0002715307824468831
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200304374839214",
+      "start_time_utc": "2026-09-22T03:00:00.000Z",
+      "tournament": "WTA Seoul, Korea Republic Women Singles",
+      "tour": "WTA",
+      "player1": "Park, Sohyun",
+      "player2": "Montgomery, Robin",
+      "winner": "Sohyun Park",
+      "player1_won": 1,
+      "market_p1": 0.1204419889502762,
+      "accepted_baseline_p1": 0.3868147082318818,
+      "elo_p1": 0.3897723156975548,
+      "full_context_p1": 0.6619850324968597,
+      "final_v5_p1": 0.6619850324968597,
+      "gap": 0.5415430435465834,
+      "selected_candidate": "residual",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 6.222257197845876,
+      "max_abs_residual_z": 6.222257197845876,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.1400214150399473,
+          "scale": 0.033168839387784727,
+          "z": 4.221474661893469,
+          "coefficient": 0.0618201046454259,
+          "logit_contribution": 0.26097200535626813
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.1400214150399473,
+          "scale": 0.03389679987046072,
+          "z": 4.130815167657422,
+          "coefficient": 0.047889766269541424,
+          "logit_contribution": 0.19782377288179054
+        },
+        {
+          "feature": "ctx_court_speed_x_serve_dominance_diff",
+          "value": 0.0045710011147101,
+          "scale": 0.0013515132437930833,
+          "z": 3.3821356436592347,
+          "coefficient": -0.0527458812113673,
+          "logit_contribution": -0.17839372490118127
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -2.74352458929587,
+          "scale": 2.1351098091247183,
+          "z": -1.2849571378347842,
+          "coefficient": -0.09248072925166553,
+          "logit_contribution": 0.11883377316409374
+        },
+        {
+          "feature": "ctx_court_speed_x_return_dominance_diff",
+          "value": 0.0029417103715648,
+          "scale": 0.00047277222365273006,
+          "z": 6.222257197845876,
+          "coefficient": -0.017671410227717312,
+          "logit_contribution": -0.10995605948550127
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.2175734397300417,
+          "scale": 0.09707213306966497,
+          "z": 2.2413583883430017,
+          "coefficient": 0.02147416914949824,
+          "logit_contribution": 0.04813130915592439
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -0.0297761773861557,
+          "scale": 0.05803206097267938,
+          "z": -0.5130987403699806,
+          "coefficient": -0.05677887041581646,
+          "logit_contribution": 0.02913316688998578
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.14874106689959538,
+          "z": 0.0,
+          "coefficient": 0.42478008272415496,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.1400214150399473,
+          "scale": 0.033168839387784727,
+          "z": 4.221474661893469,
+          "coefficient": 0.05007266535325748,
+          "logit_contribution": 0.21138048804224743
+        },
+        {
+          "feature": "ctx_court_speed_x_serve_dominance_diff",
+          "value": 0.0045710011147101,
+          "scale": 0.0013515132437930833,
+          "z": 3.3821356436592347,
+          "coefficient": -0.05508970311217236,
+          "logit_contribution": -0.1863208484942832
+        },
+        {
+          "feature": "ctx_court_speed_x_return_dominance_diff",
+          "value": 0.0029417103715648,
+          "scale": 0.00047277222365273006,
+          "z": 6.222257197845876,
+          "coefficient": -0.02556212282333284,
+          "logit_contribution": -0.1590541027297031
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -2.74352458929587,
+          "scale": 2.1351098091247183,
+          "z": -1.2849571378347842,
+          "coefficient": -0.10466640105458463,
+          "logit_contribution": 0.1344918391265667
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.1400214150399473,
+          "scale": 0.03389679987046072,
+          "z": 4.130815167657422,
+          "coefficient": 0.01680266242564292,
+          "logit_contribution": 0.06940869280487323
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.2175734397300417,
+          "scale": 0.09707213306966497,
+          "z": 2.2413583883430017,
+          "coefficient": -0.01662267732114155,
+          "logit_contribution": -0.03725737725045959
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -0.0297761773861557,
+          "scale": 0.05803206097267938,
+          "z": -0.5130987403699806,
+          "coefficient": -0.02452505838117994,
+          "logit_contribution": 0.012583776562883663
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.027166959248285535,
+          "z": 0.0,
+          "coefficient": 0.16409857435012312,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575408688",
+      "start_time_utc": "2026-10-10T04:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Tirante, Thiago Agustin",
+      "player2": "Jodar, Rafael",
+      "winner": "Rafael Jodar",
+      "player1_won": 0,
+      "market_p1": 0.3098871930988719,
+      "accepted_baseline_p1": 0.3533415915037992,
+      "elo_p1": 0.3065000176476179,
+      "full_context_p1": 0.8382101882520885,
+      "final_v5_p1": 0.8382101882520885,
+      "gap": 0.5283229951532166,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 1.0910794011691174,
+      "max_abs_residual_z": 1.0910794011691174,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 1.2039728043259363,
+          "scale": 2.0310694402505627,
+          "z": 0.5927777654797506,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.17433066815829243
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -1.0,
+          "scale": 2.2248996436638473,
+          "z": -0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": -0.12013292866178603
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0400749799402634,
+          "scale": 0.037270457558593435,
+          "z": 1.0752478656120852,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.10744837700186233
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -18.0,
+          "scale": 53.03729026506204,
+          "z": -0.3393838544548981,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": 0.09091503169300007
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0400749799402634,
+          "scale": 0.036729664126480724,
+          "z": 1.0910794011691174,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.0787598679543379
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0250738505700413,
+          "scale": 0.09975110391800121,
+          "z": -0.25136414119940825,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.012698109411223285
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 0.0001632819599708,
+          "scale": 0.04585612292334372,
+          "z": 0.0035607449902328955,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": -0.0007678212660421107
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 1.2039728043259363,
+          "scale": 2.0310694402505627,
+          "z": 0.5927777654797506,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.1703043339836266
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -1.0,
+          "scale": 2.2248996436638473,
+          "z": -0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": -0.10426201850984901
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0400749799402634,
+          "scale": 0.037270457558593435,
+          "z": 1.0752478656120852,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.0853174569598373
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0400749799402634,
+          "scale": 0.036729664126480724,
+          "z": 1.0910794011691174,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.08307695237132734
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -18.0,
+          "scale": 53.03729026506204,
+          "z": -0.3393838544548981,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": 0.07954938888984887
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0250738505700413,
+          "scale": 0.09975110391800121,
+          "z": -0.25136414119940825,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.008985110881753931
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 0.0001632819599708,
+          "scale": 0.04585612292334372,
+          "z": 0.0035607449902328955,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": -0.0008011252549816973
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575151626",
+      "start_time_utc": "2026-10-09T04:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Hanfmann, Yannick",
+      "player2": "Tiafoe, Frances",
+      "winner": "Frances Tiafoe",
+      "player1_won": 0,
+      "market_p1": 0.3160482789450157,
+      "accepted_baseline_p1": 0.3007701538988587,
+      "elo_p1": 0.2597713217552518,
+      "full_context_p1": 0.8429825306624259,
+      "final_v5_p1": 0.8429825306624259,
+      "gap": 0.5269342517174103,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 0.5708505085708483,
+      "max_abs_residual_z": 0.5708505085708483,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.9808292530117262,
+          "scale": 2.0310694402505627,
+          "z": 0.48291271266960045,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.1420203333599913
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -18.0,
+          "scale": 53.03729026506204,
+          "z": -0.3393838544548981,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": 0.09091503169300007
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0107486586082461,
+          "scale": 0.037270457558593435,
+          "z": -0.28839620740764926,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": -0.028819126650211593
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0453973527233904,
+          "scale": 0.09975110391800121,
+          "z": 0.45510626890614225,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": 0.022990507590815442
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0107486586082461,
+          "scale": 0.036729664126480724,
+          "z": -0.29264244212069224,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": 0.021124475518980286
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -103.0,
+          "scale": 180.43252734917493,
+          "z": -0.5708505085708483,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": -0.01940428204879607
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -5.437942574321175e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.001185870550681229,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": 0.000255715202881339
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.9808292530117262,
+          "scale": 2.0310694402505627,
+          "z": 0.48291271266960045,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.13874023739210603
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -18.0,
+          "scale": 53.03729026506204,
+          "z": -0.3393838544548981,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": 0.07954938888984887
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0107486586082461,
+          "scale": 0.037270457558593435,
+          "z": -0.28839620740764926,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": -0.022883310722849836
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0107486586082461,
+          "scale": 0.036729664126480724,
+          "z": -0.29264244212069224,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": 0.02228237669947664
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -103.0,
+          "scale": 180.43252734917493,
+          "z": -0.5708505085708483,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": -0.018710806194962435
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0453973527233904,
+          "scale": 0.09975110391800121,
+          "z": 0.45510626890614225,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": 0.016267954011224876
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -5.437942574321175e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.001185870550681229,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": 0.00026680676372380357
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200302575051388",
+      "start_time_utc": "2026-10-05T11:00:00.000Z",
+      "tournament": "ATP Beijing, China Men Singles",
+      "tour": "MEN",
+      "player1": "Djokovic, Novak",
+      "player2": "Medvedev, Daniil",
+      "winner": "Novak Djokovic",
+      "player1_won": 1,
+      "market_p1": 0.4397972116603295,
+      "accepted_baseline_p1": 0.6000815401370252,
+      "elo_p1": 0.6900019241082792,
+      "full_context_p1": 0.9651811406668068,
+      "final_v5_p1": 0.9651811406668068,
+      "gap": 0.5253839290064773,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 0.79372128454386,
+      "max_abs_residual_z": 0.79372128454386,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": 0.12013292866178603
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -0.6931471805599453,
+          "scale": 2.0310694402505627,
+          "z": -0.34127202488676867,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": 0.10036506695573101
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.079174574336464,
+          "scale": 0.09975110391800121,
+          "z": -0.79372128454386,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.040096251060564365
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 6.0,
+          "scale": 53.03729026506204,
+          "z": 0.11312795148496604,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": -0.030305010564333358
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.003984787407967,
+          "scale": 0.037270457558593435,
+          "z": 0.10691544104878392,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.010683946450422048
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.003984787407967,
+          "scale": 0.036729664126480724,
+          "z": 0.10848962283578618,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.007831353391702446
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -14.0,
+          "scale": 180.43252734917493,
+          "z": -0.07759133126205704,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": -0.0026374752299334462
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -7.893396687008725e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.0017213397434850466,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": 0.0003711811052902287
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": 0.10426201850984901
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -0.6931471805599453,
+          "scale": 2.0310694402505627,
+          "z": -0.34127202488676867,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": 0.09804703936313579
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.079174574336464,
+          "scale": 0.09975110391800121,
+          "z": -0.79372128454386,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.02837188199082525
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 6.0,
+          "scale": 53.03729026506204,
+          "z": 0.11312795148496604,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": -0.02651646296328296
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.003984787407967,
+          "scale": 0.037270457558593435,
+          "z": 0.10691544104878392,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.00848339609102975
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.003984787407967,
+          "scale": 0.036729664126480724,
+          "z": 0.10848962283578618,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.008260615331436233
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -14.0,
+          "scale": 180.43252734917493,
+          "z": -0.07759133126205704,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": -0.0025432163760143113
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -7.893396687008725e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.0017213397434850466,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": 0.00038728096077989324
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575408692",
+      "start_time_utc": "2026-10-10T04:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Tien, Learner",
+      "player2": "Svajda, Zachary",
+      "winner": "Learner Tien",
+      "player1_won": 1,
+      "market_p1": 0.7305657305657305,
+      "accepted_baseline_p1": 0.7102493680333102,
+      "elo_p1": 0.7728238795998869,
+      "full_context_p1": 0.2058919516673189,
+      "final_v5_p1": 0.2058919516673189,
+      "gap": 0.5246737788984116,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 0.5927777654797506,
+      "max_abs_residual_z": 0.5927777654797506,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 1.2039728043259363,
+          "scale": 2.0310694402505627,
+          "z": 0.5927777654797506,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.17433066815829243
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -1.0,
+          "scale": 2.2248996436638473,
+          "z": -0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": -0.12013292866178603
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -22.0,
+          "scale": 53.03729026506204,
+          "z": -0.4148024887782088,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": 0.11111837206922232
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0110720184731259,
+          "scale": 0.037270457558593435,
+          "z": 0.2970722443028615,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.029686113800814456
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0536533134585978,
+          "scale": 0.09975110391800121,
+          "z": -0.5378718766130413,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.027171560373976156
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0110720184731259,
+          "scale": 0.036729664126480724,
+          "z": 0.30144622164250573,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.021759978775566523
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 2.160347622637282e-05,
+          "scale": 0.04585612292334372,
+          "z": 0.0004711143212540382,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": -0.0001015887393194607
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 1.2039728043259363,
+          "scale": 2.0310694402505627,
+          "z": 0.5927777654797506,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.1703043339836266
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -1.0,
+          "scale": 2.2248996436638473,
+          "z": -0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": -0.10426201850984901
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -22.0,
+          "scale": 53.03729026506204,
+          "z": -0.4148024887782088,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": 0.09722703086537085
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0110720184731259,
+          "scale": 0.037270457558593435,
+          "z": 0.2970722443028615,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.02357172632269654
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0110720184731259,
+          "scale": 0.036729664126480724,
+          "z": 0.30144622164250573,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.022952713955626525
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0536533134585978,
+          "scale": 0.09975110391800121,
+          "z": -0.5378718766130413,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.019226443471550437
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 2.160347622637282e-05,
+          "scale": 0.04585612292334372,
+          "z": 0.0004711143212540382,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": -0.00010599511668918611
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575151628",
+      "start_time_utc": "2026-10-10T04:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Fils, Arthur",
+      "player2": "Kotov, Pavel",
+      "winner": "Arthur Fils",
+      "player1_won": 1,
+      "market_p1": 0.8819391840709879,
+      "accepted_baseline_p1": 0.8406738778550964,
+      "elo_p1": 0.8709332289667084,
+      "full_context_p1": 0.3609023257845353,
+      "final_v5_p1": 0.3609023257845353,
+      "gap": 0.5210368582864526,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 0.8989169492186648,
+      "max_abs_residual_z": 0.8989169492186648,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -2.0,
+          "scale": 2.2248996436638473,
+          "z": -0.8989169492186648,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": -0.24026585732357206
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -44.0,
+          "scale": 53.03729026506204,
+          "z": -0.8296049775564176,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": 0.22223674413844463
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.8472978603872037,
+          "scale": 2.0310694402505627,
+          "z": 0.4171683368357297,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.12268549721361076
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0643819729600464,
+          "scale": 0.09975110391800121,
+          "z": 0.6454261700499131,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": 0.03260485797637669
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0088926309445915,
+          "scale": 0.037270457558593435,
+          "z": 0.23859731076848908,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.023842775809175227
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0088926309445915,
+          "scale": 0.036729664126480724,
+          "z": 0.24211032570211402,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.017476800737185404
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -28.0,
+          "scale": 180.43252734917493,
+          "z": -0.15518266252411408,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": -0.0052749504598668924
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -2.284784380018889e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.0004982506662934181,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": 0.00010744028523500504
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -2.0,
+          "scale": 2.2248996436638473,
+          "z": -0.8989169492186648,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": -0.20852403701969802
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -44.0,
+          "scale": 53.03729026506204,
+          "z": -0.8296049775564176,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": 0.1944540617307417
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.8472978603872037,
+          "scale": 2.0310694402505627,
+          "z": 0.4171683368357297,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.11985195785197358
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0643819729600464,
+          "scale": 0.09975110391800121,
+          "z": 0.6454261700499131,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": 0.023071014330893314
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0088926309445915,
+          "scale": 0.037270457558593435,
+          "z": 0.23859731076848908,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.018931928575031898
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0088926309445915,
+          "scale": 0.036729664126480724,
+          "z": 0.24211032570211402,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.01843476100401921
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -28.0,
+          "scale": 180.43252734917493,
+          "z": -0.15518266252411408,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": -0.005086432752028623
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -2.284784380018889e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.0004982506662934181,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": 0.000112100471438986
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575151658",
+      "start_time_utc": "2026-10-09T04:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Zverev, Alexander",
+      "player2": "Wu, Yibing",
+      "winner": "Alexander Zverev",
+      "player1_won": 1,
+      "market_p1": 0.8827973235484566,
+      "accepted_baseline_p1": 0.8228969623188327,
+      "elo_p1": 0.8499180118781156,
+      "full_context_p1": 0.3664432448238245,
+      "final_v5_p1": 0.3664432448238245,
+      "gap": 0.5163540787246321,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 0.9758401793184305,
+      "max_abs_residual_z": 0.9758401793184305,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": 0.12013292866178603
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 23.0,
+          "scale": 53.03729026506204,
+          "z": 0.4336571473590365,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": -0.11616920716327787
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.6931471805599454,
+          "scale": 2.0310694402505627,
+          "z": 0.3412720248867687,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.10036506695573102
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0973411351345537,
+          "scale": 0.09975110391800121,
+          "z": 0.9758401793184305,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": 0.049296312933606104
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": 108.0,
+          "scale": 180.43252734917493,
+          "z": 0.5985616983072972,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": 0.020346237488058014
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0073997299869007,
+          "scale": 0.037270457558593435,
+          "z": -0.19854143124665094,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": -0.01984003431891091
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0073997299869007,
+          "scale": 0.036729664126480724,
+          "z": -0.20146467883341654,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": 0.014542783490716402
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -0.0002365492887049,
+          "scale": 0.04585612292334372,
+          "z": -0.00515851043709762,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": 0.001112355427183982
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": 0.10426201850984901
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 23.0,
+          "scale": 53.03729026506204,
+          "z": 0.4336571473590365,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": -0.10164644135925135
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.6931471805599454,
+          "scale": 2.0310694402505627,
+          "z": 0.3412720248867687,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.0980470393631358
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0973411351345537,
+          "scale": 0.09975110391800121,
+          "z": 0.9758401793184305,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": 0.03488179408649629
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": 108.0,
+          "scale": 180.43252734917493,
+          "z": 0.5985616983072972,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": 0.01961909775782469
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0073997299869007,
+          "scale": 0.037270457558593435,
+          "z": -0.19854143124665094,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": -0.015753623473121783
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0073997299869007,
+          "scale": 0.036729664126480724,
+          "z": -0.20146467883341654,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": 0.015339920733554622
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -0.0002365492887049,
+          "scale": 0.04585612292334372,
+          "z": -0.00515851043709762,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": 0.0011606034693810742
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200302575051372",
+      "start_time_utc": "2026-10-03T02:00:00.000Z",
+      "tournament": "ATP Beijing, China Men Singles",
+      "tour": "MEN",
+      "player1": "Cerundolo, Francisco",
+      "player2": "Mensik, Jakub",
+      "winner": "Francisco Cerundolo",
+      "player1_won": 1,
+      "market_p1": 0.3585798816568047,
+      "accepted_baseline_p1": 0.4028496410520079,
+      "elo_p1": 0.405578197376135,
+      "full_context_p1": 0.8710144653519666,
+      "final_v5_p1": 0.8710144653519666,
+      "gap": 0.5124345836951618,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 1.3441338113403918,
+      "max_abs_residual_z": 1.3441338113403918,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -2.730029107820985,
+          "scale": 2.0310694402505627,
+          "z": -1.3441338113403918,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": 0.3952977980465889
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 31.0,
+          "scale": 53.03729026506204,
+          "z": 0.5844944160056579,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": -0.15657588791572236
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": 0.12013292866178603
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0269159282112951,
+          "scale": 0.037270457558593435,
+          "z": 0.7221786362289804,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.07216654396616747
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.1183489160186189,
+          "scale": 0.09975110391800121,
+          "z": -1.186442168258165,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.05993524927917058
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0269159282112951,
+          "scale": 0.036729664126480724,
+          "z": 0.7328117163992719,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.052898216167543935
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 2.010442420347092e-05,
+          "scale": 0.04585612292334372,
+          "z": 0.00043842398619435997,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": -9.453955873457945e-05
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -2.730029107820985,
+          "scale": 2.0310694402505627,
+          "z": -1.3441338113403918,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": 0.38616801583293986
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 31.0,
+          "scale": 53.03729026506204,
+          "z": 0.5844944160056579,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": -0.1370017253102953
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": 0.10426201850984901
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0269159282112951,
+          "scale": 0.037270457558593435,
+          "z": 0.7221786362289804,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.05730255012290212
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0269159282112951,
+          "scale": 0.036729664126480724,
+          "z": 0.7328117163992719,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.05579773937187233
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.1183489160186189,
+          "scale": 0.09975110391800121,
+          "z": -1.186442168258165,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.04240984567536741
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 2.010442420347092e-05,
+          "scale": 0.04585612292334372,
+          "z": 0.00043842398619435997,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": -9.864018026943174e-05
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200302575051392",
+      "start_time_utc": "2026-10-02T11:00:00.000Z",
+      "tournament": "ATP Beijing, China Men Singles",
+      "tour": "MEN",
+      "player1": "Hurkacz, Hubert",
+      "player2": "Gea, Arthur",
+      "winner": "Hubert Hurkacz",
+      "player1_won": 1,
+      "market_p1": 0.5737292400603926,
+      "accepted_baseline_p1": 0.6100625089448242,
+      "elo_p1": 0.6266343383097286,
+      "full_context_p1": 0.0631169995608889,
+      "final_v5_p1": 0.0631169995608889,
+      "gap": 0.5106122404995037,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 2.0943905444096256,
+      "max_abs_residual_z": 2.0943905444096256,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -2.751535313041949,
+          "scale": 2.0310694402505627,
+          "z": -1.354722422834793,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": 0.3984118145029814
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 3.0,
+          "scale": 2.2248996436638473,
+          "z": 1.3483754238279972,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": 0.36039878598535807
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 55.0,
+          "scale": 53.03729026506204,
+          "z": 1.037006221945522,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": -0.2777959301730558
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0541448346874618,
+          "scale": 0.037270457558593435,
+          "z": 1.452754761659148,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.14517224010776808
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0541448346874618,
+          "scale": 0.036729664126480724,
+          "z": 1.474144563397338,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.10641153250109191
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.2089177688402837,
+          "scale": 0.09975110391800121,
+          "z": -2.0943905444096256,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.10580188628276599
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 0.0002656496834387,
+          "scale": 0.04585612292334372,
+          "z": 0.005793112598785957,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": -0.0012491978678971344
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -2.751535313041949,
+          "scale": 2.0310694402505627,
+          "z": -1.354722422834793,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": 0.3892101110891712
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 3.0,
+          "scale": 2.2248996436638473,
+          "z": 1.3483754238279972,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": 0.312786055529547
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 55.0,
+          "scale": 53.03729026506204,
+          "z": 1.037006221945522,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": -0.24306757716342714
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0541448346874618,
+          "scale": 0.037270457558593435,
+          "z": 1.452754761659148,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.11527141398276308
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0541448346874618,
+          "scale": 0.036729664126480724,
+          "z": 1.474144563397338,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.11224429454958551
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.2089177688402837,
+          "scale": 0.09975110391800121,
+          "z": -2.0943905444096256,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.07486482034161271
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 0.0002656496834387,
+          "scale": 0.04585612292334372,
+          "z": 0.005793112598785957,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": -0.0013033814048942975
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575151634",
+      "start_time_utc": "2026-10-09T04:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Kecmanovic, Miomir",
+      "player2": "Mensik, Jakub",
+      "winner": "Jakub Mensik",
+      "player1_won": 0,
+      "market_p1": 0.285111767186841,
+      "accepted_baseline_p1": 0.2968400683345305,
+      "elo_p1": 0.2355029341863139,
+      "full_context_p1": 0.7943615657063198,
+      "final_v5_p1": 0.7943615657063198,
+      "gap": 0.5092497985194788,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 0.61864846246458,
+      "max_abs_residual_z": 0.61864846246458,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.8472978603872037,
+          "scale": 2.0310694402505627,
+          "z": 0.4171683368357297,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.12268549721361076
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.061710867068016,
+          "scale": 0.09975110391800121,
+          "z": 0.61864846246458,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": 0.03125213415873971
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0023648967979297,
+          "scale": 0.037270457558593435,
+          "z": 0.06345231459023037,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.006340722393204454
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0023648967979297,
+          "scale": 0.036729664126480724,
+          "z": 0.06438656203841236,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.004647761765775583
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": 3.0,
+          "scale": 180.43252734917493,
+          "z": 0.016626713841869367,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": 0.0005651732635571671
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -6.675565496494507e-07,
+          "scale": 0.04585612292334372,
+          "z": -1.4557631720531291e-05,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": 3.139134998123535e-06
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        },
+        {
+          "feature": "x_elo_a",
+          "value": 0.0,
+          "scale": 0.8348627102586913,
+          "z": 0.0,
+          "coefficient": 0.6083523048652939,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.8472978603872037,
+          "scale": 2.0310694402505627,
+          "z": 0.4171683368357297,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.11985195785197358
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.061710867068016,
+          "scale": 0.09975110391800121,
+          "z": 0.61864846246458,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": 0.022113834557098404
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0023648967979297,
+          "scale": 0.037270457558593435,
+          "z": 0.06345231459023037,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.00503473691247213
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0023648967979297,
+          "scale": 0.036729664126480724,
+          "z": 0.06438656203841236,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.004902520698390121
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": 3.0,
+          "scale": 180.43252734917493,
+          "z": 0.016626713841869367,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": 0.0005449749377173525
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -6.675565496494507e-07,
+          "scale": 0.04585612292334372,
+          "z": -1.4557631720531291e-05,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": 3.275293921926567e-06
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        },
+        {
+          "feature": "ctx_altitude_change_x_short_rest_diff",
+          "value": 0.0,
+          "scale": 61.935829503864014,
+          "z": 0.0,
+          "coefficient": -0.1254694072015519,
+          "logit_contribution": -0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575151648",
+      "start_time_utc": "2026-10-10T04:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Lehecka, Jiri",
+      "player2": "Borges, Nuno",
+      "winner": "Jiri Lehecka",
+      "player1_won": 1,
+      "market_p1": 0.7133838383838385,
+      "accepted_baseline_p1": 0.671292893378601,
+      "elo_p1": 0.6869180565205317,
+      "full_context_p1": 0.2087066935673014,
+      "final_v5_p1": 0.2087066935673014,
+      "gap": 0.504677144816537,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 1.391101724769737,
+      "max_abs_residual_z": 1.391101724769737,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 3.0,
+          "scale": 2.2248996436638473,
+          "z": 1.3483754238279972,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": 0.36039878598535807
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 66.0,
+          "scale": 53.03729026506204,
+          "z": 1.2444074663346265,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": -0.33335511620766695
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.5108256237659907,
+          "scale": 2.0310694402505627,
+          "z": 0.25150574059298175,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.07396560120256136
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": 251.0,
+          "scale": 180.43252734917493,
+          "z": 1.391101724769737,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": 0.04728616305094964
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0128192062745904,
+          "scale": 0.037270457558593435,
+          "z": -0.3439508692491134,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": -0.03437064499370964
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0654965020713671,
+          "scale": 0.09975110391800121,
+          "z": 0.6565992705725587,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": 0.0331692871436484
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0128192062745904,
+          "scale": 0.036729664126480724,
+          "z": -0.34901506941219834,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": 0.025193749191419403
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 3.584551666546698e-06,
+          "scale": 0.04585612292334372,
+          "z": 7.816953196280644e-05,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": -1.6856087465470412e-05
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 3.0,
+          "scale": 2.2248996436638473,
+          "z": 1.3483754238279972,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": 0.312786055529547
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 66.0,
+          "scale": 53.03729026506204,
+          "z": 1.2444074663346265,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": -0.2916810925961126
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.5108256237659907,
+          "scale": 2.0310694402505627,
+          "z": 0.25150574059298175,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.07225729462049077
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": 251.0,
+          "scale": 180.43252734917493,
+          "z": 1.391101724769737,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": 0.045596236455685155
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0128192062745904,
+          "scale": 0.037270457558593435,
+          "z": -0.3439508692491134,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": -0.02729139431191077
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0128192062745904,
+          "scale": 0.036729664126480724,
+          "z": -0.34901506941219834,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": 0.026574700491425064
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0654965020713671,
+          "scale": 0.09975110391800121,
+          "z": 0.6565992705725587,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": 0.023470401238707316
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 3.584551666546698e-06,
+          "scale": 0.04585612292334372,
+          "z": 7.816953196280644e-05,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": -1.7587214584947646e-05
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1204695374628480",
+      "start_time_utc": "2026-09-14T13:00:00.000Z",
+      "tournament": "WTA Sao Paulo, Brazil Women, Singles",
+      "tour": "WTA",
+      "player1": "Kostovic, Teodora",
+      "player2": "Barros, Victoria Luiza",
+      "winner": "Teodora Kostovic",
+      "player1_won": 1,
+      "market_p1": 0.7792207792207791,
+      "accepted_baseline_p1": 0.4998832078002719,
+      "elo_p1": 0.4975659571883423,
+      "full_context_p1": 0.2759882362974232,
+      "final_v5_p1": 0.2759882362974232,
+      "gap": 0.503232542923356,
+      "selected_candidate": "residual",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 2.497728042222072,
+      "max_abs_residual_z": 2.497728042222072,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_court_speed_x_serve_dominance_diff",
+          "value": 0.0033757125284565,
+          "scale": 0.0013515132437930833,
+          "z": 2.497728042222072,
+          "coefficient": -0.0527458812113673,
+          "logit_contribution": -0.13174486661334642
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0367889420520999,
+          "scale": 0.033168839387784727,
+          "z": -1.10914167426818,
+          "coefficient": 0.0618201046454259,
+          "logit_contribution": -0.06856725436986177
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -1.5621850275835545,
+          "scale": 2.1351098091247183,
+          "z": -0.7316649574215424,
+          "coefficient": -0.09248072925166553,
+          "logit_contribution": 0.06766490883023304
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0367889420520999,
+          "scale": 0.03389679987046072,
+          "z": -1.0853219829804501,
+          "coefficient": 0.047889766269541424,
+          "logit_contribution": -0.05197581609212897
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -0.0405139206056583,
+          "scale": 0.05803206097267938,
+          "z": -0.6981299634478197,
+          "coefficient": -0.05677887041581646,
+          "logit_contribution": 0.03963903072800244
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.1606793277718656,
+          "scale": 0.09707213306966497,
+          "z": 1.6552570000347286,
+          "coefficient": 0.02147416914949824,
+          "logit_contribution": 0.03554526880463678
+        },
+        {
+          "feature": "ctx_court_speed_x_return_dominance_diff",
+          "value": -0.0007728990052177,
+          "scale": 0.00047277222365273006,
+          "z": -1.6348232120028798,
+          "coefficient": -0.017671410227717312,
+          "logit_contribution": 0.02888963162909736
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.14874106689959538,
+          "z": 0.0,
+          "coefficient": 0.42478008272415496,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_court_speed_x_serve_dominance_diff",
+          "value": 0.0033757125284565,
+          "scale": 0.0013515132437930833,
+          "z": 2.497728042222072,
+          "coefficient": -0.05508970311217236,
+          "logit_contribution": -0.13759909630096145
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -1.5621850275835545,
+          "scale": 2.1351098091247183,
+          "z": -0.7316649574215424,
+          "coefficient": -0.10466640105458463,
+          "logit_contribution": 0.07658073787106874
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0367889420520999,
+          "scale": 0.033168839387784727,
+          "z": -1.10914167426818,
+          "coefficient": 0.05007266535325748,
+          "logit_contribution": -0.05553767988498229
+        },
+        {
+          "feature": "ctx_court_speed_x_return_dominance_diff",
+          "value": -0.0007728990052177,
+          "scale": 0.00047277222365273006,
+          "z": -1.6348232120028798,
+          "coefficient": -0.02556212282333284,
+          "logit_contribution": 0.04178955173965312
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.1606793277718656,
+          "scale": 0.09707213306966497,
+          "z": 1.6552570000347286,
+          "coefficient": -0.01662267732114155,
+          "logit_contribution": -0.02751480299513808
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0367889420520999,
+          "scale": 0.03389679987046072,
+          "z": -1.0853219829804501,
+          "coefficient": 0.01680266242564292,
+          "logit_contribution": -0.018236298903149872
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -0.0405139206056583,
+          "scale": 0.05803206097267938,
+          "z": -0.6981299634478197,
+          "coefficient": -0.02452505838117994,
+          "logit_contribution": 0.017121678111208797
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.027166959248285535,
+          "z": 0.0,
+          "coefficient": 0.16409857435012312,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575151602",
+      "start_time_utc": "2026-10-10T03:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Arnaldi, Matteo",
+      "player2": "Fritz, Taylor",
+      "winner": "Taylor Fritz",
+      "player1_won": 0,
+      "market_p1": 0.2253774263120057,
+      "accepted_baseline_p1": 0.2463528940499293,
+      "elo_p1": 0.2065050859423372,
+      "full_context_p1": 0.7284356379755984,
+      "final_v5_p1": 0.7284356379755984,
+      "gap": 0.5030582116635927,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 1.794524540236687,
+      "max_abs_residual_z": 1.794524540236687,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 2.0,
+          "scale": 2.2248996436638473,
+          "z": 0.8989169492186648,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": 0.24026585732357206
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 36.0,
+          "scale": 53.03729026506204,
+          "z": 0.6787677089097962,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": -0.18183006338600013
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -1.2039728043259363,
+          "scale": 2.0310694402505627,
+          "z": -0.5927777654797506,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": 0.17433066815829243
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.1790058038965531,
+          "scale": 0.09975110391800121,
+          "z": -1.794524540236687,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.09065361846888707
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0179532946203777,
+          "scale": 0.037270457558593435,
+          "z": 0.4817030913063801,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.04813607821317279
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0179532946203777,
+          "scale": 0.036729664126480724,
+          "z": 0.4887955021465617,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.03528383833888399
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 4.893727810939552e-05,
+          "scale": 0.04585612292334372,
+          "z": 0.001067191794456816,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": -0.0002301239086138515
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 2.0,
+          "scale": 2.2248996436638473,
+          "z": 0.8989169492186648,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": 0.20852403701969802
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -1.2039728043259363,
+          "scale": 2.0310694402505627,
+          "z": -0.5927777654797506,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": 0.1703043339836266
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 36.0,
+          "scale": 53.03729026506204,
+          "z": 0.6787677089097962,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": -0.15909877777969775
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.1790058038965531,
+          "scale": 0.09975110391800121,
+          "z": -1.794524540236687,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.06414599113906183
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0179532946203777,
+          "scale": 0.037270457558593435,
+          "z": 0.4817030913063801,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.0382215897136962
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0179532946203777,
+          "scale": 0.036729664126480724,
+          "z": 0.4887955021465617,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.03721786022872111
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 4.893727810939552e-05,
+          "scale": 0.04585612292334372,
+          "z": 0.001067191794456816,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": -0.00024010545568237178
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575413686",
+      "start_time_utc": "2026-10-10T04:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Medvedev, Daniil",
+      "player2": "Struff, Jan-Lennard",
+      "winner": "Daniil Medvedev",
+      "player1_won": 1,
+      "market_p1": 0.8374523372405028,
+      "accepted_baseline_p1": 0.8244911161416655,
+      "elo_p1": 0.8534326149646253,
+      "full_context_p1": 0.3388560339056542,
+      "final_v5_p1": 0.3388560339056542,
+      "gap": 0.4985963033348486,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 1.1620370580710189,
+      "max_abs_residual_z": 1.1620370580710189,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": 0.12013292866178603
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0426812308454723,
+          "scale": 0.037270457558593435,
+          "z": 1.1451759286392582,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.11443621405734583
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 22.0,
+          "scale": 53.03729026506204,
+          "z": 0.4148024887782088,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": -0.11111837206922232
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.6931471805599454,
+          "scale": 2.0310694402505627,
+          "z": 0.3412720248867687,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.10036506695573102
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0426812308454723,
+          "scale": 0.036729664126480724,
+          "z": 1.1620370580710189,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.08388196601792029
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": 147.0,
+          "scale": 180.43252734917493,
+          "z": 0.8147089782515989,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": 0.02769348991430118
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0462237155436934,
+          "scale": 0.09975110391800121,
+          "z": -0.4633905162762997,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.02340900117145886
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -5.413050799030206e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.0011804423169571134,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": 0.00025454468567163833
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": 0.10426201850984901
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.6931471805599454,
+          "scale": 2.0310694402505627,
+          "z": 0.3412720248867687,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.0980470393631358
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 22.0,
+          "scale": 53.03729026506204,
+          "z": 0.4148024887782088,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": -0.09722703086537085
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0426812308454723,
+          "scale": 0.037270457558593435,
+          "z": 1.1451759286392582,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.09086602366562606
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0426812308454723,
+          "scale": 0.036729664126480724,
+          "z": 1.1620370580710189,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.088479809282111
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": 147.0,
+          "scale": 180.43252734917493,
+          "z": 0.8147089782515989,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": 0.02670377194815027
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0462237155436934,
+          "scale": 0.09975110391800121,
+          "z": -0.4633905162762997,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.01656407771780279
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -5.413050799030206e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.0011804423169571134,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": 0.00026558547572416843
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575151640",
+      "start_time_utc": "2026-10-10T04:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Tabilo, Alejandro",
+      "player2": "Carreno Busta, Pablo",
+      "winner": "Pablo Carreno Busta",
+      "player1_won": 0,
+      "market_p1": 0.6130456105934282,
+      "accepted_baseline_p1": 0.5641022550037493,
+      "elo_p1": 0.5566141953347784,
+      "full_context_p1": 0.1157649028880371,
+      "final_v5_p1": 0.1157649028880371,
+      "gap": 0.4972807077053911,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 0.6788931759398704,
+      "max_abs_residual_z": 0.6788931759398704,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.9808292530117262,
+          "scale": 2.0310694402505627,
+          "z": 0.48291271266960045,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.1420203333599913
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0142660513924982,
+          "scale": 0.037270457558593435,
+          "z": -0.3827710290401005,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": -0.03824990232394399
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0677203437423999,
+          "scale": 0.09975110391800121,
+          "z": 0.6788931759398704,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": 0.03429550366843506
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0142660513924982,
+          "scale": 0.036729664126480724,
+          "z": -0.3884068022885324,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": 0.028037252309990088
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -39.0,
+          "scale": 180.43252734917493,
+          "z": -0.21614727994430177,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": -0.007347252426243171
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -0.0001177180296843,
+          "scale": 0.04585612292334372,
+          "z": -0.0025671169340043343,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": 0.000553560274535815
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        },
+        {
+          "feature": "x_elo_a",
+          "value": 0.0,
+          "scale": 0.8348627102586913,
+          "z": 0.0,
+          "coefficient": 0.6083523048652939,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.9808292530117262,
+          "scale": 2.0310694402505627,
+          "z": 0.48291271266960045,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.13874023739210603
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0142660513924982,
+          "scale": 0.037270457558593435,
+          "z": -0.3827710290401005,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": -0.030371649030906354
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0142660513924982,
+          "scale": 0.036729664126480724,
+          "z": -0.3884068022885324,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": 0.02957406526037281
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0677203437423999,
+          "scale": 0.09975110391800121,
+          "z": 0.6788931759398704,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": 0.02426730572459305
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -39.0,
+          "scale": 180.43252734917493,
+          "z": -0.21614727994430177,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": -0.0070846741903255826
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -0.0001177180296843,
+          "scale": 0.04585612292334372,
+          "z": -0.0025671169340043343,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": 0.0005775707650964193
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        },
+        {
+          "feature": "ctx_altitude_change_x_short_rest_diff",
+          "value": 0.0,
+          "scale": 61.935829503864014,
+          "z": 0.0,
+          "coefficient": -0.1254694072015519,
+          "logit_contribution": -0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200302575051396",
+      "start_time_utc": "2026-10-04T11:00:00.000Z",
+      "tournament": "ATP Beijing, China Men Singles",
+      "tour": "MEN",
+      "player1": "Zverev, Alexander",
+      "player2": "Djokovic, Novak",
+      "winner": "Novak Djokovic",
+      "player1_won": 0,
+      "market_p1": 0.6792199058507062,
+      "accepted_baseline_p1": 0.4680286475396883,
+      "elo_p1": 0.4237160627141026,
+      "full_context_p1": 0.1900029852252655,
+      "final_v5_p1": 0.1900029852252655,
+      "gap": 0.48921692062544075,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 1.0142295443540315,
+      "max_abs_residual_z": 1.0142295443540315,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -30.0,
+          "scale": 53.03729026506204,
+          "z": -0.5656397574248302,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": 0.15152505282166678
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -1.0,
+          "scale": 2.2248996436638473,
+          "z": -0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": -0.12013292866178603
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0235314659962443,
+          "scale": 0.037270457558593435,
+          "z": -0.6313704616920824,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": -0.06309217954793424
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0235314659962443,
+          "scale": 0.036729664126480724,
+          "z": -0.6406665172655087,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": 0.046246689515473574
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.287682072451781,
+          "scale": 2.0310694402505627,
+          "z": 0.14164068778283187,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.04165526640426034
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -183.0,
+          "scale": 180.43252734917493,
+          "z": -1.0142295443540315,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": -0.03447556907698719
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0131903375896358,
+          "scale": 0.09975110391800121,
+          "z": -0.13223249740151954,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.00667996123755677
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -9.44068772445461e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.002058762739326288,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": 0.00044394131490063334
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -30.0,
+          "scale": 53.03729026506204,
+          "z": -0.5656397574248302,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": 0.1325823148164148
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -1.0,
+          "scale": 2.2248996436638473,
+          "z": -0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": -0.10426201850984901
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0235314659962443,
+          "scale": 0.037270457558593435,
+          "z": -0.6313704616920824,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": -0.050097213780994666
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0235314659962443,
+          "scale": 0.036729664126480724,
+          "z": -0.6406665172655087,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": 0.04878162091937525
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.287682072451781,
+          "scale": 2.0310694402505627,
+          "z": 0.14164068778283187,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.04069319802897026
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": -183.0,
+          "scale": 180.43252734917493,
+          "z": -1.0142295443540315,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": -0.033243471200758504
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0131903375896358,
+          "scale": 0.09975110391800121,
+          "z": -0.13223249740151954,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.004726703043857589
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -9.44068772445461e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.002058762739326288,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": 0.00046319711998856557
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575364278",
+      "start_time_utc": "2026-10-07T07:30:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Hijikata, Rinky",
+      "player2": "Safiullin, Roman",
+      "winner": "Roman Safiullin",
+      "player1_won": 0,
+      "market_p1": 0.2777085927770859,
+      "accepted_baseline_p1": 0.4130595743218134,
+      "elo_p1": 0.4726147920427138,
+      "full_context_p1": 0.7666206828834926,
+      "final_v5_p1": 0.7666206828834926,
+      "gap": 0.4889120901064067,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 1.7978338984373297,
+      "max_abs_residual_z": 1.7978338984373297,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -4.0,
+          "scale": 2.2248996436638473,
+          "z": -1.7978338984373297,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": -0.4805317146471441
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -76.0,
+          "scale": 53.03729026506204,
+          "z": -1.4329540521429032,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": 0.38386346714822256
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 1.5040773967762742,
+          "scale": 2.0310694402505627,
+          "z": 0.7405346990946424,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.21778466805867241
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0726626162692694,
+          "scale": 0.09975110391800121,
+          "z": -0.7284392193694471,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.03679841071539879
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0053438752955788,
+          "scale": 0.037270457558593435,
+          "z": 0.14338099518036812,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.014327910538350613
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0053438752955788,
+          "scale": 0.036729664126480724,
+          "z": 0.14549208174561182,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.010502386109028912
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -7.304841181493549e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.001592991451480717,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": 0.00034350472062032807
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": -4.0,
+          "scale": 2.2248996436638473,
+          "z": -1.7978338984373297,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": -0.41704807403939603
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": -76.0,
+          "scale": 53.03729026506204,
+          "z": -1.4329540521429032,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": 0.3358751975349175
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 1.5040773967762742,
+          "scale": 2.0310694402505627,
+          "z": 0.7405346990946424,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.2127547220314669
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0726626162692694,
+          "scale": 0.09975110391800121,
+          "z": -0.7284392193694471,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.026038348689761986
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.0053438752955788,
+          "scale": 0.037270457558593435,
+          "z": 0.14338099518036812,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.011376820430325722
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.0053438752955788,
+          "scale": 0.036729664126480724,
+          "z": 0.14549208174561182,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.011078056035732971
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -7.304841181493549e-05,
+          "scale": 0.04585612292334372,
+          "z": -0.001592991451480717,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": 0.0003584041222417567
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200308575151672",
+      "start_time_utc": "2026-10-09T04:00:00.000Z",
+      "tournament": "ATP Shanghai, China Men Singles",
+      "tour": "MEN",
+      "player1": "Mannarino, Adrian",
+      "player2": "Cobolli, Flavio",
+      "winner": "Adrian Mannarino",
+      "player1_won": 1,
+      "market_p1": 0.3478770818672297,
+      "accepted_baseline_p1": 0.3445836380525938,
+      "elo_p1": 0.2682498685306297,
+      "full_context_p1": 0.8333254350893646,
+      "final_v5_p1": 0.8333254350893646,
+      "gap": 0.4854483532221349,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 0.5409033619907057,
+      "max_abs_residual_z": 0.5409033619907057,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -1.09861228866811,
+          "scale": 2.0310694402505627,
+          "z": -0.5409033619907057,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": 0.15907486750720173
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": 0.12013292866178603
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 13.0,
+          "scale": 53.03729026506204,
+          "z": 0.24511056155075975,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": -0.06566085622272227
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0127006074395638,
+          "scale": 0.037270457558593435,
+          "z": -0.34076875551090263,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": -0.0340526597481296
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0127006074395638,
+          "scale": 0.036729664126480724,
+          "z": -0.3457861034565555,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": 0.02496066539199749
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0120121555988833,
+          "scale": 0.09975110391800121,
+          "z": -0.1204212798362382,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": -0.006083296445959766
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 6.692917821404798e-06,
+          "scale": 0.04585612292334372,
+          "z": 0.00014595472523032843,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": -3.1472947997842796e-05
+        },
+        {
+          "feature": "x_sr_a",
+          "value": 0.0,
+          "scale": 0.07974684799955266,
+          "z": 0.0,
+          "coefficient": 0.1315964243612044,
+          "logit_contribution": 0.0
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": -1.09861228866811,
+          "scale": 2.0310694402505627,
+          "z": -0.5409033619907057,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": 0.15540088069730137
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": 0.10426201850984901
+        },
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 13.0,
+          "scale": 53.03729026506204,
+          "z": 0.24511056155075975,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": -0.057452336420446413
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": -0.0127006074395638,
+          "scale": 0.037270457558593435,
+          "z": -0.34076875551090263,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": -0.02703890382987056
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": -0.0127006074395638,
+          "scale": 0.036729664126480724,
+          "z": -0.3457861034565555,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": 0.02632884061118341
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": -0.0120121555988833,
+          "scale": 0.09975110391800121,
+          "z": -0.1204212798362382,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": -0.0043045063893698545
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": 6.692917821404798e-06,
+          "scale": 0.04585612292334372,
+          "z": 0.00014595472523032843,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": -3.2838076522374774e-05
+        },
+        {
+          "feature": "ctx_ace_rate_diff",
+          "value": 0.0,
+          "scale": 0.0414039524959329,
+          "z": 0.0,
+          "coefficient": 0.07421979986370698,
+          "logit_contribution": 0.0
+        }
+      ]
+    },
+    {
+      "fixture_id": "id1200302575134816",
+      "start_time_utc": "2026-10-01T02:00:00.000Z",
+      "tournament": "ATP Beijing, China Men Singles",
+      "tour": "MEN",
+      "player1": "Medvedev, Daniil",
+      "player2": "Carreno Busta, Pablo",
+      "winner": "Daniil Medvedev",
+      "player1_won": 1,
+      "market_p1": 0.7750540735400144,
+      "accepted_baseline_p1": 0.7581177692412964,
+      "elo_p1": 0.8084517531333664,
+      "full_context_p1": 0.289858124943159,
+      "final_v5_p1": 0.289858124943159,
+      "gap": 0.48519594859685544,
+      "selected_candidate": "ensemble",
+      "context_fallback_reason": "nan",
+      "max_abs_direct_z": 1.5185731975574022,
+      "max_abs_residual_z": 1.5185731975574022,
+      "top_direct_contributions": [
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 35.0,
+          "scale": 53.03729026506204,
+          "z": 0.6599130503289685,
+          "coefficient": -0.26788260696438665,
+          "logit_contribution": -0.1767792282919446
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2672837101719021,
+          "logit_contribution": 0.12013292866178603
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": 274.0,
+          "scale": 180.43252734917493,
+          "z": 1.5185731975574022,
+          "coefficient": 0.033991880111267,
+          "logit_contribution": 0.05161915807155459
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.287682072451781,
+          "scale": 2.0310694402505627,
+          "z": 0.14164068778283187,
+          "coefficient": -0.2940911051500085,
+          "logit_contribution": -0.04165526640426034
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.014385475615227,
+          "scale": 0.037270457558593435,
+          "z": 0.38597528867498826,
+          "coefficient": 0.09992893772516098,
+          "logit_contribution": 0.03857010058545393
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0611901882567841,
+          "scale": 0.09975110391800121,
+          "z": 0.6134286825245013,
+          "coefficient": 0.050516789509565806,
+          "logit_contribution": 0.0309884476342205
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.014385475615227,
+          "scale": 0.036729664126480724,
+          "z": 0.3916582402085078,
+          "coefficient": -0.07218527622274312,
+          "logit_contribution": -0.028271958254364613
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -0.0001861490991503,
+          "scale": 0.04585612292334372,
+          "z": -0.004059416437396589,
+          "coefficient": -0.21563500563737092,
+          "logit_contribution": 0.0008753522863624497
+        }
+      ],
+      "top_residual_contributions": [
+        {
+          "feature": "ctx_games_7d_diff",
+          "value": 35.0,
+          "scale": 53.03729026506204,
+          "z": 0.6599130503289685,
+          "coefficient": -0.2343935571644009,
+          "logit_contribution": -0.15467936728581727
+        },
+        {
+          "feature": "ctx_matches_7d_diff",
+          "value": 1.0,
+          "scale": 2.2248996436638473,
+          "z": 0.4494584746093324,
+          "coefficient": 0.2319725278302365,
+          "logit_contribution": 0.10426201850984901
+        },
+        {
+          "feature": "ctx_minutes_7d_diff",
+          "value": 274.0,
+          "scale": 180.43252734917493,
+          "z": 1.5185731975574022,
+          "coefficient": 0.0327770684514337,
+          "logit_contribution": 0.04977437764485153
+        },
+        {
+          "feature": "ctx_rest_log1p_diff",
+          "value": 0.287682072451781,
+          "scale": 2.0310694402505627,
+          "z": 0.14164068778283187,
+          "coefficient": -0.28729878868819386,
+          "logit_contribution": -0.04069319802897026
+        },
+        {
+          "feature": "ctx_return_dominance_diff",
+          "value": 0.014385475615227,
+          "scale": 0.037270457558593435,
+          "z": 0.38597528867498826,
+          "coefficient": 0.07934678104315075,
+          "logit_contribution": 0.030625896718561196
+        },
+        {
+          "feature": "ctx_return_strength_diff",
+          "value": 0.014385475615227,
+          "scale": 0.036729664126480724,
+          "z": 0.3916582402085078,
+          "coefficient": -0.07614198589241848,
+          "logit_contribution": -0.029821636200605652
+        },
+        {
+          "feature": "ctx_serve_dominance_diff",
+          "value": 0.0611901882567841,
+          "scale": 0.09975110391800121,
+          "z": 0.6134286825245013,
+          "coefficient": 0.03574539645504171,
+          "logit_contribution": 0.021927251453732217
+        },
+        {
+          "feature": "ctx_state_uncertainty_diff",
+          "value": -0.0001861490991503,
+          "scale": 0.04585612292334372,
+          "z": -0.004059416437396589,
+          "coefficient": -0.22498810141674835,
+          "logit_contribution": 0.0009133203971097991
+        }
+      ]
+    }
+  ],
+  "candidate": {
+    "MEN": {
+      "selected_candidate": "ensemble",
+      "stack_weights": {
+        "accepted_baseline": 0.05,
+        "residual_uncertainty": 0.7,
+        "direct_context": 0.25
+      },
+      "uncertainty_gamma": 4.0,
+      "direct_training_rows": 7286,
+      "residual_training_rows": 7286
+    },
+    "WTA": {
+      "selected_candidate": "residual",
+      "stack_weights": {
+        "accepted_baseline": 0.4,
+        "residual_uncertainty": 0.0,
+        "direct_context": 0.6
+      },
+      "uncertainty_gamma": 4.0,
+      "direct_training_rows": 1763,
+      "residual_training_rows": 1763
+    }
+  }
+}
