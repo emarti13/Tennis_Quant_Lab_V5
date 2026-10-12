@@ -1,0 +1,100 @@
+name: Pinnacle 2026 Closing Backfill
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/build_pinnacle_closing_2026.py"
+      - ".github/workflows/pinnacle_2026_closing_backfill.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pinnacle-2026-closing-backfill
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install --disable-pip-version-check requests pandas
+
+      - name: Restore cached Tennis market dictionary
+        uses: actions/cache/restore@v4
+        with:
+          path: oddspapi_markets_tennis.json
+          key: oddspapi-tennis-markets-v1
+
+      - name: Verify cached market dictionary
+        run: |
+          test -s oddspapi_markets_tennis.json || {
+            echo "Cached OddsPapi market dictionary is missing. Refusing a billable metadata fetch."
+            exit 1
+          }
+
+      - name: Backfill Pinnacle historical odds in checkpointed batches
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          for batch in $(seq 1 8); do
+            echo "=== Pinnacle closing backfill batch $batch ==="
+            python scripts/build_pinnacle_closing_2026.py --batch-size 500
+
+            git add               oddspapi_history/pinnacle_2026_chunks/               market_warehouse/pinnacle_closing_2026.csv               market_warehouse/pinnacle_closing_2026_moneyline.csv               market_warehouse/pinnacle_closing_2026_checkpoint.json               market_warehouse/pinnacle_closing_2026_qc.json
+
+            if ! git diff --cached --quiet; then
+              git commit -m "Backfill Pinnacle 2026 closing odds batch $batch"
+              git pull --rebase origin main
+              git push origin HEAD:main
+            fi
+
+            DONE=$(python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("market_warehouse/pinnacle_closing_2026_qc.json")
+          j=json.loads(p.read_text())
+          print("true" if j.get("complete_for_observed_fixtures") else "false")
+          PY
+            )
+            if [ "$DONE" = "true" ]; then
+              echo "Pinnacle closing backfill complete for all observed 2026 fixtures."
+              break
+            fi
+          done
+
+      - name: Show final QC
+        if: always()
+        run: |
+          if [ -f market_warehouse/pinnacle_closing_2026_qc.json ]; then
+            cat market_warehouse/pinnacle_closing_2026_qc.json
+          fi
+
+      - name: Upload closing warehouse
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pinnacle-2026-closing-warehouse
+          path: |
+            market_warehouse/pinnacle_closing_2026.csv
+            market_warehouse/pinnacle_closing_2026_moneyline.csv
+            market_warehouse/pinnacle_closing_2026_qc.json
+          if-no-files-found: warn
+          retention-days: 7
