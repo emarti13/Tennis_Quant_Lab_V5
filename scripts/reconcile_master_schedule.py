@@ -2,7 +2,7 @@
 
 Usage:
     python scripts/reconcile_master_schedule.py \
-        --sheet context_registry/master_schedule/user_sheet_2026_as_pasted_2026-10-12.tsv \
+        --sheet context_registry/master_schedule/master_schedule_2026.csv \
         --year 2026 --as-of 2026-10-12
 
 Writes context_registry/master_schedule/reconciliation/<year>/:
