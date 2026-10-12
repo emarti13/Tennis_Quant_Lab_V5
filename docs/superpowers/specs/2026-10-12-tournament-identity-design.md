@@ -2,6 +2,8 @@
 
 Date: 2026-10-12
 Status: **DRAFT — pending user approval**
+First implementation: `v5_tournament_identity.py` + `scripts/reconcile_master_schedule.py`
+(read-only reconciliation; report in `context_registry/master_schedule/reconciliation/2026/REPORT.md`).
 Category: Production Reliability (data layer). Serves roadmap Phase 0; prerequisite for
 every price, because surface, time zone and court information all hang off the tournament.
 Plan: `docs/superpowers/plans/2026-10-12-ground-up-rebuild-plan.md`, Step 2.
@@ -12,7 +14,7 @@ Three sources describe the same tournaments, and none of them can be the key:
 
 | Source | What it gives | Why it can't be the key |
 |---|---|---|
-| OddsPapi | Live fixtures and prices: `tournament_id`, `season_id`, a long display name, player IDs and names, start times | One `tournament_id` can cover separate weeks (2026: the Shanghai, Tulln and "Istanbul 3" Challengers each have two date blocks). Repeat events are numbered in the name ("Istanbul 3"). `season_id` is often empty. |
+| OddsPapi | Live fixtures and prices: `tournament_id`, `season_id`, a long display name, player IDs and names, start times | Long display names in its own format; repeat events in one city are numbered ("Istanbul 3", "Shymkent II") or not numbered at all; `season_id` is often empty. (Correction: the three IDs first thought to cover two weeks were one week each, split by a gap in our own fixture collection on 2026-09-09/10. No reuse of one ID across weeks has been found in 2026.) |
 | TennisMyLife | Results and history: `tourney_id`, short name, `tourney_date`, surface, players | Same short name for different events in a year (2026: six cases, such as two Istanbul and two Munich events). Its IDs have no relation to OddsPapi's. |
 | Master schedule | Court information (surface, setting, time zone, altitude, ball, CPI) | Hand-built; names follow the official calendars, not either feed. |
 
@@ -51,9 +53,8 @@ new year copies from the same `event_id`'s latest edition.
 
 Each row records: how it was matched, the evidence score, `status`
 (`auto` / `confirmed` / `user` / `rejected`), and the date it was set. A mapping is
-decided **once** and then looked up. Nothing re-matches names each day. Because the
-OddsPapi key includes the date block, one `tournament_id` covering two weeks maps to two
-editions.
+decided **once** and then looked up. Nothing re-matches names each day. The OddsPapi key
+includes the date block as a safeguard in case an ID is ever reused across weeks.
 
 ### 2.3 Matching a new source ID (resolver)
 
