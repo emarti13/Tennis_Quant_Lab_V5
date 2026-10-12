@@ -1,0 +1,215 @@
+name: Temporary Model Input Inventory
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/tmp_model_input_inventory.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build model-input inventory bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="model_input_inventory"
+          mkdir -p "$ROOT/01_direct_runtime_inputs" "$ROOT/02_upstream_daily_sources" "$ROOT/03_model_configuration" "$ROOT/04_operational_audit" "$ROOT/05_missing_expected_inputs" "$ROOT/06_adjacent_not_direct"
+
+          copy_if_present () {
+            src="$1"; dest="$2"
+            if [ -e "$src" ]; then
+              mkdir -p "$(dirname "$ROOT/$dest")"
+              cp -a "$src" "$ROOT/$dest"
+            fi
+          }
+
+          # Files read directly by v5_daily_batch.py / v5_full_context_live.py.
+          copy_if_present "v5_market_ready/market_board_input.csv" "01_direct_runtime_inputs/v5_market_ready/market_board_input.csv"
+          copy_if_present "v5_build_summary.json" "01_direct_runtime_inputs/v5_build_summary.json"
+          copy_if_present "v5_men_ratings.csv" "01_direct_runtime_inputs/v5_men_ratings.csv"
+          copy_if_present "v5_wta_ratings.csv" "01_direct_runtime_inputs/v5_wta_ratings.csv"
+          copy_if_present "context_warehouse/player_match_rows.parquet" "01_direct_runtime_inputs/context_warehouse/player_match_rows.parquet"
+          copy_if_present "context_registry/tournament_authority.csv" "01_direct_runtime_inputs/context_registry/tournament_authority.csv"
+          copy_if_present "context_registry/player_aliases.csv" "01_direct_runtime_inputs/context_registry/player_aliases.csv"
+          copy_if_present "experiments/acceptance/production_candidate.json" "01_direct_runtime_inputs/experiments/acceptance/production_candidate.json"
+          copy_if_present "experiments/acceptance/score_production_candidate.json" "01_direct_runtime_inputs/experiments/acceptance/score_production_candidate.json"
+          copy_if_present "context_registry/tournaments.csv" "01_direct_runtime_inputs/context_registry/tournaments.csv"
+          copy_if_present "context_weather/weather_by_event_date.parquet" "01_direct_runtime_inputs/context_weather/weather_by_event_date.parquet"
+
+          # Persisted upstream snapshots feeding the direct files.
+          copy_if_present "v5_results_ready/tennismylife_results.csv" "02_upstream_daily_sources/v5_results_ready/tennismylife_results.csv"
+          copy_if_present "v5_results_ready/results_status.json" "02_upstream_daily_sources/v5_results_ready/results_status.json"
+          copy_if_present "context_warehouse/matches.parquet" "02_upstream_daily_sources/context_warehouse/matches.parquet"
+          copy_if_present "context_warehouse/source_manifest.json" "02_upstream_daily_sources/context_warehouse/source_manifest.json"
+          copy_if_present "context_warehouse/schema.json" "02_upstream_daily_sources/context_warehouse/schema.json"
+          copy_if_present "v5_market_ready/all_book_prices.csv" "02_upstream_daily_sources/v5_market_ready/all_book_prices.csv"
+          copy_if_present "v5_market_ready/market_feed_qc.json" "02_upstream_daily_sources/v5_market_ready/market_feed_qc.json"
+          copy_if_present "oddspapi_registry/fixtures.csv" "02_upstream_daily_sources/oddspapi_registry/fixtures.csv"
+          copy_if_present "context_registry/tennis_master_schedule.csv" "02_upstream_daily_sources/context_registry/tennis_master_schedule.csv"
+          copy_if_present "v5_men_walkforward.csv" "02_upstream_daily_sources/v5_men_walkforward.csv"
+          copy_if_present "v5_wta_walkforward.csv" "02_upstream_daily_sources/v5_wta_walkforward.csv"
+
+          # Static coefficients/config and the exact transformation code that gives data meaning.
+          for f in             v5_model_calibration.py v5_daily_batch.py v5_full_context_live.py             build_v5_context_matchups.py v5_rolling_stats.py v5_workload_features.py             v5_travel_features.py v5_player_state.py v5_matchup_features.py             v5_advanced_model.py v5_context_model.py v5_score_distribution.py             v5_tournament_authority.py v5_player_identity.py build_v5_states.py             build_v5_context_warehouse.py build_v5_market_board_input.py normalize_oddspapi_snapshot.py
+          do
+            copy_if_present "$f" "03_model_configuration/$f"
+          done
+
+          # Operational/freshness artifacts that govern whether a run is allowed.
+          copy_if_present "v5_refresh_last.json" "04_operational_audit/v5_refresh_last.json"
+          copy_if_present "context_warehouse/source_manifest.json" "04_operational_audit/context_warehouse_source_manifest.json"
+          copy_if_present "v5_market_ready/market_feed_qc.json" "04_operational_audit/market_feed_qc.json"
+          copy_if_present "v5_daily_ready/latest_summary.json" "04_operational_audit/latest_summary.json"
+          copy_if_present "v5_daily_ready/forecast_status.json" "04_operational_audit/forecast_status.json"
+
+          # Existing ledger is read by the daily batch only to preserve already-frozen rows.
+          copy_if_present "v5_daily_ready/frozen_predictions.csv" "06_adjacent_not_direct/frozen_predictions.csv"
+
+          # Nearby duplicate/legacy authority file: not read by current production, included so it is visible.
+          copy_if_present "context_registry/tournament_authority.csv.csv" "06_adjacent_not_direct/tournament_authority.csv.csv"
+
+          python - <<'PY'
+          from pathlib import Path
+          import csv, hashlib, json, urllib.request
+          from datetime import datetime, timezone
+
+          root=Path("model_input_inventory")
+          repo=Path(".")
+          expected = [
+              ("v5_market_ready/market_board_input.csv","DIRECT","Fixture/player/tournament/start-time/market-line slate read by v5_daily_batch.py"),
+              ("v5_build_summary.json","DIRECT","Surface serve baselines used by the base serve/return calculation"),
+              ("v5_men_ratings.csv","DIRECT","Current MEN serve/return, Elo, surface Elo, form/state values"),
+              ("v5_wta_ratings.csv","DIRECT","Current WTA serve/return, Elo, surface Elo, form/state values"),
+              ("context_warehouse/player_match_rows.parquet","DIRECT","Historical player-match rows used to rebuild rolling/workload/context features live"),
+              ("context_registry/tournament_authority.csv","DIRECT","Tournament identity; current surface/environment authority"),
+              ("context_registry/player_aliases.csv","DIRECT","Verified player identity aliases"),
+              ("experiments/acceptance/production_candidate.json","DIRECT","Winner context-model coefficients, scales, ensemble weights"),
+              ("experiments/acceptance/score_production_candidate.json","DIRECT","Spread/total score-model candidate and coefficients"),
+              ("context_registry/tournaments.csv","EXPECTED_DIRECT","Tournament registry passed to travel feature builder"),
+              ("context_weather/weather_by_event_date.parquet","EXPECTED_DIRECT","Weather cache loaded by daily prediction"),
+              ("v5_results_ready/tennismylife_results.csv","UPSTREAM","Canonical current TennisMyLife results snapshot feeding context warehouse"),
+              ("context_warehouse/matches.parquet","UPSTREAM","Canonical match-level warehouse feeding player-match rows"),
+              ("v5_market_ready/all_book_prices.csv","UPSTREAM","Normalized current book prices from OddsPapi; market_board_input is derived from this"),
+              ("oddspapi_registry/fixtures.csv","UPSTREAM","Persisted OddsPapi fixture registry"),
+              ("context_registry/tennis_master_schedule.csv","UPSTREAM","Canonical schedule source/supporting authority data"),
+              ("v5_men_walkforward.csv","REFERENCE","Daily-refreshed MEN walk-forward output; not read by v5_daily_batch"),
+              ("v5_wta_walkforward.csv","REFERENCE","Daily-refreshed WTA walk-forward output; not read by v5_daily_batch"),
+              ("v5_daily_ready/frozen_predictions.csv","OPERATIONAL","Read only to preserve prior frozen rows; does not set a new match probability"),
+          ]
+
+          # Pull a current copy of every raw TennisMyLife current/ongoing feed used by refresh_tennismylife_cloud.py.
+          target_aliases = {
+              "2026.csv":["2026.csv"],
+              "2026_atp_quali.csv":["2026_atp_quali.csv"],
+              "2026_challenger.csv":["2026_challenger.csv"],
+              "2026_wta.csv":["2026_wta.csv"],
+              "ongoing_tourneys.csv":["ongoing_tourneys.csv"],
+              "challenger_ongoing_tourneys.csv":["challenger_ongoing_tourneys.csv","ch_ongoing_tourney.csv","challenger_ongoing_tourney.csv"],
+              "wta_ongoing_tourneys.csv":["wta_ongoing_tourneys.csv","wta_ongoing_tourney.csv"],
+          }
+          raw_dir=root/"02_upstream_daily_sources"/"tennismylife_raw_current"
+          raw_dir.mkdir(parents=True,exist_ok=True)
+          raw_report={"manifest_url":"https://stats.tennismylife.org/api/data-files","downloaded":[],"missing":[]}
+          try:
+              with urllib.request.urlopen(raw_report["manifest_url"], timeout=30) as resp:
+                  payload=json.loads(resp.read().decode("utf-8"))
+              files=payload.get("files") or []
+              lookup={}
+              for item in files:
+                  if not isinstance(item,dict): continue
+                  name=str(item.get("name") or "").replace("\\","/").lower()
+                  url=str(item.get("url") or "")
+                  if name and url:
+                      lookup[name]=item
+                      lookup[name.split("/")[-1]]=item
+              for local,aliases in target_aliases.items():
+                  hit=None
+                  for alias in aliases:
+                      hit=lookup.get(alias.lower())
+                      if hit: break
+                  if not hit:
+                      raw_report["missing"].append(local); continue
+                  out=raw_dir/local
+                  urllib.request.urlretrieve(hit["url"],out)
+                  raw_report["downloaded"].append({"file":local,"source_name":hit.get("name"),"source_url":hit.get("url"),"bytes":out.stat().st_size})
+          except Exception as exc:
+              raw_report["error"]=f"{type(exc).__name__}: {exc}"
+          (raw_dir/"download_report.json").write_text(json.dumps(raw_report,indent=2),encoding="utf-8")
+
+          # Explicit missing-path markers.
+          missing_dir=root/"05_missing_expected_inputs"
+          missing_dir.mkdir(parents=True,exist_ok=True)
+          for path,kind,role in expected:
+              if kind=="EXPECTED_DIRECT" and not (repo/path).exists():
+                  marker=missing_dir/(path.replace("/","__")+".MISSING.txt")
+                  marker.write_text(f"Expected by current production code but absent from repository at inventory time.\nPath: {path}\nRole: {role}\n",encoding="utf-8")
+
+          # Manifest + checksums.
+          rows=[]
+          for path,kind,role in expected:
+              p=repo/path
+              rows.append({
+                  "repo_path":path,"classification":kind,"role":role,
+                  "present_on_main":p.exists(),
+                  "size_bytes":p.stat().st_size if p.exists() else "",
+              })
+          with (root/"inventory.csv").open("w",newline="",encoding="utf-8") as f:
+              w=csv.DictWriter(f,fieldnames=rows[0].keys()); w.writeheader(); w.writerows(rows)
+
+          hashes=[]
+          for p in sorted(root.rglob("*")):
+              if p.is_file():
+                  h=hashlib.sha256()
+                  with p.open("rb") as fh:
+                      for chunk in iter(lambda:fh.read(1024*1024),b""): h.update(chunk)
+                  hashes.append({"bundle_path":str(p.relative_to(root)),"size_bytes":p.stat().st_size,"sha256":h.hexdigest()})
+          with (root/"file_hashes.csv").open("w",newline="",encoding="utf-8") as f:
+              w=csv.DictWriter(f,fieldnames=["bundle_path","size_bytes","sha256"]); w.writeheader(); w.writerows(hashes)
+
+          readme=f"""# Tennis Quant Lab V5 — model input inventory
+
+Generated UTC: {datetime.now(timezone.utc).isoformat()}
+
+This bundle is an audit snapshot only. No production prediction logic was changed.
+
+## Directory meaning
+- 01_direct_runtime_inputs: persisted files the current daily prediction path reads directly.
+- 02_upstream_daily_sources: persisted/upstream snapshots that build the direct inputs, plus current raw TennisMyLife daily feeds.
+- 03_model_configuration: coefficients/config plus transformation code that gives the data its model meaning.
+- 04_operational_audit: freshness/QC/status files that can allow or block a daily run.
+- 05_missing_expected_inputs: explicit markers for paths current production code expects but that were absent at inventory time.
+- 06_adjacent_not_direct: files read operationally or nearby duplicates that do not set a new winner probability.
+
+## Important lineage
+OddsPapi -> normalized/all-book prices -> market_board_input.csv -> fixture identity / requested lines -> daily forecast.
+TennisMyLife current feeds + historical cache -> ratings + canonical results -> context warehouse -> rolling/workload/context features.
+Tournament authority -> tournament identity + surface/environment.
+production_candidate.json -> final winner-context layer.
+score_production_candidate.json -> spread/total layer.
+
+Raw OddsPapi daily batch JSON is ephemeral in the workflow and is not retained on main. The current promoted normalized snapshot is represented here by all_book_prices.csv and market_board_input.csv.
+"""
+          (root/"README.md").write_text(readme,encoding="utf-8")
+          PY
+
+      - name: Upload inventory bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: tennis-model-input-inventory
+          path: model_input_inventory
+          retention-days: 7
