@@ -37,7 +37,7 @@ jobs:
       - name: Run complete test suite
         shell: bash
         run: |
-          set -o pipefail
+          set +e   # Actions runs bash with -e; keep going so failures can be annotated
           python -m pytest tests -q -rfE 2>&1 | tee /tmp/pytest.txt
           status=${PIPESTATUS[0]}
           # Surface failing test ids as one PR annotation so failures are visible without opening logs.
