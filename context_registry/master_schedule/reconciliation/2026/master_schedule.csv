@@ -1,444 +1,442 @@
 sheet_row,edition_key,tour_family,circuit_type,circuit_tour,tournament_name,city,state,country,country_code,start_date,end_date,end_date_assumed,category,surface,setting,status,high_altitude,har_tru,day_notes,notes_raw
 2,ATP|2026-01-02|united-cup|perth,ATP,Men,United Cup,United Cup,Perth,,Australia,,2026-01-02,2026-01-11,False,,Hard,Outdoor,scheduled,False,False,,
-3,WTA|2026-01-02|united-cup|perth,WTA,Women,United Cup,United Cup,Perth,,Australia,,2026-01-02,2026-01-11,False,,Hard,Outdoor,scheduled,False,False,,
-4,ATP|2026-01-02|united-cup|sydney,ATP,Men,United Cup,United Cup,Sydney,,Australia,,2026-01-02,2026-01-11,False,,Hard,Outdoor,scheduled,False,False,,
-5,WTA|2026-01-02|united-cup|sydney,WTA,Women,United Cup,United Cup,Sydney,,Australia,,2026-01-02,2026-01-11,False,,Hard,Outdoor,scheduled,False,False,,
-6,ATP|2026-01-05|brisbane-international|brisbane,ATP,Men,ATP 250,Brisbane International,Brisbane,,Australia,,2026-01-05,2026-01-11,False,,Hard,Outdoor,scheduled,False,False,,
-7,ATP|2026-01-05|bank-of-china-hong-kong-tennis-open|hong-kong,ATP,Men,ATP 250,Bank of China Hong Kong Tennis Open,Hong Kong,,Hong Kong,,2026-01-05,2026-01-11,False,,Hard,Outdoor,scheduled,False,False,,
-8,ATP|2026-01-12|adelaide-international|adelaide,ATP,Men,ATP 250,Adelaide International,Adelaide,,Australia,,2026-01-12,2026-01-17,False,,Hard,Outdoor,scheduled,False,False,,
-9,ATP|2026-01-12|asb-classic|auckland,ATP,Men,ATP 250,ASB Classic,Auckland,,New Zealand,,2026-01-12,2026-01-17,False,,Hard,Outdoor,scheduled,False,False,,
-10,ATP|2026-01-18|australian-open|melbourne,ATP,Men,Grand Slam,Australian Open,Melbourne,,Australia,,2026-01-18,2026-02-01,False,,Hard,Outdoor,scheduled,False,False,,
-11,ATP|2026-02-02|open-occitanie|montpellier,ATP,Men,ATP 250,Open Occitanie,Montpellier,,France,,2026-02-02,2026-02-08,False,,Hard,Indoor,scheduled,False,False,,
-12,ATP|2026-02-09|dallas-open|dallas,ATP,Men,ATP 500,Dallas Open,Dallas,,United States,,2026-02-09,2026-02-15,False,,Hard,Indoor,scheduled,False,False,,
-13,ATP|2026-02-09|abn-amro-open|rotterdam,ATP,Men,ATP 500,ABN AMRO Open,Rotterdam,,Netherlands,,2026-02-09,2026-02-15,False,,Hard,Indoor,scheduled,False,False,,
-14,ATP|2026-02-09|ieb-argentina-open|buenos-aires,ATP,Men,ATP 250,IEB+ Argentina Open,Buenos Aires,,Argentina,,2026-02-09,2026-02-15,False,,Clay,Outdoor,scheduled,False,False,,
-15,ATP|2026-02-16|qatar-exxonmobil-open|doha,ATP,Men,ATP 500,Qatar ExxonMobil Open,Doha,,Qatar,,2026-02-16,2026-02-22,False,,Hard,Outdoor,scheduled,False,False,,
-16,ATP|2026-02-16|rio-open-presented-by-claro|rio-de-janeiro,ATP,Men,ATP 500,Rio Open presented by Claro,Rio de Janeiro,,Brazil,,2026-02-16,2026-02-22,False,,Clay,Outdoor,scheduled,False,False,,
-17,ATP|2026-02-16|delray-beach-open|delray-beach,ATP,Men,ATP 250,Delray Beach Open,Delray Beach,,United States,,2026-02-16,2026-02-22,False,,Hard,Outdoor,scheduled,False,False,,
-18,ATP|2026-02-23|abierto-mexicano-telcel|acapulco,ATP,Men,ATP 500,Abierto Mexicano Telcel,Acapulco,,Mexico,,2026-02-23,2026-02-28,False,,Hard,Outdoor,scheduled,False,False,,
-19,ATP|2026-02-23|dubai-duty-free-tennis-championships|dubai,ATP,Men,ATP 500,Dubai Duty Free Tennis Championships,Dubai,,United Arab Emirates,,2026-02-23,2026-03-01,False,,Hard,Outdoor,scheduled,False,False,,
-20,ATP|2026-02-23|bci-seguros-chile-open|santiago,ATP,Men,ATP 250,BCI Seguros Chile Open,Santiago,,Chile,,2026-02-23,2026-03-01,False,,Clay,Outdoor,scheduled,False,False,,
-21,ATP|2026-03-04|bnp-paribas-open|indian-wells,ATP,Men,ATP Masters 1000,BNP Paribas Open,Indian Wells,,United States,,2026-03-04,2026-03-15,False,,Hard,Outdoor,scheduled,False,False,,
-22,ATP|2026-03-18|miami-open|miami,ATP,Men,ATP Masters 1000,Miami Open,Miami,,United States,,2026-03-18,2026-03-29,False,,Hard,Outdoor,scheduled,False,False,,
-23,ATP|2026-03-30|tiriac-open|bucharest,ATP,Men,ATP 250,Tiriac Open,Bucharest,,Romania,,2026-03-30,2026-04-05,False,,Clay,Outdoor,scheduled,False,False,,
-24,ATP|2026-03-30|fayez-sarofim-co-u-s-men-s-clay-court-championship|houston,ATP,Men,ATP 250,Fayez Sarofim & Co. U.S. Men's Clay Court Championship,Houston,,United States,,2026-03-30,2026-04-05,False,,Clay,Outdoor,scheduled,False,False,,
-25,ATP|2026-03-30|grand-prix-hassan-ii|marrakech,ATP,Men,ATP 250,Grand Prix Hassan II,Marrakech,,Morocco,,2026-03-30,2026-04-05,False,,Clay,Outdoor,scheduled,False,False,,
-26,ATP|2026-04-05|rolex-monte-carlo-masters|monte-carlo,ATP,Men,ATP Masters 1000,Rolex Monte-Carlo Masters,Monte-Carlo,,Monaco,,2026-04-05,2026-04-12,False,,Clay,Outdoor,scheduled,False,False,,
-27,ATP|2026-04-13|barcelona-open-banc-sabadell|barcelona,ATP,Men,ATP 500,Barcelona Open Banc Sabadell,Barcelona,,Spain,,2026-04-13,2026-04-19,False,,Clay,Outdoor,scheduled,False,False,,
-28,ATP|2026-04-13|bmw-open-by-bitpanda|munich,ATP,Men,ATP 500,BMW Open by Bitpanda,Munich,,Germany,,2026-04-13,2026-04-19,False,,Clay,Outdoor,scheduled,False,False,,
-29,ATP|2026-04-22|mutua-madrid-open|madrid,ATP,Men,ATP Masters 1000,Mutua Madrid Open,Madrid,,Spain,,2026-04-22,2026-05-03,False,,Clay,Outdoor,scheduled,False,False,,
-30,ATP|2026-05-06|internazionali-bnl-d-italia|rome,ATP,Men,ATP Masters 1000,Internazionali BNL d'Italia,Rome,,Italy,,2026-05-06,2026-05-17,False,,Clay,Outdoor,scheduled,False,False,,
-31,ATP|2026-05-17|bitpanda-hamburg-open|hamburg,ATP,Men,ATP 500,Bitpanda Hamburg Open,Hamburg,,Germany,,2026-05-17,2026-05-23,False,,Clay,Outdoor,scheduled,False,False,,
-32,ATP|2026-05-17|gonet-geneva-open|geneva,ATP,Men,ATP 250,Gonet Geneva Open,Geneva,,Switzerland,,2026-05-17,2026-05-23,False,,Clay,Outdoor,scheduled,False,False,,
-33,ATP|2026-05-24|roland-garros|paris,ATP,Men,Grand Slam,Roland Garros,Paris,,France,,2026-05-24,2026-06-07,False,,Clay,Outdoor,scheduled,False,False,,
-34,ATP|2026-06-08|boss-open|stuttgart,ATP,Men,ATP 250,BOSS OPEN,Stuttgart,,Germany,,2026-06-08,2026-06-14,False,,Grass,Outdoor,scheduled,False,False,,
-35,ATP|2026-06-08|libema-open|s-hertogenbosch,ATP,Men,ATP 250,Libema Open,'s-Hertogenbosch,,Netherlands,,2026-06-08,2026-06-14,False,,Grass,Outdoor,scheduled,False,False,,
-36,ATP|2026-06-15|terra-wortmann-open|halle,ATP,Men,ATP 500,Terra Wortmann Open,Halle,,Germany,,2026-06-15,2026-06-21,False,,Grass,Outdoor,scheduled,False,False,,
-37,ATP|2026-06-15|hsbc-championships|london,ATP,Men,ATP 500,HSBC Championships,London,,Great Britain,,2026-06-15,2026-06-21,False,,Grass,Outdoor,scheduled,False,False,,
-38,ATP|2026-06-21|mallorca-championships|mallorca,ATP,Men,ATP 250,Mallorca Championships,Mallorca,,Spain,,2026-06-21,2026-06-27,False,,Grass,Outdoor,scheduled,False,False,,
-39,ATP|2026-06-22|lexus-eastbourne-open|eastbourne,ATP,Men,ATP 250,Lexus Eastbourne Open,Eastbourne,,Great Britain,,2026-06-22,2026-06-27,False,,Grass,Outdoor,scheduled,False,False,,
-40,ATP|2026-06-29|wimbledon|london,ATP,Men,Grand Slam,Wimbledon,London,,Great Britain,,2026-06-29,2026-07-12,False,,Grass,Outdoor,scheduled,False,False,,
-41,ATP|2026-07-13|nordea-open|bastad,ATP,Men,ATP 250,Nordea Open,Bastad,,Sweden,,2026-07-13,2026-07-19,False,,Clay,Outdoor,scheduled,False,False,,
-42,ATP|2026-07-13|efg-swiss-open-gstaad|gstaad,ATP,Men,ATP 250,EFG Swiss Open Gstaad,Gstaad,,Switzerland,,2026-07-13,2026-07-19,False,,Clay,Outdoor,scheduled,False,False,,
-43,ATP|2026-07-13|plava-laguna-croatia-open-umag|umag,ATP,Men,ATP 250,Plava Laguna Croatia Open Umag,Umag,,Croatia,,2026-07-13,2026-07-19,False,,Clay,Outdoor,scheduled,False,False,,
-44,ATP|2026-07-20|generali-open|kitzbuhel,ATP,Men,ATP 250,Generali Open,Kitzbuhel,,Austria,,2026-07-20,2026-07-26,False,,Clay,Outdoor,scheduled,False,False,,
-45,ATP|2026-07-20|millennium-estoril-open|estoril,ATP,Men,ATP 250,Millennium Estoril Open,Estoril,,Portugal,,2026-07-20,2026-07-26,False,,Clay,Outdoor,scheduled,False,False,,
-46,ATP|2026-07-27|mubadala-citi-dc-open|washington,ATP,Men,ATP 500,Mubadala Citi DC Open,Washington,,United States,,2026-07-27,2026-08-02,False,,Hard,Outdoor,scheduled,False,False,,
-47,ATP|2026-07-27|mifel-tennis-open-by-telcel-oppo|los-cabos,ATP,Men,ATP 250,Mifel Tennis Open by Telcel Oppo,Los Cabos,,Mexico,,2026-07-27,2026-08-02,False,,Hard,Outdoor,scheduled,False,False,,
-48,ATP|2026-08-02|national-bank-open|montreal,ATP,Men,ATP Masters 1000,National Bank Open,Montreal,,Canada,,2026-08-02,2026-08-12,False,,Hard,Outdoor,scheduled,False,False,,
-49,ATP|2026-08-13|cincinnati-open|cincinnati,ATP,Men,ATP Masters 1000,Cincinnati Open,Cincinnati,,United States,,2026-08-13,2026-08-23,False,,Hard,Outdoor,scheduled,False,False,,
-50,ATP|2026-08-23|winston-salem-open|winston-salem,ATP,Men,ATP 250,Winston-Salem Open,Winston-Salem,,United States,,2026-08-23,2026-08-29,False,,Hard,Outdoor,scheduled,False,False,,
-51,ATP|2026-08-31|us-open|new-york,ATP,Men,Grand Slam,US Open,New York,,United States,,2026-08-31,2026-09-13,False,,Hard,Outdoor,scheduled,False,False,,
-52,ATP|2026-09-23|chengdu-open|chengdu,ATP,Men,ATP 250,Chengdu Open,Chengdu,,China,,2026-09-23,2026-09-29,False,,Hard,Outdoor,scheduled,False,False,,
-53,ATP|2026-09-23|lynk-co-hangzhou-open|hangzhou,ATP,Men,ATP 250,Lynk & Co Hangzhou Open,Hangzhou,,China,,2026-09-23,2026-09-29,False,,Hard,Outdoor,scheduled,False,False,,
-54,ATP|2026-09-25|laver-cup|london,ATP,Men,Laver Cup,Laver Cup,London,,Great Britain,,2026-09-25,2026-09-27,False,,Hard,Indoor,scheduled,False,False,,
-55,ATP|2026-09-30|kinoshita-group-japan-open-tennis-championships|tokyo,ATP,Men,ATP 500,Kinoshita Group Japan Open Tennis Championships,Tokyo,,Japan,,2026-09-30,2026-10-06,False,,Hard,Outdoor,scheduled,False,False,,
-56,ATP|2026-09-30|china-open|beijing,ATP,Men,ATP 500,China Open,Beijing,,China,,2026-09-30,2026-10-06,False,,Hard,Outdoor,scheduled,False,False,,
-57,ATP|2026-10-07|rolex-shanghai-masters|shanghai,ATP,Men,ATP Masters 1000,Rolex Shanghai Masters,Shanghai,,China,,2026-10-07,2026-10-18,False,,Hard,Outdoor,scheduled,False,False,,
-58,ATP|2026-10-19|almaty-open|almaty,ATP,Men,ATP 250,Almaty Open,Almaty,,Kazakhstan,,2026-10-19,2026-10-25,False,,Hard,Indoor,scheduled,False,False,,
-59,ATP|2026-10-19|bnp-paribas-fortis-european-open|brussels,ATP,Men,ATP 250,BNP Paribas Fortis European Open,Brussels,,Belgium,,2026-10-19,2026-10-25,False,,Hard,Indoor,scheduled,False,False,,
-60,ATP|2026-10-19|grand-prix-auvergne-rhone-alpes|lyon,ATP,Men,ATP 250,Grand Prix Auvergne-Rhone-Alpes,Lyon,,France,,2026-10-19,2026-10-25,False,,Hard,Indoor,scheduled,False,False,,
-61,ATP|2026-10-26|swiss-indoors-basel|basel,ATP,Men,ATP 500,Swiss Indoors Basel,Basel,,Switzerland,,2026-10-26,2026-11-01,False,,Hard,Indoor,scheduled,False,False,,
-62,ATP|2026-10-26|erste-bank-open|vienna,ATP,Men,ATP 500,Erste Bank Open,Vienna,,Austria,,2026-10-26,2026-11-01,False,,Hard,Indoor,scheduled,False,False,,
-63,ATP|2026-11-02|rolex-paris-masters|paris,ATP,Men,ATP Masters 1000,Rolex Paris Masters,Paris,,France,,2026-11-02,2026-11-08,False,,Hard,Indoor,scheduled,False,False,,
-64,ATP|2026-11-08|bnp-paribas-nordic-open|stockholm,ATP,Men,ATP 250,BNP Paribas Nordic Open,Stockholm,,Sweden,,2026-11-08,2026-11-14,False,,Hard,Indoor,scheduled,False,False,,
-65,ATP|2026-11-15|nitto-atp-finals|turin,ATP,Men,Nitto ATP Finals,Nitto ATP Finals,Turin,,Italy,,2026-11-15,2026-11-22,False,,Hard,Indoor,scheduled,False,False,,
-66,ATP|2026-11-24|davis-cup-finals|bologna,ATP,Men,Davis Cup,Davis Cup Finals,Bologna,,Italy,,2026-11-24,2026-11-29,False,,Hard,Indoor,scheduled,False,False,,
-67,WTA|2026-01-05|united-cup|perth,WTA,Women,WTA 500,United Cup,Perth,,Australia,,2026-01-05,2026-01-11,True,,Hard,Outdoor,scheduled,False,False,,
-68,WTA|2026-01-05|united-cup|sydney,WTA,Women,WTA 500,United Cup,Sydney,,Australia,,2026-01-05,2026-01-11,True,,Hard,Outdoor,scheduled,False,False,,
-69,WTA|2026-01-05|asb-classic|auckland,WTA,Women,WTA 250,ASB Classic,Auckland,,New Zealand,,2026-01-05,2026-01-11,True,,Hard,Outdoor,scheduled,False,False,,
-70,WTA|2026-01-05|brisbane-international|brisbane,WTA,Women,WTA 500,Brisbane International,Brisbane,,Australia,,2026-01-05,2026-01-11,True,,Hard,Outdoor,scheduled,False,False,,
-71,WTA|2026-01-12|adelaide-international|adelaide,WTA,Women,WTA 500,Adelaide International,Adelaide,,Australia,,2026-01-12,2026-01-18,True,,Hard,Outdoor,scheduled,False,False,,
-72,WTA|2026-01-12|hobart-international|hobart,WTA,Women,WTA 250,Hobart International,Hobart,,Australia,,2026-01-12,2026-01-18,True,,Hard,Outdoor,scheduled,False,False,,
-73,WTA|2026-01-19|australian-open|melbourne,WTA,Women,Grand Slam,Australian Open,Melbourne,,Australia,,2026-01-19,2026-02-01,True,,Hard,Outdoor,scheduled,False,False,,
-74,WTA|2026-02-02|mubadala-abu-dhabi-open|abu-dhabi,WTA,Women,WTA 500,Mubadala Abu Dhabi Open,Abu Dhabi,,United Arab Emirates,,2026-02-02,2026-02-08,True,,Hard,Outdoor,scheduled,False,False,,
-75,WTA|2026-02-02|transylvania-open|cluj-napoca,WTA,Women,WTA 250,Transylvania Open,Cluj-Napoca,,Romania,,2026-02-02,2026-02-08,True,,Hard,Indoor,scheduled,False,False,,
-76,WTA|2026-02-02|ostrava|ostrava,WTA,Women,WTA 250,Ostrava,Ostrava,,Czechia,,2026-02-02,2026-02-08,True,,Hard,Indoor,scheduled,False,False,,
-77,WTA|2026-02-09|qatar-totalenergies-open-2026|doha,WTA,Women,WTA 1000,Qatar TotalEnergies Open 2026,Doha,,Qatar,,2026-02-09,2026-02-22,True,,Hard,Outdoor,scheduled,False,False,,
-78,WTA|2026-02-16|dubai-duty-free-tennis-championships|dubai,WTA,Women,WTA 1000,Dubai Duty Free Tennis Championships,Dubai,,United Arab Emirates,,2026-02-16,2026-03-01,True,,Hard,Outdoor,scheduled,False,False,,
-79,WTA|2026-02-23|merida-open-akron|merida,WTA,Women,WTA 500,Merida Open AKRON,Merida,,Mexico,,2026-02-23,2026-03-01,True,,Hard,Outdoor,scheduled,False,False,,
-80,WTA|2026-02-23|atx-open|austin,WTA,Women,WTA 250,ATX Open,Austin,,United States,,2026-02-23,2026-03-01,True,,Hard,Outdoor,scheduled,False,False,,
-81,WTA|2026-03-02|bnp-paribas-open|indian-wells,WTA,Women,WTA 1000,BNP Paribas Open,Indian Wells,,United States,,2026-03-02,2026-03-15,True,,Hard,Outdoor,scheduled,False,False,,
-82,WTA|2026-03-16|miami-open|miami,WTA,Women,WTA 1000,Miami Open,Miami,,United States,,2026-03-16,2026-03-29,True,,Hard,Outdoor,scheduled,False,False,,
-83,WTA|2026-03-30|credit-one-charleston-open|charleston,WTA,Women,WTA 500,Credit One Charleston Open,Charleston,,United States,,2026-03-30,2026-04-05,True,,Clay,Outdoor,scheduled,False,False,,
-84,WTA|2026-03-30|2026-colsanitas-cup|bogota,WTA,Women,WTA 250,2026 Colsanitas Cup,Bogota,,Colombia,,2026-03-30,2026-04-05,True,,Clay,Outdoor,scheduled,False,False,,
-85,WTA|2026-04-06|upper-austria-ladies-linz|linz,WTA,Women,WTA 500,Upper Austria Ladies Linz,Linz,,Austria,,2026-04-06,2026-04-12,True,,Clay,Indoor,scheduled,False,False,,
-86,WTA|2026-04-13|porsche-tennis-grand-prix|stuttgart,WTA,Women,WTA 500,Porsche Tennis Grand Prix,Stuttgart,,Germany,,2026-04-13,2026-04-19,True,,Clay,Indoor,scheduled,False,False,,
-87,WTA|2026-04-13|open-capfinances-rouen-metropole|rouen,WTA,Women,WTA 250,Open Capfinances Rouen Metropole,Rouen,,France,,2026-04-13,2026-04-19,True,,Clay,Indoor,scheduled,False,False,,
-88,WTA|2026-04-20|mutua-madrid-open|madrid,WTA,Women,WTA 1000,Mutua Madrid Open,Madrid,,Spain,,2026-04-20,2026-05-03,True,,Clay,Outdoor,scheduled,False,False,,
-89,WTA|2026-05-04|internazionali-bnl-d-italia|rome,WTA,Women,WTA 1000,Internazionali BNL d'Italia,Rome,,Italy,,2026-05-04,2026-05-17,True,,Clay,Outdoor,scheduled,False,False,,
-90,WTA|2026-05-18|internationaux-de-strasbourg|strasbourg,WTA,Women,WTA 500,Internationaux de Strasbourg,Strasbourg,,France,,2026-05-18,2026-05-24,True,,Clay,Outdoor,scheduled,False,False,,
-91,WTA|2026-05-18|grand-prix-son-altesse-royale-la-princesse-lalla-meryem|rabat,WTA,Women,WTA 250,Grand Prix Son Altesse Royale La Princesse Lalla Meryem,Rabat,,Morocco,,2026-05-18,2026-05-24,True,,Clay,Outdoor,scheduled,False,False,,
-92,WTA|2026-05-25|roland-garros|paris,WTA,Women,Grand Slam,Roland-Garros,Paris,,France,,2026-05-25,2026-06-07,True,,Clay,Outdoor,scheduled,False,False,,
-93,WTA|2026-06-08|the-hsbc-championships|london,WTA,Women,WTA 500,The HSBC Championships,London,,Great Britain,,2026-06-08,2026-06-14,True,,Grass,Outdoor,scheduled,False,False,,
-94,WTA|2026-06-08|libema-open|s-hertogenbosch,WTA,Women,WTA 250,Libema Open,'s-Hertogenbosch,,Netherlands,,2026-06-08,2026-06-14,True,,Grass,Outdoor,scheduled,False,False,,
-95,WTA|2026-06-15|berlin-tennis-open|berlin,WTA,Women,WTA 500,Berlin Tennis Open,Berlin,,Germany,,2026-06-15,2026-06-21,True,,Grass,Outdoor,scheduled,False,False,,
-96,WTA|2026-06-15|lexus-nottingham-open|nottingham,WTA,Women,WTA 250,Lexus Nottingham Open,Nottingham,,Great Britain,,2026-06-15,2026-06-21,True,,Grass,Outdoor,scheduled,False,False,,
-97,WTA|2026-06-22|bad-homburg-open|bad-homburg,WTA,Women,WTA 500,Bad Homburg Open,Bad Homburg,,Germany,,2026-06-22,2026-06-28,True,,Grass,Outdoor,scheduled,False,False,,
-98,WTA|2026-06-22|lexus-eastbourne-open|eastbourne,WTA,Women,WTA 250,Lexus Eastbourne Open,Eastbourne,,Great Britain,,2026-06-22,2026-06-28,True,,Grass,Outdoor,scheduled,False,False,,
-99,WTA|2026-06-29|the-championships|wimbledon,WTA,Women,Grand Slam,The Championships,Wimbledon,,Great Britain,,2026-06-29,2026-07-12,True,,Grass,Outdoor,scheduled,False,False,,
-100,WTA|2026-07-13|unicredit-iasi-open|iasi,WTA,Women,WTA 250,UniCredit Iasi Open,Iasi,,Romania,,2026-07-13,2026-07-19,True,,Clay,Outdoor,scheduled,False,False,,
-101,WTA|2026-07-13|athens-open|athens,WTA,Women,WTA 250,Athens Open,Athens,,Greece,,2026-07-13,2026-07-19,True,,Hard,Outdoor,scheduled,False,False,,
-102,WTA|2026-07-20|msc-hamburg-ladies-open|hamburg,WTA,Women,WTA 250,MSC Hamburg Ladies Open,Hamburg,,Germany,,2026-07-20,2026-07-26,True,,Clay,Outdoor,scheduled,False,False,,
-103,WTA|2026-07-20|livesport-prague-open-2026|prague,WTA,Women,WTA 250,Livesport Prague Open 2026,Prague,,Czechia,,2026-07-20,2026-07-26,True,,Hard,Outdoor,scheduled,False,False,,
-104,WTA|2026-07-27|mubadala-dc-open|washington-dc,WTA,Women,WTA 500,Mubadala DC Open,Washington DC,,United States,,2026-07-27,2026-08-02,True,,Hard,Outdoor,scheduled,False,False,,
-105,WTA|2026-07-27|the-memphis-classic|memphis,WTA,Women,WTA 250,The Memphis Classic,Memphis,,United States,,2026-07-27,2026-08-02,True,,Hard,Outdoor,scheduled,False,False,,
-106,WTA|2026-08-03|national-bank-open|toronto,WTA,Women,WTA 1000,National Bank Open,Toronto,,Canada,,2026-08-03,2026-08-16,True,,Hard,Outdoor,scheduled,False,False,,
-107,WTA|2026-08-10|cincinnati-open|cincinnati,WTA,Women,WTA 1000,Cincinnati Open,Cincinnati,,United States,,2026-08-10,2026-08-23,True,,Hard,Outdoor,scheduled,False,False,,
-108,WTA|2026-08-24|abierto-gnp-seguros|monterrey,WTA,Women,WTA 500,Abierto GNP Seguros,Monterrey,,Mexico,,2026-08-24,2026-08-30,True,,Hard,Outdoor,scheduled,False,False,,
-109,WTA|2026-08-31|us-open|new-york,WTA,Women,Grand Slam,US Open,New York,,United States,,2026-08-31,2026-09-13,True,,Hard,Outdoor,scheduled,False,False,,
-110,WTA|2026-09-14|guadalajara-open|guadalajara,WTA,Women,WTA 500,Guadalajara Open,Guadalajara,,Mexico,,2026-09-14,2026-09-20,True,,Hard,Outdoor,scheduled,False,False,,
-111,WTA|2026-09-14|sp-open|sao-paulo,WTA,Women,WTA 250,SP Open,Sao Paulo,,Brazil,,2026-09-14,2026-09-20,True,,Hard,Outdoor,scheduled,False,False,,
-112,WTA|2026-09-21|singapore-tennis-open|singapore,WTA,Women,WTA 500,Singapore Tennis Open,Singapore,,Singapore,,2026-09-21,2026-09-27,True,,Hard,Indoor,scheduled,False,False,,
-113,WTA|2026-09-21|korea-open|seoul,WTA,Women,WTA 500,Korea Open,Seoul,,South Korea,,2026-09-21,2026-09-27,True,,Hard,Outdoor,scheduled,False,False,,
-114,WTA|2026-09-28|china-open|beijing,WTA,Women,WTA 1000,China Open,Beijing,,China,,2026-09-28,2026-10-11,True,,Hard,Outdoor,scheduled,False,False,,
-115,WTA|2026-10-12|wuhan-open|wuhan,WTA,Women,WTA 1000,Wuhan Open,Wuhan,,China,,2026-10-12,2026-10-25,True,,Hard,Outdoor,scheduled,False,False,,
-116,WTA|2026-10-19|ningbo-open|ningbo,WTA,Women,WTA 500,Ningbo Open,Ningbo,,China,,2026-10-19,2026-10-25,True,,Hard,Outdoor,scheduled,False,False,,
-117,WTA|2026-10-19|kinoshita-group-japan-open|osaka,WTA,Women,WTA 250,Kinoshita Group Japan Open,Osaka,,Japan,,2026-10-19,2026-10-25,True,,Hard,Outdoor,scheduled,False,False,,
-118,WTA|2026-10-26|toray-pan-pacific-open-tennis|tokyo,WTA,Women,WTA 500,Toray Pan Pacific Open Tennis,Tokyo,,Japan,,2026-10-26,2026-11-01,True,,Hard,Outdoor,scheduled,False,False,,
-119,WTA|2026-10-26|guangzhou-open|guangzhou,WTA,Women,WTA 250,Guangzhou Open,Guangzhou,,China,,2026-10-26,2026-11-01,True,,Hard,Outdoor,scheduled,False,False,,
-120,WTA|2026-11-02|chennai-open|chennai,WTA,Women,WTA 250,Chennai Open,Chennai,,India,,2026-11-02,2026-11-08,True,,Hard,Outdoor,scheduled,False,False,,
-121,WTA|2026-11-02|prudential-hong-kong-tennis-open|hong-kong,WTA,Women,WTA 250,Prudential Hong Kong Tennis Open,Hong Kong,,Hong Kong,,2026-11-02,2026-11-08,True,,Hard,Outdoor,scheduled,False,False,,
-122,WTA|2026-11-09|wta-finals-indian-wells|indian-wells,WTA,Women,WTA Finals,WTA Finals Indian Wells,Indian Wells,,United States,,2026-11-09,2026-11-15,True,,Hard,Outdoor,scheduled,False,False,,
-123,WTA125|2026-01-05|workday-canberra-open|canberra,WTA125,Women,WTA 125,Workday Canberra Open,Canberra,,Australia,,2026-01-05,2026-01-11,True,,Hard,Outdoor,scheduled,False,False,,
-124,WTA125|2026-01-26|philippine-women-s-open|manila,WTA125,Women,WTA 125,Philippine Women's Open,Manila,,Philippines,,2026-01-26,2026-02-01,True,,Hard,Outdoor,scheduled,False,False,,
-125,WTA125|2026-02-02|l-t-mumbai-open|mumbai,WTA125,Women,WTA 125,L&T Mumbai Open,Mumbai,,India,,2026-02-02,2026-02-08,True,,Hard,Outdoor,scheduled,False,False,,
-126,WTA125|2026-02-09|oeiras-1-jamor-indoor|oeiras,WTA125,Women,WTA 125,Oeiras 1 - Jamor Indoor,Oeiras,,Portugal,,2026-02-09,2026-02-15,True,,Hard,Indoor,scheduled,False,False,,
-127,WTA125|2026-02-16|open-arena-les-sables-d-olonne|les-sables-d-olonne,WTA125,Women,WTA 125,Open Arena Les Sables d'Olonne,Les Sables d'Olonne,,France,,2026-02-16,2026-02-22,True,,Hard,Indoor,scheduled,False,False,,
-128,WTA125|2026-02-16|dow-tennis-classic|midland,WTA125,Women,WTA 125,Dow Tennis Classic,Midland,Michigan,United States,,2026-02-16,2026-02-22,True,,Hard,Indoor,scheduled,False,False,,
-129,WTA125|2026-02-16|oeiras-2-jamor-indoor|oeiras,WTA125,Women,WTA 125,Oeiras 2 - Jamor Indoor,Oeiras,,Portugal,,2026-02-16,2026-02-22,True,,Hard,Indoor,scheduled,False,False,,
-130,WTA125|2026-02-23|megasaray-hotels-open|antalya,WTA125,Women,WTA 125,Megasaray Hotels Open,Antalya,,Turkey,,2026-02-23,2026-03-01,True,,Clay,Outdoor,scheduled,False,False,,
-131,WTA125|2026-03-02|megasaray-hotels-open|antalya,WTA125,Women,WTA 125,Megasaray Hotels Open,Antalya,,Turkey,,2026-03-02,2026-03-08,True,,Clay,Outdoor,scheduled,False,False,,
-132,WTA125|2026-03-09|megasaray-hotels-open|antalya,WTA125,Women,WTA 125,Megasaray Hotels Open,Antalya,,Turkey,,2026-03-09,2026-03-15,True,,Clay,Outdoor,scheduled,False,False,,
-133,WTA125|2026-03-09|austin-125|austin,WTA125,Women,WTA 125,Austin 125,Austin,Texas,United States,,2026-03-09,2026-03-15,True,,Hard,Outdoor,scheduled,False,False,,
-134,WTA125|2026-03-23|dubrovnik-open|dubrovnik,WTA125,Women,WTA 125,Dubrovnik Open,Dubrovnik,,Croatia,,2026-03-23,2026-03-29,True,,Clay,Outdoor,scheduled,False,False,,
-135,WTA125|2026-04-06|open-villa-de-madrid|madrid,WTA125,Women,WTA 125,Open Villa de Madrid,Madrid,,Spain,,2026-04-06,2026-04-12,True,,Clay,Outdoor,scheduled,False,False,,
-136,WTA125|2026-04-13|oeiras-ladies-open|oeiras,WTA125,Women,WTA 125,Oeiras Ladies Open,Oeiras,,Portugal,,2026-04-13,2026-04-19,True,,Clay,Outdoor,scheduled,False,False,,
-137,WTA125|2026-04-20|oeiras-open-ceto|oeiras,WTA125,Women,WTA 125,Oeiras Open CETO,Oeiras,,Portugal,,2026-04-20,2026-04-26,True,,Clay,Outdoor,scheduled,False,False,,
-138,WTA125|2026-04-27|lopen-35-de-saint-malo|saint-malo,WTA125,Women,WTA 125,L’Open 35 de Saint-Malo,Saint Malo,,France,,2026-04-27,2026-05-03,True,,Clay,Outdoor,scheduled,False,False,,
-139,WTA125|2026-04-27|catalonia-open-solgirones|la-bisbal-demporda,WTA125,Women,WTA 125,Catalonia Open Solgironès,La Bisbal d’Emporda,,Spain,,2026-04-27,2026-05-03,True,,Clay,Outdoor,scheduled,False,False,,
-140,WTA125|2026-04-27|huzhou-open-huzhouwuxing|huzhou,WTA125,Women,WTA 125,Huzhou Open · HuzhouWuxing,Huzhou,,China,,2026-04-27,2026-05-03,True,,Clay,Outdoor,scheduled,False,False,,
-141,WTA125|2026-05-04|istanbul-open|istanbul,WTA125,Women,WTA 125,Istanbul Open,Istanbul,,Turkey,,2026-05-04,2026-05-10,True,,Clay,Outdoor,scheduled,False,False,,
-142,WTA125|2026-05-04|jiangxi-open|jiujiang,WTA125,Women,WTA 125,Jiangxi Open,Jiujiang,,China,,2026-05-04,2026-05-10,True,,Hard,Outdoor,scheduled,False,False,,
-143,WTA125|2026-05-11|parma-ladies-open|parma,WTA125,Women,WTA 125,Parma Ladies Open,Parma,,Italy,,2026-05-11,2026-05-17,True,,Clay,Outdoor,scheduled,False,False,,
-144,WTA125|2026-05-11|trophee-clarins|paris,WTA125,Women,WTA 125,Trophèe Clarins,Paris,,France,,2026-05-11,2026-05-17,True,,Clay,Outdoor,scheduled,False,False,,
-145,WTA125|2026-06-01|makarska-open|makarska,WTA125,Women,WTA 125,Makarska Open,Makarska,,Croatia,,2026-06-01,2026-06-07,True,,Clay,Outdoor,scheduled,False,False,,
-146,WTA125|2026-06-01|open-delle-puglie-trofeo|foggia,WTA125,Women,WTA 125,Open delle Puglie Trofeo,Foggia,,Italy,,2026-06-01,2026-06-07,True,,Clay,Outdoor,scheduled,False,False,,
-147,WTA125|2026-06-01|lexus-birmingham-open|birmingham,WTA125,Women,WTA 125,Lexus Birmingham Open,Birmingham,,Great Britain,,2026-06-01,2026-06-07,True,,Grass,Outdoor,scheduled,False,False,,
-148,WTA125|2026-06-08|lexus-ilkley-open|ilkley,WTA125,Women,WTA 125,Lexus Ilkley Open,Ilkley,,Great Britain,,2026-06-08,2026-06-14,True,,Grass,Outdoor,scheduled,False,False,,
-149,WTA125|2026-06-08|memorial-eugenio-fontana|modena,WTA125,Women,WTA 125,Memorial Eugenio Fontana,Modena,,Italy,,2026-06-08,2026-06-14,True,,Clay,Outdoor,scheduled,False,False,,
-150,WTA125|2026-06-15|internazionali-femminili-di-brescia|brescia,WTA125,Women,WTA 125,Internazionali Femminili Di Brescia,Brescia,,Italy,,2026-06-15,2026-06-21,True,,Clay,Outdoor,scheduled,False,False,,
-151,WTA125|2026-06-15|figueira-da-foz-ladies-open|figueira-da-foz,WTA125,Women,WTA 125,Figueira da Foz Ladies Open,Figueira da Foz,,Portugal,,2026-06-15,2026-06-21,True,,Hard,Outdoor,scheduled,False,False,,
-152,WTA125|2026-07-06|nordea-open|bastad,WTA125,Women,WTA 125,Nordea Open,Bastad,,Sweden,,2026-07-06,2026-07-12,True,,Clay,Outdoor,scheduled,False,False,,
-153,WTA125|2026-07-06|grand-est-open-88|contrexeville,WTA125,Women,WTA 125,Grand Est Open 88,Contrexeville,,France,,2026-07-06,2026-07-12,True,,Clay,Outdoor,scheduled,False,False,,
-154,WTA125|2026-07-06|hall-of-fame-open|newport,WTA125,Women,WTA 125,Hall of Fame Open,Newport,Rhode Island,United States,,2026-07-06,2026-07-12,True,,Grass,Outdoor,scheduled,False,False,,
-155,WTA125|2026-07-13|enka-open|istanbul,WTA125,Women,WTA 125,Enka Open,Istanbul,,Turkey,,2026-07-13,2026-07-19,True,,Hard,Outdoor,scheduled,False,False,,
-156,WTA125|2026-07-13|generali-open-ladies-kitzbuhel|kitzbuhel,WTA125,Women,WTA 125,Generali Open Ladies Kitzbuhel,Kitzbuhel,,Austria,,2026-07-13,2026-07-19,True,,Clay,Outdoor,scheduled,False,False,,
-157,WTA125|2026-07-13|atv-bancomat-tennis-open|rome,WTA125,Women,WTA 125,ATV Bancomat Tennis Open,Rome,,Italy,,2026-07-13,2026-07-19,True,,Clay,Outdoor,scheduled,False,False,,
-158,WTA125|2026-07-30|37-palermo-ladies-open|palermo,WTA125,Women,WTA 125,37° Palermo Ladies Open,Palermo,,Italy,,2026-07-30,2026-08-05,True,,Clay,Outdoor,scheduled,False,False,,
-159,WTA125|2026-07-27|axeria-open-2026|targu-mures,WTA125,Women,WTA 125,AXERIA Open 2026,Targu Mures,,Romania,,2026-07-27,2026-08-02,True,,Clay,Outdoor,scheduled,False,False,,
-160,WTA125|2026-07-27|odlum-brown-vanopen|vancouver,WTA125,Women,WTA 125,Odlum Brown VanOpen,Vancouver,,Canada,,2026-07-27,2026-08-02,True,,Hard,Outdoor,scheduled,False,False,,
-161,WTA125|2026-08-03|warsaw-t-mobile-polish-open|warsaw,WTA125,Women,WTA 125,Warsaw T-mobile Polish Open,Warsaw,,Poland,,2026-08-03,2026-08-09,True,,Hard,Outdoor,scheduled,False,False,,
-162,WTA125|2026-08-24|ennoble-care-philly-open|philadelphia,WTA125,Women,WTA 125,Ennoble Care Philly Open,Philadelphia,Pennsylvania,United States,,2026-08-24,2026-08-30,True,,Hard,Outdoor,scheduled,False,False,,
-163,WTA125|2026-09-07|atik-antalya-open|antalya,WTA125,Women,WTA 125,ATIK Antalya Open,Antalya,,Turkey,,2026-09-07,2026-09-13,True,,Clay,Outdoor,scheduled,False,False,,
-164,WTA125|2026-09-07|kia-open|barranquilla,WTA125,Women,WTA 125,Kia Open,Barranquilla,,Colombia,,2026-09-07,2026-09-13,True,,Hard,Outdoor,scheduled,False,False,,
-165,WTA125|2026-09-07|montreux-nestle-open|montreux,WTA125,Women,WTA 125,Montreux Nestlé Open,Montreux,,Switzerland,,2026-09-07,2026-09-13,True,,Clay,Outdoor,scheduled,False,False,,
-166,WTA125|2026-09-14|caldas-da-rainha-ladies-open|caldas-da-rainha,WTA125,Women,WTA 125,Caldas da Rainha Ladies Open,Caldas da Rainha,,Portugal,,2026-09-14,2026-09-20,True,,Hard,Outdoor,scheduled,False,False,,
-167,WTA125|2026-09-14|zavarovalnica-triglav-ljubljana|ljubljana,WTA125,Women,WTA 125,Zavarovalnica Triglav Ljubljana,Ljubljana,,Slovenia,,2026-09-14,2026-09-20,True,,Clay,Outdoor,scheduled,False,False,,
-168,WTA125|2026-09-14|bbva-open-internacional-de-valencia|valencia,WTA125,Women,WTA 125,BBVA Open Internacional de Valencia,Valencia,,Spain,,2026-09-14,2026-09-20,True,,Clay,Outdoor,scheduled,False,False,,
-169,WTA125|2026-09-21|ankara-open|ankara,WTA125,Women,WTA 125,Ankara Open,Ankara,,Turkey,,2026-09-21,2026-09-27,True,,Hard,Outdoor,scheduled,False,False,,
-170,WTA125|2026-09-21|eupago-porto-open|porto,WTA125,Women,WTA 125,Eupago Porto Open,Porto,,Portugal,,2026-09-21,2026-09-27,True,,Hard,Outdoor,scheduled,False,False,,
-171,WTA125|2026-09-21|delta-motors-tolentino-open|tolentino,WTA125,Women,WTA 125,Delta Motors Tolentino Open,Tolentino,,Italy,,2026-09-21,2026-09-27,True,,Clay,Outdoor,scheduled,False,False,,
-172,WTA125|2026-09-28|adana-open|adana,WTA125,Women,WTA 125,Adana Open,Adana,,Turkey,,2026-09-28,2026-10-04,True,,Hard,Outdoor,scheduled,False,False,,
-173,WTA125|2026-09-28|jingshan-tennis-open|jingshan,WTA125,Women,WTA 125,Jingshan Tennis Open,Jingshan,,China,,2026-09-28,2026-10-04,True,,Hard,Outdoor,scheduled,False,False,,
-174,WTA125|2026-10-05|rio-ladies-open|rio-de-janeiro,WTA125,Women,WTA 125,Rio Ladies Open,Rio de Janeiro,,Brazil,,2026-10-05,2026-10-11,True,,Clay,Outdoor,scheduled,False,False,,
-175,WTA125|2026-10-05|samsun-open|samsun,WTA125,Women,WTA 125,Samsun Open,Samsun,,Turkey,,2026-10-05,2026-10-11,True,,Hard,Outdoor,scheduled,False,False,,
-176,WTA125|2026-10-05|suzhou-open|suzhou,WTA125,Women,WTA 125,Suzhou Open,Suzhou,,China,,2026-10-05,2026-10-11,True,,Hard,Outdoor,scheduled,False,False,,
-177,WTA125|2026-10-12|lisboa-belem-open|lisbon,WTA125,Women,WTA 125,Lisboa Belem Open,Lisbon,,Portugal,,2026-10-12,2026-10-18,True,,Clay,Outdoor,scheduled,False,False,,
-178,WTA125|2026-10-12|vanda-pharmaceuticals-mallorca-womens-championships|mallorca,WTA125,Women,WTA 125,Vanda Pharmaceuticals Mallorca Women’s Championships,Mallorca,,Spain,,2026-10-12,2026-10-18,True,,Clay,Outdoor,scheduled,False,False,,
-179,WTA125|2026-10-12|roveretopen-citta-della-pace|rovereto,WTA125,Women,WTA 125,RoveretOpen Città della Pace,Rovereto,,Italy,,2026-10-12,2026-10-18,True,,Hard,Indoor,scheduled,False,False,,
-180,CHALLENGER|2026-01-05|bengaluru-1|bengaluru,CHALLENGER,Men,ATP Challenger 125,Bengaluru 1,Bengaluru,,,IND,2026-01-05,2026-01-11,False,125,Hard,Outdoor,scheduled,False,False,friday start; saturday final; saturday start,Saturday final                       United Cup                     UTD        H       18 teams        ✽        Perth: Friday start | Sydney: Saturday start
-181,CHALLENGER|2026-01-05|canberra|canberra,CHALLENGER,Men,ATP Challenger 125,Canberra,Canberra,,,AUS,2026-01-05,2026-01-11,False,125,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final                       Brisbane                       250        H          32          24
-182,CHALLENGER|2026-01-05|noumea|noumea,CHALLENGER,Men,ATP Challenger 75,Noumea,Noumea,,,NCL,2026-01-05,2026-01-11,False,75,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final                       Hong Kong                      250        H          28           16
-183,CHALLENGER|2026-01-05|nonthaburi-1|nonthaburi,CHALLENGER,Men,ATP Challenger 50,Nonthaburi 1,Nonthaburi,,,THA,2026-01-05,2026-01-11,False,50,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final
-184,CHALLENGER|2026-01-05|nottingham-1|nottingham,CHALLENGER,Men,ATP Challenger 50,Nottingham 1,Nottingham,,,GBR,2026-01-05,2026-01-11,False,50,Hard,Indoor,scheduled,False,False,saturday final,Saturday final
-185,CHALLENGER|2026-01-12|nonthaburi-2|nonthaburi,CHALLENGER,Men,ATP Challenger 75,Nonthaburi 2,Nonthaburi,,,THA,2026-01-12,2026-01-18,False,75,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final                       Australian Open Qualifying     GSL        H          ✽           128
-186,CHALLENGER|2026-01-12|buenos-aires-argentino|buenos-aires,CHALLENGER,Men,ATP Challenger 50,Buenos Aires (Argentino),Buenos Aires,,,ARG,2026-01-12,2026-01-18,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final                       Adelaide                       250        H          28           16                Saturday final
-187,CHALLENGER|2026-01-12|glasgow|glasgow,CHALLENGER,Men,ATP Challenger 50,Glasgow,Glasgow,,,GBR,2026-01-12,2026-01-18,False,50,Hard,Indoor,scheduled,False,False,saturday final,Saturday final                       Auckland                       250        H          28           16                Saturday final
-188,CHALLENGER|2026-01-19|oeiras-1|oeiras,CHALLENGER,Men,ATP Challenger 100,Oeiras 1,Oeiras,,,POR,2026-01-19,2026-01-25,False,100,Hard,Indoor,scheduled,False,False,sunday start,Australian Open                GSL        H          128          ✽                 Sunday start
-189,CHALLENGER|2026-01-19|itajai|itajai,CHALLENGER,Men,ATP Challenger 75,Itajai,Itajai,,,BRA,2026-01-19,2026-01-25,False,75,Clay,Outdoor,scheduled,False,False,,
-190,CHALLENGER|2026-01-19|soma-bay|soma-bay,CHALLENGER,Men,ATP Challenger 75,Soma Bay,Soma Bay,,,EGY,2026-01-19,2026-01-25,False,75,Hard,Outdoor,scheduled,False,False,,
-191,CHALLENGER|2026-01-19|phan-thiet-1|phan-thiet,CHALLENGER,Men,ATP Challenger 50,Phan Thiet 1,Phan Thiet,,,VIE,2026-01-19,2026-01-25,False,50,Hard,Outdoor,scheduled,False,False,,
-192,CHALLENGER|2026-01-26|manama|manama,CHALLENGER,Men,ATP Challenger 125,Manama,Manama,,,BRN,2026-01-26,2026-02-01,False,125,Hard,Outdoor,scheduled,False,False,tuesday start,Tuesday start                        Australian Open                GSL        H          128          ✽
-193,CHALLENGER|2026-01-26|quimper|quimper,CHALLENGER,Men,ATP Challenger 125,Quimper,Quimper,,,FRA,2026-01-26,2026-02-01,False,125,Hard,Indoor,scheduled,False,False,tuesday start,Tuesday start
-194,CHALLENGER|2026-01-26|concepcion|concepcion,CHALLENGER,Men,ATP Challenger 100,Concepcion,Concepcion,,,CHI,2026-01-26,2026-02-01,False,100,Clay,Outdoor,scheduled,False,False,tuesday start,Tuesday start
-195,CHALLENGER|2026-01-26|san-diego|san-diego,CHALLENGER,Men,ATP Challenger 100,San Diego,San Diego,California,,USA,2026-01-26,2026-02-01,False,100,Hard,Outdoor,scheduled,False,False,tuesday start,Tuesday start
-196,CHALLENGER|2026-01-26|oeiras-2|oeiras,CHALLENGER,Men,ATP Challenger 75,Oeiras 2,Oeiras,,,POR,2026-01-26,2026-02-01,False,75,Hard,Indoor,scheduled,False,False,,
-197,CHALLENGER|2026-01-26|phan-thiet-2|phan-thiet,CHALLENGER,Men,ATP Challenger 50,Phan Thiet 2,Phan Thiet,,,VIE,2026-01-26,2026-02-01,False,50,Hard,Outdoor,scheduled,False,False,,
-198,CHALLENGER|2026-02-02|rosario|rosario,CHALLENGER,Men,ATP Challenger 125,Rosario,Rosario,,,ARG,2026-02-02,2026-02-08,False,125,Clay,Outdoor,scheduled,False,False,,Montpellier                    250        IH         28           16
-199,CHALLENGER|2026-02-02|brisbane-1|brisbane,CHALLENGER,Men,ATP Challenger 75,Brisbane 1,Brisbane,,,AUS,2026-02-02,2026-02-08,False,75,Hard,Outdoor,scheduled,False,False,,Davis Cup Qualifiers           DC         ✽          ✽            ✽
-200,CHALLENGER|2026-02-02|cleveland|cleveland,CHALLENGER,Men,ATP Challenger 75,Cleveland,Cleveland,Ohio,,USA,2026-02-02,2026-02-08,False,75,Hard,Indoor,scheduled,False,False,,
-201,CHALLENGER|2026-02-02|tenerife-1|tenerife,CHALLENGER,Men,ATP Challenger 75,Tenerife 1,Tenerife,,,ESP,2026-02-02,2026-02-08,False,75,Hard,Outdoor,scheduled,False,False,,
-202,CHALLENGER|2026-02-02|cesenatico|cesenatico,CHALLENGER,Men,ATP Challenger 50,Cesenatico,Cesenatico,,,ITA,2026-02-02,2026-02-08,False,50,Hard,Indoor,scheduled,False,False,,
-203,CHALLENGER|2026-02-02|koblenz|koblenz,CHALLENGER,Men,ATP Challenger 50,Koblenz,Koblenz,,,GER,2026-02-02,2026-02-08,False,50,Hard,Indoor,scheduled,False,False,,
-204,CHALLENGER|2026-02-09|pau|pau,CHALLENGER,Men,ATP Challenger 125,Pau,Pau,,,FRA,2026-02-09,2026-02-15,False,125,Hard,Indoor,scheduled,False,False,,Dallas                         500        IH         32           16
-205,CHALLENGER|2026-02-09|brisbane-2|brisbane,CHALLENGER,Men,ATP Challenger 75,Brisbane 2,Brisbane,,,AUS,2026-02-09,2026-02-15,False,75,Hard,Outdoor,scheduled,False,False,,Rotterdam                      500        IH         32           16
-206,CHALLENGER|2026-02-09|tenerife-2|tenerife,CHALLENGER,Men,ATP Challenger 75,Tenerife 2,Tenerife,,,ESP,2026-02-09,2026-02-15,False,75,Hard,Outdoor,scheduled,False,False,,Buenos Aires                   250        C          28           16
-207,CHALLENGER|2026-02-09|baton-rouge|baton-rouge,CHALLENGER,Men,ATP Challenger 50,Baton Rouge,Baton Rouge,Louisiana,,USA,2026-02-09,2026-02-15,False,50,Hard,Indoor,scheduled,False,False,,
-208,CHALLENGER|2026-02-09|chennai|chennai,CHALLENGER,Men,ATP Challenger 50,Chennai,Chennai,,,IND,2026-02-09,2026-02-15,False,50,Hard,Outdoor,scheduled,False,False,,
-209,CHALLENGER|2026-02-16|lille|lille,CHALLENGER,Men,ATP Challenger 125,Lille,Lille,,,FRA,2026-02-16,2026-02-22,False,125,Hard,Indoor,scheduled,False,False,saturday final,Doha                           500        H          32           16               Saturday final
-210,CHALLENGER|2026-02-16|metepec|metepec,CHALLENGER,Men,ATP Challenger 75,Metepec,Metepec,,,MEX,2026-02-16,2026-02-22,False,75,Hard,Outdoor,scheduled,True,False,,High altitude   Rio de Janeiro                 500        C          32           16
-211,CHALLENGER|2026-02-16|new-delhi|new-delhi,CHALLENGER,Men,ATP Challenger 75,New Delhi,New Delhi,,,IND,2026-02-16,2026-02-22,False,75,Hard,Outdoor,scheduled,False,False,,Delray Beach                   250        H          28           16
-212,CHALLENGER|2026-02-16|tigre-1|tigre,CHALLENGER,Men,ATP Challenger 50,Tigre 1,Tigre,,,ARG,2026-02-16,2026-02-22,False,50,Clay,Outdoor,scheduled,False,False,,
-213,CHALLENGER|2026-02-23|saint-brieuc|saint-brieuc,CHALLENGER,Men,ATP Challenger 100,Saint-Brieuc,Saint-Brieuc,,,FRA,2026-02-23,2026-03-01,False,100,Hard,Indoor,scheduled,False,False,saturday final,Acapulco                       500        H          32           16               Saturday final
-214,CHALLENGER|2026-02-23|lugano|lugano,CHALLENGER,Men,ATP Challenger 75,Lugano,Lugano,,,SUI,2026-02-23,2026-03-01,False,75,Hard,Indoor,scheduled,False,False,saturday final,Dubai                          500        H          32           16               Saturday final
-215,CHALLENGER|2026-02-23|pune|pune,CHALLENGER,Men,ATP Challenger 75,Pune,Pune,,,IND,2026-02-23,2026-03-01,False,75,Hard,Outdoor,scheduled,False,False,,Santiago                       250        C          28           16
-216,CHALLENGER|2026-02-23|tigre-2|tigre,CHALLENGER,Men,ATP Challenger 50,Tigre 2,Tigre,,,ARG,2026-02-23,2026-03-01,False,50,Clay,Outdoor,scheduled,False,False,,
-217,CHALLENGER|2026-03-02|thionville|thionville,CHALLENGER,Men,ATP Challenger 100,Thionville,Thionville,,,FRA,2026-03-02,2026-03-08,False,100,Hard,Indoor,scheduled,False,False,wednesday start,INDIAN WELLS                  M1000       H          98          48             Wednesday start
-218,CHALLENGER|2026-03-02|brasilia|brasilia,CHALLENGER,Men,ATP Challenger 75,Brasilia,Brasilia,,,BRA,2026-03-02,2026-03-08,False,75,Clay,Outdoor,scheduled,False,False,,
-219,CHALLENGER|2026-03-02|kigali-1|kigali,CHALLENGER,Men,ATP Challenger 75,Kigali 1,Kigali,,,RWA,2026-03-02,2026-03-08,False,75,Clay,Outdoor,scheduled,True,False,saturday final,Saturday final       High altitude
-220,CHALLENGER|2026-03-02|fujairah-1|fujairah,CHALLENGER,Men,ATP Challenger 50,Fujairah 1,Fujairah,,,UAE,2026-03-02,2026-03-08,False,50,Hard,Outdoor,cancelled,False,False,,Cancelled
-221,CHALLENGER|2026-03-02|hersonissos-1|hersonissos,CHALLENGER,Men,ATP Challenger 50,Hersonissos 1,Hersonissos,,,GRE,2026-03-02,2026-03-08,False,50,Hard,Outdoor,scheduled,False,False,,
-222,CHALLENGER|2026-03-09|cap-cana|cap-cana,CHALLENGER,Men,ATP Challenger 175,Cap Cana,Cap Cana,,,DOM,2026-03-09,2026-03-15,False,175,Hard,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying   INDIAN WELLS        M1000       H          98           ✽
-223,CHALLENGER|2026-03-09|phoenix|phoenix,CHALLENGER,Men,ATP Challenger 175,Phoenix,Phoenix,Arizona,,USA,2026-03-09,2026-03-15,False,175,Hard,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying
-224,CHALLENGER|2026-03-09|kigali-2|kigali,CHALLENGER,Men,ATP Challenger 100,Kigali 2,Kigali,,,RWA,2026-03-09,2026-03-15,False,100,Clay,Outdoor,scheduled,True,False,,High altitude
-225,CHALLENGER|2026-03-09|cherbourg-en-cotentin|cherbourg-en-cotentin,CHALLENGER,Men,ATP Challenger 75,Cherbourg-en-Cotentin,Cherbourg-en-Cotentin,,,FRA,2026-03-09,2026-03-15,False,75,Hard,Indoor,scheduled,False,False,,
-226,CHALLENGER|2026-03-09|santiago|santiago,CHALLENGER,Men,ATP Challenger 75,Santiago,Santiago,,,CHI,2026-03-09,2026-03-15,False,75,Clay,Outdoor,scheduled,False,False,,
-227,CHALLENGER|2026-03-09|fujairah-2|fujairah,CHALLENGER,Men,ATP Challenger 50,Fujairah 2,Fujairah,,,UAE,2026-03-09,2026-03-15,False,50,Hard,Outdoor,cancelled,False,False,,Cancelled
-228,CHALLENGER|2026-03-09|hersonissos-2|hersonissos,CHALLENGER,Men,ATP Challenger 50,Hersonissos 2,Hersonissos,,,GRE,2026-03-09,2026-03-15,False,50,Hard,Outdoor,scheduled,False,False,,
-229,CHALLENGER|2026-03-16|asuncion-rakiura|asuncion,CHALLENGER,Men,ATP Challenger 75,Asuncion (Rakiura),Asuncion,,,PAR,2026-03-16,2026-03-22,False,75,Clay,Outdoor,scheduled,False,False,wednesday start,MIAMI               M1000       H          98          48        Wednesday start
-230,CHALLENGER|2026-03-16|cuernavaca|cuernavaca,CHALLENGER,Men,ATP Challenger 75,Cuernavaca,Cuernavaca,,,MEX,2026-03-16,2026-03-22,False,75,Hard,Outdoor,scheduled,True,False,,High altitude
-231,CHALLENGER|2026-03-16|murcia|murcia,CHALLENGER,Men,ATP Challenger 75,Murcia,Murcia,,,ESP,2026-03-16,2026-03-22,False,75,Clay,Outdoor,scheduled,False,False,,
-232,CHALLENGER|2026-03-16|zadar|zadar,CHALLENGER,Men,ATP Challenger 75,Zadar,Zadar,,,CRO,2026-03-16,2026-03-22,False,75,Clay,Outdoor,scheduled,False,False,,
-233,CHALLENGER|2026-03-23|morelia|morelia,CHALLENGER,Men,ATP Challenger 125,Morelia,Morelia,,,MEX,2026-03-23,2026-03-29,False,125,Hard,Outdoor,scheduled,True,False,saturday final,Saturday final       High altitude         MIAMI               M1000       H          98           ✽
-234,CHALLENGER|2026-03-23|naples|naples,CHALLENGER,Men,ATP Challenger 125,Naples,Naples,,,ITA,2026-03-23,2026-03-29,False,125,Clay,Outdoor,scheduled,False,False,,
-235,CHALLENGER|2026-03-23|girona|girona,CHALLENGER,Men,ATP Challenger 100,Girona,Girona,,,ESP,2026-03-23,2026-03-29,False,100,Clay,Outdoor,cancelled,False,False,,Cancelled
-236,CHALLENGER|2026-03-23|alicante-montemar|alicante,CHALLENGER,Men,ATP Challenger 100,Alicante (Montemar),Alicante,,,ESP,2026-03-23,2026-03-29,False,100,Clay,Outdoor,scheduled,False,False,,
-237,CHALLENGER|2026-03-23|sao-paulo|sao-paulo,CHALLENGER,Men,ATP Challenger 100,Sao Paulo,Sao Paulo,,,BRA,2026-03-23,2026-03-29,False,100,Clay,Outdoor,scheduled,False,False,,
-238,CHALLENGER|2026-03-23|bucaramanga-floridablanca|bucaramanga,CHALLENGER,Men,ATP Challenger 50,Bucaramanga (Floridablanca),Bucaramanga,,,COL,2026-03-23,2026-03-29,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
-239,CHALLENGER|2026-03-23|split|split,CHALLENGER,Men,ATP Challenger 50,Split,Split,,,CRO,2026-03-23,2026-03-29,False,50,Clay,Outdoor,scheduled,False,False,,
-240,CHALLENGER|2026-03-23|yokkaichi|yokkaichi,CHALLENGER,Men,ATP Challenger 50,Yokkaichi,Yokkaichi,,,JPN,2026-03-23,2026-03-29,False,50,Hard,Outdoor,scheduled,False,False,,
-241,CHALLENGER|2026-03-30|menorca|menorca,CHALLENGER,Men,ATP Challenger 100,Menorca,Menorca,,,ESP,2026-03-30,2026-04-05,False,100,Clay,Outdoor,scheduled,False,False,,Bucharest            250        C          28           16
-242,CHALLENGER|2026-03-30|barletta|barletta,CHALLENGER,Men,ATP Challenger 75,Barletta,Barletta,,,ITA,2026-03-30,2026-04-05,False,75,Clay,Outdoor,scheduled,False,False,,Houston              250        C          28           16
-243,CHALLENGER|2026-03-30|san-luis-potosi|san-luis-potosi,CHALLENGER,Men,ATP Challenger 75,San Luis Potosi,San Luis Potosi,,,MEX,2026-03-30,2026-04-05,False,75,Clay,Outdoor,scheduled,True,False,,High altitude        Marrakech            250        C          28           16
-244,CHALLENGER|2026-03-30|sao-leopoldo|sao-leopoldo,CHALLENGER,Men,ATP Challenger 75,Sao Leopoldo,Sao Leopoldo,,,BRA,2026-03-30,2026-04-05,False,75,Clay,Outdoor,scheduled,False,False,,
-245,CHALLENGER|2026-03-30|miyazaki|miyazaki,CHALLENGER,Men,ATP Challenger 50,Miyazaki,Miyazaki,,,JPN,2026-03-30,2026-04-05,False,50,Hard,Outdoor,scheduled,False,False,,
-246,CHALLENGER|2026-04-06|mexico-city|mexico-city,CHALLENGER,Men,ATP Challenger 125,Mexico City,Mexico City,,,MEX,2026-04-06,2026-04-12,False,125,Clay,Outdoor,scheduled,True,False,sunday start,High altitude         MONTECARLO          M1000       C          56          28          Sunday start
-247,CHALLENGER|2026-04-06|monza|monza,CHALLENGER,Men,ATP Challenger 125,Monza,Monza,,,ITA,2026-04-06,2026-04-12,False,125,Clay,Outdoor,scheduled,False,False,,
-248,CHALLENGER|2026-04-06|campinas|campinas,CHALLENGER,Men,ATP Challenger 75,Campinas,Campinas,,,BRA,2026-04-06,2026-04-12,False,75,Clay,Outdoor,scheduled,False,False,,
-249,CHALLENGER|2026-04-06|madrid|madrid,CHALLENGER,Men,ATP Challenger 75,Madrid,Madrid,,,ESP,2026-04-06,2026-04-12,False,75,Clay,Outdoor,scheduled,False,False,,
-250,CHALLENGER|2026-04-06|sarasota|sarasota,CHALLENGER,Men,ATP Challenger 75,Sarasota,Sarasota,Florida,,USA,2026-04-06,2026-04-12,False,75,Clay,Outdoor,scheduled,False,True,,*                               Har-Tru
-251,CHALLENGER|2026-04-06|wuning-1|wuning,CHALLENGER,Men,ATP Challenger 50,Wuning 1,Wuning,,,CHN,2026-04-06,2026-04-12,False,50,Hard,Outdoor,scheduled,False,False,,
-252,CHALLENGER|2026-04-13|busan|busan,CHALLENGER,Men,ATP Challenger 125,Busan,Busan,,,KOR,2026-04-13,2026-04-19,False,125,Hard,Outdoor,scheduled,False,False,,Barcelona            500        C          32          24
-253,CHALLENGER|2026-04-13|oeiras-3|oeiras,CHALLENGER,Men,ATP Challenger 125,Oeiras 3,Oeiras,,,POR,2026-04-13,2026-04-19,False,125,Clay,Outdoor,scheduled,False,False,,Munich               500        C          32           16
-254,CHALLENGER|2026-04-13|merida|merida,CHALLENGER,Men,ATP Challenger 75,Merida,Merida,,,MEX,2026-04-13,2026-04-19,False,75,Clay,Outdoor,cancelled,False,False,,Cancelled
-255,CHALLENGER|2026-04-13|santa-cruz-de-la-sierra|santa-cruz-de-la-sierra,CHALLENGER,Men,ATP Challenger 75,Santa Cruz de la Sierra,Santa Cruz de la Sierra,,,BOL,2026-04-13,2026-04-19,False,75,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
-256,CHALLENGER|2026-04-13|tallahassee|tallahassee,CHALLENGER,Men,ATP Challenger 75,Tallahassee,Tallahassee,Florida,,USA,2026-04-13,2026-04-19,False,75,Clay,Outdoor,scheduled,False,True,,*                               Har-Tru
-257,CHALLENGER|2026-04-13|wuning-2|wuning,CHALLENGER,Men,ATP Challenger 50,Wuning 2,Wuning,,,CHN,2026-04-13,2026-04-19,False,50,Hard,Outdoor,scheduled,False,False,,
-258,CHALLENGER|2026-04-20|gwangju|gwangju,CHALLENGER,Men,ATP Challenger 75,Gwangju,Gwangju,,,KOR,2026-04-20,2026-04-26,False,75,Hard,Outdoor,scheduled,False,False,wednesday start,MADRID              M1000       C          96          48        Wednesday start
-259,CHALLENGER|2026-04-20|rome|rome,CHALLENGER,Men,ATP Challenger 75,Rome,Rome,,,ITA,2026-04-20,2026-04-26,False,75,Clay,Outdoor,scheduled,False,False,,
-260,CHALLENGER|2026-04-20|savannah|savannah,CHALLENGER,Men,ATP Challenger 75,Savannah,Savannah,Georgia,,USA,2026-04-20,2026-04-26,False,75,Clay,Outdoor,scheduled,False,True,,*                               Har-Tru
-261,CHALLENGER|2026-04-20|abidjan-1|abidjan,CHALLENGER,Men,ATP Challenger 50,Abidjan 1,Abidjan,,,CIV,2026-04-20,2026-04-26,False,50,Hard,Outdoor,scheduled,False,False,,
-262,CHALLENGER|2026-04-20|shymkent-1|shymkent,CHALLENGER,Men,ATP Challenger 50,Shymkent 1,Shymkent,,,KAZ,2026-04-20,2026-04-26,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
-263,CHALLENGER|2026-04-27|aix-en-provence|aix-en-provence,CHALLENGER,Men,ATP Challenger 175,Aix-en-Provence,Aix-en-Provence,,,FRA,2026-04-27,2026-05-03,False,175,Clay,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying   MADRID                      M1000       C          96          ✽
-264,CHALLENGER|2026-04-27|cagliari|cagliari,CHALLENGER,Men,ATP Challenger 175,Cagliari,Cagliari,,,ITA,2026-04-27,2026-05-03,False,175,Clay,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying
-265,CHALLENGER|2026-04-27|mauthausen|mauthausen,CHALLENGER,Men,ATP Challenger 100,Mauthausen,Mauthausen,,,AUT,2026-04-27,2026-05-03,False,100,Clay,Outdoor,scheduled,False,False,,
-266,CHALLENGER|2026-04-27|jiujiang|jiujiang,CHALLENGER,Men,ATP Challenger 75,Jiujiang,Jiujiang,,,CHN,2026-04-27,2026-05-03,False,75,Hard,Outdoor,scheduled,False,False,,
-267,CHALLENGER|2026-04-27|ostrava|ostrava,CHALLENGER,Men,ATP Challenger 75,Ostrava,Ostrava,,,CZE,2026-04-27,2026-05-03,False,75,Clay,Outdoor,scheduled,False,False,,
-268,CHALLENGER|2026-04-27|abidjan-2|abidjan,CHALLENGER,Men,ATP Challenger 75,Abidjan 2,Abidjan,,,CIV,2026-04-27,2026-05-03,False,75,Hard,Outdoor,scheduled,False,False,,
-269,CHALLENGER|2026-04-27|shymkent-2|shymkent,CHALLENGER,Men,ATP Challenger 50,Shymkent 2,Shymkent,,,KAZ,2026-04-27,2026-05-03,False,50,Clay,Outdoor,scheduled,False,False,,
-270,CHALLENGER|2026-05-04|wuxi|wuxi,CHALLENGER,Men,ATP Challenger 100,Wuxi,Wuxi,,,CHN,2026-05-04,2026-05-10,False,100,Hard,Outdoor,scheduled,False,False,wednesday start,ROME                        M1000       C          96          48             Wednesday start
-271,CHALLENGER|2026-05-04|francavilla-al-mare|francavilla-al-mare,CHALLENGER,Men,ATP Challenger 75,Francavilla al Mare,Francavilla al Mare,,,ITA,2026-05-04,2026-05-10,False,75,Clay,Outdoor,scheduled,False,False,,
-272,CHALLENGER|2026-05-04|brazzaville|brazzaville,CHALLENGER,Men,ATP Challenger 50,Brazzaville,Brazzaville,,,CGO,2026-05-04,2026-05-10,False,50,Clay,Outdoor,scheduled,False,False,,
-273,CHALLENGER|2026-05-04|santos|santos,CHALLENGER,Men,ATP Challenger 50,Santos,Santos,,,BRA,2026-05-04,2026-05-10,False,50,Clay,Outdoor,scheduled,False,False,,
-274,CHALLENGER|2026-05-11|bordeaux|bordeaux,CHALLENGER,Men,ATP Challenger 175,Bordeaux,Bordeaux,,,FRA,2026-05-11,2026-05-17,False,175,Clay,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying   ROME                        M1000       C          96          ✽
-275,CHALLENGER|2026-05-11|valencia|valencia,CHALLENGER,Men,ATP Challenger 175,Valencia,Valencia,,,ESP,2026-05-11,2026-05-17,False,175,Clay,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying
-276,CHALLENGER|2026-05-11|oeiras-4|oeiras,CHALLENGER,Men,ATP Challenger 100,Oeiras 4,Oeiras,,,POR,2026-05-11,2026-05-17,False,100,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
-277,CHALLENGER|2026-05-11|tunis|tunis,CHALLENGER,Men,ATP Challenger 75,Tunis,Tunis,,,TUN,2026-05-11,2026-05-17,False,75,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
-278,CHALLENGER|2026-05-11|zagreb|zagreb,CHALLENGER,Men,ATP Challenger 75,Zagreb,Zagreb,,,CRO,2026-05-11,2026-05-17,False,75,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
-279,CHALLENGER|2026-05-11|bengaluru-2|bengaluru,CHALLENGER,Men,ATP Challenger 50,Bengaluru 2,Bengaluru,,,IND,2026-05-11,2026-05-17,False,50,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final
-280,CHALLENGER|2026-05-11|cordoba|cordoba,CHALLENGER,Men,ATP Challenger 50,Cordoba,Cordoba,,,ARG,2026-05-11,2026-05-17,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
-281,CHALLENGER|2026-05-18|istanbul-istinye|istanbul,CHALLENGER,Men,ATP Challenger 75,Istanbul (Istinye),Istanbul,,,TUR,2026-05-18,2026-05-24,False,75,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final                             Roland Garros Qualifying     GSL        C          ✽           128
-282,CHALLENGER|2026-05-18|bengaluru-3|bengaluru,CHALLENGER,Men,ATP Challenger 50,Bengaluru 3,Bengaluru,,,IND,2026-05-18,2026-05-24,False,50,Hard,Outdoor,scheduled,False,False,saturday final; sunday start,Saturday final                             Hamburg                      500        C          32          16        Sunday start | Saturday final
-283,CHALLENGER|2026-05-18|cervia|cervia,CHALLENGER,Men,ATP Challenger 50,Cervia,Cervia,,,ITA,2026-05-18,2026-05-24,False,50,Clay,Outdoor,scheduled,False,False,saturday final; sunday start,Saturday final                             Geneva                       250        C          28          16         Sunday start | Saturday final
-284,CHALLENGER|2026-05-25|chisinau-1|chisinau,CHALLENGER,Men,ATP Challenger 100,Chisinau 1,Chisinau,,,MDA,2026-05-25,2026-05-31,False,100,Clay,Outdoor,scheduled,False,False,sunday start,Roland Garros                GSL        C          128         ✽                Sunday start
-285,CHALLENGER|2026-05-25|little-rock|little-rock,CHALLENGER,Men,ATP Challenger 75,Little Rock,Little Rock,Arizona,,USA,2026-05-25,2026-05-31,False,75,Hard,Outdoor,scheduled,False,False,,
-286,CHALLENGER|2026-05-25|vicenza|vicenza,CHALLENGER,Men,ATP Challenger 75,Vicenza,Vicenza,,,ITA,2026-05-25,2026-05-31,False,75,Clay,Outdoor,scheduled,False,False,,
-287,CHALLENGER|2026-05-25|centurion-1|centurion,CHALLENGER,Men,ATP Challenger 50,Centurion 1,Centurion,,,RSA,2026-05-25,2026-05-31,False,50,Hard,Outdoor,scheduled,True,False,,High altitude
-288,CHALLENGER|2026-05-25|kosice|kosice,CHALLENGER,Men,ATP Challenger 50,Kosice,Kosice,,,SVK,2026-05-25,2026-05-31,False,50,Clay,Outdoor,scheduled,False,False,,
-289,CHALLENGER|2026-06-01|birmingham|birmingham,CHALLENGER,Men,ATP Challenger 125,Birmingham,Birmingham,,,GBR,2026-06-01,2026-06-07,False,125,Grass,Outdoor,scheduled,False,False,,Roland Garros                GSL        C          128         ✽
-290,CHALLENGER|2026-06-01|perugia|perugia,CHALLENGER,Men,ATP Challenger 125,Perugia,Perugia,,,ITA,2026-06-01,2026-06-07,False,125,Clay,Outdoor,scheduled,False,False,,
-291,CHALLENGER|2026-06-01|bad-rappenau|bad-rappenau,CHALLENGER,Men,ATP Challenger 100,Bad Rappenau,Bad Rappenau,,,GER,2026-06-01,2026-06-07,False,100,Clay,Outdoor,scheduled,False,False,,
-292,CHALLENGER|2026-06-01|prostejov|prostejov,CHALLENGER,Men,ATP Challenger 100,Prostejov,Prostejov,,,CZE,2026-06-01,2026-06-07,False,100,Clay,Outdoor,scheduled,False,False,,
-293,CHALLENGER|2026-06-01|tyler|tyler,CHALLENGER,Men,ATP Challenger 75,Tyler,Tyler,Texas,,USA,2026-06-01,2026-06-07,False,75,Hard,Outdoor,scheduled,False,False,,
-294,CHALLENGER|2026-06-01|centurion-2|centurion,CHALLENGER,Men,ATP Challenger 50,Centurion 2,Centurion,,,RSA,2026-06-01,2026-06-07,False,50,Hard,Outdoor,scheduled,True,False,,High altitude
-295,CHALLENGER|2026-06-08|ilkley|ilkley,CHALLENGER,Men,ATP Challenger 125,Ilkley,Ilkley,,,GBR,2026-06-08,2026-06-14,False,125,Grass,Outdoor,scheduled,False,False,,'s Hertogenbosch             250        G          28          16
-296,CHALLENGER|2026-06-08|bratislava|bratislava,CHALLENGER,Men,ATP Challenger 100,Bratislava,Bratislava,,,SVK,2026-06-08,2026-06-14,False,100,Clay,Outdoor,scheduled,False,False,,Stuttgart                    250        G          28          16
-297,CHALLENGER|2026-06-08|lyon|lyon,CHALLENGER,Men,ATP Challenger 100,Lyon,Lyon,,,FRA,2026-06-08,2026-06-14,False,100,Clay,Outdoor,scheduled,False,False,,
-298,CHALLENGER|2026-06-08|cattolica|cattolica,CHALLENGER,Men,ATP Challenger 75,Cattolica,Cattolica,,,ITA,2026-06-08,2026-06-14,False,75,Clay,Outdoor,scheduled,False,False,,
-299,CHALLENGER|2026-06-08|san-miguel-de-tucuman|san-miguel-de-tucuman,CHALLENGER,Men,ATP Challenger 50,San Miguel de Tucuman,San Miguel de Tucuman,,,ARG,2026-06-08,2026-06-14,False,50,Clay,Outdoor,scheduled,False,False,,
-300,CHALLENGER|2026-06-15|nottingham-2|nottingham,CHALLENGER,Men,ATP Challenger 125,Nottingham 2,Nottingham,,,GBR,2026-06-15,2026-06-21,False,125,Grass,Outdoor,scheduled,False,False,saturday final; sunday start,Sunday start | Saturday final                            Halle                    500        G          32           16
-301,CHALLENGER|2026-06-15|parma|parma,CHALLENGER,Men,ATP Challenger 125,Parma,Parma,,,ITA,2026-06-15,2026-06-21,False,125,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final                                           London                   500        G          32           16
-302,CHALLENGER|2026-06-15|poznan|poznan,CHALLENGER,Men,ATP Challenger 100,Poznan,Poznan,,,POL,2026-06-15,2026-06-21,False,100,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
-303,CHALLENGER|2026-06-15|dublin|dublin,CHALLENGER,Men,ATP Challenger 75,Dublin,Dublin,,,IRL,2026-06-15,2026-06-21,False,75,Grass,Outdoor,scheduled,False,False,saturday final,Saturday final
-304,CHALLENGER|2026-06-15|asuncion-cit|asuncion,CHALLENGER,Men,ATP Challenger 50,Asuncion (CIT),Asuncion,,,PAR,2026-06-15,2026-06-21,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
-305,CHALLENGER|2026-06-15|royan|royan,CHALLENGER,Men,ATP Challenger 50,Royan,Royan,,,FRA,2026-06-15,2026-06-21,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
-306,CHALLENGER|2026-06-22|targu-mures|targu-mures,CHALLENGER,Men,ATP Challenger 75,Targu Mures,Targu Mures,,,ROU,2026-06-22,2026-06-28,False,75,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final                                           Wimbledon Qualifying     GSL        G          ✽           128
-307,CHALLENGER|2026-06-22|durham|durham,CHALLENGER,Men,ATP Challenger 50,Durham,Durham,North Carolina,,USA,2026-06-22,2026-06-28,False,50,Hard,Outdoor,cancelled,False,False,saturday final; sunday start,Cancelled           Eastbourne               250        G          28           16       Sunday start | Saturday final
-308,CHALLENGER|2026-06-22|plovdiv|plovdiv,CHALLENGER,Men,ATP Challenger 50,Plovdiv,Plovdiv,,,BUL,2026-06-22,2026-06-28,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final                                           Mallorca                 250        G          28           16              Saturday final
-309,CHALLENGER|2026-06-22|piracicaba|piracicaba,CHALLENGER,Men,ATP Challenger 50,Piracicaba,Piracicaba,,,BRA,2026-06-22,2026-06-28,False,50,Clay,Outdoor,scheduled,False,False,,
-310,CHALLENGER|2026-06-29|brasov|brasov,CHALLENGER,Men,ATP Challenger 75,Brasov,Brasov,,,ROU,2026-06-29,2026-07-05,False,75,Clay,Outdoor,scheduled,False,False,,Wimbledon                GSL        G          128          ✽
-311,CHALLENGER|2026-06-29|cary|cary,CHALLENGER,Men,ATP Challenger 75,Cary,Cary,North Carolina,,USA,2026-06-29,2026-07-05,False,75,Hard,Outdoor,scheduled,False,False,,
-312,CHALLENGER|2026-06-29|milan|milan,CHALLENGER,Men,ATP Challenger 75,Milan,Milan,,,ITA,2026-06-29,2026-07-05,False,75,Clay,Outdoor,scheduled,False,False,,
-313,CHALLENGER|2026-06-29|quito|quito,CHALLENGER,Men,ATP Challenger 50,Quito,Quito,,,ECU,2026-06-29,2026-07-05,False,50,Clay,Outdoor,scheduled,True,False,,High altitude
-314,CHALLENGER|2026-06-29|troyes|troyes,CHALLENGER,Men,ATP Challenger 50,Troyes,Troyes,,,FRA,2026-06-29,2026-07-05,False,50,Clay,Outdoor,scheduled,False,False,,
-315,CHALLENGER|2026-07-06|braunschweig|braunschweig,CHALLENGER,Men,ATP Challenger 125,Braunschweig,Braunschweig,,,GER,2026-07-06,2026-07-12,False,125,Clay,Outdoor,scheduled,False,False,,Wimbledon                GSL        G          128          ✽
-316,CHALLENGER|2026-07-06|newport|newport,CHALLENGER,Men,ATP Challenger 125,Newport,Newport,Rhode Island,,USA,2026-07-06,2026-07-12,False,125,Grass,Outdoor,scheduled,False,False,,
-317,CHALLENGER|2026-07-06|iasi|iasi,CHALLENGER,Men,ATP Challenger 100,Iasi,Iasi,,,ROU,2026-07-06,2026-07-12,False,100,Clay,Outdoor,scheduled,False,False,,
-318,CHALLENGER|2026-07-06|bogota|bogota,CHALLENGER,Men,ATP Challenger 75,Bogota,Bogota,,,COL,2026-07-06,2026-07-12,False,75,Clay,Outdoor,scheduled,True,False,,High altitude
-319,CHALLENGER|2026-07-06|trieste|trieste,CHALLENGER,Men,ATP Challenger 75,Trieste,Trieste,,,ITA,2026-07-06,2026-07-12,False,75,Clay,Outdoor,scheduled,False,False,,
-320,CHALLENGER|2026-07-06|liege|liege,CHALLENGER,Men,ATP Challenger 50,Liege,Liege,,,BEL,2026-07-06,2026-07-12,False,50,Clay,Outdoor,scheduled,False,False,,
-321,CHALLENGER|2026-07-06|nottingham-3|nottingham,CHALLENGER,Men,ATP Challenger 50,Nottingham 3,Nottingham,,,GBR,2026-07-06,2026-07-12,False,50,Grass,Outdoor,scheduled,False,False,,
-322,CHALLENGER|2026-07-13|bunschoten|bunschoten,CHALLENGER,Men,ATP Challenger 75,Bunschoten,Bunschoten,,,NED,2026-07-13,2026-07-19,False,75,Clay,Outdoor,scheduled,False,False,,Bastad                   250        C          28           16
-323,CHALLENGER|2026-07-13|cordenons|cordenons,CHALLENGER,Men,ATP Challenger 75,Cordenons,Cordenons,,,ITA,2026-07-13,2026-07-19,False,75,Clay,Outdoor,scheduled,False,False,,Gstaad                   250        C          28           16
-324,CHALLENGER|2026-07-13|granby|granby,CHALLENGER,Men,ATP Challenger 75,Granby,Granby,,,CAN,2026-07-13,2026-07-19,False,75,Hard,Outdoor,scheduled,False,False,,Umag                     250        C          28           16
-325,CHALLENGER|2026-07-13|lincoln|lincoln,CHALLENGER,Men,ATP Challenger 75,Lincoln,Lincoln,New England,,USA,2026-07-13,2026-07-19,False,75,Hard,Outdoor,scheduled,False,False,,
-326,CHALLENGER|2026-07-13|pozoblanco|pozoblanco,CHALLENGER,Men,ATP Challenger 75,Pozoblanco,Pozoblanco,,,ESP,2026-07-13,2026-07-19,False,75,Hard,Outdoor,scheduled,False,False,,
-327,CHALLENGER|2026-07-20|bloomfield-hills|bloomfield-hills,CHALLENGER,Men,ATP Challenger 125,Bloomfield Hills,Bloomfield Hills,Michigan,,USA,2026-07-20,2026-07-26,False,125,Hard,Outdoor,scheduled,False,False,saturday final; sunday start,Kitzbuehel               250        C          28           16       Sunday start | Saturday final
-328,CHALLENGER|2026-07-20|zug|zug,CHALLENGER,Men,ATP Challenger 125,Zug,Zug,,,SUI,2026-07-20,2026-07-26,False,125,Clay,Outdoor,scheduled,False,False,,*                                      *CONIPUR® TENNIS FORCE   Estoril                  250        C          28           16
-329,CHALLENGER|2026-07-20|segovia|segovia,CHALLENGER,Men,ATP Challenger 75,Segovia,Segovia,,,ESP,2026-07-20,2026-07-26,False,75,Hard,Outdoor,scheduled,False,False,,
-330,CHALLENGER|2026-07-20|tampere|tampere,CHALLENGER,Men,ATP Challenger 75,Tampere,Tampere,,,FIN,2026-07-20,2026-07-26,False,75,Clay,Outdoor,scheduled,False,False,,
-331,CHALLENGER|2026-07-20|winnipeg|winnipeg,CHALLENGER,Men,ATP Challenger 75,Winnipeg,Winnipeg,,,CAN,2026-07-20,2026-07-26,False,75,Hard,Outdoor,scheduled,False,False,,
-332,CHALLENGER|2026-07-27|san-marino|san-marino,CHALLENGER,Men,ATP Challenger 125,San Marino,San Marino,,,SMR,2026-07-27,2026-08-02,False,125,Clay,Outdoor,scheduled,False,False,,"Washington, DC           500        H          32          24"
-333,CHALLENGER|2026-07-27|vancouver|vancouver,CHALLENGER,Men,ATP Challenger 125,Vancouver,Vancouver,,,CAN,2026-07-27,2026-08-02,False,125,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final        Los Cabos                250        H          28           16              Saturday final
-334,CHALLENGER|2026-07-27|bonn|bonn,CHALLENGER,Men,ATP Challenger 75,Bonn,Bonn,,,GER,2026-07-27,2026-08-02,False,75,Clay,Outdoor,scheduled,False,False,,
-335,CHALLENGER|2026-07-27|liberec|liberec,CHALLENGER,Men,ATP Challenger 75,Liberec,Liberec,,,CZE,2026-07-27,2026-08-02,False,75,Clay,Outdoor,scheduled,False,False,,
-336,CHALLENGER|2026-07-27|samsun|samsun,CHALLENGER,Men,ATP Challenger 50,Samsun,Samsun,,,TUR,2026-07-27,2026-08-02,False,50,Hard,Outdoor,scheduled,False,False,,
-337,CHALLENGER|2026-07-27|centurion-3|centurion,CHALLENGER,Men,ATP Challenger 50,Centurion 3,Centurion,,,RSA,2026-07-27,2026-08-02,False,50,Hard,Outdoor,cancelled,False,False,,Cancelled
-338,CHALLENGER|2026-08-03|hagen|hagen,CHALLENGER,Men,ATP Challenger 100,Hagen,Hagen,,,GER,2026-08-03,2026-08-09,False,100,Clay,Outdoor,scheduled,False,False,sunday start,MONTREAL                M1000       H          96          48               Sunday start
-339,CHALLENGER|2026-08-03|grodzisk-mazowiecki|grodzisk-mazowiecki,CHALLENGER,Men,ATP Challenger 75,Grodzisk Mazowiecki,Grodzisk Mazowiecki,,,POL,2026-08-03,2026-08-09,False,75,Hard,Outdoor,scheduled,False,False,,
-340,CHALLENGER|2026-08-03|lexington|lexington,CHALLENGER,Men,ATP Challenger 75,Lexington,Lexington,Kentucky,,USA,2026-08-03,2026-08-09,False,75,Hard,Outdoor,scheduled,False,False,,
-341,CHALLENGER|2026-08-03|centurion-4|centurion,CHALLENGER,Men,ATP Challenger 75,Centurion 4,Centurion,,,RSA,2026-08-03,2026-08-09,False,75,Hard,Outdoor,cancelled,False,False,,Cancelled
-342,CHALLENGER|2026-08-03|istanbul-enka|istanbul,CHALLENGER,Men,ATP Challenger 50,Istanbul (Enka),Istanbul,,,TUR,2026-08-03,2026-08-09,False,50,Hard,Outdoor,scheduled,False,False,,
-343,CHALLENGER|2026-08-03|plovdiv-2|plovdiv,CHALLENGER,Men,ATP Challenger 50,Plovdiv 2,Plovdiv,,,BUL,2026-08-03,2026-08-09,False,50,Clay,Outdoor,scheduled,False,False,,
-344,CHALLENGER|2026-08-10|brownsburg|brownsburg,CHALLENGER,Men,ATP Challenger 75,Brownsburg,Brownsburg,Indiana,,USA,2026-08-10,2026-08-16,False,75,Hard,Outdoor,scheduled,False,False,thursday final,MONTREAL                          M1000       H          96           ✽               Thursday final
-345,CHALLENGER|2026-08-10|hamburg|hamburg,CHALLENGER,Men,ATP Challenger 75,Hamburg,Hamburg,,,GER,2026-08-10,2026-08-16,False,75,Clay,Outdoor,scheduled,False,False,thursday start,CINCINNATI                        M1000       H          96          48              Thursday start
-346,CHALLENGER|2026-08-10|todi|todi,CHALLENGER,Men,ATP Challenger 75,Todi,Todi,,,ITA,2026-08-10,2026-08-16,False,75,Clay,Outdoor,scheduled,False,False,,
-347,CHALLENGER|2026-08-10|astana|astana,CHALLENGER,Men,ATP Challenger 50,Astana,Astana,,,KAZ,2026-08-10,2026-08-16,False,50,Hard,Outdoor,scheduled,False,False,,
-348,CHALLENGER|2026-08-17|cancun|cancun,CHALLENGER,Men,ATP Challenger 125,Cancun,Cancun,,,MEX,2026-08-17,2026-08-23,False,125,Hard,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying   CINCINNATI                        M1000       H          96           ✽
-349,CHALLENGER|2026-08-17|quebec-city|quebec-city,CHALLENGER,Men,ATP Challenger 125,Quebec City,Quebec City,,,CAN,2026-08-17,2026-08-23,False,125,Hard,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying
-350,CHALLENGER|2026-08-17|kingston-1|kingston,CHALLENGER,Men,ATP Challenger 75,Kingston 1,Kingston,,,JAM,2026-08-17,2026-08-23,False,75,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final
-351,CHALLENGER|2026-08-17|prague|prague,CHALLENGER,Men,ATP Challenger 75,Prague,Prague,,,CZE,2026-08-17,2026-08-23,False,75,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
-352,CHALLENGER|2026-08-17|roehampton-1|roehampton,CHALLENGER,Men,ATP Challenger 50,Roehampton 1,Roehampton,,,GBR,2026-08-17,2026-08-23,False,50,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final
-353,CHALLENGER|2026-08-17|sion|sion,CHALLENGER,Men,ATP Challenger 50,Sion,Sion,,,SUI,2026-08-17,2026-08-23,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
-354,CHALLENGER|2026-08-17|tashkent|tashkent,CHALLENGER,Men,ATP Challenger 50,Tashkent,Tashkent,,,UZB,2026-08-17,2026-08-23,False,50,Hard,Outdoor,cancelled,False,False,,Cancelled
-355,CHALLENGER|2026-08-24|kingston-2|kingston,CHALLENGER,Men,ATP Challenger 75,Kingston 2,Kingston,,,JAM,2026-08-24,2026-08-30,False,75,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final                             US Open Qualifying                 GSL        H          ✽           128
-356,CHALLENGER|2026-08-24|augsburg|augsburg,CHALLENGER,Men,ATP Challenger 50,Augsburg,Augsburg,,,GER,2026-08-24,2026-08-30,False,50,Clay,Outdoor,scheduled,False,False,saturday final; sunday start,"Saturday final                             Winston-Salem                      250        H          48           16        Sunday start, Saturday final"
-357,CHALLENGER|2026-08-24|roehampton-2|roehampton,CHALLENGER,Men,ATP Challenger 50,Roehampton 2,Roehampton,,,GBR,2026-08-24,2026-08-30,False,50,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final
-358,CHALLENGER|2026-08-31|como|como,CHALLENGER,Men,ATP Challenger 75,Como,Como,,,ITA,2026-08-31,2026-09-06,False,75,Clay,Outdoor,scheduled,False,False,,US Open                            GSL        H          128          ✽
-359,CHALLENGER|2026-08-31|manacor|manacor,CHALLENGER,Men,ATP Challenger 75,Manacor,Manacor,,,ESP,2026-08-31,2026-09-06,False,75,Hard,Outdoor,scheduled,False,False,tuesday start,Tuesday start
-360,CHALLENGER|2026-08-31|manta|manta,CHALLENGER,Men,ATP Challenger 75,Manta,Manta,,,ECU,2026-08-31,2026-09-06,False,75,Hard,Outdoor,cancelled,False,False,,Cancelled
-361,CHALLENGER|2026-08-31|porto-ctp|porto,CHALLENGER,Men,ATP Challenger 75,Porto (CTP),Porto,,,POR,2026-08-31,2026-09-06,False,75,Clay,Outdoor,scheduled,False,False,,
-362,CHALLENGER|2026-08-31|zhangjiagang|zhangjiagang,CHALLENGER,Men,ATP Challenger 75,Zhangjiagang,Zhangjiagang,,,CHN,2026-08-31,2026-09-06,False,75,Hard,Outdoor,scheduled,False,False,,
-363,CHALLENGER|2026-08-31|plovdiv-3|plovdiv,CHALLENGER,Men,ATP Challenger 50,Plovdiv 3,Plovdiv,,,BUL,2026-08-31,2026-09-06,False,50,Clay,Outdoor,scheduled,False,False,,
-364,CHALLENGER|2026-09-07|genoa-nuova-valletta|genoa,CHALLENGER,Men,ATP Challenger 125,Genoa (Nuova Valletta),Genoa,,,ITA,2026-09-07,2026-09-13,False,125,Clay,Outdoor,scheduled,False,False,,US Open                            GSL        H          128          ✽
-365,CHALLENGER|2026-09-07|seville|seville,CHALLENGER,Men,ATP Challenger 125,Seville,Seville,,,ESP,2026-09-07,2026-09-13,False,125,Clay,Outdoor,scheduled,False,False,,
-366,CHALLENGER|2026-09-07|shanghai|shanghai,CHALLENGER,Men,ATP Challenger 100,Shanghai,Shanghai,,,CHN,2026-09-07,2026-09-13,False,100,Hard,Outdoor,scheduled,False,False,,
-367,CHALLENGER|2026-09-07|tulln|tulln,CHALLENGER,Men,ATP Challenger 100,Tulln,Tulln,,,AUT,2026-09-07,2026-09-13,False,100,Clay,Outdoor,scheduled,False,False,,
-368,CHALLENGER|2026-09-07|cassis|cassis,CHALLENGER,Men,ATP Challenger 75,Cassis,Cassis,,,FRA,2026-09-07,2026-09-13,False,75,Hard,Outdoor,scheduled,False,False,,
-369,CHALLENGER|2026-09-07|istanbul-ted-club|istanbul,CHALLENGER,Men,ATP Challenger 75,Istanbul (TED Club),Istanbul,,,TUR,2026-09-07,2026-09-13,False,75,Hard,Outdoor,scheduled,False,False,,
-370,CHALLENGER|2026-09-07|phan-thiet-3|phan-thiet,CHALLENGER,Men,ATP Challenger 50,Phan Thiet 3,Phan Thiet,,,VIE,2026-09-07,2026-09-13,False,50,Hard,Outdoor,scheduled,False,False,,
-371,CHALLENGER|2026-09-14|szczecin|szczecin,CHALLENGER,Men,ATP Challenger 125,Szczecin,Szczecin,,,POL,2026-09-14,2026-09-20,False,125,Clay,Outdoor,scheduled,False,False,,Davis Cup Qualifiers 2nd Round     DC         ✽          ✽            ✽
-372,CHALLENGER|2026-09-14|tiburon|tiburon,CHALLENGER,Men,ATP Challenger 125,Tiburon,Tiburon,California,,USA,2026-09-14,2026-09-20,False,125,Hard,Outdoor,scheduled,False,False,,
-373,CHALLENGER|2026-09-14|guangzhou-huangpu|guangzhou,CHALLENGER,Men,ATP Challenger 100,Guangzhou (Huangpu),Guangzhou,,,CHN,2026-09-14,2026-09-20,False,100,Hard,Outdoor,scheduled,False,False,,
-374,CHALLENGER|2026-09-14|rennes|rennes,CHALLENGER,Men,ATP Challenger 100,Rennes,Rennes,,,FRA,2026-09-14,2026-09-20,False,100,Hard,Indoor,scheduled,False,False,,
-375,CHALLENGER|2026-09-14|biella|biella,CHALLENGER,Men,ATP Challenger 50,Biella,Biella,,,ITA,2026-09-14,2026-09-20,False,50,Clay,Outdoor,scheduled,False,False,,
-376,CHALLENGER|2026-09-14|phan-thiet-4|phan-thiet,CHALLENGER,Men,ATP Challenger 50,Phan Thiet 4,Phan Thiet,,,VIE,2026-09-14,2026-09-20,False,50,Hard,Outdoor,scheduled,False,False,,
-377,CHALLENGER|2026-09-21|saint-tropez|saint-tropez,CHALLENGER,Men,ATP Challenger 125,Saint-Tropez,Saint-Tropez,,,FRA,2026-09-21,2026-09-27,False,125,Hard,Outdoor,scheduled,False,False,,Laver Cup                           LC        IH       2 teams        ✽
-378,CHALLENGER|2026-09-21|buenos-aires|buenos-aires,CHALLENGER,Men,ATP Challenger 75,Buenos Aires,Buenos Aires,,,ARG,2026-09-21,2026-09-27,False,75,Clay,Outdoor,scheduled,False,False,tuesday final; wednesday start,"Chengdu                            250        H          28           16       Wednesday start, Tuesday Final"
-379,CHALLENGER|2026-09-21|genoa-park-tennis-training|genoa,CHALLENGER,Men,ATP Challenger 75,Genoa (Park Tennis Training),Genoa,,,ITA,2026-09-21,2026-09-27,False,75,Clay,Outdoor,scheduled,False,False,tuesday final; wednesday start,"Hangzhou                           250        H          28           16       Wednesday start, Tuesday Final"
-380,CHALLENGER|2026-09-21|plovdiv-4|plovdiv,CHALLENGER,Men,ATP Challenger 75,Plovdiv 4,Plovdiv,,,BUL,2026-09-21,2026-09-27,False,75,Clay,Outdoor,scheduled,False,False,,
-381,CHALLENGER|2026-09-21|san-diego-2|san-diego,CHALLENGER,Men,ATP Challenger 75,San Diego 2,San Diego,California,,USA,2026-09-21,2026-09-27,False,75,Hard,Outdoor,scheduled,False,False,,
-382,CHALLENGER|2026-09-28|porto-monte-aventino|porto,CHALLENGER,Men,ATP Challenger 125,Porto (Monte Aventino),Porto,,,POR,2026-09-28,2026-10-04,False,125,Hard,Outdoor,scheduled,False,False,tuesday final; wednesday start,"Beijing                            500        H          32           16       Wednesday start, Tuesday final"
-383,CHALLENGER|2026-09-28|jingshan|jingshan,CHALLENGER,Men,ATP Challenger 100,Jingshan,Jingshan,,,CHN,2026-09-28,2026-10-04,False,100,Hard,Outdoor,scheduled,False,False,tuesday final; tuesday start; wednesday start,"Tuesday start                              Tokyo                              500        H          32           16       Wednesday start, Tuesday final"
-384,CHALLENGER|2026-09-28|columbus|columbus,CHALLENGER,Men,ATP Challenger 75,Columbus,Columbus,Ohio,,USA,2026-09-28,2026-10-04,False,75,Hard,Indoor,scheduled,False,False,,
-385,CHALLENGER|2026-09-28|curitiba|curitiba,CHALLENGER,Men,ATP Challenger 75,Curitiba,Curitiba,,,BRA,2026-09-28,2026-10-04,False,75,Clay,Outdoor,scheduled,False,False,,
-386,CHALLENGER|2026-09-28|mouilleron-le-captif|mouilleron-le-captif,CHALLENGER,Men,ATP Challenger 75,Mouilleron-le-Captif,Mouilleron-le-Captif,,,FRA,2026-09-28,2026-10-04,False,75,Hard,Indoor,scheduled,False,False,,
-387,CHALLENGER|2026-09-28|bari|bari,CHALLENGER,Men,ATP Challenger 50,Bari,Bari,,,ITA,2026-09-28,2026-10-04,False,50,Clay,Outdoor,scheduled,False,False,,
-388,CHALLENGER|2026-10-05|villena|villena,CHALLENGER,Men,ATP Challenger 100,Villena,Villena,,,ESP,2026-10-05,2026-10-11,False,100,Hard,Outdoor,scheduled,False,False,wednesday start,SHANGHAI            M1000       H          96          48        Wednesday start
-389,CHALLENGER|2026-10-05|antofagasta|antofagasta,CHALLENGER,Men,ATP Challenger 75,Antofagasta,Antofagasta,,,CHI,2026-10-05,2026-10-11,False,75,Clay,Outdoor,scheduled,False,False,,
-390,CHALLENGER|2026-10-05|braga|braga,CHALLENGER,Men,ATP Challenger 75,Braga,Braga,,,POR,2026-10-05,2026-10-11,False,75,Clay,Outdoor,scheduled,False,False,,
-391,CHALLENGER|2026-10-05|palermo|palermo,CHALLENGER,Men,ATP Challenger 50,Palermo,Palermo,,,ITA,2026-10-05,2026-10-11,False,50,Clay,Outdoor,scheduled,False,False,,
-392,CHALLENGER|2026-10-05|wuning-3|wuning,CHALLENGER,Men,ATP Challenger 50,Wuning 3,Wuning,,,CHN,2026-10-05,2026-10-11,False,50,Hard,Outdoor,added,False,False,,Added
-393,CHALLENGER|2026-10-12|jinan|jinan,CHALLENGER,Men,ATP Challenger 125,Jinan,Jinan,,,CHN,2026-10-12,2026-10-18,False,125,Hard,Outdoor,scheduled,False,False,,SHANGHAI            M1000       H          96           ✽
-394,CHALLENGER|2026-10-12|olbia|olbia,CHALLENGER,Men,ATP Challenger 125,Olbia,Olbia,,,ITA,2026-10-12,2026-10-18,False,125,Hard,Outdoor,scheduled,False,False,,
-395,CHALLENGER|2026-10-12|maia|maia,CHALLENGER,Men,ATP Challenger 100,Maia,Maia,,,POR,2026-10-12,2026-10-18,False,100,Clay,Indoor,scheduled,False,False,,
-396,CHALLENGER|2026-10-12|roanne|roanne,CHALLENGER,Men,ATP Challenger 100,Roanne,Roanne,,,FRA,2026-10-12,2026-10-18,False,100,Hard,Indoor,scheduled,False,False,,
-397,CHALLENGER|2026-10-12|santa-cruz-de-la-sierra-2|santa-cruz-de-la-sierra,CHALLENGER,Men,ATP Challenger 75,Santa Cruz de la Sierra 2,Santa Cruz de la Sierra,,,BOL,2026-10-12,2026-10-18,False,75,Clay,Outdoor,scheduled,False,False,,
-398,CHALLENGER|2026-10-12|san-gregorio-di-catania|san-gregorio-di-catania,CHALLENGER,Men,ATP Challenger 50,San Gregorio di Catania,San Gregorio di Catania,,,ITA,2026-10-12,2026-10-18,False,50,Clay,Outdoor,scheduled,False,False,,
-399,CHALLENGER|2026-10-19|lisbon|lisbon,CHALLENGER,Men,ATP Challenger 100,Lisbon,Lisbon,,,POR,2026-10-19,2026-10-25,False,100,Clay,Outdoor,scheduled,False,False,,Almaty               250        IH         28           16
-400,CHALLENGER|2026-10-19|alicante-torrevieja|alicante,CHALLENGER,Men,ATP Challenger 75,Alicante (Torrevieja),Alicante,,,ESP,2026-10-19,2026-10-25,False,75,Hard,Outdoor,cancelled,False,False,,Cancelled   Brussels             250        IH         28           16
-401,CHALLENGER|2026-10-19|cali|cali,CHALLENGER,Men,ATP Challenger 75,Cali,Cali,,,COL,2026-10-19,2026-10-25,False,75,Clay,Outdoor,scheduled,False,False,,Lyon                 250        IH         28           16
-402,CHALLENGER|2026-10-19|fort-worth|fort-worth,CHALLENGER,Men,ATP Challenger 75,Fort Worth,Fort Worth,Texas,,USA,2026-10-19,2026-10-25,False,75,Hard,Outdoor,added,False,False,,Added
-403,CHALLENGER|2026-10-19|guangzhou-nansha|guangzhou,CHALLENGER,Men,ATP Challenger 75,Guangzhou (Nansha),Guangzhou,,,CHN,2026-10-19,2026-10-25,False,75,Hard,Outdoor,scheduled,False,False,,
-404,CHALLENGER|2026-10-19|florence|florence,CHALLENGER,Men,ATP Challenger 50,Florence,Florence,,,ITA,2026-10-19,2026-10-25,False,50,Clay,Outdoor,scheduled,False,False,,
-405,CHALLENGER|2026-10-26|seoul|seoul,CHALLENGER,Men,ATP Challenger 125,Seoul,Seoul,,,KOR,2026-10-26,2026-11-01,False,125,Hard,Outdoor,scheduled,False,False,,Basel                500        IH         32           16
-406,CHALLENGER|2026-10-26|brest|brest,CHALLENGER,Men,ATP Challenger 100,Brest,Brest,,,FRA,2026-10-26,2026-11-01,False,100,Hard,Indoor,scheduled,False,False,,Vienna               500        IH         32           16
-407,CHALLENGER|2026-10-26|sioux-falls|sioux-falls,CHALLENGER,Men,ATP Challenger 100,Sioux Falls,Sioux Falls,South Dakota,,USA,2026-10-26,2026-11-01,False,100,Hard,Indoor,scheduled,False,False,,
-408,CHALLENGER|2026-10-26|guayaquil|guayaquil,CHALLENGER,Men,ATP Challenger 75,Guayaquil,Guayaquil,,,ECU,2026-10-26,2026-11-01,False,75,Clay,Outdoor,scheduled,False,False,,
-409,CHALLENGER|2026-10-26|ningbo|ningbo,CHALLENGER,Men,ATP Challenger 75,Ningbo,Ningbo,,,CHN,2026-10-26,2026-11-01,False,75,Hard,Outdoor,scheduled,False,False,,
-410,CHALLENGER|2026-10-26|gaborone|gaborone,CHALLENGER,Men,ATP Challenger 50,Gaborone,Gaborone,,,BOT,2026-10-26,2026-11-01,False,50,Hard,Outdoor,cancelled,False,False,,Cancelled
-411,CHALLENGER|2026-11-02|costa-do-sauipe|costa-do-sauipe,CHALLENGER,Men,ATP Challenger 125,Costa do Sauipe,Costa do Sauipe,,,BRA,2026-11-02,2026-11-08,False,125,Clay,Outdoor,scheduled,False,False,,PARIS               M1000       IH         56          28
-412,CHALLENGER|2026-11-02|bratislava-2|bratislava,CHALLENGER,Men,ATP Challenger 100,Bratislava 2,Bratislava,,,SVK,2026-11-02,2026-11-08,False,100,Hard,Indoor,scheduled,False,False,,
-413,CHALLENGER|2026-11-02|taipei|taipei,CHALLENGER,Men,ATP Challenger 100,Taipei,Taipei,,,TPE,2026-11-02,2026-11-08,False,100,Hard,Indoor,scheduled,False,False,,
-414,CHALLENGER|2026-11-02|charlottesville|charlottesville,CHALLENGER,Men,ATP Challenger 75,Charlottesville,Charlottesville,Virginia,,USA,2026-11-02,2026-11-08,False,75,Hard,Indoor,scheduled,False,False,,
-415,CHALLENGER|2026-11-02|villa-maria|villa-maria,CHALLENGER,Men,ATP Challenger 50,Villa Maria,Villa Maria,,,ARG,2026-11-02,2026-11-08,False,50,Clay,Outdoor,scheduled,False,False,,
-416,CHALLENGER|2026-11-09|orleans|orleans,CHALLENGER,Men,ATP Challenger 125,Orleans,Orleans,,,FRA,2026-11-09,2026-11-15,False,125,Hard,Indoor,scheduled,False,False,,Stockholm            250        IH         28           16
-417,CHALLENGER|2026-11-09|brisbane-3|brisbane,CHALLENGER,Men,ATP Challenger 75,Brisbane 3,Brisbane,,,AUS,2026-11-09,2026-11-15,False,75,Hard,Outdoor,scheduled,False,False,,
-418,CHALLENGER|2026-11-09|knoxville|knoxville,CHALLENGER,Men,ATP Challenger 75,Knoxville,Knoxville,Tennessee,,USA,2026-11-09,2026-11-15,False,75,Hard,Indoor,scheduled,False,False,,
-419,CHALLENGER|2026-11-09|lima|lima,CHALLENGER,Men,ATP Challenger 75,Lima,Lima,,,PER,2026-11-09,2026-11-15,False,75,Clay,Outdoor,scheduled,False,False,,
-420,CHALLENGER|2026-11-09|matsuyama|matsuyama,CHALLENGER,Men,ATP Challenger 75,Matsuyama,Matsuyama,,,JPN,2026-11-09,2026-11-15,False,75,Hard,Outdoor,scheduled,False,False,,
-421,CHALLENGER|2026-11-09|hersonissos-3|hersonissos,CHALLENGER,Men,ATP Challenger 50,Hersonissos 3,Hersonissos,,,GRE,2026-11-09,2026-11-15,False,50,Hard,Outdoor,scheduled,False,False,,
-422,CHALLENGER|2026-11-09|monastir-1|monastir,CHALLENGER,Men,ATP Challenger 50,Monastir 1,Monastir,,,TUN,2026-11-09,2026-11-15,False,50,Hard,Outdoor,scheduled,False,False,,
-423,CHALLENGER|2026-11-16|helsinki|helsinki,CHALLENGER,Men,ATP Challenger 125,Helsinki,Helsinki,,,FIN,2026-11-16,2026-11-22,False,125,Hard,Indoor,scheduled,False,False,,NITTO ATP FINALS     ATP        IH          8           ✽
-424,CHALLENGER|2026-11-16|metz|metz,CHALLENGER,Men,ATP Challenger 125,Metz,Metz,,,FRA,2026-11-16,2026-11-22,False,125,Hard,Indoor,scheduled,False,False,,
-425,CHALLENGER|2026-11-16|drummondville|drummondville,CHALLENGER,Men,ATP Challenger 75,Drummondville,Drummondville,,,CAN,2026-11-16,2026-11-22,False,75,Hard,Indoor,scheduled,False,False,,
-426,CHALLENGER|2026-11-16|kobe|kobe,CHALLENGER,Men,ATP Challenger 75,Kobe,Kobe,,,JPN,2026-11-16,2026-11-22,False,75,Hard,Indoor,scheduled,False,False,,
-427,CHALLENGER|2026-11-16|montevideo|montevideo,CHALLENGER,Men,ATP Challenger 75,Montevideo,Montevideo,,,URU,2026-11-16,2026-11-22,False,75,Clay,Outdoor,scheduled,False,False,,
-428,CHALLENGER|2026-11-16|sydney|sydney,CHALLENGER,Men,ATP Challenger 75,Sydney,Sydney,,,AUS,2026-11-16,2026-11-22,False,75,Hard,Outdoor,scheduled,False,False,,
-429,CHALLENGER|2026-11-16|champaign|champaign,CHALLENGER,Men,ATP Challenger 50,Champaign,Champaign,Illinois,,USA,2026-11-16,2026-11-22,False,50,Hard,Indoor,scheduled,False,False,,
-430,CHALLENGER|2026-11-23|florianopolis|florianopolis,CHALLENGER,Men,ATP Challenger 75,Florianopolis,Florianopolis,,,BRA,2026-11-23,2026-11-29,False,75,Clay,Outdoor,scheduled,False,False,,Davis Cup Finals     DC         ✽          ✽            ✽
-431,CHALLENGER|2026-11-23|playford|playford,CHALLENGER,Men,ATP Challenger 75,Playford,Playford,,,AUS,2026-11-23,2026-11-29,False,75,Hard,Outdoor,scheduled,False,False,,
-432,CHALLENGER|2026-11-23|yokohama|yokohama,CHALLENGER,Men,ATP Challenger 75,Yokohama,Yokohama,,,JPN,2026-11-23,2026-11-29,False,75,Hard,Outdoor,scheduled,False,False,,
-433,CHALLENGER|2026-11-23|hersonissos-4|hersonissos,CHALLENGER,Men,ATP Challenger 50,Hersonissos 4,Hersonissos,,,GRE,2026-11-23,2026-11-29,False,50,Hard,Outdoor,scheduled,False,False,,
-434,CHALLENGER|2026-11-23|monastir-2|monastir,CHALLENGER,Men,ATP Challenger 50,Monastir 2,Monastir,,,TUN,2026-11-23,2026-11-29,False,50,Hard,Outdoor,scheduled,False,False,,
-435,CHALLENGER|2026-11-30|bogota-los-lagartos|bogota,CHALLENGER,Men,ATP Challenger 75,Bogotá (Los Lagartos),Bogota,,,COL,2026-11-30,2026-12-06,False,75,Clay,Outdoor,scheduled,True,False,,High altitude
-436,CHALLENGER|2026-11-30|temuco|temuco,CHALLENGER,Men,ATP Challenger 75,Temuco,Temuco,,,CHI,2026-11-30,2026-12-06,False,75,Hard,Outdoor,scheduled,False,False,,
-437,CHALLENGER|2026-11-30|chisinau-2|chisinau,CHALLENGER,Men,ATP Challenger 50,Chisinau 2,Chisinau,,,MDA,2026-11-30,2026-12-06,False,50,Hard,Indoor,scheduled,False,False,,
-438,CHALLENGER|2026-11-30|hersonissos-5|hersonissos,CHALLENGER,Men,ATP Challenger 50,Hersonissos 5,Hersonissos,,,GRE,2026-11-30,2026-12-06,False,50,Hard,Outdoor,scheduled,False,False,,
-439,CHALLENGER|2026-11-30|soma-bay|soma-bay,CHALLENGER,Men,ATP Challenger 50,Soma Bay,Soma Bay,,,EGY,2026-11-30,2026-12-06,False,50,Hard,Outdoor,scheduled,False,False,,
-440,CHALLENGER|2026-11-30|trnava|trnava,CHALLENGER,Men,ATP Challenger 50,Trnava,Trnava,,,SVK,2026-11-30,2026-12-06,False,50,Hard,Indoor,scheduled,False,False,,
-441,CHALLENGER|2026-12-07|copenhagen|copenhagen,CHALLENGER,Men,ATP Challenger 50,Copenhagen,Copenhagen,,,DEN,2026-12-07,2026-12-13,False,50,Hard,Indoor,scheduled,False,False,,
-442,CHALLENGER|2026-12-07|la-paz|la-paz,CHALLENGER,Men,ATP Challenger 50,La Paz,La Paz,,,BOL,2026-12-07,2026-12-13,False,50,Clay,Outdoor,scheduled,True,False,,High altitude
-443,CHALLENGER|2026-12-07|monastir-3|monastir,CHALLENGER,Men,ATP Challenger 50,Monastir 3,Monastir,,,TUN,2026-12-07,2026-12-13,False,50,Hard,Outdoor,scheduled,False,False,,
-444,CHALLENGER|2026-12-07|rio-de-janeiro|rio-de-janeiro,CHALLENGER,Men,ATP Challenger 50,Rio de Janeiro,Rio de Janeiro,,,BRA,2026-12-07,2026-12-13,False,50,Clay,Outdoor,scheduled,False,False,,
+3,ATP|2026-01-02|united-cup|sydney,ATP,Men,United Cup,United Cup,Sydney,,Australia,,2026-01-02,2026-01-11,False,,Hard,Outdoor,scheduled,False,False,,
+4,ATP|2026-01-05|brisbane-international|brisbane,ATP,Men,ATP 250,Brisbane International,Brisbane,,Australia,,2026-01-05,2026-01-11,False,,Hard,Outdoor,scheduled,False,False,,
+5,ATP|2026-01-05|bank-of-china-hong-kong-tennis-open|hong-kong,ATP,Men,ATP 250,Bank of China Hong Kong Tennis Open,Hong Kong,,Hong Kong,,2026-01-05,2026-01-11,False,,Hard,Outdoor,scheduled,False,False,,
+6,ATP|2026-01-12|adelaide-international|adelaide,ATP,Men,ATP 250,Adelaide International,Adelaide,,Australia,,2026-01-12,2026-01-17,False,,Hard,Outdoor,scheduled,False,False,,
+7,ATP|2026-01-12|asb-classic|auckland,ATP,Men,ATP 250,ASB Classic,Auckland,,New Zealand,,2026-01-12,2026-01-17,False,,Hard,Outdoor,scheduled,False,False,,
+8,ATP|2026-01-18|australian-open|melbourne,ATP,Men,Grand Slam,Australian Open,Melbourne,,Australia,,2026-01-18,2026-02-01,False,,Hard,Outdoor,scheduled,False,False,,
+9,ATP|2026-02-02|open-occitanie|montpellier,ATP,Men,ATP 250,Open Occitanie,Montpellier,,France,,2026-02-02,2026-02-08,False,,Hard,Indoor,scheduled,False,False,,
+10,ATP|2026-02-09|dallas-open|dallas,ATP,Men,ATP 500,Dallas Open,Dallas,,United States,,2026-02-09,2026-02-15,False,,Hard,Indoor,scheduled,False,False,,
+11,ATP|2026-02-09|abn-amro-open|rotterdam,ATP,Men,ATP 500,ABN AMRO Open,Rotterdam,,Netherlands,,2026-02-09,2026-02-15,False,,Hard,Indoor,scheduled,False,False,,
+12,ATP|2026-02-09|ieb-argentina-open|buenos-aires,ATP,Men,ATP 250,IEB+ Argentina Open,Buenos Aires,,Argentina,,2026-02-09,2026-02-15,False,,Clay,Outdoor,scheduled,False,False,,
+13,ATP|2026-02-16|qatar-exxonmobil-open|doha,ATP,Men,ATP 500,Qatar ExxonMobil Open,Doha,,Qatar,,2026-02-16,2026-02-22,False,,Hard,Outdoor,scheduled,False,False,,
+14,ATP|2026-02-16|rio-open-presented-by-claro|rio-de-janeiro,ATP,Men,ATP 500,Rio Open presented by Claro,Rio de Janeiro,,Brazil,,2026-02-16,2026-02-22,False,,Clay,Outdoor,scheduled,False,False,,
+15,ATP|2026-02-16|delray-beach-open|delray-beach,ATP,Men,ATP 250,Delray Beach Open,Delray Beach,,United States,,2026-02-16,2026-02-22,False,,Hard,Outdoor,scheduled,False,False,,
+16,ATP|2026-02-23|abierto-mexicano-telcel|acapulco,ATP,Men,ATP 500,Abierto Mexicano Telcel,Acapulco,,Mexico,,2026-02-23,2026-02-28,False,,Hard,Outdoor,scheduled,False,False,,
+17,ATP|2026-02-23|dubai-duty-free-tennis-championships|dubai,ATP,Men,ATP 500,Dubai Duty Free Tennis Championships,Dubai,,United Arab Emirates,,2026-02-23,2026-03-01,False,,Hard,Outdoor,scheduled,False,False,,
+18,ATP|2026-02-23|bci-seguros-chile-open|santiago,ATP,Men,ATP 250,BCI Seguros Chile Open,Santiago,,Chile,,2026-02-23,2026-03-01,False,,Clay,Outdoor,scheduled,False,False,,
+19,ATP|2026-03-04|bnp-paribas-open|indian-wells,ATP,Men,ATP Masters 1000,BNP Paribas Open,Indian Wells,,United States,,2026-03-04,2026-03-15,False,,Hard,Outdoor,scheduled,False,False,,
+20,ATP|2026-03-18|miami-open|miami,ATP,Men,ATP Masters 1000,Miami Open,Miami,,United States,,2026-03-18,2026-03-29,False,,Hard,Outdoor,scheduled,False,False,,
+21,ATP|2026-03-30|tiriac-open|bucharest,ATP,Men,ATP 250,Tiriac Open,Bucharest,,Romania,,2026-03-30,2026-04-05,False,,Clay,Outdoor,scheduled,False,False,,
+22,ATP|2026-03-30|fayez-sarofim-co-u-s-men-s-clay-court-championship|houston,ATP,Men,ATP 250,Fayez Sarofim & Co. U.S. Men's Clay Court Championship,Houston,,United States,,2026-03-30,2026-04-05,False,,Clay,Outdoor,scheduled,False,False,,
+23,ATP|2026-03-30|grand-prix-hassan-ii|marrakech,ATP,Men,ATP 250,Grand Prix Hassan II,Marrakech,,Morocco,,2026-03-30,2026-04-05,False,,Clay,Outdoor,scheduled,False,False,,
+24,ATP|2026-04-05|rolex-monte-carlo-masters|monte-carlo,ATP,Men,ATP Masters 1000,Rolex Monte-Carlo Masters,Monte-Carlo,,Monaco,,2026-04-05,2026-04-12,False,,Clay,Outdoor,scheduled,False,False,,
+25,ATP|2026-04-13|barcelona-open-banc-sabadell|barcelona,ATP,Men,ATP 500,Barcelona Open Banc Sabadell,Barcelona,,Spain,,2026-04-13,2026-04-19,False,,Clay,Outdoor,scheduled,False,False,,
+26,ATP|2026-04-13|bmw-open-by-bitpanda|munich,ATP,Men,ATP 500,BMW Open by Bitpanda,Munich,,Germany,,2026-04-13,2026-04-19,False,,Clay,Outdoor,scheduled,False,False,,
+27,ATP|2026-04-22|mutua-madrid-open|madrid,ATP,Men,ATP Masters 1000,Mutua Madrid Open,Madrid,,Spain,,2026-04-22,2026-05-03,False,,Clay,Outdoor,scheduled,False,False,,
+28,ATP|2026-05-06|internazionali-bnl-d-italia|rome,ATP,Men,ATP Masters 1000,Internazionali BNL d'Italia,Rome,,Italy,,2026-05-06,2026-05-17,False,,Clay,Outdoor,scheduled,False,False,,
+29,ATP|2026-05-17|bitpanda-hamburg-open|hamburg,ATP,Men,ATP 500,Bitpanda Hamburg Open,Hamburg,,Germany,,2026-05-17,2026-05-23,False,,Clay,Outdoor,scheduled,False,False,,
+30,ATP|2026-05-17|gonet-geneva-open|geneva,ATP,Men,ATP 250,Gonet Geneva Open,Geneva,,Switzerland,,2026-05-17,2026-05-23,False,,Clay,Outdoor,scheduled,False,False,,
+31,ATP|2026-05-24|roland-garros|paris,ATP,Men,Grand Slam,Roland Garros,Paris,,France,,2026-05-24,2026-06-07,False,,Clay,Outdoor,scheduled,False,False,,
+32,ATP|2026-06-08|boss-open|stuttgart,ATP,Men,ATP 250,BOSS OPEN,Stuttgart,,Germany,,2026-06-08,2026-06-14,False,,Grass,Outdoor,scheduled,False,False,,
+33,ATP|2026-06-08|libema-open|s-hertogenbosch,ATP,Men,ATP 250,Libema Open,'s-Hertogenbosch,,Netherlands,,2026-06-08,2026-06-14,False,,Grass,Outdoor,scheduled,False,False,,
+34,ATP|2026-06-15|terra-wortmann-open|halle,ATP,Men,ATP 500,Terra Wortmann Open,Halle,,Germany,,2026-06-15,2026-06-21,False,,Grass,Outdoor,scheduled,False,False,,
+35,ATP|2026-06-15|hsbc-championships|london,ATP,Men,ATP 500,HSBC Championships,London,,Great Britain,,2026-06-15,2026-06-21,False,,Grass,Outdoor,scheduled,False,False,,
+36,ATP|2026-06-21|mallorca-championships|mallorca,ATP,Men,ATP 250,Mallorca Championships,Mallorca,,Spain,,2026-06-21,2026-06-27,False,,Grass,Outdoor,scheduled,False,False,,
+37,ATP|2026-06-22|lexus-eastbourne-open|eastbourne,ATP,Men,ATP 250,Lexus Eastbourne Open,Eastbourne,,Great Britain,,2026-06-22,2026-06-27,False,,Grass,Outdoor,scheduled,False,False,,
+38,ATP|2026-06-29|wimbledon|london,ATP,Men,Grand Slam,Wimbledon,London,,Great Britain,,2026-06-29,2026-07-12,False,,Grass,Outdoor,scheduled,False,False,,
+39,ATP|2026-07-13|nordea-open|bastad,ATP,Men,ATP 250,Nordea Open,Bastad,,Sweden,,2026-07-13,2026-07-19,False,,Clay,Outdoor,scheduled,False,False,,
+40,ATP|2026-07-13|efg-swiss-open-gstaad|gstaad,ATP,Men,ATP 250,EFG Swiss Open Gstaad,Gstaad,,Switzerland,,2026-07-13,2026-07-19,False,,Clay,Outdoor,scheduled,False,False,,
+41,ATP|2026-07-13|plava-laguna-croatia-open-umag|umag,ATP,Men,ATP 250,Plava Laguna Croatia Open Umag,Umag,,Croatia,,2026-07-13,2026-07-19,False,,Clay,Outdoor,scheduled,False,False,,
+42,ATP|2026-07-20|generali-open|kitzbuhel,ATP,Men,ATP 250,Generali Open,Kitzbuhel,,Austria,,2026-07-20,2026-07-26,False,,Clay,Outdoor,scheduled,False,False,,
+43,ATP|2026-07-20|millennium-estoril-open|estoril,ATP,Men,ATP 250,Millennium Estoril Open,Estoril,,Portugal,,2026-07-20,2026-07-26,False,,Clay,Outdoor,scheduled,False,False,,
+44,ATP|2026-07-27|mubadala-citi-dc-open|washington,ATP,Men,ATP 500,Mubadala Citi DC Open,Washington,,United States,,2026-07-27,2026-08-02,False,,Hard,Outdoor,scheduled,False,False,,
+45,ATP|2026-07-27|mifel-tennis-open-by-telcel-oppo|los-cabos,ATP,Men,ATP 250,Mifel Tennis Open by Telcel Oppo,Los Cabos,,Mexico,,2026-07-27,2026-08-02,False,,Hard,Outdoor,scheduled,False,False,,
+46,ATP|2026-08-02|national-bank-open|montreal,ATP,Men,ATP Masters 1000,National Bank Open,Montreal,,Canada,,2026-08-02,2026-08-12,False,,Hard,Outdoor,scheduled,False,False,,
+47,ATP|2026-08-13|cincinnati-open|cincinnati,ATP,Men,ATP Masters 1000,Cincinnati Open,Cincinnati,,United States,,2026-08-13,2026-08-23,False,,Hard,Outdoor,scheduled,False,False,,
+48,ATP|2026-08-23|winston-salem-open|winston-salem,ATP,Men,ATP 250,Winston-Salem Open,Winston-Salem,,United States,,2026-08-23,2026-08-29,False,,Hard,Outdoor,scheduled,False,False,,
+49,ATP|2026-08-31|us-open|new-york,ATP,Men,Grand Slam,US Open,New York,,United States,,2026-08-31,2026-09-13,False,,Hard,Outdoor,scheduled,False,False,,
+50,ATP|2026-09-23|chengdu-open|chengdu,ATP,Men,ATP 250,Chengdu Open,Chengdu,,China,,2026-09-23,2026-09-29,False,,Hard,Outdoor,scheduled,False,False,,
+51,ATP|2026-09-23|lynk-co-hangzhou-open|hangzhou,ATP,Men,ATP 250,Lynk & Co Hangzhou Open,Hangzhou,,China,,2026-09-23,2026-09-29,False,,Hard,Outdoor,scheduled,False,False,,
+52,ATP|2026-09-25|laver-cup|london,ATP,Men,Laver Cup,Laver Cup,London,,Great Britain,,2026-09-25,2026-09-27,False,,Hard,Indoor,scheduled,False,False,,
+53,ATP|2026-09-30|kinoshita-group-japan-open-tennis-championships|tokyo,ATP,Men,ATP 500,Kinoshita Group Japan Open Tennis Championships,Tokyo,,Japan,,2026-09-30,2026-10-06,False,,Hard,Outdoor,scheduled,False,False,,
+54,ATP|2026-09-30|china-open|beijing,ATP,Men,ATP 500,China Open,Beijing,,China,,2026-09-30,2026-10-06,False,,Hard,Outdoor,scheduled,False,False,,
+55,ATP|2026-10-07|rolex-shanghai-masters|shanghai,ATP,Men,ATP Masters 1000,Rolex Shanghai Masters,Shanghai,,China,,2026-10-07,2026-10-18,False,,Hard,Outdoor,scheduled,False,False,,
+56,ATP|2026-10-19|almaty-open|almaty,ATP,Men,ATP 250,Almaty Open,Almaty,,Kazakhstan,,2026-10-19,2026-10-25,False,,Hard,Indoor,scheduled,False,False,,
+57,ATP|2026-10-19|bnp-paribas-fortis-european-open|brussels,ATP,Men,ATP 250,BNP Paribas Fortis European Open,Brussels,,Belgium,,2026-10-19,2026-10-25,False,,Hard,Indoor,scheduled,False,False,,
+58,ATP|2026-10-19|grand-prix-auvergne-rhone-alpes|lyon,ATP,Men,ATP 250,Grand Prix Auvergne-Rhone-Alpes,Lyon,,France,,2026-10-19,2026-10-25,False,,Hard,Indoor,scheduled,False,False,,
+59,ATP|2026-10-26|swiss-indoors-basel|basel,ATP,Men,ATP 500,Swiss Indoors Basel,Basel,,Switzerland,,2026-10-26,2026-11-01,False,,Hard,Indoor,scheduled,False,False,,
+60,ATP|2026-10-26|erste-bank-open|vienna,ATP,Men,ATP 500,Erste Bank Open,Vienna,,Austria,,2026-10-26,2026-11-01,False,,Hard,Indoor,scheduled,False,False,,
+61,ATP|2026-11-02|rolex-paris-masters|paris,ATP,Men,ATP Masters 1000,Rolex Paris Masters,Paris,,France,,2026-11-02,2026-11-08,False,,Hard,Indoor,scheduled,False,False,,
+62,ATP|2026-11-08|bnp-paribas-nordic-open|stockholm,ATP,Men,ATP 250,BNP Paribas Nordic Open,Stockholm,,Sweden,,2026-11-08,2026-11-14,False,,Hard,Indoor,scheduled,False,False,,
+63,ATP|2026-11-15|nitto-atp-finals|turin,ATP,Men,Nitto ATP Finals,Nitto ATP Finals,Turin,,Italy,,2026-11-15,2026-11-22,False,,Hard,Indoor,scheduled,False,False,,
+64,ATP|2026-11-24|davis-cup-finals|bologna,ATP,Men,Davis Cup,Davis Cup Finals,Bologna,,Italy,,2026-11-24,2026-11-29,False,,Hard,Indoor,scheduled,False,False,,
+65,WTA|2026-01-05|united-cup|perth,WTA,Women,WTA 500,United Cup,Perth,,Australia,,2026-01-05,2026-01-11,True,,Hard,Outdoor,scheduled,False,False,,
+66,WTA|2026-01-05|united-cup|sydney,WTA,Women,WTA 500,United Cup,Sydney,,Australia,,2026-01-05,2026-01-11,True,,Hard,Outdoor,scheduled,False,False,,
+67,WTA|2026-01-05|asb-classic|auckland,WTA,Women,WTA 250,ASB Classic,Auckland,,New Zealand,,2026-01-05,2026-01-11,True,,Hard,Outdoor,scheduled,False,False,,
+68,WTA|2026-01-05|brisbane-international|brisbane,WTA,Women,WTA 500,Brisbane International,Brisbane,,Australia,,2026-01-05,2026-01-11,True,,Hard,Outdoor,scheduled,False,False,,
+69,WTA|2026-01-12|adelaide-international|adelaide,WTA,Women,WTA 500,Adelaide International,Adelaide,,Australia,,2026-01-12,2026-01-18,True,,Hard,Outdoor,scheduled,False,False,,
+70,WTA|2026-01-12|hobart-international|hobart,WTA,Women,WTA 250,Hobart International,Hobart,,Australia,,2026-01-12,2026-01-18,True,,Hard,Outdoor,scheduled,False,False,,
+71,WTA|2026-01-19|australian-open|melbourne,WTA,Women,Grand Slam,Australian Open,Melbourne,,Australia,,2026-01-19,2026-02-01,True,,Hard,Outdoor,scheduled,False,False,,
+72,WTA|2026-02-02|mubadala-abu-dhabi-open|abu-dhabi,WTA,Women,WTA 500,Mubadala Abu Dhabi Open,Abu Dhabi,,United Arab Emirates,,2026-02-02,2026-02-08,True,,Hard,Outdoor,scheduled,False,False,,
+73,WTA|2026-02-02|transylvania-open|cluj-napoca,WTA,Women,WTA 250,Transylvania Open,Cluj-Napoca,,Romania,,2026-02-02,2026-02-08,True,,Hard,Indoor,scheduled,False,False,,
+74,WTA|2026-02-02|ostrava|ostrava,WTA,Women,WTA 250,Ostrava,Ostrava,,Czechia,,2026-02-02,2026-02-08,True,,Hard,Indoor,scheduled,False,False,,
+75,WTA|2026-02-09|qatar-totalenergies-open-2026|doha,WTA,Women,WTA 1000,Qatar TotalEnergies Open 2026,Doha,,Qatar,,2026-02-09,2026-02-22,True,,Hard,Outdoor,scheduled,False,False,,
+76,WTA|2026-02-16|dubai-duty-free-tennis-championships|dubai,WTA,Women,WTA 1000,Dubai Duty Free Tennis Championships,Dubai,,United Arab Emirates,,2026-02-16,2026-03-01,True,,Hard,Outdoor,scheduled,False,False,,
+77,WTA|2026-02-23|merida-open-akron|merida,WTA,Women,WTA 500,Merida Open AKRON,Merida,,Mexico,,2026-02-23,2026-03-01,True,,Hard,Outdoor,scheduled,False,False,,
+78,WTA|2026-02-23|atx-open|austin,WTA,Women,WTA 250,ATX Open,Austin,,United States,,2026-02-23,2026-03-01,True,,Hard,Outdoor,scheduled,False,False,,
+79,WTA|2026-03-02|bnp-paribas-open|indian-wells,WTA,Women,WTA 1000,BNP Paribas Open,Indian Wells,,United States,,2026-03-02,2026-03-15,True,,Hard,Outdoor,scheduled,False,False,,
+80,WTA|2026-03-16|miami-open|miami,WTA,Women,WTA 1000,Miami Open,Miami,,United States,,2026-03-16,2026-03-29,True,,Hard,Outdoor,scheduled,False,False,,
+81,WTA|2026-03-30|credit-one-charleston-open|charleston,WTA,Women,WTA 500,Credit One Charleston Open,Charleston,,United States,,2026-03-30,2026-04-05,True,,Clay,Outdoor,scheduled,False,False,,
+82,WTA|2026-03-30|2026-colsanitas-cup|bogota,WTA,Women,WTA 250,2026 Colsanitas Cup,Bogota,,Colombia,,2026-03-30,2026-04-05,True,,Clay,Outdoor,scheduled,False,False,,
+83,WTA|2026-04-06|upper-austria-ladies-linz|linz,WTA,Women,WTA 500,Upper Austria Ladies Linz,Linz,,Austria,,2026-04-06,2026-04-12,True,,Clay,Indoor,scheduled,False,False,,
+84,WTA|2026-04-13|porsche-tennis-grand-prix|stuttgart,WTA,Women,WTA 500,Porsche Tennis Grand Prix,Stuttgart,,Germany,,2026-04-13,2026-04-19,True,,Clay,Indoor,scheduled,False,False,,
+85,WTA|2026-04-13|open-capfinances-rouen-metropole|rouen,WTA,Women,WTA 250,Open Capfinances Rouen Metropole,Rouen,,France,,2026-04-13,2026-04-19,True,,Clay,Indoor,scheduled,False,False,,
+86,WTA|2026-04-20|mutua-madrid-open|madrid,WTA,Women,WTA 1000,Mutua Madrid Open,Madrid,,Spain,,2026-04-20,2026-05-03,True,,Clay,Outdoor,scheduled,False,False,,
+87,WTA|2026-05-04|internazionali-bnl-d-italia|rome,WTA,Women,WTA 1000,Internazionali BNL d'Italia,Rome,,Italy,,2026-05-04,2026-05-17,True,,Clay,Outdoor,scheduled,False,False,,
+88,WTA|2026-05-18|internationaux-de-strasbourg|strasbourg,WTA,Women,WTA 500,Internationaux de Strasbourg,Strasbourg,,France,,2026-05-18,2026-05-24,True,,Clay,Outdoor,scheduled,False,False,,
+89,WTA|2026-05-18|grand-prix-son-altesse-royale-la-princesse-lalla-meryem|rabat,WTA,Women,WTA 250,Grand Prix Son Altesse Royale La Princesse Lalla Meryem,Rabat,,Morocco,,2026-05-18,2026-05-24,True,,Clay,Outdoor,scheduled,False,False,,
+90,WTA|2026-05-25|roland-garros|paris,WTA,Women,Grand Slam,Roland-Garros,Paris,,France,,2026-05-25,2026-06-07,True,,Clay,Outdoor,scheduled,False,False,,
+91,WTA|2026-06-08|the-hsbc-championships|london,WTA,Women,WTA 500,The HSBC Championships,London,,Great Britain,,2026-06-08,2026-06-14,True,,Grass,Outdoor,scheduled,False,False,,
+92,WTA|2026-06-08|libema-open|s-hertogenbosch,WTA,Women,WTA 250,Libema Open,'s-Hertogenbosch,,Netherlands,,2026-06-08,2026-06-14,True,,Grass,Outdoor,scheduled,False,False,,
+93,WTA|2026-06-15|berlin-tennis-open|berlin,WTA,Women,WTA 500,Berlin Tennis Open,Berlin,,Germany,,2026-06-15,2026-06-21,True,,Grass,Outdoor,scheduled,False,False,,
+94,WTA|2026-06-15|lexus-nottingham-open|nottingham,WTA,Women,WTA 250,Lexus Nottingham Open,Nottingham,,Great Britain,,2026-06-15,2026-06-21,True,,Grass,Outdoor,scheduled,False,False,,
+95,WTA|2026-06-22|bad-homburg-open|bad-homburg,WTA,Women,WTA 500,Bad Homburg Open,Bad Homburg,,Germany,,2026-06-22,2026-06-28,True,,Grass,Outdoor,scheduled,False,False,,
+96,WTA|2026-06-22|lexus-eastbourne-open|eastbourne,WTA,Women,WTA 250,Lexus Eastbourne Open,Eastbourne,,Great Britain,,2026-06-22,2026-06-28,True,,Grass,Outdoor,scheduled,False,False,,
+97,WTA|2026-06-29|the-championships|wimbledon,WTA,Women,Grand Slam,The Championships,Wimbledon,,Great Britain,,2026-06-29,2026-07-12,True,,Grass,Outdoor,scheduled,False,False,,
+98,WTA|2026-07-13|unicredit-iasi-open|iasi,WTA,Women,WTA 250,UniCredit Iasi Open,Iasi,,Romania,,2026-07-13,2026-07-19,True,,Clay,Outdoor,scheduled,False,False,,
+99,WTA|2026-07-13|athens-open|athens,WTA,Women,WTA 250,Athens Open,Athens,,Greece,,2026-07-13,2026-07-19,True,,Hard,Outdoor,scheduled,False,False,,
+100,WTA|2026-07-20|msc-hamburg-ladies-open|hamburg,WTA,Women,WTA 250,MSC Hamburg Ladies Open,Hamburg,,Germany,,2026-07-20,2026-07-26,True,,Clay,Outdoor,scheduled,False,False,,
+101,WTA|2026-07-20|livesport-prague-open-2026|prague,WTA,Women,WTA 250,Livesport Prague Open 2026,Prague,,Czechia,,2026-07-20,2026-07-26,True,,Hard,Outdoor,scheduled,False,False,,
+102,WTA|2026-07-27|mubadala-dc-open|washington-dc,WTA,Women,WTA 500,Mubadala DC Open,Washington DC,,United States,,2026-07-27,2026-08-02,True,,Hard,Outdoor,scheduled,False,False,,
+103,WTA|2026-07-27|the-memphis-classic|memphis,WTA,Women,WTA 250,The Memphis Classic,Memphis,,United States,,2026-07-27,2026-08-02,True,,Hard,Outdoor,scheduled,False,False,,
+104,WTA|2026-08-03|national-bank-open|toronto,WTA,Women,WTA 1000,National Bank Open,Toronto,,Canada,,2026-08-03,2026-08-16,True,,Hard,Outdoor,scheduled,False,False,,
+105,WTA|2026-08-10|cincinnati-open|cincinnati,WTA,Women,WTA 1000,Cincinnati Open,Cincinnati,,United States,,2026-08-10,2026-08-23,True,,Hard,Outdoor,scheduled,False,False,,
+106,WTA|2026-08-24|abierto-gnp-seguros|monterrey,WTA,Women,WTA 500,Abierto GNP Seguros,Monterrey,,Mexico,,2026-08-24,2026-08-30,True,,Hard,Outdoor,scheduled,False,False,,
+107,WTA|2026-08-31|us-open|new-york,WTA,Women,Grand Slam,US Open,New York,,United States,,2026-08-31,2026-09-13,True,,Hard,Outdoor,scheduled,False,False,,
+108,WTA|2026-09-14|guadalajara-open|guadalajara,WTA,Women,WTA 500,Guadalajara Open,Guadalajara,,Mexico,,2026-09-14,2026-09-20,True,,Hard,Outdoor,scheduled,False,False,,
+109,WTA|2026-09-14|sp-open|sao-paulo,WTA,Women,WTA 250,SP Open,Sao Paulo,,Brazil,,2026-09-14,2026-09-20,True,,Hard,Outdoor,scheduled,False,False,,
+110,WTA|2026-09-21|singapore-tennis-open|singapore,WTA,Women,WTA 500,Singapore Tennis Open,Singapore,,Singapore,,2026-09-21,2026-09-27,True,,Hard,Indoor,scheduled,False,False,,
+111,WTA|2026-09-21|korea-open|seoul,WTA,Women,WTA 500,Korea Open,Seoul,,South Korea,,2026-09-21,2026-09-27,True,,Hard,Outdoor,scheduled,False,False,,
+112,WTA|2026-09-28|china-open|beijing,WTA,Women,WTA 1000,China Open,Beijing,,China,,2026-09-28,2026-10-11,True,,Hard,Outdoor,scheduled,False,False,,
+113,WTA|2026-10-12|wuhan-open|wuhan,WTA,Women,WTA 1000,Wuhan Open,Wuhan,,China,,2026-10-12,2026-10-25,True,,Hard,Outdoor,scheduled,False,False,,
+114,WTA|2026-10-19|ningbo-open|ningbo,WTA,Women,WTA 500,Ningbo Open,Ningbo,,China,,2026-10-19,2026-10-25,True,,Hard,Outdoor,scheduled,False,False,,
+115,WTA|2026-10-19|kinoshita-group-japan-open|osaka,WTA,Women,WTA 250,Kinoshita Group Japan Open,Osaka,,Japan,,2026-10-19,2026-10-25,True,,Hard,Outdoor,scheduled,False,False,,
+116,WTA|2026-10-26|toray-pan-pacific-open-tennis|tokyo,WTA,Women,WTA 500,Toray Pan Pacific Open Tennis,Tokyo,,Japan,,2026-10-26,2026-11-01,True,,Hard,Outdoor,scheduled,False,False,,
+117,WTA|2026-10-26|guangzhou-open|guangzhou,WTA,Women,WTA 250,Guangzhou Open,Guangzhou,,China,,2026-10-26,2026-11-01,True,,Hard,Outdoor,scheduled,False,False,,
+118,WTA|2026-11-02|chennai-open|chennai,WTA,Women,WTA 250,Chennai Open,Chennai,,India,,2026-11-02,2026-11-08,True,,Hard,Outdoor,scheduled,False,False,,
+119,WTA|2026-11-02|prudential-hong-kong-tennis-open|hong-kong,WTA,Women,WTA 250,Prudential Hong Kong Tennis Open,Hong Kong,,Hong Kong,,2026-11-02,2026-11-08,True,,Hard,Outdoor,scheduled,False,False,,
+120,WTA|2026-11-09|wta-finals-indian-wells|indian-wells,WTA,Women,WTA Finals,WTA Finals Indian Wells,Indian Wells,,United States,,2026-11-09,2026-11-15,True,,Hard,Outdoor,scheduled,False,False,,
+121,WTA125|2026-01-05|workday-canberra-open|canberra,WTA125,Women,WTA 125,Workday Canberra Open,Canberra,,Australia,,2026-01-05,2026-01-11,True,,Hard,Outdoor,scheduled,False,False,,
+122,WTA125|2026-01-26|philippine-women-s-open|manila,WTA125,Women,WTA 125,Philippine Women's Open,Manila,,Philippines,,2026-01-26,2026-02-01,True,,Hard,Outdoor,scheduled,False,False,,
+123,WTA125|2026-02-02|l-t-mumbai-open|mumbai,WTA125,Women,WTA 125,L&T Mumbai Open,Mumbai,,India,,2026-02-02,2026-02-08,True,,Hard,Outdoor,scheduled,False,False,,
+124,WTA125|2026-02-09|oeiras-1-jamor-indoor|oeiras,WTA125,Women,WTA 125,Oeiras 1 - Jamor Indoor,Oeiras,,Portugal,,2026-02-09,2026-02-15,True,,Hard,Indoor,scheduled,False,False,,
+125,WTA125|2026-02-16|open-arena-les-sables-d-olonne|les-sables-d-olonne,WTA125,Women,WTA 125,Open Arena Les Sables d'Olonne,Les Sables d'Olonne,,France,,2026-02-16,2026-02-22,True,,Hard,Indoor,scheduled,False,False,,
+126,WTA125|2026-02-16|dow-tennis-classic|midland,WTA125,Women,WTA 125,Dow Tennis Classic,Midland,Michigan,United States,,2026-02-16,2026-02-22,True,,Hard,Indoor,scheduled,False,False,,
+127,WTA125|2026-02-16|oeiras-2-jamor-indoor|oeiras,WTA125,Women,WTA 125,Oeiras 2 - Jamor Indoor,Oeiras,,Portugal,,2026-02-16,2026-02-22,True,,Hard,Indoor,scheduled,False,False,,
+128,WTA125|2026-02-23|megasaray-hotels-open|antalya,WTA125,Women,WTA 125,Megasaray Hotels Open,Antalya,,Turkey,,2026-02-23,2026-03-01,True,,Clay,Outdoor,scheduled,False,False,,
+129,WTA125|2026-03-02|megasaray-hotels-open|antalya,WTA125,Women,WTA 125,Megasaray Hotels Open,Antalya,,Turkey,,2026-03-02,2026-03-08,True,,Clay,Outdoor,scheduled,False,False,,
+130,WTA125|2026-03-09|megasaray-hotels-open|antalya,WTA125,Women,WTA 125,Megasaray Hotels Open,Antalya,,Turkey,,2026-03-09,2026-03-15,True,,Clay,Outdoor,scheduled,False,False,,
+131,WTA125|2026-03-09|austin-125|austin,WTA125,Women,WTA 125,Austin 125,Austin,Texas,United States,,2026-03-09,2026-03-15,True,,Hard,Outdoor,scheduled,False,False,,
+132,WTA125|2026-03-23|dubrovnik-open|dubrovnik,WTA125,Women,WTA 125,Dubrovnik Open,Dubrovnik,,Croatia,,2026-03-23,2026-03-29,True,,Clay,Outdoor,scheduled,False,False,,
+133,WTA125|2026-04-06|open-villa-de-madrid|madrid,WTA125,Women,WTA 125,Open Villa de Madrid,Madrid,,Spain,,2026-04-06,2026-04-12,True,,Clay,Outdoor,scheduled,False,False,,
+134,WTA125|2026-04-13|oeiras-ladies-open|oeiras,WTA125,Women,WTA 125,Oeiras Ladies Open,Oeiras,,Portugal,,2026-04-13,2026-04-19,True,,Clay,Outdoor,scheduled,False,False,,
+135,WTA125|2026-04-20|oeiras-open-ceto|oeiras,WTA125,Women,WTA 125,Oeiras Open CETO,Oeiras,,Portugal,,2026-04-20,2026-04-26,True,,Clay,Outdoor,scheduled,False,False,,
+136,WTA125|2026-04-27|lopen-35-de-saint-malo|saint-malo,WTA125,Women,WTA 125,L’Open 35 de Saint-Malo,Saint Malo,,France,,2026-04-27,2026-05-03,True,,Clay,Outdoor,scheduled,False,False,,
+137,WTA125|2026-04-27|catalonia-open-solgirones|la-bisbal-demporda,WTA125,Women,WTA 125,Catalonia Open Solgironès,La Bisbal d’Emporda,,Spain,,2026-04-27,2026-05-03,True,,Clay,Outdoor,scheduled,False,False,,
+138,WTA125|2026-04-27|huzhou-open-huzhouwuxing|huzhou,WTA125,Women,WTA 125,Huzhou Open · HuzhouWuxing,Huzhou,,China,,2026-04-27,2026-05-03,True,,Clay,Outdoor,scheduled,False,False,,
+139,WTA125|2026-05-04|istanbul-open|istanbul,WTA125,Women,WTA 125,Istanbul Open,Istanbul,,Turkey,,2026-05-04,2026-05-10,True,,Clay,Outdoor,scheduled,False,False,,
+140,WTA125|2026-05-04|jiangxi-open|jiujiang,WTA125,Women,WTA 125,Jiangxi Open,Jiujiang,,China,,2026-05-04,2026-05-10,True,,Hard,Outdoor,scheduled,False,False,,
+141,WTA125|2026-05-11|parma-ladies-open|parma,WTA125,Women,WTA 125,Parma Ladies Open,Parma,,Italy,,2026-05-11,2026-05-17,True,,Clay,Outdoor,scheduled,False,False,,
+142,WTA125|2026-05-11|trophee-clarins|paris,WTA125,Women,WTA 125,Trophèe Clarins,Paris,,France,,2026-05-11,2026-05-17,True,,Clay,Outdoor,scheduled,False,False,,
+143,WTA125|2026-06-01|makarska-open|makarska,WTA125,Women,WTA 125,Makarska Open,Makarska,,Croatia,,2026-06-01,2026-06-07,True,,Clay,Outdoor,scheduled,False,False,,
+144,WTA125|2026-06-01|open-delle-puglie-trofeo|foggia,WTA125,Women,WTA 125,Open delle Puglie Trofeo,Foggia,,Italy,,2026-06-01,2026-06-07,True,,Clay,Outdoor,scheduled,False,False,,
+145,WTA125|2026-06-01|lexus-birmingham-open|birmingham,WTA125,Women,WTA 125,Lexus Birmingham Open,Birmingham,,Great Britain,,2026-06-01,2026-06-07,True,,Grass,Outdoor,scheduled,False,False,,
+146,WTA125|2026-06-08|lexus-ilkley-open|ilkley,WTA125,Women,WTA 125,Lexus Ilkley Open,Ilkley,,Great Britain,,2026-06-08,2026-06-14,True,,Grass,Outdoor,scheduled,False,False,,
+147,WTA125|2026-06-08|memorial-eugenio-fontana|modena,WTA125,Women,WTA 125,Memorial Eugenio Fontana,Modena,,Italy,,2026-06-08,2026-06-14,True,,Clay,Outdoor,scheduled,False,False,,
+148,WTA125|2026-06-15|internazionali-femminili-di-brescia|brescia,WTA125,Women,WTA 125,Internazionali Femminili Di Brescia,Brescia,,Italy,,2026-06-15,2026-06-21,True,,Clay,Outdoor,scheduled,False,False,,
+149,WTA125|2026-06-15|figueira-da-foz-ladies-open|figueira-da-foz,WTA125,Women,WTA 125,Figueira da Foz Ladies Open,Figueira da Foz,,Portugal,,2026-06-15,2026-06-21,True,,Hard,Outdoor,scheduled,False,False,,
+150,WTA125|2026-07-06|nordea-open|bastad,WTA125,Women,WTA 125,Nordea Open,Bastad,,Sweden,,2026-07-06,2026-07-12,True,,Clay,Outdoor,scheduled,False,False,,
+151,WTA125|2026-07-06|grand-est-open-88|contrexeville,WTA125,Women,WTA 125,Grand Est Open 88,Contrexeville,,France,,2026-07-06,2026-07-12,True,,Clay,Outdoor,scheduled,False,False,,
+152,WTA125|2026-07-06|hall-of-fame-open|newport,WTA125,Women,WTA 125,Hall of Fame Open,Newport,Rhode Island,United States,,2026-07-06,2026-07-12,True,,Grass,Outdoor,scheduled,False,False,,
+153,WTA125|2026-07-13|enka-open|istanbul,WTA125,Women,WTA 125,Enka Open,Istanbul,,Turkey,,2026-07-13,2026-07-19,True,,Hard,Outdoor,scheduled,False,False,,
+154,WTA125|2026-07-13|generali-open-ladies-kitzbuhel|kitzbuhel,WTA125,Women,WTA 125,Generali Open Ladies Kitzbuhel,Kitzbuhel,,Austria,,2026-07-13,2026-07-19,True,,Clay,Outdoor,scheduled,False,False,,
+155,WTA125|2026-07-13|atv-bancomat-tennis-open|rome,WTA125,Women,WTA 125,ATV Bancomat Tennis Open,Rome,,Italy,,2026-07-13,2026-07-19,True,,Clay,Outdoor,scheduled,False,False,,
+156,WTA125|2026-07-30|37-palermo-ladies-open|palermo,WTA125,Women,WTA 125,37° Palermo Ladies Open,Palermo,,Italy,,2026-07-30,2026-08-05,True,,Clay,Outdoor,scheduled,False,False,,
+157,WTA125|2026-07-27|axeria-open-2026|targu-mures,WTA125,Women,WTA 125,AXERIA Open 2026,Targu Mures,,Romania,,2026-07-27,2026-08-02,True,,Clay,Outdoor,scheduled,False,False,,
+158,WTA125|2026-07-27|odlum-brown-vanopen|vancouver,WTA125,Women,WTA 125,Odlum Brown VanOpen,Vancouver,,Canada,,2026-07-27,2026-08-02,True,,Hard,Outdoor,scheduled,False,False,,
+159,WTA125|2026-08-03|warsaw-t-mobile-polish-open|warsaw,WTA125,Women,WTA 125,Warsaw T-mobile Polish Open,Warsaw,,Poland,,2026-08-03,2026-08-09,True,,Hard,Outdoor,scheduled,False,False,,
+160,WTA125|2026-08-24|ennoble-care-philly-open|philadelphia,WTA125,Women,WTA 125,Ennoble Care Philly Open,Philadelphia,Pennsylvania,United States,,2026-08-24,2026-08-30,True,,Hard,Outdoor,scheduled,False,False,,
+161,WTA125|2026-09-07|atik-antalya-open|antalya,WTA125,Women,WTA 125,ATIK Antalya Open,Antalya,,Turkey,,2026-09-07,2026-09-13,True,,Clay,Outdoor,scheduled,False,False,,
+162,WTA125|2026-09-07|kia-open|barranquilla,WTA125,Women,WTA 125,Kia Open,Barranquilla,,Colombia,,2026-09-07,2026-09-13,True,,Hard,Outdoor,scheduled,False,False,,
+163,WTA125|2026-09-07|montreux-nestle-open|montreux,WTA125,Women,WTA 125,Montreux Nestlé Open,Montreux,,Switzerland,,2026-09-07,2026-09-13,True,,Clay,Outdoor,scheduled,False,False,,
+164,WTA125|2026-09-14|caldas-da-rainha-ladies-open|caldas-da-rainha,WTA125,Women,WTA 125,Caldas da Rainha Ladies Open,Caldas da Rainha,,Portugal,,2026-09-14,2026-09-20,True,,Hard,Outdoor,scheduled,False,False,,
+165,WTA125|2026-09-14|zavarovalnica-triglav-ljubljana|ljubljana,WTA125,Women,WTA 125,Zavarovalnica Triglav Ljubljana,Ljubljana,,Slovenia,,2026-09-14,2026-09-20,True,,Clay,Outdoor,scheduled,False,False,,
+166,WTA125|2026-09-14|bbva-open-internacional-de-valencia|valencia,WTA125,Women,WTA 125,BBVA Open Internacional de Valencia,Valencia,,Spain,,2026-09-14,2026-09-20,True,,Clay,Outdoor,scheduled,False,False,,
+167,WTA125|2026-09-21|ankara-open|ankara,WTA125,Women,WTA 125,Ankara Open,Ankara,,Turkey,,2026-09-21,2026-09-27,True,,Hard,Outdoor,scheduled,False,False,,
+168,WTA125|2026-09-21|eupago-porto-open|porto,WTA125,Women,WTA 125,Eupago Porto Open,Porto,,Portugal,,2026-09-21,2026-09-27,True,,Hard,Outdoor,scheduled,False,False,,
+169,WTA125|2026-09-21|delta-motors-tolentino-open|tolentino,WTA125,Women,WTA 125,Delta Motors Tolentino Open,Tolentino,,Italy,,2026-09-21,2026-09-27,True,,Clay,Outdoor,scheduled,False,False,,
+170,WTA125|2026-09-28|adana-open|adana,WTA125,Women,WTA 125,Adana Open,Adana,,Turkey,,2026-09-28,2026-10-04,True,,Hard,Outdoor,scheduled,False,False,,
+171,WTA125|2026-09-28|jingshan-tennis-open|jingshan,WTA125,Women,WTA 125,Jingshan Tennis Open,Jingshan,,China,,2026-09-28,2026-10-04,True,,Hard,Outdoor,scheduled,False,False,,
+172,WTA125|2026-10-05|rio-ladies-open|rio-de-janeiro,WTA125,Women,WTA 125,Rio Ladies Open,Rio de Janeiro,,Brazil,,2026-10-05,2026-10-11,True,,Clay,Outdoor,scheduled,False,False,,
+173,WTA125|2026-10-05|samsun-open|samsun,WTA125,Women,WTA 125,Samsun Open,Samsun,,Turkey,,2026-10-05,2026-10-11,True,,Hard,Outdoor,scheduled,False,False,,
+174,WTA125|2026-10-05|suzhou-open|suzhou,WTA125,Women,WTA 125,Suzhou Open,Suzhou,,China,,2026-10-05,2026-10-11,True,,Hard,Outdoor,scheduled,False,False,,
+175,WTA125|2026-10-12|lisboa-belem-open|lisbon,WTA125,Women,WTA 125,Lisboa Belem Open,Lisbon,,Portugal,,2026-10-12,2026-10-18,True,,Clay,Outdoor,scheduled,False,False,,
+176,WTA125|2026-10-12|vanda-pharmaceuticals-mallorca-womens-championships|mallorca,WTA125,Women,WTA 125,Vanda Pharmaceuticals Mallorca Women’s Championships,Mallorca,,Spain,,2026-10-12,2026-10-18,True,,Clay,Outdoor,scheduled,False,False,,
+177,WTA125|2026-10-12|roveretopen-citta-della-pace|rovereto,WTA125,Women,WTA 125,RoveretOpen Città della Pace,Rovereto,,Italy,,2026-10-12,2026-10-18,True,,Hard,Indoor,scheduled,False,False,,
+178,CHALLENGER|2026-01-05|bengaluru-1|bengaluru,CHALLENGER,Men,ATP Challenger 125,Bengaluru 1,Bengaluru,,,IND,2026-01-05,2026-01-11,False,125,Hard,Outdoor,scheduled,False,False,friday start; saturday final; saturday start,Saturday final                       United Cup                     UTD        H       18 teams        ✽        Perth: Friday start | Sydney: Saturday start
+179,CHALLENGER|2026-01-05|canberra|canberra,CHALLENGER,Men,ATP Challenger 125,Canberra,Canberra,,,AUS,2026-01-05,2026-01-11,False,125,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final                       Brisbane                       250        H          32          24
+180,CHALLENGER|2026-01-05|noumea|noumea,CHALLENGER,Men,ATP Challenger 75,Noumea,Noumea,,,NCL,2026-01-05,2026-01-11,False,75,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final                       Hong Kong                      250        H          28           16
+181,CHALLENGER|2026-01-05|nonthaburi-1|nonthaburi,CHALLENGER,Men,ATP Challenger 50,Nonthaburi 1,Nonthaburi,,,THA,2026-01-05,2026-01-11,False,50,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final
+182,CHALLENGER|2026-01-05|nottingham-1|nottingham,CHALLENGER,Men,ATP Challenger 50,Nottingham 1,Nottingham,,,GBR,2026-01-05,2026-01-11,False,50,Hard,Indoor,scheduled,False,False,saturday final,Saturday final
+183,CHALLENGER|2026-01-12|nonthaburi-2|nonthaburi,CHALLENGER,Men,ATP Challenger 75,Nonthaburi 2,Nonthaburi,,,THA,2026-01-12,2026-01-18,False,75,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final                       Australian Open Qualifying     GSL        H          ✽           128
+184,CHALLENGER|2026-01-12|buenos-aires-argentino|buenos-aires,CHALLENGER,Men,ATP Challenger 50,Buenos Aires (Argentino),Buenos Aires,,,ARG,2026-01-12,2026-01-18,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final                       Adelaide                       250        H          28           16                Saturday final
+185,CHALLENGER|2026-01-12|glasgow|glasgow,CHALLENGER,Men,ATP Challenger 50,Glasgow,Glasgow,,,GBR,2026-01-12,2026-01-18,False,50,Hard,Indoor,scheduled,False,False,saturday final,Saturday final                       Auckland                       250        H          28           16                Saturday final
+186,CHALLENGER|2026-01-19|oeiras-1|oeiras,CHALLENGER,Men,ATP Challenger 100,Oeiras 1,Oeiras,,,POR,2026-01-19,2026-01-25,False,100,Hard,Indoor,scheduled,False,False,sunday start,Australian Open                GSL        H          128          ✽                 Sunday start
+187,CHALLENGER|2026-01-19|itajai|itajai,CHALLENGER,Men,ATP Challenger 75,Itajai,Itajai,,,BRA,2026-01-19,2026-01-25,False,75,Clay,Outdoor,scheduled,False,False,,
+188,CHALLENGER|2026-01-19|soma-bay|soma-bay,CHALLENGER,Men,ATP Challenger 75,Soma Bay,Soma Bay,,,EGY,2026-01-19,2026-01-25,False,75,Hard,Outdoor,scheduled,False,False,,
+189,CHALLENGER|2026-01-19|phan-thiet-1|phan-thiet,CHALLENGER,Men,ATP Challenger 50,Phan Thiet 1,Phan Thiet,,,VIE,2026-01-19,2026-01-25,False,50,Hard,Outdoor,scheduled,False,False,,
+190,CHALLENGER|2026-01-26|manama|manama,CHALLENGER,Men,ATP Challenger 125,Manama,Manama,,,BRN,2026-01-26,2026-02-01,False,125,Hard,Outdoor,scheduled,False,False,tuesday start,Tuesday start                        Australian Open                GSL        H          128          ✽
+191,CHALLENGER|2026-01-26|quimper|quimper,CHALLENGER,Men,ATP Challenger 125,Quimper,Quimper,,,FRA,2026-01-26,2026-02-01,False,125,Hard,Indoor,scheduled,False,False,tuesday start,Tuesday start
+192,CHALLENGER|2026-01-26|concepcion|concepcion,CHALLENGER,Men,ATP Challenger 100,Concepcion,Concepcion,,,CHI,2026-01-26,2026-02-01,False,100,Clay,Outdoor,scheduled,False,False,tuesday start,Tuesday start
+193,CHALLENGER|2026-01-26|san-diego|san-diego,CHALLENGER,Men,ATP Challenger 100,San Diego,San Diego,California,,USA,2026-01-26,2026-02-01,False,100,Hard,Outdoor,scheduled,False,False,tuesday start,Tuesday start
+194,CHALLENGER|2026-01-26|oeiras-2|oeiras,CHALLENGER,Men,ATP Challenger 75,Oeiras 2,Oeiras,,,POR,2026-01-26,2026-02-01,False,75,Hard,Indoor,scheduled,False,False,,
+195,CHALLENGER|2026-01-26|phan-thiet-2|phan-thiet,CHALLENGER,Men,ATP Challenger 50,Phan Thiet 2,Phan Thiet,,,VIE,2026-01-26,2026-02-01,False,50,Hard,Outdoor,scheduled,False,False,,
+196,CHALLENGER|2026-02-02|rosario|rosario,CHALLENGER,Men,ATP Challenger 125,Rosario,Rosario,,,ARG,2026-02-02,2026-02-08,False,125,Clay,Outdoor,scheduled,False,False,,Montpellier                    250        IH         28           16
+197,CHALLENGER|2026-02-02|brisbane-1|brisbane,CHALLENGER,Men,ATP Challenger 75,Brisbane 1,Brisbane,,,AUS,2026-02-02,2026-02-08,False,75,Hard,Outdoor,scheduled,False,False,,Davis Cup Qualifiers           DC         ✽          ✽            ✽
+198,CHALLENGER|2026-02-02|cleveland|cleveland,CHALLENGER,Men,ATP Challenger 75,Cleveland,Cleveland,Ohio,,USA,2026-02-02,2026-02-08,False,75,Hard,Indoor,scheduled,False,False,,
+199,CHALLENGER|2026-02-02|tenerife-1|tenerife,CHALLENGER,Men,ATP Challenger 75,Tenerife 1,Tenerife,,,ESP,2026-02-02,2026-02-08,False,75,Hard,Outdoor,scheduled,False,False,,
+200,CHALLENGER|2026-02-02|cesenatico|cesenatico,CHALLENGER,Men,ATP Challenger 50,Cesenatico,Cesenatico,,,ITA,2026-02-02,2026-02-08,False,50,Hard,Indoor,scheduled,False,False,,
+201,CHALLENGER|2026-02-02|koblenz|koblenz,CHALLENGER,Men,ATP Challenger 50,Koblenz,Koblenz,,,GER,2026-02-02,2026-02-08,False,50,Hard,Indoor,scheduled,False,False,,
+202,CHALLENGER|2026-02-09|pau|pau,CHALLENGER,Men,ATP Challenger 125,Pau,Pau,,,FRA,2026-02-09,2026-02-15,False,125,Hard,Indoor,scheduled,False,False,,Dallas                         500        IH         32           16
+203,CHALLENGER|2026-02-09|brisbane-2|brisbane,CHALLENGER,Men,ATP Challenger 75,Brisbane 2,Brisbane,,,AUS,2026-02-09,2026-02-15,False,75,Hard,Outdoor,scheduled,False,False,,Rotterdam                      500        IH         32           16
+204,CHALLENGER|2026-02-09|tenerife-2|tenerife,CHALLENGER,Men,ATP Challenger 75,Tenerife 2,Tenerife,,,ESP,2026-02-09,2026-02-15,False,75,Hard,Outdoor,scheduled,False,False,,Buenos Aires                   250        C          28           16
+205,CHALLENGER|2026-02-09|baton-rouge|baton-rouge,CHALLENGER,Men,ATP Challenger 50,Baton Rouge,Baton Rouge,Louisiana,,USA,2026-02-09,2026-02-15,False,50,Hard,Indoor,scheduled,False,False,,
+206,CHALLENGER|2026-02-09|chennai|chennai,CHALLENGER,Men,ATP Challenger 50,Chennai,Chennai,,,IND,2026-02-09,2026-02-15,False,50,Hard,Outdoor,scheduled,False,False,,
+207,CHALLENGER|2026-02-16|lille|lille,CHALLENGER,Men,ATP Challenger 125,Lille,Lille,,,FRA,2026-02-16,2026-02-22,False,125,Hard,Indoor,scheduled,False,False,saturday final,Doha                           500        H          32           16               Saturday final
+208,CHALLENGER|2026-02-16|metepec|metepec,CHALLENGER,Men,ATP Challenger 75,Metepec,Metepec,,,MEX,2026-02-16,2026-02-22,False,75,Hard,Outdoor,scheduled,True,False,,High altitude   Rio de Janeiro                 500        C          32           16
+209,CHALLENGER|2026-02-16|new-delhi|new-delhi,CHALLENGER,Men,ATP Challenger 75,New Delhi,New Delhi,,,IND,2026-02-16,2026-02-22,False,75,Hard,Outdoor,scheduled,False,False,,Delray Beach                   250        H          28           16
+210,CHALLENGER|2026-02-16|tigre-1|tigre,CHALLENGER,Men,ATP Challenger 50,Tigre 1,Tigre,,,ARG,2026-02-16,2026-02-22,False,50,Clay,Outdoor,scheduled,False,False,,
+211,CHALLENGER|2026-02-23|saint-brieuc|saint-brieuc,CHALLENGER,Men,ATP Challenger 100,Saint-Brieuc,Saint-Brieuc,,,FRA,2026-02-23,2026-03-01,False,100,Hard,Indoor,scheduled,False,False,saturday final,Acapulco                       500        H          32           16               Saturday final
+212,CHALLENGER|2026-02-23|lugano|lugano,CHALLENGER,Men,ATP Challenger 75,Lugano,Lugano,,,SUI,2026-02-23,2026-03-01,False,75,Hard,Indoor,scheduled,False,False,saturday final,Dubai                          500        H          32           16               Saturday final
+213,CHALLENGER|2026-02-23|pune|pune,CHALLENGER,Men,ATP Challenger 75,Pune,Pune,,,IND,2026-02-23,2026-03-01,False,75,Hard,Outdoor,scheduled,False,False,,Santiago                       250        C          28           16
+214,CHALLENGER|2026-02-23|tigre-2|tigre,CHALLENGER,Men,ATP Challenger 50,Tigre 2,Tigre,,,ARG,2026-02-23,2026-03-01,False,50,Clay,Outdoor,scheduled,False,False,,
+215,CHALLENGER|2026-03-02|thionville|thionville,CHALLENGER,Men,ATP Challenger 100,Thionville,Thionville,,,FRA,2026-03-02,2026-03-08,False,100,Hard,Indoor,scheduled,False,False,wednesday start,INDIAN WELLS                  M1000       H          98          48             Wednesday start
+216,CHALLENGER|2026-03-02|brasilia|brasilia,CHALLENGER,Men,ATP Challenger 75,Brasilia,Brasilia,,,BRA,2026-03-02,2026-03-08,False,75,Clay,Outdoor,scheduled,False,False,,
+217,CHALLENGER|2026-03-02|kigali-1|kigali,CHALLENGER,Men,ATP Challenger 75,Kigali 1,Kigali,,,RWA,2026-03-02,2026-03-08,False,75,Clay,Outdoor,scheduled,True,False,saturday final,Saturday final       High altitude
+218,CHALLENGER|2026-03-02|fujairah-1|fujairah,CHALLENGER,Men,ATP Challenger 50,Fujairah 1,Fujairah,,,UAE,2026-03-02,2026-03-08,False,50,Hard,Outdoor,cancelled,False,False,,Cancelled
+219,CHALLENGER|2026-03-02|hersonissos-1|hersonissos,CHALLENGER,Men,ATP Challenger 50,Hersonissos 1,Hersonissos,,,GRE,2026-03-02,2026-03-08,False,50,Hard,Outdoor,scheduled,False,False,,
+220,CHALLENGER|2026-03-09|cap-cana|cap-cana,CHALLENGER,Men,ATP Challenger 175,Cap Cana,Cap Cana,,,DOM,2026-03-09,2026-03-15,False,175,Hard,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying   INDIAN WELLS        M1000       H          98           ✽
+221,CHALLENGER|2026-03-09|phoenix|phoenix,CHALLENGER,Men,ATP Challenger 175,Phoenix,Phoenix,Arizona,,USA,2026-03-09,2026-03-15,False,175,Hard,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying
+222,CHALLENGER|2026-03-09|kigali-2|kigali,CHALLENGER,Men,ATP Challenger 100,Kigali 2,Kigali,,,RWA,2026-03-09,2026-03-15,False,100,Clay,Outdoor,scheduled,True,False,,High altitude
+223,CHALLENGER|2026-03-09|cherbourg-en-cotentin|cherbourg-en-cotentin,CHALLENGER,Men,ATP Challenger 75,Cherbourg-en-Cotentin,Cherbourg-en-Cotentin,,,FRA,2026-03-09,2026-03-15,False,75,Hard,Indoor,scheduled,False,False,,
+224,CHALLENGER|2026-03-09|santiago|santiago,CHALLENGER,Men,ATP Challenger 75,Santiago,Santiago,,,CHI,2026-03-09,2026-03-15,False,75,Clay,Outdoor,scheduled,False,False,,
+225,CHALLENGER|2026-03-09|fujairah-2|fujairah,CHALLENGER,Men,ATP Challenger 50,Fujairah 2,Fujairah,,,UAE,2026-03-09,2026-03-15,False,50,Hard,Outdoor,cancelled,False,False,,Cancelled
+226,CHALLENGER|2026-03-09|hersonissos-2|hersonissos,CHALLENGER,Men,ATP Challenger 50,Hersonissos 2,Hersonissos,,,GRE,2026-03-09,2026-03-15,False,50,Hard,Outdoor,scheduled,False,False,,
+227,CHALLENGER|2026-03-16|asuncion-rakiura|asuncion,CHALLENGER,Men,ATP Challenger 75,Asuncion (Rakiura),Asuncion,,,PAR,2026-03-16,2026-03-22,False,75,Clay,Outdoor,scheduled,False,False,wednesday start,MIAMI               M1000       H          98          48        Wednesday start
+228,CHALLENGER|2026-03-16|cuernavaca|cuernavaca,CHALLENGER,Men,ATP Challenger 75,Cuernavaca,Cuernavaca,,,MEX,2026-03-16,2026-03-22,False,75,Hard,Outdoor,scheduled,True,False,,High altitude
+229,CHALLENGER|2026-03-16|murcia|murcia,CHALLENGER,Men,ATP Challenger 75,Murcia,Murcia,,,ESP,2026-03-16,2026-03-22,False,75,Clay,Outdoor,scheduled,False,False,,
+230,CHALLENGER|2026-03-16|zadar|zadar,CHALLENGER,Men,ATP Challenger 75,Zadar,Zadar,,,CRO,2026-03-16,2026-03-22,False,75,Clay,Outdoor,scheduled,False,False,,
+231,CHALLENGER|2026-03-23|morelia|morelia,CHALLENGER,Men,ATP Challenger 125,Morelia,Morelia,,,MEX,2026-03-23,2026-03-29,False,125,Hard,Outdoor,scheduled,True,False,saturday final,Saturday final       High altitude         MIAMI               M1000       H          98           ✽
+232,CHALLENGER|2026-03-23|naples|naples,CHALLENGER,Men,ATP Challenger 125,Naples,Naples,,,ITA,2026-03-23,2026-03-29,False,125,Clay,Outdoor,scheduled,False,False,,
+233,CHALLENGER|2026-03-23|girona|girona,CHALLENGER,Men,ATP Challenger 100,Girona,Girona,,,ESP,2026-03-23,2026-03-29,False,100,Clay,Outdoor,cancelled,False,False,,Cancelled
+234,CHALLENGER|2026-03-23|alicante-montemar|alicante,CHALLENGER,Men,ATP Challenger 100,Alicante (Montemar),Alicante,,,ESP,2026-03-23,2026-03-29,False,100,Clay,Outdoor,scheduled,False,False,,
+235,CHALLENGER|2026-03-23|sao-paulo|sao-paulo,CHALLENGER,Men,ATP Challenger 100,Sao Paulo,Sao Paulo,,,BRA,2026-03-23,2026-03-29,False,100,Clay,Outdoor,scheduled,False,False,,
+236,CHALLENGER|2026-03-23|bucaramanga-floridablanca|bucaramanga,CHALLENGER,Men,ATP Challenger 50,Bucaramanga (Floridablanca),Bucaramanga,,,COL,2026-03-23,2026-03-29,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
+237,CHALLENGER|2026-03-23|split|split,CHALLENGER,Men,ATP Challenger 50,Split,Split,,,CRO,2026-03-23,2026-03-29,False,50,Clay,Outdoor,scheduled,False,False,,
+238,CHALLENGER|2026-03-23|yokkaichi|yokkaichi,CHALLENGER,Men,ATP Challenger 50,Yokkaichi,Yokkaichi,,,JPN,2026-03-23,2026-03-29,False,50,Hard,Outdoor,scheduled,False,False,,
+239,CHALLENGER|2026-03-30|menorca|menorca,CHALLENGER,Men,ATP Challenger 100,Menorca,Menorca,,,ESP,2026-03-30,2026-04-05,False,100,Clay,Outdoor,scheduled,False,False,,Bucharest            250        C          28           16
+240,CHALLENGER|2026-03-30|barletta|barletta,CHALLENGER,Men,ATP Challenger 75,Barletta,Barletta,,,ITA,2026-03-30,2026-04-05,False,75,Clay,Outdoor,scheduled,False,False,,Houston              250        C          28           16
+241,CHALLENGER|2026-03-30|san-luis-potosi|san-luis-potosi,CHALLENGER,Men,ATP Challenger 75,San Luis Potosi,San Luis Potosi,,,MEX,2026-03-30,2026-04-05,False,75,Clay,Outdoor,scheduled,True,False,,High altitude        Marrakech            250        C          28           16
+242,CHALLENGER|2026-03-30|sao-leopoldo|sao-leopoldo,CHALLENGER,Men,ATP Challenger 75,Sao Leopoldo,Sao Leopoldo,,,BRA,2026-03-30,2026-04-05,False,75,Clay,Outdoor,scheduled,False,False,,
+243,CHALLENGER|2026-03-30|miyazaki|miyazaki,CHALLENGER,Men,ATP Challenger 50,Miyazaki,Miyazaki,,,JPN,2026-03-30,2026-04-05,False,50,Hard,Outdoor,scheduled,False,False,,
+244,CHALLENGER|2026-04-06|mexico-city|mexico-city,CHALLENGER,Men,ATP Challenger 125,Mexico City,Mexico City,,,MEX,2026-04-06,2026-04-12,False,125,Clay,Outdoor,scheduled,True,False,sunday start,High altitude         MONTECARLO          M1000       C          56          28          Sunday start
+245,CHALLENGER|2026-04-06|monza|monza,CHALLENGER,Men,ATP Challenger 125,Monza,Monza,,,ITA,2026-04-06,2026-04-12,False,125,Clay,Outdoor,scheduled,False,False,,
+246,CHALLENGER|2026-04-06|campinas|campinas,CHALLENGER,Men,ATP Challenger 75,Campinas,Campinas,,,BRA,2026-04-06,2026-04-12,False,75,Clay,Outdoor,scheduled,False,False,,
+247,CHALLENGER|2026-04-06|madrid|madrid,CHALLENGER,Men,ATP Challenger 75,Madrid,Madrid,,,ESP,2026-04-06,2026-04-12,False,75,Clay,Outdoor,scheduled,False,False,,
+248,CHALLENGER|2026-04-06|sarasota|sarasota,CHALLENGER,Men,ATP Challenger 75,Sarasota,Sarasota,Florida,,USA,2026-04-06,2026-04-12,False,75,Clay,Outdoor,scheduled,False,True,,*                               Har-Tru
+249,CHALLENGER|2026-04-06|wuning-1|wuning,CHALLENGER,Men,ATP Challenger 50,Wuning 1,Wuning,,,CHN,2026-04-06,2026-04-12,False,50,Hard,Outdoor,scheduled,False,False,,
+250,CHALLENGER|2026-04-13|busan|busan,CHALLENGER,Men,ATP Challenger 125,Busan,Busan,,,KOR,2026-04-13,2026-04-19,False,125,Hard,Outdoor,scheduled,False,False,,Barcelona            500        C          32          24
+251,CHALLENGER|2026-04-13|oeiras-3|oeiras,CHALLENGER,Men,ATP Challenger 125,Oeiras 3,Oeiras,,,POR,2026-04-13,2026-04-19,False,125,Clay,Outdoor,scheduled,False,False,,Munich               500        C          32           16
+252,CHALLENGER|2026-04-13|merida|merida,CHALLENGER,Men,ATP Challenger 75,Merida,Merida,,,MEX,2026-04-13,2026-04-19,False,75,Clay,Outdoor,cancelled,False,False,,Cancelled
+253,CHALLENGER|2026-04-13|santa-cruz-de-la-sierra|santa-cruz-de-la-sierra,CHALLENGER,Men,ATP Challenger 75,Santa Cruz de la Sierra,Santa Cruz de la Sierra,,,BOL,2026-04-13,2026-04-19,False,75,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
+254,CHALLENGER|2026-04-13|tallahassee|tallahassee,CHALLENGER,Men,ATP Challenger 75,Tallahassee,Tallahassee,Florida,,USA,2026-04-13,2026-04-19,False,75,Clay,Outdoor,scheduled,False,True,,*                               Har-Tru
+255,CHALLENGER|2026-04-13|wuning-2|wuning,CHALLENGER,Men,ATP Challenger 50,Wuning 2,Wuning,,,CHN,2026-04-13,2026-04-19,False,50,Hard,Outdoor,scheduled,False,False,,
+256,CHALLENGER|2026-04-20|gwangju|gwangju,CHALLENGER,Men,ATP Challenger 75,Gwangju,Gwangju,,,KOR,2026-04-20,2026-04-26,False,75,Hard,Outdoor,scheduled,False,False,wednesday start,MADRID              M1000       C          96          48        Wednesday start
+257,CHALLENGER|2026-04-20|rome|rome,CHALLENGER,Men,ATP Challenger 75,Rome,Rome,,,ITA,2026-04-20,2026-04-26,False,75,Clay,Outdoor,scheduled,False,False,,
+258,CHALLENGER|2026-04-20|savannah|savannah,CHALLENGER,Men,ATP Challenger 75,Savannah,Savannah,Georgia,,USA,2026-04-20,2026-04-26,False,75,Clay,Outdoor,scheduled,False,True,,*                               Har-Tru
+259,CHALLENGER|2026-04-20|abidjan-1|abidjan,CHALLENGER,Men,ATP Challenger 50,Abidjan 1,Abidjan,,,CIV,2026-04-20,2026-04-26,False,50,Hard,Outdoor,scheduled,False,False,,
+260,CHALLENGER|2026-04-20|shymkent-1|shymkent,CHALLENGER,Men,ATP Challenger 50,Shymkent 1,Shymkent,,,KAZ,2026-04-20,2026-04-26,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
+261,CHALLENGER|2026-04-27|aix-en-provence|aix-en-provence,CHALLENGER,Men,ATP Challenger 175,Aix-en-Provence,Aix-en-Provence,,,FRA,2026-04-27,2026-05-03,False,175,Clay,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying   MADRID                      M1000       C          96          ✽
+262,CHALLENGER|2026-04-27|cagliari|cagliari,CHALLENGER,Men,ATP Challenger 175,Cagliari,Cagliari,,,ITA,2026-04-27,2026-05-03,False,175,Clay,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying
+263,CHALLENGER|2026-04-27|mauthausen|mauthausen,CHALLENGER,Men,ATP Challenger 100,Mauthausen,Mauthausen,,,AUT,2026-04-27,2026-05-03,False,100,Clay,Outdoor,scheduled,False,False,,
+264,CHALLENGER|2026-04-27|jiujiang|jiujiang,CHALLENGER,Men,ATP Challenger 75,Jiujiang,Jiujiang,,,CHN,2026-04-27,2026-05-03,False,75,Hard,Outdoor,scheduled,False,False,,
+265,CHALLENGER|2026-04-27|ostrava|ostrava,CHALLENGER,Men,ATP Challenger 75,Ostrava,Ostrava,,,CZE,2026-04-27,2026-05-03,False,75,Clay,Outdoor,scheduled,False,False,,
+266,CHALLENGER|2026-04-27|abidjan-2|abidjan,CHALLENGER,Men,ATP Challenger 75,Abidjan 2,Abidjan,,,CIV,2026-04-27,2026-05-03,False,75,Hard,Outdoor,scheduled,False,False,,
+267,CHALLENGER|2026-04-27|shymkent-2|shymkent,CHALLENGER,Men,ATP Challenger 50,Shymkent 2,Shymkent,,,KAZ,2026-04-27,2026-05-03,False,50,Clay,Outdoor,scheduled,False,False,,
+268,CHALLENGER|2026-05-04|wuxi|wuxi,CHALLENGER,Men,ATP Challenger 100,Wuxi,Wuxi,,,CHN,2026-05-04,2026-05-10,False,100,Hard,Outdoor,scheduled,False,False,wednesday start,ROME                        M1000       C          96          48             Wednesday start
+269,CHALLENGER|2026-05-04|francavilla-al-mare|francavilla-al-mare,CHALLENGER,Men,ATP Challenger 75,Francavilla al Mare,Francavilla al Mare,,,ITA,2026-05-04,2026-05-10,False,75,Clay,Outdoor,scheduled,False,False,,
+270,CHALLENGER|2026-05-04|brazzaville|brazzaville,CHALLENGER,Men,ATP Challenger 50,Brazzaville,Brazzaville,,,CGO,2026-05-04,2026-05-10,False,50,Clay,Outdoor,scheduled,False,False,,
+271,CHALLENGER|2026-05-04|santos|santos,CHALLENGER,Men,ATP Challenger 50,Santos,Santos,,,BRA,2026-05-04,2026-05-10,False,50,Clay,Outdoor,scheduled,False,False,,
+272,CHALLENGER|2026-05-11|bordeaux|bordeaux,CHALLENGER,Men,ATP Challenger 175,Bordeaux,Bordeaux,,,FRA,2026-05-11,2026-05-17,False,175,Clay,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying   ROME                        M1000       C          96          ✽
+273,CHALLENGER|2026-05-11|valencia|valencia,CHALLENGER,Men,ATP Challenger 175,Valencia,Valencia,,,ESP,2026-05-11,2026-05-17,False,175,Clay,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying
+274,CHALLENGER|2026-05-11|oeiras-4|oeiras,CHALLENGER,Men,ATP Challenger 100,Oeiras 4,Oeiras,,,POR,2026-05-11,2026-05-17,False,100,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
+275,CHALLENGER|2026-05-11|tunis|tunis,CHALLENGER,Men,ATP Challenger 75,Tunis,Tunis,,,TUN,2026-05-11,2026-05-17,False,75,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
+276,CHALLENGER|2026-05-11|zagreb|zagreb,CHALLENGER,Men,ATP Challenger 75,Zagreb,Zagreb,,,CRO,2026-05-11,2026-05-17,False,75,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
+277,CHALLENGER|2026-05-11|bengaluru-2|bengaluru,CHALLENGER,Men,ATP Challenger 50,Bengaluru 2,Bengaluru,,,IND,2026-05-11,2026-05-17,False,50,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final
+278,CHALLENGER|2026-05-11|cordoba|cordoba,CHALLENGER,Men,ATP Challenger 50,Cordoba,Cordoba,,,ARG,2026-05-11,2026-05-17,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
+279,CHALLENGER|2026-05-18|istanbul-istinye|istanbul,CHALLENGER,Men,ATP Challenger 75,Istanbul (Istinye),Istanbul,,,TUR,2026-05-18,2026-05-24,False,75,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final                             Roland Garros Qualifying     GSL        C          ✽           128
+280,CHALLENGER|2026-05-18|bengaluru-3|bengaluru,CHALLENGER,Men,ATP Challenger 50,Bengaluru 3,Bengaluru,,,IND,2026-05-18,2026-05-24,False,50,Hard,Outdoor,scheduled,False,False,saturday final; sunday start,Saturday final                             Hamburg                      500        C          32          16        Sunday start | Saturday final
+281,CHALLENGER|2026-05-18|cervia|cervia,CHALLENGER,Men,ATP Challenger 50,Cervia,Cervia,,,ITA,2026-05-18,2026-05-24,False,50,Clay,Outdoor,scheduled,False,False,saturday final; sunday start,Saturday final                             Geneva                       250        C          28          16         Sunday start | Saturday final
+282,CHALLENGER|2026-05-25|chisinau-1|chisinau,CHALLENGER,Men,ATP Challenger 100,Chisinau 1,Chisinau,,,MDA,2026-05-25,2026-05-31,False,100,Clay,Outdoor,scheduled,False,False,sunday start,Roland Garros                GSL        C          128         ✽                Sunday start
+283,CHALLENGER|2026-05-25|little-rock|little-rock,CHALLENGER,Men,ATP Challenger 75,Little Rock,Little Rock,Arizona,,USA,2026-05-25,2026-05-31,False,75,Hard,Outdoor,scheduled,False,False,,
+284,CHALLENGER|2026-05-25|vicenza|vicenza,CHALLENGER,Men,ATP Challenger 75,Vicenza,Vicenza,,,ITA,2026-05-25,2026-05-31,False,75,Clay,Outdoor,scheduled,False,False,,
+285,CHALLENGER|2026-05-25|centurion-1|centurion,CHALLENGER,Men,ATP Challenger 50,Centurion 1,Centurion,,,RSA,2026-05-25,2026-05-31,False,50,Hard,Outdoor,scheduled,True,False,,High altitude
+286,CHALLENGER|2026-05-25|kosice|kosice,CHALLENGER,Men,ATP Challenger 50,Kosice,Kosice,,,SVK,2026-05-25,2026-05-31,False,50,Clay,Outdoor,scheduled,False,False,,
+287,CHALLENGER|2026-06-01|birmingham|birmingham,CHALLENGER,Men,ATP Challenger 125,Birmingham,Birmingham,,,GBR,2026-06-01,2026-06-07,False,125,Grass,Outdoor,scheduled,False,False,,Roland Garros                GSL        C          128         ✽
+288,CHALLENGER|2026-06-01|perugia|perugia,CHALLENGER,Men,ATP Challenger 125,Perugia,Perugia,,,ITA,2026-06-01,2026-06-07,False,125,Clay,Outdoor,scheduled,False,False,,
+289,CHALLENGER|2026-06-01|bad-rappenau|bad-rappenau,CHALLENGER,Men,ATP Challenger 100,Bad Rappenau,Bad Rappenau,,,GER,2026-06-01,2026-06-07,False,100,Clay,Outdoor,scheduled,False,False,,
+290,CHALLENGER|2026-06-01|prostejov|prostejov,CHALLENGER,Men,ATP Challenger 100,Prostejov,Prostejov,,,CZE,2026-06-01,2026-06-07,False,100,Clay,Outdoor,scheduled,False,False,,
+291,CHALLENGER|2026-06-01|tyler|tyler,CHALLENGER,Men,ATP Challenger 75,Tyler,Tyler,Texas,,USA,2026-06-01,2026-06-07,False,75,Hard,Outdoor,scheduled,False,False,,
+292,CHALLENGER|2026-06-01|centurion-2|centurion,CHALLENGER,Men,ATP Challenger 50,Centurion 2,Centurion,,,RSA,2026-06-01,2026-06-07,False,50,Hard,Outdoor,scheduled,True,False,,High altitude
+293,CHALLENGER|2026-06-08|ilkley|ilkley,CHALLENGER,Men,ATP Challenger 125,Ilkley,Ilkley,,,GBR,2026-06-08,2026-06-14,False,125,Grass,Outdoor,scheduled,False,False,,'s Hertogenbosch             250        G          28          16
+294,CHALLENGER|2026-06-08|bratislava|bratislava,CHALLENGER,Men,ATP Challenger 100,Bratislava,Bratislava,,,SVK,2026-06-08,2026-06-14,False,100,Clay,Outdoor,scheduled,False,False,,Stuttgart                    250        G          28          16
+295,CHALLENGER|2026-06-08|lyon|lyon,CHALLENGER,Men,ATP Challenger 100,Lyon,Lyon,,,FRA,2026-06-08,2026-06-14,False,100,Clay,Outdoor,scheduled,False,False,,
+296,CHALLENGER|2026-06-08|cattolica|cattolica,CHALLENGER,Men,ATP Challenger 75,Cattolica,Cattolica,,,ITA,2026-06-08,2026-06-14,False,75,Clay,Outdoor,scheduled,False,False,,
+297,CHALLENGER|2026-06-08|san-miguel-de-tucuman|san-miguel-de-tucuman,CHALLENGER,Men,ATP Challenger 50,San Miguel de Tucuman,San Miguel de Tucuman,,,ARG,2026-06-08,2026-06-14,False,50,Clay,Outdoor,scheduled,False,False,,
+298,CHALLENGER|2026-06-15|nottingham-2|nottingham,CHALLENGER,Men,ATP Challenger 125,Nottingham 2,Nottingham,,,GBR,2026-06-15,2026-06-21,False,125,Grass,Outdoor,scheduled,False,False,saturday final; sunday start,Sunday start | Saturday final                            Halle                    500        G          32           16
+299,CHALLENGER|2026-06-15|parma|parma,CHALLENGER,Men,ATP Challenger 125,Parma,Parma,,,ITA,2026-06-15,2026-06-21,False,125,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final                                           London                   500        G          32           16
+300,CHALLENGER|2026-06-15|poznan|poznan,CHALLENGER,Men,ATP Challenger 100,Poznan,Poznan,,,POL,2026-06-15,2026-06-21,False,100,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
+301,CHALLENGER|2026-06-15|dublin|dublin,CHALLENGER,Men,ATP Challenger 75,Dublin,Dublin,,,IRL,2026-06-15,2026-06-21,False,75,Grass,Outdoor,scheduled,False,False,saturday final,Saturday final
+302,CHALLENGER|2026-06-15|asuncion-cit|asuncion,CHALLENGER,Men,ATP Challenger 50,Asuncion (CIT),Asuncion,,,PAR,2026-06-15,2026-06-21,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
+303,CHALLENGER|2026-06-15|royan|royan,CHALLENGER,Men,ATP Challenger 50,Royan,Royan,,,FRA,2026-06-15,2026-06-21,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
+304,CHALLENGER|2026-06-22|targu-mures|targu-mures,CHALLENGER,Men,ATP Challenger 75,Targu Mures,Targu Mures,,,ROU,2026-06-22,2026-06-28,False,75,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final                                           Wimbledon Qualifying     GSL        G          ✽           128
+305,CHALLENGER|2026-06-22|durham|durham,CHALLENGER,Men,ATP Challenger 50,Durham,Durham,North Carolina,,USA,2026-06-22,2026-06-28,False,50,Hard,Outdoor,cancelled,False,False,saturday final; sunday start,Cancelled           Eastbourne               250        G          28           16       Sunday start | Saturday final
+306,CHALLENGER|2026-06-22|plovdiv|plovdiv,CHALLENGER,Men,ATP Challenger 50,Plovdiv,Plovdiv,,,BUL,2026-06-22,2026-06-28,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final                                           Mallorca                 250        G          28           16              Saturday final
+307,CHALLENGER|2026-06-22|piracicaba|piracicaba,CHALLENGER,Men,ATP Challenger 50,Piracicaba,Piracicaba,,,BRA,2026-06-22,2026-06-28,False,50,Clay,Outdoor,scheduled,False,False,,
+308,CHALLENGER|2026-06-29|brasov|brasov,CHALLENGER,Men,ATP Challenger 75,Brasov,Brasov,,,ROU,2026-06-29,2026-07-05,False,75,Clay,Outdoor,scheduled,False,False,,Wimbledon                GSL        G          128          ✽
+309,CHALLENGER|2026-06-29|cary|cary,CHALLENGER,Men,ATP Challenger 75,Cary,Cary,North Carolina,,USA,2026-06-29,2026-07-05,False,75,Hard,Outdoor,scheduled,False,False,,
+310,CHALLENGER|2026-06-29|milan|milan,CHALLENGER,Men,ATP Challenger 75,Milan,Milan,,,ITA,2026-06-29,2026-07-05,False,75,Clay,Outdoor,scheduled,False,False,,
+311,CHALLENGER|2026-06-29|quito|quito,CHALLENGER,Men,ATP Challenger 50,Quito,Quito,,,ECU,2026-06-29,2026-07-05,False,50,Clay,Outdoor,scheduled,True,False,,High altitude
+312,CHALLENGER|2026-06-29|troyes|troyes,CHALLENGER,Men,ATP Challenger 50,Troyes,Troyes,,,FRA,2026-06-29,2026-07-05,False,50,Clay,Outdoor,scheduled,False,False,,
+313,CHALLENGER|2026-07-06|braunschweig|braunschweig,CHALLENGER,Men,ATP Challenger 125,Braunschweig,Braunschweig,,,GER,2026-07-06,2026-07-12,False,125,Clay,Outdoor,scheduled,False,False,,Wimbledon                GSL        G          128          ✽
+314,CHALLENGER|2026-07-06|newport|newport,CHALLENGER,Men,ATP Challenger 125,Newport,Newport,Rhode Island,,USA,2026-07-06,2026-07-12,False,125,Grass,Outdoor,scheduled,False,False,,
+315,CHALLENGER|2026-07-06|iasi|iasi,CHALLENGER,Men,ATP Challenger 100,Iasi,Iasi,,,ROU,2026-07-06,2026-07-12,False,100,Clay,Outdoor,scheduled,False,False,,
+316,CHALLENGER|2026-07-06|bogota|bogota,CHALLENGER,Men,ATP Challenger 75,Bogota,Bogota,,,COL,2026-07-06,2026-07-12,False,75,Clay,Outdoor,scheduled,True,False,,High altitude
+317,CHALLENGER|2026-07-06|trieste|trieste,CHALLENGER,Men,ATP Challenger 75,Trieste,Trieste,,,ITA,2026-07-06,2026-07-12,False,75,Clay,Outdoor,scheduled,False,False,,
+318,CHALLENGER|2026-07-06|liege|liege,CHALLENGER,Men,ATP Challenger 50,Liege,Liege,,,BEL,2026-07-06,2026-07-12,False,50,Clay,Outdoor,scheduled,False,False,,
+319,CHALLENGER|2026-07-06|nottingham-3|nottingham,CHALLENGER,Men,ATP Challenger 50,Nottingham 3,Nottingham,,,GBR,2026-07-06,2026-07-12,False,50,Grass,Outdoor,scheduled,False,False,,
+320,CHALLENGER|2026-07-13|bunschoten|bunschoten,CHALLENGER,Men,ATP Challenger 75,Bunschoten,Bunschoten,,,NED,2026-07-13,2026-07-19,False,75,Clay,Outdoor,scheduled,False,False,,Bastad                   250        C          28           16
+321,CHALLENGER|2026-07-13|cordenons|cordenons,CHALLENGER,Men,ATP Challenger 75,Cordenons,Cordenons,,,ITA,2026-07-13,2026-07-19,False,75,Clay,Outdoor,scheduled,False,False,,Gstaad                   250        C          28           16
+322,CHALLENGER|2026-07-13|granby|granby,CHALLENGER,Men,ATP Challenger 75,Granby,Granby,,,CAN,2026-07-13,2026-07-19,False,75,Hard,Outdoor,scheduled,False,False,,Umag                     250        C          28           16
+323,CHALLENGER|2026-07-13|lincoln|lincoln,CHALLENGER,Men,ATP Challenger 75,Lincoln,Lincoln,New England,,USA,2026-07-13,2026-07-19,False,75,Hard,Outdoor,scheduled,False,False,,
+324,CHALLENGER|2026-07-13|pozoblanco|pozoblanco,CHALLENGER,Men,ATP Challenger 75,Pozoblanco,Pozoblanco,,,ESP,2026-07-13,2026-07-19,False,75,Hard,Outdoor,scheduled,False,False,,
+325,CHALLENGER|2026-07-20|bloomfield-hills|bloomfield-hills,CHALLENGER,Men,ATP Challenger 125,Bloomfield Hills,Bloomfield Hills,Michigan,,USA,2026-07-20,2026-07-26,False,125,Hard,Outdoor,scheduled,False,False,saturday final; sunday start,Kitzbuehel               250        C          28           16       Sunday start | Saturday final
+326,CHALLENGER|2026-07-20|zug|zug,CHALLENGER,Men,ATP Challenger 125,Zug,Zug,,,SUI,2026-07-20,2026-07-26,False,125,Clay,Outdoor,scheduled,False,False,,*                                      *CONIPUR® TENNIS FORCE   Estoril                  250        C          28           16
+327,CHALLENGER|2026-07-20|segovia|segovia,CHALLENGER,Men,ATP Challenger 75,Segovia,Segovia,,,ESP,2026-07-20,2026-07-26,False,75,Hard,Outdoor,scheduled,False,False,,
+328,CHALLENGER|2026-07-20|tampere|tampere,CHALLENGER,Men,ATP Challenger 75,Tampere,Tampere,,,FIN,2026-07-20,2026-07-26,False,75,Clay,Outdoor,scheduled,False,False,,
+329,CHALLENGER|2026-07-20|winnipeg|winnipeg,CHALLENGER,Men,ATP Challenger 75,Winnipeg,Winnipeg,,,CAN,2026-07-20,2026-07-26,False,75,Hard,Outdoor,scheduled,False,False,,
+330,CHALLENGER|2026-07-27|san-marino|san-marino,CHALLENGER,Men,ATP Challenger 125,San Marino,San Marino,,,SMR,2026-07-27,2026-08-02,False,125,Clay,Outdoor,scheduled,False,False,,"Washington, DC           500        H          32          24"
+331,CHALLENGER|2026-07-27|vancouver|vancouver,CHALLENGER,Men,ATP Challenger 125,Vancouver,Vancouver,,,CAN,2026-07-27,2026-08-02,False,125,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final        Los Cabos                250        H          28           16              Saturday final
+332,CHALLENGER|2026-07-27|bonn|bonn,CHALLENGER,Men,ATP Challenger 75,Bonn,Bonn,,,GER,2026-07-27,2026-08-02,False,75,Clay,Outdoor,scheduled,False,False,,
+333,CHALLENGER|2026-07-27|liberec|liberec,CHALLENGER,Men,ATP Challenger 75,Liberec,Liberec,,,CZE,2026-07-27,2026-08-02,False,75,Clay,Outdoor,scheduled,False,False,,
+334,CHALLENGER|2026-07-27|samsun|samsun,CHALLENGER,Men,ATP Challenger 50,Samsun,Samsun,,,TUR,2026-07-27,2026-08-02,False,50,Hard,Outdoor,scheduled,False,False,,
+335,CHALLENGER|2026-07-27|centurion-3|centurion,CHALLENGER,Men,ATP Challenger 50,Centurion 3,Centurion,,,RSA,2026-07-27,2026-08-02,False,50,Hard,Outdoor,cancelled,False,False,,Cancelled
+336,CHALLENGER|2026-08-03|hagen|hagen,CHALLENGER,Men,ATP Challenger 100,Hagen,Hagen,,,GER,2026-08-03,2026-08-09,False,100,Clay,Outdoor,scheduled,False,False,sunday start,MONTREAL                M1000       H          96          48               Sunday start
+337,CHALLENGER|2026-08-03|grodzisk-mazowiecki|grodzisk-mazowiecki,CHALLENGER,Men,ATP Challenger 75,Grodzisk Mazowiecki,Grodzisk Mazowiecki,,,POL,2026-08-03,2026-08-09,False,75,Hard,Outdoor,scheduled,False,False,,
+338,CHALLENGER|2026-08-03|lexington|lexington,CHALLENGER,Men,ATP Challenger 75,Lexington,Lexington,Kentucky,,USA,2026-08-03,2026-08-09,False,75,Hard,Outdoor,scheduled,False,False,,
+339,CHALLENGER|2026-08-03|centurion-4|centurion,CHALLENGER,Men,ATP Challenger 75,Centurion 4,Centurion,,,RSA,2026-08-03,2026-08-09,False,75,Hard,Outdoor,cancelled,False,False,,Cancelled
+340,CHALLENGER|2026-08-03|istanbul-enka|istanbul,CHALLENGER,Men,ATP Challenger 50,Istanbul (Enka),Istanbul,,,TUR,2026-08-03,2026-08-09,False,50,Hard,Outdoor,scheduled,False,False,,
+341,CHALLENGER|2026-08-03|plovdiv-2|plovdiv,CHALLENGER,Men,ATP Challenger 50,Plovdiv 2,Plovdiv,,,BUL,2026-08-03,2026-08-09,False,50,Clay,Outdoor,scheduled,False,False,,
+342,CHALLENGER|2026-08-10|brownsburg|brownsburg,CHALLENGER,Men,ATP Challenger 75,Brownsburg,Brownsburg,Indiana,,USA,2026-08-10,2026-08-16,False,75,Hard,Outdoor,scheduled,False,False,thursday final,MONTREAL                          M1000       H          96           ✽               Thursday final
+343,CHALLENGER|2026-08-10|hamburg|hamburg,CHALLENGER,Men,ATP Challenger 75,Hamburg,Hamburg,,,GER,2026-08-10,2026-08-16,False,75,Clay,Outdoor,scheduled,False,False,thursday start,CINCINNATI                        M1000       H          96          48              Thursday start
+344,CHALLENGER|2026-08-10|todi|todi,CHALLENGER,Men,ATP Challenger 75,Todi,Todi,,,ITA,2026-08-10,2026-08-16,False,75,Clay,Outdoor,scheduled,False,False,,
+345,CHALLENGER|2026-08-10|astana|astana,CHALLENGER,Men,ATP Challenger 50,Astana,Astana,,,KAZ,2026-08-10,2026-08-16,False,50,Hard,Outdoor,scheduled,False,False,,
+346,CHALLENGER|2026-08-17|cancun|cancun,CHALLENGER,Men,ATP Challenger 125,Cancun,Cancun,,,MEX,2026-08-17,2026-08-23,False,125,Hard,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying   CINCINNATI                        M1000       H          96           ✽
+347,CHALLENGER|2026-08-17|quebec-city|quebec-city,CHALLENGER,Men,ATP Challenger 125,Quebec City,Quebec City,,,CAN,2026-08-17,2026-08-23,False,125,Hard,Outdoor,scheduled,False,False,tuesday start,Tuesday start 28 Singles | 16 Qualifying
+348,CHALLENGER|2026-08-17|kingston-1|kingston,CHALLENGER,Men,ATP Challenger 75,Kingston 1,Kingston,,,JAM,2026-08-17,2026-08-23,False,75,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final
+349,CHALLENGER|2026-08-17|prague|prague,CHALLENGER,Men,ATP Challenger 75,Prague,Prague,,,CZE,2026-08-17,2026-08-23,False,75,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
+350,CHALLENGER|2026-08-17|roehampton-1|roehampton,CHALLENGER,Men,ATP Challenger 50,Roehampton 1,Roehampton,,,GBR,2026-08-17,2026-08-23,False,50,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final
+351,CHALLENGER|2026-08-17|sion|sion,CHALLENGER,Men,ATP Challenger 50,Sion,Sion,,,SUI,2026-08-17,2026-08-23,False,50,Clay,Outdoor,scheduled,False,False,saturday final,Saturday final
+352,CHALLENGER|2026-08-17|tashkent|tashkent,CHALLENGER,Men,ATP Challenger 50,Tashkent,Tashkent,,,UZB,2026-08-17,2026-08-23,False,50,Hard,Outdoor,cancelled,False,False,,Cancelled
+353,CHALLENGER|2026-08-24|kingston-2|kingston,CHALLENGER,Men,ATP Challenger 75,Kingston 2,Kingston,,,JAM,2026-08-24,2026-08-30,False,75,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final                             US Open Qualifying                 GSL        H          ✽           128
+354,CHALLENGER|2026-08-24|augsburg|augsburg,CHALLENGER,Men,ATP Challenger 50,Augsburg,Augsburg,,,GER,2026-08-24,2026-08-30,False,50,Clay,Outdoor,scheduled,False,False,saturday final; sunday start,"Saturday final                             Winston-Salem                      250        H          48           16        Sunday start, Saturday final"
+355,CHALLENGER|2026-08-24|roehampton-2|roehampton,CHALLENGER,Men,ATP Challenger 50,Roehampton 2,Roehampton,,,GBR,2026-08-24,2026-08-30,False,50,Hard,Outdoor,scheduled,False,False,saturday final,Saturday final
+356,CHALLENGER|2026-08-31|como|como,CHALLENGER,Men,ATP Challenger 75,Como,Como,,,ITA,2026-08-31,2026-09-06,False,75,Clay,Outdoor,scheduled,False,False,,US Open                            GSL        H          128          ✽
+357,CHALLENGER|2026-08-31|manacor|manacor,CHALLENGER,Men,ATP Challenger 75,Manacor,Manacor,,,ESP,2026-08-31,2026-09-06,False,75,Hard,Outdoor,scheduled,False,False,tuesday start,Tuesday start
+358,CHALLENGER|2026-08-31|manta|manta,CHALLENGER,Men,ATP Challenger 75,Manta,Manta,,,ECU,2026-08-31,2026-09-06,False,75,Hard,Outdoor,cancelled,False,False,,Cancelled
+359,CHALLENGER|2026-08-31|porto-ctp|porto,CHALLENGER,Men,ATP Challenger 75,Porto (CTP),Porto,,,POR,2026-08-31,2026-09-06,False,75,Clay,Outdoor,scheduled,False,False,,
+360,CHALLENGER|2026-08-31|zhangjiagang|zhangjiagang,CHALLENGER,Men,ATP Challenger 75,Zhangjiagang,Zhangjiagang,,,CHN,2026-08-31,2026-09-06,False,75,Hard,Outdoor,scheduled,False,False,,
+361,CHALLENGER|2026-08-31|plovdiv-3|plovdiv,CHALLENGER,Men,ATP Challenger 50,Plovdiv 3,Plovdiv,,,BUL,2026-08-31,2026-09-06,False,50,Clay,Outdoor,scheduled,False,False,,
+362,CHALLENGER|2026-09-07|genoa-nuova-valletta|genoa,CHALLENGER,Men,ATP Challenger 125,Genoa (Nuova Valletta),Genoa,,,ITA,2026-09-07,2026-09-13,False,125,Clay,Outdoor,scheduled,False,False,,US Open                            GSL        H          128          ✽
+363,CHALLENGER|2026-09-07|seville|seville,CHALLENGER,Men,ATP Challenger 125,Seville,Seville,,,ESP,2026-09-07,2026-09-13,False,125,Clay,Outdoor,scheduled,False,False,,
+364,CHALLENGER|2026-09-07|shanghai|shanghai,CHALLENGER,Men,ATP Challenger 100,Shanghai,Shanghai,,,CHN,2026-09-07,2026-09-13,False,100,Hard,Outdoor,scheduled,False,False,,
+365,CHALLENGER|2026-09-07|tulln|tulln,CHALLENGER,Men,ATP Challenger 100,Tulln,Tulln,,,AUT,2026-09-07,2026-09-13,False,100,Clay,Outdoor,scheduled,False,False,,
+366,CHALLENGER|2026-09-07|cassis|cassis,CHALLENGER,Men,ATP Challenger 75,Cassis,Cassis,,,FRA,2026-09-07,2026-09-13,False,75,Hard,Outdoor,scheduled,False,False,,
+367,CHALLENGER|2026-09-07|istanbul-ted-club|istanbul,CHALLENGER,Men,ATP Challenger 75,Istanbul (TED Club),Istanbul,,,TUR,2026-09-07,2026-09-13,False,75,Hard,Outdoor,scheduled,False,False,,
+368,CHALLENGER|2026-09-07|phan-thiet-3|phan-thiet,CHALLENGER,Men,ATP Challenger 50,Phan Thiet 3,Phan Thiet,,,VIE,2026-09-07,2026-09-13,False,50,Hard,Outdoor,scheduled,False,False,,
+369,CHALLENGER|2026-09-14|szczecin|szczecin,CHALLENGER,Men,ATP Challenger 125,Szczecin,Szczecin,,,POL,2026-09-14,2026-09-20,False,125,Clay,Outdoor,scheduled,False,False,,Davis Cup Qualifiers 2nd Round     DC         ✽          ✽            ✽
+370,CHALLENGER|2026-09-14|tiburon|tiburon,CHALLENGER,Men,ATP Challenger 125,Tiburon,Tiburon,California,,USA,2026-09-14,2026-09-20,False,125,Hard,Outdoor,scheduled,False,False,,
+371,CHALLENGER|2026-09-14|guangzhou-huangpu|guangzhou,CHALLENGER,Men,ATP Challenger 100,Guangzhou (Huangpu),Guangzhou,,,CHN,2026-09-14,2026-09-20,False,100,Hard,Outdoor,scheduled,False,False,,
+372,CHALLENGER|2026-09-14|rennes|rennes,CHALLENGER,Men,ATP Challenger 100,Rennes,Rennes,,,FRA,2026-09-14,2026-09-20,False,100,Hard,Indoor,scheduled,False,False,,
+373,CHALLENGER|2026-09-14|biella|biella,CHALLENGER,Men,ATP Challenger 50,Biella,Biella,,,ITA,2026-09-14,2026-09-20,False,50,Clay,Outdoor,scheduled,False,False,,
+374,CHALLENGER|2026-09-14|phan-thiet-4|phan-thiet,CHALLENGER,Men,ATP Challenger 50,Phan Thiet 4,Phan Thiet,,,VIE,2026-09-14,2026-09-20,False,50,Hard,Outdoor,scheduled,False,False,,
+375,CHALLENGER|2026-09-21|saint-tropez|saint-tropez,CHALLENGER,Men,ATP Challenger 125,Saint-Tropez,Saint-Tropez,,,FRA,2026-09-21,2026-09-27,False,125,Hard,Outdoor,scheduled,False,False,,Laver Cup                           LC        IH       2 teams        ✽
+376,CHALLENGER|2026-09-21|buenos-aires|buenos-aires,CHALLENGER,Men,ATP Challenger 75,Buenos Aires,Buenos Aires,,,ARG,2026-09-21,2026-09-27,False,75,Clay,Outdoor,scheduled,False,False,tuesday final; wednesday start,"Chengdu                            250        H          28           16       Wednesday start, Tuesday Final"
+377,CHALLENGER|2026-09-21|genoa-park-tennis-training|genoa,CHALLENGER,Men,ATP Challenger 75,Genoa (Park Tennis Training),Genoa,,,ITA,2026-09-21,2026-09-27,False,75,Clay,Outdoor,scheduled,False,False,tuesday final; wednesday start,"Hangzhou                           250        H          28           16       Wednesday start, Tuesday Final"
+378,CHALLENGER|2026-09-21|plovdiv-4|plovdiv,CHALLENGER,Men,ATP Challenger 75,Plovdiv 4,Plovdiv,,,BUL,2026-09-21,2026-09-27,False,75,Clay,Outdoor,scheduled,False,False,,
+379,CHALLENGER|2026-09-21|san-diego-2|san-diego,CHALLENGER,Men,ATP Challenger 75,San Diego 2,San Diego,California,,USA,2026-09-21,2026-09-27,False,75,Hard,Outdoor,scheduled,False,False,,
+380,CHALLENGER|2026-09-28|porto-monte-aventino|porto,CHALLENGER,Men,ATP Challenger 125,Porto (Monte Aventino),Porto,,,POR,2026-09-28,2026-10-04,False,125,Hard,Outdoor,scheduled,False,False,tuesday final; wednesday start,"Beijing                            500        H          32           16       Wednesday start, Tuesday final"
+381,CHALLENGER|2026-09-28|jingshan|jingshan,CHALLENGER,Men,ATP Challenger 100,Jingshan,Jingshan,,,CHN,2026-09-28,2026-10-04,False,100,Hard,Outdoor,scheduled,False,False,tuesday final; tuesday start; wednesday start,"Tuesday start                              Tokyo                              500        H          32           16       Wednesday start, Tuesday final"
+382,CHALLENGER|2026-09-28|columbus|columbus,CHALLENGER,Men,ATP Challenger 75,Columbus,Columbus,Ohio,,USA,2026-09-28,2026-10-04,False,75,Hard,Indoor,scheduled,False,False,,
+383,CHALLENGER|2026-09-28|curitiba|curitiba,CHALLENGER,Men,ATP Challenger 75,Curitiba,Curitiba,,,BRA,2026-09-28,2026-10-04,False,75,Clay,Outdoor,scheduled,False,False,,
+384,CHALLENGER|2026-09-28|mouilleron-le-captif|mouilleron-le-captif,CHALLENGER,Men,ATP Challenger 75,Mouilleron-le-Captif,Mouilleron-le-Captif,,,FRA,2026-09-28,2026-10-04,False,75,Hard,Indoor,scheduled,False,False,,
+385,CHALLENGER|2026-09-28|bari|bari,CHALLENGER,Men,ATP Challenger 50,Bari,Bari,,,ITA,2026-09-28,2026-10-04,False,50,Clay,Outdoor,scheduled,False,False,,
+386,CHALLENGER|2026-10-05|villena|villena,CHALLENGER,Men,ATP Challenger 100,Villena,Villena,,,ESP,2026-10-05,2026-10-11,False,100,Hard,Outdoor,scheduled,False,False,wednesday start,SHANGHAI            M1000       H          96          48        Wednesday start
+387,CHALLENGER|2026-10-05|antofagasta|antofagasta,CHALLENGER,Men,ATP Challenger 75,Antofagasta,Antofagasta,,,CHI,2026-10-05,2026-10-11,False,75,Clay,Outdoor,scheduled,False,False,,
+388,CHALLENGER|2026-10-05|braga|braga,CHALLENGER,Men,ATP Challenger 75,Braga,Braga,,,POR,2026-10-05,2026-10-11,False,75,Clay,Outdoor,scheduled,False,False,,
+389,CHALLENGER|2026-10-05|palermo|palermo,CHALLENGER,Men,ATP Challenger 50,Palermo,Palermo,,,ITA,2026-10-05,2026-10-11,False,50,Clay,Outdoor,scheduled,False,False,,
+390,CHALLENGER|2026-10-05|wuning-3|wuning,CHALLENGER,Men,ATP Challenger 50,Wuning 3,Wuning,,,CHN,2026-10-05,2026-10-11,False,50,Hard,Outdoor,added,False,False,,Added
+391,CHALLENGER|2026-10-12|jinan|jinan,CHALLENGER,Men,ATP Challenger 125,Jinan,Jinan,,,CHN,2026-10-12,2026-10-18,False,125,Hard,Outdoor,scheduled,False,False,,SHANGHAI            M1000       H          96           ✽
+392,CHALLENGER|2026-10-12|olbia|olbia,CHALLENGER,Men,ATP Challenger 125,Olbia,Olbia,,,ITA,2026-10-12,2026-10-18,False,125,Hard,Outdoor,scheduled,False,False,,
+393,CHALLENGER|2026-10-12|maia|maia,CHALLENGER,Men,ATP Challenger 100,Maia,Maia,,,POR,2026-10-12,2026-10-18,False,100,Clay,Indoor,scheduled,False,False,,
+394,CHALLENGER|2026-10-12|roanne|roanne,CHALLENGER,Men,ATP Challenger 100,Roanne,Roanne,,,FRA,2026-10-12,2026-10-18,False,100,Hard,Indoor,scheduled,False,False,,
+395,CHALLENGER|2026-10-12|santa-cruz-de-la-sierra-2|santa-cruz-de-la-sierra,CHALLENGER,Men,ATP Challenger 75,Santa Cruz de la Sierra 2,Santa Cruz de la Sierra,,,BOL,2026-10-12,2026-10-18,False,75,Clay,Outdoor,scheduled,False,False,,
+396,CHALLENGER|2026-10-12|san-gregorio-di-catania|san-gregorio-di-catania,CHALLENGER,Men,ATP Challenger 50,San Gregorio di Catania,San Gregorio di Catania,,,ITA,2026-10-12,2026-10-18,False,50,Clay,Outdoor,scheduled,False,False,,
+397,CHALLENGER|2026-10-19|lisbon|lisbon,CHALLENGER,Men,ATP Challenger 100,Lisbon,Lisbon,,,POR,2026-10-19,2026-10-25,False,100,Clay,Outdoor,scheduled,False,False,,Almaty               250        IH         28           16
+398,CHALLENGER|2026-10-19|alicante-torrevieja|alicante,CHALLENGER,Men,ATP Challenger 75,Alicante (Torrevieja),Alicante,,,ESP,2026-10-19,2026-10-25,False,75,Hard,Outdoor,cancelled,False,False,,Cancelled   Brussels             250        IH         28           16
+399,CHALLENGER|2026-10-19|cali|cali,CHALLENGER,Men,ATP Challenger 75,Cali,Cali,,,COL,2026-10-19,2026-10-25,False,75,Clay,Outdoor,scheduled,False,False,,Lyon                 250        IH         28           16
+400,CHALLENGER|2026-10-19|fort-worth|fort-worth,CHALLENGER,Men,ATP Challenger 75,Fort Worth,Fort Worth,Texas,,USA,2026-10-19,2026-10-25,False,75,Hard,Outdoor,added,False,False,,Added
+401,CHALLENGER|2026-10-19|guangzhou-nansha|guangzhou,CHALLENGER,Men,ATP Challenger 75,Guangzhou (Nansha),Guangzhou,,,CHN,2026-10-19,2026-10-25,False,75,Hard,Outdoor,scheduled,False,False,,
+402,CHALLENGER|2026-10-19|florence|florence,CHALLENGER,Men,ATP Challenger 50,Florence,Florence,,,ITA,2026-10-19,2026-10-25,False,50,Clay,Outdoor,scheduled,False,False,,
+403,CHALLENGER|2026-10-26|seoul|seoul,CHALLENGER,Men,ATP Challenger 125,Seoul,Seoul,,,KOR,2026-10-26,2026-11-01,False,125,Hard,Outdoor,scheduled,False,False,,Basel                500        IH         32           16
+404,CHALLENGER|2026-10-26|brest|brest,CHALLENGER,Men,ATP Challenger 100,Brest,Brest,,,FRA,2026-10-26,2026-11-01,False,100,Hard,Indoor,scheduled,False,False,,Vienna               500        IH         32           16
+405,CHALLENGER|2026-10-26|sioux-falls|sioux-falls,CHALLENGER,Men,ATP Challenger 100,Sioux Falls,Sioux Falls,South Dakota,,USA,2026-10-26,2026-11-01,False,100,Hard,Indoor,scheduled,False,False,,
+406,CHALLENGER|2026-10-26|guayaquil|guayaquil,CHALLENGER,Men,ATP Challenger 75,Guayaquil,Guayaquil,,,ECU,2026-10-26,2026-11-01,False,75,Clay,Outdoor,scheduled,False,False,,
+407,CHALLENGER|2026-10-26|ningbo|ningbo,CHALLENGER,Men,ATP Challenger 75,Ningbo,Ningbo,,,CHN,2026-10-26,2026-11-01,False,75,Hard,Outdoor,scheduled,False,False,,
+408,CHALLENGER|2026-10-26|gaborone|gaborone,CHALLENGER,Men,ATP Challenger 50,Gaborone,Gaborone,,,BOT,2026-10-26,2026-11-01,False,50,Hard,Outdoor,cancelled,False,False,,Cancelled
+409,CHALLENGER|2026-11-02|costa-do-sauipe|costa-do-sauipe,CHALLENGER,Men,ATP Challenger 125,Costa do Sauipe,Costa do Sauipe,,,BRA,2026-11-02,2026-11-08,False,125,Clay,Outdoor,scheduled,False,False,,PARIS               M1000       IH         56          28
+410,CHALLENGER|2026-11-02|bratislava-2|bratislava,CHALLENGER,Men,ATP Challenger 100,Bratislava 2,Bratislava,,,SVK,2026-11-02,2026-11-08,False,100,Hard,Indoor,scheduled,False,False,,
+411,CHALLENGER|2026-11-02|taipei|taipei,CHALLENGER,Men,ATP Challenger 100,Taipei,Taipei,,,TPE,2026-11-02,2026-11-08,False,100,Hard,Indoor,scheduled,False,False,,
+412,CHALLENGER|2026-11-02|charlottesville|charlottesville,CHALLENGER,Men,ATP Challenger 75,Charlottesville,Charlottesville,Virginia,,USA,2026-11-02,2026-11-08,False,75,Hard,Indoor,scheduled,False,False,,
+413,CHALLENGER|2026-11-02|villa-maria|villa-maria,CHALLENGER,Men,ATP Challenger 50,Villa Maria,Villa Maria,,,ARG,2026-11-02,2026-11-08,False,50,Clay,Outdoor,scheduled,False,False,,
+414,CHALLENGER|2026-11-09|orleans|orleans,CHALLENGER,Men,ATP Challenger 125,Orleans,Orleans,,,FRA,2026-11-09,2026-11-15,False,125,Hard,Indoor,scheduled,False,False,,Stockholm            250        IH         28           16
+415,CHALLENGER|2026-11-09|brisbane-3|brisbane,CHALLENGER,Men,ATP Challenger 75,Brisbane 3,Brisbane,,,AUS,2026-11-09,2026-11-15,False,75,Hard,Outdoor,scheduled,False,False,,
+416,CHALLENGER|2026-11-09|knoxville|knoxville,CHALLENGER,Men,ATP Challenger 75,Knoxville,Knoxville,Tennessee,,USA,2026-11-09,2026-11-15,False,75,Hard,Indoor,scheduled,False,False,,
+417,CHALLENGER|2026-11-09|lima|lima,CHALLENGER,Men,ATP Challenger 75,Lima,Lima,,,PER,2026-11-09,2026-11-15,False,75,Clay,Outdoor,scheduled,False,False,,
+418,CHALLENGER|2026-11-09|matsuyama|matsuyama,CHALLENGER,Men,ATP Challenger 75,Matsuyama,Matsuyama,,,JPN,2026-11-09,2026-11-15,False,75,Hard,Outdoor,scheduled,False,False,,
+419,CHALLENGER|2026-11-09|hersonissos-3|hersonissos,CHALLENGER,Men,ATP Challenger 50,Hersonissos 3,Hersonissos,,,GRE,2026-11-09,2026-11-15,False,50,Hard,Outdoor,scheduled,False,False,,
+420,CHALLENGER|2026-11-09|monastir-1|monastir,CHALLENGER,Men,ATP Challenger 50,Monastir 1,Monastir,,,TUN,2026-11-09,2026-11-15,False,50,Hard,Outdoor,scheduled,False,False,,
+421,CHALLENGER|2026-11-16|helsinki|helsinki,CHALLENGER,Men,ATP Challenger 125,Helsinki,Helsinki,,,FIN,2026-11-16,2026-11-22,False,125,Hard,Indoor,scheduled,False,False,,NITTO ATP FINALS     ATP        IH          8           ✽
+422,CHALLENGER|2026-11-16|metz|metz,CHALLENGER,Men,ATP Challenger 125,Metz,Metz,,,FRA,2026-11-16,2026-11-22,False,125,Hard,Indoor,scheduled,False,False,,
+423,CHALLENGER|2026-11-16|drummondville|drummondville,CHALLENGER,Men,ATP Challenger 75,Drummondville,Drummondville,,,CAN,2026-11-16,2026-11-22,False,75,Hard,Indoor,scheduled,False,False,,
+424,CHALLENGER|2026-11-16|kobe|kobe,CHALLENGER,Men,ATP Challenger 75,Kobe,Kobe,,,JPN,2026-11-16,2026-11-22,False,75,Hard,Indoor,scheduled,False,False,,
+425,CHALLENGER|2026-11-16|montevideo|montevideo,CHALLENGER,Men,ATP Challenger 75,Montevideo,Montevideo,,,URU,2026-11-16,2026-11-22,False,75,Clay,Outdoor,scheduled,False,False,,
+426,CHALLENGER|2026-11-16|sydney|sydney,CHALLENGER,Men,ATP Challenger 75,Sydney,Sydney,,,AUS,2026-11-16,2026-11-22,False,75,Hard,Outdoor,scheduled,False,False,,
+427,CHALLENGER|2026-11-16|champaign|champaign,CHALLENGER,Men,ATP Challenger 50,Champaign,Champaign,Illinois,,USA,2026-11-16,2026-11-22,False,50,Hard,Indoor,scheduled,False,False,,
+428,CHALLENGER|2026-11-23|florianopolis|florianopolis,CHALLENGER,Men,ATP Challenger 75,Florianopolis,Florianopolis,,,BRA,2026-11-23,2026-11-29,False,75,Clay,Outdoor,scheduled,False,False,,Davis Cup Finals     DC         ✽          ✽            ✽
+429,CHALLENGER|2026-11-23|playford|playford,CHALLENGER,Men,ATP Challenger 75,Playford,Playford,,,AUS,2026-11-23,2026-11-29,False,75,Hard,Outdoor,scheduled,False,False,,
+430,CHALLENGER|2026-11-23|yokohama|yokohama,CHALLENGER,Men,ATP Challenger 75,Yokohama,Yokohama,,,JPN,2026-11-23,2026-11-29,False,75,Hard,Outdoor,scheduled,False,False,,
+431,CHALLENGER|2026-11-23|hersonissos-4|hersonissos,CHALLENGER,Men,ATP Challenger 50,Hersonissos 4,Hersonissos,,,GRE,2026-11-23,2026-11-29,False,50,Hard,Outdoor,scheduled,False,False,,
+432,CHALLENGER|2026-11-23|monastir-2|monastir,CHALLENGER,Men,ATP Challenger 50,Monastir 2,Monastir,,,TUN,2026-11-23,2026-11-29,False,50,Hard,Outdoor,scheduled,False,False,,
+433,CHALLENGER|2026-11-30|bogota-los-lagartos|bogota,CHALLENGER,Men,ATP Challenger 75,Bogotá (Los Lagartos),Bogota,,,COL,2026-11-30,2026-12-06,False,75,Clay,Outdoor,scheduled,True,False,,High altitude
+434,CHALLENGER|2026-11-30|temuco|temuco,CHALLENGER,Men,ATP Challenger 75,Temuco,Temuco,,,CHI,2026-11-30,2026-12-06,False,75,Hard,Outdoor,scheduled,False,False,,
+435,CHALLENGER|2026-11-30|chisinau-2|chisinau,CHALLENGER,Men,ATP Challenger 50,Chisinau 2,Chisinau,,,MDA,2026-11-30,2026-12-06,False,50,Hard,Indoor,scheduled,False,False,,
+436,CHALLENGER|2026-11-30|hersonissos-5|hersonissos,CHALLENGER,Men,ATP Challenger 50,Hersonissos 5,Hersonissos,,,GRE,2026-11-30,2026-12-06,False,50,Hard,Outdoor,scheduled,False,False,,
+437,CHALLENGER|2026-11-30|soma-bay|soma-bay,CHALLENGER,Men,ATP Challenger 50,Soma Bay,Soma Bay,,,EGY,2026-11-30,2026-12-06,False,50,Hard,Outdoor,scheduled,False,False,,
+438,CHALLENGER|2026-11-30|trnava|trnava,CHALLENGER,Men,ATP Challenger 50,Trnava,Trnava,,,SVK,2026-11-30,2026-12-06,False,50,Hard,Indoor,scheduled,False,False,,
+439,CHALLENGER|2026-12-07|copenhagen|copenhagen,CHALLENGER,Men,ATP Challenger 50,Copenhagen,Copenhagen,,,DEN,2026-12-07,2026-12-13,False,50,Hard,Indoor,scheduled,False,False,,
+440,CHALLENGER|2026-12-07|la-paz|la-paz,CHALLENGER,Men,ATP Challenger 50,La Paz,La Paz,,,BOL,2026-12-07,2026-12-13,False,50,Clay,Outdoor,scheduled,True,False,,High altitude
+441,CHALLENGER|2026-12-07|monastir-3|monastir,CHALLENGER,Men,ATP Challenger 50,Monastir 3,Monastir,,,TUN,2026-12-07,2026-12-13,False,50,Hard,Outdoor,scheduled,False,False,,
+442,CHALLENGER|2026-12-07|rio-de-janeiro|rio-de-janeiro,CHALLENGER,Men,ATP Challenger 50,Rio de Janeiro,Rio de Janeiro,,,BRA,2026-12-07,2026-12-13,False,50,Clay,Outdoor,scheduled,False,False,,

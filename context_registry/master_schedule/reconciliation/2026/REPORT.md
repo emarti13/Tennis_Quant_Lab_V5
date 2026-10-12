@@ -4,21 +4,20 @@ Sheet: `context_registry/master_schedule/master_schedule_2026.csv` · as of 2026
 
 ## Summary
 
-- Sheet: 443 editions ({'CHALLENGER': 265, 'ATP': 63, 'WTA': 58, 'WTA125': 57}); status {'scheduled': 430, 'cancelled': 11, 'added': 2}.
+- Sheet: 441 editions ({'CHALLENGER': 265, 'ATP': 63, 'WTA125': 57, 'WTA': 56}); status {'scheduled': 428, 'cancelled': 11, 'added': 2}.
 - OddsPapi: 364 tournament blocks → {'matched': 359, 'unmatched': 5}.
 - TennisMyLife: 303 tournaments (Davis Cup ties excluded) → {'matched': 291, 'unmatched': 11, 'ambiguous': 1}.
 - Player check (editions matched by both sources): 282 editions, median 100% of TennisMyLife players found in OddsPapi; 18 below 80%.
-- Past editions (ended before 2026-10-12) with no match from either source: 18.
+- Past editions (ended before 2026-10-12) with no match from either source: 16.
 
 ## Sheet issues (counts)
 
 | severity | issue | rows |
 |---|---|---|
-| info | Time zone empty | 443 |
+| info | Time zone empty | 441 |
 | info | Country name empty | 265 |
 | info | End Date missing | 113 |
 | warn | Notes contain text from another calendar column | 79 |
-| warn | Possible duplicate entry: same event, city and Men/Women within a week | 4 |
 
 Details per row: `sheet_issues.csv`.
 
@@ -61,24 +60,24 @@ Details per row: `sheet_issues.csv`.
 
 | sheet_row | sheet_name | oddspapi_ids | tennismylife_ids | oddspapi_players | tennismylife_players | share_found |
 |---|---|---|---|---|---|---|
-| 28 | BMW Open by Bitpanda | 2835@2026-04-11 | 2026-308, 2026-416 | 41 | 145 | 0.276 |
-| 369 | Istanbul (TED Club) | 51728@2026-09-06, 51728@2026-09-12 | 2026-7083 | 35 | 32 | 0.531 |
-| 367 | Tulln | 34874@2026-09-06, 34874@2026-09-12 | 2026-9556 | 35 | 32 | 0.531 |
-| 368 | Cassis | 26126@2026-09-06 | 2026-9120 | 36 | 32 | 0.562 |
-| 366 | Shanghai | 6067@2026-09-06, 6067@2026-09-12 | 2026-6313 | 35 | 32 | 0.594 |
-| 195 | San Diego | 45441@2026-01-26 | 2026-2971 | 50 | 54 | 0.611 |
-| 364 | Genoa (Nuova Valletta) | 3801@2026-09-06 | 2026-1763 | 37 | 32 | 0.625 |
-| 244 | Sao Leopoldo | 6151@2026-03-29 | 2026-2821 | 40 | 32 | 0.688 |
-| 365 | Seville | 3813@2026-09-06 | 2026-784 | 38 | 32 | 0.688 |
-| 84 | 2026 Colsanitas Cup | 2703@2026-03-28 | 2026-894 | 39 | 32 | 0.688 |
-| 391 | Palermo | 7877@2026-10-04 | 2026-3153 | 41 | 32 | 0.719 |
-| 243 | San Luis Potosi | 3379@2026-03-29 | 2026-213 | 41 | 32 | 0.719 |
-| 55 | Kinoshita Group Japan Open Tennis Championships | 3031@2026-09-29 | 2026-329 | 33 | 43 | 0.744 |
-| 389 | Antofagasta | 40303@2026-10-04 | 2026-2889 | 42 | 32 | 0.75 |
-| 359 | Manacor | 24846@2026-08-31 | 2026-7973 | 47 | 32 | 0.75 |
-| 24 | Fayez Sarofim & Co. U.S. Men's Clay Court Championship | 2751@2026-03-28 | 2026-717 | 32 | 40 | 0.75 |
-| 23 | Tiriac Open | 3007@2026-03-30 | 2026-4462 | 32 | 40 | 0.775 |
-| 25 | Grand Prix Hassan II | 13563@2026-03-29 | 2026-360 | 31 | 40 | 0.775 |
+| 26 | BMW Open by Bitpanda | 2835@2026-04-11 | 2026-308, 2026-416 | 41 | 145 | 0.276 |
+| 367 | Istanbul (TED Club) | 51728@2026-09-06, 51728@2026-09-12 | 2026-7083 | 35 | 32 | 0.531 |
+| 365 | Tulln | 34874@2026-09-06, 34874@2026-09-12 | 2026-9556 | 35 | 32 | 0.531 |
+| 366 | Cassis | 26126@2026-09-06 | 2026-9120 | 36 | 32 | 0.562 |
+| 364 | Shanghai | 6067@2026-09-06, 6067@2026-09-12 | 2026-6313 | 35 | 32 | 0.594 |
+| 193 | San Diego | 45441@2026-01-26 | 2026-2971 | 50 | 54 | 0.611 |
+| 362 | Genoa (Nuova Valletta) | 3801@2026-09-06 | 2026-1763 | 37 | 32 | 0.625 |
+| 242 | Sao Leopoldo | 6151@2026-03-29 | 2026-2821 | 40 | 32 | 0.688 |
+| 363 | Seville | 3813@2026-09-06 | 2026-784 | 38 | 32 | 0.688 |
+| 82 | 2026 Colsanitas Cup | 2703@2026-03-28 | 2026-894 | 39 | 32 | 0.688 |
+| 389 | Palermo | 7877@2026-10-04 | 2026-3153 | 41 | 32 | 0.719 |
+| 241 | San Luis Potosi | 3379@2026-03-29 | 2026-213 | 41 | 32 | 0.719 |
+| 53 | Kinoshita Group Japan Open Tennis Championships | 3031@2026-09-29 | 2026-329 | 33 | 43 | 0.744 |
+| 387 | Antofagasta | 40303@2026-10-04 | 2026-2889 | 42 | 32 | 0.75 |
+| 357 | Manacor | 24846@2026-08-31 | 2026-7973 | 47 | 32 | 0.75 |
+| 22 | Fayez Sarofim & Co. U.S. Men's Clay Court Championship | 2751@2026-03-28 | 2026-717 | 32 | 40 | 0.75 |
+| 21 | Tiriac Open | 3007@2026-03-30 | 2026-4462 | 32 | 40 | 0.775 |
+| 23 | Grand Prix Hassan II | 13563@2026-03-29 | 2026-360 | 31 | 40 | 0.775 |
 
 ### Surface disagreements (TennisMyLife vs sheet)
 
@@ -89,23 +88,21 @@ _None._
 | sheet_row | tour_family | tournament_name | city | start_date | status |
 |---|---|---|---|---|---|
 | 2 | ATP | United Cup | Perth | 2026-01-02 | scheduled |
-| 3 | WTA | United Cup | Perth | 2026-01-02 | scheduled |
-| 4 | ATP | United Cup | Sydney | 2026-01-02 | scheduled |
-| 5 | WTA | United Cup | Sydney | 2026-01-02 | scheduled |
-| 67 | WTA | United Cup | Perth | 2026-01-05 | scheduled |
-| 68 | WTA | United Cup | Sydney | 2026-01-05 | scheduled |
-| 158 | WTA125 | 37° Palermo Ladies Open | Palermo | 2026-07-30 | scheduled |
-| 174 | WTA125 | Rio Ladies Open | Rio de Janeiro | 2026-10-05 | scheduled |
-| 220 | CHALLENGER | Fujairah 1 | Fujairah | 2026-03-02 | cancelled |
-| 227 | CHALLENGER | Fujairah 2 | Fujairah | 2026-03-09 | cancelled |
-| 230 | CHALLENGER | Cuernavaca | Cuernavaca | 2026-03-16 | scheduled |
-| 235 | CHALLENGER | Girona | Girona | 2026-03-23 | cancelled |
-| 254 | CHALLENGER | Merida | Merida | 2026-04-13 | cancelled |
-| 307 | CHALLENGER | Durham | Durham | 2026-06-22 | cancelled |
-| 337 | CHALLENGER | Centurion 3 | Centurion | 2026-07-27 | cancelled |
-| 341 | CHALLENGER | Centurion 4 | Centurion | 2026-08-03 | cancelled |
-| 354 | CHALLENGER | Tashkent | Tashkent | 2026-08-17 | cancelled |
-| 360 | CHALLENGER | Manta | Manta | 2026-08-31 | cancelled |
+| 3 | ATP | United Cup | Sydney | 2026-01-02 | scheduled |
+| 65 | WTA | United Cup | Perth | 2026-01-05 | scheduled |
+| 66 | WTA | United Cup | Sydney | 2026-01-05 | scheduled |
+| 156 | WTA125 | 37° Palermo Ladies Open | Palermo | 2026-07-30 | scheduled |
+| 172 | WTA125 | Rio Ladies Open | Rio de Janeiro | 2026-10-05 | scheduled |
+| 218 | CHALLENGER | Fujairah 1 | Fujairah | 2026-03-02 | cancelled |
+| 225 | CHALLENGER | Fujairah 2 | Fujairah | 2026-03-09 | cancelled |
+| 228 | CHALLENGER | Cuernavaca | Cuernavaca | 2026-03-16 | scheduled |
+| 233 | CHALLENGER | Girona | Girona | 2026-03-23 | cancelled |
+| 252 | CHALLENGER | Merida | Merida | 2026-04-13 | cancelled |
+| 305 | CHALLENGER | Durham | Durham | 2026-06-22 | cancelled |
+| 335 | CHALLENGER | Centurion 3 | Centurion | 2026-07-27 | cancelled |
+| 339 | CHALLENGER | Centurion 4 | Centurion | 2026-08-03 | cancelled |
+| 352 | CHALLENGER | Tashkent | Tashkent | 2026-08-17 | cancelled |
+| 358 | CHALLENGER | Manta | Manta | 2026-08-31 | cancelled |
 
 ### Cancelled in the sheet
 
@@ -113,14 +110,14 @@ Check against the OddsPapi list above: a cancelled event with OddsPapi fixtures 
 
 | sheet_row | tournament_name | city | start_date |
 |---|---|---|---|
-| 220 | Fujairah 1 | Fujairah | 2026-03-02 |
-| 227 | Fujairah 2 | Fujairah | 2026-03-09 |
-| 235 | Girona | Girona | 2026-03-23 |
-| 254 | Merida | Merida | 2026-04-13 |
-| 307 | Durham | Durham | 2026-06-22 |
-| 337 | Centurion 3 | Centurion | 2026-07-27 |
-| 341 | Centurion 4 | Centurion | 2026-08-03 |
-| 354 | Tashkent | Tashkent | 2026-08-17 |
-| 360 | Manta | Manta | 2026-08-31 |
-| 400 | Alicante (Torrevieja) | Alicante | 2026-10-19 |
-| 410 | Gaborone | Gaborone | 2026-10-26 |
+| 218 | Fujairah 1 | Fujairah | 2026-03-02 |
+| 225 | Fujairah 2 | Fujairah | 2026-03-09 |
+| 233 | Girona | Girona | 2026-03-23 |
+| 252 | Merida | Merida | 2026-04-13 |
+| 305 | Durham | Durham | 2026-06-22 |
+| 335 | Centurion 3 | Centurion | 2026-07-27 |
+| 339 | Centurion 4 | Centurion | 2026-08-03 |
+| 352 | Tashkent | Tashkent | 2026-08-17 |
+| 358 | Manta | Manta | 2026-08-31 |
+| 398 | Alicante (Torrevieja) | Alicante | 2026-10-19 |
+| 408 | Gaborone | Gaborone | 2026-10-26 |
