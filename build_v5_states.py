@@ -8,8 +8,13 @@ import numpy as np
 import pandas as pd
 
 from v5_core import DynamicServeReturn, SurfaceElo
+from v5_season_files import recent_season_years, season_sources
 
 SURFACES = ["Hard", "Clay", "Grass"]
+
+# Cached multi-season aggregates from bootstrap_v5_history.py. Building
+# ratings without them would silently drop years of history, so fail closed.
+REQUIRED_HISTORY_FILES = {"ATP.csv", "ATPQualifiers.csv", "Challenger.csv", "WTA.csv"}
 
 # Only load columns V5 actually uses. This makes the large historical files
 # much faster to read and uses far less RAM.
@@ -412,20 +417,21 @@ def main():
     print("TENNIS QUANT LAB V5 — CALIBRATED STATE BUILD", flush=True)
     print("=" * 58, flush=True)
 
+    # Per-season files come from the refresh; overlap with the cached history
+    # aggregates is removed by dedupe().
+    seasons = recent_season_years()
     men_sources = [
         ("ATP.csv", "Main"),
         ("ATPQualifiers.csv", "Qualifying"),
         ("Challenger.csv", "Challenger"),
-        ("2026.csv", "Main"),
-        ("2026_atp_quali.csv", "Qualifying"),
-        ("2026_challenger.csv", "Challenger"),
+        *season_sources("MEN", seasons),
         ("ongoing_tourneys.csv", "Main"),
         ("challenger_ongoing_tourneys.csv", "Challenger"),
     ]
 
     women_sources = [
         ("WTA.csv", "Main"),
-        ("2026_wta.csv", "Main"),
+        *season_sources("WTA", seasons),
         ("wta_ongoing_tourneys.csv", "Main"),
     ]
 
@@ -435,6 +441,8 @@ def main():
         path = d / f
         if path.exists():
             men.append(load(path, level, "MEN"))
+        elif f in REQUIRED_HISTORY_FILES:
+            raise FileNotFoundError(f"Required history aggregate missing: {f} (run bootstrap_v5_history.py)")
         else:
             print(f"      Skipping missing file: {f}", flush=True)
 
@@ -451,6 +459,8 @@ def main():
         path = d / f
         if path.exists():
             women.append(load(path, level, "WTA"))
+        elif f in REQUIRED_HISTORY_FILES:
+            raise FileNotFoundError(f"Required history aggregate missing: {f} (run bootstrap_v5_history.py)")
         else:
             print(f"      Skipping missing file: {f}", flush=True)
 
