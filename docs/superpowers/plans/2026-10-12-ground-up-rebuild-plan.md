@@ -97,6 +97,15 @@ A step is done only when all of these hold:
   the snapshot is recent **and** the match has not started. Started fixtures leave the
   live board.
 - Keep the first-seen (opening) line and the last pre-start line for each fixture.
+- **Closing prices (open item, deferred by the user 2026-10-12).** The September 2026
+  OddsPapi backfill covers fixtures from 2026-01-02 to 2026-09-01 only (13,227 with full
+  odds histories, including closing prices for Pinnacle, BetRivers and DraftKings). Nothing
+  covers 2026-09-01 to 09-13. The daily feed since 09-13 saves snapshots, but the last
+  pre-start snapshot is a median 5.6 h before the start (16% within 1 h), so it is not a
+  closing price. Choose a daily after-the-fact capture instead of another bulk backfill:
+  (a) a small daily OddsPapi historical pull for yesterday's priced fixtures, (b) Kalshi
+  candles after settlement (already planned), (c) tennis-data.co.uk closing odds (tour
+  events only). Check OddsPapi quota and Actions minutes before choosing.
 - Kalshi trades and 1-minute candles, one daily pull after settlement (≤ 3 min); order-book
   depth only inside existing runs. Budget entries added to `v5_actions_budget.py`.
 
