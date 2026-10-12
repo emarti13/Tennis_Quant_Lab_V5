@@ -1,10 +1,6 @@
 name: Audit Production Handoff
 
 on:
-  push:
-    paths:
-      - "scripts/audit_production_handoff.py"
-      - ".github/workflows/audit_production_handoff.yml"
   workflow_dispatch:
 
 permissions:

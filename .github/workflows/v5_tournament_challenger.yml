@@ -3,23 +3,6 @@ name: V5 Tournament Authority Challenger
 # Research/acceptance workflow only. It never calls the live OddsPapi API.
 # Independent from production-writer concurrency so acceptance reruns cannot be starved.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'v5_tournament_authority.py'
-      - 'v5_tournament_challenger.py'
-      - 'diagnose_v5_tournament_challenger.py'
-      - 'diagnose_v5_tournament_score_challenger.py'
-      - 'build_v5_context_matchups.py'
-      - 'v5_daily_batch.py'
-      - 'v5_full_context_live.py'
-      - 'tests/test_v5_tournament_authority.py'
-      - 'tests/test_v5_tournament_challenger.py'
-      - 'tests/test_v5_tournament_score_challenger.py'
-      - 'tests/test_v5_legacy_court_retirement.py'
-      - 'context_registry/tournament_authority.csv'
-      - '.github/workflows/courtspeed_conditions_refresh.yml'
-      - '.github/workflows/v5_tournament_challenger.yml'
   workflow_dispatch:
 
 permissions:
