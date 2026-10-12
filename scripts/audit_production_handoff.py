@@ -126,12 +126,19 @@ for cut in ["2026-09-21","2026-09-28","2026-10-01","2026-10-05","2026-10-07"]:
 
 df["gap"]=(pd.to_numeric(df["final_v5_p1"],errors="coerce")-pd.to_numeric(df["market_p1"],errors="coerce")).abs()
 for _,r in df.sort_values("gap",ascending=False).head(30).iterrows():
-    report["extremes"].append({k:(None if pd.isna(r[k]) else r[k]) for k in [
+    item={}
+    for k in [
       "fixture_id","start_time_utc","tournament","tour","player1","player2","winner","player1_won",
       "market_p1","accepted_baseline_p1","elo_p1","full_context_p1","final_v5_p1","gap",
       "selected_candidate","context_fallback_reason","max_abs_direct_z","max_abs_residual_z",
       "top_direct_contributions","top_residual_contributions"
-    ]})
+    ]:
+        v=r[k]
+        if isinstance(v,(list,dict)):
+            item[k]=v
+        else:
+            item[k]=None if pd.isna(v) else v
+    report["extremes"].append(item)
 
 for tour in ["MEN","WTA"]:
     b=cand[tour]
