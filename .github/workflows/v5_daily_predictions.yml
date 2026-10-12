@@ -60,7 +60,6 @@ jobs:
           source_commit = ''
           context_newer = True
           context_inputs = [
-              'v5_court_speed.py', 'v5_court_conditions_source.py', 'v5_schedule_context.py',
               'v5_master_schedule_context.py', 'v5_full_context_live.py', 'v5_forecast_context.py',
               'build_v5_context_matchups.py', 'build_v5_context_warehouse.py',
               'context_registry/tennis_master_schedule.csv',
@@ -233,9 +232,6 @@ jobs:
           remote_sha="$(git rev-parse origin/main)"
           if [ "$remote_sha" != "$build_sha" ]; then
             changed_context="$(git diff --name-only "$build_sha..$remote_sha" -- \
-              v5_court_speed.py \
-              v5_court_conditions_source.py \
-              v5_schedule_context.py \
               v5_master_schedule_context.py \
               v5_full_context_live.py \
               v5_forecast_context.py \

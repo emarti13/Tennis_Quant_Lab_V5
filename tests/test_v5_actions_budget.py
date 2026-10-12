@@ -107,10 +107,7 @@ def test_context_and_score_acceptance_are_intentional_manual_gates_not_push_fano
 
 def test_research_diagnostics_are_manual_only():
     for name in (
-        'v5_total_length_diagnostic.yml',
         'v5_model_bias_diagnostics.yml',
-        'v5_margin_calibration_diagnostic.yml',
-        'v5_score_architecture_diagnostic.yml',
         'v5_superpowers_completion.yml',
     ):
         text = _text(name)
@@ -126,17 +123,3 @@ def test_full_regression_runs_on_pull_requests_or_manual_dispatch_not_every_main
     assert 'workflow_dispatch:' in trigger_block
     assert 'pull_request:' in trigger_block
     assert '\n  push:' not in trigger_block
-
-
-def test_probe_and_research_workflows_are_not_scheduled_background_jobs():
-    probe_names = (
-        'oddspapi_fixture_cost_probe.yml',
-        'oddspapi_historical_fixture_probe.yml',
-        'oddspapi_probe.yml',
-        'oddspapi_relevant_slate_probe_v2.yml',
-    )
-    for name in probe_names:
-        text = _text(name)
-        trigger_block = text.split('permissions:', 1)[0] if 'permissions:' in text else text.split('jobs:', 1)[0]
-        assert 'workflow_dispatch:' in trigger_block
-        assert '\n  schedule:' not in trigger_block
