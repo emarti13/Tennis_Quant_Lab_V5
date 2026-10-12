@@ -113,5 +113,6 @@ def test_reset_epoch_suppresses_legacy_fallback_and_allows_zero_official_record(
 
 def test_performance_page_copy_allows_multiple_official_markets_and_excludes_ancillary_observations():
     source = Path("v5_ui_performance.py").read_text(encoding="utf-8")
-    assert "multiple official markets" in source.lower()
-    assert "ancillary pricing observations" in source.lower()
+    # Customer copy: up to one official market per family per fixture; alternate lines excluded.
+    assert "one official moneyline, one spread and one total per fixture" in source.lower()
+    assert "alternate lines are pricing candidates, not separate bets" in source.lower()
