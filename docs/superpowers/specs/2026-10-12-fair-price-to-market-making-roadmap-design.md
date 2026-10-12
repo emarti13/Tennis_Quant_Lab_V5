@@ -112,7 +112,9 @@ Uses the order-book and trade data collected since Phase 0.
 | Opening + closing lines | OddsPapi raw snapshots | Phase 0 (opening lines are not recoverable later) | Benchmark, CLV, early-decision inputs |
 | Historical closes + results | tennis-data.co.uk | have | Market efficiency history |
 | Kalshi order books + trades | Kalshi API | Phase 0 | Fill, toxicity, and MM simulation |
-| ITF / WTA 125 | none yet | gap | Not priced until a source exists |
+| WTA 125 | none yet | gap | Undecided (user); not priced until a source exists and the user opts in |
+
+ITF is **out of scope** (user decision, 2026-10-12): not collected, modeled, or priced.
 
 ## 6. Out of scope for this roadmap
 
@@ -122,6 +124,6 @@ Uses the order-book and trade data collected since Phase 0.
 
 ## 7. Open questions for the user
 
-1. Bankroll and loss limits for Phases 3 and 5.
+1. Bankroll and loss limits: deferred by the user until Phases 3 and 5 begin. Neither phase may start real stakes until they are set.
 2. Whether Polymarket / Novig order-book collection should start alongside Kalshi in Phase 0 or wait.
-3. Budget for a paid data source for ITF / WTA 125, if those tiers turn out to be the least efficient.
+3. WTA 125: undecided. ITF is excluded (see §5).
