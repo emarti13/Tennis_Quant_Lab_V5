@@ -25,10 +25,11 @@ def test_prepare_fixture_honors_explicit_ui_overrides():
     assert prepared["best_of"] == 3
 
 
-def test_prepare_fixture_without_override_uses_historical_surface_context():
+def test_prepare_fixture_without_override_fails_closed_for_unknown_event():
+    # Surface comes only from the tournament authority; history is not a fallback.
+    import pytest
     from v5_interactive_production import _prepare_with_overrides
     ratings = _ratings().copy()
-    ratings["surface"] = "Clay"
     rows = pd.DataFrame([{
         "fixture_id":"fx-historical","tournament":"WTA Testville Women Singles","tour":"WTA",
         "start_time_utc":"2026-09-14T14:00:00Z","player1":"Alpha","player2":"Beta",
@@ -37,14 +38,13 @@ def test_prepare_fixture_without_override_uses_historical_surface_context():
         {"tourney_name":"WTA Testville Women Singles","match_date":"2025-09-10","surface":"Clay"},
         {"tourney_name":"WTA Testville Women Singles","match_date":"2025-09-11","surface":"Clay"},
     ])
-    prepared = _prepare_with_overrides(
-        rows,
-        {"WTA":ratings},
-        {"WTA":{"baseline":{"Clay":0.60}}},
-        context_history=history,
-    )
-    assert prepared["surface"] == "Clay"
-    assert prepared["surface_source"] == "V5 historical event surface"
+    with pytest.raises(ValueError, match="TOURNAMENT_IDENTITY_UNRESOLVED"):
+        _prepare_with_overrides(
+            rows,
+            {"WTA":ratings},
+            {"WTA":{"baseline":{"Clay":0.60}}},
+            context_history=history,
+        )
 
 
 def test_production_board_adapter_preserves_models_and_context():
