@@ -86,7 +86,7 @@ def test_performance_renderer_separates_market_and_fixture_headlines():
     labels = {label for label, _ in fake.metrics}
     assert "Market record" in labels
     assert "Fixture evidence" in labels
-    assert "Max correlated markets" in labels
+    assert "Max plays on one match" in labels  # customer-facing label for correlated markets
 
 
 def test_model_health_renderer_shows_production_candidates():
