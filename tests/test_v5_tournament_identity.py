@@ -13,7 +13,7 @@ from v5_tournament_identity import (
     trailing_number,
 )
 
-HEADER = ["Year", "Start Date", "End Date", "Circuit Tour", "Tournament Name", "City", "State",
+HEADER = ["Year", "Start Date", "End Date", "Circuit Type", "Circuit Tour", "Tournament Name", "City", "State",
           "Country Code", "Country", "Time Zone", "Category", "Currency", "Prize Money",
           "Surface Code", "Surface", "Setting", "Scheduling / Notes"]
 
@@ -105,3 +105,25 @@ def test_player_agreement_tolerates_name_variants(tmp_path):
                              players=[player_key("Diego Dedura"), player_key("Duje Ajdukovic")])])
     pa = player_agreement(odds, tml, match_source(odds, eds), match_source(tml, eds))
     assert pa.iloc[0]["share_found"] == 1.0
+
+
+def test_circuit_type_decides_mens_and_womens_events(tmp_path):
+    slam = {"Year": "2026", "Start Date": "8/31/2026", "Circuit Tour": "Grand Slam", "Tournament Name": "US Open",
+            "City": "New York", "Country": "United States", "Surface Code": "H", "Surface": "Hard", "Setting": "Outdoor"}
+    eds, issues = _sheet(tmp_path, [{**slam, "Circuit Type": "Men"}, {**slam, "Circuit Type": "Women"}])
+    assert sorted(eds["tour_family"]) == ["ATP", "WTA"]
+    assert not any(i.field == "Circuit Tour" for i in issues)   # no end-date guess needed
+
+
+def test_same_event_listed_under_two_tours_is_flagged_but_weekly_events_are_not(tmp_path):
+    def wta(start, tour, name, city):
+        return {"Year": "2026", "Start Date": start, "Circuit Type": "Women", "Circuit Tour": tour,
+                "Tournament Name": name, "City": city, "Surface Code": "H", "Surface": "Hard", "Setting": "Outdoor"}
+    _, issues = _sheet(tmp_path, [
+        wta("1/2/2026", "United Cup", "United Cup", "Perth"),
+        wta("1/5/2026", "WTA 500", "United Cup", "Perth"),
+        wta("2/23/2026", "WTA 125", "Megasaray Hotels Open", "Antalya"),
+        wta("3/2/2026", "WTA 125", "Megasaray Hotels Open", "Antalya"),
+    ])
+    flagged = {i.row for i in issues if i.message.startswith("Possible duplicate")}
+    assert flagged == {2, 3}

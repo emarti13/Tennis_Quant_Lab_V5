@@ -81,9 +81,22 @@ def player_key(name) -> str:
 
 
 # ---------------------------------------------------------------- master schedule
-def tour_family(circuit: str, end_date_present: bool) -> tuple[str, str | None]:
-    """Family used as a hard filter in matching. Returns (family, issue or None)."""
+def tour_family(circuit: str, end_date_present: bool, gender: str = "") -> tuple[str, str | None]:
+    """Family used as a hard filter in matching. Returns (family, issue or None).
+
+    The sheet's Circuit Type column (Men/Women) decides men's vs women's events. Without
+    it, Grand Slam rows fall back to an end-date heuristic and are flagged.
+    """
     c = fold(circuit)
+    g = fold(gender)
+    if g in {"men", "women"}:
+        if "challenger" in c:
+            return ("CHALLENGER", None) if g == "men" else ("UNKNOWN", f"Women's row with Circuit Tour '{circuit}'")
+        if "125" in c and g == "women":
+            return "WTA125", None
+        if c.startswith("wta") and g == "men":
+            return "UNKNOWN", f"Men's row with Circuit Tour '{circuit}'"
+        return ("ATP" if g == "men" else "WTA"), None
     if "challenger" in c:
         return "CHALLENGER", None
     if "wta 125" in c:
@@ -130,7 +143,8 @@ def load_master_schedule(path: str | Path) -> tuple[pd.DataFrame, list[SheetIssu
     """Load the user's sheet (TSV or CSV), normalize it, and list every problem found."""
     path = Path(path)
     sep = "\t" if path.suffix.lower() in {".tsv", ".txt"} else ","
-    raw = pd.read_csv(path, sep=sep, dtype=str, keep_default_na=False, encoding="utf-8")
+    # utf-8-sig accepts Excel's "CSV UTF-8" byte-order mark as well as plain UTF-8.
+    raw = pd.read_csv(path, sep=sep, dtype=str, keep_default_na=False, encoding="utf-8-sig")
     issues: list[SheetIssue] = []
     rows = []
     for i, r in raw.iterrows():
@@ -149,7 +163,7 @@ def load_master_schedule(path: str | Path) -> tuple[pd.DataFrame, list[SheetIssu
         if start is None:
             issues.append(SheetIssue(line, "Start Date", "error", "Missing start date"))
             continue
-        family, fam_issue = tour_family(r.get("Circuit Tour", ""), end is not None)
+        family, fam_issue = tour_family(r.get("Circuit Tour", ""), end is not None, r.get("Circuit Type", ""))
         if fam_issue:
             issues.append(SheetIssue(line, "Circuit Tour", "warn" if family != "UNKNOWN" else "error", fam_issue))
         end_derived = False
@@ -178,6 +192,7 @@ def load_master_schedule(path: str | Path) -> tuple[pd.DataFrame, list[SheetIssu
             "sheet_row": line,
             "edition_key": f"{family}|{start.isoformat()}|{fold(name).replace(' ', '-')}|{fold(city).replace(' ', '-')}",
             "tour_family": family,
+            "circuit_type": r.get("Circuit Type", "").strip(),
             "circuit_tour": r.get("Circuit Tour", "").strip(),
             "tournament_name": name,
             "city": city,
@@ -200,6 +215,25 @@ def load_master_schedule(path: str | Path) -> tuple[pd.DataFrame, list[SheetIssu
     dup = out[out.duplicated("edition_key", keep=False)]
     for _, d in dup.iterrows():
         issues.append(SheetIssue(int(d.sheet_row), "Tournament Name", "error", f"Duplicate edition {d.edition_key}"))
+    # Same men's/women's event listed twice under different tours or dates (e.g. a team
+    # event entered once as a team event and once as a tour event).
+    out["dup_name"] = out["tournament_name"].map(fold)
+    out["dup_city"] = out["city"].map(fold)
+    out["dup_gender"] = out["circuit_type"].map(fold) if "circuit_type" in out else ""
+    out["dup_start"] = pd.to_datetime(out["start_date"])
+    for _, g in out.groupby(["dup_gender", "dup_name", "dup_city"]):
+        if len(g) < 2:
+            continue
+        g = g.sort_values("dup_start")
+        for a, b in zip(g.itertuples(), list(g.itertuples())[1:]):
+            gap = (b.dup_start - a.dup_start).days
+            # Weekly events with one name (e.g. three Antalya weeks) are legitimate: flag only the
+            # same event under two tours, or two starts so close they cannot be separate weeks.
+            if gap <= 7 and (a.circuit_tour != b.circuit_tour or gap <= 3):
+                for row, other in ((a, b), (b, a)):
+                    issues.append(SheetIssue(int(row.sheet_row), "Tournament Name", "warn",
+                                             f"Possible duplicate entry: same event, city and Men/Women within a week; other row {other.sheet_row}"))
+    out = out.drop(columns=["dup_name", "dup_city", "dup_gender", "dup_start"])
     return out, issues
 
 
