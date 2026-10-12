@@ -71,6 +71,15 @@ for src,dst in audit_files: copy_if_present(src,Path("04_operational_audit")/dst
 copy_if_present("v5_daily_ready/frozen_predictions.csv","06_adjacent_not_direct/frozen_predictions.csv")
 copy_if_present("context_registry/tournament_authority.csv.csv","06_adjacent_not_direct/tournament_authority.csv.csv")
 
+# Historical aggregate inputs restored by the player-rating workflow cache (2010-2025).
+hist_cache=Path(".v5_history_cache")
+for name in ("ATP.csv","ATPQualifiers.csv","Challenger.csv","WTA.csv"):
+    src=hist_cache/name
+    if src.exists():
+        dst=ROOT/"02_upstream_daily_sources"/"historical_rating_aggregates"/name
+        dst.parent.mkdir(parents=True,exist_ok=True)
+        shutil.copy2(src,dst)
+
 expected=[
 ("v5_market_ready/market_board_input.csv","DIRECT","Fixture/player/tournament/start-time/market-line slate read by v5_daily_batch.py"),
 ("v5_build_summary.json","DIRECT","Surface serve baselines used by the base serve/return calculation"),
@@ -90,19 +99,24 @@ expected=[
 ("context_registry/tennis_master_schedule.csv","UPSTREAM","Canonical schedule source/supporting authority data"),
 ("v5_men_walkforward.csv","REFERENCE","Daily-refreshed MEN walk-forward output; not read by v5_daily_batch"),
 ("v5_wta_walkforward.csv","REFERENCE","Daily-refreshed WTA walk-forward output; not read by v5_daily_batch"),
+(".v5_history_cache/ATP.csv","UPSTREAM_CACHE","Historical ATP main-tour aggregate (2010-2025) feeding daily ratings"),
+(".v5_history_cache/ATPQualifiers.csv","UPSTREAM_CACHE","Historical ATP qualifying aggregate (2010-2025) feeding daily ratings"),
+(".v5_history_cache/Challenger.csv","UPSTREAM_CACHE","Historical Challenger aggregate (2010-2025) feeding daily ratings"),
+(".v5_history_cache/WTA.csv","UPSTREAM_CACHE","Historical WTA aggregate (2010-2025) feeding daily ratings"),
 ("v5_daily_ready/frozen_predictions.csv","OPERATIONAL","Read only to preserve prior frozen rows; does not set a new match probability"),
 ]
 
 # Download current raw TennisMyLife feeds used by refresh_tennismylife_cloud.py.
-target_aliases={
-"2026.csv":["2026.csv"],
-"2026_atp_quali.csv":["2026_atp_quali.csv"],
-"2026_challenger.csv":["2026_challenger.csv"],
-"2026_wta.csv":["2026_wta.csv"],
+target_aliases={}
+for year in (2023,2024,2025,2026):
+    for suffix in ("","_atp_quali","_challenger","_wta"):
+        name=f"{year}{suffix}.csv"
+        target_aliases[name]=[name]
+target_aliases.update({
 "ongoing_tourneys.csv":["ongoing_tourneys.csv"],
 "challenger_ongoing_tourneys.csv":["challenger_ongoing_tourneys.csv","ch_ongoing_tourney.csv","challenger_ongoing_tourney.csv"],
 "wta_ongoing_tourneys.csv":["wta_ongoing_tourneys.csv","wta_ongoing_tourney.csv"],
-}
+})
 raw_dir=ROOT/"02_upstream_daily_sources"/"tennismylife_raw_current"
 raw_dir.mkdir(parents=True,exist_ok=True)
 raw_report={"manifest_url":"https://stats.tennismylife.org/api/data-files","downloaded":[],"missing":[]}
