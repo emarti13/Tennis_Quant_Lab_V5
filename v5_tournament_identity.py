@@ -210,6 +210,11 @@ def load_master_schedule(path: str | Path) -> tuple[pd.DataFrame, list[SheetIssu
             "har_tru": flags["har_tru"],
             "day_notes": "; ".join(day_notes),
             "notes_raw": notes,
+            # Location values typed into the sheet always win over looked-up ones.
+            "sheet_latitude": r.get("Latitude", "").strip(),
+            "sheet_longitude": r.get("Longitude", "").strip(),
+            "sheet_altitude_m": r.get("Altitude (m)", "").strip(),
+            "sheet_time_zone": r.get("Time Zone", "").strip(),
         })
     out = pd.DataFrame(rows)
     dup = out[out.duplicated("edition_key", keep=False)]
@@ -399,3 +404,138 @@ def player_agreement(odds: pd.DataFrame, tml: pd.DataFrame, odds_matches: pd.Dat
             "share_found": round(found / len(tp), 3) if tp else None,
         })
     return pd.DataFrame(rows)
+
+
+# ---------------------------------------------------------------- locations
+def load_countries(path: str | Path = "context_registry/countries.csv") -> pd.DataFrame:
+    return pd.read_csv(path, dtype=str, keep_default_na=False)
+
+
+def country_iso2(row: pd.Series, countries: pd.DataFrame) -> str:
+    """ISO 3166 alpha-2 from the sheet's Country Code (IOC style, e.g. GER) or Country name."""
+    code = str(row.get("country_code") or "").strip().upper()
+    if code:
+        hit = countries[countries["ioc"] == code]
+        if len(hit):
+            return hit["iso2"].iloc[0]
+    name = fold(row.get("country"))
+    hit = countries[countries["name"].map(fold) == name]
+    return hit["iso2"].iloc[0] if len(hit) else ""
+
+
+def location_key(city: str, state: str, iso2: str) -> str:
+    return f"{fold(city)}|{fold(state)}|{iso2}"
+
+
+def pick_location(candidates: list[dict], iso2: str, state: str, query: str = "", region: str = "",
+                  match_name: str = "", same_place_km: float = 50.0) -> tuple[dict | None, str, str]:
+    """Choose a geocoder result without guessing. Returns (result, status, note).
+
+    Rules, in order: the result must be in the sheet's country; its name must equal the
+    looked-up name, or the match_name given in location_aliases.csv (no airports or
+    neighbouring towns); the sheet's State, or a region pinned in location_aliases.csv,
+    must match its first-level region when given; several same-named results all within
+    same_place_km of each other are one place (e.g. Hong Kong); otherwise the clearly
+    largest wins (population at least twice the next), and anything else is ambiguous.
+    status: 'matched' | 'state_mismatch' | 'ambiguous' | 'unresolved'.
+    """
+    in_country = [c for c in candidates if str(c.get("country_code", "")).upper() == iso2]
+    if not in_country:
+        return None, "unresolved", f"no result in country {iso2 or '?'}"
+    # Only real places: populated places (PPL*), administrative areas (ADM*) and islands.
+    # Airports, parks, dams and other features are never used as a city's location.
+    in_country = [c for c in in_country if str(c.get("feature_code") or "PPL").startswith(("PPL", "ADM", "ISL"))]
+    want = match_name or query
+    if want:
+        w = fold(want)
+        # Same name, or the official name extends it as whole words ("Acapulco de Juarez",
+        # "San Luis Potosi City"). An explicit match_name must match exactly.
+        exact = [c for c in in_country if fold(c.get("name")) == w]
+        if not match_name:
+            # Towns (not islands or regions) whose official name extends the city's name.
+            exact += [c for c in in_country if fold(c.get("name")).startswith(w + " ")
+                      and str(c.get("feature_code") or "PPL").startswith("PPL")]
+        if not exact:
+            names = ", ".join(sorted({str(c.get("name")) for c in in_country})[:5])
+            return None, "unresolved", f"no place named '{want}' in {iso2}; geocoder has: {names}"
+        in_country = exact
+    pin = region or state
+    if pin:
+        same = [c for c in in_country if fold(c.get("admin1")) == fold(pin)]
+        if not same:
+            found = sorted({str(c.get("admin1")) for c in in_country if c.get("admin1")})
+            shown = ", ".join(found[:6]) + (f" and {len(found) - 6} more" if len(found) > 6 else "")
+            # Fail closed: with the state/region wrong we cannot tell which same-named place is meant.
+            return None, "state_mismatch", f"'{pin}' not found; geocoder has: {shown}"
+        in_country = same
+    if len(in_country) == 1:
+        return in_country[0], "matched", ""
+    spread = max(_haversine_km(a["latitude"], a["longitude"], b["latitude"], b["longitude"])
+                 for a in in_country for b in in_country)
+    if spread <= same_place_km:
+        return max(in_country, key=lambda c: c.get("population") or 0), "matched", ""
+    ranked = sorted(in_country, key=lambda c: c.get("population") or 0, reverse=True)
+    top, nxt = ranked[0].get("population") or 0, ranked[1].get("population") or 0
+    if top > 0 and top >= 2 * nxt:
+        return ranked[0], "matched", ""
+    regions = ", ".join(sorted({str(c.get("admin1")) for c in in_country})[:6])
+    return None, "ambiguous", f"{len(in_country)} places named '{query or in_country[0].get('name')}' ({regions}); set the region in location_aliases.csv or type coordinates"
+
+
+def _haversine_km(lat1, lon1, lat2, lon2) -> float:
+    import math
+    r = 6371.0
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dp, dl = p2 - p1, math.radians(lon2 - lon1)
+    a = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
+    return 2 * r * math.asin(math.sqrt(a))
+
+
+def enrich_locations(editions: pd.DataFrame, cache: pd.DataFrame, countries: pd.DataFrame,
+                     max_disagreement_km: float = 25.0, aliases: pd.DataFrame | None = None) -> tuple[pd.DataFrame, list[SheetIssue]]:
+    """Add latitude, longitude, altitude_m, time_zone (IANA) and country fields.
+
+    Sheet values win; otherwise the cached geocoder result is used. Every row gets a
+    location_source ('sheet', 'geocoded' or 'missing') and a location_status. Nothing is
+    guessed: an unresolved location stays empty and is reported.
+    """
+    import json
+    by_key = {r["location_key"]: json.loads(r["results_json"] or "[]") for _, r in cache.iterrows()}
+    query_of = {r["location_key"]: r.get("query", "") for _, r in cache.iterrows()}
+    alias_rows = aliases if aliases is not None else pd.DataFrame(columns=["city", "country_iso2", "region", "match_name"])
+    region_of = {(r["city"], r["country_iso2"]): r.get("region", "") for _, r in alias_rows.iterrows()}
+    match_of = {(r["city"], r["country_iso2"]): r.get("match_name", "") for _, r in alias_rows.iterrows()}
+    out = editions.copy()
+    issues: list[SheetIssue] = []
+    cols = {k: [] for k in ("country_iso2", "country_name", "latitude", "longitude", "altitude_m",
+                            "time_zone", "region", "location_source", "location_status")}
+    for _, e in out.iterrows():
+        iso2 = country_iso2(e, countries)
+        name = countries.loc[countries["iso2"] == iso2, "name"].iloc[0] if iso2 else ""
+        key = location_key(e["city"], e["state"], iso2)
+        pick, status, note = pick_location(by_key.get(key, []), iso2, e["state"], query=query_of.get(key, "") or e["city"],
+                                           region=region_of.get((e["city"], iso2), ""),
+                                           match_name=match_of.get((e["city"], iso2), ""))
+        sheet_vals = {k: str(e.get(f"sheet_{k}", "")).strip() for k in ("latitude", "longitude", "altitude_m", "time_zone")}
+        lat = float(sheet_vals["latitude"]) if sheet_vals["latitude"] else (pick or {}).get("latitude")
+        lon = float(sheet_vals["longitude"]) if sheet_vals["longitude"] else (pick or {}).get("longitude")
+        alt = float(sheet_vals["altitude_m"]) if sheet_vals["altitude_m"] else (pick or {}).get("elevation")
+        tz = sheet_vals["time_zone"] or (pick or {}).get("timezone") or ""
+        source = "sheet" if sheet_vals["latitude"] and sheet_vals["longitude"] else ("geocoded" if pick else "missing")
+        if status == "state_mismatch" and source != "sheet":
+            issues.append(SheetIssue(int(e["sheet_row"]), "State", "warn", f"{e['city']}: check State/region ({note}); location left empty until fixed"))
+        elif status == "ambiguous" and source != "sheet":
+            issues.append(SheetIssue(int(e["sheet_row"]), "City", "warn", f"{e['city']}: {note}"))
+        elif pick is None and source != "sheet":
+            issues.append(SheetIssue(int(e["sheet_row"]), "City", "warn", f"{e['city']}: location not found ({note}); correct City or type Latitude/Longitude/Time Zone in the sheet"))
+        if source == "sheet" and pick is not None:
+            d = _haversine_km(lat, lon, pick["latitude"], pick["longitude"])
+            if d > max_disagreement_km:
+                issues.append(SheetIssue(int(e["sheet_row"]), "Latitude", "warn", f"Sheet location is {d:.0f} km from the geocoded city; check"))
+        for k, v in (("country_iso2", iso2), ("country_name", e["country"] or name), ("latitude", lat), ("longitude", lon),
+                     ("altitude_m", alt), ("time_zone", tz), ("region", (pick or {}).get("admin1", "")),
+                     ("location_source", source), ("location_status", "sheet" if source == "sheet" else status)):
+            cols[k].append(v)
+    for k, v in cols.items():
+        out[k] = v
+    return out, issues

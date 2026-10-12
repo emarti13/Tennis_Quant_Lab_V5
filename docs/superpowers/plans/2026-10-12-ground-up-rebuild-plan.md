@@ -171,13 +171,14 @@ collectors writing at least 95% of scheduled snapshots for 14 days. Then Phase 1
 | # | Question | Answer |
 |---|---|---|
 | Plan | Approve the rebuild plan | Approved |
-| D1 | Where the shared daily warehouse lives | Open: user asked for the trade-offs of committing daily vs a release file |
+| D1 | Where the shared daily warehouse lives | **GitHub release file**, downloaded by the app at startup with a read-only token in Streamlit secrets. The app runs on Streamlit Community Cloud for now; a future standalone app can read the same file |
 | D2 | Close PRs #28, #30, #31, #32 and delete stale branches; review #36 in Step 4 | Yes |
-| D3 | New raw OddsPapi history outside git | Open: user asked what it means in practice |
+| D3 | New raw OddsPapi history outside git | Explained (bulk backfills should be rare once closing prices are captured daily, Step 3); rule stands for future backfills |
 | D4 | One branch and PR per step, CLAUDE.md names | Yes |
 | D5 | Existing session-branch commits | Split into PRs |
 | D6 | Maintaining the master schedule | User maintains it in Excel a few times a year or when needed; **the system must raise flags when an update is needed** (Step 2) |
-| D7 | Fill coordinates, altitude, time zone from Open-Meteo geocoding | Yes (user to allow `geocoding-api.open-meteo.com`) |
+| D7 | Fill coordinates, altitude, time zone from Open-Meteo geocoding | Yes; domain allowed 2026-10-12 |
+| Spec | Tournament identity spec | Approved 2026-10-12. Ball/CPI columns are filled by the user later; they are optional inputs |
 | Spec Q2 | Team events | Keep in the schedule so fixtures resolve; never priced |
 | Spec Q3 | WTA 125 | In the schedule and matching now; pricing decided later |
 

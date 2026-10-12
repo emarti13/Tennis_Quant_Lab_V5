@@ -9,6 +9,7 @@ Sheet: `context_registry/master_schedule/master_schedule_2026.csv` · as of 2026
 - TennisMyLife: 303 tournaments (Davis Cup ties excluded) → {'matched': 291, 'unmatched': 11, 'ambiguous': 1}.
 - Player check (editions matched by both sources): 282 editions, median 100% of TennisMyLife players found in OddsPapi; 18 below 80%.
 - Past editions (ended before 2026-10-12) with no match from either source: 16.
+- Locations: {'geocoded': 437, 'missing': 4}; time zone filled for 437 of 441 editions.
 
 ## Sheet issues (counts)
 
@@ -18,6 +19,8 @@ Sheet: `context_registry/master_schedule/master_schedule_2026.csv` · as of 2026
 | info | Country name empty | 265 |
 | info | End Date missing | 113 |
 | warn | Notes contain text from another calendar column | 79 |
+| warn | Wuning: check State/region | 3 |
+| warn | Playford: location not found | 1 |
 
 Details per row: `sheet_issues.csv`.
 
@@ -103,6 +106,17 @@ _None._
 | 339 | CHALLENGER | Centurion 4 | Centurion | 2026-08-03 | cancelled |
 | 352 | CHALLENGER | Tashkent | Tashkent | 2026-08-17 | cancelled |
 | 358 | CHALLENGER | Manta | Manta | 2026-08-31 | cancelled |
+
+### Locations to check
+
+Coordinates, altitude and time zone come from Open-Meteo geocoding unless the sheet has them. Fix a row by correcting City/State/Country or by typing Latitude, Longitude and Time Zone into the sheet.
+
+| row | field | message |
+|---|---|---|
+| 249 | State | Wuning: check State/region ('Jiangxi' not found; geocoder has: Guangdong, Shandong, Shanghai Municipality, Xinjiang, Zhejiang); location left empty until fixed |
+| 255 | State | Wuning: check State/region ('Jiangxi' not found; geocoder has: Guangdong, Shandong, Shanghai Municipality, Xinjiang, Zhejiang); location left empty until fixed |
+| 390 | State | Wuning: check State/region ('Jiangxi' not found; geocoder has: Guangdong, Shandong, Shanghai Municipality, Xinjiang, Zhejiang); location left empty until fixed |
+| 429 | City | Playford: location not found (no place named 'Playford' in AU; geocoder has: Pine Creek); correct City or type Latitude/Longitude/Time Zone in the sheet |
 
 ### Cancelled in the sheet
 

@@ -127,3 +127,63 @@ def test_same_event_listed_under_two_tours_is_flagged_but_weekly_events_are_not(
     ])
     flagged = {i.row for i in issues if i.message.startswith("Possible duplicate")}
     assert flagged == {2, 3}
+
+
+def test_location_choice_requires_country_and_flags_wrong_state():
+    from v5_tournament_identity import pick_location
+
+    candidates = [
+        {"name": "Little Rock", "country_code": "US", "admin1": "Arkansas", "latitude": 34.7, "longitude": -92.3},
+        {"name": "Little Rock", "country_code": "GB", "admin1": "England", "latitude": 52.0, "longitude": -1.0},
+    ]
+    pick, status, note = pick_location(candidates, "US", "Arizona")
+    assert status == "state_mismatch" and pick is None and "Arizona" in note   # wrong state: no guess
+    assert pick_location(candidates, "US", "Arkansas")[1] == "matched"
+    assert pick_location(candidates, "FR", "")[1] == "unresolved"   # never a result from another country
+
+
+def test_sheet_location_wins_and_missing_location_is_reported(tmp_path):
+    import json
+    from v5_tournament_identity import enrich_locations, load_countries, location_key
+
+    eds, _ = _sheet(tmp_path, [
+        {**_ch("3/2/2026", "3/8/2026", "Hersonissos 1", "Hersonissos"), "Country Code": "GRE"},
+        {**_ch("3/9/2026", "3/15/2026", "Nowhere", "Nowhereville"), "Country Code": "GRE"},
+    ])
+    eds.loc[eds.tournament_name == "Hersonissos 1", "sheet_time_zone"] = "Europe/Athens"
+    cache = pd.DataFrame([{
+        "location_key": location_key("Hersonissos", "", "GR"),
+        "results_json": json.dumps([{"name": "Hersonissos", "country_code": "GR", "admin1": "Crete",
+                                     "latitude": 35.3, "longitude": 25.37, "elevation": 107, "timezone": "Europe/Athens"}]),
+    }])
+    out, issues = enrich_locations(eds, cache, load_countries())
+    h = out.set_index("tournament_name")
+    assert h.loc["Hersonissos 1", "location_source"] == "geocoded" and h.loc["Hersonissos 1", "region"] == "Crete"
+    assert h.loc["Hersonissos 1", "country_name"] == "Greece"
+    assert h.loc["Nowhere", "location_source"] == "missing" and h.loc["Nowhere", "time_zone"] == ""
+    assert any("location not found" in i.message for i in issues)
+
+
+def test_location_rules_real_places_largest_town_and_no_guess():
+    from v5_tournament_identity import pick_location
+
+    def c(name, admin1, pop, lat, lon, code="PPL"):
+        return {"name": name, "country_code": "MX", "admin1": admin1, "population": pop,
+                "latitude": lat, "longitude": lon, "feature_code": code}
+
+    # Official name extends the city's name; tiny same-named villages lose to the real city.
+    pick, status, _ = pick_location([c("Acapulco de Juárez", "Guerrero", 658609, 16.85, -99.91),
+                                     c("Acapulco", "Chiapas", 185, 16.11, -91.51)], "MX", "", query="Acapulco")
+    assert status == "matched" and pick["admin1"] == "Guerrero"
+    # Airports are never a city's location.
+    pick, status, _ = pick_location([c("Los Cabos International Airport", "Baja California Sur", None, 23.15, -109.72, "AIRP")],
+                                    "MX", "", query="Los Cabos")
+    assert pick is None and status == "unresolved"
+    # Several entries within 50 km are one place (Hong Kong-style duplicates).
+    pick, status, _ = pick_location([c("Hong Kong", None, 7396076, 22.28, 114.17), c("Hong Kong", None, 1195529, 22.27, 114.18)],
+                                    "MX", "", query="Hong Kong")
+    assert status == "matched"
+    # Same-named places far apart with no clear largest: left empty, never guessed.
+    pick, status, _ = pick_location([c("Jingshan", "Anhui", None, 31.3, 118.4), c("Jingshan", "Beijing", None, 39.9, 116.4)],
+                                    "MX", "", query="Jingshan")
+    assert pick is None and status == "ambiguous"

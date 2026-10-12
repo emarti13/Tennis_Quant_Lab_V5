@@ -1,0 +1,17 @@
+city,country_iso2,query,match_name,region,note
+Marrakech,MA,Marrakesh,,,Geocoder spelling
+Washington DC,US,Washington,Washington D.C.,District of Columbia,Geocoder names it 'Washington D.C.'
+Les Sables d'Olonne,FR,Les Sables-d'Olonne,,,Geocoder spelling (hyphen)
+La Bisbal d’Emporda,ES,La Bisbal,,Catalonia,Geocoder name; pinned to Catalonia
+Cherbourg-en-Cotentin,FR,Cherbourg,,,Former town name used by the geocoder
+Quebec City,CA,Quebec,Québec,,Geocoder name (Québec)
+Cap Cana,DO,Punta Cana,,,Approximation: Cap Cana is a resort about 10 km from Punta Cana; type exact coordinates in the sheet if wanted
+Saint Malo,FR,Saint-Malo,St-Malo,Brittany Region,Geocoder names it 'St-Malo'; the unhyphenated query matched a village in Burgundy
+Los Cabos,MX,Cabo San Lucas,,Baja California Sur,'Los Cabos' is the municipality; the geocoder's 'Los Cabos' are villages in Michoacán/Tamaulipas
+Wuning,CN,Wuning,,Jiangxi,"The Wuning Challenger is in Jiangxi; the geocoder has no Jiangxi Wuning, so it stays empty for the user to fill"
+Jingshan,CN,Jingshan,,Hubei,The Jingshan events are in Hubei; pinned so places of the same name elsewhere are not used. The geocoder Hubei result may be up to ~100 km from the venue: type exact coordinates in the sheet if needed
+Tiburon,US,Tiburon,Belvedere Tiburon,California,Geocoder names the town 'Belvedere Tiburon'
+Figueira da Foz,PT,Figueira da Foz,Figueira da Foz Municipality,,Geocoder lists the municipality
+Mallorca,ES,Palma,,Balearic Islands,Approximation: Mallorca is an island; Palma used (events may be elsewhere on the island)
+Menorca,ES,Minorca,,Balearic Islands,Approximation: Menorca is an island; island centre used
+Washington,US,Washington,Washington D.C.,District of Columbia,The ATP 500 'Washington' is in Washington D.C.
