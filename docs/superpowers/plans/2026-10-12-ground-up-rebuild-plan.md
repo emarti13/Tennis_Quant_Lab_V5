@@ -59,13 +59,31 @@ A step is done only when all of these hold:
 - **Warehouse:** one builder (`build_v5_context_warehouse.py`), built once per day by the
   production workflow. The forecast and the app read **the same build** (storage
   choice: decision D1).
-- **Tournament identity and surface:** one source, the tournament authority. The master
-  schedule's useful columns (environment, altitude, ball) are merged into the authority
-  table; `v5_master_schedule_context`, `v5_tournament_registry` and
-  `v5_tournament_context_registry` are removed or reduced to readers of the authority.
-- **Overrides:** a user override is recorded only for a value the user changed, and is
-  labeled as such. Unknown surface stays "unknown, needs override" (fail closed) instead
-  of a guess.
+- **Master tennis schedule (user design, 2026-10-12).** One file holds every tournament
+  with its court-specific information: dates, tour/category, city/country, coordinates,
+  altitude, time zone, surface, indoor/outdoor, ball, CPI, notes, and OddsPapi IDs. It
+  replaces `tournament_authority.csv` and `tennis_master_schedule.csv` (merged; the
+  authority's 2026 Challenger rows and coordinates are kept). `v5_master_schedule_context`,
+  `v5_tournament_registry` and `v5_tournament_context_registry` are removed; one module
+  reads the file.
+  - **Stable event id** per tournament (for example `atp-250-brisbane`) that stays the same
+    across years, so a new year's event links to its history.
+  - **ISO dates** (`2026-04-05`) and **IANA time zones** (`Australia/Brisbane`, not
+    `UTC+10`, so daylight saving is correct).
+  - **2026 reconciliation report:** every 2026 row checked against TennisMyLife 2026
+    results (tournament name, surface) and OddsPapi fixtures (tournament names and IDs).
+    Output lists events with no match, surface disagreements, and missing OddsPapi IDs.
+- **Resolving a fixture to an event**, in order, with the method shown in the app:
+  1. this year's row (OddsPapi tournament ID, then tour + name/city + date window);
+  2. **carried forward**: no row for this year, but the same event id exists in an
+     earlier year, so surface, setting, time zone, altitude and coordinates are copied
+     and labeled "from <year>";
+  3. **unknown**: no match. The fixture gets no price (fail closed) and is listed in the
+     app as needing an override.
+- **Overrides:** set in the app when the choice is wrong or unknown. An override is stored
+  only for a value the user changed, keyed by event id and year, and labeled as an
+  override. Overrides are kept in a reviewable file and can be promoted into the master
+  schedule so the next year carries them forward.
 - No hard-coded years on live paths (everything goes through `v5_season_files.py`).
 
 ### Step 3. Market data layer (roadmap Phase 0 collection)
@@ -121,6 +139,14 @@ collectors writing at least 95% of scheduled snapshots for 14 days. Then Phase 1
 - **D4. Branch for this work.** This session was assigned
   `claude/bootstrap-v5-history-setup-3pxlyr`. CLAUDE.md asks for one branch and PR per
   step. OK to open one branch per step with CLAUDE.md names?
+- **D6. Master schedule source and editing.** Start from the repo's
+  `tournament_authority.csv` (has Challengers and coordinates) and add the user's new
+  columns (Country Code, Category, Currency, Prize Money, Scheduling / Notes)? Who edits
+  it and how: the user in a spreadsheet, exported as "CSV UTF-8"?
+- **D7. Filling location columns automatically.** Coordinates, altitude and IANA time zone
+  can be filled from Open-Meteo's free geocoding API (the repo already uses Open-Meteo for
+  weather). It needs `geocoding-api.open-meteo.com` allowed in this environment. Ball,
+  CPI and notes stay manual.
 - **D5. Commits already on the session branch.** Six commits (season-year rollover,
   workflow triggers, budget model, test fixes). Keep them as the first PR, or fold them
   into Steps 1–2?
