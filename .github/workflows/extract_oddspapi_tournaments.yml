@@ -2,10 +2,6 @@ name: Extract OddsPapi Tournament Registry
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/extract_oddspapi_tournaments.yml'
-
 permissions:
   contents: write
 

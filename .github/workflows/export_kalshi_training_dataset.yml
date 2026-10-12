@@ -1,10 +1,6 @@
 name: Export Kalshi Training Dataset
 
 on:
-  push:
-    paths:
-      - "scripts/export_kalshi_training_dataset.py"
-      - ".github/workflows/export_kalshi_training_dataset.yml"
   workflow_dispatch:
 
 permissions:

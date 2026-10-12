@@ -3,21 +3,10 @@ name: V5 Daily Predictions
 # Three recovery windows, but at most one heavy forecast/day unless production
 # context inputs/code changed after the frozen forecast. Forecast freshness is
 # tied to the exact source commit used to build it, not wall-clock timestamps.
+# No push trigger: a context/code change on main is picked up by the next
+# window (the freshness check compares against the forecast's source commit).
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "v5_court_speed.py"
-      - "v5_court_conditions_source.py"
-      - "v5_schedule_context.py"
-      - "v5_master_schedule_context.py"
-      - "v5_full_context_live.py"
-      - "v5_forecast_context.py"
-      - "build_v5_context_matchups.py"
-      - "build_v5_context_warehouse.py"
-      - "context_registry/tennis_master_schedule.csv"
-      - ".github/workflows/v5_daily_predictions.yml"
   schedule:
     - cron: "45 6 * * *"
     - cron: "45 10 * * *"
@@ -257,7 +246,7 @@ jobs:
             if [ -n "$changed_context" ]; then
               echo "This run was superseded by newer production context/code. Refusing to publish stale artifacts."
               echo "$changed_context"
-              echo "The newer main push owns the rebuild; ending this superseded writer cleanly."
+              echo "The next scheduled window rebuilds from the newer main; ending this superseded writer cleanly."
               exit 0
             fi
           fi

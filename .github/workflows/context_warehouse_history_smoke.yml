@@ -1,14 +1,6 @@
 name: Context Warehouse History Smoke
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'context_warehouse/**'
-      - 'tests/test_context_warehouse.py'
-      - 'build_context_warehouse.py'
-      - '.github/workflows/context_warehouse_history_smoke.yml'
   workflow_dispatch:
 
 permissions:

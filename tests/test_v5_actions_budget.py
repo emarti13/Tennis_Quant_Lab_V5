@@ -13,7 +13,22 @@ def test_configured_recurring_budget_stays_below_70_percent_of_allowance():
     assert report['guardrail_minutes'] == 2100
     assert report['projected_minutes'] < report['guardrail_minutes']
     assert report['headroom_to_allowance'] >= 900
-    assert report['jobs']['courtspeed_conditions']['runs_per_day'] == 1
+    assert 'courtspeed_conditions' not in report['jobs']  # retired
+
+
+def test_every_scheduled_workflow_is_budgeted():
+    import re
+    from v5_actions_budget import RECURRING_JOBS, SCHEDULED_WORKFLOWS
+
+    scheduled = {}
+    for path in Path('.github/workflows').glob('*.yml'):
+        trigger = path.read_text(encoding='utf-8').split('\njobs:', 1)[0]
+        crons = re.findall(r'^\s*-\s*cron:', trigger, flags=re.M)
+        if crons:
+            scheduled[path.name] = len(crons)
+    assert scheduled == {name: cfg['crons'] for name, cfg in SCHEDULED_WORKFLOWS.items()}
+    for cfg in SCHEDULED_WORKFLOWS.values():
+        assert all(job in RECURRING_JOBS for job in cfg['jobs'])
 
 
 def test_live_market_is_one_quota_conserving_run_and_performs_repricing():
@@ -58,7 +73,8 @@ def test_settlement_is_once_daily_and_never_on_push():
 
 
 def test_canonical_production_writers_share_one_serialization_lock():
-    for name in ('oddspapi_normalized_daily_v2.yml', 'v5_daily_predictions.yml', 'v5_automatic_settlement.yml', 'courtspeed_conditions_refresh.yml'):
+    # courtspeed_conditions_refresh.yml is retired (echo-only) and writes nothing.
+    for name in ('oddspapi_normalized_daily_v2.yml', 'v5_daily_predictions.yml', 'v5_automatic_settlement.yml'):
         text = _text(name)
         assert 'group: v5-production-writer' in text
         assert 'cancel-in-progress: false' in text

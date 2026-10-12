@@ -1,15 +1,6 @@
 name: V5 Joint Score Distribution Calibration
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "diagnose_joint_score_distribution_calibration.py"
-      - "historical_score_calibration.py"
-      - "v5_strength_conditioning.py"
-      - "v5_core.py"
-      - ".github/workflows/v5_joint_score_calibration_diagnostic.yml"
   workflow_dispatch:
 
 jobs:

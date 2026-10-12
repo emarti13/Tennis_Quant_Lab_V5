@@ -1,11 +1,6 @@
 name: Pinnacle 2026 Closing Backfill
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "scripts/build_pinnacle_closing_2026.py"
-      - ".github/workflows/pinnacle_2026_closing_backfill.yml"
   workflow_dispatch:
 
 permissions:

@@ -1,11 +1,6 @@
 name: Apply Legacy Court Retirement
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'retire_legacy_court_paths.py'
-      - '.github/workflows/v5_apply_legacy_court_retirement.yml'
   workflow_dispatch:
 
 permissions:

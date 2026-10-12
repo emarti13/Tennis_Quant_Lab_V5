@@ -1,17 +1,6 @@
 name: V5 Calibrated Board Diagnostic
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "diagnose_calibrated_live_board.py"
-      - "v5_model_calibration.py"
-      - "v5_strength_conditioning.py"
-      - "v5_core.py"
-      - "v5_live_market.py"
-      - "v5_daily_batch.py"
-      - ".github/workflows/v5_calibrated_board_diagnostic.yml"
   workflow_dispatch:
 
 jobs:
