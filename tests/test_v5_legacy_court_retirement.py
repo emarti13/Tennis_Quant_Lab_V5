@@ -28,8 +28,10 @@ def test_context_builder_neutralizes_retired_court_characteristics():
     assert '"altitude_m": np.nan' in source
 
 
-def test_legacy_courtspeed_refresh_is_disabled():
-    source = Path(".github/workflows/courtspeed_conditions_refresh.yml").read_text(encoding="utf-8")
-    assert "schedule:" not in source
-    assert "v5_refresh_court_conditions.py" not in source
-    assert "courtspeed_snapshot.csv" not in source
+def test_retired_court_code_and_workflows_are_gone():
+    for path in (
+        "v5_court_conditions_source.py", "v5_court_speed.py", "v5_courtspeed_fetch.py",
+        "v5_refresh_court_conditions.py", "retire_legacy_court_paths.py", "data/court_conditions",
+        ".github/workflows/courtspeed_conditions_refresh.yml", ".github/workflows/v5_court_speed.yml",
+    ):
+        assert not Path(path).exists(), path

@@ -11,6 +11,7 @@ The goal: a fair-price engine that beats the market, proven first as a taker and
 
 ## Git
 - Never push to `main`. One logical change per branch and PR.
+- Anything you cannot remove yourself (for example, branch deletion is blocked from agent sessions) goes on the checklist in `manual_cleanup/README.md`, with why it can go and how to remove it. Do not leave it only in chat.
 - Branch names: `fix/…`, `feat/…`, `repair/…`, `docs/…`, `research/…`.
 - New or changed specs are marked `DRAFT — pending user approval` until the user approves them in chat.
 - If `gh pr create` fails with a GraphQL 403 (some sandboxed agent workspaces only allow GitHub's REST API), open the PR with `gh api repos/emarti13/Tennis_Quant_Lab_V5/pulls -X POST` instead.
