@@ -1,7 +1,7 @@
 # Fair Price to Market Making: Program Roadmap
 
 Date: 2026-10-12
-Status: **DRAFT — pending user approval.** Not binding until approved in chat.
+Status: **Approved by the user in chat, 2026-10-12.**
 Category: Model Profitability (program-level), with Production Reliability prerequisites.
 Subordinate to: `PROJECT_MANDATE.md`. Builds on (does not replace): `2026-09-01-full-context-tennis-model-design.md`, `2026-09-21-market-aware-decision-system-design.md`, `2026-09-08-self-functioning-production-pipeline-design.md`.
 
@@ -42,7 +42,7 @@ Goal: a trustworthy pipeline and a clean evaluation clock.
 - Get CI green: triage the 21 failures (retire dead court tests with a spec note, fix workflow drift, fix the `_clean` robustness bug, repair the broken tests).
 - Make the leak/parity tests and `v5_model_guard.py` **required checks** on any PR that touches features, models, or production.
 - Switch production probabilities to the leak-free baseline (Elo + surface, plus `fatigue_v1` only after it passes its own gate). Label the old workload features as retired.
-- **Seal a forward period** starting on the date this spec is approved. No model selection, tuning, or threshold choices may use results from inside it until the Phase 2 gate evaluation.
+- **Seal a forward period** starting on the approval date: **matches played on or after 2026-10-13 (UTC)** are sealed. No model selection, tuning, or threshold choices may use results from inside it until the Phase 2 gate evaluation.
 - **Start collecting market data at zero extra cost** (see §5.1 for the budget):
   - Kalshi trades and 1-minute bid/ask candlesticks for every settled tennis market, pulled once a day after the fact from Kalshi's free public endpoints.
   - Kalshi order-book depth snapshots, taken only inside the already-scheduled daily runs (no new jobs).

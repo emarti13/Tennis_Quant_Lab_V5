@@ -1,6 +1,6 @@
 # CLAUDE.md: working rules for AI agents in this repo
 
-Status: **DRAFT — pending user approval.**
+Status: Approved by the user in chat, 2026-10-12.
 
 ## Read first, in this order
 1. `PROJECT_MANDATE.md`: precedence is mandate > specs > plans > code > fixes.
