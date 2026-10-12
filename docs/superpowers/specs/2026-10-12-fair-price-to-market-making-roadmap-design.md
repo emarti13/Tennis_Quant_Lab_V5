@@ -43,9 +43,10 @@ Goal: a trustworthy pipeline and a clean evaluation clock.
 - Make the leak/parity tests and `v5_model_guard.py` **required checks** on any PR that touches features, models, or production.
 - Switch production probabilities to the leak-free baseline (Elo + surface, plus `fatigue_v1` only after it passes its own gate). Label the old workload features as retired.
 - **Seal a forward period** starting on the date this spec is approved. No model selection, tuning, or threshold choices may use results from inside it until the Phase 2 gate evaluation.
-- **Start collecting data that cannot be recovered later:**
-  - Kalshi tennis order books (top of book plus depth) and trades, on a fixed cadence, stored raw.
-  - Raw OddsPapi snapshots, including the **first available (opening) line** and the last pre-start line for each fixture.
+- **Start collecting market data at zero extra cost** (see §5.1 for the budget):
+  - Kalshi trades and 1-minute bid/ask candlesticks for every settled tennis market, pulled once a day after the fact from Kalshi's free public endpoints.
+  - Kalshi order-book depth snapshots, taken only inside the already-scheduled daily runs (no new jobs).
+  - Raw OddsPapi snapshots from the existing daily feed, keeping the **first seen (opening) line** and the last pre-start line for each fixture.
   - Match start/end timestamps from OddsPapi fixtures.
 
 **Gate 0:** CI green on main for 7 consecutive days; guard and parity checks required; collectors writing at least 95% of scheduled snapshots for 14 days.
@@ -111,10 +112,21 @@ Uses the order-book and trade data collected since Phase 0.
 | Fixture timestamps (start/true start/end) | OddsPapi | 2026 | Clock validation, rest hours |
 | Opening + closing lines | OddsPapi raw snapshots | Phase 0 (opening lines are not recoverable later) | Benchmark, CLV, early-decision inputs |
 | Historical closes + results | tennis-data.co.uk | have | Market efficiency history |
-| Kalshi order books + trades | Kalshi API | Phase 0 | Fill, toxicity, and MM simulation |
-| WTA 125 | none yet | gap | Undecided (user); not priced until a source exists and the user opts in |
+| Kalshi trades + 1-min bid/ask candles | Kalshi public API (free) | Phase 0, one daily pull after settlement | Fill, toxicity, and MM simulation |
+| Kalshi order-book depth | Kalshi public API (free) | Phase 0, inside already-scheduled runs only | Queue/depth context for MM |
+| Polymarket books/trades | Polymarket public API (free) | Deferred to Phase 4, only if tennis liquidity justifies it | Second MM venue |
+| WTA 125 | none yet | gap | Undecided (user); not priced until a free source exists and the user opts in |
 
 ITF is **out of scope** (user decision, 2026-10-12): not collected, modeled, or priced.
+
+### 5.1 Data cost rule (user decision, 2026-10-12)
+
+No paid data. Collection uses free public endpoints only, and its only cost is GitHub Actions minutes. The repo is private, so those minutes count against the 3,000/month budget.
+
+- Continuous order-book polling is **not** allowed: a 15-minute schedule alone would use about 2,900 minutes/month.
+- Trades and 1-minute candlesticks can be fetched after a market settles, so one daily job (target ≤ 3 min, about 90 min/month) captures the history needed for fill and adverse-selection research.
+- Depth snapshots ride along in jobs that already run. They add seconds, not new jobs.
+- Before building the collector, verify how long Kalshi keeps candlestick and trade history for settled markets. If it is shorter than a day, the pull moves into an existing earlier run.
 
 ## 6. Out of scope for this roadmap
 
@@ -125,5 +137,5 @@ ITF is **out of scope** (user decision, 2026-10-12): not collected, modeled, or 
 ## 7. Open questions for the user
 
 1. Bankroll and loss limits: deferred by the user until Phases 3 and 5 begin. Neither phase may start real stakes until they are set.
-2. Whether Polymarket / Novig order-book collection should start alongside Kalshi in Phase 0 or wait.
+2. Polymarket / Novig collection: answered. No paid data; Polymarket is deferred to Phase 4 and stays free-only (see §5.1). Novig has no known public data API and is not collected.
 3. WTA 125: undecided. ITF is excluded (see §5).

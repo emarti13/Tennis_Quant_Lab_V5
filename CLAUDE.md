@@ -35,6 +35,7 @@ The goal: a fair-price engine that beats the market, proven first as a taker and
 - PyPI is blocked in the chat workspace. Rely on the GitHub Actions CI loop for full tests. Actions log downloads are blocked, so read check-run annotations instead.
 - Actions budget: 3,000 minutes/month. Heavy or research workflows are `workflow_dispatch` only. No new scheduled jobs without a budget note.
 - Do not try to route around blocked network hosts.
+- No paid data sources. Collectors use free public endpoints and must fit the Actions budget (roadmap §5.1); no continuous polling jobs. ITF is out of scope.
 
 ## Repo map (main pieces)
 - Data: `bootstrap_v5_history.py` → `.v5_history_cache/`; `refresh_tennismylife_cloud.py`; `v5_results_ready/`.
