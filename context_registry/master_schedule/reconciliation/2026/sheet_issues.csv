@@ -897,3 +897,7 @@ row,field,severity,message
 441,Time Zone,info,Time zone empty
 442,Country,info,Country name empty (code given)
 442,Time Zone,info,Time zone empty
+249,State,warn,"Wuning: check State/region ('Jiangxi' not found; geocoder has: Guangdong, Shandong, Shanghai Municipality, Xinjiang, Zhejiang); location left empty until fixed"
+255,State,warn,"Wuning: check State/region ('Jiangxi' not found; geocoder has: Guangdong, Shandong, Shanghai Municipality, Xinjiang, Zhejiang); location left empty until fixed"
+390,State,warn,"Wuning: check State/region ('Jiangxi' not found; geocoder has: Guangdong, Shandong, Shanghai Municipality, Xinjiang, Zhejiang); location left empty until fixed"
+429,City,warn,Playford: location not found (no place named 'Playford' in AU; geocoder has: Pine Creek); correct City or type Latitude/Longitude/Time Zone in the sheet

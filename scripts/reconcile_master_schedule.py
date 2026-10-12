@@ -64,7 +64,9 @@ def main() -> int:
     editions, issues = load_master_schedule(args.sheet)
     cache_path = Path(args.geocode_cache)
     cache = pd.read_csv(cache_path, dtype=str, keep_default_na=False) if cache_path.exists() else pd.DataFrame(columns=["location_key", "results_json"])
-    editions, loc_issues = enrich_locations(editions, cache, load_countries())
+    alias_path = Path("context_registry/master_schedule/location_aliases.csv")
+    aliases = pd.read_csv(alias_path, dtype=str, keep_default_na=False) if alias_path.exists() else None
+    editions, loc_issues = enrich_locations(editions, cache, load_countries(), aliases=aliases)
     issues += loc_issues
     odds = oddspapi_tournaments(pd.read_csv(args.fixtures, low_memory=False), args.year)
     tml = tennismylife_tournaments(pd.read_csv(args.results, low_memory=False), args.year)

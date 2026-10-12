@@ -137,7 +137,7 @@ def test_location_choice_requires_country_and_flags_wrong_state():
         {"name": "Little Rock", "country_code": "GB", "admin1": "England", "latitude": 52.0, "longitude": -1.0},
     ]
     pick, status, note = pick_location(candidates, "US", "Arizona")
-    assert status == "state_mismatch" and pick["admin1"] == "Arkansas" and "Arizona" in note
+    assert status == "state_mismatch" and pick is None and "Arizona" in note   # wrong state: no guess
     assert pick_location(candidates, "US", "Arkansas")[1] == "matched"
     assert pick_location(candidates, "FR", "")[1] == "unresolved"   # never a result from another country
 
@@ -161,4 +161,29 @@ def test_sheet_location_wins_and_missing_location_is_reported(tmp_path):
     assert h.loc["Hersonissos 1", "location_source"] == "geocoded" and h.loc["Hersonissos 1", "region"] == "Crete"
     assert h.loc["Hersonissos 1", "country_name"] == "Greece"
     assert h.loc["Nowhere", "location_source"] == "missing" and h.loc["Nowhere", "time_zone"] == ""
-    assert any("Location not found" in i.message for i in issues)
+    assert any("location not found" in i.message for i in issues)
+
+
+def test_location_rules_real_places_largest_town_and_no_guess():
+    from v5_tournament_identity import pick_location
+
+    def c(name, admin1, pop, lat, lon, code="PPL"):
+        return {"name": name, "country_code": "MX", "admin1": admin1, "population": pop,
+                "latitude": lat, "longitude": lon, "feature_code": code}
+
+    # Official name extends the city's name; tiny same-named villages lose to the real city.
+    pick, status, _ = pick_location([c("Acapulco de Juárez", "Guerrero", 658609, 16.85, -99.91),
+                                     c("Acapulco", "Chiapas", 185, 16.11, -91.51)], "MX", "", query="Acapulco")
+    assert status == "matched" and pick["admin1"] == "Guerrero"
+    # Airports are never a city's location.
+    pick, status, _ = pick_location([c("Los Cabos International Airport", "Baja California Sur", None, 23.15, -109.72, "AIRP")],
+                                    "MX", "", query="Los Cabos")
+    assert pick is None and status == "unresolved"
+    # Several entries within 50 km are one place (Hong Kong-style duplicates).
+    pick, status, _ = pick_location([c("Hong Kong", None, 7396076, 22.28, 114.17), c("Hong Kong", None, 1195529, 22.27, 114.18)],
+                                    "MX", "", query="Hong Kong")
+    assert status == "matched"
+    # Same-named places far apart with no clear largest: left empty, never guessed.
+    pick, status, _ = pick_location([c("Jingshan", "Anhui", None, 31.3, 118.4), c("Jingshan", "Beijing", None, 39.9, 116.4)],
+                                    "MX", "", query="Jingshan")
+    assert pick is None and status == "ambiguous"
