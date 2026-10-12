@@ -22,6 +22,14 @@ Past fixes patched individual names, and the next year produced new mismatches.
 
 ## 2. Design
 
+### 2.0 Source of truth (user decision, 2026-10-12)
+
+The **official ATP and WTA calendars** are the source of truth for which editions exist,
+their dates, category, city and country. The user is building the master schedule from
+them (sheet started 2026-10-12: ATP tour, WTA tour, WTA 125). TennisMyLife and OddsPapi
+never create or change an edition. They are reconciled against it through the crosswalks
+below, and anything that does not reconcile is listed for review.
+
 ### 2.1 Two canonical levels, owned by the master schedule
 
 - **Event:** a tournament that recurs across years (for example "the Brisbane men's
@@ -121,8 +129,10 @@ four current lookups are removed in the same change (`v5_tournament_authority`,
 
 ## 4. Open questions for the user
 
-1. Is the 2026 calendar source your sheet, the official ATP/WTA calendars, or both
-   (sheet wins)?
+1. ~~Calendar source~~ Answered: official ATP/WTA calendars (§2.0). **Challengers:** the
+   started sheet has no ATP Challenger events, but production prices many Challenger
+   matches. Add the official ATP Challenger calendar to the master schedule, or stop
+   pricing Challengers until it is added?
 2. Should exhibitions and team events (United Cup, Laver Cup, Davis Cup) get editions,
    or be ignored by default?
 3. WTA 125 is in your sheet. The roadmap lists it as undecided for pricing. Should it be
