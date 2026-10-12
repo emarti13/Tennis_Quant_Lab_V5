@@ -3,6 +3,7 @@ from pathlib import Path
 import json, math, re, unicodedata
 import numpy as np
 import pandas as pd
+from v5_full_context_live import predict_with_production_candidate
 
 BASE=Path(__file__).resolve().parents[1]
 H=BASE/"v5_daily_ready"/"market_snapshot_history.csv"
@@ -93,14 +94,49 @@ for fid,g in m.groupby("fid"):
     if cn(r1.get("selection"))!=cn(p1):
       q=1-q if q is not None else None
     bundle=cand[tour]
-    direct=contribs(r1,bundle.get("direct_context_model") or {})
-    residual=contribs(r1,bundle.get("residual_model") or {})
+
+    # Reconstruct the exact deterministic player-A orientation used by live production.
+    rp1=str(r1.get("resolved_player1") or p1)
+    rp2=str(r1.get("resolved_player2") or p2)
+    p1_is_a = rp1.casefold() <= rp2.casefold()
+    sign = 1.0 if p1_is_a else -1.0
+    s1=num(r1,"serve_probability_p1"); s2=num(r1,"serve_probability_p2")
+    ep=num(r1,"elo_probability_p1")
+    live_input={}
+    for col in r1.index:
+        if str(col).startswith("ctx_"):
+            live_input[str(col)]=num(r1,col)
+    if s1 is not None and s2 is not None:
+        live_input["x_sr_a"]=sign*(logit(s1)-logit(s2))
+    if ep is not None:
+        live_input["x_elo_a"]=sign*logit(ep)
+    baseline_a=None if p_base is None else (p_base if p1_is_a else 1-p_base)
+    recomputed={}
+    recomputed_p1=None
+    if baseline_a is not None and "x_sr_a" in live_input and "x_elo_a" in live_input:
+        try:
+            recomputed=predict_with_production_candidate(
+                cand,tour=tour,baseline_probability=baseline_a,
+                signed_features=pd.DataFrame([live_input])
+            )
+            pa=float(recomputed["probability"])
+            recomputed_p1=pa if p1_is_a else 1-pa
+        except Exception as exc:
+            recomputed={"error":f"{type(exc).__name__}:{exc}"}
+
+    direct=contribs(pd.Series(live_input),bundle.get("direct_context_model") or {})
+    residual=contribs(pd.Series(live_input),bundle.get("residual_model") or {})
     rows.append({
       "fixture_id":fid,"start_time_utc":str(r1.get("start_time_utc")),"tournament":str(r1.get("tournament")),
       "tour":tour,"player1":p1,"player2":p2,"winner":winner,"player1_won":y,
       "market_p1":q,"accepted_baseline_p1":p_base,"elo_p1":p_elo,"full_context_p1":p_ctx,"final_v5_p1":p_final,
       "selected_candidate":str(r1.get("selected_model_candidate") or ""),
       "context_fallback_reason":str(r1.get("context_fallback_reason") or ""),
+      "resolved_player1":rp1,"resolved_player2":rp2,"player1_is_a":p1_is_a,
+      "x_sr_a_rebuilt":live_input.get("x_sr_a"),"x_elo_a_rebuilt":live_input.get("x_elo_a"),
+      "recomputed_final_p1":recomputed_p1,
+      "recomputed_components":recomputed.get("component_probabilities") if isinstance(recomputed,dict) else None,
+      "recompute_error":recomputed.get("error") if isinstance(recomputed,dict) else None,
       "max_abs_direct_z":max([abs(x["z"]) for x in direct],default=0),
       "max_abs_residual_z":max([abs(x["z"]) for x in residual],default=0),
       "top_direct_contributions":direct[:8],
@@ -116,12 +152,12 @@ def metrics(frame,col):
     return {"n":int(ok.sum()),"brier":float(((p-yy)**2).mean()),"accuracy":float(((p>=.5)==(yy>=.5)).mean())}
 
 report={"n":int(len(df)),"overall":{},"cutoffs":{},"extremes":[],"candidate":{}}
-for col in ["market_p1","accepted_baseline_p1","elo_p1","full_context_p1","final_v5_p1"]:
+for col in ["market_p1","accepted_baseline_p1","elo_p1","full_context_p1","final_v5_p1","recomputed_final_p1"]:
     report["overall"][col]=metrics(df,col)
 starts=pd.to_datetime(df["start_time_utc"],errors="coerce",utc=True)
 for cut in ["2026-09-21","2026-09-28","2026-10-01","2026-10-05","2026-10-07"]:
     sub=df[starts>=pd.Timestamp(cut,tz="UTC")]
-    report["cutoffs"][cut]={col:metrics(sub,col) for col in ["market_p1","accepted_baseline_p1","elo_p1","full_context_p1","final_v5_p1"]}
+    report["cutoffs"][cut]={col:metrics(sub,col) for col in ["market_p1","accepted_baseline_p1","elo_p1","full_context_p1","final_v5_p1","recomputed_final_p1"]}
     report["cutoffs"][cut]["n"]=int(len(sub))
 
 df["gap"]=(pd.to_numeric(df["final_v5_p1"],errors="coerce")-pd.to_numeric(df["market_p1"],errors="coerce")).abs()
@@ -130,7 +166,9 @@ for _,r in df.sort_values("gap",ascending=False).head(30).iterrows():
     for k in [
       "fixture_id","start_time_utc","tournament","tour","player1","player2","winner","player1_won",
       "market_p1","accepted_baseline_p1","elo_p1","full_context_p1","final_v5_p1","gap",
-      "selected_candidate","context_fallback_reason","max_abs_direct_z","max_abs_residual_z",
+      "selected_candidate","context_fallback_reason","resolved_player1","resolved_player2","player1_is_a",
+      "x_sr_a_rebuilt","x_elo_a_rebuilt","recomputed_final_p1","recomputed_components","recompute_error",
+      "max_abs_direct_z","max_abs_residual_z",
       "top_direct_contributions","top_residual_contributions"
     ]:
         v=r[k]
