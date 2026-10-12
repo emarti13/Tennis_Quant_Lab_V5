@@ -1,3 +1,7 @@
+> **Superseded (2026-10-12).** Court-condition / CourtSpeed work is retired; its code was removed in
+> the Step 1 repo cleanup. Surface and court information come from the master tennis schedule
+> (see `docs/superpowers/plans/2026-10-12-ground-up-rebuild-plan.md`, Step 2). Kept for history only.
+
 # External Court Conditions Data Notes
 
 Initial source snapshot fields are derived from CourtSpeed.com's published tournament-year tables as of 2026-08-27.

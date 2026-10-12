@@ -24,4 +24,4 @@ jobs:
       - name: Run historical validation unit tests
         run: python -m unittest discover -s tests -p 'test_historical_validation_modules.py' -v
       - name: Compile historical modules
-        run: python -m py_compile historical_odds_normalizer.py historical_market_mapper.py historical_fixture_matcher.py historical_state_replay.py historical_backtest_engine.py historical_v5_replay.py
+        run: python -m py_compile historical_odds_normalizer.py historical_market_mapper.py historical_fixture_matcher.py historical_state_replay.py historical_backtest_engine.py
