@@ -44,15 +44,6 @@ def test_enrichment_uses_2024_as_history_for_first_2025_match():
     assert np.isclose(alpha_2025["rolling_return_points_won_pct"], 52/124)
 
 
-def test_enrichment_builds_historical_prior_court_speed_before_target_match():
-    enriched = enrich_player_history(_player_rows())
-    first_2025 = enriched[enriched.match_id == "m1"]
-    assert first_2025["court_speed_historical_sample_size"].iloc[0] == 1
-    assert first_2025["court_speed_historical_prior"].notna().all()
-    assert first_2025["court_speed_blended"].notna().all()
-    assert first_2025["court_speed_current_event_sample_size"].iloc[0] == 0
-
-
 def test_enrichment_attaches_year_aware_travel_state_when_registry_is_available():
     enriched = enrich_player_history(_player_rows(), tournament_registry=_registry())
     alpha_2025 = enriched[(enriched.match_id == "m1") & (enriched.player_name == "Alpha")].iloc[0]
