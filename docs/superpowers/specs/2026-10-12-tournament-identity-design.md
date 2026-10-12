@@ -1,7 +1,7 @@
 # Tournament identity across sources
 
 Date: 2026-10-12
-Status: **DRAFT — pending user approval**
+Status: **Approved by the user in chat, 2026-10-12.**
 First implementation: `v5_tournament_identity.py` + `scripts/reconcile_master_schedule.py`
 (read-only reconciliation; report in `context_registry/master_schedule/reconciliation/2026/REPORT.md`).
 Category: Production Reliability (data layer). Serves roadmap Phase 0; prerequisite for

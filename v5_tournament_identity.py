@@ -210,6 +210,11 @@ def load_master_schedule(path: str | Path) -> tuple[pd.DataFrame, list[SheetIssu
             "har_tru": flags["har_tru"],
             "day_notes": "; ".join(day_notes),
             "notes_raw": notes,
+            # Location values typed into the sheet always win over looked-up ones.
+            "sheet_latitude": r.get("Latitude", "").strip(),
+            "sheet_longitude": r.get("Longitude", "").strip(),
+            "sheet_altitude_m": r.get("Altitude (m)", "").strip(),
+            "sheet_time_zone": r.get("Time Zone", "").strip(),
         })
     out = pd.DataFrame(rows)
     dup = out[out.duplicated("edition_key", keep=False)]
@@ -399,3 +404,90 @@ def player_agreement(odds: pd.DataFrame, tml: pd.DataFrame, odds_matches: pd.Dat
             "share_found": round(found / len(tp), 3) if tp else None,
         })
     return pd.DataFrame(rows)
+
+
+# ---------------------------------------------------------------- locations
+def load_countries(path: str | Path = "context_registry/countries.csv") -> pd.DataFrame:
+    return pd.read_csv(path, dtype=str, keep_default_na=False)
+
+
+def country_iso2(row: pd.Series, countries: pd.DataFrame) -> str:
+    """ISO 3166 alpha-2 from the sheet's Country Code (IOC style, e.g. GER) or Country name."""
+    code = str(row.get("country_code") or "").strip().upper()
+    if code:
+        hit = countries[countries["ioc"] == code]
+        if len(hit):
+            return hit["iso2"].iloc[0]
+    name = fold(row.get("country"))
+    hit = countries[countries["name"].map(fold) == name]
+    return hit["iso2"].iloc[0] if len(hit) else ""
+
+
+def location_key(city: str, state: str, iso2: str) -> str:
+    return f"{fold(city)}|{fold(state)}|{iso2}"
+
+
+def pick_location(candidates: list[dict], iso2: str, state: str) -> tuple[dict | None, str, str]:
+    """Choose a geocoder result: it must be in the sheet's country; the sheet's state, when
+    given, must match the result's first-level region. Returns (result, status, note).
+    status: 'matched' | 'state_mismatch' (country right, state not found) | 'unresolved'."""
+    in_country = [c for c in candidates if str(c.get("country_code", "")).upper() == iso2]
+    if not in_country:
+        return None, "unresolved", f"no result in country {iso2 or '?'}"
+    if state:
+        same_state = [c for c in in_country if fold(c.get("admin1")) == fold(state)]
+        if same_state:
+            return same_state[0], "matched", ""
+        found = ", ".join(sorted({str(c.get("admin1")) for c in in_country if c.get("admin1")}))
+        return in_country[0], "state_mismatch", f"sheet state '{state}' not found; geocoder has: {found}"
+    return in_country[0], "matched", ""
+
+
+def _haversine_km(lat1, lon1, lat2, lon2) -> float:
+    import math
+    r = 6371.0
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dp, dl = p2 - p1, math.radians(lon2 - lon1)
+    a = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
+    return 2 * r * math.asin(math.sqrt(a))
+
+
+def enrich_locations(editions: pd.DataFrame, cache: pd.DataFrame, countries: pd.DataFrame,
+                     max_disagreement_km: float = 25.0) -> tuple[pd.DataFrame, list[SheetIssue]]:
+    """Add latitude, longitude, altitude_m, time_zone (IANA) and country fields.
+
+    Sheet values win; otherwise the cached geocoder result is used. Every row gets a
+    location_source ('sheet', 'geocoded' or 'missing') and a location_status. Nothing is
+    guessed: an unresolved location stays empty and is reported.
+    """
+    import json
+    by_key = {r["location_key"]: json.loads(r["results_json"] or "[]") for _, r in cache.iterrows()}
+    out = editions.copy()
+    issues: list[SheetIssue] = []
+    cols = {k: [] for k in ("country_iso2", "country_name", "latitude", "longitude", "altitude_m",
+                            "time_zone", "region", "location_source", "location_status")}
+    for _, e in out.iterrows():
+        iso2 = country_iso2(e, countries)
+        name = countries.loc[countries["iso2"] == iso2, "name"].iloc[0] if iso2 else ""
+        pick, status, note = pick_location(by_key.get(location_key(e["city"], e["state"], iso2), []), iso2, e["state"])
+        sheet_vals = {k: str(e.get(f"sheet_{k}", "")).strip() for k in ("latitude", "longitude", "altitude_m", "time_zone")}
+        lat = float(sheet_vals["latitude"]) if sheet_vals["latitude"] else (pick or {}).get("latitude")
+        lon = float(sheet_vals["longitude"]) if sheet_vals["longitude"] else (pick or {}).get("longitude")
+        alt = float(sheet_vals["altitude_m"]) if sheet_vals["altitude_m"] else (pick or {}).get("elevation")
+        tz = sheet_vals["time_zone"] or (pick or {}).get("timezone") or ""
+        source = "sheet" if sheet_vals["latitude"] and sheet_vals["longitude"] else ("geocoded" if pick else "missing")
+        if pick is None and source != "sheet":
+            issues.append(SheetIssue(int(e["sheet_row"]), "City", "warn", f"Location not found ({note}); fill Latitude/Longitude/Time Zone in the sheet"))
+        elif status == "state_mismatch":
+            issues.append(SheetIssue(int(e["sheet_row"]), "State", "warn", f"Check State: {note}"))
+        if source == "sheet" and pick is not None:
+            d = _haversine_km(lat, lon, pick["latitude"], pick["longitude"])
+            if d > max_disagreement_km:
+                issues.append(SheetIssue(int(e["sheet_row"]), "Latitude", "warn", f"Sheet location is {d:.0f} km from the geocoded city; check"))
+        for k, v in (("country_iso2", iso2), ("country_name", e["country"] or name), ("latitude", lat), ("longitude", lon),
+                     ("altitude_m", alt), ("time_zone", tz), ("region", (pick or {}).get("admin1", "")),
+                     ("location_source", source), ("location_status", "sheet" if source == "sheet" else status)):
+            cols[k].append(v)
+    for k, v in cols.items():
+        out[k] = v
+    return out, issues

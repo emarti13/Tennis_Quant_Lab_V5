@@ -127,3 +127,38 @@ def test_same_event_listed_under_two_tours_is_flagged_but_weekly_events_are_not(
     ])
     flagged = {i.row for i in issues if i.message.startswith("Possible duplicate")}
     assert flagged == {2, 3}
+
+
+def test_location_choice_requires_country_and_flags_wrong_state():
+    from v5_tournament_identity import pick_location
+
+    candidates = [
+        {"name": "Little Rock", "country_code": "US", "admin1": "Arkansas", "latitude": 34.7, "longitude": -92.3},
+        {"name": "Little Rock", "country_code": "GB", "admin1": "England", "latitude": 52.0, "longitude": -1.0},
+    ]
+    pick, status, note = pick_location(candidates, "US", "Arizona")
+    assert status == "state_mismatch" and pick["admin1"] == "Arkansas" and "Arizona" in note
+    assert pick_location(candidates, "US", "Arkansas")[1] == "matched"
+    assert pick_location(candidates, "FR", "")[1] == "unresolved"   # never a result from another country
+
+
+def test_sheet_location_wins_and_missing_location_is_reported(tmp_path):
+    import json
+    from v5_tournament_identity import enrich_locations, load_countries, location_key
+
+    eds, _ = _sheet(tmp_path, [
+        {**_ch("3/2/2026", "3/8/2026", "Hersonissos 1", "Hersonissos"), "Country Code": "GRE"},
+        {**_ch("3/9/2026", "3/15/2026", "Nowhere", "Nowhereville"), "Country Code": "GRE"},
+    ])
+    eds.loc[eds.tournament_name == "Hersonissos 1", "sheet_time_zone"] = "Europe/Athens"
+    cache = pd.DataFrame([{
+        "location_key": location_key("Hersonissos", "", "GR"),
+        "results_json": json.dumps([{"name": "Hersonissos", "country_code": "GR", "admin1": "Crete",
+                                     "latitude": 35.3, "longitude": 25.37, "elevation": 107, "timezone": "Europe/Athens"}]),
+    }])
+    out, issues = enrich_locations(eds, cache, load_countries())
+    h = out.set_index("tournament_name")
+    assert h.loc["Hersonissos 1", "location_source"] == "geocoded" and h.loc["Hersonissos 1", "region"] == "Crete"
+    assert h.loc["Hersonissos 1", "country_name"] == "Greece"
+    assert h.loc["Nowhere", "location_source"] == "missing" and h.loc["Nowhere", "time_zone"] == ""
+    assert any("Location not found" in i.message for i in issues)

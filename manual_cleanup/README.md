@@ -15,9 +15,18 @@ local clone with the command shown.
 |---|---|---|
 | `docs/roadmap-fair-price-to-market-making` | Fully merged into `main` (PR #38) | 2026-10-12 |
 | `fix/retired-infer-surface-imports` | Fully merged into `main` (PR #37) | 2026-10-12 |
+| `fix/phase0-ci-green-and-season-rollover` | Merged (PR #39) | 2026-10-12 |
+| `docs/rebuild-plan-and-tournament-identity` | Merged (PR #40) | 2026-10-12 |
+| `feat/master-schedule-reconciliation` | Merged into #39's branch (PR #41), then into `main` via #43 | 2026-10-12 |
+| `repair/step1-repo-cleanup` | Merged into #39's branch (PR #42), then into `main` via #43 | 2026-10-12 |
+| `repair/land-step1-and-schedule-on-main` | Merged (PR #43) | 2026-10-12 |
+| `claude/bootstrap-v5-history-setup-3pxlyr` | Agent session branch; all its work reached `main` via #39–#43 | 2026-10-12 |
 
 ```bash
-git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-infer-surface-imports
+git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-infer-surface-imports \
+  fix/phase0-ci-green-and-season-rollover docs/rebuild-plan-and-tournament-identity \
+  feat/master-schedule-reconciliation repair/step1-repo-cleanup \
+  repair/land-step1-and-schedule-on-main claude/bootstrap-v5-history-setup-3pxlyr
 ```
 
 ### Pending your decision (not yet recommended for deletion)
@@ -31,6 +40,6 @@ way (it looks like a separate project).
 
 ## Session branches after their PRs merge
 
-Once a PR is merged, its branch can be deleted with GitHub's "Delete branch" button on the PR.
-Open as of 2026-10-12: #39, #40, #41 and the Step 1 cleanup PR, plus the agent session branch
-`claude/bootstrap-v5-history-setup-3pxlyr` (all of its work was split into #39–#41).
+Once a PR is merged, its branch can be deleted on a computer browser: open the PR, scroll to
+the bottom, click "Delete branch" (the GitHub phone app does not show this button). Agents
+add each merged branch to the table above.

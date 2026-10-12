@@ -25,6 +25,8 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from v5_tournament_identity import (  # noqa: E402
+    enrich_locations,
+    load_countries,
     load_master_schedule,
     match_source,
     oddspapi_tournaments,
@@ -52,12 +54,18 @@ def main() -> int:
     ap.add_argument("--fixtures", default="oddspapi_registry/fixtures.csv")
     ap.add_argument("--results", default="v5_results_ready/tennismylife_results.csv")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--geocode-cache", default="context_registry/master_schedule/geocode_cache.csv",
+                    help="Filled by scripts/geocode_master_schedule.py; missing cache means locations stay empty.")
     args = ap.parse_args()
 
     out = Path(args.out or f"context_registry/master_schedule/reconciliation/{args.year}")
     out.mkdir(parents=True, exist_ok=True)
 
     editions, issues = load_master_schedule(args.sheet)
+    cache_path = Path(args.geocode_cache)
+    cache = pd.read_csv(cache_path, dtype=str, keep_default_na=False) if cache_path.exists() else pd.DataFrame(columns=["location_key", "results_json"])
+    editions, loc_issues = enrich_locations(editions, cache, load_countries())
+    issues += loc_issues
     odds = oddspapi_tournaments(pd.read_csv(args.fixtures, low_memory=False), args.year)
     tml = tennismylife_tournaments(pd.read_csv(args.results, low_memory=False), args.year)
     om = match_source(odds, editions)
@@ -93,6 +101,8 @@ def main() -> int:
          f"- Player check (editions matched by both sources): {len(pa)} editions, median "
          f"{pa.share_found.median():.0%} of TennisMyLife players found in OddsPapi; {len(low)} below {AGREEMENT_REVIEW_BELOW:.0%}.",
          f"- Past editions (ended before {args.as_of}) with no match from either source: {len(unseen)}.",
+         f"- Locations: {editions.location_source.value_counts().to_dict()}; time zone filled for "
+         f"{(editions.time_zone != '').sum()} of {len(editions)} editions.",
          "", "## Sheet issues (counts)", "",
          _table(pd.DataFrame([{"severity": k[0], "issue": k[1], "rows": v} for k, v in sev.most_common()]), ["severity", "issue", "rows"]),
          "Details per row: `sheet_issues.csv`.", "",
@@ -109,6 +119,11 @@ def main() -> int:
          _table(surf, ["source_id", "source_name", "first_date", "source_surface", "sheet_row", "sheet_name", "sheet_surface"]),
          f"### Past editions no source matched (ended before {args.as_of})", "",
          _table(unseen, ["sheet_row", "tour_family", "tournament_name", "city", "start_date", "status"]),
+         "### Locations to check", "",
+         "Coordinates, altitude and time zone come from Open-Meteo geocoding unless the sheet has them. "
+         "Fix a row by correcting City/State/Country or by typing Latitude, Longitude and Time Zone into the sheet.", "",
+         _table(pd.DataFrame([i.__dict__ for i in loc_issues]) if loc_issues else pd.DataFrame(),
+                ["row", "field", "message"]),
          "### Cancelled in the sheet", "",
          "Check against the OddsPapi list above: a cancelled event with OddsPapi fixtures needs a decision.", "",
          _table(cancelled_seen, ["sheet_row", "tournament_name", "city", "start_date"]),
