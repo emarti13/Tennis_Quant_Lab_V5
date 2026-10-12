@@ -33,14 +33,15 @@ The goal: a fair-price engine that beats the market, proven first as a taker and
 
 ## Environment notes
 - PyPI is blocked in the chat workspace. Rely on the GitHub Actions CI loop for full tests. Actions log downloads are blocked, so read check-run annotations instead.
-- Actions budget: 3,000 minutes/month. Heavy or research workflows are `workflow_dispatch` only. No new scheduled jobs without a budget note.
+- Actions budget: 3,000 minutes/month. Heavy or research workflows are `workflow_dispatch` only. No new scheduled jobs without a budget entry in `v5_actions_budget.py` (`SCHEDULED_WORKFLOWS`; a test enforces it).
+- Pushes made by workflows with the default `GITHUB_TOKEN` do not trigger other workflows. Do not design chains that rely on a bot commit firing a `push:` workflow.
 - Do not try to route around blocked network hosts.
 - No paid data sources. Collectors use free public endpoints and must fit the Actions budget (roadmap §5.1); no continuous polling jobs. ITF is out of scope.
 
 ## Repo map (main pieces)
-- Data: `bootstrap_v5_history.py` → `.v5_history_cache/`; `refresh_tennismylife_cloud.py`; `v5_results_ready/`.
-- Features: `v5_fatigue_features.py` (leak-free, research candidate); `v5_workload_features.py` (**leaky, being retired**).
+- Data: `bootstrap_v5_history.py` → `.v5_history_cache/` (history through last year); `refresh_tennismylife_cloud.py` (current season); `v5_results_ready/`. Season years and file names come only from `v5_season_files.py`; never hard-code a year.
+- Features: `v5_fatigue_features.py` (leak-free, research candidate; in PR #36, not yet on `main`); `v5_workload_features.py` (**leaky, being retired**).
 - Warehouse/production: `build_v5_context_warehouse.py`, `v5_daily_batch.py`, `v5_interactive_production.py`, `v5_official_performance.py`.
-- Safety: `v5_model_guard.py`, `v5_fatigue_validation.py`.
+- Safety: `v5_model_guard.py`, `v5_fatigue_validation.py` (both in PR #36, not yet on `main`).
 - Ledgers: `v5_daily_ready/official_recommendations.csv` (frozen; never rewrite), `market_snapshot_history.csv` (append-only).
 - Experiments are recorded in `docs/experiments/YYYY-MM-DD-*.md`.

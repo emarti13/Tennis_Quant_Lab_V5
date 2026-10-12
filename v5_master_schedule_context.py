@@ -31,6 +31,29 @@ def _tour_mask(schedule: pd.DataFrame, provider_tournament: str, provider_tour: 
 
 
 def resolve_master_schedule_context(provider_tournament, provider_tour, *, year=2026, schedule_path=None):
+    found = _resolve_by_name(provider_tournament, provider_tour, year=year, schedule_path=schedule_path)
+    if found is not None:
+        return found
+    # Provider labels often name the city (WTA Sao Paulo) while the schedule uses
+    # the event name (SP Open). The tournament authority is the identity source,
+    # so retry with its official name rather than guessing.
+    official = _authority_name(provider_tournament, provider_tour, year)
+    if official and _event_core(official) != _event_core(provider_tournament):
+        return _resolve_by_name(official, provider_tour, year=year, schedule_path=schedule_path)
+    return None
+
+
+def _authority_name(provider_tournament, provider_tour, year):
+    try:
+        from v5_tournament_authority import resolve_authority
+        row = resolve_authority(provider_tournament, int(year), tour=provider_tour)
+    except Exception:
+        return None
+    name = (row or {}).get("Tournament Name")
+    return str(name) if _has(name) else None
+
+
+def _resolve_by_name(provider_tournament, provider_tour, *, year=2026, schedule_path=None):
     path = Path(schedule_path or Path(__file__).parent / "context_registry" / "tennis_master_schedule.csv")
     if not path.exists() or path.stat().st_size == 0: return None
     schedule = pd.read_csv(path, low_memory=False)

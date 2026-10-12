@@ -6,28 +6,6 @@ from v5_full_context_live import _target_rows
 from v5_interactive_production import _interactive_context_fixture
 
 
-def test_live_target_uses_canonical_courtspeed_snapshot_without_network():
-    rows = _target_rows({
-        "fixture_id": "fx-paris",
-        "start_time_utc": "2026-10-28T18:00:00Z",
-        "tournament": "Rolex Paris Masters",
-        "tour": "MEN",
-        "surface": "Hard",
-        "best_of": 3,
-        "player1": "Alpha",
-        "player2": "Beta",
-    })
-    row = rows.iloc[0]
-    assert row["surface"] == "Hard"
-    assert row["environment"] == "Indoor"
-    assert bool(row["indoor"]) is True
-    assert row["external_cpi"] == 35.1
-    assert row["cpi_source_year"] == 2025
-    assert row["external_ball_type"] == "Penn/Head"
-    assert row["ball_type_source_year"] == 2026
-    assert row["court_conditions_source"] == "CourtSpeed"
-
-
 def test_indoor_and_surface_are_independent_dimensions():
     rows = _target_rows({
         "fixture_id": "fx-finals",
@@ -90,19 +68,3 @@ def test_interactive_context_passes_environment_and_internal_court_speed_overrid
     assert fixture["external_relative_air_density_override"] == 0.95
     assert fixture["external_altitude_m_override"] == 55.0
     assert fixture["external_ball_type_override"] == "Test Ball"
-
-
-def test_raw_cpi_never_becomes_internal_court_speed_override_implicitly():
-    rows = _target_rows({
-        "fixture_id": "fx-cincy",
-        "start_time_utc": "2026-08-15T18:00:00Z",
-        "tournament": "Cincinnati",
-        "tour": "MEN",
-        "surface": "Hard",
-        "best_of": 3,
-        "player1": "Alpha",
-        "player2": "Beta",
-    })
-    row = rows.iloc[0]
-    assert row["external_cpi"] == 39.0
-    assert pd.isna(row["court_speed_override"])

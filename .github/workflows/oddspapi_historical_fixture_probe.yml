@@ -2,11 +2,6 @@ name: OddsPapi Historical Fixture Probe
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/oddspapi_historical_fixture_probe.yml"
-
 permissions:
   contents: write
 

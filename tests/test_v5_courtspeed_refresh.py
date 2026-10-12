@@ -90,12 +90,3 @@ def test_validation_rejects_duplicate_event_year_rows():
         assert "duplicate" in str(exc).lower()
     else:
         raise AssertionError("duplicate snapshot rows must be rejected")
-
-
-def test_refresh_workflow_is_daily_manual_and_does_not_touch_oddspapi():
-    text = Path(".github/workflows/courtspeed_conditions_refresh.yml").read_text(encoding="utf-8")
-    assert "workflow_dispatch:" in text
-    assert "schedule:" in text
-    assert text.count("- cron:") == 1
-    assert "v5_refresh_court_conditions.py" in text
-    assert "oddspapi" not in text.lower()

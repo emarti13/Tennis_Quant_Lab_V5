@@ -1,14 +1,6 @@
 name: V5 Context Join Keys
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'diagnose_context_join_keys.py'
-      - 'build_v5_context_matchups.py'
-      - 'tests/test_v5_context_walkforward_dates.py'
-      - 'tests/test_v5_context_timezone_keys.py'
-      - '.github/workflows/v5_context_join_keys.yml'
   workflow_dispatch:
 
 jobs:
