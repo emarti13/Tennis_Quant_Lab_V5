@@ -1,6 +1,7 @@
 # Repository inventory (2026-10-12)
 
-Facts only. The plan that acts on this is
+Facts as of 2026-10-12, before Step 1. Step 1 removals and the re-run graph:
+`docs/experiments/2026-10-12-step1-repo-cleanup.md` (PR #42). The plan that acts on this is
 `docs/superpowers/plans/2026-10-12-ground-up-rebuild-plan.md`.
 
 ## Method
@@ -361,4 +362,4 @@ Size, then the modules and workflows that reference the file by name.
   pipeline, decision feed, official top-play contract, schedule/context persistence,
   market-aware decision system, preflight audit) describe the current code and predate the roadmap.
 - **Plans:** 14 in `docs/superpowers/plans/`, one per spec above, all September.
-- **Experiments:** 6 in `docs/experiments/`; one (`2026-09-13-court-conditions-pr-note.md`) is empty.
+- **Experiments:** 6 in `docs/experiments/`. (Correction: `2026-09-13-court-conditions-pr-note.md` is not empty; it is a one-line note with no trailing newline.)
