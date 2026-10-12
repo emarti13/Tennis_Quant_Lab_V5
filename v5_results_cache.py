@@ -7,17 +7,27 @@ from pathlib import Path
 
 import pandas as pd
 
+from v5_season_files import recent_season_years, season_file_names
+
 
 REQUIRED_COLUMNS = {"winner_name", "loser_name", "tourney_date", "score"}
-DEFAULT_RESULT_FILES = (
-    "2026.csv",
-    "2026_atp_quali.csv",
-    "2026_challenger.csv",
-    "2026_wta.csv",
+ONGOING_RESULT_FILES = (
     "ongoing_tourneys.csv",
     "challenger_ongoing_tourneys.csv",
     "wta_ongoing_tourneys.csv",
 )
+
+
+def default_result_files(now=None) -> tuple[str, ...]:
+    """Season files kept by the refresh (current year, plus last year in early January)."""
+    season = [
+        name
+        for year in recent_season_years(now)
+        for name in season_file_names(year).values()
+    ]
+    return (*season, *ONGOING_RESULT_FILES)
+
+
 DEFAULT_CACHE = Path("v5_results_ready/tennismylife_results.csv")
 DEFAULT_STATUS = Path("v5_results_ready/results_status.json")
 
@@ -102,7 +112,7 @@ def main() -> int:
     parser.add_argument("--source-success-utc", default=None)
     args = parser.parse_args()
     base = Path(args.dir)
-    files = [base / name for name in DEFAULT_RESULT_FILES]
+    files = [base / name for name in default_result_files()]
     payload = build_results_cache(
         files,
         base / DEFAULT_CACHE,

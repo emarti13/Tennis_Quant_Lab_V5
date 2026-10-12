@@ -115,7 +115,13 @@ def test_result_file_drives_tour_without_guessing_from_player_names():
 
 
 def test_default_history_includes_two_full_prior_seasons_before_fit_year():
-    assert DEFAULT_HISTORY_YEARS == (2023, 2024, 2025, 2026)
+    from datetime import datetime, timezone
+    from v5_season_files import current_season_year, rolling_history_years
+
+    assert DEFAULT_HISTORY_YEARS == rolling_history_years(4)
+    assert DEFAULT_HISTORY_YEARS[-1] == current_season_year()
+    assert rolling_history_years(4, now=datetime(2026, 10, 12, tzinfo=timezone.utc)) == (2023, 2024, 2025, 2026)
+    assert rolling_history_years(4, now=datetime(2027, 1, 2, tzinfo=timezone.utc)) == (2024, 2025, 2026, 2027)
 
 
 def test_history_target_resolution_includes_requested_seasons_all_tours():

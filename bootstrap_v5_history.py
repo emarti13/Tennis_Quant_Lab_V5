@@ -1,19 +1,22 @@
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import tempfile
-from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
 
 import pandas as pd
 import requests
 
+from v5_season_files import HISTORY_START_YEAR, history_end_year
+
 MANIFEST_URL = "https://stats.tennismylife.org/api/data-files"
-CURRENT_YEAR = datetime.now(timezone.utc).year
-START_YEAR = 2010
+START_YEAR = HISTORY_START_YEAR
+END_YEAR = history_end_year()
+COVERAGE_FILE = "coverage.json"
 
 OUTPUTS = {
     "ATP.csv": "atp_main",
@@ -134,17 +137,40 @@ def copy_chunked(src: Path, dst: Path):
             fo.write(chunk)
 
 
+def read_coverage(cache: Path) -> dict:
+    try:
+        payload = json.loads((cache / COVERAGE_FILE).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def cache_is_current(cache: Path) -> bool:
+    """True only if all aggregates exist and cover START_YEAR..END_YEAR.
+
+    A cache built last year (or before coverage was recorded) is rebuilt, so
+    the season that just ended moves from the refresh files into history
+    instead of silently disappearing at the new year.
+    """
+    if not all((cache / name).exists() and (cache / name).stat().st_size > 0 for name in OUTPUTS):
+        return False
+    coverage = read_coverage(cache)
+    return coverage.get("start_year") == START_YEAR and coverage.get("end_year") == END_YEAR
+
+
 def main():
     cache = Path(".v5_history_cache")
     cache.mkdir(exist_ok=True)
 
-    existing = [cache / name for name in OUTPUTS]
-    if all(p.exists() and p.stat().st_size > 0 for p in existing):
-        print("Historical V5 cache already contains all four aggregates.", flush=True)
+    if cache_is_current(cache):
+        print(
+            f"Historical V5 cache already covers {START_YEAR}-{END_YEAR} for all four aggregates.",
+            flush=True,
+        )
     else:
         print(
             f"Building historical aggregates from TennisMyLife yearly files "
-            f"({START_YEAR}-{CURRENT_YEAR - 1})...",
+            f"({START_YEAR}-{END_YEAR})...",
             flush=True,
         )
         manifest = fetch_manifest()
@@ -154,7 +180,7 @@ def main():
             if not isinstance(item, dict):
                 continue
             year, kind = classify(item)
-            if kind and year is not None and START_YEAR <= year < CURRENT_YEAR:
+            if kind and year is not None and START_YEAR <= year <= END_YEAR:
                 groups[kind].append((year, item))
 
         for kind, vals in groups.items():
@@ -162,13 +188,19 @@ def main():
             print(f"{kind}: {years}", flush=True)
             if not years:
                 raise RuntimeError(f"No TennisMyLife yearly files discovered for {kind}.")
+            if years[-1] != END_YEAR:
+                raise RuntimeError(
+                    f"TennisMyLife has no {END_YEAR} file for {kind} yet; "
+                    "refusing to build history that skips a season."
+                )
 
         for output_name, kind in OUTPUTS.items():
-            dest = cache / output_name
-            if not dest.exists() or dest.stat().st_size == 0:
-                build_aggregate(groups[kind], dest, kind)
-            else:
-                print(f"Using existing cached {output_name}", flush=True)
+            build_aggregate(groups[kind], cache / output_name, kind)
+
+        (cache / COVERAGE_FILE).write_text(
+            json.dumps({"start_year": START_YEAR, "end_year": END_YEAR}, indent=2) + "\n",
+            encoding="utf-8",
+        )
 
     for name in OUTPUTS:
         src = cache / name

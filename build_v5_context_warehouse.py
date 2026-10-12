@@ -11,11 +11,13 @@ import pandas as pd
 import requests
 
 from v5_context_schema import MATCH_COLUMNS, PLAYER_MATCH_COLUMNS, SCHEMA_VERSION
+from v5_season_files import rolling_history_years
 from v5_settlement import canonical_name, parse_score_games
 
 SLAM_TOKENS = ("australian open", "roland garros", "french open", "wimbledon", "us open")
 HISTORY_SUFFIXES = ("", "_atp_quali", "_challenger", "_wta")
-DEFAULT_HISTORY_YEARS = (2023, 2024, 2025, 2026)
+# Rolling four-season window ending at the current season (2023-2026 in 2026).
+DEFAULT_HISTORY_YEARS = rolling_history_years(4)
 CANONICAL_CURRENT_RESULTS = Path("v5_results_ready/tennismylife_results.csv")
 CANONICAL_RESULTS_STATUS = Path("v5_results_ready/results_status.json")
 RAW_STAT_SUFFIXES = {

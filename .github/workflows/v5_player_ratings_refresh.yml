@@ -59,13 +59,19 @@ jobs:
           test -f v5_core.py
           test -f v5_results_cache.py
 
+      - name: Compute historical cache key
+        if: steps.freshness.outputs.history_fresh != 'true'
+        id: history-key
+        # Rolls over every January so last season moves into cached history.
+        run: echo "key=$(python v5_season_files.py cache-key)" >> "$GITHUB_OUTPUT"
+
       - name: Restore historical TennisMyLife cache
         if: steps.freshness.outputs.history_fresh != 'true'
         id: history-cache
         uses: actions/cache/restore@v4
         with:
           path: .v5_history_cache
-          key: v5-tennis-history-2010-2025-v3
+          key: ${{ steps.history-key.outputs.key }}
 
       - name: Build or restore historical V5 inputs
         if: steps.freshness.outputs.history_fresh != 'true'
@@ -76,7 +82,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: .v5_history_cache
-          key: v5-tennis-history-2010-2025-v3
+          key: ${{ steps.history-key.outputs.key }}
 
       - name: Refresh current TennisMyLife data and rebuild V5 ratings
         if: steps.freshness.outputs.history_fresh != 'true'

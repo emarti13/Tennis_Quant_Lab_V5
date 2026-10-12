@@ -15,14 +15,17 @@ from urllib.parse import urlparse
 import pandas as pd
 import requests
 
-MANIFEST_URL = "https://stats.tennismylife.org/api/data-files"
-CURRENT_YEAR = datetime.now(timezone.utc).year
+from v5_season_files import (
+    current_season_year,
+    in_new_season_grace,
+    recent_season_years,
+    season_file_names,
+)
 
-TARGETS = {
-    f"{CURRENT_YEAR}.csv": [f"{CURRENT_YEAR}.csv"],
-    f"{CURRENT_YEAR}_atp_quali.csv": [f"{CURRENT_YEAR}_atp_quali.csv"],
-    f"{CURRENT_YEAR}_challenger.csv": [f"{CURRENT_YEAR}_challenger.csv"],
-    f"{CURRENT_YEAR}_wta.csv": [f"{CURRENT_YEAR}_wta.csv"],
+MANIFEST_URL = "https://stats.tennismylife.org/api/data-files"
+CURRENT_YEAR = current_season_year()
+
+ONGOING_TARGETS = {
     "ongoing_tourneys.csv": ["ongoing_tourneys.csv"],
     "challenger_ongoing_tourneys.csv": [
         "challenger_ongoing_tourneys.csv",
@@ -34,6 +37,28 @@ TARGETS = {
         "wta_ongoing_tourney.csv",
     ],
 }
+
+
+def build_targets(now=None):
+    """Files to download, and which of them may be absent upstream.
+
+    Season files are optional only inside the new-season grace window, when
+    TennisMyLife may not have published the new year yet and last season's
+    file is fetched so late-December results still settle.
+    """
+    targets = {}
+    optional = set()
+    grace = in_new_season_grace(now)
+    for year in recent_season_years(now):
+        for name in season_file_names(year).values():
+            targets[name] = [name]
+            if grace:
+                optional.add(name)
+    targets.update(ONGOING_TARGETS)
+    return targets, optional
+
+
+TARGETS, OPTIONAL_TARGETS = build_targets()
 
 ONGOING_FILES = {
     "ongoing_tourneys.csv",
@@ -74,6 +99,10 @@ def row_count(path: Path):
 
 def log(project_dir: Path, event: dict):
     event = {"timestamp_utc": utc_now(), **event}
+    # The log is committed daily; keep build output in v5_refresh_last.json only.
+    build = event.get("build")
+    if isinstance(build, dict):
+        event["build"] = {"returncode": build.get("returncode")}
     with (project_dir / LOG_FILE).open("a", encoding="utf-8") as f:
         f.write(json.dumps(event, default=str) + "\n")
 
@@ -292,6 +321,15 @@ def main():
         print("[1/4] Reading TennisMyLife manifest...", flush=True)
         lookup = manifest_lookup(get_manifest())
         resolved, missing = resolve_targets(lookup)
+        missing_optional = sorted(m for m in missing if m in OPTIONAL_TARGETS)
+        missing = [m for m in missing if m not in OPTIONAL_TARGETS]
+        if missing_optional:
+            summary["missing_optional"] = missing_optional
+            print(
+                "  New-season grace window: not yet published upstream: "
+                + ", ".join(missing_optional),
+                flush=True,
+            )
 
         if missing:
             raise RuntimeError(
