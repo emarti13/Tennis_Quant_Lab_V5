@@ -3,6 +3,8 @@ from pathlib import Path
 import json, math, re, unicodedata
 import numpy as np
 import pandas as pd
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from v5_full_context_live import predict_with_production_candidate
 
 BASE=Path(__file__).resolve().parents[1]
