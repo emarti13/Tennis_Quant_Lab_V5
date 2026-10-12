@@ -1,7 +1,7 @@
 # Ground-up rebuild plan
 
 Date: 2026-10-12
-Status: **DRAFT — pending user approval**
+Status: **Approved by the user in chat, 2026-10-12.** Decisions recorded below.
 Serves: roadmap Phase 0 → Gate 0 (`docs/superpowers/specs/2026-10-12-fair-price-to-market-making-roadmap-design.md`).
 Evidence: `docs/inventory/2026-10-12-repo-inventory.md`.
 
@@ -156,3 +156,22 @@ collectors writing at least 95% of scheduled snapshots for 14 days. Then Phase 1
 - **D5. Commits already on the session branch.** Six commits (season-year rollover,
   workflow triggers, budget model, test fixes). Keep them as the first PR, or fold them
   into Steps 1–2?
+
+## Decisions recorded (user, 2026-10-12)
+
+| # | Question | Answer |
+|---|---|---|
+| Plan | Approve the rebuild plan | Approved |
+| D1 | Where the shared daily warehouse lives | Open: user asked for the trade-offs of committing daily vs a release file |
+| D2 | Close PRs #28, #30, #31, #32 and delete stale branches; review #36 in Step 4 | Yes |
+| D3 | New raw OddsPapi history outside git | Open: user asked what it means in practice |
+| D4 | One branch and PR per step, CLAUDE.md names | Yes |
+| D5 | Existing session-branch commits | Split into PRs |
+| D6 | Maintaining the master schedule | User maintains it in Excel a few times a year or when needed; **the system must raise flags when an update is needed** (Step 2) |
+| D7 | Fill coordinates, altitude, time zone from Open-Meteo geocoding | Yes (user to allow `geocoding-api.open-meteo.com`) |
+| Spec Q2 | Team events | Keep in the schedule so fixtures resolve; never priced |
+| Spec Q3 | WTA 125 | In the schedule and matching now; pricing decided later |
+
+Sheet notes from the user: a Men/Women column will be added; WTA end dates are not in the
+official WTA calendar, so the code keeps assuming them (labeled) and can replace them with
+the observed last match date once an event finishes.
