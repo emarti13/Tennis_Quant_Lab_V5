@@ -68,8 +68,8 @@ def _country(value) -> str:
 def load_tml_matches(history_dir: str | Path = ".v5_history_cache",
                      results_path: str | Path = "v5_results_ready/tennismylife_results.csv") -> pd.DataFrame:
     """One row per TennisMyLife match: tour (M/W), tourney, date, round and both players."""
-    cols = ["tourney_id", "tourney_date", "round", "winner_id", "winner_name", "winner_ioc",
-            "loser_id", "loser_name", "loser_ioc"]
+    cols = ["tourney_id", "tourney_date", "round", "winner_id", "winner_name", "winner_ioc", "winner_age",
+            "loser_id", "loser_name", "loser_ioc", "loser_age"]
     frames = []
     for name, tour in HISTORY_FILES.items():
         p = Path(history_dir) / name
@@ -86,6 +86,11 @@ def load_tml_matches(history_dir: str | Path = ".v5_history_cache",
         m[f"{side}_id"] = m[f"{side}_id"].map(normalize_tml_id)
         m[f"{side}_key"] = m[f"{side}_name"].map(player_key)
         m[f"{side}_ioc"] = m[f"{side}_ioc"].map(_country)
+        # Birth date estimated from the age TennisMyLife records at each match. Ages
+        # outside 13-50 are data errors (the 2026 WTA id scheme carries some).
+        age = pd.to_numeric(m[f"{side}_age"], errors="coerce")
+        birth = m["date"].dt.year + m["date"].dt.dayofyear / 365.25 - age
+        m[f"{side}_birth"] = birth.where(age.between(13, 50))
     m["tourney_id"] = m["tourney_id"].astype(str)
     # The same match can sit in a history file and in the current-season file.
     m = m.drop_duplicates(["tour", "tourney_id", "round", "winner_key", "loser_key"]).reset_index(drop=True)
@@ -94,9 +99,10 @@ def load_tml_matches(history_dir: str | Path = ".v5_history_cache",
 
 def _appearances(matches: pd.DataFrame) -> pd.DataFrame:
     a = pd.concat([
-        matches[["tour", "tourney_id", "date", f"{s}_id", f"{s}_name", f"{s}_key", f"{s}_ioc"]]
-        .set_axis(["tour", "tourney_id", "date", "id", "name", "key", "ioc"], axis=1)
+        matches[["tour", "tourney_id", "date", f"{s}_id", f"{s}_name", f"{s}_key", f"{s}_ioc", f"{s}_birth"]]
+        .set_axis(["tour", "tourney_id", "date", "id", "name", "key", "ioc", "birth"], axis=1)
         for s in ("winner", "loser")], ignore_index=True)
+    a["ioc"] = a["ioc"].map(_country)
     # A row without an id is its own node, named by tour and folded name.
     a["node"] = [i if i else f"name:{k}" for i, k in zip(a["id"], a["key"])]
     a["week"] = a["date"].dt.to_period("W-SUN").astype(str)
@@ -121,14 +127,42 @@ class _UnionFind:
             self.parent[max(ra, rb)] = min(ra, rb)
 
 
-def _compatible(a: dict, b: dict) -> tuple[bool, str]:
-    """Can two TennisMyLife ids with the same folded name be one person?"""
+SAME_BIRTH_YEARS = 0.1      # two ids born within ~5 weeks: one person
+DIFFERENT_BIRTH_YEARS = 0.5  # born more than six months apart: two people
+
+
+def _compatible(a: dict, b: dict) -> tuple[str, str]:
+    """Two TennisMyLife ids with the same folded name and tour: 'join', 'separate' or 'review'.
+
+    Different TennisMyLife ids are different players unless the evidence says otherwise
+    (the same name recurs across 2010-2026: two "David Warren" born 1988 and 1994).
+    Evidence, in order: birth date (from recorded ages), country, same-week play, and
+    for ids without a usable age, one id's matches lying inside the other's career.
+    """
     if a["countries"] and b["countries"] and not (a["countries"] & b["countries"]):
-        return False, f"same name, different country ({'/'.join(sorted(a['countries']))} vs {'/'.join(sorted(b['countries']))})"
+        return "review", (f"same name, different country ({'/'.join(sorted(a['countries']))} vs "
+                          f"{'/'.join(sorted(b['countries']))})" + _birth_note(a, b))
     clash = {w for w, t in a["week_tourneys"].items() if w in b["week_tourneys"] and t != b["week_tourneys"][w]}
     if clash:
-        return False, f"same name, different events in the same week ({sorted(clash)[0]})"
-    return True, ""
+        return "separate", f"same name, different events in the same week ({sorted(clash)[0]})"
+    if a["birth"] is not None and b["birth"] is not None:
+        gap = abs(a["birth"] - b["birth"])
+        if gap <= SAME_BIRTH_YEARS:
+            return "join", "same name, country and birth date"
+        if gap > DIFFERENT_BIRTH_YEARS:
+            return "separate", f"same name, born {a['birth']:.0f} and {b['birth']:.0f}"
+        return "review", f"same name, birth dates {gap:.1f} years apart"
+    inner, outer = sorted((a, b), key=lambda n: (n["last"] - n["first"]))
+    if outer["first"] <= inner["first"] and inner["last"] <= outer["last"]:
+        return "join", "same name and country; one id's matches lie inside the other's career (no usable age)"
+    return "review", "same name and country, no usable age, careers do not overlap"
+
+
+def _birth_note(a: dict, b: dict) -> str:
+    if a["birth"] is None or b["birth"] is None:
+        return ""
+    gap = abs(a["birth"] - b["birth"])
+    return "; same birth date" if gap <= SAME_BIRTH_YEARS else f"; born {a['birth']:.0f} and {b['birth']:.0f}"
 
 
 def build_players(matches: pd.DataFrame, existing_players: pd.DataFrame | None = None,
@@ -148,9 +182,21 @@ def build_players(matches: pd.DataFrame, existing_players: pd.DataFrame | None =
             "latest_country": next((c for c in g.sort_values("date")["ioc"][::-1] if c), ""),
             "week_tourneys": dict(zip(g["week"], g["tourney_id"])),
             "first": g["date"].min(), "last": g["date"].max(), "matches": len(g),
+            "birth": float(g["birth"].median()) if g["birth"].notna().any() else None,
         }
     uf = _UnionFind()
     review = []
+    joined_how = defaultdict(set)
+    # One id, a name that shares no word with the id's usual name: a row filed under the
+    # wrong player (MH30 is John Millman; one row says Marc-Andrea Huesler).
+    for k, n in nodes.items():
+        main = n["names"].most_common(1)[0][0]
+        for other, cnt in n["names"].items():
+            if other != main and not (set(player_key(other).split()) & set(player_key(main).split())):
+                review.append({"kind": "tennismylife_ids", "tour": n["tour"], "subject": k[1],
+                               "names": f"{main} / {other}",
+                               "reason": f"{cnt} row(s) under another name for this id; the rows may belong to another player",
+                               "candidates": ""})
     by_key = defaultdict(list)
     for k, n in nodes.items():
         uf.find(k)
@@ -161,11 +207,13 @@ def build_players(matches: pd.DataFrame, existing_players: pd.DataFrame | None =
             continue
         for i, x in enumerate(members):
             for y in members[i + 1:]:
-                ok, why = _compatible(nodes[x], nodes[y])
-                if ok:
+                verdict, why = _compatible(nodes[x], nodes[y])
+                if verdict == "join":
                     uf.union(x, y)
+                    joined_how[x].add(why); joined_how[y].add(why)
                 else:
-                    review.append({"kind": "tennismylife_ids", "tour": tour, "subject": f"{x[1]} / {y[1]}",
+                    review.append({"kind": "tennismylife_ids" if verdict == "review" else "kept_apart",
+                                   "tour": tour, "subject": f"{x[1]} / {y[1]}",
                                    "names": f"{nodes[x]['names'].most_common(1)[0][0]} / {nodes[y]['names'].most_common(1)[0][0]}",
                                    "reason": why, "candidates": ""})
 
@@ -217,7 +265,7 @@ def build_players(matches: pd.DataFrame, existing_players: pd.DataFrame | None =
                 "names": " | ".join(sorted(n["names"])), "countries": "/".join(sorted(n["countries"])),
                 "matches": n["matches"],
                 "status": keep["status"].iloc[0] if len(keep) else ("auto" if n["tml_id"] else "review"),
-                "method": "tennismylife_id" if len(members) == 1 else "same name, tour and country; no same-week clash",
+                "method": "; ".join(sorted(joined_how[m])) or "tennismylife_id",
                 "set_on": keep["set_on"].iloc[0] if len(keep) else set_on,
             })
             if not n["tml_id"]:
@@ -235,9 +283,21 @@ def build_players(matches: pd.DataFrame, existing_players: pd.DataFrame | None =
 
 
 # ---------------------------------------------------------------- OddsPapi participants
+def _editions(crosswalk: pd.DataFrame, tournament_ids, dates, *, gap_days: int) -> list:
+    """resolve_edition for many rows, looked up once per (tournament, day)."""
+    cache = {}
+    out = []
+    for t, d in zip(tournament_ids, dates):
+        key = (str(t), pd.Timestamp(d).date())
+        if key not in cache:
+            cache[key] = resolve_edition(crosswalk, key[0], key[1], gap_days=gap_days)
+        out.append(cache[key])
+    return out
+
+
 def _tml_with_editions(matches: pd.DataFrame, crosswalk_tml: pd.DataFrame, alias_tml: pd.DataFrame, year: int) -> pd.DataFrame:
     m = matches[matches["date"].dt.year == year].copy()
-    m["edition"] = [resolve_edition(crosswalk_tml, t, d, gap_days=6) for t, d in zip(m["tourney_id"], m["date"])]
+    m["edition"] = _editions(crosswalk_tml, m["tourney_id"], m["date"], gap_days=6)
     m = m[m["edition"].notna()].copy()
     pid = {(r.tour, r.tml_id): r.player_id for r in alias_tml.itertuples()}
     for side in ("winner", "loser"):
@@ -252,7 +312,7 @@ def _oddspapi_fixtures(fixtures: pd.DataFrame, crosswalk_odds: pd.DataFrame, yea
     f = f[(f["start"].dt.year == year) & ~f["tournament_name"].astype(str).str.contains("doubles", case=False)]
     f["tour"] = f["category_name"].map(ODDSPAPI_TOUR)
     f = f[f["tour"].notna()].copy()
-    f["edition"] = [resolve_edition(crosswalk_odds, t, d, gap_days=4) for t, d in zip(f["tournament_id"], f["start"])]
+    f["edition"] = _editions(crosswalk_odds, f["tournament_id"], f["start"].dt.date, gap_days=4)
     for s in ("1", "2"):
         f[f"p{s}"] = f[f"participant{s}_id"].astype("Int64").astype(str)
         f[f"k{s}"] = f[f"participant{s}_name"].map(player_key)

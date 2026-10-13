@@ -13,34 +13,62 @@ from v5_player_registry import (
 from v5_tournament_identity import player_key
 
 
-def _m(tour, tid, date, rnd, w, wid, wc, l, lid, lc):
+def _m(tour, tid, date, rnd, w, wid, wc, l, lid, lc, wb=None, lb=None):
+    """wb / lb: birth year estimated from TennisMyLife's recorded age (None = unusable age)."""
     return {"tour": tour, "tourney_id": tid, "date": pd.Timestamp(date), "round": rnd,
             "winner_id": normalize_tml_id(wid), "winner_name": w, "winner_key": player_key(w), "winner_ioc": wc,
-            "loser_id": normalize_tml_id(lid), "loser_name": l, "loser_key": player_key(l), "loser_ioc": lc}
+            "winner_birth": wb,
+            "loser_id": normalize_tml_id(lid), "loser_name": l, "loser_key": player_key(l), "loser_ioc": lc,
+            "loser_birth": lb}
 
 
 def _pid(alias, tour, tml_id):
     return alias.set_index(["tour", "tml_id"]).loc[(tour, tml_id), "player_id"]
 
 
-def test_ids_join_only_on_same_name_tour_and_country_without_a_same_week_clash():
+def test_different_tennismylife_ids_stay_apart_unless_the_evidence_joins_them():
     m = pd.DataFrame([
-        # Two id schemes for one player (WTA 2026): same name and country, never the same week.
-        _m("W", "t1", "2025-03-03", "R32", "Ajla Tomljanovic", "201548.0", "AUS", "A B", "1", "USA"),
+        # Second WTA id scheme (2026): same name and country, the new id has no usable age
+        # and its matches lie inside the old id's career -> one player.
+        _m("W", "t1", "2025-03-03", "R32", "Ajla Tomljanovic", "201548.0", "AUS", "A B", "1", "USA", wb=1993.35),
         _m("W", "t2", "2026-06-08", "R32", "Ajla Tomljanovic", "315232", "AUS", "C D", "2", "USA"),
-        # Same name, different country: kept apart until a person decides.
-        _m("M", "t3", "2012-01-02", "R32", "Harshana Godamanna", "104631", "SRI", "E F", "3", "USA"),
-        _m("M", "t4", "2013-01-07", "R32", "Harshana Godamanna", "G793", "ECU", "G H", "4", "USA"),
-        # Same name and country, but two different events in one week: two people.
-        _m("M", "t5", "2016-05-02", "R32", "David Warren", "W654", "USA", "I J", "5", "USA"),
-        _m("M", "t6", "2016-05-03", "R32", "David Warren", "W933", "USA", "K L", "6", "USA"),
+        _m("W", "t3", "2026-08-03", "R32", "Ajla Tomljanovic", "201548", "AUS", "E F", "3", "USA", wb=1993.35),
+        # Same name and country, years apart, born 1988 and 1994 -> two people.
+        _m("M", "t4", "2013-04-08", "R32", "David Warren", "W654", "USA", "G H", "4", "USA", wb=1988.56),
+        _m("M", "t5", "2016-04-04", "R32", "David Warren", "W933", "USA", "I J", "5", "USA", wb=1994.45),
+        # Same name and birth date, a year apart -> one person.
+        _m("M", "t6", "2022-06-27", "R32", "Hernandez Aguila Abel", "A0JF", "ESP", "K L", "6", "USA", wb=1989.66),
+        _m("M", "t7", "2023-07-09", "R32", "Abel Hernandez-Aguila", "H811", "ESP", "M N", "7", "USA", wb=1989.66),
+        # Same name and birth date but different countries: a person decides.
+        _m("M", "t8", "2010-03-05", "R32", "Harshana Godamanna", "104631", "SRI", "O P", "8", "USA", wb=1987.95),
+        _m("M", "t9", "2012-04-06", "R32", "Harshana Godamanna", "G793", "ECU", "Q R", "9", "USA", wb=1987.95),
+        # Same name and country, no usable age, careers apart: a person decides.
+        _m("M", "u1", "2011-04-25", "R32", "Diogo Rocha", "R630", "POR", "S T", "10", "USA"),
+        _m("M", "u2", "2012-04-30", "R32", "Diogo Rocha", "RD02", "PRT", "U V", "11", "USA"),
     ])
     players, alias, review = build_players(m, set_on="2026-10-13")
     assert _pid(alias, "W", "201548") == _pid(alias, "W", "315232")
-    assert _pid(alias, "M", "104631") != _pid(alias, "M", "G793")
     assert _pid(alias, "M", "W654") != _pid(alias, "M", "W933")
-    reasons = " ".join(review["reason"])
-    assert "different country" in reasons and "same week" in reasons
+    assert _pid(alias, "M", "A0JF") == _pid(alias, "M", "H811")
+    assert _pid(alias, "M", "104631") != _pid(alias, "M", "G793")
+    assert _pid(alias, "M", "R630") != _pid(alias, "M", "RD02")
+    to_decide = " ".join(review[review["kind"] == "tennismylife_ids"]["reason"])
+    assert "different country" in to_decide and "same birth date" in to_decide
+    assert "careers do not overlap" in to_decide                      # POR and PRT count as one country
+    assert "born 1989 and 1994" not in to_decide                      # proven different people are not a question
+    assert "born 1989 and 1994" in " ".join(review[review["kind"] == "kept_apart"]["reason"])
+
+
+def test_rows_filed_under_another_players_name_are_flagged():
+    m = pd.DataFrame([
+        _m("M", "t1", "2019-01-07", "R32", "John Millman", "MH30", "AUS", "A B", "1", "USA", wb=1989.45),
+        _m("M", "t2", "2020-11-09", "R32", "Marc-Andrea Huesler", "MH30", "AUS", "C D", "2", "USA", wb=1989.45),
+        _m("M", "t3", "2019-01-07", "R32", "John Millman", "MH30", "AUS", "E F", "3", "USA", wb=1989.45),
+        _m("M", "t4", "2021-01-04", "R32", "Marc-Andrea Huesler", "HH06", "SUI", "G H", "4", "USA", wb=1996.48),
+    ])
+    _, alias, review = build_players(m, set_on="2026-10-13")
+    assert _pid(alias, "M", "MH30") != _pid(alias, "M", "HH06")
+    assert any("under another name" in r for r in review["reason"])
 
 
 def test_player_ids_are_stable_and_user_rows_win():
