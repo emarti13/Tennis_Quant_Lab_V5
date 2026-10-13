@@ -86,7 +86,7 @@ A step is done only when all of these hold:
   and `crosswalk_tennismylife.csv`, written by `scripts/reconcile_master_schedule.py`,
   confirmed by shared matches, read with `v5_tournament_identity.resolve_edition`.
   Production does not read them yet; replacing the four old lookups is next.
-- **Player identity (next; user decision 2026-10-13).** Same approach as tournaments: a
+- **Player identity (built 2026-10-13: `v5_player_registry.py`, `context_registry/players/`; production switch next).** Same approach as tournaments: a
   stored crosswalk from OddsPapi participant ids to one TennisMyLife player, proven by
   results (same edition, same opponent), user decisions never overwritten, unclear links
   give no price. Today the live resolver refuses 15 players whose names appear twice in

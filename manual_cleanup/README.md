@@ -21,6 +21,10 @@ local clone with the command shown.
 | `repair/step1-repo-cleanup` | Merged into #39's branch (PR #42), then into `main` via #43 | 2026-10-12 |
 | `repair/land-step1-and-schedule-on-main` | Merged (PR #43) | 2026-10-12 |
 | `feat/step2a-schedule-locations` | Merged (PR #44) | 2026-10-12 |
+| `feat/step2b-tournament-crosswalks` | Merged (PR #45) | 2026-10-13 |
+| `docs/player-identity-spec` | Merged (PR #47) | 2026-10-13 |
+| `feat/official-ledger-switch` | Merged (PR #48) | 2026-10-13 |
+| `fix/no-bet-without-player-history` | PR #46 closed without merging (owner decision: no patches to the old engine) | 2026-10-13 |
 | `claude/bootstrap-v5-history-setup-3pxlyr` | Agent session branch; all its work reached `main` via #39–#43 | 2026-10-12 |
 
 ```bash
@@ -28,7 +32,8 @@ git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-in
   fix/phase0-ci-green-and-season-rollover docs/rebuild-plan-and-tournament-identity \
   feat/master-schedule-reconciliation repair/step1-repo-cleanup \
   repair/land-step1-and-schedule-on-main feat/step2a-schedule-locations \
-  claude/bootstrap-v5-history-setup-3pxlyr
+  feat/step2b-tournament-crosswalks docs/player-identity-spec feat/official-ledger-switch \
+  fix/no-bet-without-player-history claude/bootstrap-v5-history-setup-3pxlyr
 ```
 
 ### Pending your decision (not yet recommended for deletion)

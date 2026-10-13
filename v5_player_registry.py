@@ -54,6 +54,11 @@ ODDS_ALIAS_COLUMNS = ["participant_id", "tour", "names", "player_id", "status", 
 
 
 # ---------------------------------------------------------------- TennisMyLife results
+def _present(value) -> bool:
+    """A real id: a non-empty string (None and NaN are not)."""
+    return isinstance(value, str) and value != ""
+
+
 def normalize_tml_id(value) -> str | None:
     s = str(value if value is not None else "").strip()
     s = re.sub(r"\.0$", "", s)
@@ -104,8 +109,10 @@ def _appearances(matches: pd.DataFrame) -> pd.DataFrame:
         for s in ("winner", "loser")], ignore_index=True)
     a["ioc"] = a["ioc"].map(_country)
     # A row without an id is its own node, named by tour and folded name.
-    a["node"] = [i if i else f"name:{k}" for i, k in zip(a["id"], a["key"])]
-    a["week"] = a["date"].dt.to_period("W-SUN").astype(str)
+    a["node"] = [i if _present(i) else f"name:{k}" for i, k in zip(a["id"], a["key"])]
+    # Tennis week: an event dated Saturday or Sunday belongs to the following Monday's week
+    # (TennisMyLife dates Bad Homburg 2026 on Sunday June 21, the eve of its main draw).
+    a["week"] = (a["date"] + pd.Timedelta(days=2)).dt.to_period("W-SUN").astype(str)
     return a
 
 
@@ -129,6 +136,9 @@ class _UnionFind:
 
 SAME_BIRTH_YEARS = 0.1      # two ids born within ~5 weeks: one person
 DIFFERENT_BIRTH_YEARS = 0.5  # born more than six months apart: two people
+# The 2026 WTA rows with a second id or no id fall up to ~70 days after the main id's last
+# match (Begu: last main-id match April 20, broken rows late June).
+CAREER_MARGIN_DAYS = 90
 
 
 def _compatible(a: dict, b: dict) -> tuple[str, str]:
@@ -153,9 +163,15 @@ def _compatible(a: dict, b: dict) -> tuple[str, str]:
             return "separate", f"same name, born {a['birth']:.0f} and {b['birth']:.0f}"
         return "review", f"same name, birth dates {gap:.1f} years apart"
     inner, outer = sorted((a, b), key=lambda n: (n["last"] - n["first"]))
-    if outer["first"] <= inner["first"] and inner["last"] <= outer["last"]:
-        return "join", "same name and country; one id's matches lie inside the other's career (no usable age)"
-    return "review", "same name and country, no usable age, careers do not overlap"
+    margin = pd.Timedelta(days=CAREER_MARGIN_DAYS)
+    if outer["first"] - margin <= inner["first"] and inner["last"] <= outer["last"] + margin:
+        return "join", "same name and country; one id's matches lie within the other's career (no usable age)"
+    return "review", "same name and country, no usable age, careers more than 90 days apart"
+
+
+def _same_root(uf: "_UnionFind", tour: str, subject: str) -> bool:
+    x, y = (t.strip() for t in subject.split(" / ", 1))
+    return uf.find((tour, x)) == uf.find((tour, y))
 
 
 def _birth_note(a: dict, b: dict) -> str:
@@ -217,6 +233,9 @@ def build_players(matches: pd.DataFrame, existing_players: pd.DataFrame | None =
                                    "names": f"{nodes[x]['names'].most_common(1)[0][0]} / {nodes[y]['names'].most_common(1)[0][0]}",
                                    "reason": why, "candidates": ""})
 
+    review = [r for r in review if not (" / " in r["subject"] and r["kind"] == "tennismylife_ids"
+                                        and _same_root(uf, r["tour"], r["subject"]))]
+
     # Stable player ids.
     stored = existing_alias if existing_alias is not None and not existing_alias.empty else pd.DataFrame(columns=TML_ALIAS_COLUMNS)
     stored_pid = {(r.tour, r.tml_id): r.player_id for r in stored.itertuples()}
@@ -264,11 +283,12 @@ def build_players(matches: pd.DataFrame, existing_players: pd.DataFrame | None =
                 "tour": m[0], "tml_id": m[1], "player_id": pid,
                 "names": " | ".join(sorted(n["names"])), "countries": "/".join(sorted(n["countries"])),
                 "matches": n["matches"],
-                "status": keep["status"].iloc[0] if len(keep) else ("auto" if n["tml_id"] else "review"),
+                "status": keep["status"].iloc[0] if len(keep) else (
+                    "auto" if n["tml_id"] or any(nodes[x]["tml_id"] for x in members) else "review"),
                 "method": "; ".join(sorted(joined_how[m])) or "tennismylife_id",
                 "set_on": keep["set_on"].iloc[0] if len(keep) else set_on,
             })
-            if not n["tml_id"]:
+            if not n["tml_id"] and not any(nodes[x]["tml_id"] for x in members):
                 review.append({"kind": "tennismylife_ids", "tour": m[0], "subject": m[1], "names": n["names"].most_common(1)[0][0],
                                "reason": "TennisMyLife rows without a player id", "candidates": pid})
     # Player ids that no component uses any more (merged by a later build) stay, marked.
@@ -301,7 +321,7 @@ def _tml_with_editions(matches: pd.DataFrame, crosswalk_tml: pd.DataFrame, alias
     m = m[m["edition"].notna()].copy()
     pid = {(r.tour, r.tml_id): r.player_id for r in alias_tml.itertuples()}
     for side in ("winner", "loser"):
-        m[f"{side}_pid"] = [pid.get((t, i if i else f"name:{k}")) for t, i, k in zip(m["tour"], m[f"{side}_id"], m[f"{side}_key"])]
+        m[f"{side}_pid"] = [pid.get((t, i if _present(i) else f"name:{k}")) for t, i, k in zip(m["tour"], m[f"{side}_id"], m[f"{side}_key"])]
     m["round_no"] = m["round"].map(ROUND_ORDER)
     return m
 
@@ -339,7 +359,7 @@ def link_oddspapi(fixtures: pd.DataFrame, crosswalk_odds: pd.DataFrame, matches:
         for fid, p1, k1, p2, k2 in zip(fg["fixture_id"].astype(str), fg["p1"], fg["k1"], fg["p2"], fg["k2"]):
             hits = set()
             for wk, lk, wp, lp in pairs:
-                if not (wp and lp):
+                if not (_present(wp) and _present(lp)):
                     continue
                 if _same_player(k1, wk) and _same_player(k2, lk):
                     hits.add((wp, lp))
@@ -354,23 +374,33 @@ def link_oddspapi(fixtures: pd.DataFrame, crosswalk_odds: pd.DataFrame, matches:
     # 2. Draw order: a linked player's fixtures in an edition, in time order, against the
     #    player's results in round order. Used only when both counts agree.
     linked = {p: c.most_common(1)[0][0] for p, c in evidence.items() if len(c) == 1 and sum(c.values()) >= 2}
-    for e, fg in f[f["edition"].notna()].groupby("edition"):
-        tg = tml_by_ed.get(e)
-        if tg is None:
+    fixtures_of = defaultdict(list)   # (edition, participant) -> [(start, fixture_id, opponent, opponent key)]
+    for e, fid, start, p1, p2, k1, k2 in zip(f["edition"], f["fixture_id"].astype(str), f["start"], f["p1"], f["p2"], f["k1"], f["k2"]):
+        if e is not None:
+            fixtures_of[(e, p1)].append((start, fid, p2, k2))
+            fixtures_of[(e, p2)].append((start, fid, p1, k1))
+    words_of = defaultdict(set)       # player_id -> every word of every TennisMyLife spelling
+    for r in alias_tml.itertuples():
+        for n in str(r.names).split(" | "):
+            words_of[r.player_id] |= set(player_key(n).split())
+    results_of = defaultdict(list)    # (edition, player_id) -> [(round_no, opponent player_id)]
+    for e, rn, wp, lp in zip(t["edition"], t["round_no"], t["winner_pid"], t["loser_pid"]):
+        if pd.notna(rn):
+            if _present(wp):
+                results_of[(e, wp)].append((rn, lp if _present(lp) else None))
+            if _present(lp):
+                results_of[(e, lp)].append((rn, wp if _present(wp) else None))
+    for (e, p), mine in fixtures_of.items():
+        pid = linked.get(p)
+        res = results_of.get((e, pid)) if pid else None
+        if not res or len(res) != len(mine) or len({r for r, _ in res}) != len(res):
             continue
-        for p, pid in linked.items():
-            mine = fg[(fg["p1"] == p) | (fg["p2"] == p)].sort_values("start")
-            if mine.empty:
-                continue
-            res = tg[(tg["winner_pid"] == pid) | (tg["loser_pid"] == pid)].dropna(subset=["round_no"]).sort_values("round_no")
-            if len(res) != len(mine) or res["round_no"].duplicated().any():
-                continue
-            for fx, rs in zip(mine.itertuples(), res.itertuples()):
-                opp = fx.p2 if fx.p1 == p else fx.p1
-                opp_pid = rs.loser_pid if rs.winner_pid == pid else rs.winner_pid
-                if opp_pid and (str(fx.fixture_id), opp) not in counted:
-                    evidence[opp][opp_pid] += 1; method[opp]["draw order"] += 1
-                    counted.add((str(fx.fixture_id), opp))
+        for (_, fid, opp, opp_key), (_, opp_pid) in zip(sorted(mine), sorted(res)):
+            # Draw order links spellings that differ ("Pyotr"/"Petr" Nesterov) but must share
+            # at least one name word, so a walkover or lucky loser cannot shift a link.
+            if opp_pid and (fid, opp) not in counted and set(opp_key.split()) & words_of[opp_pid]:
+                evidence[opp][opp_pid] += 1; method[opp]["draw order"] += 1
+                counted.add((fid, opp))
 
     # Names, for participants results cannot link.
     names_by_tour = defaultdict(lambda: defaultdict(set))
@@ -378,6 +408,12 @@ def link_oddspapi(fixtures: pd.DataFrame, crosswalk_odds: pd.DataFrame, matches:
         for n in str(r.names).split(" | "):
             names_by_tour[r.tour][player_key(n)].add(r.player_id)
     tokens_by_tour = {tour: [(set(k.split()), pids) for k, pids in idx.items()] for tour, idx in names_by_tour.items()}
+    by_word = defaultdict(set)        # (tour, word) -> folded names containing it
+    for tour, idx in names_by_tour.items():
+        for k in idx:
+            for w in k.split():
+                if len(w) > 3:
+                    by_word[(tour, w)].add(k)
 
     seen = pd.concat([f[["p1", "participant1_name", "tour"]].set_axis(["pid", "name", "tour"], axis=1),
                       f[["p2", "participant2_name", "tour"]].set_axis(["pid", "name", "tour"], axis=1)])
@@ -392,8 +428,15 @@ def link_oddspapi(fixtures: pd.DataFrame, crosswalk_odds: pd.DataFrame, matches:
             row.update(status="placeholder", method="draw slot, not a player")
         elif len(ev) == 1:
             p, n = ev.most_common(1)[0]
-            row.update(player_id=p, status="confirmed" if n >= 2 else "auto",
-                       method=" + ".join(sorted(method[pid_odds])))
+            how = " + ".join(sorted(method[pid_odds]))
+            if n >= 2:
+                row.update(player_id=p, status="confirmed", method=how)
+            elif "same match" in method[pid_odds]:
+                row.update(player_id=p, status="auto", method=how)
+            else:
+                # One match lined up by draw order alone, names not compared: too weak
+                # (a lucky loser or walkover shifts the order).
+                row.update(status="review", method="one match by draw order only", candidates=f"{p} (1)")
         elif len(ev) > 1:
             row.update(status="review", method="results disagree",
                        candidates=", ".join(f"{p} ({n})" for p, n in ev.most_common()))
@@ -413,6 +456,8 @@ def link_oddspapi(fixtures: pd.DataFrame, crosswalk_odds: pd.DataFrame, matches:
                         cands |= pids
                 if cands:
                     row.update(status="review", method="partial name or suffix", candidates=", ".join(sorted(cands)[:6]))
+                elif near := _near_spellings(toks, tour, by_word, names_by_tour):
+                    row.update(status="review", method="near spelling", candidates=", ".join(sorted(near)[:6]))
                 else:
                     row.update(status="no_history", method="no candidate in our history")
         rows.append(row)
@@ -431,6 +476,20 @@ def link_oddspapi(fixtures: pd.DataFrame, crosswalk_odds: pd.DataFrame, matches:
     review = fresh[fresh["status"] == "review"].assign(kind="oddspapi_participant")
     review = review.rename(columns={"participant_id": "subject", "method": "reason"})[["kind", "tour", "subject", "names", "reason", "candidates"]]
     return fresh.sort_values("participant_id").reset_index(drop=True), review.reset_index(drop=True), drift.reset_index(drop=True)
+
+
+def _near_spellings(toks: set, tour: str, by_word: dict, names_by_tour: dict) -> set:
+    """Players whose name shares one word of 4+ letters and whose other words are near
+    spellings of this name's ("Raluca Georgiana Serban" ~ "Raluka Serban")."""
+    from difflib import SequenceMatcher
+    out = set()
+    for w in toks:
+        for k in by_word.get((tour, w), ()):
+            other = set(k.split()) - {w}
+            rest = toks - {w}
+            if other and rest and all(any(SequenceMatcher(None, o, r).ratio() >= 0.8 for r in rest) for o in other):
+                out |= names_by_tour[tour][k]
+    return out
 
 
 # ---------------------------------------------------------------- lookups

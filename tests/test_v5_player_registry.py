@@ -54,9 +54,20 @@ def test_different_tennismylife_ids_stay_apart_unless_the_evidence_joins_them():
     assert _pid(alias, "M", "R630") != _pid(alias, "M", "RD02")
     to_decide = " ".join(review[review["kind"] == "tennismylife_ids"]["reason"])
     assert "different country" in to_decide and "same birth date" in to_decide
-    assert "careers do not overlap" in to_decide                      # POR and PRT count as one country
+    assert "careers more than 90 days apart" in to_decide             # POR and PRT count as one country
     assert "born 1989 and 1994" not in to_decide                      # proven different people are not a question
     assert "born 1989 and 1994" in " ".join(review[review["kind"] == "kept_apart"]["reason"])
+
+
+def test_a_weekend_start_belongs_to_the_next_week():
+    # Same player, events dated Monday June 15 and Sunday June 21: consecutive weeks.
+    m = pd.DataFrame([
+        _m("W", "t1", "2026-06-15", "R32", "Elina Svitolina", "202494", "UKR", "A B", "1", "USA", wb=1994.7),
+        _m("W", "t9", "2025-06-15", "R32", "Elina Svitolina", "202494", "UKR", "A C", "1", "USA", wb=1994.7),
+        _m("W", "t2", "2026-06-21", "R16", "Elina Svitolina", None, "UKR", "C D", "2", "USA"),
+    ])
+    _, alias, review = build_players(m, set_on="2026-10-13")
+    assert _pid(alias, "W", "202494") == _pid(alias, "W", "name:elina svitolina")
 
 
 def test_rows_filed_under_another_players_name_are_flagged():
@@ -107,6 +118,7 @@ def _world():
         fx("f3", 4, 104, "Hand, Old", 101, "Fellin, Pietro Orlando"),
         fx("f4", 5, 105, "Silva, Joao Dinis", 106, "WQF1"),
         fx("f5", 5, 107, "Nobody, Brand New", 108, "Hand, Old"),
+        fx("f6", 6, 109, "Felin, Pietro", 110, "Hand, Old"),
     ])
     return m, players, alias_tml, xt, xo, f
 
@@ -121,6 +133,7 @@ def test_oddspapi_players_link_through_shared_matches_not_names():
     assert st.loc["105", "status"] == "review"        # partial name: Joao Dinis Silva vs Joao Silva, a person decides
     assert st.loc["106", "status"] == "placeholder"
     assert st.loc["107", "status"] == "no_history"
+    assert (st.loc["109", "status"], st.loc["109", "method"]) == ("review", "near spelling")   # Felin ~ Fellin
     assert resolve_oddspapi_player(odds, 105) == (None, "review")
     assert resolve_oddspapi_player(odds, 106) == (None, "placeholder")
     assert resolve_oddspapi_player(odds, 999) == (None, "unknown")

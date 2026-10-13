@@ -90,13 +90,26 @@ Each row records method, evidence count, status (`confirmed` / `auto` / `review`
 
 ### 2.3 Building players from TennisMyLife history
 
-- Two TennisMyLife ids are the same player when they share a tour and a folded name and
-  the same country (IOC and ISO spellings equal, e.g. POR/PRT), or when OddsPapi evidence
-  ties both to one OddsPapi id (§2.4).
-- The same name in different countries, or two ids playing different events in the same
-  week (Challenger dates are week starts, so a same-day test is too weak), are different
-  players; they are listed for review, never merged automatically.
-- Folding: case, accents, hyphens, spacing and name order ignored ("Mccartney" = "McCartney").
+Revised 2026-10-13 at the user's direction ("include year, country and name"): the same
+name recurs across 2010–2026, so different TennisMyLife ids are **different players by
+default**. Two ids with the same folded name and tour join only on evidence:
+
+1. **Birth date.** TennisMyLife records each player's age at every match (99.9% of rows),
+   which gives a birth date. Same name and country, born within ~5 weeks: one person.
+   Born more than six months apart: two people (two "David Warren", born 1988 and 1994;
+   two "Diogo Rocha", 1984 and 1994; two "Quentin Robert", 1991 and 1994).
+2. **No usable age** (the 2026 WTA rows with a second id or no id carry broken ages): one
+   id's matches lie within the other's career, allowing 90 days either side, same country.
+3. **Different country:** review, never joined automatically; the report says whether the
+   birth dates match (Harshana Godamanna, Sri Lanka and Ecuador, same birth date).
+4. **Different events in the same tennis week:** two people. A tennis week starts on
+   Monday; an event dated Saturday or Sunday belongs to the following week.
+5. **Rows filed under another player's name** (an id whose rows carry a name sharing no
+   word with its usual name, e.g. one Marc-Andrea Huesler row under John Millman's id
+   MH30) are flagged for review.
+
+Folding: case, accents, hyphens, spacing and name order ignored ("Mccartney" = "McCartney").
+Country codes: IOC and ISO alpha-3 spellings are equal (POR = PRT).
 
 ### 2.4 Linking an OddsPapi player id
 
@@ -104,8 +117,12 @@ Each row records method, evidence count, status (`confirmed` / `auto` / `review`
    already linked and round aligned, or both names compatible). Confirmed at two or more
    shared matches that agree and none that disagree; a disagreement goes to review and
    blocks the price.
+   Draw order (a linked player's fixtures in time order against their results in round
+   order) also counts, but only when the opponent's names share at least one word; one
+   match by draw order alone is never enough (a walkover or lucky loser shifts the order).
 2. **Names, before results exist.** Exact folded name, unique in that tour: `auto`.
-   Otherwise, candidates where one name's words contain the other's ("Maria Carle" in
+   Otherwise, candidates where one name's words contain the other's, or near spellings
+   sharing a word ("Raluca Georgiana Serban" ~ "Raluka Serban"), ("Maria Carle" in
    "Maria Lourdes Carle"), or suffixes dropped ("Jr", "(2001)"): **review, no price**, with
    the candidates listed. Never a silent cold start.
 3. **No history in our data.** Only when no candidate exists at all. Such a player gets

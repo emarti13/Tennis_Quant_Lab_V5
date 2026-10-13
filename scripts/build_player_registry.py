@@ -83,6 +83,8 @@ def main() -> int:
          "## Review list", "",
          "### TennisMyLife ids not joined automatically", "",
          _table(review[review["kind"] == "tennismylife_ids"], ["tour", "subject", "names", "reason", "candidates"]),
+         "### Kept apart: same name, different people (information)", "",
+         _table(review[review["kind"] == "kept_apart"], ["tour", "subject", "names", "reason"]),
          "### OddsPapi participants for a person to decide", "",
          _table(review[review["kind"] == "oddspapi_participant"], ["tour", "subject", "names", "reason", "candidates"]),
          "### Stored links the fresh build would change", "",
