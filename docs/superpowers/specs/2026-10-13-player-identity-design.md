@@ -108,7 +108,9 @@ default**. Two ids with the same folded name and tour join only on evidence:
    word with its usual name, e.g. one Marc-Andrea Huesler row under John Millman's id
    MH30) are flagged for review.
 
-Folding: case, accents, hyphens, spacing and name order ignored ("Mccartney" = "McCartney").
+Folding: case, accents, hyphens, spacing and name order ignored ("Mccartney" = "McCartney"),
+and German umlauts spelled either way are equal ("Würth" = "Wurth" = "Wuerth"; user, 2026-10-13),
+except after g or q, where "ue" is Spanish or Portuguese (Guerra, Rodriguez).
 Country codes: IOC and ISO alpha-3 spellings are equal (POR = PRT).
 
 ### 2.4 Linking an OddsPapi player id

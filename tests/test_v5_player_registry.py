@@ -8,9 +8,9 @@ from v5_player_registry import (
     is_placeholder_participant,
     link_oddspapi,
     normalize_tml_id,
+    player_key,
     resolve_oddspapi_player,
 )
-from v5_tournament_identity import player_key
 
 
 def _m(tour, tid, date, rnd, w, wid, wc, l, lid, lc, wb=None, lb=None):
@@ -151,6 +151,13 @@ def test_stored_user_links_survive_and_disagreements_are_reported():
     assert (st.loc["105", "status"], st.loc["105", "player_id"]) == ("user", _pid(alias_tml, "M", "J1"))
     assert st.loc["102", "player_id"] == "M-999999"
     assert "102" in set(drift["participant_id"])
+
+
+def test_umlaut_spellings_are_one_name():
+    # OddsPapi "Wuerth, Tara" and TennisMyLife "Tara Wurth" are Tara Würth (user, 2026-10-13).
+    assert player_key("Wuerth, Tara") == player_key("Tara Wurth") == player_key("Tara Würth")
+    assert player_key("Mueller, Jan") == player_key("Jan Müller") and player_key("Manuel Goes") == player_key("Goes, Manuel")
+    assert player_key("Andres Guerra") != player_key("Andres Gurra") and "rodriguez" in player_key("Rodriguez, Ana")
 
 
 def test_placeholders_and_ids():

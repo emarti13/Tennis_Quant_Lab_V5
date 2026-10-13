@@ -25,7 +25,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from v5_tournament_identity import _same_player, player_key, resolve_edition
+from v5_tournament_identity import _same_player, player_key as _folded_key, resolve_edition
 
 HISTORY_FILES = {"ATP.csv": "M", "ATPQualifiers.csv": "M", "Challenger.csv": "M", "WTA.csv": "W"}
 ROUND_ORDER = {"Q1": 0, "Q2": 1, "Q3": 2, "R128": 3, "R64": 4, "R32": 5, "RR": 5, "R16": 6, "QF": 7, "SF": 8, "BR": 8, "F": 9}
@@ -54,6 +54,18 @@ ODDS_ALIAS_COLUMNS = ["participant_id", "tour", "names", "player_id", "status", 
 
 
 # ---------------------------------------------------------------- TennisMyLife results
+# Not after g or q: Spanish and Portuguese "gue"/"que" are not umlauts (Guerra, Rodriguez).
+_UMLAUT_PAIRS = re.compile(r"(?<=[a-fh-pr-z])(ae|oe|ue)")
+
+
+def player_key(name) -> str:
+    """Order-independent folded name, with German umlauts spelled either way equal:
+    "Würth" folds to "wurth" and "Wuerth" (ü written as ue) to "wurth" too. Applied to
+    both sides of every comparison, so "Manuel" becomes "manul" everywhere and still
+    matches itself."""
+    return " ".join(sorted(_UMLAUT_PAIRS.sub(lambda m: m.group(1)[0], w) for w in _folded_key(name).split()))
+
+
 def _present(value) -> bool:
     """A real id: a non-empty string (None and NaN are not)."""
     return isinstance(value, str) and value != ""
