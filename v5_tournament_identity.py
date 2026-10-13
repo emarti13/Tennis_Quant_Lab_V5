@@ -1,6 +1,6 @@
 """Tournament identity: the master schedule and its reconciliation with each source.
 
-Design: docs/superpowers/specs/2026-10-12-tournament-identity-design.md (draft).
+Design: docs/superpowers/specs/2026-10-12-tournament-identity-design.md (approved 2026-10-12).
 
 The master schedule (built by the user from the official ATP, WTA and ATP Challenger
 calendars) decides which editions exist. TennisMyLife and OddsPapi never create an
@@ -8,8 +8,10 @@ edition; their tournaments are matched to editions on tour family, dates and loc
 and every match is reported with how it was made. Nothing is guessed: a source
 tournament with no single candidate is reported as unmatched or ambiguous.
 
-This module is read-only with respect to production: it loads and checks the sheet and
-produces reconciliation tables. It does not change pricing yet.
+Matches are stored per source in crosswalk tables (build_crosswalk) and confirmed by
+the other source's results (confirm_matches: the same two players meeting in both).
+resolve_edition looks a source tournament up in its crosswalk and returns None rather
+than guess. Production does not read the crosswalks yet (rebuild plan, Step 2).
 """
 from __future__ import annotations
 
@@ -243,7 +245,29 @@ def load_master_schedule(path: str | Path) -> tuple[pd.DataFrame, list[SheetIssu
 
 
 # ---------------------------------------------------------------- source tournaments
-def oddspapi_tournaments(fixtures: pd.DataFrame, year: int, gap_days: int = 4) -> pd.DataFrame:
+ODDSPAPI_GAP_DAYS = 4       # fixture dates: a gap longer than this starts a new block
+TENNISMYLIFE_GAP_DAYS = 6   # tournament week dates: a week later is a new block
+
+
+def _date_blocks(days, gap_days: int) -> list[list]:
+    """Split sorted dates into runs with no gap longer than gap_days."""
+    days = sorted(days)
+    blocks, cur = [], [days[0]]
+    for d in days[1:]:
+        if (d - cur[-1]).days > gap_days:
+            blocks.append(cur)
+            cur = []
+        cur.append(d)
+    blocks.append(cur)
+    return blocks
+
+
+def match_pair(a, b) -> frozenset:
+    """Order-independent key for one match between two players."""
+    return frozenset((player_key(a), player_key(b)))
+
+
+def oddspapi_tournaments(fixtures: pd.DataFrame, year: int, gap_days: int = ODDSPAPI_GAP_DAYS) -> pd.DataFrame:
     """One row per (OddsPapi tournament_id, date block). A block is a run of fixture
     dates with no gap longer than gap_days, so an id reused for two weeks gives two rows."""
     f = fixtures.copy()
@@ -254,15 +278,7 @@ def oddspapi_tournaments(fixtures: pd.DataFrame, year: int, gap_days: int = 4) -
     f["family"] = f["category_name"].map(family)
     out = []
     for (tid, tname, fam), g in f.dropna(subset=["family"]).groupby(["tournament_id", "tournament_name", "family"]):
-        days = sorted(g["start"].dt.date.unique())
-        blocks, cur = [], [days[0]]
-        for d in days[1:]:
-            if (d - cur[-1]).days > gap_days:
-                blocks.append(cur)
-                cur = []
-            cur.append(d)
-        blocks.append(cur)
-        for b in blocks:
+        for b in _date_blocks(g["start"].dt.date.unique(), gap_days):
             sub = g[g["start"].dt.date.between(b[0], b[-1])]
             players = set(sub["participant1_name"].map(player_key)) | set(sub["participant2_name"].map(player_key))
             out.append({
@@ -270,12 +286,16 @@ def oddspapi_tournaments(fixtures: pd.DataFrame, year: int, gap_days: int = 4) -
                 "tournament_id": int(tid), "name": tname, "family": fam,
                 "first_date": b[0].isoformat(), "last_date": b[-1].isoformat(),
                 "fixtures": len(sub), "players": players, "surface": "",
+                "pairs": {match_pair(x, y) for x, y in zip(sub["participant1_name"], sub["participant2_name"])},
             })
     return pd.DataFrame(out)
 
 
-def tennismylife_tournaments(results: pd.DataFrame, year: int) -> pd.DataFrame:
-    """One row per TennisMyLife tourney_id. Davis Cup ties (level D) are excluded."""
+def tennismylife_tournaments(results: pd.DataFrame, year: int, gap_days: int = TENNISMYLIFE_GAP_DAYS) -> pd.DataFrame:
+    """One row per (TennisMyLife tourney_id, date block). Davis Cup ties (level D) are
+    excluded. TennisMyLife has reused one tourney_id for two editions of an event (both
+    2026 San Diego Challengers are 2026-2971), so an id is split wherever its dates jump
+    by more than gap_days, as OddsPapi ids are."""
     r = results.copy()
     r["date"] = pd.to_datetime(r["tourney_date"].astype(str).str[:8], format="%Y%m%d", errors="coerce")
     r = r[r["date"].dt.year == year]
@@ -288,15 +308,18 @@ def tennismylife_tournaments(results: pd.DataFrame, year: int) -> pd.DataFrame:
     r = r[r["tourney_level"].astype(str) != "D"]
     out = []
     for (tid, fam), g in r.dropna(subset=["family"]).groupby(["tourney_id", "family"]):
-        players = set(g["winner_name"].map(player_key)) | set(g["loser_name"].map(player_key))
-        out.append({
-            "source": "tennismylife", "source_id": str(tid), "tournament_id": str(tid),
-            "name": str(g["tourney_name"].iloc[0]), "family": fam,
-            "first_date": g["date"].min().date().isoformat(), "last_date": g["date"].max().date().isoformat(),
-            "fixtures": len(g), "players": players,
-            "surface": str(g["surface"].dropna().iloc[0]) if g["surface"].notna().any() else "",
-            "level": str(g["tourney_level"].iloc[0]),
-        })
+        for b in _date_blocks(g["date"].dt.date.unique(), gap_days):
+            sub = g[g["date"].dt.date.between(b[0], b[-1])]
+            players = set(sub["winner_name"].map(player_key)) | set(sub["loser_name"].map(player_key))
+            out.append({
+                "source": "tennismylife", "source_id": f"{tid}@{b[0].isoformat()}", "tournament_id": str(tid),
+                "name": str(sub["tourney_name"].iloc[0]), "family": fam,
+                "first_date": b[0].isoformat(), "last_date": b[-1].isoformat(),
+                "fixtures": len(sub), "players": players,
+                "surface": str(sub["surface"].dropna().iloc[0]) if sub["surface"].notna().any() else "",
+                "level": str(sub["tourney_level"].iloc[0]),
+                "pairs": {match_pair(x, y) for x, y in zip(sub["winner_name"], sub["loser_name"])},
+            })
     return pd.DataFrame(out)
 
 
@@ -382,28 +405,159 @@ def _same_player(a: str, b: str) -> bool:
     return ta <= tb or tb <= ta or len(ta & tb) >= 2
 
 
-def player_agreement(odds: pd.DataFrame, tml: pd.DataFrame, odds_matches: pd.DataFrame, tml_matches: pd.DataFrame) -> pd.DataFrame:
-    """For editions matched by both sources: the share of TennisMyLife players (main
-    draw, plus ATP qualifying) that also appear in the OddsPapi fixtures mapped to the
-    same edition. OddsPapi also lists qualifying, so its larger set is the reference.
-    High agreement confirms both mappings; low agreement flags one of them."""
-    o = odds_matches[odds_matches.status == "matched"].merge(odds[["source_id", "players"]], on="source_id")
-    t = tml_matches[tml_matches.status == "matched"].merge(tml[["source_id", "players"]], on="source_id")
-    rows = []
-    for key, og in o.groupby("edition_key"):
-        tg = t[t["edition_key"] == key]
-        if tg.empty:
+def shared_pairs(a: set, b: set) -> int:
+    """How many matches in a also appear in b (same two players), tolerating name variants."""
+    exact = a & b
+    n = len(exact)
+    rest_b = [sorted(q) for q in b - exact if len(q) == 2]
+    for p in a - exact:
+        if len(p) != 2:
             continue
-        op = set().union(*og["players"])
-        tp = set().union(*tg["players"])
-        found = sum(1 for p in tp if p in op or any(_same_player(p, q) for q in op))
-        rows.append({
-            "edition_key": key, "sheet_row": og["sheet_row"].iloc[0], "sheet_name": og["sheet_name"].iloc[0],
-            "oddspapi_ids": ", ".join(og["source_id"]), "tennismylife_ids": ", ".join(tg["source_id"]),
-            "oddspapi_players": len(op), "tennismylife_players": len(tp),
-            "share_found": round(found / len(tp), 3) if tp else None,
+        x, y = sorted(p)
+        if any((_same_player(x, q0) and _same_player(y, q1)) or (_same_player(x, q1) and _same_player(y, q0))
+               for q0, q1 in rest_b):
+            n += 1
+    return n
+
+
+CONFIRM_WINDOW_DAYS = 8   # other-source tournaments starting this close are compared
+CONFIRM_MIN_PAIRS = 3     # matches both sources must share before a mapping counts as confirmed
+
+
+def confirm_matches(sources: pd.DataFrame, matches: pd.DataFrame, other: pd.DataFrame,
+                    other_matches: pd.DataFrame, *, window_days: int = CONFIRM_WINDOW_DAYS,
+                    min_pairs: int = CONFIRM_MIN_PAIRS) -> pd.DataFrame:
+    """Check each matched source tournament against the other source's results.
+
+    The evidence is matches, not names: the same two players meeting in both sources.
+    For a source tournament mapped to edition E, count the matches it shares with the
+    other source's tournaments mapped to E, and with every other nearby tournament of
+    the same tour (mapped elsewhere or not mapped). Two events never share a match, but
+    players do meet again a week later (Abidjan 1 and 2 share up to five), so the call
+    is relative:
+
+    - confirmed: at least min_pairs shared with E, and at least twice any other tournament;
+    - conflict: another tournament shares more than E (the mapping is probably wrong);
+    - unconfirmed: too little evidence either way (a fragment, an event still running);
+    - no_results: the other source has nothing for E yet.
+    """
+    pairs = dict(zip(sources["source_id"], sources["pairs"]))
+    o = other.merge(other_matches[["source_id", "status", "edition_key"]], on="source_id", how="left")
+    o["key"] = [k if st == "matched" else f"unmatched:{sid}" for k, st, sid in zip(o["edition_key"], o["status"], o["source_id"])]
+    o["_first"] = pd.to_datetime(o["first_date"])
+    rows = []
+    for _, m in matches[matches["status"] == "matched"].iterrows():
+        near = o[(o["family"] == m["family"]) & ((o["_first"] - pd.Timestamp(m["first_date"])).abs().dt.days <= window_days)]
+        score: dict[str, int] = {}
+        for k, op in zip(near["key"], near["pairs"]):
+            score[k] = score.get(k, 0) + shared_pairs(pairs[m["source_id"]], op)
+        mine = score.get(m["edition_key"])
+        rivals = {k: v for k, v in score.items() if k != m["edition_key"]}
+        best_other = max(rivals, key=rivals.get) if rivals else ""
+        other_n = rivals.get(best_other, 0)
+        if mine is None:
+            verdict = "no_results"
+        elif other_n > mine:
+            verdict = "conflict"
+        elif mine >= min_pairs and mine >= 2 * other_n:
+            verdict = "confirmed"
+        else:
+            verdict = "unconfirmed"
+        rows.append({"source_id": m["source_id"], "edition_key": m["edition_key"], "confirmation": verdict,
+                     "pairs_same_edition": mine or 0, "pairs_best_other": other_n,
+                     "best_other": best_other if other_n else ""})
+    return pd.DataFrame(rows, columns=["source_id", "edition_key", "confirmation", "pairs_same_edition",
+                                       "pairs_best_other", "best_other"])
+
+
+# ---------------------------------------------------------------- crosswalks
+CROSSWALK_COLUMNS = [
+    "source", "source_id", "tournament_id", "source_name", "family", "first_date", "last_date",
+    "edition_key", "status", "method", "pairs_same_edition", "pairs_best_other", "note", "set_on",
+]
+# Rows a person decided, or that results confirmed, are never re-matched automatically.
+KEPT_STATUSES = {"confirmed", "user", "rejected"}
+# Rows a fixture may be priced through. Everything else gives no price (fail closed).
+USABLE_STATUSES = {"auto", "confirmed", "user"}
+
+
+def build_crosswalk(matches: pd.DataFrame, confirmation: pd.DataFrame, existing: pd.DataFrame | None = None,
+                    *, set_on: str) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Merge a fresh matching run into the stored crosswalk for one source.
+
+    Stored rows with status confirmed, user or rejected are kept as they are; the fresh
+    run never overrides them. Every other row is (re)decided from the fresh run:
+
+    - matched and confirmed by the other source's results -> confirmed
+    - matched, other source has no or too little evidence  -> auto (usable)
+    - matched, but the other source's results point elsewhere -> review (not usable)
+    - unmatched or ambiguous                                -> review (not usable)
+
+    Returns (crosswalk, drift): drift lists kept rows that the fresh run would now map
+    differently, for the report.
+    """
+    conf = confirmation.set_index("source_id") if len(confirmation) else pd.DataFrame()
+    fresh = []
+    for _, m in matches.iterrows():
+        c = conf.loc[m["source_id"]] if m["source_id"] in conf.index else None
+        verdict = c["confirmation"] if c is not None else ""
+        if m["status"] != "matched":
+            status, note = "review", f"{m['status']}; candidates: {m['candidates']}" if m["candidates"] else m["status"]
+        elif verdict == "confirmed":
+            status, note = "confirmed", ""
+        elif verdict == "conflict":
+            status, note = "review", f"results point to {c['best_other']} ({c['pairs_best_other']} shared matches vs {c['pairs_same_edition']})"
+        else:
+            status, note = "auto", verdict
+        fresh.append({
+            "source": m["source"], "source_id": m["source_id"], "tournament_id": str(m["source_id"]).split("@")[0],
+            "source_name": m["source_name"], "family": m["family"], "first_date": m["first_date"],
+            "last_date": m["last_date"], "edition_key": m["edition_key"] if m["status"] == "matched" else "",
+            "status": status, "method": m["method"],
+            "pairs_same_edition": int(c["pairs_same_edition"]) if c is not None else 0,
+            "pairs_best_other": int(c["pairs_best_other"]) if c is not None else 0,
+            "note": note, "set_on": set_on,
         })
-    return pd.DataFrame(rows)
+    fresh = pd.DataFrame(fresh, columns=CROSSWALK_COLUMNS)
+    if existing is None or existing.empty:
+        return fresh.sort_values(["first_date", "source_id"]).reset_index(drop=True), pd.DataFrame(columns=["source_id", "stored", "fresh", "fresh_status"])
+    kept = existing[existing["status"].isin(KEPT_STATUSES)].copy()
+    drift = kept.merge(fresh[["source_id", "edition_key", "status", "last_date"]], on="source_id", suffixes=("", "_fresh"))
+    # A running event's block grows day by day; keep its stored mapping but its latest dates.
+    last = dict(zip(drift["source_id"], drift["last_date_fresh"]))
+    kept["last_date"] = [max(str(v), last.get(sid, "")) for sid, v in zip(kept["source_id"], kept["last_date"])]
+    drift = drift[(drift["edition_key"] != drift["edition_key_fresh"]) | (drift["status_fresh"] == "review")]
+    drift = drift.rename(columns={"edition_key": "stored", "edition_key_fresh": "fresh", "status_fresh": "fresh_status"})[
+        ["source_id", "stored", "fresh", "fresh_status"]]
+    out = pd.concat([kept, fresh[~fresh["source_id"].isin(kept["source_id"])]], ignore_index=True)
+    return out[CROSSWALK_COLUMNS].sort_values(["first_date", "source_id"]).reset_index(drop=True), drift.reset_index(drop=True)
+
+
+def load_crosswalk(path: str | Path) -> pd.DataFrame:
+    p = Path(path)
+    if not p.exists():
+        return pd.DataFrame(columns=CROSSWALK_COLUMNS)
+    return pd.read_csv(p, dtype=str, keep_default_na=False)
+
+
+def resolve_edition(crosswalk: pd.DataFrame, tournament_id, when, *, gap_days: int) -> str | None:
+    """Edition key for one source tournament id on one date, or None (fail closed).
+
+    A crosswalk row covers its block's dates plus gap_days on either side, so a fixture
+    added to a running block still resolves. None when no row covers the date, when the
+    covering row is not usable (review, rejected), or when two rows cover it.
+    """
+    day = pd.Timestamp(when).date()
+    rows = crosswalk[crosswalk["tournament_id"].astype(str) == str(tournament_id)]
+    if rows.empty:
+        return None
+    first = pd.to_datetime(rows["first_date"]).dt.date
+    last = pd.to_datetime(rows["last_date"]).dt.date
+    pad = timedelta(days=gap_days)
+    covering = rows[[(f - pad) <= day <= (l + pad) for f, l in zip(first, last)]]
+    if len(covering) != 1 or covering["status"].iloc[0] not in USABLE_STATUSES:
+        return None
+    return covering["edition_key"].iloc[0] or None
 
 
 # ---------------------------------------------------------------- locations

@@ -20,13 +20,15 @@ local clone with the command shown.
 | `feat/master-schedule-reconciliation` | Merged into #39's branch (PR #41), then into `main` via #43 | 2026-10-12 |
 | `repair/step1-repo-cleanup` | Merged into #39's branch (PR #42), then into `main` via #43 | 2026-10-12 |
 | `repair/land-step1-and-schedule-on-main` | Merged (PR #43) | 2026-10-12 |
+| `feat/step2a-schedule-locations` | Merged (PR #44) | 2026-10-12 |
 | `claude/bootstrap-v5-history-setup-3pxlyr` | Agent session branch; all its work reached `main` via #39–#43 | 2026-10-12 |
 
 ```bash
 git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-infer-surface-imports \
   fix/phase0-ci-green-and-season-rollover docs/rebuild-plan-and-tournament-identity \
   feat/master-schedule-reconciliation repair/step1-repo-cleanup \
-  repair/land-step1-and-schedule-on-main claude/bootstrap-v5-history-setup-3pxlyr
+  repair/land-step1-and-schedule-on-main feat/step2a-schedule-locations \
+  claude/bootstrap-v5-history-setup-3pxlyr
 ```
 
 ### Pending your decision (not yet recommended for deletion)
