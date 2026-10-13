@@ -1,7 +1,10 @@
 # Player identity across sources
 
 Date: 2026-10-13
-Status: **DRAFT — pending user approval.**
+Status: **Approved by the user in chat, 2026-10-13, in this order:** (1) the safety fix
+(question 0, PR #46); (2) build the alias tables and rules (§2.2–2.4, §2.6); (3) decide our
+own player id and id-keyed ratings (§2.1, §2.5) after measuring how many same-name players
+reach priced fixtures (§2.8). §2.1 and §2.5 are not approved yet.
 Category: Production Reliability (data layer). Serves roadmap Phase 0; rebuild plan Step 2
 (user decision 2026-10-13: player identity is the next Step 2 item).
 Companion: `docs/superpowers/specs/2026-10-12-tournament-identity-design.md` (same approach,
