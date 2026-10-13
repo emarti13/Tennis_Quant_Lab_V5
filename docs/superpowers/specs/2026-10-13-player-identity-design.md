@@ -4,7 +4,10 @@ Date: 2026-10-13
 Status: **Approved by the user in chat, 2026-10-13, in this order:** (1) the safety fix
 (question 0, PR #46); (2) build the alias tables and rules (§2.2–2.4, §2.6); (3) decide our
 own player id and id-keyed ratings (§2.1, §2.5) after measuring how many same-name players
-reach priced fixtures (§2.8). §2.1 and §2.5 are not approved yet.
+reach priced fixtures (§2.8). Later the same day the user approved §2.1 and §2.5 as well
+(our own player id; ratings move onto it only after the model check) and question 2
+(same name, different country: separate players until the user decides). Build order is
+unchanged: alias tables and rules first.
 Category: Production Reliability (data layer). Serves roadmap Phase 0; rebuild plan Step 2
 (user decision 2026-10-13: player identity is the next Step 2 item).
 Companion: `docs/superpowers/specs/2026-10-12-tournament-identity-design.md` (same approach,
