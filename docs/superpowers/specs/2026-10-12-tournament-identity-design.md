@@ -1,7 +1,8 @@
 # Tournament identity across sources
 
 Date: 2026-10-12
-Status: **Approved by the user in chat, 2026-10-12.**
+Status: **Approved by the user in chat, 2026-10-12.** Amendment A (§2.8) approved by the
+user in chat, 2026-10-13.
 First implementation: `v5_tournament_identity.py` + `scripts/reconcile_master_schedule.py`
 (read-only reconciliation; report in `context_registry/master_schedule/reconciliation/2026/REPORT.md`).
 Category: Production Reliability (data layer). Serves roadmap Phase 0; prerequisite for
@@ -113,6 +114,37 @@ master schedule. The daily forecast, the app, settlement and research all call i
 four current lookups are removed in the same change (`v5_tournament_authority`,
 `v5_master_schedule_context`, `v5_tournament_registry`, `v5_tournament_context_registry`).
 
+### 2.8 Amendment A: block keys and confirmation by shared matches (approved 2026-10-13)
+
+Found while building the crosswalks on 2026 data:
+
+- **TennisMyLife reuses ids too.** Both 2026 San Diego Challengers are `2026-2971`, and
+  `2026-416` holds one Munich match plus the whole Rome Masters. So the TennisMyLife
+  crosswalk is keyed like OddsPapi's: (`tourney_id`, date block), written
+  `2026-2971@2026-01-26`. A block ends where the id's dates jump by more than 6 days
+  (OddsPapi: 4 days between fixture dates).
+- **Confirmation uses shared matches, not shared players.** A shared player proves
+  little: a Grand Slam's qualifying contains most of the previous week's draws, and our
+  OddsPapi collection has gaps (Sept 1–13), so player shares ranged from 28% to 100% for
+  correct mappings. The evidence is now the same two players meeting in both sources.
+  Players do meet again a week later (Abidjan 1 and 2 share up to five matches), so the
+  rule is relative to every nearby tournament of the same tour (±8 days):
+  - **confirmed:** at least 3 matches shared with its own edition, and at least twice as
+    many as with any other tournament;
+  - **conflict:** another tournament shares more; the mapping goes to review (no price);
+  - **unconfirmed:** too little evidence (a fragment, an event still running); stays usable;
+  - **no results:** the other source has nothing for that edition yet; stays usable.
+- **Crosswalk statuses:** `confirmed` (by results), `auto` (matched, not yet confirmed;
+  usable), `review` (unmatched, ambiguous or in conflict; not usable), plus `user` and
+  `rejected` from the person. Rows marked `confirmed`, `user` or `rejected` are never
+  changed by a later run; if a later run disagrees, the report lists it.
+- **Stored mappings point at edition keys.** A sheet edit that changes a row's key
+  (its name or start date) leaves the stored row pointing at nothing; the report lists
+  those rows to be re-pointed, and resolution fails closed until then.
+
+2026 result: OddsPapi 284 confirmed, 0 conflicts, 4 unconfirmed (fragments of 1–2
+matches), 71 with no TennisMyLife results yet; TennisMyLife 283 confirmed, 0 conflicts.
+
 ## 3. Acceptance (before it replaces the current lookups)
 
 - **2026 back-test:** every OddsPapi 2026 fixture block and every TennisMyLife 2026
@@ -121,8 +153,8 @@ four current lookups are removed in the same change (`v5_tournament_authority`,
 - **Same-city cases resolve correctly:** each multi-edition city in 2026 (Istanbul,
   Shanghai, Tulln, Munich, Oeiras, Antalya and any others found) is checked by player
   overlap.
-- **Confirmation agreement:** for settled 2026 editions, mapped OddsPapi fixtures agree
-  with TennisMyLife player pairs at ≥ 98%; disagreements are listed.
+- **Confirmation agreement:** for settled 2026 editions, no mapping is in conflict with
+  the other source's matches (§2.8); every conflict or unconfirmed mapping is listed.
 - **Year-rollover simulation:** using only 2025 data, the 2026 season resolves through
   carry-forward and candidates, and the number needing review is reported.
 - **Parity:** the forecast and the app resolve every fixture to the same edition and

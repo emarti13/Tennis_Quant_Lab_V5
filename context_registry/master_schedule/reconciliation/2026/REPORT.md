@@ -6,8 +6,9 @@ Sheet: `context_registry/master_schedule/master_schedule_2026.csv` · as of 2026
 
 - Sheet: 441 editions ({'CHALLENGER': 265, 'ATP': 63, 'WTA125': 57, 'WTA': 56}); status {'scheduled': 428, 'cancelled': 11, 'added': 2}.
 - OddsPapi: 364 tournament blocks → {'matched': 359, 'unmatched': 5}.
-- TennisMyLife: 303 tournaments (Davis Cup ties excluded) → {'matched': 291, 'unmatched': 11, 'ambiguous': 1}.
-- Player check (editions matched by both sources): 282 editions, median 100% of TennisMyLife players found in OddsPapi; 18 below 80%.
+- TennisMyLife: 305 tournaments (Davis Cup ties excluded) → {'matched': 293, 'unmatched': 11, 'ambiguous': 1}.
+- Confirmation by shared matches (same two players in both sources): OddsPapi {'confirmed': 284, 'no_results': 71, 'unconfirmed': 4}; TennisMyLife {'confirmed': 283, 'no_results': 8, 'unconfirmed': 2}.
+- Crosswalks: OddsPapi {'confirmed': 284, 'auto': 75, 'review': 5}; TennisMyLife {'confirmed': 283, 'review': 12, 'auto': 10}.
 - Past editions (ended before 2026-10-12) with no match from either source: 16.
 - Locations: {'geocoded': 437, 'missing': 4}; time zone filled for 437 of 441 editions.
 
@@ -30,18 +31,18 @@ Details per row: `sheet_issues.csv`.
 
 | source_id | source_name | family | first_date | status | candidates |
 |---|---|---|---|---|---|
-| 2026-1111 | Queen's Club | WTA | 2026-06-08 | unmatched | The HSBC Championships (London, 2026-06-08) / Libema Open ('s-Hertogenbosch, 2026-06-08) |
-| 2026-2895 | Copa Internacional de Tenis | CHALLENGER | 2026-09-28 | unmatched | Porto (Monte Aventino) (Porto, 2026-09-28) / Jingshan (Jingshan, 2026-09-28) / Columbus (Columbus, 2026-09-28) / Curitiba (Curitiba, 2026-09-28) / Mouilleron-le-Captif (Mouilleron-le-Captif, 2026-09-28) / Bari (Bari, 2026-09-28) |
-| 2026-2983 | Crete 1 | CHALLENGER | 2026-03-02 | unmatched | Thionville (Thionville, 2026-03-02) / Brasilia (Brasilia, 2026-03-02) / Kigali 1 (Kigali, 2026-03-02) / Hersonissos 1 (Hersonissos, 2026-03-02) |
-| 2026-2985 | Crete 2 | CHALLENGER | 2026-03-09 | unmatched | Cap Cana (Cap Cana, 2026-03-09) / Phoenix (Phoenix, 2026-03-09) / Kigali 2 (Kigali, 2026-03-09) / Cherbourg-en-Cotentin (Cherbourg-en-Cotentin, 2026-03-09) / Santiago (Santiago, 2026-03-09) / Hersonissos 2 (Hersonissos, 2026-03-09) |
-| 2026-2993 | Moldova | CHALLENGER | 2026-05-25 | unmatched | Chisinau 1 (Chisinau, 2026-05-25) / Little Rock (Little Rock, 2026-05-25) / Vicenza (Vicenza, 2026-05-25) / Centurion 1 (Centurion, 2026-05-25) / Kosice (Kosice, 2026-05-25) |
-| 2026-311 | Queen's Club | ATP | 2026-06-15 | unmatched | Terra Wortmann Open (Halle, 2026-06-15) / HSBC Championships (London, 2026-06-15) |
-| 2026-421 | Canada Masters | ATP | 2026-08-02 | unmatched | Mubadala Citi DC Open (Washington, 2026-07-27) / Mifel Tennis Open by Telcel Oppo (Los Cabos, 2026-07-27) / National Bank Open (Montreal, 2026-08-02) |
-| 2026-460 | Heilbronn | CHALLENGER | 2026-06-01 | unmatched | Birmingham (Birmingham, 2026-06-01) / Perugia (Perugia, 2026-06-01) / Bad Rappenau (Bad Rappenau, 2026-06-01) / Prostejov (Prostejov, 2026-06-01) / Tyler (Tyler, 2026-06-01) / Centurion 2 (Centurion, 2026-06-01) |
-| 2026-6857 | Open de Vendée | CHALLENGER | 2026-09-28 | unmatched | Porto (Monte Aventino) (Porto, 2026-09-28) / Jingshan (Jingshan, 2026-09-28) / Columbus (Columbus, 2026-09-28) / Curitiba (Curitiba, 2026-09-28) / Mouilleron-le-Captif (Mouilleron-le-Captif, 2026-09-28) / Bari (Bari, 2026-09-28) |
-| 2026-6963 | Morelos | CHALLENGER | 2026-03-16 | unmatched | Asuncion (Rakiura) (Asuncion, 2026-03-16) / Cuernavaca (Cuernavaca, 2026-03-16) / Murcia (Murcia, 2026-03-16) / Zadar (Zadar, 2026-03-16) |
-| 2026-7909 | Ferrero Challenger | CHALLENGER | 2026-10-05 | unmatched | Villena (Villena, 2026-10-05) / Antofagasta (Antofagasta, 2026-10-05) / Braga (Braga, 2026-10-05) / Palermo (Palermo, 2026-10-05) / Wuning 3 (Wuning, 2026-10-05) |
-| 2026-9900 | United Cup | ATP | 2026-01-02 | ambiguous | United Cup (Perth, 2026-01-02) / United Cup (Sydney, 2026-01-02) |
+| 2026-1111@2026-06-08 | Queen's Club | WTA | 2026-06-08 | unmatched | The HSBC Championships (London, 2026-06-08) / Libema Open ('s-Hertogenbosch, 2026-06-08) |
+| 2026-2895@2026-09-28 | Copa Internacional de Tenis | CHALLENGER | 2026-09-28 | unmatched | Porto (Monte Aventino) (Porto, 2026-09-28) / Jingshan (Jingshan, 2026-09-28) / Columbus (Columbus, 2026-09-28) / Curitiba (Curitiba, 2026-09-28) / Mouilleron-le-Captif (Mouilleron-le-Captif, 2026-09-28) / Bari (Bari, 2026-09-28) |
+| 2026-2983@2026-03-02 | Crete 1 | CHALLENGER | 2026-03-02 | unmatched | Thionville (Thionville, 2026-03-02) / Brasilia (Brasilia, 2026-03-02) / Kigali 1 (Kigali, 2026-03-02) / Hersonissos 1 (Hersonissos, 2026-03-02) |
+| 2026-2985@2026-03-09 | Crete 2 | CHALLENGER | 2026-03-09 | unmatched | Cap Cana (Cap Cana, 2026-03-09) / Phoenix (Phoenix, 2026-03-09) / Kigali 2 (Kigali, 2026-03-09) / Cherbourg-en-Cotentin (Cherbourg-en-Cotentin, 2026-03-09) / Santiago (Santiago, 2026-03-09) / Hersonissos 2 (Hersonissos, 2026-03-09) |
+| 2026-2993@2026-05-25 | Moldova | CHALLENGER | 2026-05-25 | unmatched | Chisinau 1 (Chisinau, 2026-05-25) / Little Rock (Little Rock, 2026-05-25) / Vicenza (Vicenza, 2026-05-25) / Centurion 1 (Centurion, 2026-05-25) / Kosice (Kosice, 2026-05-25) |
+| 2026-311@2026-06-15 | Queen's Club | ATP | 2026-06-15 | unmatched | Terra Wortmann Open (Halle, 2026-06-15) / HSBC Championships (London, 2026-06-15) |
+| 2026-421@2026-08-02 | Canada Masters | ATP | 2026-08-02 | unmatched | Mubadala Citi DC Open (Washington, 2026-07-27) / Mifel Tennis Open by Telcel Oppo (Los Cabos, 2026-07-27) / National Bank Open (Montreal, 2026-08-02) |
+| 2026-460@2026-06-01 | Heilbronn | CHALLENGER | 2026-06-01 | unmatched | Birmingham (Birmingham, 2026-06-01) / Perugia (Perugia, 2026-06-01) / Bad Rappenau (Bad Rappenau, 2026-06-01) / Prostejov (Prostejov, 2026-06-01) / Tyler (Tyler, 2026-06-01) / Centurion 2 (Centurion, 2026-06-01) |
+| 2026-6857@2026-09-28 | Open de Vendée | CHALLENGER | 2026-09-28 | unmatched | Porto (Monte Aventino) (Porto, 2026-09-28) / Jingshan (Jingshan, 2026-09-28) / Columbus (Columbus, 2026-09-28) / Curitiba (Curitiba, 2026-09-28) / Mouilleron-le-Captif (Mouilleron-le-Captif, 2026-09-28) / Bari (Bari, 2026-09-28) |
+| 2026-6963@2026-03-16 | Morelos | CHALLENGER | 2026-03-16 | unmatched | Asuncion (Rakiura) (Asuncion, 2026-03-16) / Cuernavaca (Cuernavaca, 2026-03-16) / Murcia (Murcia, 2026-03-16) / Zadar (Zadar, 2026-03-16) |
+| 2026-7909@2026-10-05 | Ferrero Challenger | CHALLENGER | 2026-10-05 | unmatched | Villena (Villena, 2026-10-05) / Antofagasta (Antofagasta, 2026-10-05) / Braga (Braga, 2026-10-05) / Palermo (Palermo, 2026-10-05) / Wuning 3 (Wuning, 2026-10-05) |
+| 2026-9900@2026-01-02 | United Cup | ATP | 2026-01-02 | ambiguous | United Cup (Perth, 2026-01-02) / United Cup (Sydney, 2026-01-02) |
 
 ### OddsPapi tournament blocks not matched to exactly one edition
 
@@ -57,30 +58,32 @@ Details per row: `sheet_issues.csv`.
 
 | edition_key | tennismylife_ids |
 |---|---|
-| ATP/2026-04-13/bmw-open-by-bitpanda/munich | 2026-308, 2026-416 |
+| ATP/2026-04-13/bmw-open-by-bitpanda/munich | 2026-308@2026-04-13, 2026-416@2026-04-13 |
 
-### Low player agreement (below 80%)
+### Matches the other source does not confirm
 
-| sheet_row | sheet_name | oddspapi_ids | tennismylife_ids | oddspapi_players | tennismylife_players | share_found |
-|---|---|---|---|---|---|---|
-| 26 | BMW Open by Bitpanda | 2835@2026-04-11 | 2026-308, 2026-416 | 41 | 145 | 0.276 |
-| 367 | Istanbul (TED Club) | 51728@2026-09-06, 51728@2026-09-12 | 2026-7083 | 35 | 32 | 0.531 |
-| 365 | Tulln | 34874@2026-09-06, 34874@2026-09-12 | 2026-9556 | 35 | 32 | 0.531 |
-| 366 | Cassis | 26126@2026-09-06 | 2026-9120 | 36 | 32 | 0.562 |
-| 364 | Shanghai | 6067@2026-09-06, 6067@2026-09-12 | 2026-6313 | 35 | 32 | 0.594 |
-| 193 | San Diego | 45441@2026-01-26 | 2026-2971 | 50 | 54 | 0.611 |
-| 362 | Genoa (Nuova Valletta) | 3801@2026-09-06 | 2026-1763 | 37 | 32 | 0.625 |
-| 242 | Sao Leopoldo | 6151@2026-03-29 | 2026-2821 | 40 | 32 | 0.688 |
-| 363 | Seville | 3813@2026-09-06 | 2026-784 | 38 | 32 | 0.688 |
-| 82 | 2026 Colsanitas Cup | 2703@2026-03-28 | 2026-894 | 39 | 32 | 0.688 |
-| 389 | Palermo | 7877@2026-10-04 | 2026-3153 | 41 | 32 | 0.719 |
-| 241 | San Luis Potosi | 3379@2026-03-29 | 2026-213 | 41 | 32 | 0.719 |
-| 53 | Kinoshita Group Japan Open Tennis Championships | 3031@2026-09-29 | 2026-329 | 33 | 43 | 0.744 |
-| 387 | Antofagasta | 40303@2026-10-04 | 2026-2889 | 42 | 32 | 0.75 |
-| 357 | Manacor | 24846@2026-08-31 | 2026-7973 | 47 | 32 | 0.75 |
-| 22 | Fayez Sarofim & Co. U.S. Men's Clay Court Championship | 2751@2026-03-28 | 2026-717 | 32 | 40 | 0.75 |
-| 21 | Tiriac Open | 3007@2026-03-30 | 2026-4462 | 32 | 40 | 0.775 |
-| 23 | Grand Prix Hassan II | 13563@2026-03-29 | 2026-360 | 31 | 40 | 0.775 |
+conflict: the other source's results point to a different tournament, so the mapping is held for review and gives no price. unconfirmed: too few shared matches to tell (a fragment, or an event still running); the mapping stays usable.
+
+| source | source_id | source_name | edition_key | confirmation | pairs_same_edition | pairs_best_other | best_other |
+|---|---|---|---|---|---|---|---|
+| tennismylife | 2026-3155@2026-10-12 | Catania | CHALLENGER/2026-10-12/san-gregorio-di-catania/san-gregorio-di-catania | unconfirmed | 1 | 0 |  |
+| tennismylife | 2026-416@2026-04-13 | Munich | ATP/2026-04-13/bmw-open-by-bitpanda/munich | unconfirmed | 1 | 0 |  |
+| oddspapi | 34874@2026-09-12 | ATP Challenger Tulln, Austria Men Singles | CHALLENGER/2026-09-07/tulln/tulln | unconfirmed | 1 | 0 |  |
+| oddspapi | 51728@2026-09-12 | ATP Challenger Istanbul 3, Turkiye Men Singles | CHALLENGER/2026-09-07/istanbul-ted-club/istanbul | unconfirmed | 2 | 0 |  |
+| oddspapi | 52078@2026-10-11 | ATP Challenger Catania, Italy Men Singles | CHALLENGER/2026-10-12/san-gregorio-di-catania/san-gregorio-di-catania | unconfirmed | 1 | 0 |  |
+| oddspapi | 6067@2026-09-12 | ATP Challenger Shanghai, China Men Singles | CHALLENGER/2026-09-07/shanghai/shanghai | unconfirmed | 2 | 1 | CHALLENGER/2026-09-14/guangzhou-huangpu/guangzhou |
+
+### Stored mappings the fresh run would change
+
+Confirmed and user rows are never changed automatically. Check each one.
+
+_None._
+
+### Stored mappings to editions no longer in the sheet
+
+A renamed or re-dated sheet row changes its edition key. Re-point these rows.
+
+_None._
 
 ### Surface disagreements (TennisMyLife vs sheet)
 

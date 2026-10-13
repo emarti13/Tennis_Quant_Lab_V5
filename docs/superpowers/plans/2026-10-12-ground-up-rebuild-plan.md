@@ -73,7 +73,7 @@ A step is done only when all of these hold:
   `v5_tournament_registry` and `v5_tournament_context_registry` are removed; one module
   reads the file.
   - **Identity across sources** follows `docs/superpowers/specs/2026-10-12-tournament-identity-design.md`
-    (draft): canonical event and edition ids owned by the master schedule, one stored
+    (approved, including amendment A of 2026-10-13): canonical event and edition ids owned by the master schedule, one stored
     crosswalk per source (OddsPapi, TennisMyLife), a resolver that matches on tour, date
     window, location and player overlap (names only as a tiebreaker), a confirmation loop
     from results, and review/override in the app. No source's own id or name is the key.
@@ -82,6 +82,18 @@ A step is done only when all of these hold:
   - **2026 reconciliation report:** every 2026 row checked against TennisMyLife 2026
     results (tournament name, surface) and OddsPapi fixtures (tournament names and IDs).
     Output lists events with no match, surface disagreements, and missing OddsPapi IDs.
+- **Crosswalks (done 2026-10-12):** `context_registry/master_schedule/crosswalk_oddspapi.csv`
+  and `crosswalk_tennismylife.csv`, written by `scripts/reconcile_master_schedule.py`,
+  confirmed by shared matches, read with `v5_tournament_identity.resolve_edition`.
+  Production does not read them yet; replacing the four old lookups is next.
+- **Player identity (next; user decision 2026-10-13).** Same approach as tournaments: a
+  stored crosswalk from OddsPapi participant ids to one TennisMyLife player, proven by
+  results (same edition, same opponent), user decisions never overwritten, unclear links
+  give no price. Today the live resolver refuses 15 players whose names appear twice in
+  our own history (de Minaur, De Jong, Ruse, Kessler...), refuses 97 spelling variants,
+  and prices at least 9 known players as new (extra given names, e.g. Maria Carle). The
+  history duplicates are merged into one player; that changes ratings, so it is measured
+  against the current engine before going live.
 - **Resolving a fixture:** through the crosswalk (spec §2.2–2.5). Unmatched or ambiguous
   → no price, listed for review (fail closed). No row for this year → carried forward from
   the same event, labeled "from <year>".
@@ -106,6 +118,24 @@ A step is done only when all of these hold:
   (a) a small daily OddsPapi historical pull for yesterday's priced fixtures, (b) Kalshi
   candles after settlement (already planned), (c) tennis-data.co.uk closing odds (tour
   events only). Check OddsPapi quota and Actions minutes before choosing.
+- **Margin removal (de-vig), user decision 2026-10-13.** One function turns a book's prices
+  into no-vig probabilities, with a setting per book on one scale (Box-Cox λ: 0 =
+  multiplicative, 1 = additive/Shin, about 1.5 = power). It replaces the three current
+  copies (`historical_market_mapper`, the app's `no_vig_probs`, and the cross-book average
+  in `build_v5_market_board_input`) and the two copies of the BET/LEAN rule
+  (`v5_live_market.signal_row`, the app). Prompted by vigged.com's study of 725,000 closing
+  prices (Pinnacle tennis fits λ ≈ 2.0 [1.5, 3.1]; Bet365 on the same matches ≈ 1.2), which
+  is not adopted as-is: its tennis data ends in 2019 and has no Challengers.
+  - **Measure on our data** before the sealed period: 2026 OddsPapi closing prices to
+    Sept 1 (Pinnacle, BetRivers, DraftKings), by men's tour, women's tour and Challengers;
+    plus tennis-data.co.uk (Pinnacle and Bet365, free) once the domain is allowed.
+    Fit λ per book on closing prices and again 4–8 h before the start; earliest 60% fit,
+    latest 40% test; log loss with paired-bootstrap 95% intervals and reliability by
+    price bucket; multiplicative and power reported alongside.
+  - **Cautious edge rule (approved):** an edge is judged against the least favourable of
+    the multiplicative, additive and power no-vig probabilities for the side being bet,
+    so the method choice can never create an edge. Built into the same function.
+  - Exchanges (Kalshi, Polymarket): midpoint for fair price; the price paid plus fees for EV.
 - Kalshi trades and 1-minute candles, one daily pull after settlement (≤ 3 min); order-book
   depth only inside existing runs. Budget entries added to `v5_actions_budget.py`.
 
@@ -194,6 +224,11 @@ collectors writing at least 95% of scheduled snapshots for 14 days. Then Phase 1
 | Spec | Tournament identity spec | Approved 2026-10-12. Ball/CPI columns are filled by the user later; they are optional inputs |
 | Spec Q2 | Team events | Keep in the schedule so fixtures resolve; never priced |
 | Spec Q3 | WTA 125 | In the schedule and matching now; pricing decided later |
+| Tournament spec A | TennisMyLife ids split by week; confirmation by shared matches | Approved 2026-10-13 |
+| Players | Player identity spec (2026-10-13): our own player id, alias tables proven by results, no silent new players; ratings move to the id after the model check; same name + different country kept separate | Approved 2026-10-13 |
+| De-vig | One margin-removal function, λ per book measured on our data; cautious edge rule | Approved 2026-10-13 (Step 3) |
+| Data | tennis-data.co.uk (free Pinnacle/Bet365 closing prices) | Approved 2026-10-13; the domain must be allowed in the environment |
+| Approach | Build toward the finished state; no fixes "for today" | User direction 2026-10-13 |
 
 Sheet notes from the user: a Men/Women column will be added; WTA end dates are not in the
 official WTA calendar, so the code keeps assuming them (labeled) and can replace them with
