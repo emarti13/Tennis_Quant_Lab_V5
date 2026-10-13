@@ -121,7 +121,9 @@ def _appearances(matches: pd.DataFrame) -> pd.DataFrame:
         for s in ("winner", "loser")], ignore_index=True)
     a["ioc"] = a["ioc"].map(_country)
     # A row without an id is its own node, named by tour and folded name.
-    a["node"] = [i if _present(i) else f"name:{k}" for i, k in zip(a["id"], a["key"])]
+    # Stored names of id-less nodes use the plain folded name, so a change to how names
+    # are compared (e.g. umlauts) never renames a node and never mints a new player id.
+    a["node"] = [i if _present(i) else f"name:{_folded_key(n)}" for i, n in zip(a["id"], a["name"])]
     # Tennis week: an event dated Saturday or Sunday belongs to the following Monday's week
     # (TennisMyLife dates Bad Homburg 2026 on Sunday June 21, the eve of its main draw).
     a["week"] = (a["date"] + pd.Timedelta(days=2)).dt.to_period("W-SUN").astype(str)
@@ -333,7 +335,8 @@ def _tml_with_editions(matches: pd.DataFrame, crosswalk_tml: pd.DataFrame, alias
     m = m[m["edition"].notna()].copy()
     pid = {(r.tour, r.tml_id): r.player_id for r in alias_tml.itertuples()}
     for side in ("winner", "loser"):
-        m[f"{side}_pid"] = [pid.get((t, i if _present(i) else f"name:{k}")) for t, i, k in zip(m["tour"], m[f"{side}_id"], m[f"{side}_key"])]
+        m[f"{side}_pid"] = [pid.get((t, i if _present(i) else f"name:{_folded_key(n)}"))
+                             for t, i, n in zip(m["tour"], m[f"{side}_id"], m[f"{side}_name"])]
     m["round_no"] = m["round"].map(ROUND_ORDER)
     return m
 

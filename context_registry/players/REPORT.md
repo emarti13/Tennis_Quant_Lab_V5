@@ -24,7 +24,7 @@ Statuses: confirmed = 2+ shared matches agree; auto = 1 shared match, or a uniqu
 | M | 104631 / G793 | Harshana Godamanna / Harshana Godamanna | same name, different country (SRI vs ECU); same birth date |  |
 | M | MH30 / HH06 | John Millman / Marc-Andrea Huesler | same name, different country (AUS vs SUI); born 1989 and 1996 |  |
 | M | C0KH / P0IL | Julio Cesar Porras / Julio César Porras | same name, different country (ARG vs ESP) |  |
-| W | name:basiletti nomi | Noemi Basiletti | TennisMyLife rows without a player id | W-006036 |
+| W | name:basiletti noemi | Noemi Basiletti | TennisMyLife rows without a player id | W-004070 |
 | W | name:jennifer ruggeri | Jennifer Ruggeri | TennisMyLife rows without a player id | W-006016 |
 
 ### Kept apart: same name, different people (information)
@@ -61,6 +61,4 @@ Statuses: confirmed = 2+ shared matches agree; auto = 1 shared match, or a uniqu
 
 ### Stored links the fresh build would change
 
-| participant_id | stored | fresh | fresh_status |
-|---|---|---|---|
-| 770242 | W-004070 | W-006036 | confirmed |
+_None._

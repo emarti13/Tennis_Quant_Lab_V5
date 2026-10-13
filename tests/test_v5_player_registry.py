@@ -166,3 +166,11 @@ def test_placeholders_and_ids():
     for name in ("Quinn, Ethan", "Qu, Yihan", "Llamas Ruiz, Pablo", "Cretu, Cezar (2001)", "Emanuela Lares"):
         assert not is_placeholder_participant(name), name
     assert normalize_tml_id("211817.0") == "211817" and normalize_tml_id("nan") is None and normalize_tml_id(" DH58 ") == "DH58"
+
+
+def test_idless_rows_keep_their_stored_name_whatever_the_comparison_rules():
+    # A rule for comparing names (umlauts) must never rename a stored node, or the player
+    # would get a new id. "Noemi" contains "oe" but stays "noemi" in the stored key.
+    m = pd.DataFrame([_m("W", "t1", "2026-05-05", "R32", "Noemi Basiletti", None, "ITA", "A B", "1", "USA")])
+    _, alias, _ = build_players(m, set_on="2026-10-13")
+    assert "name:basiletti noemi" in set(alias["tml_id"])
