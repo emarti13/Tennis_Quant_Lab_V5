@@ -1,6 +1,6 @@
 # Tournament crosswalks and confirmation by shared matches (2026)
 
-Date: 2026-10-12 · Rebuild plan Step 2 · Spec: tournament identity, amendment A (§2.8, draft).
+Date: 2026-10-12 · Rebuild plan Step 2 · Spec: tournament identity, amendment A (§2.8, approved 2026-10-13).
 Data: OddsPapi `oddspapi_registry/fixtures.csv`, TennisMyLife `v5_results_ready/tennismylife_results.csv`,
 master schedule `master_schedule_2026.csv` (441 editions). No model or pricing change; no market benchmark applies.
 

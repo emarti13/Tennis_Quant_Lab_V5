@@ -73,7 +73,7 @@ A step is done only when all of these hold:
   `v5_tournament_registry` and `v5_tournament_context_registry` are removed; one module
   reads the file.
   - **Identity across sources** follows `docs/superpowers/specs/2026-10-12-tournament-identity-design.md`
-    (approved; amendment A on block keys and confirmation pending): canonical event and edition ids owned by the master schedule, one stored
+    (approved, including amendment A of 2026-10-13): canonical event and edition ids owned by the master schedule, one stored
     crosswalk per source (OddsPapi, TennisMyLife), a resolver that matches on tour, date
     window, location and player overlap (names only as a tiebreaker), a confirmation loop
     from results, and review/override in the app. No source's own id or name is the key.
@@ -86,6 +86,14 @@ A step is done only when all of these hold:
   and `crosswalk_tennismylife.csv`, written by `scripts/reconcile_master_schedule.py`,
   confirmed by shared matches, read with `v5_tournament_identity.resolve_edition`.
   Production does not read them yet; replacing the four old lookups is next.
+- **Player identity (next; user decision 2026-10-13).** Same approach as tournaments: a
+  stored crosswalk from OddsPapi participant ids to one TennisMyLife player, proven by
+  results (same edition, same opponent), user decisions never overwritten, unclear links
+  give no price. Today the live resolver refuses 15 players whose names appear twice in
+  our own history (de Minaur, De Jong, Ruse, Kessler...), refuses 97 spelling variants,
+  and prices at least 9 known players as new (extra given names, e.g. Maria Carle). The
+  history duplicates are merged into one player; that changes ratings, so it is measured
+  against the current engine before going live.
 - **Resolving a fixture:** through the crosswalk (spec §2.2–2.5). Unmatched or ambiguous
   → no price, listed for review (fail closed). No row for this year → carried forward from
   the same event, labeled "from <year>".

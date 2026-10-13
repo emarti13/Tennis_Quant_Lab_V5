@@ -1,8 +1,8 @@
 # Tournament identity across sources
 
 Date: 2026-10-12
-Status: **Approved by the user in chat, 2026-10-12.** Amendment A (§2.8, 2026-10-12):
-**DRAFT — pending user approval.**
+Status: **Approved by the user in chat, 2026-10-12.** Amendment A (§2.8) approved by the
+user in chat, 2026-10-13.
 First implementation: `v5_tournament_identity.py` + `scripts/reconcile_master_schedule.py`
 (read-only reconciliation; report in `context_registry/master_schedule/reconciliation/2026/REPORT.md`).
 Category: Production Reliability (data layer). Serves roadmap Phase 0; prerequisite for
@@ -114,7 +114,7 @@ master schedule. The daily forecast, the app, settlement and research all call i
 four current lookups are removed in the same change (`v5_tournament_authority`,
 `v5_master_schedule_context`, `v5_tournament_registry`, `v5_tournament_context_registry`).
 
-### 2.8 Amendment A: block keys and confirmation by shared matches (DRAFT — pending user approval)
+### 2.8 Amendment A: block keys and confirmation by shared matches (approved 2026-10-13)
 
 Found while building the crosswalks on 2026 data:
 
