@@ -45,5 +45,5 @@ The goal: a fair-price engine that beats the market, proven first as a taker and
 - Features: `v5_fatigue_features.py` (leak-free, research candidate; in PR #36, not yet on `main`); `v5_workload_features.py` (**leaky, being retired**).
 - Warehouse/production: `build_v5_context_warehouse.py`, `v5_daily_batch.py`, `v5_interactive_production.py`, `v5_official_performance.py`.
 - Safety: `v5_model_guard.py`, `v5_fatigue_validation.py` (both in PR #36, not yet on `main`).
-- Ledgers: `v5_daily_ready/official_recommendations.csv` (frozen; never rewrite), `market_snapshot_history.csv` (append-only).
+- Ledgers: `v5_daily_ready/official_recommendations.csv` (frozen; never rewrite; rows before the rebuild are not evidence), `market_snapshot_history.csv` (append-only). New official recommendations are paused by `production_switches.json` (fails closed) until rebuild Step 5.
 - Experiments are recorded in `docs/experiments/YYYY-MM-DD-*.md`.

@@ -10,7 +10,7 @@ import pandas as pd
 from v5_active_board import clear_adjusted_board, get_active_board, set_active_board
 from v5_context_transaction import commit_successful_adjustments
 from v5_interactive_production import run_interactive_production
-from v5_ui_production import load_canonical_today_board, load_repricing_status, runtime_production_state
+from v5_ui_production import render_official_pause_notice, load_canonical_today_board, load_repricing_status, runtime_production_state
 
 
 EDITABLE_CONTEXT_COLUMNS = [
@@ -107,6 +107,7 @@ def render_daily_board(st_module, base_dir: str | Path, namespace: Mapping[str, 
 
     st_module.markdown('<div class="v5-eyebrow">Tennis Quant Lab V5</div>', unsafe_allow_html=True)
     st_module.markdown('<div class="v5-title">Daily Board</div>', unsafe_allow_html=True)
+    render_official_pause_notice(st_module, base_dir)
     st_module.markdown('<div class="v5-subtitle">Full-slate analytical workspace. Inspect production output, adjust match context, and run verified scenarios. Context changes persist only after a successful adjusted production run.</div>', unsafe_allow_html=True)
     st_module.caption("Active board: Adjusted Scenario" if active_mode == "adjusted" else "Active board: Production Forecast")
 
