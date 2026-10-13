@@ -1,30 +1,7 @@
 kind,tour,subject,names,reason,candidates
-tennismylife_ids,M,MH30,John Millman / Marc-Andrea Huesler,1 row(s) under another name for this id; the rows may belong to another player,
-tennismylife_ids,M,W723,Pol Wattanakul / Puriwat Chatpatcharoen,2 row(s) under another name for this id; the rows may belong to another player,
-tennismylife_ids,M,104631 / G793,Harshana Godamanna / Harshana Godamanna,"same name, different country (SRI vs ECU); same birth date",
-tennismylife_ids,M,MH30 / HH06,John Millman / Marc-Andrea Huesler,"same name, different country (AUS vs SUI); born 1989 and 1996",
-tennismylife_ids,M,C0KH / P0IL,Julio Cesar Porras / Julio César Porras,"same name, different country (ARG vs ESP)",
 kept_apart,M,RB32 / RB04,Quentin Robert / Quentin Robert,"same name, born 1992 and 1995",
 kept_apart,M,R630 / RD02,Diogo Rocha / Diogo Rocha,"same name, born 1984 and 1995",
 kept_apart,M,W654 / W933,David Warren / David Warren,"same name, born 1989 and 1994",
-tennismylife_ids,W,name:basiletti noemi,Noemi Basiletti,TennisMyLife rows without a player id,W-004070
-tennismylife_ids,W,name:jennifer ruggeri,Jennifer Ruggeri,TennisMyLife rows without a player id,W-006016
-oddspapi_participant,M,1031927,"Loncarevic, Andrej",one match by draw order only,M-005957 (1)
-oddspapi_participant,W,103375,"Serban, Raluca Georgiana",near spelling,W-003108
-oddspapi_participant,M,1274170,"Sanchez Rojas, Cristian Felipe",partial name or suffix,M-004211
-oddspapi_participant,W,132988,"Ma, Yexin",results disagree,"W-004542 (2), W-002654 (2)"
-oddspapi_participant,W,155556,"Bulgaru, Miriam Bianca",results disagree,"W-002353 (1), W-006024 (1)"
-oddspapi_participant,W,164684,"Thandi, Karman Kaur",partial name or suffix,W-002154
-oddspapi_participant,W,165866,"Miyazaki, Yuriko Lily",partial name or suffix,W-002295
-oddspapi_participant,M,204789,"Al-Harrasi, Mubarak",one match by draw order only,M-002551 (1)
-oddspapi_participant,M,205825,"Salazar Martinez, Daniel",partial name or suffix,M-003039
-oddspapi_participant,M,252239,"Forti, Francesco",results disagree,"M-001067 (24), M-000556 (1)"
-oddspapi_participant,W,335165,"Ku, Yeon Woo",one match by draw order only,W-004074 (1)
-oddspapi_participant,M,42151,"Nam, Ji Sung",one match by draw order only,M-001109 (1)
-oddspapi_participant,M,452689,"Goncalves, Joao",partial name or suffix,M-005963
-oddspapi_participant,W,731379,"Geerlings Martinez, Ariana",partial name or suffix,W-005894
-oddspapi_participant,W,739667,"Pedone, Giorgia",near spelling,W-004519
-oddspapi_participant,M,938595,"Turcanu, Radu David",one match by draw order only,M-003195 (1)
-oddspapi_participant,M,960167,"Fernandez, Jose Gabriel",near spelling,M-000566
-oddspapi_participant,M,965509,"Freda, Vicente",partial name or suffix,M-005620
-oddspapi_participant,M,990759,"Silva, Joao Dinis",partial name or suffix,M-005946
+information,W,name:basiletti noemi,Noemi Basiletti,TennisMyLife rows without a player id; kept as their own player,W-004070
+information,M,name:chatpatcharoen puriwat,Puriwat Chatpatcharoen,TennisMyLife rows without a player id; kept as their own player,M-006036
+information,W,name:jennifer ruggeri,Jennifer Ruggeri,TennisMyLife rows without a player id; kept as their own player,W-006016

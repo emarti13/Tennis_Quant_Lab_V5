@@ -174,3 +174,26 @@ def test_idless_rows_keep_their_stored_name_whatever_the_comparison_rules():
     m = pd.DataFrame([_m("W", "t1", "2026-05-05", "R32", "Noemi Basiletti", None, "ITA", "A B", "1", "USA")])
     _, alias, _ = build_players(m, set_on="2026-10-13")
     assert "name:basiletti noemi" in set(alias["tml_id"])
+
+
+def test_user_decisions_join_ids_and_move_misfiled_rows(tmp_path):
+    from v5_player_registry import load_tml_matches
+    cols = "tourney_id,tourney_date,round,winner_id,winner_name,winner_ioc,winner_age,loser_id,loser_name,loser_ioc,loser_age\n"
+    (tmp_path / "ATP.csv").write_text(cols +
+        "t1,20190107,R32,MH30,John Millman,AUS,29.5,A1,Al Pha,USA,25\n"
+        "t2,20201109,R32,MH30,Marc-Andrea Huesler,AUS,31,B1,Be Ta,USA,25\n"
+        "t3,20210104,R32,HH06,Marc-Andrea Huesler,SUI,24.5,C1,Ce Ta,USA,25\n"
+        "t4,20100305,R32,104631,Harshana Godamanna,SRI,22.2,D1,De Ta,USA,25\n"
+        "t5,20120406,R32,G793,Harshana Godamanna,ECU,24.3,E1,Ep Si,USA,25\n", encoding="utf-8")
+    fixes = tmp_path / "fixes.csv"
+    fixes.write_text("tour,tml_id,name,new_tml_id,note\nM,MH30,Marc-Andrea Huesler,HH06,user\n", encoding="utf-8")
+    m = load_tml_matches(tmp_path, tmp_path / "none.csv", fixes)
+    assert set(m.loc[m["winner_name"] == "Marc-Andrea Huesler", "winner_id"]) == {"HH06"}   # the misfiled row moved
+    _, alias, review = build_players(m, set_on="2026-10-13")
+    assert not any("under another name" in r for r in review["reason"])
+    assert _pid(alias, "M", "104631") != _pid(alias, "M", "G793")                          # different countries: apart
+    stored = alias.copy()
+    stored.loc[stored["tml_id"].isin(["104631", "G793"]), ["player_id", "status"]] = [_pid(alias, "M", "104631"), "user"]
+    players, alias2, review2 = build_players(m, existing_alias=stored, set_on="2026-10-14")
+    assert _pid(alias2, "M", "104631") == _pid(alias2, "M", "G793") == _pid(alias, "M", "104631")
+    assert not any("different country" in r for r in review2["reason"])

@@ -82,9 +82,17 @@ def _country(value) -> str:
     return "" if s in {"", "NAN", "NONE"} else ISO3_TO_IOC.get(s, s)
 
 
+ROW_CORRECTION_COLUMNS = ["tour", "tml_id", "name", "new_tml_id", "note"]
+
+
 def load_tml_matches(history_dir: str | Path = ".v5_history_cache",
-                     results_path: str | Path = "v5_results_ready/tennismylife_results.csv") -> pd.DataFrame:
-    """One row per TennisMyLife match: tour (M/W), tourney, date, round and both players."""
+                     results_path: str | Path = "v5_results_ready/tennismylife_results.csv",
+                     corrections_path: str | Path = "context_registry/players/tml_row_corrections.csv") -> pd.DataFrame:
+    """One row per TennisMyLife match: tour (M/W), tourney, date, round and both players.
+
+    tml_row_corrections.csv (user decisions) moves rows that TennisMyLife filed under the
+    wrong player id: rows with this tour, id and exact name get new_tml_id instead (empty
+    new_tml_id: no id, so the rows form their own player by name)."""
     cols = ["tourney_id", "tourney_date", "round", "winner_id", "winner_name", "winner_ioc", "winner_age",
             "loser_id", "loser_name", "loser_ioc", "loser_age"]
     frames = []
@@ -99,8 +107,12 @@ def load_tml_matches(history_dir: str | Path = ".v5_history_cache",
         frames.append(r.drop(columns="result_file"))
     m = pd.concat(frames, ignore_index=True)
     m["date"] = pd.to_datetime(m["tourney_date"].astype(str).str[:8], format="%Y%m%d", errors="coerce")
+    fixes = load_table(corrections_path, ROW_CORRECTION_COLUMNS)
     for side in ("winner", "loser"):
         m[f"{side}_id"] = m[f"{side}_id"].map(normalize_tml_id)
+        for fx in fixes.itertuples():
+            hit = (m["tour"] == fx.tour) & (m[f"{side}_id"] == fx.tml_id) & (m[f"{side}_name"].astype(str).str.strip() == fx.name)
+            m.loc[hit, f"{side}_id"] = fx.new_tml_id or None
         m[f"{side}_key"] = m[f"{side}_name"].map(player_key)
         m[f"{side}_ioc"] = m[f"{side}_ioc"].map(_country)
         # Birth date estimated from the age TennisMyLife records at each match. Ages
@@ -247,6 +259,13 @@ def build_players(matches: pd.DataFrame, existing_players: pd.DataFrame | None =
                                    "names": f"{nodes[x]['names'].most_common(1)[0][0]} / {nodes[y]['names'].most_common(1)[0][0]}",
                                    "reason": why, "candidates": ""})
 
+    # A person's decision that several ids are one player (user rows sharing a player id).
+    stored_rows = existing_alias if existing_alias is not None and not existing_alias.empty else pd.DataFrame(columns=TML_ALIAS_COLUMNS)
+    for _, g in stored_rows[stored_rows["status"] == "user"].groupby("player_id"):
+        keys = [(t, i) for t, i in zip(g["tour"], g["tml_id"]) if (t, i) in nodes]
+        for k in keys[1:]:
+            uf.union(keys[0], k)
+            joined_how[keys[0]].add("user decision"); joined_how[k].add("user decision")
     review = [r for r in review if not (" / " in r["subject"] and r["kind"] == "tennismylife_ids"
                                         and _same_root(uf, r["tour"], r["subject"]))]
 
@@ -298,18 +317,26 @@ def build_players(matches: pd.DataFrame, existing_players: pd.DataFrame | None =
                 "names": " | ".join(sorted(n["names"])), "countries": "/".join(sorted(n["countries"])),
                 "matches": n["matches"],
                 "status": keep["status"].iloc[0] if len(keep) else (
-                    "auto" if n["tml_id"] or any(nodes[x]["tml_id"] for x in members) else "review"),
+                    "auto"),
                 "method": "; ".join(sorted(joined_how[m])) or "tennismylife_id",
                 "set_on": keep["set_on"].iloc[0] if len(keep) else set_on,
             })
             if not n["tml_id"] and not any(nodes[x]["tml_id"] for x in members):
-                review.append({"kind": "tennismylife_ids", "tour": m[0], "subject": m[1], "names": n["names"].most_common(1)[0][0],
-                               "reason": "TennisMyLife rows without a player id", "candidates": pid})
+                review.append({"kind": "information", "tour": m[0], "subject": m[1], "names": n["names"].most_common(1)[0][0],
+                               "reason": "TennisMyLife rows without a player id; kept as their own player", "candidates": pid})
     # Player ids that no component uses any more (merged by a later build) stay, marked.
     players = pd.DataFrame(players, columns=PLAYER_COLUMNS)
     if existing_players is not None and not existing_players.empty:
         gone = existing_players[~existing_players["player_id"].isin(players["player_id"])].copy()
-        gone["status"] = gone["status"].where(gone["status"].str.startswith("merged_into"), "retired")
+        # Where did a vanished id go? Follow its stored TennisMyLife ids to their new player.
+        now = {(r["tour"], r["tml_id"]): r["player_id"] for r in alias}
+        moved = {}
+        for r in stored.itertuples():
+            new = now.get((r.tour, r.tml_id))
+            if new and new != r.player_id:
+                moved.setdefault(r.player_id, new)
+        gone["status"] = [st if str(st).startswith("merged_into") else (f"merged_into:{moved[p]}" if p in moved else "retired")
+                          for p, st in zip(gone["player_id"], gone["status"])]
         players = pd.concat([players, gone[PLAYER_COLUMNS]], ignore_index=True)
     return (players.sort_values("player_id").reset_index(drop=True),
             pd.DataFrame(alias, columns=TML_ALIAS_COLUMNS).sort_values(["tour", "tml_id"]).reset_index(drop=True),
@@ -483,7 +510,8 @@ def link_oddspapi(fixtures: pd.DataFrame, crosswalk_odds: pd.DataFrame, matches:
     if existing is not None and not existing.empty:
         kept = existing[existing["status"].isin(KEPT_STATUSES)].copy()
         cmp = kept.merge(fresh[["participant_id", "player_id", "status"]], on="participant_id", suffixes=("", "_fresh"))
-        drift = cmp[(cmp["player_id"] != cmp["player_id_fresh"]) & (cmp["status_fresh"] != "")].rename(
+        # Only a real contradiction: the fresh build would link this participant to another player.
+        drift = cmp[(cmp["player_id_fresh"] != "") & (cmp["player_id"] != cmp["player_id_fresh"])].rename(
             columns={"player_id": "stored", "player_id_fresh": "fresh", "status_fresh": "fresh_status"})[
             ["participant_id", "stored", "fresh", "fresh_status"]]
         fresh = pd.concat([kept[ODDS_ALIAS_COLUMNS], fresh[~fresh["participant_id"].isin(kept["participant_id"])]], ignore_index=True)
