@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from v5_live_market import fair_american, signal_row
+from v5_live_market import fair_american, has_no_history, signal_row
 from v5_production_artifacts import stable_market_key
 from v5_recommendation_ledger import update_official_recommendations
 from v5_recommendation_policy import select_primary_market_rows
@@ -41,6 +41,8 @@ def reprice_market_snapshot(prices, frozen_market_probs, *, prices_fresh):
     for _, row in out.iterrows():
         if pd.isna(row.get("model_probability")): signals.append("N/A"); continue
         if not prices_fresh: signals.append("STALE"); continue
+        # Fail closed for rows frozen before the both-players confidence rule.
+        if has_no_history(row): signals.append("REVIEW"); continue
         conf = row.get("state_confidence")
         try: conf = float(conf) if pd.notna(conf) else None
         except Exception: conf = None

@@ -68,3 +68,13 @@ def test_unmodeled_new_market_line_is_not_guessed():
     out = reprice_market_snapshot(price, _forecast_prob(), prices_fresh=True)
     assert pd.isna(out.iloc[0]["model_probability"])
     assert out.iloc[0]["signal"] == "N/A"
+
+
+def test_repricing_holds_rows_frozen_with_a_no_history_player():
+    # Rows frozen before the both-players confidence rule carry the selected side's
+    # confidence; the cold-start flags still block BET/LEAN on reprice.
+    frozen = _forecast_prob().assign(player1_cold_start=False, player2_cold_start=True)
+    out = reprice_market_snapshot(_price(100, 2.0, 0.49, "2026-09-08T12:00:00Z"), frozen, prices_fresh=True)
+    assert out.iloc[0]["signal"] == "REVIEW"
+    clean = reprice_market_snapshot(_price(100, 2.0, 0.49, "2026-09-08T12:00:00Z"), _forecast_prob(), prices_fresh=True)
+    assert clean.iloc[0]["signal"] == "BET"

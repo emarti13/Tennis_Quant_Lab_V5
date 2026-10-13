@@ -223,6 +223,20 @@ def add_model_pricing(match_rows, result, selected_p1, selected_p2):
     return out
 
 
+# Draw slots a feed lists before the player is known: "WQF1", "Qf3", "WSF2", "R16P14",
+# "Q1", "LL2", "TBD", "Qualifier". They are not players and are never priced.
+_PLACEHOLDER = re.compile(r"^(?:(?:W?Q[FS]?|W?SF|R\d+P|LL|Q)\d+|TBD|TBA|BYE|QUALIFIER(?: \d+)?|LUCKY LOSER(?: \d+)?)$", re.I)
+
+
+def is_placeholder_participant(name) -> bool:
+    return bool(_PLACEHOLDER.match(str(name or "").strip()))
+
+
+def has_no_history(row) -> bool:
+    """True when either player was priced from the no-history default (1500 Elo)."""
+    return any(str(row.get(c, "")).strip().lower() in {"true", "1"} for c in ("player1_cold_start", "player2_cold_start"))
+
+
 def signal_row(row, disagreement_level=None, state_confidence=None):
     ev=row.get("expected_value");edge=row.get("edge_vs_consensus")
     if pd.isna(ev) or pd.isna(edge):return "N/A"

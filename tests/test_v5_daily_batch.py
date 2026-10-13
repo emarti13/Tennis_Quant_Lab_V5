@@ -145,3 +145,34 @@ def test_unseen_player_uses_explicit_zero_confidence_cold_start():
     assert prepared["rating_p2"]["surface_elo"] == 1500.0
     assert prepared["rating_p2"]["serve_global"] == 0.0
     assert prepared["rating_p2"]["return_global"] == 0.0
+
+
+def test_market_confidence_is_the_weaker_player_on_every_side():
+    # A bet on a known player against a no-history opponent used to inherit the known
+    # player's confidence and reach BET (2026-09/10: 9 official BETs, e.g. vs Kuzmova).
+    from v5_daily_batch import _confidence_for_market
+    row = {"market_group": "moneyline", "selection": "Known Player"}
+    assert _confidence_for_market(row, "Known Player", "New Player", 0.8, 0.0) == 0.0
+    assert _confidence_for_market({**row, "selection": "New Player"}, "Known Player", "New Player", 0.8, 0.0) == 0.0
+
+
+def test_placeholder_participants_are_never_priced():
+    import pytest
+    from v5_daily_batch import _prepare_fixture
+    feed = pd.DataFrame([{
+        "fixture_id": "ph-1", "start_time_utc": "2026-09-01T07:00:00Z",
+        "tournament": "US Open Men Singles", "tour": "MEN",
+        "player1": "WQF1", "player2": "Alice Alpha",
+    }])
+    ratings = DailyBatchModuleTests._ratings()
+    summary = {"MEN": {"baseline": {"Hard": 0.62, "Clay": 0.60, "Grass": 0.65}}}
+    with pytest.raises(ValueError, match="Placeholder participant"):
+        _prepare_fixture(feed, {"MEN": ratings, "WTA": ratings.iloc[0:0]}, summary)
+
+
+def test_placeholder_names():
+    from v5_live_market import is_placeholder_participant as ph
+    for name in ("WQF1", "Qf8", "WSF2", "R16P14", "Q1", "LL2", "TBD", "Qualifier"):
+        assert ph(name), name
+    for name in ("Quinn, Ethan", "Qu, Yihan", "Llamas Ruiz, Pablo", "Cretu, Cezar (2001)", "Emanuela Lares"):
+        assert not ph(name), name

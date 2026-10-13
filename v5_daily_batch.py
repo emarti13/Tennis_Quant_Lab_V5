@@ -17,7 +17,7 @@ from v5_full_context_live import (
     load_production_candidate,
     predict_with_production_candidate,
 )
-from v5_live_market import canonical_name, add_model_pricing, signal_row
+from v5_live_market import canonical_name, add_model_pricing, is_placeholder_participant, signal_row
 from v5_model_calibration import calibrated_match_probability, calibration_record
 from v5_tournament_authority import resolve_authority
 from v5_score_distribution import predict_score_distribution
@@ -238,13 +238,10 @@ def _logit_probability(p):
 
 
 def _confidence_for_market(row, p1, p2, p1_conf, p2_conf):
-    if str(row.get("market_group", "")) == "total_games":
-        return min(p1_conf, p2_conf)
-    sel = canonical_name(row.get("selection"))
-    if sel == canonical_name(p1):
-        return p1_conf
-    if sel == canonical_name(p2):
-        return p2_conf
+    """Every price depends on both players' ratings, so a market is only as reliable as
+    the weaker one. Same rule as the app (tennis_quant_app_v5: min(p1_conf, p2_conf)).
+    Using only the selected side's confidence let a bet on a known player against a
+    no-history opponent (1500 Elo default) through as BET."""
     return min(p1_conf, p2_conf)
 
 
@@ -270,6 +267,9 @@ def _prepare_fixture(fixture_rows, ratings_by_tour, summary, context_history=Non
         tour=tour,
         oddspapi_tournament_id=first.get("tournament_id") or first.get("oddspapi_tournament_id"),
     )
+    placeholders = [n for n in (first.get("player1"), first.get("player2")) if is_placeholder_participant(n)]
+    if placeholders:
+        raise ValueError("Placeholder participant, not a player: " + ", ".join(map(str, placeholders)))
     best_of = infer_best_of(tournament, tour)
     aliases = load_aliases(PLAYER_ALIAS_PATH)
     historical_players = ratings["player"].dropna().unique()
