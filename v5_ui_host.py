@@ -14,7 +14,7 @@ from v5_ui_health import load_model_health, render_model_health_page
 from v5_ui_match_detail import render_match_detail
 from v5_ui_navigation import PAGE_ORDER
 from v5_ui_performance import load_performance_report, render_performance_page
-from v5_ui_production import load_canonical_today_board, load_repricing_status, runtime_production_state
+from v5_ui_production import load_canonical_today_board, load_repricing_status, render_official_pause_notice, runtime_production_state
 from v5_ui_theme import apply_v5_theme
 from v5_ui_today import prepare_today_board, render_today_results
 
@@ -54,6 +54,7 @@ def _render_decision_feed_page(st_module, namespace: Mapping[str, Any], base_dir
     st_module.markdown('<div class="v5-eyebrow">Tennis Quant Lab V5</div>', unsafe_allow_html=True)
     st_module.markdown('<div class="v5-title">Decision Feed</div>', unsafe_allow_html=True)
     st_module.markdown('<div class="v5-subtitle">Card-based decision view sourced from the exact active Daily Board result set.</div>', unsafe_allow_html=True)
+    render_official_pause_notice(st_module, base_dir)
     production_board = load_canonical_today_board(base_dir); active_board, active_mode = get_active_board(st_module.session_state, production_board)
     if active_mode == "production":
         if production_state == "MISSING": st_module.info("Production artifacts are not available yet. The scheduled pipeline will restore them automatically; no missing or stale input is treated as actionable."); return

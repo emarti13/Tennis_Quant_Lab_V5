@@ -68,3 +68,34 @@ def test_unmodeled_new_market_line_is_not_guessed():
     out = reprice_market_snapshot(price, _forecast_prob(), prices_fresh=True)
     assert pd.isna(out.iloc[0]["model_probability"])
     assert out.iloc[0]["signal"] == "N/A"
+
+
+def test_paused_switch_leaves_the_official_ledger_unchanged():
+    from v5_reprice_markets import update_repricing_artifacts
+    existing = pd.DataFrame([{"market_key": "old", "official_signal": "BET", "result_status": "OPEN"}])
+    repriced, official, audit = update_repricing_artifacts(
+        _price(100, 2.0, 0.49, "2026-09-08T12:00:00Z"), _forecast_prob(), prices_fresh=True,
+        existing_official=existing, official_enabled=False)
+    assert repriced.iloc[0]["signal"] == "BET"          # the board still shows the engine's view
+    assert official.equals(existing) and audit.empty    # but nothing new becomes official
+
+
+def test_official_switch_fails_closed(tmp_path):
+    import json
+    from v5_recommendation_ledger import official_recommendations_switch as switch
+    assert switch(tmp_path / "missing.json")["enabled"] is False
+    (tmp_path / "bad.json").write_text("{not json", encoding="utf-8")
+    assert switch(tmp_path / "bad.json")["enabled"] is False
+    (tmp_path / "on.json").write_text(json.dumps({"official_recommendations": {"enabled": True}}), encoding="utf-8")
+    assert switch(tmp_path / "on.json")["enabled"] is True
+    (tmp_path / "text.json").write_text(json.dumps({"official_recommendations": {"enabled": "yes"}}), encoding="utf-8")
+    assert switch(tmp_path / "text.json")["enabled"] is False
+
+
+def test_repo_switch_is_paused_and_the_app_says_so():
+    from pathlib import Path
+    from v5_recommendation_ledger import official_recommendations_switch
+    from v5_ui_production import official_pause_notice
+    assert official_recommendations_switch("production_switches.json")["enabled"] is False
+    notice = official_pause_notice(Path("."))
+    assert notice and "paused since 2026-10-13" in notice and "not recommendations" in notice

@@ -123,6 +123,19 @@ A step is done only when all of these hold:
 
 ### Step 5. Pricing, ledger, settlement, performance
 
+- **Pre-rebuild bets are not evidence (owner decision 2026-10-13).** New official
+  recommendations are paused (`production_switches.json`, fails closed when missing)
+  until this step ships; prices, frozen forecasts and results keep being collected. The
+  existing `official_recommendations.csv` rows are kept as they are (never rewritten) and
+  labeled pre-rebuild in reports; no claim of edge or ROI rests on them.
+- **Re-simulate history with the rebuilt engine.** Walk forward through past fixtures in
+  time order, pricing each from as-of data only (ratings, schedule, overrides and market
+  prices available before the start), through the same pricing function the daily batch
+  uses. Fixtures before the sealed period are a backtest; from 2026-10-13 on they are the
+  forward test and are never used for tuning.
+- Turning recommendations back on is a change to `production_switches.json` in its own PR,
+  after the rebuilt engine passes its gate.
+
 - Keep ledger semantics (roadmap §6). Verify repricing, the official recommendation
   ledger, settlement and performance on the rebuilt inputs.
 - EV and ROI claims only at executable prices, with fees (CLAUDE.md).
