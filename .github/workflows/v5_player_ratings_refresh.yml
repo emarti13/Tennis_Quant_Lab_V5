@@ -102,6 +102,15 @@ jobs:
           )
           python v5_results_cache.py --dir . --source-success-utc "$SOURCE_SUCCESS"
 
+      - name: Rebuild tournament and player identity tables
+        # Crosswalks and player aliases for the master schedule (rebuild plan Step 2).
+        # Rows marked confirmed, user or rejected are never changed; flags go to
+        # context_registry/identity_status.json.
+        if: steps.freshness.outputs.history_fresh != 'true' && steps.refresh_current.outcome == 'success'
+        id: identity
+        continue-on-error: true
+        run: python scripts/refresh_identity.py
+
       - name: Remove ephemeral historical root copies before commit
         if: always() && steps.freshness.outputs.history_fresh != 'true'
         run: rm -f ATP.csv ATPQualifiers.csv Challenger.csv WTA.csv
@@ -123,7 +132,12 @@ jobs:
               v5_wta_walkforward.csv \
               v5_build_summary.json \
               v5_results_ready/tennismylife_results.csv \
-              v5_results_ready/results_status.json
+              v5_results_ready/results_status.json \
+              context_registry/identity_status.json \
+              context_registry/master_schedule/crosswalk_oddspapi.csv \
+              context_registry/master_schedule/crosswalk_tennismylife.csv \
+              context_registry/master_schedule/reconciliation \
+              context_registry/players
             do
               [ -e "$f" ] && git add "$f"
             done
@@ -140,6 +154,10 @@ jobs:
             git pull --rebase origin main
             git push origin HEAD:main
           fi
+
+      - name: Enforce identity refresh result
+        if: steps.freshness.outputs.history_fresh != 'true' && steps.refresh_current.outcome == 'success' && steps.identity.outcome != 'success'
+        run: exit 1
 
       - name: Enforce refresh result
         if: steps.freshness.outputs.history_fresh != 'true' && steps.refresh_current.outcome != 'success'

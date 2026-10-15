@@ -521,6 +521,11 @@ def build_crosswalk(matches: pd.DataFrame, confirmation: pd.DataFrame, existing:
     fresh = pd.DataFrame(fresh, columns=CROSSWALK_COLUMNS)
     if existing is None or existing.empty:
         return fresh.sort_values(["first_date", "source_id"]).reset_index(drop=True), pd.DataFrame(columns=["source_id", "stored", "fresh", "fresh_status"])
+    # An unchanged decision keeps the date it was first made (no daily churn).
+    prev = existing.set_index("source_id")
+    same = [sid in prev.index and prev.at[sid, "edition_key"] == ek and prev.at[sid, "status"] == st
+            for sid, ek, st in zip(fresh["source_id"], fresh["edition_key"], fresh["status"])]
+    fresh.loc[same, "set_on"] = [prev.at[sid, "set_on"] for sid in fresh.loc[same, "source_id"]]
     kept = existing[existing["status"].isin(KEPT_STATUSES)].copy()
     drift = kept.merge(fresh[["source_id", "edition_key", "status", "last_date"]], on="source_id", suffixes=("", "_fresh"))
     # A running event's block grows day by day; keep its stored mapping but its latest dates.

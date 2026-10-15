@@ -23,7 +23,7 @@ The goal: a fair-price engine that beats the market, proven first as a taker and
 - **Sealed period.** Do not use results inside the sealed forward period (roadmap §4, Phase 0) for selection, tuning, or thresholds.
 - **Fail closed.** Unknown player, unknown event, stale price, missing timestamp → raise or output no price. Never silently default (no quiet 1500 Elo, no `fillna(0)` on features without a flag column).
 - **Executable prices only** for EV, ROI, and CLV claims. Pinnacle is information; Bet365, BetRivers, Kalshi, Polymarket, and Novig are execution. Include fees.
-- **Surface comes only from `tournament_authority`** (`resolve_fixture_surface`). Court-condition modules are retired.
+- **Surface and court attributes come only from the master schedule** through `v5_fixture_resolution.py` (overrides on top). The old engine still reads `tournament_authority` until rebuild Step 4 removes it; do not add new callers of it. Court-condition modules are retired.
 
 ## Required checks before asking for merge
 - `python -m pytest tests -q`, all green (CI runs it and posts failures as annotations).
@@ -43,6 +43,7 @@ The goal: a fair-price engine that beats the market, proven first as a taker and
 - Data: `bootstrap_v5_history.py` → `.v5_history_cache/` (history through last year); `refresh_tennismylife_cloud.py` (current season); `v5_results_ready/`. Season years and file names come only from `v5_season_files.py`; never hard-code a year.
 - Tournaments: master schedule `context_registry/master_schedule/master_schedule_<year>.csv` (user-maintained, official calendars); `v5_tournament_identity.py` matches OddsPapi and TennisMyLife to it and stores the result in `crosswalk_oddspapi.csv` / `crosswalk_tennismylife.csv` (rebuilt by `scripts/reconcile_master_schedule.py`; it never overwrites rows marked `confirmed`, `user` or `rejected`). Not yet read by production.
 - Players: `v5_player_registry.py` → `context_registry/players/` (our own `player_id`; TennisMyLife and OddsPapi ids are aliases; built by `scripts/build_player_registry.py`; rows marked `confirmed`, `user` or `rejected` are never overwritten). Not yet read by production; `v5_player_identity.py` (name-only) is retired when the daily batch switches.
+- Fixture resolution: `v5_fixture_resolution.py` (fixture → edition, court, best-of, player ids; fails closed). Tables refreshed daily by `scripts/refresh_identity.py` (ratings workflow); flags in `context_registry/identity_status.json`.
 - Features: `v5_fatigue_features.py` (leak-free, research candidate; in PR #36, not yet on `main`); `v5_workload_features.py` (**leaky, being retired**).
 - Warehouse/production: `build_v5_context_warehouse.py`, `v5_daily_batch.py`, `v5_interactive_production.py`, `v5_official_performance.py`.
 - Safety: `v5_model_guard.py`, `v5_fatigue_validation.py` (both in PR #36, not yet on `main`).

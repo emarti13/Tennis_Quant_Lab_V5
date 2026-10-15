@@ -86,7 +86,7 @@ A step is done only when all of these hold:
   and `crosswalk_tennismylife.csv`, written by `scripts/reconcile_master_schedule.py`,
   confirmed by shared matches, read with `v5_tournament_identity.resolve_edition`.
   Production does not read them yet; replacing the four old lookups is next.
-- **Player identity (built 2026-10-13: `v5_player_registry.py`, `context_registry/players/`; production switch next).** Same approach as tournaments: a
+- **Player identity (built 2026-10-13: `v5_player_registry.py`, `context_registry/players/`).** Same approach as tournaments: a
   stored crosswalk from OddsPapi participant ids to one TennisMyLife player, proven by
   results (same edition, same opponent), user decisions never overwritten, unclear links
   give no price. Today the live resolver refuses 15 players whose names appear twice in
@@ -94,6 +94,14 @@ A step is done only when all of these hold:
   and prices at least 9 known players as new (extra given names, e.g. Maria Carle). The
   history duplicates are merged into one player; that changes ratings, so it is measured
   against the current engine before going live.
+- **Fixture resolution (built 2026-10-15: `v5_fixture_resolution.py`).** One function turns an
+  OddsPapi fixture into its edition (court attributes from the master schedule, user
+  overrides on top) and two player ids, or a reason it cannot (fail closed). Refreshed
+  daily by `scripts/refresh_identity.py` in the ratings workflow, which also writes
+  `context_registry/identity_status.json` with the "schedule needs attention" flags (D6).
+  The old engine is its only would-be caller and is replaced in Step 4, so the switch-over
+  and the removal of the old lookups happen there, in one change (no patching of the old
+  engine; owner direction 2026-10-13).
 - **Resolving a fixture:** through the crosswalk (spec §2.2–2.5). Unmatched or ambiguous
   → no price, listed for review (fail closed). No row for this year → carried forward from
   the same event, labeled "from <year>".
@@ -145,6 +153,16 @@ A step is done only when all of these hold:
 - Production probability = leak-free baseline (Elo + surface). `v5_workload_features`
   is removed from every path. fatigue_v1 enters only after it passes its own
   out-of-sample gate against this baseline, with the market benchmark reported.
+- **Fixtures resolve through `v5_fixture_resolution`** (edition, court, best-of, player ids).
+  The same change removes every old lookup and its callers, tests and workflows:
+  `v5_tournament_authority` (+ `v5_tournament_challenger`, the two diagnose scripts and the
+  `v5_tournament_authority` / `v5_tournament_challenger` workflows, `tournament_authority.csv`),
+  `v5_master_schedule_context` (+ `tennis_master_schedule.csv`), `v5_tournament_context_registry`
+  and the name-keyed override path in `v5_context_transaction`, `v5_player_identity`
+  (+ `player_aliases.csv`), and the app override run's own player matcher. Ratings move to
+  `player_id` (model check first). `v5_tournament_registry` (historical venue coordinates for
+  travel and weather features) goes with the context model if Step 4 retires it, or is
+  rebuilt from the schedule if a context feature passes its gate.
 - **One function** prices a fixture from (fixture, warehouse, overrides, ratings). The
   daily batch and the app override run both call it. Parity test: with no overrides,
   the override run reproduces the frozen forecast exactly.
