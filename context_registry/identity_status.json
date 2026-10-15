@@ -1,27 +1,23 @@
 {
-  "generated_utc": "2026-10-15T13:16:54+00:00",
-  "as_of": "2026-10-13",
+  "generated_utc": "2026-10-15T14:18:28+00:00",
+  "as_of": "2026-10-15",
   "season": 2026,
   "schedule_years": [
     2026
   ],
   "tournament_mappings": {
-    "confirmed": 567,
-    "auto": 85,
-    "review": 17
+    "confirmed": 579,
+    "auto": 78,
+    "user": 14,
+    "rejected": 2
   },
   "oddspapi_players": {
-    "confirmed": 1023,
-    "no_history": 789,
-    "auto": 609,
+    "confirmed": 1034,
+    "no_history": 790,
+    "auto": 600,
     "placeholder": 30,
     "user": 15,
     "rejected": 5
   },
-  "flags": [
-    {
-      "flag": "REVIEW_OPEN",
-      "detail": "17 tournament mappings held for review"
-    }
-  ]
+  "flags": []
 }
