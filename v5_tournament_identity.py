@@ -538,6 +538,35 @@ def build_crosswalk(matches: pd.DataFrame, confirmation: pd.DataFrame, existing:
     return out[CROSSWALK_COLUMNS].sort_values(["first_date", "source_id"]).reset_index(drop=True), drift.reset_index(drop=True)
 
 
+def suggest_from_other_source(sources: pd.DataFrame, crosswalk: pd.DataFrame, other: pd.DataFrame,
+                              other_crosswalk: pd.DataFrame, *, window_days: int = CONFIRM_WINDOW_DAYS,
+                              min_pairs: int = CONFIRM_MIN_PAIRS) -> dict[str, tuple[str, int]]:
+    """For rows held for review, the edition the other source's results point to.
+
+    A suggestion only (user decision 2026-10-15: flag, do not map): the row stays in
+    review and gives no price until a person confirms it. Same evidence rule as
+    confirm_matches: at least min_pairs shared matches with tournaments the other source
+    maps to one edition, and at least twice any other edition.
+    """
+    usable = other_crosswalk[other_crosswalk["status"].isin(USABLE_STATUSES) & (other_crosswalk["edition_key"] != "")]
+    o = other.merge(usable[["source_id", "edition_key"]], on="source_id")
+    o["_first"] = pd.to_datetime(o["first_date"])
+    pairs = dict(zip(sources["source_id"], sources["pairs"]))
+    fam = dict(zip(sources["source_id"], sources["family"]))
+    out = {}
+    for r in crosswalk[crosswalk["status"] == "review"].itertuples():
+        if r.source_id not in pairs:
+            continue
+        near = o[((o["_first"] - pd.Timestamp(r.first_date)).abs().dt.days <= window_days) & (o["family"] == fam[r.source_id])]
+        score: dict[str, int] = {}
+        for k, op in zip(near["edition_key"], near["pairs"]):
+            score[k] = score.get(k, 0) + shared_pairs(pairs[r.source_id], op)
+        ranked = sorted(score.items(), key=lambda kv: -kv[1])
+        if ranked and ranked[0][1] >= min_pairs and ranked[0][1] >= 2 * (ranked[1][1] if len(ranked) > 1 else 0):
+            out[r.source_id] = ranked[0]
+    return out
+
+
 def load_crosswalk(path: str | Path) -> pd.DataFrame:
     p = Path(path)
     if not p.exists():

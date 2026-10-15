@@ -88,9 +88,9 @@ def main() -> int:
         orphan = xw[(xw["edition_key"] != "") & ~xw["edition_key"].isin(editions)]
         for r in orphan.itertuples():
             flags.append({"flag": "MAPPING_ORPHANED", "detail": f"{r.source} {r.source_id} -> {r.edition_key}"})
-        open_t = int((xw["status"] == "review").sum())
-        if open_t:
-            flags.append({"flag": "REVIEW_OPEN", "detail": f"{open_t} tournament mappings held for review"})
+        held = xw[xw["status"] == "review"]
+        for r in held.itertuples():
+            flags.append({"flag": "REVIEW_OPEN", "detail": f"tournament {r.source} {r.source_id} {r.source_name}: {r.note}"})
     review = _read(PLAYERS / "review.csv")
     open_p = int(review["kind"].isin(["tennismylife_ids", "oddspapi_participant"]).sum()) if not review.empty else 0
     if open_p:

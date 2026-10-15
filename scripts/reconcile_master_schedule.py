@@ -31,6 +31,7 @@ from v5_tournament_identity import (  # noqa: E402
     confirm_matches,
     enrich_locations,
     load_crosswalk,
+    suggest_from_other_source,
     load_countries,
     load_master_schedule,
     match_source,
@@ -82,7 +83,17 @@ def main() -> int:
     for name, matches, conf in (("oddspapi", om, oc), ("tennismylife", tm, tc)):
         path = xdir / f"crosswalk_{name}.csv"
         crosswalks[name], drifts[name] = build_crosswalk(matches, conf, load_crosswalk(path), set_on=args.as_of)
-        crosswalks[name].to_csv(path, index=False, encoding="utf-8")
+
+    # Rows still held for review: suggest the edition the other source's results point to
+    # (flag only; the row stays in review until a person confirms it).
+    for name, srcs, other, other_name in (("oddspapi", odds, tml, "tennismylife"), ("tennismylife", tml, odds, "oddspapi")):
+        sug = suggest_from_other_source(srcs, crosswalks[name], other, crosswalks[other_name])
+        xw = crosswalks[name]
+        base = xw["note"].str.replace(r"\s*\|\s*suggested by results: .*$", "", regex=True)
+        xw["note"] = [f"{b} | suggested by results: {sug[sid][0]} ({sug[sid][1]} shared matches)" if sid in sug else b
+                      for sid, b in zip(xw["source_id"], base)]
+    for name in crosswalks:
+        crosswalks[name].to_csv(xdir / f"crosswalk_{name}.csv", index=False, encoding="utf-8")
 
     issues_df = pd.DataFrame([i.__dict__ for i in issues])
     editions.to_csv(out / "master_schedule.csv", index=False, encoding="utf-8")
