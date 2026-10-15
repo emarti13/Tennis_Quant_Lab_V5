@@ -25,6 +25,8 @@ local clone with the command shown.
 | `docs/player-identity-spec` | Merged (PR #47) | 2026-10-13 |
 | `feat/official-ledger-switch` | Merged (PR #48) | 2026-10-13 |
 | `fix/no-bet-without-player-history` | PR #46 closed without merging (owner decision: no patches to the old engine) | 2026-10-13 |
+| `feat/step2c-player-identity` | Merged (PR #49) | 2026-10-15 |
+| `feat/step2d-production-identity` | Merged (PR #50); its last commit moved to `feat/tournament-review-decisions` | 2026-10-15 |
 | `claude/bootstrap-v5-history-setup-3pxlyr` | Agent session branch; all its work reached `main` via #39–#43 | 2026-10-12 |
 
 ```bash
@@ -33,7 +35,8 @@ git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-in
   feat/master-schedule-reconciliation repair/step1-repo-cleanup \
   repair/land-step1-and-schedule-on-main feat/step2a-schedule-locations \
   feat/step2b-tournament-crosswalks docs/player-identity-spec feat/official-ledger-switch \
-  fix/no-bet-without-player-history claude/bootstrap-v5-history-setup-3pxlyr
+  fix/no-bet-without-player-history feat/step2c-player-identity feat/step2d-production-identity \
+  claude/bootstrap-v5-history-setup-3pxlyr
 ```
 
 ### Pending your decision (not yet recommended for deletion)
