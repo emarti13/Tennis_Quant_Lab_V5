@@ -72,6 +72,23 @@ def _official_record(row, signal, market_key):
     }
 
 
+def official_recommendations_switch(path="production_switches.json") -> dict:
+    """Whether new official recommendations may be created, from production_switches.json.
+
+    Fails closed: a missing or unreadable file, or a missing "enabled", means paused.
+    Settlement of existing rows is not affected.
+    """
+    import json
+    from pathlib import Path
+    try:
+        cfg = json.loads(Path(path).read_text(encoding="utf-8")).get("official_recommendations") or {}
+    except (OSError, ValueError, AttributeError):
+        cfg = {}
+    enabled = cfg.get("enabled") is True
+    return {"enabled": enabled, "since": cfg.get("since"),
+            "reason": cfg.get("reason") or ("" if enabled else "production_switches.json missing or unreadable")}
+
+
 def update_official_recommendations(existing, observations, audit=None, *, now_utc=None):
     ledger = _empty_official() if existing is None or existing.empty else existing.copy()
     audit_out = pd.DataFrame() if audit is None else audit.copy()

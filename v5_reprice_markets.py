@@ -50,8 +50,14 @@ def reprice_market_snapshot(prices, frozen_market_probs, *, prices_fresh):
     return out
 
 
-def update_repricing_artifacts(prices, frozen_market_probs, *, prices_fresh, existing_official=None, existing_audit=None):
+def update_repricing_artifacts(prices, frozen_market_probs, *, prices_fresh, existing_official=None, existing_audit=None,
+                               official_enabled=True):
     repriced = reprice_market_snapshot(prices, frozen_market_probs, prices_fresh=prices_fresh)
+    if not official_enabled:
+        # Paused (production_switches.json): the ledger and its audit are returned unchanged.
+        official = existing_official.copy() if existing_official is not None else pd.DataFrame()
+        audit = existing_audit.copy() if existing_audit is not None else pd.DataFrame()
+        return repriced, official, audit
     selected = select_primary_market_rows(repriced)
     actionable = selected
     if not actionable.empty and "signal" in actionable.columns:
