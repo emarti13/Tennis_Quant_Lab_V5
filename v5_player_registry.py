@@ -272,6 +272,7 @@ def build_players(matches: pd.DataFrame, existing_players: pd.DataFrame | None =
     # Stable player ids.
     stored = existing_alias if existing_alias is not None and not existing_alias.empty else pd.DataFrame(columns=TML_ALIAS_COLUMNS)
     stored_pid = {(r.tour, r.tml_id): r.player_id for r in stored.itertuples()}
+    stored_set_on = {(r.tour, r.tml_id, r.player_id): r.set_on for r in stored.itertuples()}
     user_pid = {(r.tour, r.tml_id): r.player_id for r in stored.itertuples() if r.status == "user"}
     comps = defaultdict(list)
     for k in nodes:
@@ -319,7 +320,7 @@ def build_players(matches: pd.DataFrame, existing_players: pd.DataFrame | None =
                 "status": keep["status"].iloc[0] if len(keep) else (
                     "auto"),
                 "method": "; ".join(sorted(joined_how[m])) or "tennismylife_id",
-                "set_on": keep["set_on"].iloc[0] if len(keep) else set_on,
+                "set_on": keep["set_on"].iloc[0] if len(keep) else stored_set_on.get((m[0], m[1], pid), set_on),
             })
             if not n["tml_id"] and not any(nodes[x]["tml_id"] for x in members):
                 review.append({"kind": "information", "tour": m[0], "subject": m[1], "names": n["names"].most_common(1)[0][0],
@@ -504,6 +505,11 @@ def link_oddspapi(fixtures: pd.DataFrame, crosswalk_odds: pd.DataFrame, matches:
                     row.update(status="no_history", method="no candidate in our history")
         rows.append(row)
     fresh = pd.DataFrame(rows, columns=ODDS_ALIAS_COLUMNS)
+    if existing is not None and not existing.empty:
+        prev = existing.drop_duplicates("participant_id").set_index("participant_id")
+        same = [p in prev.index and prev.at[p, "player_id"] == pl and prev.at[p, "status"] == st
+                for p, pl, st in zip(fresh["participant_id"], fresh["player_id"], fresh["status"])]
+        fresh.loc[same, "set_on"] = [prev.at[p, "set_on"] for p in fresh.loc[same, "participant_id"]]
 
     # Kept rows win; report where the fresh build disagrees.
     drift = pd.DataFrame(columns=["participant_id", "stored", "fresh", "fresh_status"])
