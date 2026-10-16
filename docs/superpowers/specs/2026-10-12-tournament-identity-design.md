@@ -57,6 +57,10 @@ Each row records: how it was matched, the evidence score, `status`
 decided **once** and then looked up. Nothing re-matches names each day. The OddsPapi key
 includes the date block as a safeguard in case an ID is ever reused across weeks.
 
+**Decision files (user decision 2026-10-16).** `user` and `rejected` rows come only from
+separate decision files that people edit (`context_registry/DECISIONS.md`). The daily rebuild
+lays them over the generated tables and never writes them; removing a decision withdraws it.
+
 ### 2.3 Matching a new source ID (resolver)
 
 A new OddsPapi tournament block or TennisMyLife `tourney_id` is scored against editions

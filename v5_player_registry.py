@@ -541,6 +541,59 @@ def _near_spellings(toks: set, tour: str, by_word: dict, names_by_tour: dict) ->
     return out
 
 
+# ---------------------------------------------------------------- decisions
+# A person's decisions live in their own files, which only people edit (user decision
+# 2026-10-16); the daily rebuild reads them and never writes them.
+ODDS_DECISION_COLUMNS = ["participant_id", "player_id", "status", "note", "set_on"]
+TML_DECISION_COLUMNS = ["tour", "tml_id", "player_id", "note", "set_on"]
+
+
+def load_odds_decisions(path) -> pd.DataFrame:
+    d = load_table(path, ODDS_DECISION_COLUMNS)
+    bad = d[~d["status"].isin({"user", "rejected"}) | ((d["status"] == "user") & (d["player_id"] == ""))]
+    if len(bad):
+        raise ValueError(f"{path}: rows need status user (with a player_id) or rejected: {list(bad['participant_id'])}")
+    if d["participant_id"].duplicated().any():
+        raise ValueError(f"{path}: one decision per participant_id")
+    return d
+
+
+def apply_odds_decisions(alias: pd.DataFrame, decisions: pd.DataFrame) -> pd.DataFrame:
+    """alias_oddspapi with the decision file laid over it; user/rejected rows come only from
+    the decision file."""
+    out = alias.copy() if len(alias) else pd.DataFrame(columns=ODDS_ALIAS_COLUMNS)
+    gone = out["status"].isin({"user", "rejected"}) & ~out["participant_id"].astype(str).isin(decisions["participant_id"].astype(str))
+    out.loc[gone, ["status", "player_id"]] = ["review", ""]
+    for d in decisions.itertuples():
+        hit = out["participant_id"].astype(str) == str(d.participant_id)
+        values = {"player_id": d.player_id if d.status == "user" else "", "status": d.status,
+                  "method": "user decision", "note": d.note, "set_on": d.set_on}
+        if hit.any():
+            for k, v in values.items():
+                out.loc[hit, k] = v
+        else:
+            out = pd.concat([out, pd.DataFrame([{c: "" for c in ODDS_ALIAS_COLUMNS} | values
+                                                | {"participant_id": str(d.participant_id)}])], ignore_index=True)
+    return out[ODDS_ALIAS_COLUMNS].reset_index(drop=True)
+
+
+def apply_tml_decisions(alias: pd.DataFrame, decisions: pd.DataFrame) -> pd.DataFrame:
+    """alias_tennismylife with the user's joins (rows sharing a player_id are one player)."""
+    out = alias.copy() if len(alias) else pd.DataFrame(columns=TML_ALIAS_COLUMNS)
+    gone = (out["status"] == "user") & ~(out["tour"] + "|" + out["tml_id"]).isin(decisions["tour"] + "|" + decisions["tml_id"])
+    out.loc[gone, "status"] = "auto"   # the join is re-decided by the rebuild's own rules
+    for d in decisions.itertuples():
+        hit = (out["tour"] == d.tour) & (out["tml_id"] == d.tml_id)
+        values = {"player_id": d.player_id, "status": "user", "method": "user decision", "set_on": d.set_on}
+        if hit.any():
+            for k, v in values.items():
+                out.loc[hit, k] = v
+        else:
+            out = pd.concat([out, pd.DataFrame([{c: "" for c in TML_ALIAS_COLUMNS} | values
+                                                | {"tour": d.tour, "tml_id": d.tml_id}])], ignore_index=True)
+    return out[TML_ALIAS_COLUMNS].reset_index(drop=True)
+
+
 # ---------------------------------------------------------------- lookups
 def load_table(path: str | Path, columns: list[str]) -> pd.DataFrame:
     p = Path(path)

@@ -22,9 +22,10 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from v5_player_registry import (  # noqa: E402
-    ODDS_ALIAS_COLUMNS, PLAYER_COLUMNS, TML_ALIAS_COLUMNS, build_players, link_oddspapi, load_table, load_tml_matches,
+    ODDS_ALIAS_COLUMNS, PLAYER_COLUMNS, TML_ALIAS_COLUMNS, TML_DECISION_COLUMNS, apply_odds_decisions,
+    apply_tml_decisions, build_players, link_oddspapi, load_odds_decisions, load_table, load_tml_matches,
 )
-from v5_tournament_identity import load_crosswalk  # noqa: E402
+from v5_tournament_identity import apply_crosswalk_decisions, load_crosswalk, load_decisions  # noqa: E402
 
 
 def _table(frame: pd.DataFrame, cols: list[str], limit: int = 60) -> str:
@@ -35,6 +36,10 @@ def _table(frame: pd.DataFrame, cols: list[str], limit: int = 60) -> str:
         lines.append("| " + " | ".join(str(r[c]).replace("|", "/") for c in cols) + " |")
     more = f"\n_{len(frame) - limit} more in review.csv._\n" if len(frame) > limit else ""
     return "\n".join(lines) + "\n" + more
+
+
+def _crosswalk(xdir: Path, name: str) -> pd.DataFrame:
+    return apply_crosswalk_decisions(load_crosswalk(xdir / f"crosswalk_{name}.csv"), load_decisions(xdir / f"decisions_{name}.csv"))
 
 
 def main() -> int:
@@ -50,13 +55,14 @@ def main() -> int:
 
     matches = load_tml_matches()
     players, alias_tml, review_tml = build_players(
-        matches, load_table(out / "players.csv", PLAYER_COLUMNS), load_table(out / "alias_tennismylife.csv", TML_ALIAS_COLUMNS),
+        matches, load_table(out / "players.csv", PLAYER_COLUMNS), apply_tml_decisions(load_table(out / "alias_tennismylife.csv", TML_ALIAS_COLUMNS),
+                            load_table(out / "decisions_tennismylife.csv", TML_DECISION_COLUMNS)),
         set_on=args.as_of)
     xdir = Path(args.crosswalk_dir)
     alias_odds, review_odds, drift = link_oddspapi(
-        pd.read_csv(args.fixtures, low_memory=False), load_crosswalk(xdir / "crosswalk_oddspapi.csv"), matches,
-        load_crosswalk(xdir / "crosswalk_tennismylife.csv"), alias_tml, players,
-        load_table(out / "alias_oddspapi.csv", ODDS_ALIAS_COLUMNS), year=args.year, set_on=args.as_of)
+        pd.read_csv(args.fixtures, low_memory=False), _crosswalk(xdir, "oddspapi"), matches, _crosswalk(xdir, "tennismylife"), alias_tml, players,
+        apply_odds_decisions(load_table(out / "alias_oddspapi.csv", ODDS_ALIAS_COLUMNS),
+                             load_odds_decisions(out / "decisions_oddspapi.csv")), year=args.year, set_on=args.as_of)
 
     review = pd.concat([review_tml, review_odds], ignore_index=True)
     players.to_csv(out / "players.csv", index=False, encoding="utf-8")
