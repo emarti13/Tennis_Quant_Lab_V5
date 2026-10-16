@@ -11,8 +11,9 @@ Each run (spec docs/superpowers/specs/2026-10-16-market-data-layer-design.md §2
    when it would leave fewer than 50 requests for live pricing.
 2. Daily: fixtures that started in the last 8 days and have no finished pull (one
    without a reported true start waits up to 3 days for it).
-3. Backfill, with the time left: older fixtures with no stored history, oldest first,
-   because OddsPapi drops history after 4-9 months.
+3. Backfill, with the time left, in one queue oldest first (OddsPapi drops history after
+   4-9 months): older fixtures with no stored history (Pinnacle, Bet365, BetRivers), and
+   Bet365 alone for the fixtures the January-August backfill holds without it.
 /historical-odds is free but allows one call per 5 s and at most 3 books per call.
 
 `--stored-chunks` derives price points from the January-August backfill already in git
@@ -54,6 +55,7 @@ META = BASE / "oddspapi_markets_tennis.json"
 REGISTRY = BASE / "oddspapi_registry" / "fixtures.csv"
 RUN_STATUS = STORE_DIR / "run_status.json"
 STORED_BOOKS = "pinnacle,betrivers,draftkings"
+EXTRA_BOOK = "bet365"     # added to the stored backfill's fixtures, one call each
 WINDOW_DAYS = 9
 DAILY_DAYS = 8
 DISCOVERY_DAYS = 9   # one /fixtures call covers the whole daily window
@@ -146,7 +148,14 @@ def pull(args) -> dict:
     backfill = pending_fixtures(registry, log, now=now, since=args.backfill_since, books=books,
                                 relevant=relevant_fixture, skip_stored=True)
     backfill = backfill[~backfill["fixture_id"].isin(daily["fixture_id"])]
-    queue = [("daily", r) for r in daily.to_dict("records")] + [("backfill", r) for r in backfill.to_dict("records")]
+    # Bet365 for the fixtures the January-August backfill holds without it (user, 2026-10-16).
+    extra = pending_fixtures(registry, log, now=now, since=args.backfill_since, books=EXTRA_BOOK,
+                             relevant=relevant_fixture, only_stored=True) if not args.no_extra_book else registry.iloc[0:0]
+    # One queue, oldest first: OddsPapi drops history after 4-9 months, whichever book it is for.
+    older = sorted([("backfill", r, books) for r in backfill.to_dict("records")]
+                   + [("bet365_backfill", r, EXTRA_BOOK) for r in extra.to_dict("records")],
+                   key=lambda item: item[1]["start_time_utc"])
+    queue = [("daily", r, books) for r in daily.to_dict("records")] + older
 
     resolver = _resolver()
     raw_dir = STORE_DIR / "raw"
@@ -154,15 +163,15 @@ def pull(args) -> dict:
     raw_path = raw_dir / f"{now:%Y-%m-%d_%H%M}.jsonl.gz"
     counts, entries, points, fixtures = {}, [], [], []
     with gzip.open(raw_path, "at", encoding="utf-8") as raw:
-        for mode, fx in queue:
+        for mode, fx, call_books in queue:
             if time.time() - started > args.max_minutes * 60:
                 break
             stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
-            status, body = api.get("historical-odds", fixtureId=fx["fixture_id"], bookmakers=books)
-            entry = {"fixture_id": fx["fixture_id"], "start_time_utc": fx["start_time_utc"], "books": books,
+            status, body = api.get("historical-odds", fixtureId=fx["fixture_id"], bookmakers=call_books)
+            entry = {"fixture_id": fx["fixture_id"], "start_time_utc": fx["start_time_utc"], "books": call_books,
                      "mode": mode, "http_status": status, "pulled_utc": stamp, "quotes": 0, "point_rows": 0, "detail": ""}
             if status == 200:
-                raw.write(json.dumps({"fixture_id": fx["fixture_id"], "pulled_utc": stamp, "books": books,
+                raw.write(json.dumps({"fixture_id": fx["fixture_id"], "pulled_utc": stamp, "books": call_books,
                                       "historical_odds": body}, separators=(",", ":")) + "\n")
                 pts = price_points(body, fx, meta)
                 points.append(pts)
@@ -179,7 +188,7 @@ def pull(args) -> dict:
             time.sleep(COOLDOWN)
     _flush(points, fixtures, entries)
     return {"quota_before": quota_before, "quota_after": _quota(api), "discovery": discovery,
-            "queued": {"daily": len(daily), "backfill": len(backfill)},
+            "queued": {"daily": len(daily), "backfill": len(backfill), "bet365_backfill": len(extra)},
             "done": {f"{m}:{s}": n for (m, s), n in sorted(counts.items())},
             "raw_file": raw_path.name, "minutes": round((time.time() - started) / 60, 1)}
 
@@ -240,11 +249,12 @@ def from_stored(spec: str) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--max-minutes", type=float, default=22)
+    ap.add_argument("--max-minutes", type=float, default=30)
     ap.add_argument("--books", nargs="+", default=list(DEFAULT_BOOKS))
     ap.add_argument("--backfill-since", default=BACKFILL_SINCE)
     ap.add_argument("--discover-from", default=None)
     ap.add_argument("--no-discovery", action="store_true")
+    ap.add_argument("--no-extra-book", action="store_true", help="skip the Bet365 backfill of stored fixtures")
     ap.add_argument("--stored-chunks", default=None, help="e.g. 1-30: convert stored backfill files, no API")
     args = ap.parse_args()
     if len(args.books) > 3:
