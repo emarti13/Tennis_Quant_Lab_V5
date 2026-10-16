@@ -75,27 +75,21 @@ def test_live_workflow_treats_quota_skip_as_controlled_state():
     assert "oddspapi_daily/*_manifest.json" in text
 
 
-def test_fresh_live_market_promotion_dispatches_daily_forecast_recovery():
+def test_live_market_no_longer_starts_the_paused_daily_forecast():
+    # The old engine's daily forecast is paused until rebuild Step 4 (user decision 2026-10-16).
     text = Path(".github/workflows/oddspapi_normalized_daily_v2.yml").read_text(encoding="utf-8")
-    assert "actions: write" in text
-    assert "Trigger daily forecast after fresh market promotion" in text
-    assert "gh workflow run v5_daily_predictions.yml --ref main -R emarti13/Tennis_Quant_Lab_V5" in text
-    dispatch = text.split("Trigger daily forecast after fresh market promotion", 1)[1]
-    assert "steps.live_pull.outputs.fresh_snapshot == 'true'" in dispatch
-    assert "github.event.schedule" not in dispatch
-    assert text.index("Commit live feed and lightweight production artifacts") < text.index(
-        "Trigger daily forecast after fresh market promotion"
-    )
+    assert "gh workflow run v5_daily_predictions.yml" not in text
+    assert "actions: write" not in text
 
 
 def test_one_time_recovery_workflow_is_removed_after_successful_use():
     assert not Path(".github/workflows/v5_recover_today_once.yml").exists()
 
 
-def test_daily_predictions_use_recovery_windows_without_market_refresh_fanout():
+def test_daily_predictions_keep_their_freshness_check_without_market_refresh_fanout():
     text = Path(".github/workflows/v5_daily_predictions.yml").read_text(encoding="utf-8")
     trigger = text.split("permissions:", 1)[0]
-    assert trigger.count("cron:") == 3
+    assert "cron:" not in trigger      # paused until rebuild Step 4
     assert "workflow_run:" not in trigger
     assert "\n  push:" not in trigger
     assert "Check whether today's canonical forecast already exists" in text

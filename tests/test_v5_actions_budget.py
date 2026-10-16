@@ -43,11 +43,11 @@ def test_live_market_is_one_quota_conserving_run_and_performs_repricing():
     assert 'python -m pytest' not in text
 
 
-def test_heavy_forecast_has_recovery_windows_but_at_most_one_heavy_build_daily():
+def test_heavy_forecast_is_paused_until_step4_but_still_runnable_by_hand():
+    # User decision 2026-10-16: the old engine's board is unused; no schedule until Step 4.
     text = _text('v5_daily_predictions.yml')
     trigger = text.split('permissions:', 1)[0]
-    assert 'schedule:' in trigger
-    assert trigger.count('cron:') == 3
+    assert '\n  schedule:' not in trigger
     assert 'workflow_dispatch:' in trigger
     assert '\n  push:' not in trigger
     assert 'workflow_run:' not in trigger

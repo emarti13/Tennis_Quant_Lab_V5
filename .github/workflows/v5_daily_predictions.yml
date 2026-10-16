@@ -5,12 +5,13 @@ name: V5 Daily Predictions
 # tied to the exact source commit used to build it, not wall-clock timestamps.
 # No push trigger: a context/code change on main is picked up by the next
 # window (the freshness check compares against the forecast's source commit).
+#
+# PAUSED (user decision 2026-10-16): the old engine's output is untrusted and its board is
+# unused, so the daily schedule is off until rebuild Step 4 replaces it. It stays runnable
+# by hand. To resume, restore the three crons ("45 6/10/14 * * *") and the budget entries
+# in v5_actions_budget.py.
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "45 6 * * *"
-    - cron: "45 10 * * *"
-    - cron: "45 14 * * *"
 
 permissions:
   contents: write
