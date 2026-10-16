@@ -222,12 +222,14 @@ def append_pull_log(entries: list[dict], base: Path | str = ".") -> None:
 
 def pending_fixtures(registry: pd.DataFrame, log: pd.DataFrame, *, now, since, books: str,
                      relevant, settle_hours: float = 6, max_attempts: int = 3,
-                     skip_stored: bool = False, true_start_wait_hours: float = 72) -> pd.DataFrame:
+                     skip_stored: bool = False, only_stored: bool = False,
+                     true_start_wait_hours: float = 72) -> pd.DataFrame:
     """Relevant fixtures that started at least `settle_hours` ago, after `since`, oldest first,
     with no finished pull for this book set. A fixture whose true start OddsPapi has not
     reported yet waits up to `true_start_wait_hours` (its close would otherwise be cut at the
     scheduled start). `skip_stored`: leave out fixtures the January-August backfill already
-    holds (their points come from the stored files)."""
+    holds (their points come from the stored files); `only_stored`: just those (to add a book
+    the stored backfill did not ask for)."""
     now = _ts(now)
     f = registry.copy()
     known = f["true_start_time_utc"].astype(str).str.len() > 0
@@ -235,8 +237,9 @@ def pending_fixtures(registry: pd.DataFrame, log: pd.DataFrame, *, now, since, b
     wait = pd.Timedelta(hours=settle_hours) + (~known) * pd.Timedelta(hours=true_start_wait_hours)
     f = f[f["_start"].notna() & (f["_start"] >= _ts(since)) & (f["_start"] <= now - wait)]
     f = f[pd.Series([relevant(_as_fixture(r)) for r in f.to_dict("records")], index=f.index, dtype=bool)]
-    if skip_stored and "historical_status" in f:
-        f = f[f["historical_status"].astype(str) != "CACHED"]
+    if (skip_stored or only_stored) and "historical_status" in f:
+        stored = f["historical_status"].astype(str) == "CACHED"
+        f = f[stored] if only_stored else f[~stored]
     if not log.empty:
         mine = log[log["books"] == books]
         done = set(mine.loc[mine["status"].isin(DONE_STATUSES), "fixture_id"])

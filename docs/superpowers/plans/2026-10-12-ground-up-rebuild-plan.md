@@ -157,6 +157,13 @@ Design: `docs/superpowers/specs/2026-10-16-market-data-layer-design.md` (approve
   is removed from every path. fatigue_v1 enters only after it passes its own
   out-of-sample gate against this baseline, with the market benchmark reported.
 - **Fixtures resolve through `v5_fixture_resolution`** (edition, court, best-of, player ids).
+- **Challenger and WTA qualifying, and WTA 125 before August 2026, are not priced** (user
+  decision 2026-10-16): no free source has their results (TennisMyLife publishes
+  qualifying for ATP only and no WTA 125; Kalshi lists main draws, from about August), so
+  the model can neither be measured nor settled on them. OddsPapi does not label
+  qualifying, so the pricing function needs a stage rule (before the edition's start date
+  = qualifying; the start day itself is mixed and also left unpriced until draw data says
+  otherwise). ATP qualifying stays in.
   The same change removes every old lookup and its callers, tests and workflows:
   `v5_tournament_authority` (+ `v5_tournament_challenger`, the two diagnose scripts and the
   `v5_tournament_authority` / `v5_tournament_challenger` workflows, `tournament_authority.csv`),
@@ -249,6 +256,7 @@ collectors writing at least 95% of scheduled snapshots for 14 days. Then Phase 1
 | Players | Player identity spec (2026-10-13): our own player id, alias tables proven by results, no silent new players; ratings move to the id after the model check; same name + different country kept separate | Approved 2026-10-13 |
 | De-vig | One margin-removal function, λ per book measured on our data; cautious edge rule | Approved 2026-10-13 (Step 3) |
 | Data | tennis-data.co.uk (free Pinnacle/Bet365 closing prices) | Approved 2026-10-13; the domain must be allowed in the environment |
+| Step 3 | Bet365 history for the stored January–August fixtures, re-pulled from OddsPapi in the same oldest-first queue as the gap backfill; Kalshi as the second results source, cross-checked against TennisMyLife | Approved 2026-10-16 |
 | Step 3 | Market data layer design; probe run first (done; findings in docs/experiments/2026-10-16-step3-market-source-probe.md) | Approved 2026-10-16; old engine's daily heavy forecast paused until Step 4 (the board is unused; #54) |
 | Approach | Build toward the finished state; no fixes "for today" | User direction 2026-10-13 |
 
