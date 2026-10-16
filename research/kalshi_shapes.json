@@ -1,0 +1,1229 @@
+{
+ "KXATPMATCH": {
+  "status": 200,
+  "settled_seen": 200,
+  "cursor": true,
+  "market": {
+   "can_close_early": true,
+   "close_time": "2026-10-08T14:24:49Z",
+   "created_time": "2026-10-07T04:01:35.887422Z",
+   "custom_strike": {
+    "tennis_competitor": "b524322e-690c-4f3d-b71e-d7b7b4eb3e36"
+   },
+   "early_close_condition": "This market will close and expire after a winner is declared.",
+   "event_ticker": "KXATPMATCH-26OCT08NORSVR",
+   "exchange_index": 3,
+   "expected_expiration_time": "2026-10-08T07:00:00Z",
+   "expiration_time": "2026-10-22T04:00:00Z",
+   "expiration_value": "Dalibor Svrcina",
+   "last_price_dollars": "0.0100",
+   "latest_expiration_time": "2026-10-22T04:00:00Z",
+   "market_type": "binary",
+   "no_ask_dollars": "1.0000",
+   "no_bid_dollars": "0.0000",
+   "no_sub_title": "Cameron Norrie",
+   "notional_value_dollars": "1.0000",
+   "occurrence_datetime": "2026-10-08T07:00:00Z",
+   "open_interest_fp": "2095372.19",
+   "open_time": "2026-10-07T04:06:00Z",
+   "previous_price_dollars": "0.0100",
+   "previous_yes_ask_dollars": "1.0000",
+   "previous_yes_bid_dollars": "0.0000",
+   "price_level_structure": "linear_cent",
+   "price_ranges": [
+    {
+     "end": "1.0000",
+     "start": "0.0000",
+     "step": "0.0100"
+    }
+   ],
+   "result": "no",
+   "rules_primary": "If Cameron Norrie wins the Norrie vs Svrcina professional tennis match in the 2026 ATP Shanghai Round Of 128 after a ball has been played, then the market resolves to Yes.",
+   "rules_secondary": "The following market refers to the Norrie vs Svrcina professional tennis match in the 2026 ATP Shanghai Round Of 128 after a ball has been played. If the match does not occur (signaled by a ball being played) due to a player injury, walkover, forfeiture, or any other cancellation (all before the match starts), the market will resolve to a fair price in accordance with the rules. If this match is postponed or delayed, the market will remain open and close after the rescheduled match has finished (within two weeks).\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+   "settlement_bounds_type": "default",
+   "settlement_timer_seconds": 60,
+   "settlement_ts": "2026-10-08T14:26:48.683773Z",
+   "settlement_value_dollars": "0.0000",
+   "status": "finalized",
+   "strike_type": "structured",
+   "ticker": "KXATPMATCH-26OCT08NORSVR-NOR",
+   "title": "Cameron Norrie wins",
+   "updated_time": "2026-10-08T14:26:48.933104Z",
+   "volume_24h_fp": "0.00",
+   "volume_fp": "5219433.40",
+   "yes_ask_dollars": "1.0000",
+   "yes_ask_size_fp": "0.00",
+   "yes_bid_dollars": "0.0000",
+   "yes_bid_size_fp": "0.00",
+   "yes_sub_title": "Cameron Norrie"
+  },
+  "event": {
+   "event": {
+    "category": "Sports",
+    "collateral_return_type": "MECNET",
+    "event_ticker": "KXATPMATCH-26OCT08NORSVR",
+    "exchange_index": 3,
+    "last_updated_ts": "0001-01-01T00:00:00Z",
+    "mutually_exclusive": true,
+    "product_metadata": {
+     "competition": "ATP Shanghai",
+     "competition_scope": "Game"
+    },
+    "series_ticker": "KXATPMATCH",
+    "settlement_sources": [
+     {
+      "name": "ATP",
+      "url": "https://www.atptour.com/"
+     }
+    ],
+    "strike_period": "",
+    "sub_title": "Norrie vs Svrcina (Oct 8)",
+    "title": "Norrie vs Svrcina"
+   },
+   "markets": [
+    {
+     "can_close_early": true,
+     "close_time": "2026-10-08T14:24:49Z",
+     "created_time": "2026-10-07T04:01:35.887422Z",
+     "custom_strike": {
+      "tennis_competitor": "b524322e-690c-4f3d-b71e-d7b7b4eb3e36"
+     },
+     "early_close_condition": "This market will close and expire after a winner is declared.",
+     "event_ticker": "KXATPMATCH-26OCT08NORSVR",
+     "exchange_index": 3,
+     "expected_expiration_time": "2026-10-08T07:00:00Z",
+     "expiration_time": "2026-10-22T04:00:00Z",
+     "expiration_value": "Dalibor Svrcina",
+     "last_price_dollars": "0.0100",
+     "latest_expiration_time": "2026-10-22T04:00:00Z",
+     "market_type": "binary",
+     "no_ask_dollars": "1.0000",
+     "no_bid_dollars": "0.0000",
+     "no_sub_title": "Cameron Norrie",
+     "notional_value_dollars": "1.0000",
+     "occurrence_datetime": "2026-10-08T07:00:00Z",
+     "open_interest_fp": "2095372.19",
+     "open_time": "2026-10-07T04:06:00Z",
+     "previous_price_dollars": "0.0100",
+     "previous_yes_ask_dollars": "1.0000",
+     "previous_yes_bid_dollars": "0.0000",
+     "price_level_structure": "linear_cent",
+     "price_ranges": [
+      {
+       "end": "1.0000",
+       "start": "0.0000",
+       "step": "0.0100"
+      }
+     ],
+     "result": "no",
+     "rules_primary": "If Cameron Norrie wins the Norrie vs Svrcina professional tennis match in the 2026 ATP Shanghai Round Of 128 after a ball has been played, then the market resolves to Yes.",
+     "rules_secondary": "The following market refers to the Norrie vs Svrcina professional tennis match in the 2026 ATP Shanghai Round Of 128 after a ball has been played. If the match does not occur (signaled by a ball being played) due to a player injury, walkover, forfeiture, or any other cancellation (all before the match starts), the market will resolve to a fair price in accordance with the rules. If this match is postponed or delayed, the market will remain open and close after the rescheduled match has finished (within two weeks).\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+     "settlement_bounds_type": "default",
+     "settlement_timer_seconds": 60,
+     "settlement_ts": "2026-10-08T14:26:48.683773Z",
+     "settlement_value_dollars": "0.0000",
+     "status": "finalized",
+     "strike_type": "structured",
+     "ticker": "KXATPMATCH-26OCT08NORSVR-NOR",
+     "title": "Cameron Norrie wins",
+     "updated_time": "2026-10-08T14:26:48.933104Z",
+     "volume_24h_fp": "0.00",
+     "volume_fp": "5219433.40",
+     "yes_ask_dollars": "1.0000",
+     "yes_ask_size_fp": "0.00",
+     "yes_bid_dollars": "0.0000",
+     "yes_bid_size_fp": "0.00",
+     "yes_sub_title": "Cameron Norrie"
+    },
+    {
+     "can_close_early": true,
+     "close_time": "2026-10-08T14:24:49Z",
+     "created_time": "2026-10-07T04:01:35.887422Z",
+     "custom_strike": {
+      "tennis_competitor": "8f26d0f5-6f62-4033-b680-759681e8121e"
+     },
+     "early_close_condition": "This market will close and expire after a winner is declared.",
+     "event_ticker": "KXATPMATCH-26OCT08NORSVR",
+     "exchange_index": 3,
+     "expected_expiration_time": "2026-10-08T07:00:00Z",
+     "expiration_time": "2026-10-22T04:00:00Z",
+     "expiration_value": "Dalibor Svrcina",
+     "last_price_dollars": "0.9900",
+     "latest_expiration_time": "2026-10-22T04:00:00Z",
+     "market_type": "binary",
+     "no_ask_dollars": "1.0000",
+     "no_bid_dollars": "0.0000",
+     "no_sub_title": "Dalibor Svrcina",
+     "notional_value_dollars": "1.0000",
+     "occurrence_datetime": "2026-10-08T07:00:00Z",
+     "open_interest_fp": "1536159.62",
+     "open_time": "2026-10-07T04:06:00Z",
+     "previous_price_dollars": "0.9900",
+     "previous_yes_ask_dollars": "1.0000",
+     "previous_yes_bid_dollars": "0.0000",
+     "price_level_structure": "linear_cent",
+     "price_ranges": [
+      {
+       "end": "1.0000",
+       "start": "0.0000",
+       "step": "0.0100"
+      }
+     ],
+     "result": "yes",
+     "rules_primary": "If Dalibor Svrcina wins the Norrie vs Svrcina professional tennis match in the 2026 ATP Shanghai Round Of 128 after a ball has been played, then the market resolves to Yes.",
+     "rules_secondary": "The following market refers to the Norrie vs Svrcina professional tennis match in the 2026 ATP Shanghai Round Of 128 after a ball has been played. If the match does not occur (signaled by a ball being played) due to a player injury, walkover, forfeiture, or any other cancellation (all before the match starts), the market will resolve to a fair price in accordance with the rules. If this match is postponed or delayed, the market will remain open and close after the rescheduled match has finished (within two weeks).\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+     "settlement_bounds_type": "default",
+     "settlement_timer_seconds": 60,
+     "settlement_ts": "2026-10-08T14:26:48.683773Z",
+     "settlement_value_dollars": "1.0000",
+     "status": "finalized",
+     "strike_type": "structured",
+     "ticker": "KXATPMATCH-26OCT08NORSVR-SVR",
+     "title": "Dalibor Svrcina wins",
+     "updated_time": "2026-10-08T14:26:48.933104Z",
+     "volume_24h_fp": "0.00",
+     "volume_fp": "3375834.56",
+     "yes_ask_dollars": "1.0000",
+     "yes_ask_size_fp": "0.00",
+     "yes_bid_dollars": "0.0000",
+     "yes_bid_size_fp": "0.00",
+     "yes_sub_title": "Dalibor Svrcina"
+    }
+   ]
+  },
+  "candles_1m": {
+   "status": 200,
+   "n": 810,
+   "first": [
+    {
+     "end_period_ts": 1791346020,
+     "open_interest_fp": "0.00",
+     "price": {},
+     "volume_fp": "0.00",
+     "yes_ask": {
+      "close_dollars": "0.9400",
+      "high_dollars": "0.9900",
+      "low_dollars": "0.9400",
+      "open_dollars": "0.9900"
+     },
+     "yes_bid": {
+      "close_dollars": "0.6200",
+      "high_dollars": "0.6200",
+      "low_dollars": "0.0000",
+      "open_dollars": "0.0000"
+     }
+    },
+    {
+     "end_period_ts": 1791346080,
+     "open_interest_fp": "0.00",
+     "price": {},
+     "volume_fp": "0.00",
+     "yes_ask": {
+      "close_dollars": "0.6600",
+      "high_dollars": "0.9400",
+      "low_dollars": "0.6600",
+      "open_dollars": "0.9400"
+     },
+     "yes_bid": {
+      "close_dollars": "0.6200",
+      "high_dollars": "0.6200",
+      "low_dollars": "0.6200",
+      "open_dollars": "0.6200"
+     }
+    }
+   ],
+   "last": [
+    {
+     "end_period_ts": 1791469440,
+     "open_interest_fp": "2095372.19",
+     "price": {
+      "close_dollars": "0.0100",
+      "high_dollars": "0.0100",
+      "low_dollars": "0.0100",
+      "mean_dollars": "0.0100",
+      "open_dollars": "0.0100",
+      "previous_dollars": "0.0100"
+     },
+     "volume_fp": "187.02",
+     "yes_ask": {
+      "close_dollars": "0.0100",
+      "high_dollars": "0.0100",
+      "low_dollars": "0.0100",
+      "open_dollars": "0.0100"
+     },
+     "yes_bid": {
+      "close_dollars": "0.0000",
+      "high_dollars": "0.0000",
+      "low_dollars": "0.0000",
+      "open_dollars": "0.0000"
+     }
+    }
+   ],
+   "error": null
+  },
+  "trades": {
+   "status": 200,
+   "n_first_page": 1000,
+   "cursor": true,
+   "newest": [
+    {
+     "count_fp": "13.09",
+     "created_time": "2026-10-08T14:24:44.107114Z",
+     "is_block_trade": false,
+     "no_price_dollars": "0.9900",
+     "taker_book_side": "bid",
+     "taker_outcome_side": "yes",
+     "taker_side": "yes",
+     "ticker": "KXATPMATCH-26OCT08NORSVR-NOR",
+     "trade_id": "07257478-ae09-b243-05ed-3a25a8a61981",
+     "yes_price_dollars": "0.0100"
+    },
+    {
+     "count_fp": "93.51",
+     "created_time": "2026-10-08T14:24:33.281172Z",
+     "is_block_trade": false,
+     "no_price_dollars": "0.9900",
+     "taker_book_side": "bid",
+     "taker_outcome_side": "yes",
+     "taker_side": "yes",
+     "ticker": "KXATPMATCH-26OCT08NORSVR-NOR",
+     "trade_id": "07257478-4229-908b-b804-89888f9c4f5d",
+     "yes_price_dollars": "0.0100"
+    }
+   ],
+   "oldest_on_page": [
+    {
+     "count_fp": "300.00",
+     "created_time": "2026-10-08T14:18:57.425985Z",
+     "is_block_trade": false,
+     "no_price_dollars": "0.9100",
+     "taker_book_side": "ask",
+     "taker_outcome_side": "no",
+     "taker_side": "no",
+     "ticker": "KXATPMATCH-26OCT08NORSVR-NOR",
+     "trade_id": "07257467-8ea9-98db-bd8b-4f4507044d6f",
+     "yes_price_dollars": "0.0900"
+    }
+   ]
+  }
+ },
+ "KXWTAMATCH": {
+  "status": 200,
+  "settled_seen": 200,
+  "cursor": true,
+  "market": {
+   "can_close_early": true,
+   "close_time": "2026-10-12T05:40:24Z",
+   "created_time": "2026-10-11T02:01:31.410856Z",
+   "custom_strike": {
+    "tennis_competitor": "6b48f577-d421-4d95-ab71-27521ca2ecdc"
+   },
+   "early_close_condition": "This market will close and expire after a winner is declared.",
+   "event_ticker": "KXWTAMATCH-26OCT11ALEFER",
+   "exchange_index": 3,
+   "expected_expiration_time": "2026-10-12T05:00:00Z",
+   "expiration_time": "2026-10-26T02:00:00Z",
+   "expiration_value": "Leylah Fernandez",
+   "last_price_dollars": "0.0100",
+   "latest_expiration_time": "2026-10-26T02:00:00Z",
+   "market_type": "binary",
+   "no_ask_dollars": "1.0000",
+   "no_bid_dollars": "0.0000",
+   "no_sub_title": "Ekaterina Alexandrova",
+   "notional_value_dollars": "1.0000",
+   "occurrence_datetime": "2026-10-12T05:00:00Z",
+   "open_interest_fp": "1624585.91",
+   "open_time": "2026-10-11T02:06:00Z",
+   "previous_price_dollars": "0.0100",
+   "previous_yes_ask_dollars": "1.0000",
+   "previous_yes_bid_dollars": "0.0000",
+   "price_level_structure": "linear_cent",
+   "price_ranges": [
+    {
+     "end": "1.0000",
+     "start": "0.0000",
+     "step": "0.0100"
+    }
+   ],
+   "result": "no",
+   "rules_primary": "If Ekaterina Alexandrova wins the Alexandrova vs Fernandez professional tennis match in the 2026 WTA Wuhan Round Of 64 after a ball has been played, then the market resolves to Yes.",
+   "rules_secondary": "The following market refers to the Alexandrova vs Fernandez professional tennis match in the 2026 WTA Wuhan Round Of 64 after a ball has been played. If the match does not occur (signaled by a ball being played) due to a player injury, walkover, forfeiture, or any other cancellation (all before the match starts), the market will resolve to a fair price in accordance with the rules. If this match is postponed or delayed, the market will remain open and close after the rescheduled match has finished (within two weeks).\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+   "settlement_bounds_type": "default",
+   "settlement_timer_seconds": 60,
+   "settlement_ts": "2026-10-12T05:42:23.641742Z",
+   "settlement_value_dollars": "0.0000",
+   "status": "finalized",
+   "strike_type": "structured",
+   "ticker": "KXWTAMATCH-26OCT11ALEFER-ALE",
+   "title": "Ekaterina Alexandrova wins",
+   "updated_time": "2026-10-12T05:42:23.934331Z",
+   "volume_24h_fp": "0.00",
+   "volume_fp": "4103016.36",
+   "yes_ask_dollars": "1.0000",
+   "yes_ask_size_fp": "0.00",
+   "yes_bid_dollars": "0.0000",
+   "yes_bid_size_fp": "0.00",
+   "yes_sub_title": "Ekaterina Alexandrova"
+  },
+  "event": {
+   "event": {
+    "category": "Sports",
+    "collateral_return_type": "MECNET",
+    "event_ticker": "KXWTAMATCH-26OCT11ALEFER",
+    "exchange_index": 3,
+    "last_updated_ts": "0001-01-01T00:00:00Z",
+    "mutually_exclusive": true,
+    "product_metadata": {
+     "competition": "WTA Wuhan",
+     "competition_scope": "Game"
+    },
+    "series_ticker": "KXWTAMATCH",
+    "settlement_sources": [
+     {
+      "name": "WTA",
+      "url": "https://www.wtatennis.com/"
+     }
+    ],
+    "strike_period": "",
+    "sub_title": "Alexandrova vs Fernandez (Oct 11)",
+    "title": "Alexandrova vs Fernandez"
+   },
+   "markets": [
+    {
+     "can_close_early": true,
+     "close_time": "2026-10-12T05:40:24Z",
+     "created_time": "2026-10-11T02:01:31.410856Z",
+     "custom_strike": {
+      "tennis_competitor": "6b48f577-d421-4d95-ab71-27521ca2ecdc"
+     },
+     "early_close_condition": "This market will close and expire after a winner is declared.",
+     "event_ticker": "KXWTAMATCH-26OCT11ALEFER",
+     "exchange_index": 3,
+     "expected_expiration_time": "2026-10-12T05:00:00Z",
+     "expiration_time": "2026-10-26T02:00:00Z",
+     "expiration_value": "Leylah Fernandez",
+     "last_price_dollars": "0.0100",
+     "latest_expiration_time": "2026-10-26T02:00:00Z",
+     "market_type": "binary",
+     "no_ask_dollars": "1.0000",
+     "no_bid_dollars": "0.0000",
+     "no_sub_title": "Ekaterina Alexandrova",
+     "notional_value_dollars": "1.0000",
+     "occurrence_datetime": "2026-10-12T05:00:00Z",
+     "open_interest_fp": "1624585.91",
+     "open_time": "2026-10-11T02:06:00Z",
+     "previous_price_dollars": "0.0100",
+     "previous_yes_ask_dollars": "1.0000",
+     "previous_yes_bid_dollars": "0.0000",
+     "price_level_structure": "linear_cent",
+     "price_ranges": [
+      {
+       "end": "1.0000",
+       "start": "0.0000",
+       "step": "0.0100"
+      }
+     ],
+     "result": "no",
+     "rules_primary": "If Ekaterina Alexandrova wins the Alexandrova vs Fernandez professional tennis match in the 2026 WTA Wuhan Round Of 64 after a ball has been played, then the market resolves to Yes.",
+     "rules_secondary": "The following market refers to the Alexandrova vs Fernandez professional tennis match in the 2026 WTA Wuhan Round Of 64 after a ball has been played. If the match does not occur (signaled by a ball being played) due to a player injury, walkover, forfeiture, or any other cancellation (all before the match starts), the market will resolve to a fair price in accordance with the rules. If this match is postponed or delayed, the market will remain open and close after the rescheduled match has finished (within two weeks).\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+     "settlement_bounds_type": "default",
+     "settlement_timer_seconds": 60,
+     "settlement_ts": "2026-10-12T05:42:23.641742Z",
+     "settlement_value_dollars": "0.0000",
+     "status": "finalized",
+     "strike_type": "structured",
+     "ticker": "KXWTAMATCH-26OCT11ALEFER-ALE",
+     "title": "Ekaterina Alexandrova wins",
+     "updated_time": "2026-10-12T05:42:23.934331Z",
+     "volume_24h_fp": "0.00",
+     "volume_fp": "4103016.36",
+     "yes_ask_dollars": "1.0000",
+     "yes_ask_size_fp": "0.00",
+     "yes_bid_dollars": "0.0000",
+     "yes_bid_size_fp": "0.00",
+     "yes_sub_title": "Ekaterina Alexandrova"
+    },
+    {
+     "can_close_early": true,
+     "close_time": "2026-10-12T05:40:24Z",
+     "created_time": "2026-10-11T02:01:31.410856Z",
+     "custom_strike": {
+      "tennis_competitor": "500f9182-df27-4f29-bb5c-ae02f3f172fd"
+     },
+     "early_close_condition": "This market will close and expire after a winner is declared.",
+     "event_ticker": "KXWTAMATCH-26OCT11ALEFER",
+     "exchange_index": 3,
+     "expected_expiration_time": "2026-10-12T05:00:00Z",
+     "expiration_time": "2026-10-26T02:00:00Z",
+     "expiration_value": "Leylah Fernandez",
+     "last_price_dollars": "0.9900",
+     "latest_expiration_time": "2026-10-26T02:00:00Z",
+     "market_type": "binary",
+     "no_ask_dollars": "1.0000",
+     "no_bid_dollars": "0.0000",
+     "no_sub_title": "Leylah Fernandez",
+     "notional_value_dollars": "1.0000",
+     "occurrence_datetime": "2026-10-12T05:00:00Z",
+     "open_interest_fp": "1073964.07",
+     "open_time": "2026-10-11T02:06:00Z",
+     "previous_price_dollars": "0.9900",
+     "previous_yes_ask_dollars": "1.0000",
+     "previous_yes_bid_dollars": "0.0000",
+     "price_level_structure": "linear_cent",
+     "price_ranges": [
+      {
+       "end": "1.0000",
+       "start": "0.0000",
+       "step": "0.0100"
+      }
+     ],
+     "result": "yes",
+     "rules_primary": "If Leylah Fernandez wins the Alexandrova vs Fernandez professional tennis match in the 2026 WTA Wuhan Round Of 64 after a ball has been played, then the market resolves to Yes.",
+     "rules_secondary": "The following market refers to the Alexandrova vs Fernandez professional tennis match in the 2026 WTA Wuhan Round Of 64 after a ball has been played. If the match does not occur (signaled by a ball being played) due to a player injury, walkover, forfeiture, or any other cancellation (all before the match starts), the market will resolve to a fair price in accordance with the rules. If this match is postponed or delayed, the market will remain open and close after the rescheduled match has finished (within two weeks).\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+     "settlement_bounds_type": "default",
+     "settlement_timer_seconds": 60,
+     "settlement_ts": "2026-10-12T05:42:23.641742Z",
+     "settlement_value_dollars": "1.0000",
+     "status": "finalized",
+     "strike_type": "structured",
+     "ticker": "KXWTAMATCH-26OCT11ALEFER-FER",
+     "title": "Leylah Fernandez wins",
+     "updated_time": "2026-10-12T05:42:23.934331Z",
+     "volume_24h_fp": "0.00",
+     "volume_fp": "2349333.39",
+     "yes_ask_dollars": "1.0000",
+     "yes_ask_size_fp": "0.00",
+     "yes_bid_dollars": "0.0000",
+     "yes_bid_size_fp": "0.00",
+     "yes_sub_title": "Leylah Fernandez"
+    }
+   ]
+  },
+  "candles_1m": {
+   "status": 200,
+   "n": 826,
+   "first": [
+    {
+     "end_period_ts": 1791684420,
+     "open_interest_fp": "0.00",
+     "price": {},
+     "volume_fp": "0.00",
+     "yes_ask": {
+      "close_dollars": "0.9400",
+      "high_dollars": "0.9900",
+      "low_dollars": "0.9400",
+      "open_dollars": "0.9900"
+     },
+     "yes_bid": {
+      "close_dollars": "0.0300",
+      "high_dollars": "0.0300",
+      "low_dollars": "0.0000",
+      "open_dollars": "0.0000"
+     }
+    },
+    {
+     "end_period_ts": 1791684480,
+     "open_interest_fp": "0.00",
+     "price": {},
+     "volume_fp": "0.00",
+     "yes_ask": {
+      "close_dollars": "0.7900",
+      "high_dollars": "0.9400",
+      "low_dollars": "0.7900",
+      "open_dollars": "0.9400"
+     },
+     "yes_bid": {
+      "close_dollars": "0.4300",
+      "high_dollars": "0.4300",
+      "low_dollars": "0.0300",
+      "open_dollars": "0.0300"
+     }
+    }
+   ],
+   "last": [
+    {
+     "end_period_ts": 1791783600,
+     "open_interest_fp": "1624576.91",
+     "price": {
+      "close_dollars": "0.0100",
+      "high_dollars": "0.0100",
+      "low_dollars": "0.0100",
+      "mean_dollars": "0.0100",
+      "open_dollars": "0.0100",
+      "previous_dollars": "0.0100"
+     },
+     "volume_fp": "920.54",
+     "yes_ask": {
+      "close_dollars": "0.0100",
+      "high_dollars": "0.0100",
+      "low_dollars": "0.0100",
+      "open_dollars": "0.0100"
+     },
+     "yes_bid": {
+      "close_dollars": "0.0000",
+      "high_dollars": "0.0000",
+      "low_dollars": "0.0000",
+      "open_dollars": "0.0000"
+     }
+    }
+   ],
+   "error": null
+  },
+  "trades": {
+   "status": 200,
+   "n_first_page": 1000,
+   "cursor": true,
+   "newest": [
+    {
+     "count_fp": "25.25",
+     "created_time": "2026-10-12T05:40:09.074308Z",
+     "is_block_trade": false,
+     "no_price_dollars": "0.9900",
+     "taker_book_side": "bid",
+     "taker_outcome_side": "yes",
+     "taker_side": "yes",
+     "ticker": "KXWTAMATCH-26OCT11ALEFER-ALE",
+     "trade_id": "0725941c-a999-a422-7598-e21892b23e99",
+     "yes_price_dollars": "0.0100"
+    },
+    {
+     "count_fp": "9.00",
+     "created_time": "2026-10-12T05:40:03.978841Z",
+     "is_block_trade": false,
+     "no_price_dollars": "0.9900",
+     "taker_book_side": "bid",
+     "taker_outcome_side": "yes",
+     "taker_side": "yes",
+     "ticker": "KXWTAMATCH-26OCT11ALEFER-ALE",
+     "trade_id": "0725941c-0fd9-b376-65c1-ba4f0d627d0d",
+     "yes_price_dollars": "0.0100"
+    }
+   ],
+   "oldest_on_page": [
+    {
+     "count_fp": "5.00",
+     "created_time": "2026-10-12T05:32:18.948709Z",
+     "is_block_trade": false,
+     "no_price_dollars": "0.8600",
+     "taker_book_side": "bid",
+     "taker_outcome_side": "yes",
+     "taker_side": "yes",
+     "ticker": "KXWTAMATCH-26OCT11ALEFER-ALE",
+     "trade_id": "072594fb-3991-9f71-7df7-9ca52c0a402b",
+     "yes_price_dollars": "0.1400"
+    }
+   ]
+  }
+ },
+ "KXATPCHALLENGERMATCH": {
+  "status": 200,
+  "settled_seen": 200,
+  "cursor": true,
+  "market": {
+   "can_close_early": true,
+   "close_time": "2026-10-16T18:29:56Z",
+   "created_time": "2026-10-16T03:01:06.924756Z",
+   "custom_strike": {
+    "tennis_competitor": "2a551588-1823-4dfc-8f6c-9a6e45a9ff98"
+   },
+   "early_close_condition": "This market will close and expire after a winner is declared.",
+   "event_ticker": "KXATPCHALLENGERMATCH-26OCT16CADMOE",
+   "exchange_index": 3,
+   "expected_expiration_time": "2026-10-16T18:00:00Z",
+   "expiration_time": "2026-10-30T15:00:00Z",
+   "expiration_value": "Gianluca Cadenasso",
+   "last_price_dollars": "0.0100",
+   "latest_expiration_time": "2026-10-30T15:00:00Z",
+   "market_type": "binary",
+   "no_ask_dollars": "1.0000",
+   "no_bid_dollars": "0.0000",
+   "no_sub_title": "Marvin Moeller",
+   "notional_value_dollars": "1.0000",
+   "occurrence_datetime": "2026-10-16T18:00:00Z",
+   "open_interest_fp": "1197710.17",
+   "open_time": "2026-10-16T03:10:00Z",
+   "previous_price_dollars": "0.0000",
+   "previous_yes_ask_dollars": "0.0000",
+   "previous_yes_bid_dollars": "0.0000",
+   "price_level_structure": "linear_cent",
+   "price_ranges": [
+    {
+     "end": "1.0000",
+     "start": "0.0000",
+     "step": "0.0100"
+    }
+   ],
+   "result": "no",
+   "rules_primary": "If Marvin Moeller wins the Cadenasso vs Moeller professional tennis match in the 2026 ATP Challenger Catania Quarterfinal after a ball has been played, then the market resolves to Yes.",
+   "rules_secondary": "The following market refers to the Cadenasso vs Moeller professional tennis match in the 2026 ATP Challenger Catania Quarterfinal after a ball has been played. If the match does not occur (signaled by a ball being played) due to a player injury, walkover, forfeiture, or any other cancellation (all before the match starts), the market will resolve to a fair price in accordance with the rules. If this match is postponed or delayed, the market will remain open and close after the rescheduled match has finished (within two weeks).\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+   "settlement_bounds_type": "default",
+   "settlement_timer_seconds": 60,
+   "settlement_ts": "2026-10-16T18:31:56.819038Z",
+   "settlement_value_dollars": "0.0000",
+   "status": "finalized",
+   "strike_type": "structured",
+   "ticker": "KXATPCHALLENGERMATCH-26OCT16CADMOE-MOE",
+   "title": "Marvin Moeller wins",
+   "updated_time": "2026-10-16T18:31:57.153833Z",
+   "volume_24h_fp": "4040716.11",
+   "volume_fp": "4040716.11",
+   "yes_ask_dollars": "1.0000",
+   "yes_ask_size_fp": "0.00",
+   "yes_bid_dollars": "0.0000",
+   "yes_bid_size_fp": "0.00",
+   "yes_sub_title": "Marvin Moeller"
+  },
+  "event": {
+   "event": {
+    "category": "Sports",
+    "collateral_return_type": "MECNET",
+    "event_ticker": "KXATPCHALLENGERMATCH-26OCT16CADMOE",
+    "exchange_index": 3,
+    "last_updated_ts": "0001-01-01T00:00:00Z",
+    "mutually_exclusive": true,
+    "product_metadata": {
+     "competition": "ATP Challenger Catania",
+     "competition_scope": "Game"
+    },
+    "series_ticker": "KXATPCHALLENGERMATCH",
+    "settlement_sources": [
+     {
+      "name": "ATP",
+      "url": "https://www.atptour.com/"
+     }
+    ],
+    "strike_period": "",
+    "sub_title": "Cadenasso vs Moeller (Oct 16)",
+    "title": "Cadenasso vs Moeller"
+   },
+   "markets": [
+    {
+     "can_close_early": true,
+     "close_time": "2026-10-16T18:29:56Z",
+     "created_time": "2026-10-16T03:01:06.924756Z",
+     "custom_strike": {
+      "tennis_competitor": "c3aa8175-2557-4759-8efe-237988ce18f8"
+     },
+     "early_close_condition": "This market will close and expire after a winner is declared.",
+     "event_ticker": "KXATPCHALLENGERMATCH-26OCT16CADMOE",
+     "exchange_index": 3,
+     "expected_expiration_time": "2026-10-16T18:00:00Z",
+     "expiration_time": "2026-10-30T15:00:00Z",
+     "expiration_value": "Gianluca Cadenasso",
+     "last_price_dollars": "0.9900",
+     "latest_expiration_time": "2026-10-30T15:00:00Z",
+     "market_type": "binary",
+     "no_ask_dollars": "1.0000",
+     "no_bid_dollars": "0.0000",
+     "no_sub_title": "Gianluca Cadenasso",
+     "notional_value_dollars": "1.0000",
+     "occurrence_datetime": "2026-10-16T18:00:00Z",
+     "open_interest_fp": "978523.79",
+     "open_time": "2026-10-16T03:10:00Z",
+     "previous_price_dollars": "0.0000",
+     "previous_yes_ask_dollars": "0.0000",
+     "previous_yes_bid_dollars": "0.0000",
+     "price_level_structure": "linear_cent",
+     "price_ranges": [
+      {
+       "end": "1.0000",
+       "start": "0.0000",
+       "step": "0.0100"
+      }
+     ],
+     "result": "yes",
+     "rules_primary": "If Gianluca Cadenasso wins the Cadenasso vs Moeller professional tennis match in the 2026 ATP Challenger Catania Quarterfinal after a ball has been played, then the market resolves to Yes.",
+     "rules_secondary": "The following market refers to the Cadenasso vs Moeller professional tennis match in the 2026 ATP Challenger Catania Quarterfinal after a ball has been played. If the match does not occur (signaled by a ball being played) due to a player injury, walkover, forfeiture, or any other cancellation (all before the match starts), the market will resolve to a fair price in accordance with the rules. If this match is postponed or delayed, the market will remain open and close after the rescheduled match has finished (within two weeks).\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+     "settlement_bounds_type": "default",
+     "settlement_timer_seconds": 60,
+     "settlement_ts": "2026-10-16T18:31:56.819038Z",
+     "settlement_value_dollars": "1.0000",
+     "status": "finalized",
+     "strike_type": "structured",
+     "ticker": "KXATPCHALLENGERMATCH-26OCT16CADMOE-CAD",
+     "title": "Gianluca Cadenasso wins",
+     "updated_time": "2026-10-16T18:31:57.153833Z",
+     "volume_24h_fp": "3128100.40",
+     "volume_fp": "3128100.40",
+     "yes_ask_dollars": "1.0000",
+     "yes_ask_size_fp": "0.00",
+     "yes_bid_dollars": "0.0000",
+     "yes_bid_size_fp": "0.00",
+     "yes_sub_title": "Gianluca Cadenasso"
+    },
+    {
+     "can_close_early": true,
+     "close_time": "2026-10-16T18:29:56Z",
+     "created_time": "2026-10-16T03:01:06.924756Z",
+     "custom_strike": {
+      "tennis_competitor": "2a551588-1823-4dfc-8f6c-9a6e45a9ff98"
+     },
+     "early_close_condition": "This market will close and expire after a winner is declared.",
+     "event_ticker": "KXATPCHALLENGERMATCH-26OCT16CADMOE",
+     "exchange_index": 3,
+     "expected_expiration_time": "2026-10-16T18:00:00Z",
+     "expiration_time": "2026-10-30T15:00:00Z",
+     "expiration_value": "Gianluca Cadenasso",
+     "last_price_dollars": "0.0100",
+     "latest_expiration_time": "2026-10-30T15:00:00Z",
+     "market_type": "binary",
+     "no_ask_dollars": "1.0000",
+     "no_bid_dollars": "0.0000",
+     "no_sub_title": "Marvin Moeller",
+     "notional_value_dollars": "1.0000",
+     "occurrence_datetime": "2026-10-16T18:00:00Z",
+     "open_interest_fp": "1197710.17",
+     "open_time": "2026-10-16T03:10:00Z",
+     "previous_price_dollars": "0.0000",
+     "previous_yes_ask_dollars": "0.0000",
+     "previous_yes_bid_dollars": "0.0000",
+     "price_level_structure": "linear_cent",
+     "price_ranges": [
+      {
+       "end": "1.0000",
+       "start": "0.0000",
+       "step": "0.0100"
+      }
+     ],
+     "result": "no",
+     "rules_primary": "If Marvin Moeller wins the Cadenasso vs Moeller professional tennis match in the 2026 ATP Challenger Catania Quarterfinal after a ball has been played, then the market resolves to Yes.",
+     "rules_secondary": "The following market refers to the Cadenasso vs Moeller professional tennis match in the 2026 ATP Challenger Catania Quarterfinal after a ball has been played. If the match does not occur (signaled by a ball being played) due to a player injury, walkover, forfeiture, or any other cancellation (all before the match starts), the market will resolve to a fair price in accordance with the rules. If this match is postponed or delayed, the market will remain open and close after the rescheduled match has finished (within two weeks).\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+     "settlement_bounds_type": "default",
+     "settlement_timer_seconds": 60,
+     "settlement_ts": "2026-10-16T18:31:56.819038Z",
+     "settlement_value_dollars": "0.0000",
+     "status": "finalized",
+     "strike_type": "structured",
+     "ticker": "KXATPCHALLENGERMATCH-26OCT16CADMOE-MOE",
+     "title": "Marvin Moeller wins",
+     "updated_time": "2026-10-16T18:31:57.153833Z",
+     "volume_24h_fp": "4040716.11",
+     "volume_fp": "4040716.11",
+     "yes_ask_dollars": "1.0000",
+     "yes_ask_size_fp": "0.00",
+     "yes_bid_dollars": "0.0000",
+     "yes_bid_size_fp": "0.00",
+     "yes_sub_title": "Marvin Moeller"
+    }
+   ]
+  },
+  "candles_1m": {
+   "status": 200,
+   "n": 407,
+   "first": [
+    {
+     "end_period_ts": 1792120260,
+     "open_interest_fp": "0.00",
+     "price": {},
+     "volume_fp": "0.00",
+     "yes_ask": {
+      "close_dollars": "0.8700",
+      "high_dollars": "0.9900",
+      "low_dollars": "0.8700",
+      "open_dollars": "0.9900"
+     },
+     "yes_bid": {
+      "close_dollars": "0.4800",
+      "high_dollars": "0.4800",
+      "low_dollars": "0.0000",
+      "open_dollars": "0.0000"
+     }
+    },
+    {
+     "end_period_ts": 1792120320,
+     "open_interest_fp": "0.00",
+     "price": {},
+     "volume_fp": "0.00",
+     "yes_ask": {
+      "close_dollars": "0.5700",
+      "high_dollars": "0.8700",
+      "low_dollars": "0.5700",
+      "open_dollars": "0.8700"
+     },
+     "yes_bid": {
+      "close_dollars": "0.4900",
+      "high_dollars": "0.4900",
+      "low_dollars": "0.4800",
+      "open_dollars": "0.4800"
+     }
+    }
+   ],
+   "last": [
+    {
+     "end_period_ts": 1792175340,
+     "open_interest_fp": "1197710.17",
+     "price": {
+      "close_dollars": "0.0100",
+      "high_dollars": "0.0100",
+      "low_dollars": "0.0100",
+      "mean_dollars": "0.0100",
+      "open_dollars": "0.0100",
+      "previous_dollars": "0.0100"
+     },
+     "volume_fp": "538.66",
+     "yes_ask": {
+      "close_dollars": "0.0100",
+      "high_dollars": "0.0100",
+      "low_dollars": "0.0100",
+      "open_dollars": "0.0100"
+     },
+     "yes_bid": {
+      "close_dollars": "0.0000",
+      "high_dollars": "0.0000",
+      "low_dollars": "0.0000",
+      "open_dollars": "0.0000"
+     }
+    }
+   ],
+   "error": null
+  },
+  "trades": {
+   "status": 200,
+   "n_first_page": 1000,
+   "cursor": true,
+   "newest": [
+    {
+     "count_fp": "71.07",
+     "created_time": "2026-10-16T18:28:47.673103Z",
+     "is_block_trade": false,
+     "no_price_dollars": "0.9900",
+     "taker_book_side": "bid",
+     "taker_outcome_side": "yes",
+     "taker_side": "yes",
+     "ticker": "KXATPCHALLENGERMATCH-26OCT16CADMOE-MOE",
+     "trade_id": "07245211-1b39-9b4b-db8f-8d5bffd698e5",
+     "yes_price_dollars": "0.0100"
+    },
+    {
+     "count_fp": "467.59",
+     "created_time": "2026-10-16T18:28:20.813935Z",
+     "is_block_trade": false,
+     "no_price_dollars": "0.9900",
+     "taker_book_side": "bid",
+     "taker_outcome_side": "yes",
+     "taker_side": "yes",
+     "ticker": "KXATPCHALLENGERMATCH-26OCT16CADMOE-MOE",
+     "trade_id": "07245217-71d9-bb7f-3372-15c14f1ea669",
+     "yes_price_dollars": "0.0100"
+    }
+   ],
+   "oldest_on_page": [
+    {
+     "count_fp": "3.26",
+     "created_time": "2026-10-16T18:21:38.035711Z",
+     "is_block_trade": false,
+     "no_price_dollars": "0.4900",
+     "taker_book_side": "bid",
+     "taker_outcome_side": "yes",
+     "taker_side": "yes",
+     "ticker": "KXATPCHALLENGERMATCH-26OCT16CADMOE-MOE",
+     "trade_id": "07245238-8821-9bbb-c263-c9e284267297",
+     "yes_price_dollars": "0.5100"
+    }
+   ]
+  }
+ },
+ "KXWTACHALLENGERMATCH": {
+  "status": 200,
+  "settled_seen": 200,
+  "cursor": true,
+  "market": {
+   "can_close_early": true,
+   "close_time": "2026-10-15T20:34:46Z",
+   "created_time": "2026-10-15T05:00:38.909864Z",
+   "custom_strike": {
+    "tennis_competitor": "14fa3fa3-ad56-4e1e-9535-f9696bb3b9ec"
+   },
+   "early_close_condition": "This market will close and expire after a winner is declared.",
+   "event_ticker": "KXWTACHALLENGERMATCH-26OCT15RUZAND",
+   "exchange_index": 3,
+   "expected_expiration_time": "2026-10-15T20:00:00Z",
+   "expiration_time": "2026-10-29T17:00:00Z",
+   "expiration_value": "Bianca Andreescu",
+   "last_price_dollars": "0.0100",
+   "latest_expiration_time": "2026-10-29T17:00:00Z",
+   "market_type": "binary",
+   "no_ask_dollars": "1.0000",
+   "no_bid_dollars": "0.0000",
+   "no_sub_title": "Antonia Ruzic",
+   "notional_value_dollars": "1.0000",
+   "occurrence_datetime": "2026-10-15T20:00:00Z",
+   "open_interest_fp": "1344722.01",
+   "open_time": "2026-10-15T05:10:00Z",
+   "previous_price_dollars": "0.2200",
+   "previous_yes_ask_dollars": "0.2300",
+   "previous_yes_bid_dollars": "0.2200",
+   "price_level_structure": "linear_cent",
+   "price_ranges": [
+    {
+     "end": "1.0000",
+     "start": "0.0000",
+     "step": "0.0100"
+    }
+   ],
+   "result": "no",
+   "rules_primary": "If Antonia Ruzic wins the Ruzic vs Andreescu professional tennis match in the 2026 WTA 125K Rovereto Round Of 16 after a ball has been played, then the market resolves to Yes.",
+   "rules_secondary": "The following market refers to the Ruzic vs Andreescu professional tennis match in the 2026 WTA 125K Rovereto Round Of 16 after a ball has been played. If the match does not occur (signaled by a ball being played) due to a player injury, walkover, forfeiture, or any other cancellation (all before the match starts), the market will resolve to a fair price in accordance with the rules. If this match is postponed or delayed, the market will remain open and close after the rescheduled match has finished (within two weeks).\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+   "settlement_bounds_type": "default",
+   "settlement_timer_seconds": 60,
+   "settlement_ts": "2026-10-15T20:36:46.814779Z",
+   "settlement_value_dollars": "0.0000",
+   "status": "finalized",
+   "strike_type": "structured",
+   "ticker": "KXWTACHALLENGERMATCH-26OCT15RUZAND-RUZ",
+   "title": "Antonia Ruzic wins",
+   "updated_time": "2026-10-15T20:36:47.156032Z",
+   "volume_24h_fp": "34701.97",
+   "volume_fp": "4654965.92",
+   "yes_ask_dollars": "1.0000",
+   "yes_ask_size_fp": "0.00",
+   "yes_bid_dollars": "0.0000",
+   "yes_bid_size_fp": "0.00",
+   "yes_sub_title": "Antonia Ruzic"
+  },
+  "event": {
+   "event": {
+    "category": "Sports",
+    "collateral_return_type": "MECNET",
+    "event_ticker": "KXWTACHALLENGERMATCH-26OCT15RUZAND",
+    "exchange_index": 3,
+    "last_updated_ts": "0001-01-01T00:00:00Z",
+    "mutually_exclusive": true,
+    "product_metadata": {
+     "competition": "WTA 125K Rovereto",
+     "competition_scope": "Game"
+    },
+    "series_ticker": "KXWTACHALLENGERMATCH",
+    "settlement_sources": [
+     {
+      "name": "WTA",
+      "url": "https://www.wtatennis.com/"
+     }
+    ],
+    "strike_period": "",
+    "sub_title": "Ruzic vs Andreescu (Oct 15)",
+    "title": "Ruzic vs Andreescu"
+   },
+   "markets": [
+    {
+     "can_close_early": true,
+     "close_time": "2026-10-15T20:34:46Z",
+     "created_time": "2026-10-15T05:00:38.909864Z",
+     "custom_strike": {
+      "tennis_competitor": "14fa3fa3-ad56-4e1e-9535-f9696bb3b9ec"
+     },
+     "early_close_condition": "This market will close and expire after a winner is declared.",
+     "event_ticker": "KXWTACHALLENGERMATCH-26OCT15RUZAND",
+     "exchange_index": 3,
+     "expected_expiration_time": "2026-10-15T20:00:00Z",
+     "expiration_time": "2026-10-29T17:00:00Z",
+     "expiration_value": "Bianca Andreescu",
+     "last_price_dollars": "0.0100",
+     "latest_expiration_time": "2026-10-29T17:00:00Z",
+     "market_type": "binary",
+     "no_ask_dollars": "1.0000",
+     "no_bid_dollars": "0.0000",
+     "no_sub_title": "Antonia Ruzic",
+     "notional_value_dollars": "1.0000",
+     "occurrence_datetime": "2026-10-15T20:00:00Z",
+     "open_interest_fp": "1344722.01",
+     "open_time": "2026-10-15T05:10:00Z",
+     "previous_price_dollars": "0.2200",
+     "previous_yes_ask_dollars": "0.2300",
+     "previous_yes_bid_dollars": "0.2200",
+     "price_level_structure": "linear_cent",
+     "price_ranges": [
+      {
+       "end": "1.0000",
+       "start": "0.0000",
+       "step": "0.0100"
+      }
+     ],
+     "result": "no",
+     "rules_primary": "If Antonia Ruzic wins the Ruzic vs Andreescu professional tennis match in the 2026 WTA 125K Rovereto Round Of 16 after a ball has been played, then the market resolves to Yes.",
+     "rules_secondary": "The following market refers to the Ruzic vs Andreescu professional tennis match in the 2026 WTA 125K Rovereto Round Of 16 after a ball has been played. If the match does not occur (signaled by a ball being played) due to a player injury, walkover, forfeiture, or any other cancellation (all before the match starts), the market will resolve to a fair price in accordance with the rules. If this match is postponed or delayed, the market will remain open and close after the rescheduled match has finished (within two weeks).\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+     "settlement_bounds_type": "default",
+     "settlement_timer_seconds": 60,
+     "settlement_ts": "2026-10-15T20:36:46.814779Z",
+     "settlement_value_dollars": "0.0000",
+     "status": "finalized",
+     "strike_type": "structured",
+     "ticker": "KXWTACHALLENGERMATCH-26OCT15RUZAND-RUZ",
+     "title": "Antonia Ruzic wins",
+     "updated_time": "2026-10-15T20:36:47.156032Z",
+     "volume_24h_fp": "34701.97",
+     "volume_fp": "4654965.92",
+     "yes_ask_dollars": "1.0000",
+     "yes_ask_size_fp": "0.00",
+     "yes_bid_dollars": "0.0000",
+     "yes_bid_size_fp": "0.00",
+     "yes_sub_title": "Antonia Ruzic"
+    },
+    {
+     "can_close_early": true,
+     "close_time": "2026-10-15T20:34:46Z",
+     "created_time": "2026-10-15T05:00:38.909864Z",
+     "custom_strike": {
+      "tennis_competitor": "99951f77-a0d6-494a-80bb-dd1d247fbc1c"
+     },
+     "early_close_condition": "This market will close and expire after a winner is declared.",
+     "event_ticker": "KXWTACHALLENGERMATCH-26OCT15RUZAND",
+     "exchange_index": 3,
+     "expected_expiration_time": "2026-10-15T20:00:00Z",
+     "expiration_time": "2026-10-29T17:00:00Z",
+     "expiration_value": "Bianca Andreescu",
+     "last_price_dollars": "0.9900",
+     "latest_expiration_time": "2026-10-29T17:00:00Z",
+     "market_type": "binary",
+     "no_ask_dollars": "1.0000",
+     "no_bid_dollars": "0.0000",
+     "no_sub_title": "Bianca Andreescu",
+     "notional_value_dollars": "1.0000",
+     "occurrence_datetime": "2026-10-15T20:00:00Z",
+     "open_interest_fp": "1243557.85",
+     "open_time": "2026-10-15T05:10:00Z",
+     "previous_price_dollars": "0.7800",
+     "previous_yes_ask_dollars": "0.7800",
+     "previous_yes_bid_dollars": "0.7700",
+     "price_level_structure": "linear_cent",
+     "price_ranges": [
+      {
+       "end": "1.0000",
+       "start": "0.0000",
+       "step": "0.0100"
+      }
+     ],
+     "result": "yes",
+     "rules_primary": "If Bianca Andreescu wins the Ruzic vs Andreescu professional tennis match in the 2026 WTA 125K Rovereto Round Of 16 after a ball has been played, then the market resolves to Yes.",
+     "rules_secondary": "The following market refers to the Ruzic vs Andreescu professional tennis match in the 2026 WTA 125K Rovereto Round Of 16 after a ball has been played. If the match does not occur (signaled by a ball being played) due to a player injury, walkover, forfeiture, or any other cancellation (all before the match starts), the market will resolve to a fair price in accordance with the rules. If this match is postponed or delayed, the market will remain open and close after the rescheduled match has finished (within two weeks).\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+     "settlement_bounds_type": "default",
+     "settlement_timer_seconds": 60,
+     "settlement_ts": "2026-10-15T20:36:46.814779Z",
+     "settlement_value_dollars": "1.0000",
+     "status": "finalized",
+     "strike_type": "structured",
+     "ticker": "KXWTACHALLENGERMATCH-26OCT15RUZAND-AND",
+     "title": "Bianca Andreescu wins",
+     "updated_time": "2026-10-15T20:36:47.156032Z",
+     "volume_24h_fp": "153242.72",
+     "volume_fp": "3975107.75",
+     "yes_ask_dollars": "1.0000",
+     "yes_ask_size_fp": "0.00",
+     "yes_bid_dollars": "0.0000",
+     "yes_bid_size_fp": "0.00",
+     "yes_sub_title": "Bianca Andreescu"
+    }
+   ]
+  },
+  "candles_1m": {
+   "status": 200,
+   "n": 362,
+   "first": [
+    {
+     "end_period_ts": 1792041060,
+     "open_interest_fp": "0.00",
+     "price": {},
+     "volume_fp": "0.00",
+     "yes_ask": {
+      "close_dollars": "0.3700",
+      "high_dollars": "0.9900",
+      "low_dollars": "0.3700",
+      "open_dollars": "0.9900"
+     },
+     "yes_bid": {
+      "close_dollars": "0.3300",
+      "high_dollars": "0.3300",
+      "low_dollars": "0.0000",
+      "open_dollars": "0.0000"
+     }
+    },
+    {
+     "end_period_ts": 1792041120,
+     "open_interest_fp": "0.00",
+     "price": {},
+     "volume_fp": "0.00",
+     "yes_ask": {
+      "close_dollars": "0.3600",
+      "high_dollars": "0.3700",
+      "low_dollars": "0.3600",
+      "open_dollars": "0.3700"
+     },
+     "yes_bid": {
+      "close_dollars": "0.3300",
+      "high_dollars": "0.3300",
+      "low_dollars": "0.3300",
+      "open_dollars": "0.3300"
+     }
+    }
+   ],
+   "last": [
+    {
+     "end_period_ts": 1792096440,
+     "open_interest_fp": "1344151.59",
+     "price": {
+      "previous_dollars": "0.0100"
+     },
+     "volume_fp": "0.00",
+     "yes_ask": {
+      "close_dollars": "0.0100",
+      "high_dollars": "0.0100",
+      "low_dollars": "0.0100",
+      "open_dollars": "0.0100"
+     },
+     "yes_bid": {
+      "close_dollars": "0.0000",
+      "high_dollars": "0.0000",
+      "low_dollars": "0.0000",
+      "open_dollars": "0.0000"
+     }
+    }
+   ],
+   "error": null
+  },
+  "trades": {
+   "status": 200,
+   "n_first_page": 1000,
+   "cursor": true,
+   "newest": [
+    {
+     "count_fp": "93.51",
+     "created_time": "2026-10-15T20:35:24.025421Z",
+     "is_block_trade": false,
+     "no_price_dollars": "0.9900",
+     "taker_book_side": "bid",
+     "taker_outcome_side": "yes",
+     "taker_side": "yes",
+     "ticker": "KXWTACHALLENGERMATCH-26OCT15RUZAND-RUZ",
+     "trade_id": "07244459-6499-888d-f3c2-e6d4c2a7d6d6",
+     "yes_price_dollars": "0.0100"
+    },
+    {
+     "count_fp": "9.32",
+     "created_time": "2026-10-15T20:35:20.501072Z",
+     "is_block_trade": false,
+     "no_price_dollars": "0.9900",
+     "taker_book_side": "bid",
+     "taker_outcome_side": "yes",
+     "taker_side": "yes",
+     "ticker": "KXWTACHALLENGERMATCH-26OCT15RUZAND-RUZ",
+     "trade_id": "07244459-2219-8dc9-dd19-10e7750ef996",
+     "yes_price_dollars": "0.0100"
+    }
+   ],
+   "oldest_on_page": [
+    {
+     "count_fp": "1.00",
+     "created_time": "2026-10-15T20:29:00.29016Z",
+     "is_block_trade": false,
+     "no_price_dollars": "0.5800",
+     "taker_book_side": "bid",
+     "taker_outcome_side": "yes",
+     "taker_side": "yes",
+     "ticker": "KXWTACHALLENGERMATCH-26OCT15RUZAND-RUZ",
+     "trade_id": "07244443-1161-a0ef-cfc0-5915938a31b5",
+     "yes_price_dollars": "0.4200"
+    }
+   ]
+  }
+ }
+}
