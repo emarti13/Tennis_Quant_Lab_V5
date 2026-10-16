@@ -567,6 +567,52 @@ def suggest_from_other_source(sources: pd.DataFrame, crosswalk: pd.DataFrame, ot
     return out
 
 
+# A person's decisions live in their own files, which only people edit; the daily rebuild
+# reads them and never writes them (user decision 2026-10-16), so a decision PR and the
+# bot's daily commit never touch the same file.
+DECISION_COLUMNS = ["source_id", "edition_key", "status", "note", "set_on"]
+DECISION_STATUSES = {"user", "rejected"}
+
+
+def load_decisions(path: str | Path) -> pd.DataFrame:
+    p = Path(path)
+    if not p.exists():
+        return pd.DataFrame(columns=DECISION_COLUMNS)
+    d = pd.read_csv(p, dtype=str, keep_default_na=False)
+    bad = d[~d["status"].isin(DECISION_STATUSES) | ((d["status"] == "user") & (d["edition_key"] == ""))]
+    if len(bad):
+        raise ValueError(f"{p}: rows need status user (with an edition_key) or rejected: {list(bad['source_id'])}")
+    if d["source_id"].duplicated().any():
+        raise ValueError(f"{p}: one decision per source_id: {list(d.loc[d['source_id'].duplicated(), 'source_id'])}")
+    return d
+
+
+def apply_crosswalk_decisions(crosswalk: pd.DataFrame, decisions: pd.DataFrame) -> pd.DataFrame:
+    """The stored crosswalk with the decision file laid over it. user/rejected rows come only
+    from the decision file: a decision removed from the file stops applying."""
+    out = crosswalk.copy() if len(crosswalk) else pd.DataFrame(columns=CROSSWALK_COLUMNS)
+    for c in CROSSWALK_COLUMNS:
+        if c not in out.columns:
+            out[c] = ""
+    # A stored user/rejected row whose decision is gone is re-decided by the rebuild.
+    gone = out["status"].isin(DECISION_STATUSES) & ~out["source_id"].isin(decisions["source_id"])
+    out.loc[gone, ["status", "edition_key"]] = ["review", ""]
+    for d in decisions.itertuples():
+        hit = out["source_id"] == d.source_id
+        values = {"edition_key": d.edition_key if d.status == "user" else "", "status": d.status,
+                  "method": "user decision", "note": d.note, "set_on": d.set_on}
+        if hit.any():
+            for k, v in values.items():
+                out.loc[hit, k] = v
+        else:
+            row = {c: "" for c in CROSSWALK_COLUMNS} | values | {"source_id": d.source_id,
+                                                                "tournament_id": d.source_id.split("@")[0]}
+            if "@" in d.source_id:
+                row["first_date"] = row["last_date"] = d.source_id.split("@")[1]
+            out = pd.concat([out, pd.DataFrame([row])], ignore_index=True)
+    return out[CROSSWALK_COLUMNS].reset_index(drop=True)
+
+
 def load_crosswalk(path: str | Path) -> pd.DataFrame:
     p = Path(path)
     if not p.exists():

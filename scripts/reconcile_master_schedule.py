@@ -27,10 +27,12 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from v5_tournament_identity import (  # noqa: E402
+    apply_crosswalk_decisions,
     build_crosswalk,
     confirm_matches,
     enrich_locations,
     load_crosswalk,
+    load_decisions,
     suggest_from_other_source,
     load_countries,
     load_master_schedule,
@@ -82,7 +84,8 @@ def main() -> int:
     crosswalks, drifts = {}, {}
     for name, matches, conf in (("oddspapi", om, oc), ("tennismylife", tm, tc)):
         path = xdir / f"crosswalk_{name}.csv"
-        crosswalks[name], drifts[name] = build_crosswalk(matches, conf, load_crosswalk(path), set_on=args.as_of)
+        stored = apply_crosswalk_decisions(load_crosswalk(path), load_decisions(xdir / f"decisions_{name}.csv"))
+        crosswalks[name], drifts[name] = build_crosswalk(matches, conf, stored, set_on=args.as_of)
 
     # Rows still held for review: suggest the edition the other source's results point to
     # (flag only; the row stays in review until a person confirms it).
