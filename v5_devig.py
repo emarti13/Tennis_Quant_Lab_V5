@@ -11,7 +11,8 @@ with c chosen so the fair probabilities q_i sum to 1.
 lam = 0 is "same share off each side" (multiplicative); lam = 1 is "same amount off each
 side" (additive); larger lam takes more of the margin from the longshot. The "power"
 method (q_i = p_i**k) is offered separately; for two-way prices it sits near lam = 1.5.
-Each book's lam is measured on our own closing prices (scripts/measure_devig.py).
+Each book's lam is measured on our own closing prices (scripts/measure_devig.py); see
+DEFAULT_LAM below for the current setting and why.
 
 Cautious edge rule (approved 2026-10-13): an edge is judged against the least favourable of
 the multiplicative, additive and power fair probabilities for the side being bet (and the
@@ -27,6 +28,17 @@ import math
 from typing import Sequence
 
 LAM_MAX = 5.0
+# Measured 2026-10-16 (docs/experiments/2026-10-16-devig-measurement.md): on 2026 closes
+# before the sealed period no setting beat another (every 95% interval includes zero) and
+# fitted lam values were unstable, while additive was best or tied at the close for every
+# book. So every book uses lam = 1 until more data separates them; the cautious edge rule
+# makes the choice unable to create an edge either way.
+DEFAULT_LAM = 1.0
+BOOK_LAM: dict[str, float] = {}
+
+
+def book_lam(book: str) -> float:
+    return BOOK_LAM.get(book, DEFAULT_LAM)
 KALSHI_TAKER_FEE_RATE = 0.07   # fee per contract = ceil(rate * P * (1 - P), to the cent); check Kalshi's schedule
 
 

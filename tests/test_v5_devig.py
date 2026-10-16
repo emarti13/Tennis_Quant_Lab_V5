@@ -5,7 +5,7 @@ import pandas as pd
 import pytest
 
 from v5_devig import (
-    cautious_edge, cautious_fair, devig, devig_power, exchange_fair, expected_value, kalshi_ev, kalshi_fee,
+    DEFAULT_LAM, book_lam, cautious_edge, cautious_fair, devig, devig_power, exchange_fair, expected_value, kalshi_ev, kalshi_fee,
 )
 from v5_market_results import fixture_winners
 
@@ -67,3 +67,7 @@ def test_winners_join_by_edition_and_both_player_ids_and_skip_ambiguous_pairs():
         {"edition_key": "E1", "winner_id": "M-4", "loser_id": "M-3"},
     ])
     assert fixture_winners(fixtures, results).to_dict("records") == [{"fixture_id": "f1", "winner_side": "p2"}]
+
+
+def test_every_book_uses_the_measured_default_until_data_separates_them():
+    assert DEFAULT_LAM == 1.0 and book_lam("pinnacle") == book_lam("bet365") == 1.0
