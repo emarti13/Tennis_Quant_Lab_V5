@@ -5,46 +5,74 @@ Spec §2.5, rebuild plan Step 3 (user decision 2026-10-13).
 
 ## Data
 
-- Price store (`market_history/`), moneyline, Pinnacle, BetRivers and DraftKings: the
-  January–August backfill plus the first live pulls. Bet365 has too few results before the
-  sealed period yet.
+- Price store (`market_history/`), moneyline closes for Pinnacle, BetRivers and
+  DraftKings: the January–August backfill plus the first live pulls. Bet365 has only 70
+  results before the sealed period so far.
 - **Only fixtures that started before 2026-10-13** (sealed period; CLAUDE.md).
 - Closes whose book stopped quoting more than 60 minutes before the start are left out
   (spec §5.4). Also measured 6 hours before the start.
 - Winners joined through our ids (`v5_market_results`): same master-schedule edition and
-  same two `player_id`s. 41,731 book × fixture × point pairs.
-- **Winner coverage: 8,515 of 12,366 resolved fixtures (69%)**, 63–76% a month. The
-  missing 31% are a gap in the results join, to look at before Step 5's re-simulation.
-- Earliest 60% (by start time) to fit lam, latest 40% to test; paired bootstrap (1,000)
-  against multiplicative.
+  same two `player_id`s.
 
-## Results (test-set log loss)
+## Winner coverage: 8,589 of 12,366 resolved fixtures (69%)
 
-| Book, point | n test | fitted lam | fitted | multiplicative | additive | power | fitted − mult., 95% CI |
-|---|---|---|---|---|---|---|---|
-| Pinnacle, close | 3,058 | 5.0 (edge) | 0.6067 | 0.6056 | **0.6055** | 0.6056 | +0.0012 [−0.0008, +0.0030] |
-| Pinnacle, T-6h | 2,915 | 5.0 (edge) | 0.6084 | 0.6076 | **0.6074** | 0.6074 | +0.0008 [−0.0013, +0.0029] |
-| BetRivers, close | 2,745 | 1.35 | **0.6082** | 0.6087 | **0.6082** | 0.6083 | −0.0005 [−0.0022, +0.0012] |
-| BetRivers, T-6h | 2,563 | 5.0 (edge) | 0.6112 | 0.6099 | 0.6093 | **0.6092** | +0.0013 [−0.0016, +0.0044] |
-| DraftKings, close | 2,715 | 1.10 | 0.6081 | 0.6082 | **0.6081** | 0.6083 | −0.0001 [−0.0012, +0.0010] |
-| DraftKings, T-6h | 2,644 | 1.05 | 0.6054 | 0.6062 | 0.6054 | **0.6051** | −0.0009 [−0.0019, +0.0002] |
+First review (user, 2026-10-16: "makes me think there are some underlying errors"). Checked:
 
-By family (closes), fitted lam: Pinnacle ATP 5.0, Challenger 5.0, WTA 0.05; BetRivers ATP
-5.0, Challenger 1.55, WTA 0.95; DraftKings ATP 0.95, Challenger 1.55, WTA 0.7. No
-family's fitted lam beats multiplicative significantly.
+- **A real bug, fixed:** 74 TennisMyLife WTA rows have no player id (all of Eastbourne and
+  Bad Homburg among them). The alias table keys such players as `name:<folded name>`, but
+  the join looked them up by id only. It now uses the registry's own key
+  (`v5_player_registry.tml_node`).
+- **The join itself works where TennisMyLife has the match.** ATP: 2,577 of 2,582 (99.8%).
+  For Challengers and WTA the missing ones are the qualifying days: missing share by day of
+  the edition, Challenger: Saturday/Sunday 100%, Monday 62%, Tuesday 5%, later 0–1%; WTA:
+  64% the day before, 32% the first day, 2–6% after.
+- **TennisMyLife has no Challenger or WTA qualifying results** (its only qualifying file is
+  ATP), **and no WTA 125 results at all** (1,092 fixtures).
 
-## What it means
+So main-draw coverage is about 99%. Qualifying and WTA 125 need another results source
+before Step 5 can re-simulate or settle them.
 
-- **On our data the methods cannot be told apart.** Every difference is at most 0.003 log
-  loss and every 95% interval includes zero. The fit curve is nearly flat (Pinnacle close,
-  fit set: 0.5921 at lam 0 to 0.5911 at lam 5), so the fitted lam drifts to the edge of the
-  range and does worse on the test set. That is noise, not a real setting.
-- **Additive (lam = 1) is best or tied at the close for every book.** It is the setting for
-  every book (`v5_devig.DEFAULT_LAM`) until more data separates them: September–October
-  closes, Bet365, and tennis-data.co.uk once that domain is allowed. vigged.com's
-  Pinnacle-tennis lam of about 2.0 is not contradicted, just not detectable here.
-- The cautious edge rule judges every edge against the least favourable of
-  multiplicative, additive and power, so this choice cannot create an edge.
-- **Benchmark for the model (Phase 1):** the market's test-set log loss is about 0.606
-  at the close and 0.607–0.611 six hours before the start on these fixtures. Pinnacle's
-  close is calibrated within noise in every probability bucket.
+## The setting: lam per book on every pre-sealed close
+
+| Book | Closes | Mean overround | Mean gap, additive vs multiplicative | **lam (95% CI)** | Favourite-longshot slope (95% CI) |
+|---|---|---|---|---|---|
+| Pinnacle | 7,717 | 3.4% | 0.55 pts | **1.5 [0.5, 4.25]** | 1.075 [1.012, 1.139] |
+| BetRivers | 6,935 | 6.6% | 1.06 pts | **1.25 [0.75, 1.75]** | 1.123 [1.053, 1.192] |
+| DraftKings | 6,858 | 6.1% | 0.95 pts | **1.0 [0.5, 1.75]** | 1.078 [1.011, 1.145] |
+
+- **Multiplicative (lam 0) is outside every interval.** All three books show a
+  favourite-longshot bias: regressing the outcome on logit(multiplicative probability)
+  gives a slope above 1, so favourites win more often than "same share off each side"
+  implies. Pinnacle's 1.5 agrees with vigged.com's Pinnacle-tennis estimate (about 2.0
+  [1.5, 3.1]).
+- **These are the settings now** (`v5_devig.BOOK_LAM`). Books not measured yet use
+  additive (lam 1). The cautious edge rule still judges every edge against the least
+  favourable of multiplicative, additive and power.
+
+## The 60/40 test the spec asked for, and why it could not decide
+
+Fit on the earliest 60% of closes by start time, test on the latest 40%:
+
+| Book, point | n test | fitted lam | fitted | multiplicative | additive | power |
+|---|---|---|---|---|---|---|
+| Pinnacle, close | 3,087 | 5.0 | 0.6084 | 0.6072 | 0.6071 | 0.6073 |
+| BetRivers, close | 2,774 | 1.40 | 0.6099 | 0.6103 | 0.6099 | 0.6100 |
+| DraftKings, close | 2,744 | 1.00 | 0.6064 | 0.6067 | 0.6064 | 0.6065 |
+
+(T-6h and by-family results are in the JSON.)
+
+- The methods move a price by only about 0.5–1 percentage point, which changes log loss by
+  well under 0.001 per match. With about 3,000 test matches the smallest detectable
+  difference is about 0.0004–0.0008, so every 95% interval includes zero. **This test
+  lacks the power to separate the methods; it is not evidence that they are equal.** The
+  full-sample intervals above use all the data and do separate them.
+- Fitted on the earliest 60% alone (January to about June), Pinnacle's lam runs to the top
+  of the range (5.0); the full sample gives 1.5. The bias may be stronger early in the
+  season. Re-measure as September–October results and Bet365 arrive, and add
+  tennis-data.co.uk (Pinnacle and Bet365 closes) once that domain is allowed.
+
+## Benchmark for the model (Phase 1)
+
+The market's log loss on these main-draw fixtures is about 0.607 at the close (latest 40%).
+Pinnacle's close is calibrated within noise in every probability bucket, apart from the
+favourite-longshot tilt above.

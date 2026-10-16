@@ -28,13 +28,17 @@ import math
 from typing import Sequence
 
 LAM_MAX = 5.0
-# Measured 2026-10-16 (docs/experiments/2026-10-16-devig-measurement.md): on 2026 closes
-# before the sealed period no setting beat another (every 95% interval includes zero) and
-# fitted lam values were unstable, while additive was best or tied at the close for every
-# book. So every book uses lam = 1 until more data separates them; the cautious edge rule
-# makes the choice unable to create an edge either way.
+# Measured 2026-10-16 (docs/experiments/2026-10-16-devig-measurement.md): lam fitted on every
+# pre-sealed 2026 close of each book, with bootstrap 95% intervals. Multiplicative (0) is
+# outside every interval: all three books show a favourite-longshot bias. Books not measured
+# yet (Bet365: 70 results so far) use additive. Re-measure as September-October and Bet365
+# results arrive; the earliest months alone point higher, so the bias may drift.
 DEFAULT_LAM = 1.0
-BOOK_LAM: dict[str, float] = {}
+BOOK_LAM: dict[str, float] = {
+    "pinnacle": 1.5,     # 95% [0.5, 4.25], n = 7,717 closes
+    "betrivers": 1.25,   # 95% [0.75, 1.75], n = 6,935
+    "draftkings": 1.0,   # 95% [0.5, 1.75], n = 6,858
+}
 
 
 def book_lam(book: str) -> float:

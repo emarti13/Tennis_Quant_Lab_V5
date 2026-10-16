@@ -69,8 +69,9 @@ def test_winners_join_by_edition_and_both_player_ids_and_skip_ambiguous_pairs():
     assert fixture_winners(fixtures, results).to_dict("records") == [{"fixture_id": "f1", "winner_side": "p2"}]
 
 
-def test_every_book_uses_the_measured_default_until_data_separates_them():
-    assert DEFAULT_LAM == 1.0 and book_lam("pinnacle") == book_lam("bet365") == 1.0
+def test_measured_books_use_their_own_lam_and_others_use_additive():
+    assert (book_lam("pinnacle"), book_lam("betrivers"), book_lam("draftkings")) == (1.5, 1.25, 1.0)
+    assert book_lam("bet365") == DEFAULT_LAM == 1.0
 
 
 def test_tml_rows_without_an_id_join_through_their_name_node():
