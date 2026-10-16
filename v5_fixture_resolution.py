@@ -186,7 +186,7 @@ class FixtureResolver:
         try:
             r = self.resolve(fixture_id)
             out.update(edition_key=r.edition_key, player1_id=r.player1.player_id or "", player2_id=r.player2.player_id or "")
-            if not r.priceable:
+            if r.player1.player_id is None or r.player2.player_id is None:
                 out["resolution"] = "NO_HISTORY"
             return out
         except FixtureResolutionError as e:

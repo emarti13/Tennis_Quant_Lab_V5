@@ -7,9 +7,10 @@ Usage:
 Each run (spec docs/superpowers/specs/2026-10-16-market-data-layer-design.md §2.2, §5):
 1. Discovery: one /fixtures call per 9-day window (these do count against the request
    quota) adds finished fixtures and their true start times to oddspapi_registry/fixtures.csv.
-   Daily: the last 4 days. `--discover-from` widens it once (the September gap). Skipped
+   Daily: the last 9 days. `--discover-from` widens it once (the September gap). Skipped
    when it would leave fewer than 50 requests for live pricing.
-2. Daily: fixtures that started in the last 10 days and have no finished pull.
+2. Daily: fixtures that started in the last 8 days and have no finished pull (one
+   without a reported true start waits up to 3 days for it).
 3. Backfill, with the time left: older fixtures with no stored history, oldest first,
    because OddsPapi drops history after 4-9 months.
 /historical-odds is free but allows one call per 5 s and at most 3 books per call.
@@ -52,8 +53,8 @@ REGISTRY = BASE / "oddspapi_registry" / "fixtures.csv"
 RUN_STATUS = STORE_DIR / "run_status.json"
 STORED_BOOKS = "pinnacle,betrivers,draftkings"
 WINDOW_DAYS = 9
-DAILY_DAYS = 10
-DISCOVERY_DAYS = 4
+DAILY_DAYS = 8
+DISCOVERY_DAYS = 9   # one /fixtures call covers the whole daily window
 BACKFILL_SINCE = "2026-01-01"
 COOLDOWN = 5.1
 FLUSH_EVERY = 25

@@ -88,7 +88,8 @@ def _registry(rows):
 def test_queue_is_oldest_first_and_skips_done_unstarted_irrelevant_and_exhausted(tmp_path):
     reg = _registry([
         {"fixture_id": "old", "start_time_utc": "2026-09-02T10:00:00Z", "tournament_name": "ATP Challenger X"},
-        {"fixture_id": "new", "start_time_utc": "2026-10-14T10:00:00Z", "tournament_name": "WTA Y"},
+        {"fixture_id": "new", "start_time_utc": "2026-10-14T10:00:00Z", "tournament_name": "WTA Y",
+         "true_start_time_utc": "2026-10-14T10:40:00Z"},
         {"fixture_id": "future", "start_time_utc": "2026-10-16T18:00:00Z", "tournament_name": "WTA Y"},
         {"fixture_id": "itf", "start_time_utc": "2026-10-14T10:00:00Z", "tournament_name": "ITF M15 Z"},
         {"fixture_id": "done", "start_time_utc": "2026-10-13T10:00:00Z", "tournament_name": "ATP Z"},
@@ -105,6 +106,13 @@ def test_queue_is_oldest_first_and_skips_done_unstarted_irrelevant_and_exhausted
     got = pending_fixtures(reg, log, now="2026-10-16T12:00:00Z", since="2026-01-01", books=books,
                            relevant=relevant_fixture, skip_stored=True)
     assert list(got["fixture_id"]) == ["old", "new"]
+    # Without a reported true start, a fixture waits up to 3 days for it.
+    unknown = reg.assign(true_start_time_utc="")
+    assert pending_fixtures(unknown, log, now="2026-10-16T12:00:00Z", since="2026-10-01",
+                            books=books, relevant=relevant_fixture).empty
+    later = pending_fixtures(unknown, log, now="2026-10-18T12:00:00Z", since="2026-10-01", books=books,
+                             relevant=relevant_fixture)
+    assert list(later["fixture_id"]) == ["new"]     # 3 days on, pulled anyway (flagged scheduled_start)
 
 
 def test_main_lines_handles_empty():

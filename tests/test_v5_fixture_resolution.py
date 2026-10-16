@@ -117,6 +117,8 @@ def test_no_history_player_is_shown_but_not_priceable():
 def test_identify_fills_what_resolves_and_names_the_first_failure():
     R = _resolver()
     assert R.identify("f-porto") == {"edition_key": "CH|porto", "player1_id": "M-1", "player2_id": "M-2", "resolution": "ok"}
+    no_ratings = _resolver(ratings_by_tour=None)      # the price store loads no ratings
+    assert no_ratings.identify("f-porto")["resolution"] == "ok"
     assert R.identify("f-new") == {"edition_key": "CH|porto", "player1_id": "M-1", "player2_id": "", "resolution": "NO_HISTORY"}
     held = R.identify("f-held")
     assert (held["edition_key"], held["player1_id"], held["resolution"]) == ("CH|porto", "M-1", "PLAYER_UNRESOLVED")
