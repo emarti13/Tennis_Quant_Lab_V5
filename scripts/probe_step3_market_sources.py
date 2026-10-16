@@ -195,11 +195,39 @@ def kalshi():
     return res
 
 
+def retention(key):
+    """Third run: how far back /historical-odds still answers, and which execution books it has."""
+    f = pd.read_csv(BASE / "oddspapi_registry" / "fixtures.csv", low_memory=False)
+    f["start"] = pd.to_datetime(f["true_start_time_utc"].fillna(f["start_time_utc"]), utc=True, errors="coerce")
+    f = f[f["tournament_name"].str.contains("ATP|WTA", na=False)]
+    now = pd.Timestamp.now(tz="UTC")
+    out = {"quota_before": _quota(key), "ladder": [], "books": []}
+    for days in (7, 21, 35, 45, 60, 90, 120, 180, 270):
+        near = f.iloc[(f["start"] - (now - pd.Timedelta(days=days))).abs().argsort()[:1]]
+        row = near.iloc[0]
+        time.sleep(5)
+        body, meta = _get(f"{ODDS}/historical-odds", {"apiKey": key, "fixtureId": row["fixture_id"], "bookmakers": "pinnacle"})
+        out["ladder"].append({"days_ago": days, "fixture_id": row["fixture_id"], "start_utc": str(row["start"]),
+                              "registry_historical_status": row.get("historical_status"), "status": meta.get("status"),
+                              "pinnacle_quotes": len(flatten_history(body or {})) if meta.get("status") == 200 else 0})
+    recent = f[(f["start"] < now - pd.Timedelta(days=1)) & f["tournament_name"].str.contains("ATP ", na=False)
+               & ~f["tournament_name"].str.contains("Challenger", na=False)].tail(1).iloc[0]
+    for books in ("bet365,fanduel,betmgm", "kalshi,polymarket,prophetx", "novig"):
+        time.sleep(5)
+        body, meta = _get(f"{ODDS}/historical-odds", {"apiKey": key, "fixtureId": recent["fixture_id"], "bookmakers": books})
+        rows = flatten_history(body or {}) if meta.get("status") == 200 else []
+        out["books"].append({"asked": books, "status": meta.get("status"),
+                             "quotes_by_book": pd.Series([r["bookmaker"] for r in rows]).value_counts().to_dict() if rows else {},
+                             "error": None if meta.get("status") == 200 else json.dumps(body)[:20000]})
+    time.sleep(5)
+    out["quota_after"] = _quota(key)
+    return out
+
+
 def main():
     key = os.getenv("ODDSPAPI_KEY")
     result = {"run_utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
-    result["oddspapi"] = oddspapi(key) if key else {"error": "ODDSPAPI_KEY not set"}
-    result["kalshi"] = kalshi()
+    result["retention"] = retention(key) if key else {"error": "ODDSPAPI_KEY not set"}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     text = json.dumps(result, indent=2, default=str)
     assert not key or key not in text
