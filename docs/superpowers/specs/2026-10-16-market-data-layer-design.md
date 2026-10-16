@@ -111,8 +111,8 @@ else depends on it; it could be paused until Step 4.
    calls) checks that historical odds do not count against the quota, reads the real quota
    limit, and checks that Kalshi's API answers and which tennis series it lists. Its findings
    are recorded in `docs/experiments/` before the build relies on them.
-3. The old engine's daily heavy forecast is paused until Step 4 (saves about 780 minutes a
-   month); it stays runnable by hand.
+3. Pause the old engine's daily heavy forecast until Step 4 (saves about 780 minutes a
+   month): approved, then held back because the app's board depends on it (see §5.5).
 
 ## 5. Probe findings and proposed changes (DRAFT — pending user approval)
 

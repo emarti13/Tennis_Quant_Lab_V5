@@ -249,7 +249,7 @@ collectors writing at least 95% of scheduled snapshots for 14 days. Then Phase 1
 | Players | Player identity spec (2026-10-13): our own player id, alias tables proven by results, no silent new players; ratings move to the id after the model check; same name + different country kept separate | Approved 2026-10-13 |
 | De-vig | One margin-removal function, λ per book measured on our data; cautious edge rule | Approved 2026-10-13 (Step 3) |
 | Data | tennis-data.co.uk (free Pinnacle/Bet365 closing prices) | Approved 2026-10-13; the domain must be allowed in the environment |
-| Step 3 | Market data layer design; probe run first; old engine's daily heavy forecast paused until Step 4 | Approved 2026-10-16 |
+| Step 3 | Market data layer design; probe run first (done; findings in docs/experiments/2026-10-16-step3-market-source-probe.md) | Approved 2026-10-16. The heavy forecast pause is held because the app's board depends on it (spec §5.5) |
 | Approach | Build toward the finished state; no fixes "for today" | User direction 2026-10-13 |
 
 Sheet notes from the user: a Men/Women column will be added; WTA end dates are not in the
