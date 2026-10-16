@@ -8,4 +8,5 @@ __pycache__/
 
 # Raw OddsPapi payloads go to a monthly GitHub release, not git (decision D3)
 market_history/raw/
+market_history/kalshi/raw/
 oddspapi_markets_tennis.json
