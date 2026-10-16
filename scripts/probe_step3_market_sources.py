@@ -33,10 +33,20 @@ ODDS = "https://api.oddspapi.io/v4"
 KALSHI = "https://api.elections.kalshi.com/trade-api/v2"
 OUT = BASE / "research" / "step3_probe" / "result.json"
 CORE_BOOKS = "pinnacle,betrivers,draftkings"
-WIDE_BOOKS = "pinnacle,betrivers,draftkings,bet365,kalshi,polymarket,novig,fanduel"
+WIDE_BOOKS = "pinnacle,betrivers,draftkings,bet365,kalshi,polymarket,fanduel"
 
 
-def _get(url, params=None, timeout=30):
+def _get(url, params=None, timeout=30, retries=4):
+    for _ in range(retries):
+        body, meta = _get_once(url, params, timeout)
+        if meta.get("status") != 429:
+            return body, meta
+        wait = ((body or {}).get("error") or {}).get("retryMs") or 5000
+        time.sleep(wait / 1000 + 0.5)
+    return body, meta
+
+
+def _get_once(url, params=None, timeout=30):
     t = time.time()
     try:
         r = requests.get(url, params=params, timeout=timeout)
@@ -78,6 +88,17 @@ def _summarize_history(payload, start):
     return out
 
 
+def _stored_first():
+    """A fixture saved by the January-August backfill (gzipped chunks in git)."""
+    import gzip
+    with gzip.open(BASE / "oddspapi_history" / "chunks" / "history_chunk_0001.jsonl.gz", "rt", encoding="utf-8") as fh:
+        for line in fh:  # the first one Pinnacle quoted
+            rec = json.loads(line)
+            if "pinnacle" in ((rec.get("historical_odds") or {}).get("bookmakers") or {}):
+                return rec["fixture"]["fixtureId"], rec["historical_odds"]
+    return rec["fixture"]["fixtureId"], rec["historical_odds"]
+
+
 def oddspapi(key):
     f = pd.read_csv(BASE / "oddspapi_registry" / "fixtures.csv", low_memory=False)
     f["start"] = pd.to_datetime(f["true_start_time_utc"].fillna(f["start_time_utc"]), utc=True, errors="coerce")
@@ -89,15 +110,17 @@ def oddspapi(key):
     for sub in (recent[name.str.contains("Challenger")], recent[name.str.contains("WTA")],
                 recent[name.str.contains("ATP") & ~name.str.contains("Challenger")]):  # a mix of tours
         picks += list(sub.sample(n=min(2, len(sub)), random_state=1)["fixture_id"])
-    old = f[f["historical_status"] == "CACHED"]
-    if len(old):
-        picks.append(old.sample(n=1, random_state=1)["fixture_id"].iloc[0])
+    stored_id, stored_payload = _stored_first()
+    old = f[f["fixture_id"] == stored_id]
+    picks.append(stored_id)
     upcoming = tier(f[f["start"] > now + pd.Timedelta(hours=1)])
     picks += list(upcoming.head(2)["fixture_id"])
     picks = list(dict.fromkeys(picks))[:10]
 
     before = _quota(key)
+    time.sleep(5)
     after_account_only = _quota(key)      # does /account itself count?
+    time.sleep(5)
     calls = []
     for i, fid in enumerate(picks):
         row = f[f["fixture_id"] == fid].iloc[0]
@@ -108,12 +131,27 @@ def oddspapi(key):
             "fixture_id": fid, "tournament": row["tournament_name"], "start_utc": str(row["start"]),
             "kind": "upcoming" if row["start"] > now else ("stored_backfill" if fid in set(old["fixture_id"]) else "recent"),
             "books_asked": books, "http": meta,
-            "error": None if meta.get("status") == 200 else (json.dumps(body)[:300] if body else meta.get("text")),
+            "error": None if meta.get("status") == 200 else (json.dumps(body)[:4000] if body else meta.get("text")),
             "books": _summarize_history(body, start) if meta.get("status") == 200 else {},
         })
-        time.sleep(1.2)
+        if calls[-1]["kind"] == "stored_backfill":
+            calls[-1]["stored_copy"] = _summarize_history(stored_payload, start)
+        time.sleep(5)
+    # Freshness: ask again for the first upcoming fixture; how old is its newest quote?
+    fresh = []
+    for fid in [c["fixture_id"] for c in calls if c["kind"] == "upcoming"][:1]:
+        for _ in range(2):
+            body, meta = _get(f"{ODDS}/historical-odds", {"apiKey": key, "fixtureId": fid, "bookmakers": CORE_BOOKS})
+            rows = flatten_history(body or {})
+            asked = datetime.now(timezone.utc)
+            newest = {b: round((asked - max(r["created_at"] for r in rows if r["bookmaker"] == b)).total_seconds() / 60, 1)
+                      for b in {r["bookmaker"] for r in rows}}
+            fresh.append({"fixture_id": fid, "asked_utc": asked.isoformat(timespec="seconds"), "status": meta.get("status"),
+                          "newest_quote_min_old": newest})
+            time.sleep(60)
+    time.sleep(5)
     after = _quota(key)
-    return {"quota_before": before, "quota_after_account_only": after_account_only, "quota_after": after,
+    return {"freshness": fresh,"quota_before": before, "quota_after_account_only": after_account_only, "quota_after": after,
             "historical_calls": len(calls),
             "count_delta": (after["request_count"] or 0) - (after_account_only["request_count"] or 0)
             if after["request_count"] is not None and after_account_only["request_count"] is not None else None,
@@ -125,12 +163,12 @@ def kalshi():
     body, meta = _get(f"{KALSHI}/series", {"category": "Sports"})
     res["series_http"] = meta
     series = (body or {}).get("series") or []
-    tennis = [s for s in series if any(w in (str(s.get("title")) + " " + " ".join(s.get("tags") or [])).lower()
-                                      for w in ("tennis", "atp", "wta", "wimbledon", "us open", "challenger"))]
+    tennis = [s for s in series if "Tennis" in (s.get("tags") or []) and "Table Tennis" not in (s.get("tags") or [])]
     res["sports_series"] = len(series)
-    res["tennis_series"] = [{"ticker": s.get("ticker"), "title": s.get("title"), "tags": s.get("tags")} for s in tennis][:40]
+    res["tennis_series"] = [{"ticker": s.get("ticker"), "title": s.get("title"), "tags": s.get("tags")} for s in tennis]
     samples = []
-    for s in tennis[:6]:
+    match_series = [s for s in tennis if str(s.get("ticker", "")).endswith("MATCH")]
+    for s in match_series[:6]:
         mb, mm = _get(f"{KALSHI}/markets", {"series_ticker": s["ticker"], "status": "settled", "limit": 5})
         markets = (mb or {}).get("markets") or []
         entry = {"series": s["ticker"], "markets_http": mm.get("status"), "settled_markets_seen": len(markets)}
@@ -141,6 +179,8 @@ def kalshi():
             tb, tm = _get(f"{KALSHI}/markets/trades", {"ticker": m["ticker"], "limit": 1000})
             trades = (tb or {}).get("trades") or []
             entry["trades_http"], entry["trades_seen"] = tm.get("status"), len(trades)
+            entry["trades_has_cursor"] = bool((tb or {}).get("cursor"))
+            entry["market_fields"] = sorted(m.keys())
             entry["trade_fields"] = sorted(trades[0].keys()) if trades else []
             close = pd.Timestamp(m.get("close_time") or datetime.now(timezone.utc))
             cb, cm = _get(f"{KALSHI}/series/{s['ticker']}/markets/{m['ticker']}/candlesticks",
