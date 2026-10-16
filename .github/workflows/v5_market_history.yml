@@ -3,7 +3,8 @@ name: V5 Market History
 # Rebuild plan Step 3 (spec docs/superpowers/specs/2026-10-16-market-data-layer-design.md):
 # once a day, after the day's matches, store open/close/checkpoint prices for every relevant
 # fixture from OddsPapi /historical-odds (free; one call per 5 s), then spend the time left
-# on the gap backfill, oldest first. Budget: v5_actions_budget.py "market_history".
+# on the gap backfill, oldest first; then settled Kalshi match markets (spec §2.4).
+# Budget: v5_actions_budget.py "market_history".
 on:
   workflow_dispatch:
     inputs:
@@ -13,6 +14,9 @@ on:
       discover_from:
         description: "Optional YYYY-MM-DD: widen fixture discovery once (about 1 quota request per 9 days)"
         default: ""
+      kalshi_minutes:
+        description: "Minutes for settled Kalshi markets (public API, no quota)"
+        default: "6"
       stored_chunks:
         description: "Optional, e.g. 1-30: convert the stored January-August backfill instead (no API calls)"
         default: ""
@@ -70,12 +74,17 @@ jobs:
             python scripts/pull_market_history.py --max-minutes "${{ inputs.max_minutes || '22' }}"
           fi
 
+      - name: Collect settled Kalshi markets (public API, no key)
+        if: ${{ !inputs.stored_chunks }}
+        run: python scripts/pull_kalshi_history.py --max-minutes "${{ inputs.kalshi_minutes || '6' }}"
+
       - name: Upload raw payloads to this month's release (not git, decision D3)
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           shopt -s nullglob
           files=(market_history/raw/*.jsonl.gz)
+          for f in market_history/kalshi/raw/*.jsonl.gz; do cp "$f" "market_history/raw/kalshi_$(basename "$f")"; files+=("market_history/raw/kalshi_$(basename "$f")"); done
           if [ ${#files[@]} -eq 0 ]; then echo "No raw payloads this run."; exit 0; fi
           tag="market-raw-$(date -u +%Y-%m)"
           gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --prerelease \
@@ -86,7 +95,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # market_history/raw/ is in .gitignore: raw payloads live in the release only.
+          # market_history/raw/ and market_history/kalshi/raw/ are in .gitignore: raw payloads live in the release only.
           git add -A market_history oddspapi_registry/fixtures.csv
           if git diff --cached --quiet; then echo "Nothing new."; exit 0; fi
           git commit -m "Market history: daily prices and backfill"
