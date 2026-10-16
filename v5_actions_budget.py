@@ -20,10 +20,10 @@ RECURRING_JOBS = {
     "player_ratings": {"runs_per_day": 1, "minutes_per_run": 14},  # includes ~1.5 min identity refresh
     "player_refresh_recovery_probes": {"runs_per_day": 2, "minutes_per_run": 3},
     "daily_settlement": {"runs_per_day": 1, "minutes_per_run": 3},
-    # Step 3 price store: ~2 min setup + up to 22 min of /historical-odds calls (daily first,
-    # then the gap backfill) + up to 6 min of Kalshi. Falls to ~12 min a day once the
-    # backfills are done.
-    "market_history": {"runs_per_day": 1, "minutes_per_run": 31},
+    # Step 3 price store: ~2 min setup + up to 30 min of /historical-odds calls (daily first,
+    # then the gap and Bet365 backfills, about 18,700 fixtures, about 7 weeks) + up to 6 min
+    # of Kalshi. Falls to ~12 min a day once the backfills are done.
+    "market_history": {"runs_per_day": 1, "minutes_per_run": 39},
 }
 
 # Every workflow with a cron schedule, and how many cron lines it has. A new

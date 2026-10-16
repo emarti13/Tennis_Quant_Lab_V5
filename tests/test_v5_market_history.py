@@ -132,3 +132,42 @@ def test_workflow_is_one_daily_run_serialized_with_production_and_keeps_raw_out_
     commit = text.split("Commit price store", 1)[1]
     assert "git add -A market_history" in commit and "git add -f" not in commit
     assert "market_history/raw/" in Path(".gitignore").read_text(encoding="utf-8")
+
+
+def test_bet365_is_added_only_to_the_fixtures_the_stored_backfill_holds(tmp_path):
+    from pull_oddspapi_quota_aware import relevant_fixture
+    reg = _registry([
+        {"fixture_id": "stored", "start_time_utc": "2026-05-02T10:00:00Z", "tournament_name": "ATP Z",
+         "true_start_time_utc": "2026-05-02T10:10:00Z", "historical_status": "CACHED"},
+        {"fixture_id": "gap", "start_time_utc": "2026-05-01T10:00:00Z", "tournament_name": "ATP Z",
+         "true_start_time_utc": "2026-05-01T10:10:00Z"},
+    ])
+    log = load_pull_log(tmp_path)
+    got = pending_fixtures(reg, log, now="2026-10-16T12:00:00Z", since="2026-01-01", books="bet365",
+                           relevant=relevant_fixture, only_stored=True)
+    assert list(got["fixture_id"]) == ["stored"]
+    append_pull_log([{"fixture_id": "stored", "books": "bet365", "status": "ok"}], tmp_path)
+    assert pending_fixtures(reg, load_pull_log(tmp_path), now="2026-10-16T12:00:00Z", since="2026-01-01",
+                            books="bet365", relevant=relevant_fixture, only_stored=True).empty
+
+
+def test_expired_months_are_skipped_with_a_few_sample_calls(monkeypatch):
+    import sys
+    sys.path.insert(0, "scripts")
+    import pull_market_history as pm
+    monkeypatch.setattr(pm, "COOLDOWN", 0)
+    calls = []
+
+    class FakeApi:
+        def get(self, endpoint, **params):
+            calls.append(params["fixtureId"])
+            return (404 if params["fixtureId"].startswith("jan") else 200), {}
+
+    fx = lambda fid, start: {"fixture_id": fid, "start_time_utc": start}
+    queue = ([("backfill", fx(f"jan{i}", f"2026-01-{i + 1:02d}T10:00:00Z"), "b") for i in range(10)]
+             + [("backfill", fx(f"feb{i}", f"2026-02-{i + 1:02d}T10:00:00Z"), "b") for i in range(10)]
+             + [("backfill", fx(f"mar{i}", f"2026-03-{i + 1:02d}T10:00:00Z"), "b") for i in range(10)])
+    keep, expired = pm.skip_expired_months(FakeApi(), queue)
+    assert len(expired) == 10 and all(e["status"] == "not_found" for e in expired)
+    assert [k[1]["fixture_id"][:3] for k in keep] == ["feb"] * 10 + ["mar"] * 10
+    assert len(calls) == 4          # 3 January samples, 1 February sample; March is not probed
