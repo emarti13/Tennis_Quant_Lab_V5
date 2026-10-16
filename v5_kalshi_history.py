@@ -33,7 +33,7 @@ from v5_player_registry import player_key
 SERIES = {"KXATPMATCH": "ATP", "KXWTAMATCH": "WTA", "KXATPCHALLENGERMATCH": "CHALLENGER",
           "KXWTACHALLENGERMATCH": "WTA125"}
 KALSHI_DIR = STORE_DIR / "kalshi"
-MATCH_WINDOW_HOURS = 36
+MATCH_WINDOW_HOURS = 72   # rain and schedule moves; the pair must still be unique in the window
 
 MARKET_COLUMNS = [
     "ticker", "event_ticker", "series", "family", "title", "player_name", "rules_primary",
@@ -69,7 +69,7 @@ def match_fixture(event_markets: list[dict], registry: pd.DataFrame) -> tuple[di
     """Tie a Kalshi event (its two player markets) to one OddsPapi fixture.
 
     "names": both players' full names fold to the fixture's two participants. Unique match
-    within +-36 h of Kalshi's scheduled time, or nothing (fail closed): returns
+    within +-72 h of Kalshi's scheduled time, or nothing (fail closed): returns
     ({ticker: (fixture_id, side)}, method)."""
     names = {m["ticker"]: _fixture_name(m.get("yes_sub_title") or "") for m in event_markets}
     when = _ts(event_markets[0].get("occurrence_datetime") or event_markets[0].get("open_time"))
