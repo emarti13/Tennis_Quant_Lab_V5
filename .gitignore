@@ -5,3 +5,7 @@ Challenger.csv
 WTA.csv
 __pycache__/
 *.pyc
+
+# Raw OddsPapi payloads go to a monthly GitHub release, not git (decision D3)
+market_history/raw/
+oddspapi_markets_tennis.json

@@ -112,3 +112,14 @@ def test_no_history_player_is_shown_but_not_priceable():
     r = _resolver().resolve("f-new")
     assert r.player2.player_id is None and r.player2.status == "no_history"
     assert not r.priceable
+
+
+def test_identify_fills_what_resolves_and_names_the_first_failure():
+    R = _resolver()
+    assert R.identify("f-porto") == {"edition_key": "CH|porto", "player1_id": "M-1", "player2_id": "M-2", "resolution": "ok"}
+    assert R.identify("f-new") == {"edition_key": "CH|porto", "player1_id": "M-1", "player2_id": "", "resolution": "NO_HISTORY"}
+    held = R.identify("f-held")
+    assert (held["edition_key"], held["player1_id"], held["resolution"]) == ("CH|porto", "M-1", "PLAYER_UNRESOLVED")
+    review = R.identify("f-review")
+    assert (review["edition_key"], review["player1_id"], review["resolution"]) == ("", "M-1", "TOURNAMENT_UNRESOLVED")
+    assert R.identify("nope")["resolution"] == "FIXTURE_UNKNOWN"

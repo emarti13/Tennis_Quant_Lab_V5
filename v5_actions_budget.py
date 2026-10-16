@@ -14,13 +14,15 @@ WEEKS_PER_BUDGET_MONTH = DAYS_PER_BUDGET_MONTH / 7.0
 # Research/acceptance workflows are manual-only and excluded from recurring burn.
 # The old engine's daily heavy forecast (v5_daily_predictions.yml: 20 min + 2 x 3 min
 # probes a day, ~780 min/month) is paused until rebuild Step 4 (user decision 2026-10-16).
+# The weekly bulk-backfill reserve is replaced by "market_history" (Step 3 spec §2.6).
 RECURRING_JOBS = {
     "live_market_repricing": {"runs_per_day": 1, "minutes_per_run": 3},
     "player_ratings": {"runs_per_day": 1, "minutes_per_run": 14},  # includes ~1.5 min identity refresh
     "player_refresh_recovery_probes": {"runs_per_day": 2, "minutes_per_run": 3},
     "daily_settlement": {"runs_per_day": 1, "minutes_per_run": 3},
-    # Manual-only today (workflow_dispatch); budgeted so an occasional run fits.
-    "historical_backfill": {"runs_per_week": 1, "minutes_per_run": 45},
+    # Step 3 price store: ~2 min setup + up to 22 min of /historical-odds calls (daily first,
+    # then the gap backfill). Falls to ~10 min a day once the backfill is done.
+    "market_history": {"runs_per_day": 1, "minutes_per_run": 25},
 }
 
 # Every workflow with a cron schedule, and how many cron lines it has. A new
@@ -30,6 +32,7 @@ SCHEDULED_WORKFLOWS = {
     "oddspapi_normalized_daily_v2.yml": {"crons": 1, "jobs": ("live_market_repricing",)},
     "v5_player_ratings_refresh.yml": {"crons": 3, "jobs": ("player_ratings", "player_refresh_recovery_probes")},
     "v5_automatic_settlement.yml": {"crons": 1, "jobs": ("daily_settlement",)},
+    "v5_market_history.yml": {"crons": 1, "jobs": ("market_history",)},
 }
 
 

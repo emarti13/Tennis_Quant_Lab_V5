@@ -178,6 +178,38 @@ class FixtureResolver:
         return max(found)[1] if found else None
 
     # ------------------------------------------------------------------ fixture
+    def identify(self, fixture_id) -> dict:
+        """Best-effort ids for storing prices (the price store keeps every fixture; pricing
+        still goes through resolve()). Each part is filled when it resolves on its own;
+        `resolution` is "ok", or the first failure code."""
+        out = {"edition_key": "", "player1_id": "", "player2_id": "", "resolution": "ok"}
+        try:
+            r = self.resolve(fixture_id)
+            out.update(edition_key=r.edition_key, player1_id=r.player1.player_id or "", player2_id=r.player2.player_id or "")
+            if not r.priceable:
+                out["resolution"] = "NO_HISTORY"
+            return out
+        except FixtureResolutionError as e:
+            out["resolution"] = e.code
+        fid = str(fixture_id)
+        if fid not in self.fixtures.index:
+            return out
+        fx = self.fixtures.loc[fid]
+        try:
+            start = pd.Timestamp(fx["start_time_utc"])
+            start = start.tz_localize("UTC") if start.tzinfo is None else start.tz_convert("UTC")
+            edition = self._edition(fx, start)
+            out["edition_key"] = edition["edition_key"]
+            tour = "WTA" if edition["tour_family"] in {"WTA", "WTA125"} else "MEN"
+        except (FixtureResolutionError, ValueError):
+            tour = None
+        for n in (1, 2):
+            try:
+                out[f"player{n}_id"] = self._player(fx[f"participant{n}_id"], str(fx[f"participant{n}_name"]), tour or "MEN").player_id or ""
+            except FixtureResolutionError:
+                pass
+        return out
+
     def resolve(self, fixture_id) -> ResolvedFixture:
         fid = str(fixture_id)
         if fid not in self.fixtures.index:
