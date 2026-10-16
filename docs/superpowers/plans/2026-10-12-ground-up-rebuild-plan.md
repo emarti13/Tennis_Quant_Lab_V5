@@ -113,6 +113,9 @@ A step is done only when all of these hold:
 
 ### Step 3. Market data layer (roadmap Phase 0 collection)
 
+Design: `docs/superpowers/specs/2026-10-16-market-data-layer-design.md` (approved
+2026-10-16). It chooses option (a) below, a daily OddsPapi historical pull, plus Kalshi daily.
+
 - OddsPapi feed with a **start-time-aware freshness rule**: a price is actionable only if
   the snapshot is recent **and** the match has not started. Started fixtures leave the
   live board.
@@ -246,6 +249,7 @@ collectors writing at least 95% of scheduled snapshots for 14 days. Then Phase 1
 | Players | Player identity spec (2026-10-13): our own player id, alias tables proven by results, no silent new players; ratings move to the id after the model check; same name + different country kept separate | Approved 2026-10-13 |
 | De-vig | One margin-removal function, λ per book measured on our data; cautious edge rule | Approved 2026-10-13 (Step 3) |
 | Data | tennis-data.co.uk (free Pinnacle/Bet365 closing prices) | Approved 2026-10-13; the domain must be allowed in the environment |
+| Step 3 | Market data layer design; probe run first (done; findings in docs/experiments/2026-10-16-step3-market-source-probe.md) | Approved 2026-10-16; old engine's daily heavy forecast paused until Step 4 (the board is unused; #54) |
 | Approach | Build toward the finished state; no fixes "for today" | User direction 2026-10-13 |
 
 Sheet notes from the user: a Men/Women column will be added; WTA end dates are not in the
