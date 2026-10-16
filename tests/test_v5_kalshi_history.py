@@ -89,3 +89,16 @@ def test_a_market_waits_three_days_for_its_fixture_and_true_start():
     assert should_wait(EVENT[0], {**f, "true_start_time_utc": ""}, now="2026-10-08T20:00:00Z")
     assert should_wait(EVENT[0], None, now="2026-10-08T20:00:00Z")                         # no fixture yet
     assert not should_wait(EVENT[0], None, now="2026-10-11T15:00:00Z")                     # 3 days on: store, flagged
+
+
+def test_kalshi_birth_year_marks_match_oddspapi_and_the_map_is_rebuilt_from_stored_markets():
+    from v5_kalshi_history import rebuild_fixture_map
+    reg = pd.DataFrame([{"fixture_id": "f9", "start_time_utc": "2026-08-16T21:00:00Z", "true_start_time_utc": "",
+                         "participant1_name": "Miyoshi, Kenta (2004)", "participant2_name": "Huertas Del Pino Cordova, Arklon"}])
+    stored = pd.DataFrame([
+        {"ticker": "A-MIY", "event_ticker": "A", "player_name": "Kenta Miyoshi (b. 2004)", "occurrence_utc": "2026-08-16T21:30:00Z", "open_utc": ""},
+        {"ticker": "A-HUE", "event_ticker": "A", "player_name": "Arklon Huertas Del Pino Cordova", "occurrence_utc": "2026-08-16T21:30:00Z", "open_utc": ""},
+    ])
+    fm = rebuild_fixture_map(stored, reg).set_index("ticker")
+    assert fm.loc["A-MIY", "fixture_id"] == "f9" and fm.loc["A-MIY", "side"] == "p1" and fm.loc["A-HUE", "side"] == "p2"
+    assert rebuild_fixture_map(stored, reg.iloc[0:0])["match_method"].eq("unmatched").all()
