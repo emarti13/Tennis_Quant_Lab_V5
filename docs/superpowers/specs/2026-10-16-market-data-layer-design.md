@@ -112,9 +112,9 @@ else depends on it; it could be paused until Step 4.
    limit, and checks that Kalshi's API answers and which tennis series it lists. Its findings
    are recorded in `docs/experiments/` before the build relies on them.
 3. Pause the old engine's daily heavy forecast until Step 4 (saves about 780 minutes a
-   month): approved, then held back because the app's board depends on it (see §5.5).
+   month): approved; the user confirmed after hearing the app's board depends on it (§5.5).
 
-## 5. Probe findings and changes (items 1–3 approved by the user 2026-10-16; 4–5 DRAFT — pending user approval)
+## 5. Probe findings and changes (items 1–3 and 5 approved by the user 2026-10-16; 4 DRAFT — pending user approval)
 
 Probe results: `docs/experiments/2026-10-16-step3-market-source-probe.md`. OddsPapi's own
 page for the endpoint (pasted by the user 2026-10-16) confirms: at most 3 books per call, a
@@ -139,6 +139,7 @@ answers "No historical odds found" for it with `bookmakers=pinnacle`. Item 2 sta
 4. **Close for a stale book.** BetRivers sometimes stops quoting 10+ hours before the start.
    The close keeps its own quote time (already in §2.2); edge and CLV measurements treat a
    close more than 60 minutes before the start as missing for that book.
-5. **The old engine's heavy forecast keeps running for now.** The app's daily board and
-   decision feed are built from it, so pausing it would stop new matches from appearing in
-   the app. Proposal: pause it in Step 4, when the new pricing function feeds the board.
+5. **The old engine's heavy forecast is paused now** (user, 2026-10-16: the daily board is
+   not used). The app's daily board and decision feed stop getting new matches until Step 4
+   feeds them from the new pricing function. Done in #54; budget 973 minutes a month before
+   Step 3's jobs, about 1,110 with them.
