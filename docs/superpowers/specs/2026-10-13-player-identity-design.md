@@ -88,6 +88,10 @@ Each row records method, evidence count, status (`confirmed` / `auto` / `review`
 `user` / `rejected`) and the date set. As with tournaments, rows marked `confirmed`,
 `user` or `rejected` are never changed by a later run; disagreements are reported.
 
+**Decision files (user decision 2026-10-16).** `user` and `rejected` rows come only from
+separate decision files that people edit (`context_registry/DECISIONS.md`). The daily rebuild
+lays them over the generated tables and never writes them; removing a decision withdraws it.
+
 ### 2.3 Building players from TennisMyLife history
 
 Revised 2026-10-13 at the user's direction ("include year, country and name"): the same

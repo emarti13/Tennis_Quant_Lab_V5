@@ -20,10 +20,10 @@ from pathlib import Path
 import pandas as pd
 
 from v5_player_registry import (
-    ODDS_ALIAS_COLUMNS, TML_ALIAS_COLUMNS, USABLE_STATUSES as PLAYER_USABLE, load_table, player_key,
+    apply_odds_decisions, load_odds_decisions, ODDS_ALIAS_COLUMNS, TML_ALIAS_COLUMNS, USABLE_STATUSES as PLAYER_USABLE, load_table, player_key,
 )
 from v5_tournament_identity import (
-    ODDSPAPI_GAP_DAYS, enrich_locations, load_countries, load_crosswalk, load_master_schedule, resolve_edition,
+    ODDSPAPI_GAP_DAYS, apply_crosswalk_decisions, enrich_locations, load_decisions, load_countries, load_crosswalk, load_master_schedule, resolve_edition,
 )
 
 OVERRIDE_COLUMNS = ["edition_key", "field", "value", "set_on", "note"]
@@ -118,9 +118,12 @@ class FixtureResolver:
         return cls(
             fixtures=pd.read_csv(base / "oddspapi_registry" / "fixtures.csv", low_memory=False),
             editions_by_year=editions,
-            crosswalk_oddspapi=load_crosswalk(ms / "crosswalk_oddspapi.csv"),
+            # Decision files are applied on load, so a merged decision counts at once.
+            crosswalk_oddspapi=apply_crosswalk_decisions(load_crosswalk(ms / "crosswalk_oddspapi.csv"),
+                                                         load_decisions(ms / "decisions_oddspapi.csv")),
             overrides=load_table(ms / "overrides.csv", OVERRIDE_COLUMNS),
-            alias_oddspapi=load_table(players / "alias_oddspapi.csv", ODDS_ALIAS_COLUMNS),
+            alias_oddspapi=apply_odds_decisions(load_table(players / "alias_oddspapi.csv", ODDS_ALIAS_COLUMNS),
+                                                load_odds_decisions(players / "decisions_oddspapi.csv")),
             alias_tennismylife=load_table(players / "alias_tennismylife.csv", TML_ALIAS_COLUMNS),
             ratings_by_tour=ratings_by_tour,
         )
