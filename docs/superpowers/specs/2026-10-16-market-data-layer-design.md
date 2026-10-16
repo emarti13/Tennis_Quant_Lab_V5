@@ -114,9 +114,15 @@ else depends on it; it could be paused until Step 4.
 3. Pause the old engine's daily heavy forecast until Step 4 (saves about 780 minutes a
    month): approved, then held back because the app's board depends on it (see §5.5).
 
-## 5. Probe findings and proposed changes (DRAFT — pending user approval)
+## 5. Probe findings and changes (items 1–3 approved by the user 2026-10-16; 4–5 DRAFT — pending user approval)
 
-Probe results: `docs/experiments/2026-10-16-step3-market-source-probe.md`.
+Probe results: `docs/experiments/2026-10-16-step3-market-source-probe.md`. OddsPapi's own
+page for the endpoint (pasted by the user 2026-10-16) confirms: at most 3 books per call, a
+5,000 ms cooldown per call (a 304 counts too), an ETag for finished fixtures (a re-fetch can
+return 304 Not Modified), and "all historical odds data since January 2026 is available".
+The last point is **contradicted by our own data**: the stored backfill holds 2,026 Pinnacle
+quotes for fixture `id1203388067924576` (Oeiras Challenger, 2026-01-19), and the endpoint now
+answers "No historical odds found" for it with `bookmakers=pinnacle`. Item 2 stands.
 
 1. **Books in the daily pull.** At most 3 books per call. Bet365 (an execution book) has full
    history; DraftKings is neither an execution book nor needed as information next to
