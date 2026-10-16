@@ -1,7 +1,7 @@
 # Market data layer (rebuild plan Step 3)
 
 Date: 2026-10-16
-Status: **DRAFT — pending user approval.**
+Status: **Approved by the user in chat, 2026-10-16** (all three questions in §4 as recommended).
 Serves: roadmap Phase 0 (collection) and Phase 1 (honest benchmark). Plan: rebuild plan Step 3.
 Builds on: tournament and player identity (Step 2), so every price is stored against our
 own edition and player ids.
@@ -104,11 +104,12 @@ else depends on it; it could be paused until Step 4.
 - Kalshi markets for yesterday's settled matches are stored and tied to fixtures, or listed.
 - Budget test passes with the new jobs.
 
-## 4. Open questions for the user
+## 4. Decisions (user, in chat, 2026-10-16)
 
-1. Approve this design?
-2. A small probe run first (manual workflow, about 3 minutes, about 20 OddsPapi
-   historical calls): it checks that historical odds really do not count against the quota,
-   reads the real quota limit, and checks that Kalshi's API answers and which tennis series it
-   lists. OK to run it?
-3. Pause the old engine's daily heavy forecast until Step 4 (saves about 780 minutes a month)?
+1. Design approved.
+2. Probe run approved: a manual workflow (about 3 minutes, about 20 OddsPapi historical
+   calls) checks that historical odds do not count against the quota, reads the real quota
+   limit, and checks that Kalshi's API answers and which tennis series it lists. Its findings
+   are recorded in `docs/experiments/` before the build relies on them.
+3. The old engine's daily heavy forecast is paused until Step 4 (saves about 780 minutes a
+   month); it stays runnable by hand.
