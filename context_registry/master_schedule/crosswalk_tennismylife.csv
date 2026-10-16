@@ -1,5 +1,5 @@
 source,source_id,tournament_id,source_name,family,first_date,last_date,edition_key,status,method,pairs_same_edition,pairs_best_other,note,set_on
-tennismylife,2026-9900@2026-01-02,2026-9900,United Cup,ATP,2026-01-02,2026-01-11,,review,,0,0,"ambiguous; candidates: United Cup (Perth, 2026-01-02) | United Cup (Sydney, 2026-01-02)",2026-10-12
+tennismylife,2026-9900@2026-01-02,2026-9900,United Cup,ATP,2026-01-02,2026-01-11,,rejected,user decision,0,0,user decision 2026-10-15 (tournament review item 15): ignore; never priced,2026-10-15
 tennismylife,2026-339@2026-01-04,2026-339,Brisbane,ATP,2026-01-04,2026-01-11,ATP|2026-01-05|brisbane-international|brisbane,confirmed,family+dates+city,48,0,,2026-10-12
 tennismylife,2026-800@2026-01-04,2026-800,Brisbane,WTA,2026-01-04,2026-01-04,WTA|2026-01-05|brisbane-international|brisbane,confirmed,family+dates+city,47,1,,2026-10-12
 tennismylife,2026-1049@2026-01-05,2026-1049,Auckland,WTA,2026-01-05,2026-01-05,WTA|2026-01-05|asb-classic|auckland,confirmed,family+dates+city,31,0,,2026-10-12
@@ -66,18 +66,18 @@ tennismylife,2026-9516@2026-02-23,2026-9516,Lugano,CHALLENGER,2026-02-23,2026-02
 tennismylife,2026-9695@2026-02-23,2026-9695,Tigre 2,CHALLENGER,2026-02-23,2026-02-23,CHALLENGER|2026-02-23|tigre-2|tigre,auto,family+dates+city,0,1,no_results,2026-10-12
 tennismylife,2026-2913@2026-03-02,2026-2913,Kigali,CHALLENGER,2026-03-02,2026-03-02,CHALLENGER|2026-03-02|kigali-1|kigali,confirmed,family+dates+city,31,3,,2026-10-12
 tennismylife,2026-2973@2026-03-02,2026-2973,Thionville,CHALLENGER,2026-03-02,2026-03-02,CHALLENGER|2026-03-02|thionville|thionville,confirmed,family+dates+city,31,1,,2026-10-12
-tennismylife,2026-2983@2026-03-02,2026-2983,Crete 1,CHALLENGER,2026-03-02,2026-03-02,,review,,0,0,"unmatched; candidates: Thionville (Thionville, 2026-03-02) | Brasilia (Brasilia, 2026-03-02) | Kigali 1 (Kigali, 2026-03-02) | Hersonissos 1 (Hersonissos, 2026-03-02)",2026-10-12
+tennismylife,2026-2983@2026-03-02,2026-2983,Crete 1,CHALLENGER,2026-03-02,2026-03-02,CHALLENGER|2026-03-02|hersonissos-1|hersonissos,user,user decision,0,0,user decision 2026-10-15 (tournament review item 6): same event,2026-10-15
 tennismylife,2026-3065@2026-03-02,2026-3065,Brasilia,CHALLENGER,2026-03-02,2026-03-02,CHALLENGER|2026-03-02|brasilia|brasilia,confirmed,family+dates+city,30,0,,2026-10-12
 tennismylife,2026-404@2026-03-04,2026-404,Indian Wells Masters,ATP,2026-03-04,2026-03-15,ATP|2026-03-04|bnp-paribas-open|indian-wells,confirmed,family+dates+city,129,0,,2026-10-12
 tennismylife,2026-609@2026-03-04,2026-609,Indian Wells,WTA,2026-03-04,2026-03-04,WTA|2026-03-02|bnp-paribas-open|indian-wells,confirmed,family+dates+city,95,0,,2026-10-12
 tennismylife,2026-2915@2026-03-09,2026-2915,Kigali 2,CHALLENGER,2026-03-09,2026-03-09,CHALLENGER|2026-03-09|kigali-2|kigali,confirmed,family+dates+city,31,4,,2026-10-12
 tennismylife,2026-2975@2026-03-09,2026-2975,Cap Cana,CHALLENGER,2026-03-09,2026-03-09,CHALLENGER|2026-03-09|cap-cana|cap-cana,confirmed,family+dates+city,25,0,,2026-10-12
-tennismylife,2026-2985@2026-03-09,2026-2985,Crete 2,CHALLENGER,2026-03-09,2026-03-09,,review,,0,0,"unmatched; candidates: Cap Cana (Cap Cana, 2026-03-09) | Phoenix (Phoenix, 2026-03-09) | Kigali 2 (Kigali, 2026-03-09) | Cherbourg-en-Cotentin (Cherbourg-en-Cotentin, 2026-03-09) | Santiago (Santiago, 2026-03-09) | Hersonissos 2 (Hersonissos, 2026-03-09)",2026-10-12
+tennismylife,2026-2985@2026-03-09,2026-2985,Crete 2,CHALLENGER,2026-03-09,2026-03-09,CHALLENGER|2026-03-09|hersonissos-2|hersonissos,user,user decision,0,0,user decision 2026-10-15 (tournament review item 7): same event,2026-10-15
 tennismylife,2026-3406@2026-03-09,2026-3406,Santiago,CHALLENGER,2026-03-09,2026-03-09,CHALLENGER|2026-03-09|santiago|santiago,confirmed,family+dates+city,30,0,,2026-10-12
 tennismylife,2026-398@2026-03-09,2026-398,Cherbourg,CHALLENGER,2026-03-09,2026-03-09,CHALLENGER|2026-03-09|cherbourg-en-cotentin|cherbourg-en-cotentin,confirmed,family+dates+name,31,2,,2026-10-12
 tennismylife,2026-9167@2026-03-09,2026-9167,Phoenix,CHALLENGER,2026-03-09,2026-03-09,CHALLENGER|2026-03-09|phoenix|phoenix,confirmed,family+dates+city,26,0,,2026-10-12
 tennismylife,2026-2909@2026-03-16,2026-2909,Asuncion,CHALLENGER,2026-03-16,2026-03-16,CHALLENGER|2026-03-16|asuncion-rakiura|asuncion,confirmed,family+dates+city,31,1,,2026-10-12
-tennismylife,2026-6963@2026-03-16,2026-6963,Morelos,CHALLENGER,2026-03-16,2026-03-16,,review,,0,0,"unmatched; candidates: Asuncion (Rakiura) (Asuncion, 2026-03-16) | Cuernavaca (Cuernavaca, 2026-03-16) | Murcia (Murcia, 2026-03-16) | Zadar (Zadar, 2026-03-16)",2026-10-12
+tennismylife,2026-6963@2026-03-16,2026-6963,Morelos,CHALLENGER,2026-03-16,2026-03-16,CHALLENGER|2026-03-16|cuernavaca|cuernavaca,user,user decision,0,0,user decision 2026-10-15 (tournament review item 8): same event,2026-10-15
 tennismylife,2026-9171@2026-03-16,2026-9171,Murcia,CHALLENGER,2026-03-16,2026-03-16,CHALLENGER|2026-03-16|murcia|murcia,confirmed,family+dates+city,31,1,,2026-10-12
 tennismylife,2026-9472@2026-03-16,2026-9472,Zadar,CHALLENGER,2026-03-16,2026-03-16,CHALLENGER|2026-03-16|zadar|zadar,confirmed,family+dates+city,31,0,,2026-10-12
 tennismylife,2026-902@2026-03-17,2026-902,Miami,WTA,2026-03-17,2026-03-17,WTA|2026-03-16|miami-open|miami,confirmed,family+dates+city,95,0,,2026-10-12
@@ -152,18 +152,18 @@ tennismylife,2026-322@2026-05-18,2026-322,Geneva,ATP,2026-05-18,2026-05-23,ATP|2
 tennismylife,2026-414@2026-05-18,2026-414,Hamburg,ATP,2026-05-18,2026-05-23,ATP|2026-05-17|bitpanda-hamburg-open|hamburg,confirmed,family+dates+city,42,0,,2026-10-12
 tennismylife,2026-520@2026-05-24,2026-520,Roland Garros,ATP,2026-05-24,2026-06-07,ATP|2026-05-24|roland-garros|paris,auto,family+dates+city,0,238,no_results,2026-10-12
 tennismylife,2026-903@2026-05-24,2026-903,Roland Garros,WTA,2026-05-24,2026-05-24,WTA|2026-05-25|roland-garros|paris,auto,family+dates+city,0,127,no_results,2026-10-12
-tennismylife,2026-2993@2026-05-25,2026-2993,Moldova,CHALLENGER,2026-05-25,2026-05-25,,review,,0,0,"unmatched; candidates: Chisinau 1 (Chisinau, 2026-05-25) | Little Rock (Little Rock, 2026-05-25) | Vicenza (Vicenza, 2026-05-25) | Centurion 1 (Centurion, 2026-05-25) | Kosice (Kosice, 2026-05-25)",2026-10-12
+tennismylife,2026-2993@2026-05-25,2026-2993,Moldova,CHALLENGER,2026-05-25,2026-05-25,CHALLENGER|2026-05-25|chisinau-1|chisinau,user,user decision,0,0,user decision 2026-10-15 (tournament review item 5): same event,2026-10-15
 tennismylife,2026-3087@2026-05-25,2026-3087,Centurion,CHALLENGER,2026-05-25,2026-05-25,CHALLENGER|2026-05-25|centurion-1|centurion,confirmed,family+dates+city,31,2,,2026-10-12
 tennismylife,2026-3097@2026-05-25,2026-3097,Kosice,CHALLENGER,2026-05-25,2026-05-25,CHALLENGER|2026-05-25|kosice|kosice,confirmed,family+dates+city,31,1,,2026-10-12
 tennismylife,2026-7015@2026-05-25,2026-7015,Vicenza,CHALLENGER,2026-05-25,2026-05-25,CHALLENGER|2026-05-25|vicenza|vicenza,confirmed,family+dates+city,31,0,,2026-10-12
 tennismylife,2026-9188@2026-05-25,2026-9188,Little Rock,CHALLENGER,2026-05-25,2026-05-25,CHALLENGER|2026-05-25|little-rock|little-rock,confirmed,family+dates+city,31,0,,2026-10-12
 tennismylife,2026-2873@2026-06-01,2026-2873,Tyler,CHALLENGER,2026-06-01,2026-06-01,CHALLENGER|2026-06-01|tyler|tyler,confirmed,family+dates+city,30,0,,2026-10-12
 tennismylife,2026-3089@2026-06-01,2026-3089,Centurion 2,CHALLENGER,2026-06-01,2026-06-01,CHALLENGER|2026-06-01|centurion-2|centurion,confirmed,family+dates+city,31,2,,2026-10-12
-tennismylife,2026-460@2026-06-01,2026-460,Heilbronn,CHALLENGER,2026-06-01,2026-06-01,,review,,0,0,"unmatched; candidates: Birmingham (Birmingham, 2026-06-01) | Perugia (Perugia, 2026-06-01) | Bad Rappenau (Bad Rappenau, 2026-06-01) | Prostejov (Prostejov, 2026-06-01) | Tyler (Tyler, 2026-06-01) | Centurion 2 (Centurion, 2026-06-01)",2026-10-12
+tennismylife,2026-460@2026-06-01,2026-460,Heilbronn,CHALLENGER,2026-06-01,2026-06-01,CHALLENGER|2026-06-01|bad-rappenau|bad-rappenau,user,user decision,0,0,user decision 2026-10-15 (tournament review item 4): same event,2026-10-15
 tennismylife,2026-4940@2026-06-01,2026-4940,Birmingham,CHALLENGER,2026-06-01,2026-06-01,CHALLENGER|2026-06-01|birmingham|birmingham,confirmed,family+dates+city,31,1,,2026-10-12
 tennismylife,2026-558@2026-06-01,2026-558,Prostejov,CHALLENGER,2026-06-01,2026-06-01,CHALLENGER|2026-06-01|prostejov|prostejov,confirmed,family+dates+city,29,1,,2026-10-12
 tennismylife,2026-9001@2026-06-01,2026-9001,Perugia,CHALLENGER,2026-06-01,2026-06-01,CHALLENGER|2026-06-01|perugia|perugia,confirmed,family+dates+city,31,0,,2026-10-12
-tennismylife,2026-1111@2026-06-08,2026-1111,Queen's Club,WTA,2026-06-08,2026-06-08,,review,,0,0,"unmatched; candidates: The HSBC Championships (London, 2026-06-08) | Libema Open ('s-Hertogenbosch, 2026-06-08)",2026-10-12
+tennismylife,2026-1111@2026-06-08,2026-1111,Queen's Club,WTA,2026-06-08,2026-06-08,WTA|2026-06-08|the-hsbc-championships|london,user,user decision,0,0,user decision 2026-10-15 (tournament review item 9): same event,2026-10-15
 tennismylife,2026-2927@2026-06-08,2026-2927,San Miguel de Tucuman,CHALLENGER,2026-06-08,2026-06-08,CHALLENGER|2026-06-08|san-miguel-de-tucuman|san-miguel-de-tucuman,confirmed,family+dates+city,31,5,,2026-10-12
 tennismylife,2026-3085@2026-06-08,2026-3085,Cattolica,CHALLENGER,2026-06-08,2026-06-08,CHALLENGER|2026-06-08|cattolica|cattolica,confirmed,family+dates+city,30,0,,2026-10-12
 tennismylife,2026-321@2026-06-08,2026-321,Stuttgart,ATP,2026-06-08,2026-06-14,ATP|2026-06-08|boss-open|stuttgart,confirmed,family+dates+city,39,2,,2026-10-12
@@ -176,7 +176,7 @@ tennismylife,2026-1080@2026-06-15,2026-1080,Nottingham,WTA,2026-06-15,2026-06-15
 tennismylife,2026-2012@2026-06-15,2026-2012,Berlin,WTA,2026-06-15,2026-06-15,WTA|2026-06-15|berlin-tennis-open|berlin,confirmed,family+dates+city,27,1,,2026-10-12
 tennismylife,2026-3115@2026-06-15,2026-3115,Dublin,CHALLENGER,2026-06-15,2026-06-15,CHALLENGER|2026-06-15|dublin|dublin,confirmed,family+dates+city,31,0,,2026-10-12
 tennismylife,2026-3117@2026-06-15,2026-3117,Asuncion,CHALLENGER,2026-06-15,2026-06-15,CHALLENGER|2026-06-15|asuncion-cit|asuncion,confirmed,family+dates+city,31,5,,2026-10-12
-tennismylife,2026-311@2026-06-15,2026-311,Queen's Club,ATP,2026-06-15,2026-06-21,,review,,0,0,"unmatched; candidates: Terra Wortmann Open (Halle, 2026-06-15) | HSBC Championships (London, 2026-06-15)",2026-10-12
+tennismylife,2026-311@2026-06-15,2026-311,Queen's Club,ATP,2026-06-15,2026-06-21,ATP|2026-06-15|hsbc-championships|london,user,user decision,0,0,user decision 2026-10-15 (tournament review item 10): same event,2026-10-15
 tennismylife,2026-4942@2026-06-15,2026-4942,Royan,CHALLENGER,2026-06-15,2026-06-15,CHALLENGER|2026-06-15|royan|royan,confirmed,family+dates+city,31,0,,2026-10-12
 tennismylife,2026-500@2026-06-15,2026-500,Halle,ATP,2026-06-15,2026-06-21,ATP|2026-06-15|terra-wortmann-open|halle,confirmed,family+dates+city,43,1,,2026-10-12
 tennismylife,2026-7740@2026-06-15,2026-7740,Nottingham,CHALLENGER,2026-06-15,2026-06-15,CHALLENGER|2026-06-15|nottingham-2|nottingham,confirmed,family+dates+city,31,0,,2026-10-12
@@ -231,7 +231,7 @@ tennismylife,2026-6795@2026-07-27,2026-6795,Liberec,CHALLENGER,2026-07-27,2026-0
 tennismylife,2026-7480@2026-07-27,2026-7480,Los Cabos,ATP,2026-07-27,2026-08-02,ATP|2026-07-27|mifel-tennis-open-by-telcel-oppo|los-cabos,confirmed,family+dates+city,37,0,,2026-10-12
 tennismylife,2026-7774@2026-07-27,2026-7774,Vancouver,CHALLENGER,2026-07-27,2026-07-27,CHALLENGER|2026-07-27|vancouver|vancouver,confirmed,family+dates+city,23,0,,2026-10-12
 tennismylife,2026-9540@2026-07-27,2026-9540,San Marino,CHALLENGER,2026-07-27,2026-07-27,CHALLENGER|2026-07-27|san-marino|san-marino,confirmed,family+dates+city,27,0,,2026-10-12
-tennismylife,2026-421@2026-08-02,2026-421,Canada Masters,ATP,2026-08-02,2026-08-14,,review,,0,0,"unmatched; candidates: Mubadala Citi DC Open (Washington, 2026-07-27) | Mifel Tennis Open by Telcel Oppo (Los Cabos, 2026-07-27) | National Bank Open (Montreal, 2026-08-02)",2026-10-12
+tennismylife,2026-421@2026-08-02,2026-421,Canada Masters,ATP,2026-08-02,2026-08-14,ATP|2026-08-02|national-bank-open|montreal,user,user decision,0,0,user decision 2026-10-15 (tournament review item 11): same event,2026-10-15
 tennismylife,2026-806@2026-08-02,2026-806,Toronto,WTA,2026-08-02,2026-08-02,WTA|2026-08-03|national-bank-open|toronto,confirmed,family+dates+city,90,1,,2026-10-12
 tennismylife,2026-2789@2026-08-03,2026-2789,Grodzisk Mazowiecki,CHALLENGER,2026-08-03,2026-08-03,CHALLENGER|2026-08-03|grodzisk-mazowiecki|grodzisk-mazowiecki,confirmed,family+dates+city,29,0,,2026-10-12
 tennismylife,2026-3111@2026-08-03,2026-3111,Istanbul,CHALLENGER,2026-08-03,2026-08-03,CHALLENGER|2026-08-03|istanbul-enka|istanbul,confirmed,family+dates+city,30,1,,2026-10-12
@@ -287,10 +287,10 @@ tennismylife,2026-9552@2026-09-21,2026-9552,Saint-Tropez Open,CHALLENGER,2026-09
 tennismylife,2026-4713@2026-09-22,2026-4713,Hangzhou,ATP,2026-09-22,2026-09-29,ATP|2026-09-23|lynk-co-hangzhou-open|hangzhou,confirmed,family+dates+city,38,0,,2026-10-12
 tennismylife,2026-7581@2026-09-22,2026-7581,Chengdu,ATP,2026-09-22,2026-09-29,ATP|2026-09-23|chengdu-open|chengdu,confirmed,family+dates+city,37,0,,2026-10-12
 tennismylife,2026-9210@2026-09-25,2026-9210,Laver Cup,ATP,2026-09-25,2026-09-27,ATP|2026-09-25|laver-cup|london,auto,family+dates+city,0,0,no_results,2026-10-12
-tennismylife,2026-2895@2026-09-28,2026-2895,Copa Internacional de Tenis,CHALLENGER,2026-09-28,2026-09-28,,review,,0,0,"unmatched; candidates: Porto (Monte Aventino) (Porto, 2026-09-28) | Jingshan (Jingshan, 2026-09-28) | Columbus (Columbus, 2026-09-28) | Curitiba (Curitiba, 2026-09-28) | Mouilleron-le-Captif (Mouilleron-le-Captif, 2026-09-28) | Bari (Bari, 2026-09-28)",2026-10-12
+tennismylife,2026-2895@2026-09-28,2026-2895,Copa Internacional de Tenis,CHALLENGER,2026-09-28,2026-09-28,CHALLENGER|2026-09-28|curitiba|curitiba,user,user decision,0,0,user decision 2026-10-15 (tournament review item 1): same event,2026-10-15
 tennismylife,2026-3151@2026-09-28,2026-3151,Bari,CHALLENGER,2026-09-28,2026-09-28,CHALLENGER|2026-09-28|bari|bari,confirmed,family+dates+city,31,1,,2026-10-12
 tennismylife,2026-329@2026-09-28,2026-329,Tokyo,ATP,2026-09-28,2026-10-06,ATP|2026-09-30|kinoshita-group-japan-open-tennis-championships|tokyo,confirmed,family+dates+city,28,0,,2026-10-12
-tennismylife,2026-6857@2026-09-28,2026-6857,Open de Vendée,CHALLENGER,2026-09-28,2026-09-28,,review,,0,0,"unmatched; candidates: Porto (Monte Aventino) (Porto, 2026-09-28) | Jingshan (Jingshan, 2026-09-28) | Columbus (Columbus, 2026-09-28) | Curitiba (Curitiba, 2026-09-28) | Mouilleron-le-Captif (Mouilleron-le-Captif, 2026-09-28) | Bari (Bari, 2026-09-28)",2026-10-12
+tennismylife,2026-6857@2026-09-28,2026-6857,Open de Vendée,CHALLENGER,2026-09-28,2026-09-28,CHALLENGER|2026-09-28|mouilleron-le-captif|mouilleron-le-captif,user,user decision,0,0,user decision 2026-10-15 (tournament review item 2): same event,2026-10-15
 tennismylife,2026-747@2026-09-28,2026-747,Beijing,ATP,2026-09-28,2026-10-06,ATP|2026-09-30|china-open|beijing,confirmed,family+dates+city,37,2,,2026-10-12
 tennismylife,2026-8281@2026-09-28,2026-8281,Columbus Challenger,CHALLENGER,2026-09-28,2026-09-28,CHALLENGER|2026-09-28|columbus|columbus,confirmed,family+dates+city,25,0,,2026-10-12
 tennismylife,2026-9526@2026-09-28,2026-9526,Eupago Porto Open,CHALLENGER,2026-09-28,2026-09-28,CHALLENGER|2026-09-28|porto-monte-aventino|porto,confirmed,family+dates+city,30,0,,2026-10-12
@@ -299,7 +299,7 @@ tennismylife,2026-1020@2026-09-30,2026-1020,Beijing,WTA,2026-09-30,2026-09-30,WT
 tennismylife,2026-2889@2026-10-05,2026-2889,Challenger Dove Men+Care Antofagasta,CHALLENGER,2026-10-05,2026-10-05,CHALLENGER|2026-10-05|antofagasta|antofagasta,confirmed,family+dates+city,18,1,,2026-10-12
 tennismylife,2026-3153@2026-10-05,2026-3153,Palermo,CHALLENGER,2026-10-05,2026-10-05,CHALLENGER|2026-10-05|palermo|palermo,confirmed,family+dates+city,17,0,,2026-10-12
 tennismylife,2026-5014@2026-10-05,2026-5014,Shanghai Masters,ATP,2026-10-05,2026-10-16,ATP|2026-10-07|rolex-shanghai-masters|shanghai,confirmed,family+dates+city,94,2,,2026-10-12
-tennismylife,2026-7909@2026-10-05,2026-7909,Ferrero Challenger,CHALLENGER,2026-10-05,2026-10-05,,review,,0,0,"unmatched; candidates: Villena (Villena, 2026-10-05) | Antofagasta (Antofagasta, 2026-10-05) | Braga (Braga, 2026-10-05) | Palermo (Palermo, 2026-10-05) | Wuning 3 (Wuning, 2026-10-05)",2026-10-12
+tennismylife,2026-7909@2026-10-05,2026-7909,Ferrero Challenger,CHALLENGER,2026-10-05,2026-10-05,CHALLENGER|2026-10-05|villena|villena,user,user decision,0,0,user decision 2026-10-15 (tournament review item 3): same event,2026-10-15
 tennismylife,2026-7913@2026-10-05,2026-7913,Braga Open,CHALLENGER,2026-10-05,2026-10-05,CHALLENGER|2026-10-05|braga|braga,confirmed,family+dates+city,30,0,,2026-10-12
 tennismylife,2026-1075@2026-10-12,2026-1075,Wuhan,WTA,2026-10-12,2026-10-12,WTA|2026-10-12|wuhan-open|wuhan,confirmed,family+dates+city,10,0,,2026-10-12
 tennismylife,2026-2893@2026-10-12,2026-2893,Olbia Challenger,CHALLENGER,2026-10-12,2026-10-12,CHALLENGER|2026-10-12|olbia|olbia,confirmed,family+dates+city,24,0,,2026-10-16

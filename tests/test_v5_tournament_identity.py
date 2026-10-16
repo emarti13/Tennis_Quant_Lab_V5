@@ -13,6 +13,7 @@ from v5_tournament_identity import (
     player_key,
     resolve_edition,
     shared_pairs,
+    suggest_from_other_source,
     tennismylife_tournaments,
     tour_family,
     trailing_number,
@@ -269,3 +270,17 @@ def test_location_rules_real_places_largest_town_and_no_guess():
     pick, status, _ = pick_location([c("Jingshan", "Anhui", None, 31.3, 118.4), c("Jingshan", "Beijing", None, 39.9, 116.4)],
                                     "MX", "", query="Jingshan")
     assert pick is None and status == "ambiguous"
+
+
+def test_unmatched_rows_get_a_suggestion_from_the_other_sources_results_but_stay_in_review(tmp_path):
+    # "Copa Internacional de Tenis" matches no sheet row by name; its matches are the
+    # same as OddsPapi's Curitiba block, which is mapped. Suggest, do not map (user, 2026-10-15).
+    week = [("P1", "P2"), ("P3", "P4"), ("P5", "P6"), ("P7", "P8")]
+    tml = pd.DataFrame([_src("Copa Internacional de Tenis", "CHALLENGER", "2026-09-28", sid="t1", pairs=week)])
+    odds = pd.DataFrame([_src("ATP Challenger Curitiba", "CHALLENGER", "2026-09-27", sid="o1", pairs=week),
+                         _src("ATP Challenger Columbus", "CHALLENGER", "2026-09-27", sid="o2", pairs=[("Q1", "Q2")])])
+    xw_t = pd.DataFrame([{"source_id": "t1", "first_date": "2026-09-28", "status": "review", "edition_key": ""}])
+    xw_o = pd.DataFrame([{"source_id": "o1", "edition_key": "CH|curitiba", "status": "auto"},
+                         {"source_id": "o2", "edition_key": "CH|columbus", "status": "auto"}])
+    assert suggest_from_other_source(tml, xw_t, odds, xw_o) == {"t1": ("CH|curitiba", 4)}
+    assert xw_t["status"].iloc[0] == "review"
