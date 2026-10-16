@@ -7,7 +7,8 @@ four match-winner series: first those that closed in the last 3 days, then older
 oldest first, with the time left. Per market it fetches the 1-minute candles over the
 market's life and the trades before the start (the in-play trades are not needed for a
 pre-match benchmark), ties the event to an OddsPapi fixture by both players' names, and
-stores the points. Raw candles and trades go to market_history/kalshi/raw/ (not committed;
+stores the points. A market whose fixture or true start is not known yet waits up to 3
+days (the OddsPapi step in the same workflow discovers them first). Raw candles and trades go to market_history/kalshi/raw/ (not committed;
 the workflow uploads them to the monthly release).
 """
 from __future__ import annotations
@@ -29,7 +30,7 @@ sys.path.insert(0, str(BASE))
 os.chdir(BASE)
 from v5_kalshi_history import (  # noqa: E402
     KALSHI_DIR, SERIES, append_kalshi, append_kalshi_log, kalshi_cutoff, load_kalshi_log, market_points,
-    market_record, match_fixture,
+    market_record, match_fixture, should_wait,
 )
 from v5_market_history import _ts  # noqa: E402
 
@@ -138,6 +139,9 @@ def main() -> int:
             for series, m in items:
                 fid, side = mapping.get(m["ticker"], ("", ""))
                 fixture = by_fixture.loc[fid].to_dict() if fid and fid in by_fixture.index else None
+                if should_wait(m, fixture, now):
+                    counts["deferred"] = counts.get("deferred", 0) + 1      # not logged: retried next run
+                    continue
                 stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
                 try:
                     cutoff, source = kalshi_cutoff(m, fixture)

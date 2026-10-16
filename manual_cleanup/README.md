@@ -33,6 +33,9 @@ local clone with the command shown.
 | `research/step3-probe` | One-off probe; findings in `docs/experiments/2026-10-16-step3-market-source-probe.md`. Never merged | 2026-10-16 |
 | `feat/pause-old-forecast` | Merged (PR #54) | 2026-10-16 |
 | `research/step3a-trial` | One-off trial; findings in `docs/experiments/2026-10-16-price-store-trial.md`. Never merged | 2026-10-16 |
+| `feat/step3a-price-store` | Merged (PR #55) | 2026-10-16 |
+| `research/step3b-kalshi-shapes` | One-off probe; findings in `docs/experiments/2026-10-16-kalshi-collector-trial.md`. Never merged | 2026-10-16 |
+| `research/step3b-kalshi-trial` | One-off trial; same note. Never merged | 2026-10-16 |
 | `claude/bootstrap-v5-history-setup-3pxlyr` | Agent session branch; all its work reached `main` via #39–#43 | 2026-10-12 |
 
 ```bash
@@ -44,6 +47,7 @@ git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-in
   fix/no-bet-without-player-history feat/step2c-player-identity feat/step2d-production-identity \
   feat/tournament-review-decisions feat/identity-decision-files docs/step3-market-data-spec \
   research/step3-probe feat/pause-old-forecast research/step3a-trial \
+  feat/step3a-price-store research/step3b-kalshi-shapes research/step3b-kalshi-trial \
   claude/bootstrap-v5-history-setup-3pxlyr
 ```
 

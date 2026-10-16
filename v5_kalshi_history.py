@@ -83,6 +83,14 @@ def match_fixture(event_markets: list[dict], registry: pd.DataFrame) -> tuple[di
     return {t: (fid, sides[n]) for t, n in names.items()}, "names"
 
 
+def should_wait(market: dict, fixture: dict | None, now, wait_hours: float = 72) -> bool:
+    """Wait (up to `wait_hours` after the market closed) for the matched fixture and its true
+    start, so the close is cut at the real start; after that, store with what is known."""
+    closed = _ts(market.get("close_time")) or _ts(now)
+    young = closed > _ts(now) - pd.Timedelta(hours=wait_hours)
+    return young and not (fixture and str(fixture.get("true_start_time_utc") or "").strip())
+
+
 def kalshi_cutoff(market: dict, fixture: dict | None) -> tuple[pd.Timestamp, str]:
     if fixture:
         for col, src in (("true_start_time_utc", "true_start"), ("start_time_utc", "scheduled_start")):

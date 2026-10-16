@@ -5,6 +5,7 @@ import pandas as pd
 
 from v5_kalshi_history import (
     MARKET_COLUMNS, POINT_COLUMNS, append_kalshi, kalshi_cutoff, market_points, market_record, match_fixture,
+    should_wait,
 )
 
 
@@ -80,3 +81,11 @@ def test_daily_workflow_collects_kalshi_and_keeps_its_raw_out_of_git():
     assert "market_history/kalshi/raw/" in Path(".gitignore").read_text(encoding="utf-8")
     assert not Path("scripts/export_kalshi_training_dataset.py").exists()       # retired: read the old engine
     assert not Path(".github/workflows/v5_market_feed_build.yml").exists()        # retired: artifact no longer exists
+
+
+def test_a_market_waits_three_days_for_its_fixture_and_true_start():
+    f = REG.iloc[0].to_dict()
+    assert not should_wait(EVENT[0], f, now="2026-10-08T20:00:00Z")                       # true start known
+    assert should_wait(EVENT[0], {**f, "true_start_time_utc": ""}, now="2026-10-08T20:00:00Z")
+    assert should_wait(EVENT[0], None, now="2026-10-08T20:00:00Z")                         # no fixture yet
+    assert not should_wait(EVENT[0], None, now="2026-10-11T15:00:00Z")                     # 3 days on: store, flagged
