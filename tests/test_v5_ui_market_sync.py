@@ -78,13 +78,12 @@ def test_daily_board_and_decision_feed_use_same_runtime_state_helper():
     assert "runtime_production_state(" in daily
 
 
-def test_live_workflow_refreshes_prices_once_per_day_and_dispatches_forecast_from_that_pull():
+def test_live_workflow_refreshes_prices_once_per_day_without_starting_the_paused_forecast():
     text = Path(".github/workflows/oddspapi_normalized_daily_v2.yml").read_text(encoding="utf-8")
     trigger = text.split("permissions:", 1)[0]
 
     assert 'cron: "2 0 * * *"' in trigger
     assert trigger.count("cron:") == 1
 
-    dispatch = text.split("Trigger daily forecast after fresh market promotion", 1)[1]
-    assert "steps.live_pull.outputs.fresh_snapshot == 'true'" in dispatch
-    assert "github.event.schedule" not in dispatch
+    # The daily forecast is paused until rebuild Step 4 (user decision 2026-10-16).
+    assert "Trigger daily forecast after fresh market promotion" not in text

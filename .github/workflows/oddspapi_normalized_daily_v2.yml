@@ -4,6 +4,7 @@ name: OddsPapi Normalized Daily v2
 # 00:02 UTC establishes the canonical market snapshot for the production day.
 # Daily Board and Decision Feed consume the same promoted snapshot/repricing
 # artifacts. Last-known-good pricing remains actionable until it is >24h old.
+# It no longer starts the daily forecast: that is paused until rebuild Step 4 (2026-10-16).
 on:
   workflow_dispatch:
   schedule:
@@ -11,7 +12,6 @@ on:
 
 permissions:
   contents: write
-  actions: write
 
 concurrency:
   group: v5-production-writer
@@ -150,12 +150,6 @@ jobs:
             git pull --rebase origin main
             git push origin HEAD:main
           fi
-
-      - name: Trigger daily forecast after fresh market promotion
-        if: steps.live_pull.outputs.fresh_snapshot == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh workflow run v5_daily_predictions.yml --ref main -R emarti13/Tennis_Quant_Lab_V5
 
       - name: Upload compact live-feed audit
         if: always()
