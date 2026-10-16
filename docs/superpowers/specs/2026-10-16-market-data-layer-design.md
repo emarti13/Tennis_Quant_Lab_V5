@@ -54,8 +54,9 @@ Stored: a compact table `market_history/price_points_<year>.csv` (append-only, i
 about 1 MB a month), and the raw ticks as a monthly GitHub release file (decision D3: no new
 raw OddsPapi history in git).
 
-The same code backfills the gap from 2026-09-01 to the first daily run (about 3,500
-fixtures), as a manual workflow in batches.
+The same code fills the gaps, as a manual workflow in batches: about 1,500 fixtures before
+2026-09-01 that the earlier backfill never fetched, and about 3,600 since (roughly 80 a day).
+At one call every 5 seconds that is about 7 hours of runs, spread over several days.
 
 ### 2.3 Live prices: start-time-aware freshness
 
