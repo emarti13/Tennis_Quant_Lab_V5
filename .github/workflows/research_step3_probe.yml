@@ -1,0 +1,32 @@
+name: Research - Step 3 market source probe
+
+# One-off probe (user-approved 2026-10-16). Runs only on pushes to its own research branch,
+# which is never merged; it commits its findings back to that branch.
+on:
+  push:
+    branches: [research/step3-probe]
+    paths: [scripts/probe_step3_market_sources.py, .github/workflows/research_step3_probe.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --disable-pip-version-check requests pandas
+      - name: Probe OddsPapi and Kalshi
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: python scripts/probe_step3_market_sources.py
+      - name: Commit findings to the research branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/step3_probe/result.json
+          git commit -m "Step 3 probe findings" && git push origin HEAD:research/step3-probe
