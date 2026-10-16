@@ -29,11 +29,12 @@ from v5_devig import devig, devig_power  # noqa: E402
 from v5_market_results import load_fixture_winners  # noqa: E402
 
 SEALED_FROM = pd.Timestamp("2026-10-13", tz="UTC")
-LAM_GRID = [round(x, 2) for x in np.arange(0.0, 4.01, 0.05)]
+COARSE = [round(x, 2) for x in np.arange(0.0, 5.01, 0.25)]   # then 0.05 steps around the best
 POINTS = {"close": "close_price", "t6h": "t6h_price"}
 FIT_SHARE = 0.6
 BOOTSTRAP = 1000
 MIN_TEST = 200
+COVERAGE: dict = {}
 
 
 def load_pairs(base: Path) -> pd.DataFrame:
@@ -45,6 +46,11 @@ def load_pairs(base: Path) -> pd.DataFrame:
     pts = pd.concat([pd.read_csv(p, dtype={"fixture_id": str, "market_id": str}) for p in sorted((base / "market_history" / "price_points").glob("*.csv"))])
     pts = pts[(pts["market_group"] == "moneyline") & pts["fixture_id"].isin(fx["fixture_id"])]
     winners = load_fixture_winners(fx, base)
+    resolved = fx[fx["resolution"] == "ok"]
+    COVERAGE.update(fixtures=int(len(fx)), resolved=int(len(resolved)),
+                    resolved_with_winner=int(resolved["fixture_id"].isin(winners["fixture_id"]).sum()),
+                    by_month={m: round(float(g["fixture_id"].isin(winners["fixture_id"]).mean()), 3)
+                              for m, g in resolved.groupby(resolved["cutoff"].dt.strftime("%Y-%m"))})
     rows = []
     for point, col in POINTS.items():
         use = pts if point != "close" else pts[pts["close_stale"].astype(str) != "True"]
@@ -81,7 +87,12 @@ def evaluate(df: pd.DataFrame, rng: np.random.Generator) -> dict:
     cut = int(len(df) * FIT_SHARE)
     fit, test = df.iloc[:cut], df.iloc[cut:]
     yf, yt = fit["y"].to_numpy(), test["y"].to_numpy()
-    grid = {lam: np.nanmean(_loss(_probs(fit, lambda p, l=lam: devig(p, l)), yf)) for lam in LAM_GRID}
+    fit_loss = lambda lam: float(np.nanmean(_loss(_probs(fit, lambda p, l=lam: devig(p, l)), yf)))
+    grid = {lam: fit_loss(lam) for lam in COARSE}
+    c = min(grid, key=grid.get)
+    for lam in np.arange(max(0.0, c - 0.2), min(5.0, c + 0.2) + 1e-9, 0.05):
+        lam = round(float(lam), 2)
+        grid.setdefault(lam, fit_loss(lam))
     best = min(grid, key=grid.get)
     methods = {"fitted": lambda p: devig(p, best), "multiplicative": lambda p: devig(p, 0.0),
                "additive": lambda p: devig(p, 1.0), "power": devig_power}
@@ -89,7 +100,7 @@ def evaluate(df: pd.DataFrame, rng: np.random.Generator) -> dict:
     ok = np.all([np.isfinite(v) for v in losses.values()], axis=0)
     base = losses["multiplicative"][ok]
     out = {"n_fit": int(len(fit)), "n_test": int(ok.sum()), "fit_until": str(fit["cutoff"].max()),
-           "lam_fitted": best, "fit_curve": {str(k): round(v, 5) for k, v in grid.items() if k in (0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0)},
+           "lam_fitted": best, "lam_at_edge": best in (0.0, 5.0), "fit_curve": {str(k): round(v, 5) for k, v in grid.items() if k in (0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0)},
            "test_log_loss": {k: round(float(v[ok].mean()), 5) for k, v in losses.items()}}
     idx = rng.integers(0, ok.sum(), size=(BOOTSTRAP, ok.sum()))
     for k in ("fitted", "additive", "power"):
@@ -110,7 +121,7 @@ def main() -> int:
     args = ap.parse_args()
     rng = np.random.default_rng(20261013)
     pairs = load_pairs(BASE)
-    report = {"sealed_from": str(SEALED_FROM.date()), "pairs": int(len(pairs)),
+    report = {"sealed_from": str(SEALED_FROM.date()), "pairs": int(len(pairs)), "coverage": COVERAGE,
               "by_book_point": {}, "by_family": {}}
     for (book, point), g in pairs.groupby(["bookmaker", "point"]):
         if len(g) * (1 - FIT_SHARE) >= MIN_TEST:
@@ -121,6 +132,7 @@ def main() -> int:
     out = BASE / args.out
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")
+    print("coverage", json.dumps(COVERAGE))
     for key, r in report["by_book_point"].items():
         print(f"{key:24s} n={r['n_fit']}+{r['n_test']} lam={r['lam_fitted']:.2f} test={r['test_log_loss']} "
               f"fitted-vs-mult={r['vs_multiplicative']['fitted']}")
