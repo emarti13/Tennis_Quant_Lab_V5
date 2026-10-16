@@ -1,6 +1,26 @@
 {
-  "run_utc": "2026-10-16T18:49:50+00:00",
+  "run_utc": "2026-10-16T18:54:28+00:00",
   "oddspapi": {
+    "freshness": [
+      {
+        "fixture_id": "id1203609375371512",
+        "asked_utc": "2026-10-16T18:55:30+00:00",
+        "status": 200,
+        "newest_quote_min_old": {
+          "draftkings": 96.3,
+          "pinnacle": 18.2
+        }
+      },
+      {
+        "fixture_id": "id1203609375371512",
+        "asked_utc": "2026-10-16T18:56:31+00:00",
+        "status": 200,
+        "newest_quote_min_old": {
+          "draftkings": 97.3,
+          "pinnacle": 19.2
+        }
+      }
+    ],
     "quota_before": {
       "request_limit": 250,
       "request_count": 70,
@@ -14,14 +34,14 @@
       }
     },
     "quota_after_account_only": {
-      "request_limit": null,
-      "request_count": null,
-      "valid_from": null,
+      "request_limit": 250,
+      "request_count": 70,
+      "valid_from": "2026-08-26T14:33:08.55076+00:00",
       "valid_until": null,
       "plan": null,
       "http": {
-        "status": 429,
-        "seconds": 0.17,
+        "status": 200,
+        "seconds": 0.42,
         "headers": {}
       }
     },
@@ -33,25 +53,25 @@
       "plan": null,
       "http": {
         "status": 200,
-        "seconds": 0.18,
+        "seconds": 0.34,
         "headers": {}
       }
     },
     "historical_calls": 9,
-    "count_delta": null,
+    "count_delta": 0,
     "calls": [
       {
         "fixture_id": "id1203543675371412",
         "tournament": "ATP Challenger Roanne, France, Men Singles",
         "start_utc": "2026-10-15 14:30:00+00:00",
         "kind": "recent",
-        "books_asked": "pinnacle,betrivers,draftkings,bet365,kalshi,polymarket,novig,fanduel",
+        "books_asked": "pinnacle,betrivers,draftkings,bet365,kalshi,polymarket,fanduel",
         "http": {
           "status": 400,
-          "seconds": 0.23,
+          "seconds": 0.19,
           "headers": {}
         },
-        "error": "{\"error\": {\"message\": \"Invalid bookmaker(s) provided.\", \"code\": \"INVALID_PARAMETER\", \"details\": \"Invalid bookmakers: novig. Valid bookmakers are: 188bet, 18bet, 198bet, 1bet, 1red, 1xbet, 1xbit, 20bet, 22bet, 31bet, 32red, 3et, 3et+5, 3et-preprod, 3et2, 3etpp, 4casters, 500.casino, 7bet.co.uk, 7bet.",
+        "error": "{\"error\": {\"message\": \"Too many bookmakers specified.\", \"code\": \"TOO_MANY_BOOKMAKERS\", \"details\": \"Please provide a maximum of 3 bookmakers using the 'bookmakers' query parameter.\"}}",
         "books": {}
       },
       {
@@ -61,12 +81,31 @@
         "kind": "recent",
         "books_asked": "pinnacle,betrivers,draftkings",
         "http": {
-          "status": 429,
-          "seconds": 0.15,
+          "status": 200,
+          "seconds": 0.62,
           "headers": {}
         },
-        "error": "{\"error\": {\"message\": \"You are being rate limited. Please wait before making more requests to this endpoint.\", \"code\": \"RATE_LIMITED\", \"details\": \"Please wait 3.63 seconds before making another request to /v4/historical-odds.\", \"retryAfter\": \"3.63 seconds\", \"retryMs\": 3626}}",
-        "books": {}
+        "error": null,
+        "books": {
+          "betrivers": {
+            "quotes": 2198,
+            "pre_start_quotes": 236,
+            "markets": 19,
+            "first_quote_h_before_start": 37.71,
+            "last_pre_start_min_before_start": 675.7,
+            "has_active_flag": true,
+            "has_limit": false
+          },
+          "pinnacle": {
+            "quotes": 7747,
+            "pre_start_quotes": 1422,
+            "markets": 57,
+            "first_quote_h_before_start": 18.23,
+            "last_pre_start_min_before_start": 46.2,
+            "has_active_flag": true,
+            "has_limit": true
+          }
+        }
       },
       {
         "fixture_id": "id1204628175374248",
@@ -75,12 +114,40 @@
         "kind": "recent",
         "books_asked": "pinnacle,betrivers,draftkings",
         "http": {
-          "status": 429,
-          "seconds": 0.15,
+          "status": 200,
+          "seconds": 0.9,
           "headers": {}
         },
-        "error": "{\"error\": {\"message\": \"You are being rate limited. Please wait before making more requests to this endpoint.\", \"code\": \"RATE_LIMITED\", \"details\": \"Please wait 2.27 seconds before making another request to /v4/historical-odds.\", \"retryAfter\": \"2.27 seconds\", \"retryMs\": 2268}}",
-        "books": {}
+        "error": null,
+        "books": {
+          "betrivers": {
+            "quotes": 7958,
+            "pre_start_quotes": 42,
+            "markets": 76,
+            "first_quote_h_before_start": 9.92,
+            "last_pre_start_min_before_start": 595.0,
+            "has_active_flag": true,
+            "has_limit": false
+          },
+          "draftkings": {
+            "quotes": 19953,
+            "pre_start_quotes": 934,
+            "markets": 61,
+            "first_quote_h_before_start": 18.08,
+            "last_pre_start_min_before_start": 0.2,
+            "has_active_flag": true,
+            "has_limit": false
+          },
+          "pinnacle": {
+            "quotes": 7841,
+            "pre_start_quotes": 1187,
+            "markets": 60,
+            "first_quote_h_before_start": 16.67,
+            "last_pre_start_min_before_start": 2.1,
+            "has_active_flag": true,
+            "has_limit": true
+          }
+        }
       },
       {
         "fixture_id": "id1201111775373606",
@@ -89,12 +156,40 @@
         "kind": "recent",
         "books_asked": "pinnacle,betrivers,draftkings",
         "http": {
-          "status": 429,
-          "seconds": 0.25,
+          "status": 200,
+          "seconds": 0.78,
           "headers": {}
         },
-        "error": "{\"error\": {\"message\": \"You are being rate limited. Please wait before making more requests to this endpoint.\", \"code\": \"RATE_LIMITED\", \"details\": \"Please wait 0.81 seconds before making another request to /v4/historical-odds.\", \"retryAfter\": \"0.81 seconds\", \"retryMs\": 815}}",
-        "books": {}
+        "error": null,
+        "books": {
+          "betrivers": {
+            "quotes": 5329,
+            "pre_start_quotes": 220,
+            "markets": 74,
+            "first_quote_h_before_start": 29.25,
+            "last_pre_start_min_before_start": 26.8,
+            "has_active_flag": true,
+            "has_limit": false
+          },
+          "draftkings": {
+            "quotes": 36303,
+            "pre_start_quotes": 4478,
+            "markets": 77,
+            "first_quote_h_before_start": 33.07,
+            "last_pre_start_min_before_start": 4.4,
+            "has_active_flag": true,
+            "has_limit": false
+          },
+          "pinnacle": {
+            "quotes": 6404,
+            "pre_start_quotes": 1478,
+            "markets": 48,
+            "first_quote_h_before_start": 20.87,
+            "last_pre_start_min_before_start": 0.6,
+            "has_active_flag": true,
+            "has_limit": true
+          }
+        }
       },
       {
         "fixture_id": "id1200308575515280",
@@ -104,7 +199,7 @@
         "books_asked": "pinnacle,betrivers,draftkings",
         "http": {
           "status": 200,
-          "seconds": 1.05,
+          "seconds": 0.85,
           "headers": {}
         },
         "error": null,
@@ -145,26 +240,65 @@
         "kind": "recent",
         "books_asked": "pinnacle,betrivers,draftkings",
         "http": {
-          "status": 429,
-          "seconds": 0.14,
+          "status": 200,
+          "seconds": 1.08,
           "headers": {}
         },
-        "error": "{\"error\": {\"message\": \"You are being rate limited. Please wait before making more requests to this endpoint.\", \"code\": \"RATE_LIMITED\", \"details\": \"Please wait 2.64 seconds before making another request to /v4/historical-odds.\", \"retryAfter\": \"2.64 seconds\", \"retryMs\": 2641}}",
-        "books": {}
+        "error": null,
+        "books": {
+          "betrivers": {
+            "quotes": 5353,
+            "pre_start_quotes": 274,
+            "markets": 74,
+            "first_quote_h_before_start": 42.75,
+            "last_pre_start_min_before_start": 1.6,
+            "has_active_flag": true,
+            "has_limit": false
+          },
+          "draftkings": {
+            "quotes": 22024,
+            "pre_start_quotes": 5359,
+            "markets": 65,
+            "first_quote_h_before_start": 42.26,
+            "last_pre_start_min_before_start": 5.2,
+            "has_active_flag": true,
+            "has_limit": false
+          },
+          "pinnacle": {
+            "quotes": 7083,
+            "pre_start_quotes": 1481,
+            "markets": 47,
+            "first_quote_h_before_start": 40.71,
+            "last_pre_start_min_before_start": 8.0,
+            "has_active_flag": true,
+            "has_limit": true
+          }
+        }
       },
       {
-        "fixture_id": "id1204336772749622",
-        "tournament": "WTA Iasi, Romania Women Singles",
-        "start_utc": "2026-07-12 13:55:42+00:00",
+        "fixture_id": "id1200263167588722",
+        "tournament": "ATP Auckland, New Zealand Men Singles",
+        "start_utc": "2026-01-10 01:05:42.093000+00:00",
         "kind": "stored_backfill",
         "books_asked": "pinnacle,betrivers,draftkings",
         "http": {
-          "status": 429,
-          "seconds": 0.18,
+          "status": 404,
+          "seconds": 0.26,
           "headers": {}
         },
-        "error": "{\"error\": {\"message\": \"You are being rate limited. Please wait before making more requests to this endpoint.\", \"code\": \"RATE_LIMITED\", \"details\": \"Please wait 1.25 seconds before making another request to /v4/historical-odds.\", \"retryAfter\": \"1.25 seconds\", \"retryMs\": 1246}}",
-        "books": {}
+        "error": "{\"error\": {\"message\": \"No historical odds found.\", \"code\": \"NOT_FOUND\", \"details\": \"Please check the provided filters and try again.\"}}",
+        "books": {},
+        "stored_copy": {
+          "betrivers": {
+            "quotes": 879,
+            "pre_start_quotes": 0,
+            "markets": 17,
+            "first_quote_h_before_start": -1.02,
+            "last_pre_start_min_before_start": null,
+            "has_active_flag": true,
+            "has_limit": false
+          }
+        }
       },
       {
         "fixture_id": "id1203609375371512",
@@ -174,7 +308,7 @@
         "books_asked": "pinnacle,betrivers,draftkings",
         "http": {
           "status": 200,
-          "seconds": 0.22,
+          "seconds": 0.44,
           "headers": {}
         },
         "error": null,
@@ -206,103 +340,52 @@
         "kind": "upcoming",
         "books_asked": "pinnacle,betrivers,draftkings",
         "http": {
-          "status": 429,
-          "seconds": 0.18,
+          "status": 200,
+          "seconds": 0.57,
           "headers": {}
         },
-        "error": "{\"error\": {\"message\": \"You are being rate limited. Please wait before making more requests to this endpoint.\", \"code\": \"RATE_LIMITED\", \"details\": \"Please wait 3.55 seconds before making another request to /v4/historical-odds.\", \"retryAfter\": \"3.55 seconds\", \"retryMs\": 3546}}",
-        "books": {}
+        "error": null,
+        "books": {
+          "draftkings": {
+            "quotes": 626,
+            "pre_start_quotes": 626,
+            "markets": 19,
+            "first_quote_h_before_start": 16.3,
+            "last_pre_start_min_before_start": 107.8,
+            "has_active_flag": true,
+            "has_limit": false
+          },
+          "pinnacle": {
+            "quotes": 1148,
+            "pre_start_quotes": 1148,
+            "markets": 28,
+            "first_quote_h_before_start": 16.9,
+            "last_pre_start_min_before_start": 85.8,
+            "has_active_flag": true,
+            "has_limit": true
+          }
+        }
       }
     ]
   },
   "kalshi": {
     "series_http": {
       "status": 200,
-      "seconds": 0.12,
+      "seconds": 0.17,
       "headers": {}
     },
-    "sports_series": 4000,
+    "sports_series": 4001,
     "tennis_series": [
       {
-        "ticker": "KXATPCHALLENGERMATCH",
-        "title": "Challenger ATP ",
+        "ticker": "KXATPMC",
+        "title": "ATP Monte Carlo",
         "tags": [
           "Tennis"
         ]
       },
       {
-        "ticker": "KXLIGAPROMATCH",
-        "title": "Russia Liga Pro Match",
-        "tags": [
-          "Table Tennis"
-        ]
-      },
-      {
-        "ticker": "KXDDFWOMENSINGLES",
-        "title": "Dubai Duty Free Tennis Championships",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXALCARAZCOACH",
-        "title": "Carlos Alcaraz Next Coach",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXTTSTARMATCH",
-        "title": "TT Star Series Match",
-        "tags": [
-          "Table Tennis"
-        ]
-      },
-      {
-        "ticker": "KXITTFWOMENMATCH",
-        "title": "ITTF Women Match",
-        "tags": [
-          "Table Tennis"
-        ]
-      },
-      {
-        "ticker": "KXATPROUND",
-        "title": "Will player reach round?",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXEXHIBITIONMEN",
-        "title": "Men's Tennis Exhibition Match",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXATPEXACTMATCH",
-        "title": "ATP Exact Match Score",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXTABLETENNISMATCH",
-        "title": "Men's Table Tennis Match",
-        "tags": [
-          "Table Tennis"
-        ]
-      },
-      {
-        "ticker": "KXTTELITEMATCH",
-        "title": "TT Elite Series Match",
-        "tags": [
-          "Table Tennis"
-        ]
-      },
-      {
-        "ticker": "KXMIXEDDOUBLESMATCH",
-        "title": "Mixed Doubles Tennis Match",
+        "ticker": "KXDAVISCUPMATCH",
+        "title": "Davis Cup Match",
         "tags": [
           "Tennis"
         ]
@@ -315,36 +398,22 @@
         ]
       },
       {
-        "ticker": "KXATPACES",
-        "title": "ATP Tennis Aces",
+        "ticker": "KXDAVISCUPADVANCE",
+        "title": "Davis Cup Advance",
         "tags": [
           "Tennis"
         ]
       },
       {
-        "ticker": "KXWTA1RANK",
-        "title": "WTA #1 Ranked",
+        "ticker": "KXWTAMOA",
+        "title": "WTA Tour Merida Open Akron",
         "tags": [
           "Tennis"
         ]
       },
       {
-        "ticker": "KXMOMEN",
-        "title": "Miami Open Winner (Men's)",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXUNITEDCUP",
-        "title": "United Cup Champions",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXATPGAME",
-        "title": "ATP Tennis Winner",
+        "ticker": "KXWTANATSTAGE",
+        "title": "How many players from country will reach stage at tournament?",
         "tags": [
           "Tennis"
         ]
@@ -357,8 +426,36 @@
         ]
       },
       {
-        "ticker": "KXEXHIBITIONWOMEN",
-        "title": "Women's Tennis Exhibition Match",
+        "ticker": "KXATPS2GWINNER",
+        "title": "ATP set 2 game winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPGSPREAD",
+        "title": "ATP Game Spread",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPGAMETOTAL",
+        "title": "ATP Total Games",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPMCO",
+        "title": "Movistar Chile Open",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXTENNISMAJORDJOKOVIC",
+        "title": "Djokovic major",
         "tags": [
           "Tennis"
         ]
@@ -371,120 +468,29 @@
         ]
       },
       {
-        "ticker": "KXWTAGRANDSLAM",
-        "title": "WTA Grand Slam",
+        "ticker": "KXUNITEDCUPMATCH",
+        "title": "United Cup Match",
         "tags": [
           "Tennis"
         ]
       },
       {
-        "ticker": "KXATPGRANDSLAMFIELD",
-        "title": "ATP Grand Slam Field Winner",
+        "ticker": "KXATPGRANDSLAM",
+        "title": "ATP Grand Slam",
         "tags": [
           "Tennis"
         ]
       },
       {
-        "ticker": "KXWMENSINGLES",
-        "title": "WIMBLEDON men's singles",
+        "ticker": "KXWTAFINALS",
+        "title": "WTA Finals Champion",
         "tags": [
           "Tennis"
         ]
       },
       {
-        "ticker": "KXATPMAD",
-        "title": "ATP Madrid",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXATPWTA",
-        "title": "Men and Women Tournament Winners",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXATPMC",
-        "title": "ATP Monte Carlo",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXWTADOUBLES",
-        "title": "WTA Doubles Tennis Match",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXATPMEN",
-        "title": "Mens ATP Tournament Winner",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXTTELITEGAME",
-        "title": "TT Elite Series Table Tennis Game",
-        "tags": [
-          "Table Tennis"
-        ]
-      },
-      {
-        "ticker": "KXATPS4GWINNER",
-        "title": "ATP set 4 game winner",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXWTABLETENNISMATCH",
-        "title": "Women's Table Tennis Match",
-        "tags": [
-          "Table Tennis"
-        ]
-      },
-      {
-        "ticker": "KXATPGWINNER",
-        "title": "ATP Game Winner",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXITTFWOMEN",
-        "title": "ITTF Women Tournament Champion",
-        "tags": [
-          "Table Tennis"
-        ]
-      },
-      {
-        "ticker": "KXQEMOMENSSINGLES",
-        "title": "Qatar ExxonMobil Open",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXO13MENSINGLES",
-        "title": "Open 13 (Marseille) Mens' Singles",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXMADWOMEN",
-        "title": "Madrid Open Winner (Women's)",
-        "tags": [
-          "Tennis"
-        ]
-      },
-      {
-        "ticker": "KXATPIWO",
-        "title": "Indian Wells Open",
+        "ticker": "KXMCMMEN",
+        "title": "ATP Monte-Carlo Masters Winner",
         "tags": [
           "Tennis"
         ]
@@ -497,14 +503,967 @@
         ]
       },
       {
+        "ticker": "KXATPIWO",
+        "title": "Indian Wells Open",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXROMENSDOUBLES",
+        "title": "Rio Open men Doubles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWIMMEN",
+        "title": "Wimbledon Championship Men's",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXFOPENMENSINGLE",
+        "title": "French Open men's singles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTAIT",
+        "title": "WTA Italian Open",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPRETIRE",
+        "title": "ATP Tennis Retirement",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXDAVISCUP",
+        "title": "Davis Cup Champions",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTATOURNWIN",
+        "title": "Will player win tournament",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXIWWOMEN",
+        "title": "Indian Wells Women's Singles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPCHALLENGERMATCH",
+        "title": "Challenger ATP ",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
         "ticker": "KXSIXKINGSMATCH",
         "title": "Six Kings Slam Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTAROE",
+        "title": "WTA Round of Elimination",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXO13MENSINGLES",
+        "title": "Open 13 (Marseille) Mens' Singles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXQOWOMENSINGLES",
+        "title": "Qatar Open Women's Singles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXUSOMENSINGLES",
+        "title": "US Open men's singles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXSIXKINGSSEMI",
+        "title": "Six Kings Slam Semifinals",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXGRANDSLAM",
+        "title": "Grand Slam Wins by Year",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXMIXEDDOUBLESMATCH",
+        "title": "Mixed Doubles Tennis Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXCALCFO",
+        "title": "Will Carlos Alcaraz play in French Open",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPRANK",
+        "title": "ATP #1 Ranked Player",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPS5GWINNER",
+        "title": "ATP set 5 game winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTAGRANDSLAM",
+        "title": "WTA Grand Slam",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXPLAYERDEAL",
+        "title": "Next Brand Deal",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPNATSTAGE",
+        "title": "How many players from country reach stage of tournament?",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPTIEBREAK",
+        "title": "Tiebreak to occur in Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPFINALS",
+        "title": "ATP Finals Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPNATWINNER",
+        "title": "Nationality of Tennis Tournament Winner ",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTASETWINNER",
+        "title": "WTA Set Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPWTA",
+        "title": "Men and Women Tournament Winners",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPMEN",
+        "title": "Mens ATP Tournament Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXMADWOMEN",
+        "title": "Madrid Open Winner (Women's)",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXBATTLEOFSEXESSET",
+        "title": "Battle of the Sexes Set Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXSIXKINGSSLAM",
+        "title": "Six Kings Slam Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXSIXKINGSQUARTER",
+        "title": "Six Kings Slam Quarterfinals",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTADDF",
+        "title": "WTA Tour Dubai Duty Free",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXGRANDSLAMJFONSECA",
+        "title": "Wil Joao Fonseca Win a grand slam",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPWDDF",
+        "title": "ATP Tour Dubai Duty Free",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXCHALLENGERMATCH",
+        "title": "Challenger ATP ",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXEXHIBITIONWOMEN",
+        "title": "Women's Tennis Exhibition Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPSETSWEEP",
+        "title": "Winner without dropping a set",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTAMIA",
+        "title": "WTA Miami",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPS3GWINNER",
+        "title": "ATP set 3 game winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPGRANDSLAMFIELD",
+        "title": "ATP Grand Slam Field Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPEXACTSETS",
+        "title": "testing",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPTOTALSETS",
+        "title": "ATP Total Sets",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPCOMPETE",
+        "title": "ATP Player to Compete",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPSETWINNER",
+        "title": "ATP Set Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXFOWOMENSINGLES",
+        "title": "French Open women's singles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTAMATCH",
+        "title": "WTA Tennis Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXAOMENSINGLES",
+        "title": "Argentina Open men's singles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXTENNISEXHIBITION",
+        "title": "Tennis Exhibition Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPGAME",
+        "title": "ATP Tennis Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXMIXEDDOUBLES",
+        "title": "Mixed Doubles Tournament Champion",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPGWINNER",
+        "title": "ATP Game Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXAOMEN",
+        "title": "Australian Open Mens",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPSSPREAD",
+        "title": "ATP Set Spread",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXQEMOMENSSINGLES",
+        "title": "Qatar ExxonMobil Open",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPS4GWINNER",
+        "title": "ATP set 4 game winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXLAVERCUP",
+        "title": "Laver Cup",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXSINNERFINISH",
+        "title": "Jannik Sinner to Complete Tennis",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTA1RANK",
+        "title": "WTA #1 Ranked",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTAGTOTAL",
+        "title": "WTA Total Games",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPGAMESPREAD",
+        "title": "ATP Game Spread",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXMOMEN",
+        "title": "Miami Open Winner (Men's)",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXMCMEN",
+        "title": "ATP Monte-Carlo Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXLAVERCUPMATCH",
+        "title": "Laver Cup Tennis Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXMADMEN",
+        "title": "Men's Madrid Open Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWMENSINGLES",
+        "title": "WIMBLEDON men's singles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPNOVAK25",
+        "title": "When will Novak win his 25th Major?",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTAFINALSQUAL",
+        "title": "Will Player Qualify for WTA Finals",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTAGAME",
+        "title": "WTA Tennis Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTAMAD",
+        "title": "WTA Madrid",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATP1RANK",
+        "title": "ATP #1 Ranked Player",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXALCARAZCOACH",
+        "title": "Carlos Alcaraz Next Coach",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXDDFMENSINGLES",
+        "title": "Dubai Duty Free Tennis Championships",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPIT",
+        "title": "ATP Italian Open",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXROMENSSINGLES",
+        "title": "Rio Open",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXFOMENSINGLES",
+        "title": "French Open men's singles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPANYSET",
+        "title": "ATP Any Set Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTA",
+        "title": "Women's Tournament Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTAATX",
+        "title": "WTA Tour ATX Open",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXITFMATCH",
+        "title": "ITF Men's Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXUSOWOMENSINGLES",
+        "title": "US Open women's singles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPMATCH",
+        "title": "ATP Tennis Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPRETURN",
+        "title": "ATP Player to Return by Date",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPMAD",
+        "title": "ATP Madrid",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXUNITEDCUP",
+        "title": "United Cup Champions",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATP",
+        "title": "Men's Tournament Winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXAOWOMEN",
+        "title": "Australian Open Womens",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTACHALLENGERMATCH",
+        "title": "Challenger WTA",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTAADVANCE",
+        "title": "WTA Stage Qualifiers",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXDDFWOMENSINGLES",
+        "title": "Dubai Duty Free Tennis Championships",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTASERENA",
+        "title": "Serena Williams WTA",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTAIWO",
+        "title": "Indian Wells Open",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXGOLFTENNISMAJORS",
+        "title": "More Major Wins, Tennis vs Golf",
+        "tags": [
+          "Golf",
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXFOPENWMENSINGLE",
+        "title": "French Open women's singles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXIWMEN",
+        "title": "Indian Wells Men's Singles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPGTOTAL",
+        "title": "ATP Total Games",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPS1GWINNER",
+        "title": "ATP set 1 game winner",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXUNITEDCUPADVANCE",
+        "title": "United Cup Advance",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXMOWOMEN",
+        "title": "Miami Open Winner (Women's)",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXTENNISGRANDSLAM",
+        "title": "Tennis Grand Slam",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPMIA",
+        "title": "ATP Miami",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPROUND",
+        "title": "Will player reach round?",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXIWMENDOUBLES",
+        "title": "Indian Wells Men's Doubles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXPICKLEBALLMATCH",
+        "title": "Pickleball Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXITFWMATCH",
+        "title": "ITF Women's Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXSIXKINGSSLAMMATCH",
+        "title": "Six Kings Slam Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPAMT",
+        "title": "ATP Tour Abierto Mexican Telcel presentado por HSBC",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPEXACTMATCH",
+        "title": "ATP Exact Match Score",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPDOUBLES",
+        "title": "ATP Doubles Tennis Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTAEXACTMATCH",
+        "title": "WTA Exact Match Score",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPADVANCE",
+        "title": "ATP Stage Qualifiers",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPNEXTGEN",
+        "title": "ATP Next Gen Finals",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXITFWDOUBLES",
+        "title": "ITF Women's Doubles Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPCHALLENGERDOUBLES",
+        "title": "ATP Challenger Doubles Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWTADOUBLES",
+        "title": "WTA Doubles Tennis Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXLAVERCUPDOUBLESMATCH",
+        "title": "Laver Cup Doubles Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPACES",
+        "title": "ATP Tennis Aces",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXITFDOUBLES",
+        "title": "ITF Doubles Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXBATTLEOFSEXES",
+        "title": "Battle of the Sexes Tennis Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXFOMEN",
+        "title": "French Open Men's",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXEXHIBITIONMEN",
+        "title": "Men's Tennis Exhibition Match",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXWWOMENSINGLES",
+        "title": "Wimbledon women's singles",
+        "tags": [
+          "Tennis"
+        ]
+      },
+      {
+        "ticker": "KXATPT5RANK",
+        "title": "Top 5 Ranked Player ATP",
         "tags": [
           "Tennis"
         ]
       }
     ],
     "samples": [
+      {
+        "series": "KXDAVISCUPMATCH",
+        "markets_http": 200,
+        "settled_markets_seen": 5,
+        "example": {
+          "ticker": "KXDAVISCUPMATCH-26SEP20SOTLAN-SOT",
+          "title": "Matias Soto wins",
+          "event_ticker": "KXDAVISCUPMATCH-26SEP20SOTLAN",
+          "open_time": "2026-09-20T17:25:00Z",
+          "close_time": "2026-09-20T18:14:36Z",
+          "expected_expiration_time": "2026-09-20T20:00:00Z",
+          "result": "no",
+          "volume": null,
+          "status": "finalized"
+        },
+        "trades_http": 200,
+        "trades_seen": 285,
+        "trades_has_cursor": false,
+        "market_fields": [
+          "can_close_early",
+          "close_time",
+          "created_time",
+          "custom_strike",
+          "early_close_condition",
+          "event_ticker",
+          "exchange_index",
+          "expected_expiration_time",
+          "expiration_time",
+          "expiration_value",
+          "last_price_dollars",
+          "latest_expiration_time",
+          "market_type",
+          "no_ask_dollars",
+          "no_bid_dollars",
+          "no_sub_title",
+          "notional_value_dollars",
+          "occurrence_datetime",
+          "open_interest_fp",
+          "open_time",
+          "previous_price_dollars",
+          "previous_yes_ask_dollars",
+          "previous_yes_bid_dollars",
+          "price_level_structure",
+          "price_ranges",
+          "result",
+          "rules_primary",
+          "rules_secondary",
+          "settlement_bounds_type",
+          "settlement_timer_seconds",
+          "settlement_ts",
+          "settlement_value_dollars",
+          "status",
+          "strike_type",
+          "ticker",
+          "title",
+          "updated_time",
+          "volume_24h_fp",
+          "volume_fp",
+          "yes_ask_dollars",
+          "yes_ask_size_fp",
+          "yes_bid_dollars",
+          "yes_bid_size_fp",
+          "yes_sub_title"
+        ],
+        "trade_fields": [
+          "count_fp",
+          "created_time",
+          "is_block_trade",
+          "no_price_dollars",
+          "taker_book_side",
+          "taker_outcome_side",
+          "taker_side",
+          "ticker",
+          "trade_id",
+          "yes_price_dollars"
+        ],
+        "candles_http": 200,
+        "candles_seen": 1
+      },
+      {
+        "series": "KXUNITEDCUPMATCH",
+        "markets_http": 200,
+        "settled_markets_seen": 0
+      },
       {
         "series": "KXATPCHALLENGERMATCH",
         "markets_http": 200,
@@ -522,6 +1481,53 @@
         },
         "trades_http": 200,
         "trades_seen": 1000,
+        "trades_has_cursor": true,
+        "market_fields": [
+          "can_close_early",
+          "close_time",
+          "created_time",
+          "custom_strike",
+          "early_close_condition",
+          "event_ticker",
+          "exchange_index",
+          "expected_expiration_time",
+          "expiration_time",
+          "expiration_value",
+          "last_price_dollars",
+          "latest_expiration_time",
+          "market_type",
+          "no_ask_dollars",
+          "no_bid_dollars",
+          "no_sub_title",
+          "notional_value_dollars",
+          "occurrence_datetime",
+          "open_interest_fp",
+          "open_time",
+          "previous_price_dollars",
+          "previous_yes_ask_dollars",
+          "previous_yes_bid_dollars",
+          "price_level_structure",
+          "price_ranges",
+          "result",
+          "rules_primary",
+          "rules_secondary",
+          "settlement_bounds_type",
+          "settlement_timer_seconds",
+          "settlement_ts",
+          "settlement_value_dollars",
+          "status",
+          "strike_type",
+          "ticker",
+          "title",
+          "updated_time",
+          "volume_24h_fp",
+          "volume_fp",
+          "yes_ask_dollars",
+          "yes_ask_size_fp",
+          "yes_bid_dollars",
+          "yes_bid_size_fp",
+          "yes_sub_title"
+        ],
         "trade_fields": [
           "count_fp",
           "created_time",
@@ -538,64 +1544,74 @@
         "candles_seen": 13
       },
       {
-        "series": "KXLIGAPROMATCH",
+        "series": "KXSIXKINGSMATCH",
+        "markets_http": 200,
+        "settled_markets_seen": 0
+      },
+      {
+        "series": "KXMIXEDDOUBLESMATCH",
         "markets_http": 200,
         "settled_markets_seen": 5,
         "example": {
-          "ticker": "KXLIGAPROMATCH-26OCT161230BOGSUR-SUR",
-          "title": "Surkin Dmitrii Evgenevich wins",
-          "event_ticker": "KXLIGAPROMATCH-26OCT161230BOGSUR",
-          "open_time": "2026-10-16T16:12:00Z",
-          "close_time": "2026-10-16T17:09:53Z",
-          "expected_expiration_time": "2026-10-16T19:30:00Z",
+          "ticker": "KXMIXEDDOUBLESMATCH-26AUG26BENCOBMENMUC-MENMUC",
+          "title": "Jakub Mensik / Karolina Muchova wins",
+          "event_ticker": "KXMIXEDDOUBLESMATCH-26AUG26BENCOBMENMUC",
+          "open_time": "2026-08-27T02:35:00Z",
+          "close_time": "2026-08-27T04:09:56Z",
+          "expected_expiration_time": "2026-08-27T05:30:00Z",
           "result": "yes",
           "volume": null,
           "status": "finalized"
         },
         "trades_http": 200,
-        "trades_seen": 25,
-        "trade_fields": [
-          "count_fp",
+        "trades_seen": 1000,
+        "trades_has_cursor": true,
+        "market_fields": [
+          "can_close_early",
+          "close_time",
           "created_time",
-          "is_block_trade",
-          "no_price_dollars",
-          "taker_book_side",
-          "taker_outcome_side",
-          "taker_side",
+          "custom_strike",
+          "early_close_condition",
+          "event_ticker",
+          "exchange_index",
+          "expected_expiration_time",
+          "expiration_time",
+          "expiration_value",
+          "last_price_dollars",
+          "latest_expiration_time",
+          "market_type",
+          "no_ask_dollars",
+          "no_bid_dollars",
+          "no_sub_title",
+          "notional_value_dollars",
+          "occurrence_datetime",
+          "open_interest_fp",
+          "open_time",
+          "previous_price_dollars",
+          "previous_yes_ask_dollars",
+          "previous_yes_bid_dollars",
+          "price_level_structure",
+          "price_ranges",
+          "result",
+          "rules_primary",
+          "rules_secondary",
+          "settlement_bounds_type",
+          "settlement_timer_seconds",
+          "settlement_ts",
+          "settlement_value_dollars",
+          "status",
+          "strike_type",
           "ticker",
-          "trade_id",
-          "yes_price_dollars"
+          "title",
+          "updated_time",
+          "volume_24h_fp",
+          "volume_fp",
+          "yes_ask_dollars",
+          "yes_ask_size_fp",
+          "yes_bid_dollars",
+          "yes_bid_size_fp",
+          "yes_sub_title"
         ],
-        "candles_http": 200,
-        "candles_seen": 1
-      },
-      {
-        "series": "KXDDFWOMENSINGLES",
-        "markets_http": 200,
-        "settled_markets_seen": 0
-      },
-      {
-        "series": "KXALCARAZCOACH",
-        "markets_http": 200,
-        "settled_markets_seen": 0
-      },
-      {
-        "series": "KXTTSTARMATCH",
-        "markets_http": 200,
-        "settled_markets_seen": 5,
-        "example": {
-          "ticker": "KXTTSTARMATCH-26OCT161345BARKIM-KIM",
-          "title": "Kim Taehyun wins",
-          "event_ticker": "KXTTSTARMATCH-26OCT161345BARKIM",
-          "open_time": "2026-10-16T15:15:00Z",
-          "close_time": "2026-10-16T18:19:48Z",
-          "expected_expiration_time": "2026-10-16T20:45:00Z",
-          "result": "no",
-          "volume": null,
-          "status": "finalized"
-        },
-        "trades_http": 200,
-        "trades_seen": 32,
         "trade_fields": [
           "count_fp",
           "created_time",
@@ -612,7 +1628,7 @@
         "candles_seen": 2
       },
       {
-        "series": "KXITTFWOMENMATCH",
+        "series": "KXCHALLENGERMATCH",
         "markets_http": 200,
         "settled_markets_seen": 0
       }
