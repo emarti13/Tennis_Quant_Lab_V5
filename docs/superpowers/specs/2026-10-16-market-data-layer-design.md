@@ -128,8 +128,8 @@ answers "No historical odds found" for it with `bookmakers=pinnacle`. Item 2 sta
    history; DraftKings is neither an execution book nor needed as information next to
    Pinnacle. Proposal: one call per fixture with **Pinnacle, Bet365, BetRivers**. A second
    call per fixture would add about 240 minutes a month and break the 2,100 guardrail.
-2. **History disappears after about 4–6 months.** Fixtures from April and January now
-   return "not found". Proposal: run the gap backfill (§2.2) right after the store code
+2. **History disappears after 4–9 months.** A January fixture whose Pinnacle quotes we
+   stored now returns "not found"; June still answers. Proposal: run the gap backfill (§2.2) right after the store code
    lands, **oldest first**, before more of it expires. Fixtures already past the window are
    lost; the stored 1.4 GB backfill is the only copy of them and must be kept.
 3. **A free pre-match source.** `/historical-odds` answers for matches that have not started
