@@ -114,7 +114,7 @@ else depends on it; it could be paused until Step 4.
 3. Pause the old engine's daily heavy forecast until Step 4 (saves about 780 minutes a
    month): approved; the user confirmed after hearing the app's board depends on it (§5.5).
 
-## 5. Probe findings and changes (items 1–3 and 5 approved by the user 2026-10-16; 4 DRAFT — pending user approval)
+## 5. Probe findings and changes (approved by the user 2026-10-16)
 
 Probe results: `docs/experiments/2026-10-16-step3-market-source-probe.md`. OddsPapi's own
 page for the endpoint (pasted by the user 2026-10-16) confirms: at most 3 books per call, a
