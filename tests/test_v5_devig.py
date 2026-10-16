@@ -71,3 +71,16 @@ def test_winners_join_by_edition_and_both_player_ids_and_skip_ambiguous_pairs():
 
 def test_every_book_uses_the_measured_default_until_data_separates_them():
     assert DEFAULT_LAM == 1.0 and book_lam("pinnacle") == book_lam("bet365") == 1.0
+
+
+def test_tml_rows_without_an_id_join_through_their_name_node():
+    from v5_market_results import tml_results
+    matches = pd.DataFrame([{"tour": "W", "tourney_id": "T1", "date": pd.Timestamp("2026-06-22"),
+                             "winner_id": float("nan"), "winner_name": "Tatjana Maria",
+                             "loser_id": "238184", "loser_name": "Tereza Valentova"}])
+    crosswalk = pd.DataFrame([{"tournament_id": "T1", "first_date": "2026-06-22", "last_date": "2026-06-22",
+                               "edition_key": "WTA|e", "status": "confirmed"}])
+    alias = pd.DataFrame([{"tour": "W", "tml_id": "name:maria tatjana", "player_id": "W-1", "status": "auto"},
+                          {"tour": "W", "tml_id": "238184", "player_id": "W-2", "status": "auto"}])
+    assert tml_results(matches, crosswalk, alias).to_dict("records") == [
+        {"edition_key": "WTA|e", "winner_id": "W-1", "loser_id": "W-2"}]

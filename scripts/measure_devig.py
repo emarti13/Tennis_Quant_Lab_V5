@@ -11,7 +11,11 @@ Spec §2.5 / rebuild plan Step 3 (user decision 2026-10-13):
 - lam fitted on the earliest 60% (by start time), tested on the latest 40%: log loss for the
   fitted lam, multiplicative (0), additive (1) and power, with paired-bootstrap 95% intervals
   against multiplicative, by men's tour, women's tour, Challengers and WTA 125;
-- reliability of the fitted lam by probability bucket on the test set.
+- reliability of the fitted lam by probability bucket on the test set;
+- the setting used in production: lam fitted on all pre-sealed closes per book, with a
+  bootstrap 95% interval (the 60/40 split has too little data to separate methods that move
+  a price by about one percentage point), and the favourite-longshot test: the slope of the
+  outcome on logit(multiplicative probability), where 1 means no bias.
 """
 from __future__ import annotations
 
@@ -115,6 +119,29 @@ def evaluate(df: pd.DataFrame, rng: np.random.Generator) -> dict:
     return out
 
 
+def full_sample(df: pd.DataFrame, rng: np.random.Generator, boots: int = 300) -> dict:
+    """lam on every pre-sealed close of one book, its bootstrap interval, and the calibration slope."""
+    y = df["y"].to_numpy()
+    grid = np.round(np.arange(0.0, 5.01, 0.25), 2)
+    L = np.array([_loss(_probs(df, lambda p, l=l: devig(p, l)), y) for l in grid])
+    best = float(grid[np.nanargmin(np.nanmean(L, axis=1))])
+    draws = [float(grid[np.nanargmin(np.nanmean(L[:, i], axis=1))]) for i in rng.integers(0, len(y), size=(boots, len(y)))]
+    qm = _probs(df, lambda p: devig(p, 0.0))
+    x = np.log(qm / (1 - qm))
+    X = np.c_[np.ones_like(x), x]
+    b = np.zeros(2)
+    for _ in range(30):
+        pr = 1 / (1 + np.exp(-X @ b))
+        H = X.T @ (X * (pr * (1 - pr))[:, None])
+        b += np.linalg.solve(H, X.T @ (y - pr))
+    se = float(np.sqrt(np.linalg.inv(H)[1, 1]))
+    qa = _probs(df, lambda p: devig(p, 1.0))
+    return {"n": int(len(y)), "lam": best, "lam_ci95": [float(np.percentile(draws, 2.5)), float(np.percentile(draws, 97.5))],
+            "calibration_slope": round(float(b[1]), 3), "slope_ci95": [round(float(b[1] - 1.96 * se), 3), round(float(b[1] + 1.96 * se), 3)],
+            "mean_abs_gap_additive_vs_multiplicative": round(float(np.nanmean(np.abs(qa - qm))), 4),
+            "mean_overround": round(float((1 / df["p1"] + 1 / df["p2"]).mean()), 4)}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="docs/experiments/data/devig_measurement.json")
@@ -129,10 +156,14 @@ def main() -> int:
     for (book, point, family), g in pairs.groupby(["bookmaker", "point", "family"]):
         if point == "close" and len(g) * (1 - FIT_SHARE) >= MIN_TEST:
             report["by_family"][f"{book}|{family}"] = evaluate(g, rng)
+    for book, g in pairs[pairs["point"] == "close"].groupby("bookmaker"):
+        if len(g) >= 1000:
+            report.setdefault("full_sample_close", {})[book] = full_sample(g, rng)
     out = BASE / args.out
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")
     print("coverage", json.dumps(COVERAGE))
+    print("full sample", json.dumps(report.get("full_sample_close", {})))
     for key, r in report["by_book_point"].items():
         print(f"{key:24s} n={r['n_fit']}+{r['n_test']} lam={r['lam_fitted']:.2f} test={r['test_log_loss']} "
               f"fitted-vs-mult={r['vs_multiplicative']['fitted']}")

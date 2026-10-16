@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from v5_player_registry import TML_ALIAS_COLUMNS, USABLE_STATUSES, load_table, load_tml_matches
+from v5_player_registry import TML_ALIAS_COLUMNS, USABLE_STATUSES, load_table, load_tml_matches, tml_node
 from v5_tournament_identity import TENNISMYLIFE_GAP_DAYS, load_crosswalk, resolve_edition
 
 
@@ -27,7 +27,8 @@ def tml_results(matches: pd.DataFrame, crosswalk: pd.DataFrame, alias: pd.DataFr
             editions[key] = resolve_edition(crosswalk, m.tourney_id, m.date, gap_days=TENNISMYLIFE_GAP_DAYS) \
                 if pd.notna(m.date) else None
         edition = editions[key]
-        w, l = pid.get((m.tour, str(m.winner_id))), pid.get((m.tour, str(m.loser_id)))
+        w = pid.get((m.tour, tml_node(m.winner_id, m.winner_name)))
+        l = pid.get((m.tour, tml_node(m.loser_id, m.loser_name)))
         if edition and w and l and w != l:
             rows.append({"edition_key": edition, "winner_id": w, "loser_id": l})
     return pd.DataFrame(rows, columns=["edition_key", "winner_id", "loser_id"])

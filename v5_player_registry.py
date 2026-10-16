@@ -357,14 +357,19 @@ def _editions(crosswalk: pd.DataFrame, tournament_ids, dates, *, gap_days: int) 
     return out
 
 
+def tml_node(tml_id, name) -> str:
+    """The alias-table key of a TennisMyLife player: its id, or "name:<folded name>" for a
+    row without an id (alias_tennismylife.csv stores id-less players that way)."""
+    return tml_id if _present(tml_id) else f"name:{_folded_key(name)}"
+
+
 def _tml_with_editions(matches: pd.DataFrame, crosswalk_tml: pd.DataFrame, alias_tml: pd.DataFrame, year: int) -> pd.DataFrame:
     m = matches[matches["date"].dt.year == year].copy()
     m["edition"] = _editions(crosswalk_tml, m["tourney_id"], m["date"], gap_days=6)
     m = m[m["edition"].notna()].copy()
     pid = {(r.tour, r.tml_id): r.player_id for r in alias_tml.itertuples()}
     for side in ("winner", "loser"):
-        m[f"{side}_pid"] = [pid.get((t, i if _present(i) else f"name:{_folded_key(n)}"))
-                             for t, i, n in zip(m["tour"], m[f"{side}_id"], m[f"{side}_name"])]
+        m[f"{side}_pid"] = [pid.get((t, tml_node(i, n))) for t, i, n in zip(m["tour"], m[f"{side}_id"], m[f"{side}_name"])]
     m["round_no"] = m["round"].map(ROUND_ORDER)
     return m
 
