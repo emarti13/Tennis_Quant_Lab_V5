@@ -1,68 +1,101 @@
 {
   "status": "PARTIAL",
-  "built_at_utc": "2026-10-15T12:10:09.667073+00:00",
-  "market_snapshot_utc": "2026-10-15T03:29:13.770978+00:00",
+  "built_at_utc": "2026-10-16T11:57:01.488754+00:00",
+  "market_snapshot_utc": "2026-10-16T03:24:40.665511+00:00",
   "simulations_per_fixture": 5000,
-  "market_rows_input": 976,
-  "eligible_pre_match_fixtures": 14,
-  "priced_rows": 180,
-  "board_rows": 180,
-  "frozen_ledger_rows": 26323,
-  "new_frozen_rows": 180,
+  "market_rows_input": 880,
+  "eligible_pre_match_fixtures": 17,
+  "priced_rows": 176,
+  "board_rows": 176,
+  "frozen_ledger_rows": 26499,
+  "new_frozen_rows": 176,
   "signal_counts": {
-    "PASS": 69,
-    "REVIEW": 56,
-    "BET": 55
+    "PASS": 88,
+    "BET": 42,
+    "REVIEW": 38,
+    "LEAN": 8
   },
   "selected_candidate_counts": {
     "ensemble": 110,
-    "residual": 70
+    "residual": 66
   },
   "selected_score_candidate_counts": {
     "conditioned_mechanistic": 110,
-    "gaussian_contextual": 70
+    "gaussian_contextual": 66
   },
   "context_fallback_rows": 0,
   "errors": [
     {
-      "fixture_id": "id1203086975371366",
-      "player1": "Boyer, Tristan",
-      "player2": "Gaubas, Vilius",
+      "fixture_id": "id1203086975371360",
+      "player1": "Trungelliti, Marco",
+      "player2": "Passaro, Francesco",
       "tournament": "ATP Challenger Maia, Portugal Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Maia, Portugal Men Singles:2026"
     },
     {
-      "fixture_id": "id1203086975371378",
+      "fixture_id": "id1203086975371362",
       "player1": "Dodig, Matej",
-      "player2": "Neumayer, Lukas",
+      "player2": "Boyer, Tristan",
       "tournament": "ATP Challenger Maia, Portugal Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Maia, Portugal Men Singles:2026"
     },
     {
-      "fixture_id": "id1204070975371218",
-      "player1": "Fearnley, Jacob",
-      "player2": "Kumstat, Jan",
-      "tournament": "ATP Challenger Olbia, Italy Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Olbia, Italy Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1204070975371220",
-      "player1": "Mrva, Maxim",
-      "player2": "Maestrelli, Francesco",
-      "tournament": "ATP Challenger Olbia, Italy Men Singles",
-      "stage": "prepare_fixture",
-      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Olbia, Italy Men Singles:2026"
-    },
-    {
-      "fixture_id": "id1205207875371460",
-      "player1": "Cadenasso, Gianluca",
-      "player2": "Gulin, Svyatoslav",
+      "fixture_id": "id1205207875371442",
+      "player1": "Wiskandt, Max",
+      "player2": "Giunta, Massimo",
       "tournament": "ATP Challenger Catania, Italy Men Singles",
       "stage": "prepare_fixture",
       "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Catania, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1204070975371234",
+      "player1": "Fearnley, Jacob",
+      "player2": "Mrva, Maxim",
+      "tournament": "ATP Challenger Olbia, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Olbia, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1204070975371236",
+      "player1": "Mmoh, Michael",
+      "player2": "Nardi, Luca",
+      "tournament": "ATP Challenger Olbia, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Olbia, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1205207875371444",
+      "player1": "Cadenasso, Gianluca",
+      "player2": "Moeller, Marvin",
+      "tournament": "ATP Challenger Catania, Italy Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Catania, Italy Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1203609375371508",
+      "player1": "Comesana, Francisco",
+      "player2": "Olivieri, Genaro Alberto",
+      "tournament": "ATP Challenger Santa Cruz 2, Bolivia Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Santa Cruz 2, Bolivia Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1203609375371514",
+      "player1": "Miguel, Luis Guto",
+      "player2": "Dellien, Hugo",
+      "tournament": "ATP Challenger Santa Cruz 2, Bolivia Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Santa Cruz 2, Bolivia Men Singles:2026"
+    },
+    {
+      "fixture_id": "id1203609375371512",
+      "player1": "La Serna, Juan Manuel",
+      "player2": "Roncadelli, Franco",
+      "tournament": "ATP Challenger Santa Cruz 2, Bolivia Men Singles",
+      "stage": "prepare_fixture",
+      "error": "TOURNAMENT_IDENTITY_UNRESOLVED:ATP Challenger Santa Cruz 2, Bolivia Men Singles:2026"
     }
   ],
   "model_version": "v5-advanced-nested-chronological-1",
