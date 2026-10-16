@@ -1,0 +1,94 @@
+name: V5 Market History
+
+# Rebuild plan Step 3 (spec docs/superpowers/specs/2026-10-16-market-data-layer-design.md):
+# once a day, after the day's matches, store open/close/checkpoint prices for every relevant
+# fixture from OddsPapi /historical-odds (free; one call per 5 s), then spend the time left
+# on the gap backfill, oldest first. Budget: v5_actions_budget.py "market_history".
+on:
+  workflow_dispatch:
+    inputs:
+      max_minutes:
+        description: "Minutes of /historical-odds calls (one per 5 s)"
+        default: "22"
+      discover_from:
+        description: "Optional YYYY-MM-DD: widen fixture discovery once (about 1 quota request per 9 days)"
+        default: ""
+      stored_chunks:
+        description: "Optional, e.g. 1-30: convert the stored January-August backfill instead (no API calls)"
+        default: ""
+  schedule:
+    - cron: "20 7 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v5-production-writer
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install --disable-pip-version-check requests pandas
+
+      - name: Restore cached Tennis market dictionary
+        id: market-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: oddspapi_markets_tennis.json
+          key: oddspapi-tennis-markets-v1
+
+      - name: Fetch Tennis market dictionary on cache miss
+        if: steps.market-cache.outputs.cache-hit != 'true'
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: python fetch_oddspapi_markets.py
+
+      - name: Collect prices
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: |
+          if [ -n "${{ inputs.stored_chunks }}" ]; then
+            python scripts/pull_market_history.py --stored-chunks "${{ inputs.stored_chunks }}"
+          elif [ -n "${{ inputs.discover_from }}" ]; then
+            python scripts/pull_market_history.py --max-minutes "${{ inputs.max_minutes || '22' }}" --discover-from "${{ inputs.discover_from }}"
+          else
+            python scripts/pull_market_history.py --max-minutes "${{ inputs.max_minutes || '22' }}"
+          fi
+
+      - name: Upload raw payloads to this month's release (not git, decision D3)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          shopt -s nullglob
+          files=(market_history/raw/*.jsonl.gz)
+          if [ ${#files[@]} -eq 0 ]; then echo "No raw payloads this run."; exit 0; fi
+          tag="market-raw-$(date -u +%Y-%m)"
+          gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --prerelease \
+            --title "$tag" --notes "Raw OddsPapi /historical-odds payloads (v5_market_history.yml)."
+          gh release upload "$tag" "${files[@]}" --clobber
+
+      - name: Commit price store
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # market_history/raw/ is in .gitignore: raw payloads live in the release only.
+          git add -A market_history oddspapi_registry/fixtures.csv
+          if git diff --cached --quiet; then echo "Nothing new."; exit 0; fi
+          git commit -m "Market history: daily prices and backfill"
+          git pull --rebase origin main
+          git push origin HEAD:main
