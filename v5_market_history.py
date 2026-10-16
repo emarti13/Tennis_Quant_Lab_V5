@@ -19,9 +19,10 @@ Spec §5.4 (user, 2026-10-16): for edge and CLV measurement a close whose book s
 quoting more than 60 minutes before the start counts as missing (`close_stale`). The
 close is still stored.
 
-Stored per start month in market_history/price_points/YYYY-MM.csv (append-only): the
-moneyline, plus the main game handicap and the main total games line per book (the line
-closest to even). Raw payloads go to a monthly GitHub release (decision D3), not git.
+Stored per start month, append-only: market_history/fixtures/YYYY-MM.csv (one row per
+fixture: start, cutoff, our edition and player ids) and market_history/price_points/YYYY-MM.csv
+(the moneyline, plus the main game handicap and the main total games line per book, the
+line closest to even). Raw payloads go to a monthly GitHub release (decision D3), not git.
 """
 from __future__ import annotations
 
@@ -35,6 +36,7 @@ from normalize_oddspapi_snapshot import market_group, normalize_selection, norma
 
 STORE_DIR = Path("market_history")
 POINTS_DIR = STORE_DIR / "price_points"
+FIXTURES_DIR = STORE_DIR / "fixtures"
 PULL_LOG = STORE_DIR / "pull_log.csv"
 CHECKPOINT_HOURS = (24, 12, 6, 1)
 STALE_CLOSE_MINUTES = 60
@@ -42,15 +44,17 @@ GROUPS = ("moneyline", "game_spread", "total_games")
 # Spec §5.1: Pinnacle is information; Bet365 and BetRivers are execution books.
 DEFAULT_BOOKS = ("pinnacle", "bet365", "betrivers")
 
-POINT_COLUMNS = [
+FIXTURE_COLUMNS = [
     "fixture_id", "start_time_utc", "true_start_time_utc", "cutoff_utc", "cutoff_source",
     "tournament_id", "tournament_name", "edition_key", "participant1_id", "participant2_id",
-    "player1_id", "player2_id", "resolution",
-    "bookmaker", "market_group", "market_id", "outcome_id", "player_key", "side", "line",
+    "player1_id", "player2_id", "resolution", "source", "pulled_utc",
+]
+POINT_COLUMNS = [
+    "fixture_id", "bookmaker", "market_group", "market_id", "outcome_id", "player_key", "side", "line",
     "open_price", "open_utc",
     "close_price", "close_utc", "close_valid_until", "close_gap_min", "close_stale",
     *[c for h in CHECKPOINT_HOURS for c in (f"t{h}h_price", f"t{h}h_utc")],
-    "quotes", "pre_start_quotes", "source", "pulled_utc",
+    "quotes", "pre_start_quotes",
 ]
 KEY = ["fixture_id", "bookmaker", "market_id", "outcome_id", "player_key"]
 LOG_COLUMNS = ["fixture_id", "start_time_utc", "books", "mode", "status", "http_status",
@@ -66,7 +70,7 @@ def _ts(value) -> pd.Timestamp | None:
 
 
 def _iso(t) -> str:
-    return t.isoformat() if t is not None else ""
+    return pd.Timestamp(t).tz_convert("UTC").strftime("%Y-%m-%dT%H:%M:%SZ") if t is not None else ""
 
 
 def close_cutoff(fixture: dict) -> tuple[pd.Timestamp, str]:
@@ -121,16 +125,31 @@ def _label(meta: dict | None, outcome_id) -> tuple[str | None, str, float | None
     return group, side, normalized_line(group, meta, side, "p1", "p2")
 
 
-def price_points(payload: dict, fixture: dict, market_meta: list[dict], *, identity: dict | None = None,
-                 source: str = "oddspapi_historical", pulled_utc: str | None = None) -> pd.DataFrame:
-    """One row per (book, market, outcome, player) in the stored market groups."""
+def fixture_record(fixture: dict, *, identity: dict | None = None, source: str = "oddspapi_historical",
+                   pulled_utc: str | None = None) -> dict:
+    """The fixture row stored next to its price points."""
     cutoff, cutoff_source = close_cutoff(fixture)
+    identity = identity or {}
+    return {
+        "fixture_id": fixture.get("fixture_id"), "start_time_utc": fixture.get("start_time_utc"),
+        "true_start_time_utc": fixture.get("true_start_time_utc") or "", "cutoff_utc": _iso(cutoff),
+        "cutoff_source": cutoff_source, "tournament_id": fixture.get("tournament_id"),
+        "tournament_name": fixture.get("tournament_name"),
+        "participant1_id": fixture.get("participant1_id"), "participant2_id": fixture.get("participant2_id"),
+        "edition_key": identity.get("edition_key", ""), "player1_id": identity.get("player1_id", ""),
+        "player2_id": identity.get("player2_id", ""), "resolution": identity.get("resolution", ""),
+        "source": source, "pulled_utc": pulled_utc or _iso(pd.Timestamp.now(tz="UTC")),
+    }
+
+
+def price_points(payload: dict, fixture: dict, market_meta: list[dict]) -> pd.DataFrame:
+    """One row per (book, market, outcome, player) in the stored market groups."""
+    cutoff, _ = close_cutoff(fixture)
     meta_by_id = {str(m.get("marketId")): m for m in market_meta}
     quotes: dict[tuple, list[dict]] = {}
     for r in flatten_history(payload or {}):
         r["created_at"] = pd.Timestamp(r["created_at"])
         quotes.setdefault((r["bookmaker"], r["market_id"], r["outcome_id"], r["player_id"]), []).append(r)
-    identity = identity or {}
     rows = []
     for (book, market_id, outcome_id, player_key), qs in quotes.items():
         group, side, line = _label(meta_by_id.get(str(market_id)), outcome_id)
@@ -138,17 +157,9 @@ def price_points(payload: dict, fixture: dict, market_meta: list[dict], *, ident
             continue
         qs.sort(key=lambda q: q["created_at"])
         rows.append({
-            "fixture_id": fixture.get("fixture_id"), "start_time_utc": fixture.get("start_time_utc"),
-            "true_start_time_utc": fixture.get("true_start_time_utc") or "", "cutoff_utc": _iso(cutoff),
-            "cutoff_source": cutoff_source, "tournament_id": fixture.get("tournament_id"),
-            "tournament_name": fixture.get("tournament_name"),
-            "participant1_id": fixture.get("participant1_id"), "participant2_id": fixture.get("participant2_id"),
-            "edition_key": identity.get("edition_key", ""), "player1_id": identity.get("player1_id", ""),
-            "player2_id": identity.get("player2_id", ""), "resolution": identity.get("resolution", ""),
-            "bookmaker": book, "market_group": group, "market_id": str(market_id), "outcome_id": str(outcome_id),
-            "player_key": str(player_key), "side": side, "line": line,
-            **selection_points(qs, cutoff), "source": source,
-            "pulled_utc": pulled_utc or datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "fixture_id": fixture.get("fixture_id"), "bookmaker": book, "market_group": group,
+            "market_id": str(market_id), "outcome_id": str(outcome_id), "player_key": str(player_key),
+            "side": side, "line": line, **selection_points(qs, cutoff),
         })
     return main_lines(pd.DataFrame(rows, columns=POINT_COLUMNS))
 
@@ -169,26 +180,30 @@ def main_lines(points: pd.DataFrame) -> pd.DataFrame:
     return pd.concat(keep, ignore_index=True)[POINT_COLUMNS]
 
 
-def _month_path(start, base: Path) -> Path:
-    t = _ts(start)
-    return base / POINTS_DIR / f"{t:%Y-%m}.csv"
-
-
-def append_points(points: pd.DataFrame, base: Path | str = ".") -> int:
-    """Append-only: a stored (fixture, book, market, outcome, player) row is never replaced."""
-    base = Path(base)
-    if points.empty:
+def _append(frame: pd.DataFrame, path: Path, columns: list[str], key: list[str]) -> int:
+    existing = pd.read_csv(path, dtype=str, keep_default_na=False, usecols=key) if path.exists() else pd.DataFrame(columns=key)
+    seen = set(map(tuple, existing[key].astype(str).values))
+    new = frame[[tuple(map(str, k)) not in seen for k in frame[key].values]]
+    if new.empty:
         return 0
+    path.parent.mkdir(parents=True, exist_ok=True)
+    new[columns].to_csv(path, mode="a", header=not path.exists(), index=False)
+    return len(new)
+
+
+def append_store(points: pd.DataFrame, fixtures: list[dict] | pd.DataFrame, base: Path | str = ".") -> int:
+    """Append-only, per start month: a stored fixture row or price row is never replaced."""
+    base = Path(base)
+    fx = pd.DataFrame(fixtures, columns=FIXTURE_COLUMNS)
+    if fx.empty:
+        return 0
+    month = fx.set_index("fixture_id")["start_time_utc"].map(lambda s: f"{_ts(s):%Y-%m}")
+    for m, chunk in fx.groupby(fx["fixture_id"].map(month)):
+        _append(chunk, base / FIXTURES_DIR / f"{m}.csv", FIXTURE_COLUMNS, ["fixture_id", "source"])
     added = 0
-    for path, chunk in points.groupby(points["start_time_utc"].map(lambda s: _month_path(s, base))):
-        existing = pd.read_csv(path, dtype=str, keep_default_na=False) if path.exists() else pd.DataFrame(columns=POINT_COLUMNS)
-        seen = set(map(tuple, existing[KEY].astype(str).values))
-        new = chunk[[tuple(map(str, k)) not in seen for k in chunk[KEY].values]]
-        if new.empty:
-            continue
-        path.parent.mkdir(parents=True, exist_ok=True)
-        new[POINT_COLUMNS].to_csv(path, mode="a", header=not path.exists(), index=False)
-        added += len(new)
+    if not points.empty:
+        for m, chunk in points.groupby(points["fixture_id"].map(month)):
+            added += _append(chunk, base / POINTS_DIR / f"{m}.csv", POINT_COLUMNS, KEY)
     return added
 
 

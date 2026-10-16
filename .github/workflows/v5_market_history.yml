@@ -86,8 +86,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add market_history/price_points market_history/pull_log.csv market_history/run_status.json \
-            oddspapi_registry/fixtures.csv
+          # market_history/raw/ is in .gitignore: raw payloads live in the release only.
+          git add -A market_history oddspapi_registry/fixtures.csv
           if git diff --cached --quiet; then echo "Nothing new."; exit 0; fi
           git commit -m "Market history: daily prices and backfill"
           git pull --rebase origin main

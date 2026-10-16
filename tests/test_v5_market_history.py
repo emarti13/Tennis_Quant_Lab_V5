@@ -5,8 +5,8 @@ import pandas as pd
 import pytest
 
 from v5_market_history import (
-    LOG_COLUMNS, POINT_COLUMNS, append_points, close_cutoff, load_pull_log, append_pull_log, main_lines,
-    pending_fixtures, price_points,
+    FIXTURE_COLUMNS, LOG_COLUMNS, POINT_COLUMNS, append_pull_log, append_store, close_cutoff, fixture_record,
+    load_pull_log, main_lines, pending_fixtures, price_points,
 )
 
 META = [
@@ -39,7 +39,8 @@ def test_open_close_checkpoints_and_true_start_cutoff():
         122: [q("2026-10-09T08:00:00Z", 2.05), q("2026-10-10T12:10:00Z", 2.30)]}}}), FX, META)
     p1 = pts[(pts["side"] == "p1")].iloc[0]
     assert (p1["open_price"], p1["close_price"]) == (1.80, 1.65)
-    assert p1["cutoff_source"] == "true_start" and p1["close_utc"].startswith("2026-10-10T12:10")
+    assert p1["close_utc"] == "2026-10-10T12:10:00Z"
+    assert fixture_record(FX)["cutoff_source"] == "true_start"
     assert p1["t24h_price"] == 1.80 and p1["t6h_price"] == 1.70 and p1["t1h_price"] == 1.70
     assert p1["close_gap_min"] == 0 and not p1["close_stale"]
     assert set(pts["market_group"]) == {"moneyline"}       # set-1 market is not stored
@@ -72,11 +73,13 @@ def test_only_the_main_total_line_is_kept_per_book():
 def test_store_is_append_only(tmp_path):
     pts = price_points(payload({"pinnacle": {121: {121: [q("2026-10-10T11:00:00Z", 1.9)],
                                                    122: [q("2026-10-10T11:00:00Z", 1.9)]}}}), FX, META)
-    assert append_points(pts, tmp_path) == 2
-    changed = pts.assign(close_price=9.9)
-    assert append_points(changed, tmp_path) == 0
+    ident = {"edition_key": "ATP|x", "player1_id": "M-1", "player2_id": "M-2", "resolution": "ok"}
+    assert append_store(pts, [fixture_record(FX, identity=ident)], tmp_path) == 2
+    assert append_store(pts.assign(close_price=9.9), [fixture_record(FX, identity={})], tmp_path) == 0
     stored = pd.read_csv(tmp_path / "market_history" / "price_points" / "2026-10.csv")
     assert list(stored.columns) == POINT_COLUMNS and set(stored["close_price"]) == {1.9}
+    fx = pd.read_csv(tmp_path / "market_history" / "fixtures" / "2026-10.csv", dtype=str)
+    assert list(fx.columns) == FIXTURE_COLUMNS and list(fx["edition_key"]) == ["ATP|x"]
 
 
 def _registry(rows):
@@ -127,5 +130,5 @@ def test_workflow_is_one_daily_run_serialized_with_production_and_keeps_raw_out_
     assert "group: v5-production-writer" in text
     assert "gh release upload" in text
     commit = text.split("Commit price store", 1)[1]
-    assert "market_history/raw" not in commit
+    assert "git add -A market_history" in commit and "git add -f" not in commit
     assert "market_history/raw/" in Path(".gitignore").read_text(encoding="utf-8")

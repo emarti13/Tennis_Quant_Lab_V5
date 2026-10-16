@@ -18,7 +18,8 @@ Each run (spec docs/superpowers/specs/2026-10-16-market-data-layer-design.md §2
 `--stored-chunks` derives price points from the January-August backfill already in git
 (oddspapi_history/chunks; Pinnacle, BetRivers, DraftKings) without calling the API.
 
-Writes market_history/price_points/YYYY-MM.csv and market_history/pull_log.csv
+Writes market_history/fixtures/YYYY-MM.csv, market_history/price_points/YYYY-MM.csv and
+market_history/pull_log.csv
 (append-only), market_history/run_status.json, and raw payloads to market_history/raw/
 (not committed; the workflow uploads them to a monthly GitHub release).
 """
@@ -43,7 +44,8 @@ from oddspapi_fixture_registry import FixtureRegistry  # noqa: E402
 from pull_oddspapi_quota_aware import RESEARCH_PROTECTED_RESERVE, quota_state, relevant_fixture  # noqa: E402
 from v5_fixture_resolution import FixtureResolver  # noqa: E402
 from v5_market_history import (  # noqa: E402
-    DEFAULT_BOOKS, STORE_DIR, append_points, append_pull_log, load_pull_log, pending_fixtures, price_points,
+    DEFAULT_BOOKS, STORE_DIR, append_pull_log, append_store, fixture_record, load_pull_log, pending_fixtures,
+    price_points,
 )
 
 API = "https://api.oddspapi.io/v4"
@@ -150,7 +152,7 @@ def pull(args) -> dict:
     raw_dir = STORE_DIR / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
     raw_path = raw_dir / f"{now:%Y-%m-%d_%H%M}.jsonl.gz"
-    counts, entries, points = {}, [], []
+    counts, entries, points, fixtures = {}, [], [], []
     with gzip.open(raw_path, "at", encoding="utf-8") as raw:
         for mode, fx in queue:
             if time.time() - started > args.max_minutes * 60:
@@ -162,8 +164,9 @@ def pull(args) -> dict:
             if status == 200:
                 raw.write(json.dumps({"fixture_id": fx["fixture_id"], "pulled_utc": stamp, "books": books,
                                       "historical_odds": body}, separators=(",", ":")) + "\n")
-                pts = price_points(body, fx, meta, identity=_identity(resolver, fx["fixture_id"]), pulled_utc=stamp)
+                pts = price_points(body, fx, meta)
                 points.append(pts)
+                fixtures.append(fixture_record(fx, identity=_identity(resolver, fx["fixture_id"]), pulled_utc=stamp))
                 entry.update(status="ok", quotes=int(pts["quotes"].sum()) if len(pts) else 0, point_rows=len(pts))
             elif status == 404:
                 entry["status"] = "not_found"
@@ -172,21 +175,22 @@ def pull(args) -> dict:
             entries.append(entry)
             counts[(mode, entry["status"])] = counts.get((mode, entry["status"]), 0) + 1
             if len(entries) >= FLUSH_EVERY:
-                _flush(points, entries)
+                _flush(points, fixtures, entries)
             time.sleep(COOLDOWN)
-    _flush(points, entries)
+    _flush(points, fixtures, entries)
     return {"quota_before": quota_before, "quota_after": _quota(api), "discovery": discovery,
             "queued": {"daily": len(daily), "backfill": len(backfill)},
             "done": {f"{m}:{s}": n for (m, s), n in sorted(counts.items())},
             "raw_file": raw_path.name, "minutes": round((time.time() - started) / 60, 1)}
 
 
-def _flush(points: list, entries: list) -> None:
-    if points:
-        append_points(pd.concat(points, ignore_index=True), BASE)
+def _flush(points: list, fixtures: list, entries: list) -> None:
+    """Store first, log second: a fixture is logged as done only once its prices are stored."""
+    if fixtures:
+        append_store(pd.concat(points, ignore_index=True) if points else pd.DataFrame(), fixtures, BASE)
     append_pull_log(entries, BASE)
-    points.clear()
-    entries.clear()
+    for buf in (points, fixtures, entries):
+        buf.clear()
 
 
 def from_stored(spec: str) -> dict:
@@ -201,7 +205,7 @@ def from_stored(spec: str) -> dict:
     done = set(log.loc[(log["books"] == STORED_BOOKS) & log["status"].isin({"ok", "not_found"}), "fixture_id"])
     resolver = _resolver()
     n = rows = missing = 0
-    entries, points = [], []
+    entries, points, fixtures = [], [], []
     for i in wanted:
         path = BASE / "oddspapi_history" / "chunks" / f"history_chunk_{i:04d}.jsonl.gz"
         if not path.exists():
@@ -217,9 +221,10 @@ def from_stored(spec: str) -> dict:
                     continue
                 fx = registry.loc[fid].to_dict()
                 stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
-                pts = price_points(rec.get("historical_odds"), fx, meta, identity=_identity(resolver, fid),
-                                   source="oddspapi_backfill_2026", pulled_utc=stamp)
+                pts = price_points(rec.get("historical_odds"), fx, meta)
                 points.append(pts)
+                fixtures.append(fixture_record(fx, identity=_identity(resolver, fid), source="oddspapi_backfill_2026",
+                                               pulled_utc=stamp))
                 entries.append({"fixture_id": fid, "start_time_utc": fx["start_time_utc"], "books": STORED_BOOKS,
                                 "mode": "stored", "status": "ok", "http_status": "", "quotes": int(pts["quotes"].sum()) if len(pts) else 0,
                                 "point_rows": len(pts), "pulled_utc": stamp, "detail": path.name})
@@ -227,8 +232,8 @@ def from_stored(spec: str) -> dict:
                 n += 1
                 rows += len(pts)
                 if len(entries) >= 500:
-                    _flush(points, entries)
-        _flush(points, entries)
+                    _flush(points, fixtures, entries)
+        _flush(points, fixtures, entries)
         print(f"{path.name}: fixtures so far {n}, rows {rows}", flush=True)
     return {"stored_chunks": spec, "fixtures": n, "point_rows": rows, "not_in_registry": missing}
 
