@@ -30,6 +30,7 @@ local clone with the command shown.
 | `feat/tournament-review-decisions` | Merged (PR #51) | 2026-10-16 |
 | `feat/identity-decision-files` | Merged (PR #52) | 2026-10-16 |
 | `docs/step3-market-data-spec` | Delete once its PR is merged | 2026-10-16 |
+| `research/step3-probe` | One-off probe; findings in `docs/experiments/2026-10-16-step3-market-source-probe.md`. Never merged | 2026-10-16 |
 | `claude/bootstrap-v5-history-setup-3pxlyr` | Agent session branch; all its work reached `main` via #39–#43 | 2026-10-12 |
 
 ```bash
@@ -40,6 +41,7 @@ git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-in
   feat/step2b-tournament-crosswalks docs/player-identity-spec feat/official-ledger-switch \
   fix/no-bet-without-player-history feat/step2c-player-identity feat/step2d-production-identity \
   feat/tournament-review-decisions feat/identity-decision-files docs/step3-market-data-spec \
+  research/step3-probe \
   claude/bootstrap-v5-history-setup-3pxlyr
 ```
 

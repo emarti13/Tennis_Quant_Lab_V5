@@ -113,3 +113,26 @@ else depends on it; it could be paused until Step 4.
    are recorded in `docs/experiments/` before the build relies on them.
 3. The old engine's daily heavy forecast is paused until Step 4 (saves about 780 minutes a
    month); it stays runnable by hand.
+
+## 5. Probe findings and proposed changes (DRAFT — pending user approval)
+
+Probe results: `docs/experiments/2026-10-16-step3-market-source-probe.md`.
+
+1. **Books in the daily pull.** At most 3 books per call. Bet365 (an execution book) has full
+   history; DraftKings is neither an execution book nor needed as information next to
+   Pinnacle. Proposal: one call per fixture with **Pinnacle, Bet365, BetRivers**. A second
+   call per fixture would add about 240 minutes a month and break the 2,100 guardrail.
+2. **History disappears after about 4–6 months.** Fixtures from April and January now
+   return "not found". Proposal: run the gap backfill (§2.2) right after the store code
+   lands, **oldest first**, before more of it expires. Fixtures already past the window are
+   lost; the stored 1.4 GB backfill is the only copy of them and must be kept.
+3. **A free pre-match source.** `/historical-odds` answers for matches that have not started
+   yet. Proposal: inside the existing live run (no new schedule, no polling), also fetch it
+   for the day's upcoming fixtures, giving all three books' prices without using the
+   250-request quota. §2.3's freshness rule applies unchanged.
+4. **Close for a stale book.** BetRivers sometimes stops quoting 10+ hours before the start.
+   The close keeps its own quote time (already in §2.2); edge and CLV measurements treat a
+   close more than 60 minutes before the start as missing for that book.
+5. **The old engine's heavy forecast keeps running for now.** The app's daily board and
+   decision feed are built from it, so pausing it would stop new matches from appearing in
+   the app. Proposal: pause it in Step 4, when the new pricing function feeds the board.
