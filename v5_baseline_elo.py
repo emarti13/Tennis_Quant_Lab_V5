@@ -20,8 +20,9 @@ can see later rounds of the same event) and keys players by name. Here:
 Rating: overall and per-surface (Hard, Clay, Grass; Carpet and unknown count as Hard),
 blended (1 - blend) * overall + blend * surface. K shrinks with experience
 (k * 250 / (n + 5) ** 0.4, n = that rating's matches so far). A player's first match uses
-the tour's newcomer rating; the match count travels with every rating, so the pricing
-function can refuse thin histories (fail closed) instead of trusting a newcomer number.
+the newcomer rating (every player starts there, so its value cancels out: Elo depends only
+on differences). The match count travels with every rating, so the pricing function can
+refuse thin histories (fail closed) instead of trusting a newcomer number.
 """
 from __future__ import annotations
 

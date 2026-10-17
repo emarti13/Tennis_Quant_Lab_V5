@@ -32,9 +32,11 @@ from v5_model_calibration import calibrated_match_probability  # noqa: E402
 
 TEST_EVENTS_BEFORE = pd.Timestamp("2026-10-06")
 SEALED_FROM = pd.Timestamp("2026-10-13", tz="UTC")
-GRID_K = (0.6, 1.0, 1.4)
-GRID_BLEND = (0.3, 0.5, 0.7)
-GRID_NEWCOMER = (1350.0, 1425.0, 1500.0)
+GRID_K = (0.3, 0.45, 0.6, 1.0)
+GRID_BLEND = (0.1, 0.2, 0.3, 0.5)
+# No newcomer grid: every player starts at the same rating, and Elo depends only on rating
+# differences, so a common starting value cancels out (1350, 1425 and 1500 gave identical
+# results to 5 decimals in the first run).
 BOOTSTRAP = 1000
 
 
@@ -51,13 +53,6 @@ def tune(m: pd.DataFrame, quick: bool) -> tuple[be.EloParams, list[dict]]:
             v = float(loss(pr[pr["date"].dt.year == 2025]["p_winner"]).mean())
             tried.append({"k": k, "blend": b, "newcomer": 1500.0, "log_loss_2025": round(v, 5)})
             best = min(best or tried[-1], tried[-1], key=lambda r: r["log_loss_2025"])
-    for nc in (() if quick else GRID_NEWCOMER):
-        if nc == 1500.0:
-            continue
-        pr = be.run(m, be.EloParams(k=best["k"], blend=best["blend"], newcomer=nc))
-        v = float(loss(pr[pr["date"].dt.year == 2025]["p_winner"]).mean())
-        tried.append({"k": best["k"], "blend": best["blend"], "newcomer": nc, "log_loss_2025": round(v, 5)})
-        best = min(best, tried[-1], key=lambda r: r["log_loss_2025"])
     return be.EloParams(k=best["k"], blend=best["blend"], newcomer=best["newcomer"]), tried
 
 
