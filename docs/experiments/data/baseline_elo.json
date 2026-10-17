@@ -1,0 +1,163 @@
+{
+ "params": {
+  "k": 0.6,
+  "blend": 0.3,
+  "newcomer": 1500.0,
+  "shape": 0.4
+ },
+ "grid": [
+  {
+   "k": 0.6,
+   "blend": 0.3,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.63907
+  },
+  {
+   "k": 0.6,
+   "blend": 0.5,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64049
+  },
+  {
+   "k": 0.6,
+   "blend": 0.7,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64268
+  },
+  {
+   "k": 1.0,
+   "blend": 0.3,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64349
+  },
+  {
+   "k": 1.0,
+   "blend": 0.5,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64551
+  },
+  {
+   "k": 1.0,
+   "blend": 0.7,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64833
+  },
+  {
+   "k": 1.4,
+   "blend": 0.3,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.65223
+  },
+  {
+   "k": 1.4,
+   "blend": 0.5,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.65503
+  },
+  {
+   "k": 1.4,
+   "blend": 0.7,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.65863
+  },
+  {
+   "k": 0.6,
+   "blend": 0.3,
+   "newcomer": 1350.0,
+   "log_loss_2025": 0.63907
+  },
+  {
+   "k": 0.6,
+   "blend": 0.3,
+   "newcomer": 1425.0,
+   "log_loss_2025": 0.63907
+  }
+ ],
+ "test_2026_all": {
+  "n": 12204,
+  "p_winner": 0.62628
+ },
+ "test_2026_with_current_engine": {
+  "n": 12204,
+  "p_winner": 0.62628,
+  "p_current": 0.62871,
+  "elo_minus_current": {
+   "mean": -0.00243,
+   "ci95": [
+    -0.00514,
+    0.00027
+   ]
+  }
+ },
+ "test_2026_with_market": {
+  "n": 7132,
+  "p_winner": 0.62881,
+  "market_winner": 0.59636,
+  "elo_minus_market": {
+   "mean": 0.03244,
+   "ci95": [
+    0.02648,
+    0.03794
+   ]
+  },
+  "with_current_engine": {
+   "n": 7132,
+   "p_winner": 0.62881,
+   "p_current": 0.62955,
+   "market_winner": 0.59636,
+   "elo_minus_current": {
+    "mean": -0.00075,
+    "ci95": [
+     -0.00412,
+     0.00282
+    ]
+   },
+   "current_minus_market": {
+    "mean": 0.03319,
+    "ci95": [
+     0.028,
+     0.03866
+    ]
+   }
+  }
+ },
+ "by_family": {
+  "ATP": {
+   "n": 2030,
+   "p_winner": 0.61889,
+   "market_winner": 0.6002
+  },
+  "CHALLENGER": {
+   "n": 3731,
+   "p_winner": 0.6357,
+   "market_winner": 0.59904
+  },
+  "WTA": {
+   "n": 1371,
+   "p_winner": 0.62471,
+   "market_winner": 0.58341
+  }
+ },
+ "by_experience": {
+  "<10": {
+   "n": 802,
+   "p_winner": 0.61895,
+   "market_winner": 0.52908
+  },
+  "10-29": {
+   "n": 1069,
+   "p_winner": 0.64288,
+   "market_winner": 0.60302
+  },
+  "30-99": {
+   "n": 1885,
+   "p_winner": 0.6263,
+   "market_winner": 0.59588
+  },
+  "100+": {
+   "n": 3376,
+   "p_winner": 0.62809,
+   "market_winner": 0.61051
+  }
+ }
+}
