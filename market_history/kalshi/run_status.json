@@ -1,13 +1,18 @@
 {
-  "run_utc": "2026-10-16T22:49:10+00:00",
-  "listed_not_done": 7880,
-  "recent": 6,
+  "run_utc": "2026-10-17T11:41:33+00:00",
+  "listed_not_done": 6858,
+  "recent": 76,
   "done": {
-    "ok:names": 988,
-    "deferred": 4,
-    "ok:unmatched": 106
+    "deferred": 8,
+    "ok:names": 602,
+    "ok:unmatched": 8
   },
-  "api_calls": 2564,
-  "raw_file": "2026-10-16_2239.jsonl.gz",
-  "minutes": 10.0
+  "fixture_map": {
+    "names": 3206,
+    "unmatched": 170,
+    "ambiguous": 2
+  },
+  "api_calls": 1467,
+  "raw_file": "2026-10-17_1135.jsonl.gz",
+  "minutes": 6.5
 }
