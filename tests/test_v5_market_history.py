@@ -151,23 +151,59 @@ def test_bet365_is_added_only_to_the_fixtures_the_stored_backfill_holds(tmp_path
                             books="bet365", relevant=relevant_fixture, only_stored=True).empty
 
 
-def test_expired_months_are_skipped_with_a_few_sample_calls(monkeypatch):
+def _pm(monkeypatch):
     import sys
     sys.path.insert(0, "scripts")
     import pull_market_history as pm
     monkeypatch.setattr(pm, "COOLDOWN", 0)
-    calls = []
+    return pm
 
-    class FakeApi:
-        def get(self, endpoint, **params):
-            calls.append(params["fixtureId"])
-            return (404 if params["fixtureId"].startswith("jan") else 200), {}
 
-    fx = lambda fid, start: {"fixture_id": fid, "start_time_utc": start}
-    queue = ([("backfill", fx(f"jan{i}", f"2026-01-{i + 1:02d}T10:00:00Z"), "b") for i in range(10)]
-             + [("backfill", fx(f"feb{i}", f"2026-02-{i + 1:02d}T10:00:00Z"), "b") for i in range(10)]
-             + [("backfill", fx(f"mar{i}", f"2026-03-{i + 1:02d}T10:00:00Z"), "b") for i in range(10)])
-    keep, expired = pm.skip_expired_months(FakeApi(), queue)
-    assert len(expired) == 10 and all(e["status"] == "not_found" for e in expired)
-    assert [k[1]["fixture_id"][:3] for k in keep] == ["feb"] * 10 + ["mar"] * 10
-    assert len(calls) == 4          # 3 January samples, 1 February sample; March is not probed
+class _DatedApi:
+    """History exists from `first` on; `missing` fixtures are absent anyway; `errors` fail."""
+    def __init__(self, first, missing=(), errors=()):
+        self.first, self.missing, self.errors, self.calls = first, set(missing), set(errors), []
+
+    def get(self, endpoint, **params):
+        fid = params["fixtureId"]
+        self.calls.append(fid)
+        if fid in self.errors:
+            return 500, {}
+        return (404 if fid < self.first or fid in self.missing else 200), {}
+
+
+def _queue(n, books="b"):
+    # fixture ids sort like their start times: d000, d001, ...
+    return [("backfill", {"fixture_id": f"d{i:03d}", "start_time_utc": f"2026-04-01T00:00:00Z+{i:03d}"}, books)
+            for i in range(n)]
+
+
+def test_history_expired_before_a_date_is_skipped_with_a_few_calls(monkeypatch):
+    pm = _pm(monkeypatch)
+    api = _DatedApi(first="d137", missing={"d140", "d150"})     # boundary inside a month; a few gaps
+    keep, expired = pm.skip_expired(api, _queue(300))
+    # Never drops a fixture that has history; may keep up to window-1 expired ones before it.
+    assert all(e["fixture_id"] < "d137" for e in expired) and 137 - pm.PROBE_WINDOW < len(expired)
+    assert len(keep) + len(expired) == 300 and all(e["status"] == "not_found" for e in expired)
+    assert len(api.calls) < 40                                    # not one call per fixture
+
+
+def test_nothing_is_dropped_when_the_oldest_still_has_history_or_on_errors(monkeypatch):
+    pm = _pm(monkeypatch)
+    api = _DatedApi(first="d000")
+    keep, expired = pm.skip_expired(api, _queue(50))
+    assert not expired and len(keep) == 50 and len(api.calls) == 1
+    api = _DatedApi(first="d999", errors={"d000"})              # an error is never read as "expired"
+    keep, expired = pm.skip_expired(api, _queue(50))
+    assert not expired and len(keep) == 50
+
+
+def test_each_book_set_has_its_own_boundary_and_all_expired_drops_all(monkeypatch):
+    pm = _pm(monkeypatch)
+    api = _DatedApi(first="d020")
+    keep, expired = pm.skip_expired(api, _queue(30, "a") + _queue(10, "b"))
+    assert {e["books"] for e in expired} == {"a", "b"}
+    a = [e["fixture_id"] for e in expired if e["books"] == "a"]
+    assert all(f < "d020" for f in a) and len(a) > 20 - pm.PROBE_WINDOW
+    assert len([e for e in expired if e["books"] == "b"]) == 10   # all expired
+    assert {k[2] for k in keep} == {"a"}
