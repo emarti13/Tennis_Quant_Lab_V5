@@ -62,3 +62,34 @@ to 97.6% / 2.0%.
   fixtures until the gap backfill reaches them.
 - A label only: a mislabelled main-draw match is still priced and shown, just not an
   official recommendation until qualifying is validated.
+
+## Lucky losers (added 2026-10-17)
+
+User point: a lucky loser (lost in qualifying, then let into the main draw) who meets a
+qualifier in the first round has two players who both already played, so step 3 calls the
+match qualifying. Added rule, before that test: if either player lost their previous match
+in this edition, the match is main draw (a qualifying loser is out of qualifying). It uses
+the results known when the price is made: TennisMyLife, then Kalshi, then in-play calls,
+now filled for the whole stored January–August download (1,876 in-play results used here).
+A repeat of the same pair is treated as a duplicate listing, not a lucky loser.
+
+Effect, same fixtures (`scripts/check_fixture_stage.py` runs both ways):
+
+| | Without the rule | With it |
+|---|---|---|
+| Challenger main draws labelled main | 4,268 of 4,290 | 4,269 |
+| Challenger qualifying labelled main | 188 | 190 |
+| WTA main draws labelled main | 1,609 of 1,649 | 1,610 |
+| WTA qualifying labelled main | 33 | 33 |
+
+The rule fires 20 times, but most of those matches were already labelled main (a lucky
+loser usually plays on day two or later). It changes six labels in eight months, all from
+qualifying to main:
+- four confirmed main draw: Dubai WTA, Nottingham Challenger, Monte-Carlo and Washington
+  ATP (TennisMyLife lists them; for ATP the player had lost the previous day);
+- two wrong, Kigali and Morelia Challengers. Each rests on one book's in-play call that a
+  player lost, then that player played again the next day: either that call is wrong or
+  TennisMyLife lacks the match.
+
+Kept: the mechanism is right and the effect is small either way. Too few cases to tune it
+(for example, requiring two books to agree), so it is left as is.
