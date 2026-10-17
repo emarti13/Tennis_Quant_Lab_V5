@@ -32,6 +32,12 @@
  },
  "without_result_called": 4100,
  "without_result": 4711,
+ "clean": {
+  "called": 3892,
+  "agree": 3889,
+  "disagree": 3,
+  "without_result_called": 2569
+ },
  "strict": {
   "called": 2748,
   "agree": 2747,
@@ -44,7 +50,7 @@
    "edition_key": "WTA|2026-01-19|australian-open|melbourne",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"unclear\", \"draftkings\": \"p2\", \"pinnacle\": \"unclear\"}"
+   "books": "{\"draftkings\": \"p2\", \"pinnacle\": \"unclear\", \"betrivers\": \"unclear\"}"
   },
   {
    "fixture_id": "id1200422168660124",
@@ -79,21 +85,21 @@
    "edition_key": "CHALLENGER|2026-03-16|cuernavaca|cuernavaca",
    "call": "p1",
    "winner_side": "p2",
-   "books": "{\"betrivers\": \"unclear\", \"draftkings\": \"unclear\", \"pinnacle\": \"p1\"}"
+   "books": "{\"draftkings\": \"unclear\", \"pinnacle\": \"p1\", \"betrivers\": \"unclear\"}"
   },
   {
    "fixture_id": "id1201122569982456",
    "edition_key": "CHALLENGER|2026-03-16|cuernavaca|cuernavaca",
    "call": "p1",
    "winner_side": "p2",
-   "books": "{\"betrivers\": \"unclear\", \"draftkings\": \"p1\", \"pinnacle\": \"unclear\"}"
+   "books": "{\"draftkings\": \"p1\", \"pinnacle\": \"unclear\", \"betrivers\": \"unclear\"}"
   },
   {
    "fixture_id": "id1204208970016352",
    "edition_key": "CHALLENGER|2026-03-16|asuncion-rakiura|asuncion",
    "call": "p1",
    "winner_side": "p2",
-   "books": "{\"betrivers\": \"unclear\", \"draftkings\": \"p1\", \"pinnacle\": \"unclear\"}"
+   "books": "{\"draftkings\": \"p1\", \"pinnacle\": \"unclear\", \"betrivers\": \"unclear\"}"
   },
   {
    "fixture_id": "id1204581770373164",
@@ -107,63 +113,63 @@
    "edition_key": "WTA|2026-04-13|open-capfinances-rouen-metropole|rouen",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"p2\", \"draftkings\": \"unclear\", \"pinnacle\": \"p2\"}"
+   "books": "{\"draftkings\": \"unclear\", \"pinnacle\": \"p2\", \"betrivers\": \"p2\"}"
   },
   {
    "fixture_id": "id1204196570768824",
    "edition_key": "WTA|2026-04-13|open-capfinances-rouen-metropole|rouen",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"p2\", \"draftkings\": \"unclear\", \"pinnacle\": \"p2\"}"
+   "books": "{\"draftkings\": \"unclear\", \"pinnacle\": \"p2\", \"betrivers\": \"p2\"}"
   },
   {
    "fixture_id": "id1204196570768822",
    "edition_key": "WTA|2026-04-13|open-capfinances-rouen-metropole|rouen",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"p2\", \"draftkings\": \"unclear\", \"pinnacle\": \"p2\"}"
+   "books": "{\"draftkings\": \"unclear\", \"pinnacle\": \"p2\", \"betrivers\": \"p2\"}"
   },
   {
    "fixture_id": "id1204196570796998",
    "edition_key": "WTA|2026-04-13|open-capfinances-rouen-metropole|rouen",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"p2\", \"draftkings\": \"unclear\", \"pinnacle\": \"p2\"}"
+   "books": "{\"draftkings\": \"unclear\", \"pinnacle\": \"p2\", \"betrivers\": \"p2\"}"
   },
   {
    "fixture_id": "id1204196570752858",
    "edition_key": "WTA|2026-04-13|open-capfinances-rouen-metropole|rouen",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"p2\", \"draftkings\": \"unclear\", \"pinnacle\": \"p2\"}"
+   "books": "{\"draftkings\": \"unclear\", \"pinnacle\": \"p2\", \"betrivers\": \"p2\"}"
   },
   {
    "fixture_id": "id1204196570682172",
    "edition_key": "WTA|2026-04-13|open-capfinances-rouen-metropole|rouen",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"p2\", \"draftkings\": \"unclear\", \"pinnacle\": \"p2\"}"
+   "books": "{\"draftkings\": \"unclear\", \"pinnacle\": \"p2\", \"betrivers\": \"p2\"}"
   },
   {
    "fixture_id": "id1204196570752852",
    "edition_key": "WTA|2026-04-13|open-capfinances-rouen-metropole|rouen",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"p2\", \"draftkings\": \"unclear\", \"pinnacle\": \"p2\"}"
+   "books": "{\"draftkings\": \"unclear\", \"pinnacle\": \"p2\", \"betrivers\": \"p2\"}"
   },
   {
    "fixture_id": "id1204196570682182",
    "edition_key": "WTA|2026-04-13|open-capfinances-rouen-metropole|rouen",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"p2\", \"draftkings\": \"unclear\", \"pinnacle\": \"p2\"}"
+   "books": "{\"draftkings\": \"unclear\", \"pinnacle\": \"p2\", \"betrivers\": \"p2\"}"
   },
   {
    "fixture_id": "id1204196570682170",
    "edition_key": "WTA|2026-04-13|open-capfinances-rouen-metropole|rouen",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"p2\", \"draftkings\": \"unclear\", \"pinnacle\": \"p2\"}"
+   "books": "{\"draftkings\": \"unclear\", \"pinnacle\": \"p2\", \"betrivers\": \"p2\"}"
   },
   {
    "fixture_id": "id1204196570682186",
@@ -177,28 +183,28 @@
    "edition_key": "WTA|2026-04-13|open-capfinances-rouen-metropole|rouen",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"p2\", \"draftkings\": \"unclear\", \"pinnacle\": \"p2\"}"
+   "books": "{\"draftkings\": \"unclear\", \"pinnacle\": \"p2\", \"betrivers\": \"p2\"}"
   },
   {
    "fixture_id": "id1200353570919290",
    "edition_key": "CHALLENGER|2026-04-20|savannah|savannah",
    "call": "p1",
    "winner_side": "p2",
-   "books": "{\"betrivers\": \"unclear\", \"draftkings\": \"p1\", \"pinnacle\": \"unclear\"}"
+   "books": "{\"draftkings\": \"p1\", \"pinnacle\": \"unclear\", \"betrivers\": \"unclear\"}"
   },
   {
    "fixture_id": "id1200492570836072",
    "edition_key": "WTA|2026-04-20|mutua-madrid-open|madrid",
    "call": "p1",
    "winner_side": "p2",
-   "books": "{\"betrivers\": \"unclear\", \"draftkings\": \"p1\", \"pinnacle\": \"unclear\"}"
+   "books": "{\"draftkings\": \"p1\", \"pinnacle\": \"unclear\", \"betrivers\": \"unclear\"}"
   },
   {
    "fixture_id": "id1200477571371854",
    "edition_key": "WTA|2026-05-04|internazionali-bnl-d-italia|rome",
    "call": "p1",
    "winner_side": "p2",
-   "books": "{\"betrivers\": \"unclear\", \"draftkings\": \"p1\", \"pinnacle\": \"unclear\"}"
+   "books": "{\"draftkings\": \"p1\", \"pinnacle\": \"unclear\", \"betrivers\": \"unclear\"}"
   },
   {
    "fixture_id": "id1200497371407438",
@@ -212,49 +218,49 @@
    "edition_key": "WTA|2026-05-18|grand-prix-son-altesse-royale-la-princesse-lalla-meryem|rabat",
    "call": "p1",
    "winner_side": "p2",
-   "books": "{\"betrivers\": \"unclear\", \"draftkings\": \"p1\", \"pinnacle\": \"unclear\"}"
+   "books": "{\"draftkings\": \"p1\", \"pinnacle\": \"unclear\", \"betrivers\": \"unclear\"}"
   },
   {
    "fixture_id": "id1200286572129166",
    "edition_key": "ATP|2026-06-15|hsbc-championships|london",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"unclear\", \"draftkings\": \"p2\", \"pinnacle\": \"unclear\"}"
+   "books": "{\"draftkings\": \"p2\", \"pinnacle\": \"unclear\", \"betrivers\": \"unclear\"}"
   },
   {
    "fixture_id": "id1204648372031618",
    "edition_key": "CHALLENGER|2026-06-15|royan|royan",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"unclear\", \"draftkings\": \"p2\", \"pinnacle\": \"p2\"}"
+   "books": "{\"draftkings\": \"p2\", \"pinnacle\": \"p2\", \"betrivers\": \"unclear\"}"
   },
   {
    "fixture_id": "id1201284972311532",
    "edition_key": "CHALLENGER|2026-06-29|cary|cary",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"p2\", \"draftkings\": \"p2\", \"pinnacle\": \"p2\"}"
+   "books": "{\"draftkings\": \"p2\", \"pinnacle\": \"p2\", \"betrivers\": \"p2\"}"
   },
   {
    "fixture_id": "id1204648972504538",
    "edition_key": "CHALLENGER|2026-07-06|newport|newport",
    "call": "p1",
    "winner_side": "p2",
-   "books": "{\"betrivers\": \"unclear\", \"draftkings\": \"unclear\", \"pinnacle\": \"p1\"}"
+   "books": "{\"draftkings\": \"unclear\", \"pinnacle\": \"p1\", \"betrivers\": \"unclear\"}"
   },
   {
    "fixture_id": "id1203970972827670",
    "edition_key": "CHALLENGER|2026-07-20|bloomfield-hills|bloomfield-hills",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"unclear\", \"draftkings\": \"p2\", \"pinnacle\": \"unclear\"}"
+   "books": "{\"draftkings\": \"p2\", \"pinnacle\": \"unclear\", \"betrivers\": \"unclear\"}"
   },
   {
    "fixture_id": "id1200448373148798",
    "edition_key": "WTA|2026-07-27|the-memphis-classic|memphis",
    "call": "p2",
    "winner_side": "p1",
-   "books": "{\"betrivers\": \"p2\", \"draftkings\": \"unclear\", \"pinnacle\": \"unclear\"}"
+   "books": "{\"draftkings\": \"unclear\", \"pinnacle\": \"unclear\", \"betrivers\": \"p2\"}"
   }
  ]
 }
