@@ -1,35 +1,7 @@
 {
-  "quota_before": {
-    "limit": 250,
-    "used": 79,
-    "remaining": 171,
-    "valid_from": "2026-08-26T14:33:08.55076+00:00",
-    "valid_until": null
-  },
-  "quota_after": {
-    "limit": 250,
-    "used": 88,
-    "remaining": 162,
-    "valid_from": "2026-08-26T14:33:08.55076+00:00",
-    "valid_until": null
-  },
-  "discovery": {
-    "windows": 9,
-    "relevant_seen": 5314,
-    "inserted": 5,
-    "updated": 5309,
-    "registry_rows": 19355,
-    "path": "/home/runner/work/Tennis_Quant_Lab_V5/Tennis_Quant_Lab_V5/oddspapi_registry/fixtures.csv"
-  },
-  "queued": {
-    "daily": 141,
-    "backfill": 5533
-  },
-  "done": {
-    "backfill:not_found": 89,
-    "daily:ok": 141
-  },
-  "raw_file": "2026-10-16_2217.jsonl.gz",
-  "minutes": 22.1,
-  "run_utc": "2026-10-16T22:39:09+00:00"
+  "stored_chunks": "1-15",
+  "fixtures": 0,
+  "point_rows": 0,
+  "not_in_registry": 0,
+  "run_utc": "2026-10-17T06:12:42+00:00"
 }
