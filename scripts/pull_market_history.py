@@ -46,6 +46,8 @@ os.chdir(BASE)
 from oddspapi_fixture_registry import FixtureRegistry  # noqa: E402
 from pull_oddspapi_quota_aware import RESEARCH_PROTECTED_RESERVE, quota_state, relevant_fixture  # noqa: E402
 from v5_fixture_resolution import FixtureResolver  # noqa: E402
+from v5_market_results import INPLAY_DIR, append_inplay, inplay_record  # noqa: E402
+from v5_market_history import close_cutoff  # noqa: E402
 from v5_market_history import (  # noqa: E402
     DEFAULT_BOOKS, STORE_DIR, append_pull_log, append_store, fixture_record, load_pull_log, pending_fixtures,
     price_points,
@@ -201,7 +203,7 @@ def pull(args) -> dict:
     raw_dir = STORE_DIR / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
     raw_path = raw_dir / f"{now:%Y-%m-%d_%H%M}.jsonl.gz"
-    counts, entries, points, fixtures = {}, [], [], []
+    counts, entries, points, fixtures, inplay = {}, [], [], [], []
     with gzip.open(raw_path, "at", encoding="utf-8") as raw:
         for mode, fx, call_books in queue:
             if time.time() - started > args.max_minutes * 60:
@@ -216,6 +218,7 @@ def pull(args) -> dict:
                 pts = price_points(body, fx, meta)
                 points.append(pts)
                 fixtures.append(fixture_record(fx, identity=_identity(resolver, fx["fixture_id"]), pulled_utc=stamp))
+                inplay.append(inplay_record(fx["fixture_id"], close_cutoff(fx)[0], body, f"oddspapi:{call_books}"))
                 entry.update(status="ok", quotes=int(pts["quotes"].sum()) if len(pts) else 0, point_rows=len(pts))
             elif status == 404:
                 entry["status"] = "not_found"
@@ -224,9 +227,9 @@ def pull(args) -> dict:
             entries.append(entry)
             counts[(mode, entry["status"])] = counts.get((mode, entry["status"]), 0) + 1
             if len(entries) >= FLUSH_EVERY:
-                _flush(points, fixtures, entries)
+                _flush(points, fixtures, entries, inplay)
             time.sleep(COOLDOWN)
-    _flush(points, fixtures, entries)
+    _flush(points, fixtures, entries, inplay)
     return {"quota_before": quota_before, "quota_after": _quota(api), "discovery": discovery,
             "queued": {"daily": len(daily), "backfill": len(backfill), "bet365_backfill": len(extra),
                        "expired_by_month_probe": len(expired)},
@@ -234,17 +237,27 @@ def pull(args) -> dict:
             "raw_file": raw_path.name, "minutes": round((time.time() - started) / 60, 1)}
 
 
-def _flush(points: list, fixtures: list, entries: list) -> None:
-    """Store first, log second: a fixture is logged as done only once its prices are stored."""
+def _flush(points: list, fixtures: list, entries: list, inplay: list | None = None) -> None:
+    """Store first, log second: a fixture is logged as done only once its prices are stored.
+    In-play winner calls (v5_market_results) are stored alongside."""
     if fixtures:
         append_store(pd.concat(points, ignore_index=True) if points else pd.DataFrame(), fixtures, BASE)
+    if inplay:
+        append_inplay(inplay, BASE)
     append_pull_log(entries, BASE)
-    for buf in (points, fixtures, entries):
+    for buf in (points, fixtures, entries, inplay if inplay is not None else []):
         buf.clear()
 
 
+def _stored_inplay_done() -> set:
+    paths = sorted((BASE / INPLAY_DIR).glob("*.csv"))
+    return set(pd.concat([pd.read_csv(p, dtype=str, usecols=["fixture_id"]) for p in paths])["fixture_id"]) if paths else set()
+
+
 def from_stored(spec: str) -> dict:
-    """Price points from the January-August backfill files (no API calls)."""
+    """Price points from the January-August backfill files (no API calls), and the in-play
+    winner call for every stored fixture that has none yet (also for fixtures whose prices
+    were converted before in-play calls existed)."""
     if not META.exists():
         raise SystemExit(f"{META.name} is missing")
     meta = json.loads(META.read_text(encoding="utf-8"))
@@ -255,7 +268,8 @@ def from_stored(spec: str) -> dict:
     done = set(log.loc[(log["books"] == STORED_BOOKS) & log["status"].isin({"ok", "not_found"}), "fixture_id"])
     resolver = _resolver()
     n = rows = missing = 0
-    entries, points, fixtures = [], [], []
+    entries, points, fixtures, inplay = [], [], [], []
+    inplay_done = _stored_inplay_done()
     for i in wanted:
         path = BASE / "oddspapi_history" / "chunks" / f"history_chunk_{i:04d}.jsonl.gz"
         if not path.exists():
@@ -264,12 +278,19 @@ def from_stored(spec: str) -> dict:
             for line in fh:
                 rec = json.loads(line)
                 fid = (rec.get("fixture") or {}).get("fixtureId")
-                if not fid or fid in done:
+                if not fid:
                     continue
                 if fid not in registry.index:
                     missing += 1
                     continue
                 fx = registry.loc[fid].to_dict()
+                if fid not in inplay_done:
+                    inplay.append(inplay_record(fid, close_cutoff(fx)[0], rec.get("historical_odds"), "oddspapi_backfill_2026"))
+                    inplay_done.add(fid)
+                if fid in done:
+                    if len(inplay) >= 500:
+                        _flush([], [], [], inplay)
+                    continue
                 stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
                 pts = price_points(rec.get("historical_odds"), fx, meta)
                 points.append(pts)
@@ -282,8 +303,8 @@ def from_stored(spec: str) -> dict:
                 n += 1
                 rows += len(pts)
                 if len(entries) >= 500:
-                    _flush(points, fixtures, entries)
-        _flush(points, fixtures, entries)
+                    _flush(points, fixtures, entries, inplay)
+        _flush(points, fixtures, entries, inplay)
         print(f"{path.name}: fixtures so far {n}, rows {rows}", flush=True)
     return {"stored_chunks": spec, "fixtures": n, "point_rows": rows, "not_in_registry": missing}
 

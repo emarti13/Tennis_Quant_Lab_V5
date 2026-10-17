@@ -50,6 +50,8 @@ def load_pairs(base: Path) -> pd.DataFrame:
     pts = pd.concat([pd.read_csv(p, dtype={"fixture_id": str, "market_id": str}) for p in sorted((base / "market_history" / "price_points").glob("*.csv"))])
     pts = pts[(pts["market_group"] == "moneyline") & pts["fixture_id"].isin(fx["fixture_id"])]
     winners = load_fixture_winners(fx, base)
+    # Matches that ended before two completed sets, and walkovers, are void for measurement.
+    winners = winners[~winners["void_for_measurement"].astype(bool)]
     resolved = fx[fx["resolution"] == "ok"]
     COVERAGE.update(fixtures=int(len(fx)), resolved=int(len(resolved)),
                     resolved_with_winner=int(resolved["fixture_id"].isin(winners["fixture_id"]).sum()),

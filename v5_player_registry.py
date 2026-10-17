@@ -95,17 +95,20 @@ def load_tml_matches(history_dir: str | Path = ".v5_history_cache",
     new_tml_id: no id, so the rows form their own player by name)."""
     cols = ["tourney_id", "tourney_date", "round", "winner_id", "winner_name", "winner_ioc", "winner_age",
             "loser_id", "loser_name", "loser_ioc", "loser_age"]
+    keep = set(cols) | {"score"}       # score: how the match ended (results use it; optional)
     frames = []
     for name, tour in HISTORY_FILES.items():
         p = Path(history_dir) / name
         if p.exists():
-            frames.append(pd.read_csv(p, usecols=cols, low_memory=False).assign(tour=tour))
+            frames.append(pd.read_csv(p, usecols=lambda c: c in keep, low_memory=False).assign(tour=tour))
     rp = Path(results_path)
     if rp.exists():
-        r = pd.read_csv(rp, usecols=cols + ["result_file"], low_memory=False)
+        r = pd.read_csv(rp, usecols=lambda c: c in keep | {"result_file"}, low_memory=False)
         r["tour"] = r["result_file"].astype(str).str.contains("wta", case=False).map({True: "W", False: "M"})
         frames.append(r.drop(columns="result_file"))
     m = pd.concat(frames, ignore_index=True)
+    if "score" not in m:
+        m["score"] = ""
     m["date"] = pd.to_datetime(m["tourney_date"].astype(str).str[:8], format="%Y%m%d", errors="coerce")
     fixes = load_table(corrections_path, ROW_CORRECTION_COLUMNS)
     for side in ("winner", "loser"):
