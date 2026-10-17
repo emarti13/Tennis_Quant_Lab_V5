@@ -85,3 +85,21 @@ def test_tml_rows_without_an_id_join_through_their_name_node():
                           {"tour": "W", "tml_id": "238184", "player_id": "W-2", "status": "auto"}])
     assert tml_results(matches, crosswalk, alias).to_dict("records") == [
         {"edition_key": "WTA|e", "winner_id": "W-1", "loser_id": "W-2"}]
+
+
+def test_kalshi_settles_a_fixture_only_when_its_markets_agree():
+    from v5_market_results import combine_winners, kalshi_winners
+    m = pd.DataFrame([
+        {"ticker": "a1", "fixture_id": "f1", "side": "p1", "result": "no"},
+        {"ticker": "a2", "fixture_id": "f1", "side": "p2", "result": "yes"},
+        {"ticker": "b1", "fixture_id": "f2", "side": "p1", "result": "scalar"},     # retirement or void
+        {"ticker": "b2", "fixture_id": "f2", "side": "p2", "result": "no"},
+        {"ticker": "c1", "fixture_id": "f3", "side": "p1", "result": "yes"},
+        {"ticker": "c2", "fixture_id": "f3", "side": "p2", "result": "yes"},       # contradictory
+        {"ticker": "d1", "fixture_id": "", "side": "", "result": "yes"},           # not tied to a fixture
+    ])
+    k = kalshi_winners(m)
+    assert k.to_dict("records") == [{"fixture_id": "f1", "winner_side": "p2"}]
+    tml = pd.DataFrame([{"fixture_id": "f1", "winner_side": "p2"}, {"fixture_id": "f7", "winner_side": "p1"}])
+    both = combine_winners(tml, pd.concat([k, pd.DataFrame([{"fixture_id": "f8", "winner_side": "p1"}])]))
+    assert dict(zip(both["fixture_id"], both["result_source"])) == {"f1": "tennismylife", "f7": "tennismylife", "f8": "kalshi"}

@@ -1,0 +1,102 @@
+{
+ "fixtures_resolved": 12690,
+ "tennismylife_winners": 8801,
+ "kalshi_winners": 143,
+ "combined": 8845,
+ "overlap": 99,
+ "disagreements": 0,
+ "disagreement_rows": [],
+ "registry_overlap": {
+  "kalshi_fixtures": 1302,
+  "resolved": 1227,
+  "both_sources": 863,
+  "disagreements": 0,
+  "disagreement_rows": []
+ },
+ "kalshi_markets": 2768,
+ "kalshi_markets_unmatched": 164,
+ "kalshi_settlements": {
+  "yes": 1347,
+  "no": 1347,
+  "scalar": 74
+ },
+ "coverage_in_kalshi_months": {
+  "months": [
+   "2026-10"
+  ],
+  "by_family": {
+   "ATP": {
+    "fixtures": 60,
+    "tennismylife": 0.983,
+    "kalshi": 0.133,
+    "combined": 1.0
+   },
+   "CHALLENGER": {
+    "fixtures": 273,
+    "tennismylife": 0.637,
+    "kalshi": 0.3,
+    "combined": 0.681
+   },
+   "WTA": {
+    "fixtures": 86,
+    "tennismylife": 0.605,
+    "kalshi": 0.302,
+    "combined": 0.651
+   },
+   "WTA125": {
+    "fixtures": 74,
+    "tennismylife": 0.0,
+    "kalshi": 0.365,
+    "combined": 0.365
+   }
+  },
+  "by_day": {
+   "-2": {
+    "fixtures": 16,
+    "combined": 0.0
+   },
+   "-1": {
+    "fixtures": 56,
+    "combined": 0.0
+   },
+   "0": {
+    "fixtures": 76,
+    "combined": 0.355
+   },
+   "1": {
+    "fixtures": 100,
+    "combined": 0.78
+   },
+   "2": {
+    "fixtures": 74,
+    "combined": 1.0
+   },
+   "3": {
+    "fixtures": 59,
+    "combined": 1.0
+   },
+   "4": {
+    "fixtures": 66,
+    "combined": 0.818
+   },
+   "5": {
+    "fixtures": 22,
+    "combined": 0.727
+   },
+   "6": {
+    "fixtures": 11,
+    "combined": 0.727
+   },
+   "7": {
+    "fixtures": 13,
+    "combined": 1.0
+   }
+  }
+ },
+ "coverage_all_months_combined": {
+  "ATP": 0.998,
+  "CHALLENGER": 0.7,
+  "WTA": 0.686,
+  "WTA125": 0.023
+ }
+}

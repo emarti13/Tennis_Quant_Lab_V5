@@ -30,7 +30,7 @@ sys.path.insert(0, str(BASE))
 os.chdir(BASE)
 from v5_kalshi_history import (  # noqa: E402
     KALSHI_DIR, SERIES, append_kalshi, append_kalshi_log, kalshi_cutoff, load_kalshi_log, market_points,
-    market_record, match_fixture, should_wait,
+    market_record, match_fixture, rebuild_fixture_map, should_wait,
 )
 from v5_market_history import _ts  # noqa: E402
 
@@ -40,6 +40,12 @@ DAILY_DAYS = 3
 MAX_TRADE_PAGES = 30          # 30,000 pre-start trades per market; more is flagged as truncated
 CANDLE_SPAN = timedelta(days=3)
 PAUSE = 0.12                  # well under the public 20 requests/second
+
+
+def load_stored_markets(base: Path) -> pd.DataFrame:
+    paths = sorted((base / KALSHI_DIR / "markets").glob("*.csv"))
+    return pd.concat([pd.read_csv(p, dtype=str, keep_default_na=False) for p in paths]) if paths else pd.DataFrame(
+        columns=["ticker", "event_ticker", "player_name", "occurrence_utc", "open_utc"])
 
 
 class Kalshi:
@@ -169,8 +175,13 @@ def main() -> int:
                 markets, points, entries = [], [], []
     append_kalshi(markets, points, BASE)
     append_kalshi_log(entries, BASE)
+    # Match every stored market again: fixtures discovered since a market was stored count now.
+    stored = load_stored_markets(BASE)
+    fixture_map = rebuild_fixture_map(stored, registry)
+    fixture_map.to_csv(BASE / KALSHI_DIR / "fixture_map.csv", index=False)
     result = {"run_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"), "listed_not_done": len(queue),
-              "recent": len(head), "done": counts, "api_calls": api.calls, "raw_file": raw_path.name,
+              "recent": len(head), "done": counts,
+              "fixture_map": fixture_map["match_method"].value_counts().to_dict(), "api_calls": api.calls, "raw_file": raw_path.name,
               "minutes": round((time.time() - started) / 60, 1)}
     (BASE / KALSHI_DIR / "run_status.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result, indent=2))

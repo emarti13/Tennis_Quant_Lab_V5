@@ -20,6 +20,7 @@ release (decision D3), not git.
 """
 from __future__ import annotations
 
+import re
 from datetime import timedelta
 from pathlib import Path
 
@@ -32,7 +33,7 @@ from v5_player_registry import player_key
 SERIES = {"KXATPMATCH": "ATP", "KXWTAMATCH": "WTA", "KXATPCHALLENGERMATCH": "CHALLENGER",
           "KXWTACHALLENGERMATCH": "WTA125"}
 KALSHI_DIR = STORE_DIR / "kalshi"
-MATCH_WINDOW_HOURS = 36
+MATCH_WINDOW_HOURS = 72   # rain and schedule moves; the pair must still be unique in the window
 
 MARKET_COLUMNS = [
     "ticker", "event_ticker", "series", "family", "title", "player_name", "rules_primary",
@@ -56,15 +57,19 @@ def _num(v):
         return None
 
 
+_BIRTH_YEAR = re.compile(r"\(b\.\s*(\d{4})\)")
+
+
 def _fixture_name(name: str) -> str:
-    return player_key(name)
+    """Kalshi marks namesakes "(b. 2004)" where OddsPapi writes "(2004)"."""
+    return player_key(_BIRTH_YEAR.sub(r"(\1)", str(name)))
 
 
 def match_fixture(event_markets: list[dict], registry: pd.DataFrame) -> tuple[dict, str]:
     """Tie a Kalshi event (its two player markets) to one OddsPapi fixture.
 
     "names": both players' full names fold to the fixture's two participants. Unique match
-    within +-36 h of Kalshi's scheduled time, or nothing (fail closed): returns
+    within +-72 h of Kalshi's scheduled time, or nothing (fail closed): returns
     ({ticker: (fixture_id, side)}, method)."""
     names = {m["ticker"]: _fixture_name(m.get("yes_sub_title") or "") for m in event_markets}
     when = _ts(event_markets[0].get("occurrence_datetime") or event_markets[0].get("open_time"))
@@ -74,7 +79,7 @@ def match_fixture(event_markets: list[dict], registry: pd.DataFrame) -> tuple[di
     near = registry[(start - when).abs() <= pd.Timedelta(hours=MATCH_WINDOW_HOURS)]
     hits = []
     for r in near.itertuples():
-        sides = {player_key(r.participant1_name): "p1", player_key(r.participant2_name): "p2"}
+        sides = {_fixture_name(r.participant1_name): "p1", _fixture_name(r.participant2_name): "p2"}
         if all(n in sides for n in names.values()):
             hits.append((r.fixture_id, sides))
     if len(hits) != 1:
@@ -89,6 +94,26 @@ def should_wait(market: dict, fixture: dict | None, now, wait_hours: float = 72)
     closed = _ts(market.get("close_time")) or _ts(now)
     young = closed > _ts(now) - pd.Timedelta(hours=wait_hours)
     return young and not (fixture and str(fixture.get("true_start_time_utc") or "").strip())
+
+
+MAP_COLUMNS = ["ticker", "event_ticker", "fixture_id", "side", "match_method"]
+
+
+def rebuild_fixture_map(markets: pd.DataFrame, registry: pd.DataFrame) -> pd.DataFrame:
+    """ticker -> fixture for every stored market, matched again against today's registry.
+
+    A generated table (like the tournament crosswalks): the stored market rows keep the
+    match made at pull time, and fixtures the registry gains later (discovery) are picked up
+    here. Consumers read this map, not the stored fixture_id."""
+    rows = []
+    for event, g in markets.groupby("event_ticker"):
+        items = [{"ticker": r.ticker, "yes_sub_title": r.player_name, "occurrence_datetime": r.occurrence_utc,
+                  "open_time": r.open_utc} for r in g.itertuples()]
+        mapping, method = match_fixture(items, registry)
+        for it in items:
+            fid, side = mapping.get(it["ticker"], ("", ""))
+            rows.append({"ticker": it["ticker"], "event_ticker": event, "fixture_id": fid, "side": side, "match_method": method})
+    return pd.DataFrame(rows, columns=MAP_COLUMNS)
 
 
 def kalshi_cutoff(market: dict, fixture: dict | None) -> tuple[pd.Timestamp, str]:
