@@ -1,0 +1,64 @@
+{
+ "until": "2026-10-01",
+ "by_family": {
+  "CHALLENGER": {
+   "fixtures": 6125,
+   "main_draw_truth": 4290,
+   "main_labelled_main": 4268,
+   "main_draw_kept_share": 0.9949,
+   "qualifying_labelled_main": 188,
+   "qualifying_share_of_labelled_main": 0.0422,
+   "table": {
+    "main": {
+     "main": 4268,
+     "qualifying": 188
+    },
+    "qualifying": {
+     "main": 10,
+     "qualifying": 1555
+    },
+    "unknown": {
+     "main": 12,
+     "qualifying": 92
+    }
+   },
+   "by_source": {
+    "after_start": 3893,
+    "before_start": 983,
+    "played_before": 582,
+    "qualifying_started_earlier": 563,
+    "start_day": 104
+   }
+  },
+  "WTA": {
+   "fixtures": 2398,
+   "main_draw_truth": 1649,
+   "main_labelled_main": 1609,
+   "main_draw_kept_share": 0.9757,
+   "qualifying_labelled_main": 33,
+   "qualifying_share_of_labelled_main": 0.0201,
+   "table": {
+    "main": {
+     "main": 1609,
+     "qualifying": 33
+    },
+    "qualifying": {
+     "main": 34,
+     "qualifying": 633
+    },
+    "unknown": {
+     "main": 6,
+     "qualifying": 83
+    }
+   },
+   "by_source": {
+    "after_start": 1377,
+    "before_start": 598,
+    "played_before": 69,
+    "qualifying_started_earlier": 265,
+    "start_day": 89
+   }
+  }
+ },
+ "kalshi_labelled": {}
+}

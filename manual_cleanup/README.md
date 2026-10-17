@@ -36,6 +36,7 @@ local clone with the command shown.
 | `feat/step3a-price-store` | Merged (PR #55) | 2026-10-16 |
 | `research/step3b-kalshi-shapes` | One-off probe; findings in `docs/experiments/2026-10-16-kalshi-collector-trial.md`. Never merged | 2026-10-16 |
 | `research/step3b-kalshi-trial` | One-off trial; same note. Never merged | 2026-10-16 |
+| `research/step3e-live-trial` | One-off trial for #60. Never merged | 2026-10-17 |
 | `claude/bootstrap-v5-history-setup-3pxlyr` | Agent session branch; all its work reached `main` via #39–#43 | 2026-10-12 |
 
 ```bash

@@ -157,13 +157,13 @@ Design: `docs/superpowers/specs/2026-10-16-market-data-layer-design.md` (approve
   is removed from every path. fatigue_v1 enters only after it passes its own
   out-of-sample gate against this baseline, with the market benchmark reported.
 - **Fixtures resolve through `v5_fixture_resolution`** (edition, court, best-of, player ids).
-- **Challenger and WTA qualifying, and WTA 125 before August 2026, are not priced** (user
-  decision 2026-10-16): no free source has their results (TennisMyLife publishes
-  qualifying for ATP only and no WTA 125; Kalshi lists main draws, from about August), so
-  the model can neither be measured nor settled on them. OddsPapi does not label
-  qualifying, so the pricing function needs a stage rule (before the edition's start date
-  = qualifying; the start day itself is mixed and also left unpriced until draw data says
-  otherwise). ATP qualifying stays in.
+- **Stage is a label, not a filter** (user decision 2026-10-17, replacing "not priced" of
+  2026-10-16): every fixture is priced; fixtures labelled qualifying stay out of official
+  recommendations until the model is measured on qualifying results (Kalshi settles some
+  from August 2026; TennisMyLife has ATP qualifying only). `v5_fixture_stage.py` infers the
+  stage, since OddsPapi has no round: Kalshi's round text, then the edition's calendar by
+  level and who already played. It keeps 99.5% of Challenger and 97.6% of WTA main draws
+  (docs/experiments/2026-10-17-fixture-stage.md).
   The same change removes every old lookup and its callers, tests and workflows:
   `v5_tournament_authority` (+ `v5_tournament_challenger`, the two diagnose scripts and the
   `v5_tournament_authority` / `v5_tournament_challenger` workflows, `tournament_authority.csv`),
