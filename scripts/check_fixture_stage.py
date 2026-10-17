@@ -6,7 +6,8 @@ TennisMyLife publishes main draws only for Challengers and the WTA, so a stored 
 WTA fixture with a TennisMyLife result is main draw and one without (in a month TennisMyLife
 covers) is, almost always, qualifying. Reports, per family, how many main-draw fixtures the
 rule labels main (kept for official recommendations) and how many qualifying ones it lets
-through, plus the same for fixtures Kalshi describes.
+through, plus the same for fixtures Kalshi describes. Run twice: without results, and with
+the lucky-loser test fed by every results source (TennisMyLife, Kalshi, in-play).
 """
 from __future__ import annotations
 
@@ -40,12 +41,23 @@ def main() -> int:
         kalshi["fixture_id"] = kalshi["ticker"].map(m).fillna(kalshi["fixture_id"])
     schedule = pd.concat([pd.read_csv(p, dtype=str, keep_default_na=False)
                           for p in sorted((BASE / "context_registry" / "master_schedule" / "reconciliation").glob("*/master_schedule.csv"))])
-    stages = fixture_stages(fx, kalshi, edition_levels(schedule))
     truth = load_fixture_winners(fx, BASE, sources=("tennismylife",))
+    winners = load_fixture_winners(fx, BASE)
+    report = {"until": UNTIL, "results_known": winners["result_source"].value_counts().to_dict()}
+    for name, w in (("without_results", None), ("with_results", winners)):
+        report[name] = summarize(fx, fixture_stages(fx, kalshi, edition_levels(schedule), w), truth)
+    out = BASE / args.out
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")
+    print(json.dumps(report, indent=1))
+    return 0
+
+
+def summarize(fx: pd.DataFrame, stages: pd.DataFrame, truth: pd.DataFrame) -> dict:
     d = fx.merge(stages, on="fixture_id")
     d["family"] = d["edition_key"].str.split("|").str[0]
     d["truth"] = d["fixture_id"].isin(truth["fixture_id"]).map({True: "main", False: "qualifying"})
-    report = {"until": UNTIL, "by_family": {}}
+    report = {"by_family": {}}
     for fam, g in d[d["family"].isin(["CHALLENGER", "WTA"])].groupby("family"):
         t = pd.crosstab(g["stage"], g["truth"])
         main_total = int((g["truth"] == "main").sum())
@@ -62,11 +74,7 @@ def main() -> int:
     k = d[d["stage_source"] == "kalshi"]
     report["kalshi_labelled"] = {f: {s: {k2: int(v) for k2, v in row.items()} for s, row in pd.crosstab(g["stage"], g["truth"]).to_dict("index").items()}
                                  for f, g in k.groupby("family")}
-    out = BASE / args.out
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")
-    print(json.dumps(report, indent=1))
-    return 0
+    return report
 
 
 if __name__ == "__main__":

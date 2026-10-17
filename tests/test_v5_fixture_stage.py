@@ -52,3 +52,28 @@ def test_kalshi_round_text_decides_when_kalshi_lists_the_match():
     assert kalshi_round("no round here") is None
     k = pd.DataFrame([{"fixture_id": "x", "rules_primary": "the 2026 ATP Challenger X Round Of 32"}])
     assert stages([fx("x", E, "2026-03-01T10:00:00Z", "1", "2")], k) == {"x": "main"}
+
+
+def test_a_player_who_lost_and_plays_again_is_a_lucky_loser_in_the_main_draw():
+    rows = [fx("qa", W, "2026-03-01T10:00:00Z", "1", "2"),     # 2 loses in qualifying
+            fx("qb", W, "2026-03-01T11:00:00Z", "3", "4"),     # 3 wins
+            fx("ll", W, "2026-03-02T10:00:00Z", "2", "3")]     # lucky loser vs qualifier: both played
+    win = pd.DataFrame([{"fixture_id": "qa", "winner_side": "p1"}, {"fixture_id": "qb", "winner_side": "p1"}])
+    assert stages(rows)["ll"] == "qualifying"                  # without results
+    got = fixture_stages(pd.DataFrame(rows), None, LEVELS, win).set_index("fixture_id")
+    assert got.loc["ll", "stage"] == "main" and got.loc["ll", "stage_source"] == "lucky_loser"
+
+
+def test_a_duplicate_listing_of_the_same_pair_is_not_a_lucky_loser():
+    rows = [fx("qa", W, "2026-03-01T10:00:00Z", "1", "2"), fx("qb", W, "2026-03-01T11:00:00Z", "5", "6"),
+            fx("dup", W, "2026-03-02T10:00:00Z", "2", "1")]
+    win = pd.DataFrame([{"fixture_id": "qa", "winner_side": "p1"}])
+    got = fixture_stages(pd.DataFrame(rows), None, LEVELS, win).set_index("fixture_id")["stage"]
+    assert got["dup"] == "qualifying"
+
+
+def test_a_result_not_yet_known_does_not_count():
+    rows = [fx("qa", W, "2026-03-01T10:00:00Z", "1", "2"), fx("qb", W, "2026-03-01T11:00:00Z", "3", "4"),
+            fx("ll", W, "2026-03-02T10:00:00Z", "2", "3")]
+    win = pd.DataFrame(columns=["fixture_id", "winner_side"])
+    assert fixture_stages(pd.DataFrame(rows), None, LEVELS, win).set_index("fixture_id").loc["ll", "stage"] == "qualifying"
