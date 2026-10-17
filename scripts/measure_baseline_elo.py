@@ -5,8 +5,9 @@ Usage:  python scripts/measure_baseline_elo.py [--out docs/experiments/data/base
 Chronological, nothing from the sealed period (from 2026-10-13; CLAUDE.md):
 - settings chosen on 2025 matches (log loss), from a small grid: K scale, surface blend,
   newcomer rating;
-- tested on 2026 matches from events that started before 2026-10-06 (so none of their
-  rounds reach the sealed period);
+- tested on 2026 matches from events that started before 2026-10-06 and dated before
+  2026-10-13 (current-season dates are per match, so a long event can reach the sealed
+  period);
 - on the 2026 matches the price store also has (both players resolved, Pinnacle close not
   stale): log loss of this Elo, of the current engine's accepted baseline (serve/return +
   Elo, calibrated on 2025; from v5_*_walkforward.csv, whose Elo uses the old ordering) and of
@@ -123,7 +124,8 @@ def main() -> int:
     pred = pred.join(names, on="key")
     first = m.groupby(["tour", "tid"])["date"].min()
     pred["event_start"] = [first[(t, i)] for t, i in zip(pred["tour"], pred["tid"])]
-    test = pred[(pred["date"].dt.year == 2026) & (pred["event_start"] < TEST_EVENTS_BEFORE)].copy()
+    test = pred[(pred["date"].dt.year == 2026) & (pred["event_start"] < TEST_EVENTS_BEFORE)
+                & (pred["date"] < SEALED_FROM.tz_localize(None))].copy()
     test["p_current"] = test["key"].map(current_engine(test, BASE))
     report = {"params": params.__dict__, "grid": tried, "test_2026_all": summary(test, ["p_winner"])}
     both = test.dropna(subset=["p_current"])
