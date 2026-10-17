@@ -66,7 +66,7 @@ def test_winners_join_by_edition_and_both_player_ids_and_skip_ambiguous_pairs():
         {"edition_key": "E1", "winner_id": "M-3", "loser_id": "M-4"},
         {"edition_key": "E1", "winner_id": "M-4", "loser_id": "M-3"},
     ])
-    assert fixture_winners(fixtures, results).to_dict("records") == [{"fixture_id": "f1", "winner_side": "p2"}]
+    assert fixture_winners(fixtures, results).to_dict("records") == [{"fixture_id": "f1", "winner_side": "p2", "outcome": "unknown"}]
 
 
 def test_measured_books_use_their_own_lam_and_others_use_additive():
@@ -84,7 +84,7 @@ def test_tml_rows_without_an_id_join_through_their_name_node():
     alias = pd.DataFrame([{"tour": "W", "tml_id": "name:maria tatjana", "player_id": "W-1", "status": "auto"},
                           {"tour": "W", "tml_id": "238184", "player_id": "W-2", "status": "auto"}])
     assert tml_results(matches, crosswalk, alias).to_dict("records") == [
-        {"edition_key": "WTA|e", "winner_id": "W-1", "loser_id": "W-2"}]
+        {"edition_key": "WTA|e", "winner_id": "W-1", "loser_id": "W-2", "outcome": "unknown"}]
 
 
 def test_kalshi_settles_a_fixture_only_when_its_markets_agree():
@@ -103,3 +103,39 @@ def test_kalshi_settles_a_fixture_only_when_its_markets_agree():
     tml = pd.DataFrame([{"fixture_id": "f1", "winner_side": "p2"}, {"fixture_id": "f7", "winner_side": "p1"}])
     both = combine_winners(tml, pd.concat([k, pd.DataFrame([{"fixture_id": "f8", "winner_side": "p1"}])]))
     assert dict(zip(both["fixture_id"], both["result_source"])) == {"f1": "tennismylife", "f7": "tennismylife", "f8": "kalshi"}
+
+
+def test_how_a_match_ended_and_which_results_are_void():
+    from v5_market_results import combine_winners, match_outcome
+    assert match_outcome("6-3 6-4") == "completed"
+    assert match_outcome("6-3 4-1 RET") == "retired_lt2_sets"
+    assert match_outcome("7-6(4) 6-7(5) 3-1 RET") == "retired_2plus_sets"
+    assert match_outcome("W/O") == "walkover" and match_outcome("") == "unknown"
+    tml = pd.DataFrame([{"fixture_id": "a", "winner_side": "p1", "outcome": "retired_lt2_sets"},
+                        {"fixture_id": "b", "winner_side": "p2", "outcome": "completed"}])
+    kal = pd.DataFrame([{"fixture_id": "b", "winner_side": "p1"}, {"fixture_id": "c", "winner_side": "p1"}])
+    inp = pd.DataFrame([{"fixture_id": "c", "winner_side": "p2"}, {"fixture_id": "d", "winner_side": "p2"}])
+    got = combine_winners(tml, kal, inp).set_index("fixture_id")
+    assert got.loc["a", "void_for_measurement"] and not got.loc["b", "void_for_measurement"]
+    assert dict(got["result_source"]) == {"a": "tennismylife", "b": "tennismylife", "c": "kalshi", "d": "inplay"}
+    assert got.loc["d", "outcome"] == "unknown"
+
+
+def test_inplay_call_needs_every_quoting_book_to_agree_and_none_unclear():
+    from v5_market_results import inplay_call
+
+    def q(t, p, active=True):
+        return {"createdAt": t, "price": p, "limit": None, "active": active, "exchangeMeta": None}
+
+    def book(p1, p2):
+        return {"markets": {"121": {"outcomes": {"121": {"players": {"0": p1}}, "122": {"players": {"0": p2}}}}}}
+
+    cutoff = pd.Timestamp("2026-05-01T10:00:00Z")
+    finished = book([q("2026-05-01T09:00:00Z", 1.8), q("2026-05-01T11:30:00Z", 1.01)],
+                    [q("2026-05-01T09:00:00Z", 2.0), q("2026-05-01T11:30:00Z", 26.0)])
+    level = book([q("2026-05-01T11:00:00Z", 1.9)], [q("2026-05-01T11:00:00Z", 1.9)])         # suspended mid-match
+    pre_only = book([q("2026-05-01T09:00:00Z", 1.01)], [q("2026-05-01T09:00:00Z", 26.0)])    # before the start: ignored
+    assert inplay_call({"bookmakers": {"pinnacle": finished}}, cutoff)[0] == "p1"
+    assert inplay_call({"bookmakers": {"pinnacle": finished, "betrivers": finished}}, cutoff)[0] == "p1"
+    assert inplay_call({"bookmakers": {"pinnacle": finished, "betrivers": level}}, cutoff)[0] == "none"
+    assert inplay_call({"bookmakers": {"pinnacle": pre_only}}, cutoff)[0] == "none"
