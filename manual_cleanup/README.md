@@ -47,6 +47,7 @@ local clone with the command shown.
 | `feat/step4b-results-inplay` | Merged (PR #62) | 2026-10-17 |
 | `feat/step4c-lucky-loser` | Merged (PR #63) | 2026-10-17 |
 | `fix/market-history-expiry-by-date` | Merged (PR #64) | 2026-10-17 |
+| `repair/fatigue-v1-safety-layer` | Merged (PR #36) | 2026-10-17 |
 | `docs/repo-map-step4` | This change, once merged | 2026-10-17 |
 | `claude/bootstrap-v5-history-setup-3pxlyr` | Agent session branch; all its work reached `main` via #39–#43 | 2026-10-12 |
 
@@ -63,7 +64,7 @@ git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-in
   feat/step3b-kalshi feat/step3c-devig feat/step3-bet365-history feat/step3d-results-kalshi \
   feat/step3e-live-prices research/step3e-live-trial research/inplay-winners \
   feat/step4a-fixture-stage feat/step4b-results-inplay feat/step4c-lucky-loser \
-  fix/market-history-expiry-by-date docs/repo-map-step4 \
+  fix/market-history-expiry-by-date docs/repo-map-step4 repair/fatigue-v1-safety-layer \
   claude/bootstrap-v5-history-setup-3pxlyr
 ```
 
