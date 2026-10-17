@@ -40,6 +40,8 @@ local clone with the command shown.
 | `feat/step3c-devig` | Merged (PR #57) | 2026-10-17 |
 | `feat/step3-bet365-history` | Merged (PR #58) | 2026-10-17 |
 | `feat/step3d-results-kalshi` | Merged (PR #59) | 2026-10-17 |
+| `feat/step3e-live-prices` | Merged (PR #60) | 2026-10-17 |
+| `research/step3e-live-trial` | One-off trial for #60. Never merged | 2026-10-17 |
 | `claude/bootstrap-v5-history-setup-3pxlyr` | Agent session branch; all its work reached `main` via #39–#43 | 2026-10-12 |
 
 ```bash
@@ -53,6 +55,7 @@ git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-in
   research/step3-probe feat/pause-old-forecast research/step3a-trial \
   feat/step3a-price-store research/step3b-kalshi-shapes research/step3b-kalshi-trial \
   feat/step3b-kalshi feat/step3c-devig feat/step3-bet365-history feat/step3d-results-kalshi \
+  feat/step3e-live-prices research/step3e-live-trial \
   claude/bootstrap-v5-history-setup-3pxlyr
 ```
 
