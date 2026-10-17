@@ -142,9 +142,11 @@ def fixture_record(fixture: dict, *, identity: dict | None = None, source: str =
     }
 
 
-def price_points(payload: dict, fixture: dict, market_meta: list[dict]) -> pd.DataFrame:
-    """One row per (book, market, outcome, player) in the stored market groups."""
-    cutoff, _ = close_cutoff(fixture)
+def price_points(payload: dict, fixture: dict, market_meta: list[dict], *, cutoff: pd.Timestamp | None = None) -> pd.DataFrame:
+    """One row per (book, market, outcome, player) in the stored market groups. `cutoff`
+    defaults to the fixture's start; the live pull passes the fetch time instead, so a live
+    price is the same "close" computed at that moment (v5_live_prices)."""
+    cutoff = cutoff if cutoff is not None else close_cutoff(fixture)[0]
     meta_by_id = {str(m.get("marketId")): m for m in market_meta}
     quotes: dict[tuple, list[dict]] = {}
     for r in flatten_history(payload or {}):

@@ -16,14 +16,15 @@ WEEKS_PER_BUDGET_MONTH = DAYS_PER_BUDGET_MONTH / 7.0
 # probes a day, ~780 min/month) is paused until rebuild Step 4 (user decision 2026-10-16).
 # The weekly bulk-backfill reserve is replaced by "market_history" (Step 3 spec §2.6).
 RECURRING_JOBS = {
-    "live_market_repricing": {"runs_per_day": 1, "minutes_per_run": 3},
+    # + up to 5 min of free /historical-odds calls for the day's upcoming fixtures (live prices).
+    "live_market_repricing": {"runs_per_day": 1, "minutes_per_run": 8},
     "player_ratings": {"runs_per_day": 1, "minutes_per_run": 14},  # includes ~1.5 min identity refresh
     "player_refresh_recovery_probes": {"runs_per_day": 2, "minutes_per_run": 3},
     "daily_settlement": {"runs_per_day": 1, "minutes_per_run": 3},
-    # Step 3 price store: ~2 min setup + up to 30 min of /historical-odds calls (daily first,
+    # Step 3 price store: ~2 min setup + up to 27 min of /historical-odds calls (daily first,
     # then the gap and Bet365 backfills, about 18,700 fixtures, about 7 weeks) + up to 6 min
     # of Kalshi. Falls to ~12 min a day once the backfills are done.
-    "market_history": {"runs_per_day": 1, "minutes_per_run": 39},
+    "market_history": {"runs_per_day": 1, "minutes_per_run": 36},
 }
 
 # Every workflow with a cron schedule, and how many cron lines it has. A new

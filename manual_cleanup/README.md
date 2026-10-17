@@ -29,13 +29,17 @@ local clone with the command shown.
 | `feat/step2d-production-identity` | Merged (PR #50); its last commit moved to `feat/tournament-review-decisions` | 2026-10-15 |
 | `feat/tournament-review-decisions` | Merged (PR #51) | 2026-10-16 |
 | `feat/identity-decision-files` | Merged (PR #52) | 2026-10-16 |
-| `docs/step3-market-data-spec` | Delete once its PR is merged | 2026-10-16 |
+| `docs/step3-market-data-spec` | Merged (PR #53) | 2026-10-16 |
 | `research/step3-probe` | One-off probe; findings in `docs/experiments/2026-10-16-step3-market-source-probe.md`. Never merged | 2026-10-16 |
 | `feat/pause-old-forecast` | Merged (PR #54) | 2026-10-16 |
 | `research/step3a-trial` | One-off trial; findings in `docs/experiments/2026-10-16-price-store-trial.md`. Never merged | 2026-10-16 |
 | `feat/step3a-price-store` | Merged (PR #55) | 2026-10-16 |
 | `research/step3b-kalshi-shapes` | One-off probe; findings in `docs/experiments/2026-10-16-kalshi-collector-trial.md`. Never merged | 2026-10-16 |
 | `research/step3b-kalshi-trial` | One-off trial; same note. Never merged | 2026-10-16 |
+| `feat/step3b-kalshi` | Merged (PR #56) | 2026-10-17 |
+| `feat/step3c-devig` | Merged (PR #57) | 2026-10-17 |
+| `feat/step3-bet365-history` | Merged (PR #58) | 2026-10-17 |
+| `feat/step3d-results-kalshi` | Merged (PR #59) | 2026-10-17 |
 | `claude/bootstrap-v5-history-setup-3pxlyr` | Agent session branch; all its work reached `main` via #39–#43 | 2026-10-12 |
 
 ```bash
@@ -48,6 +52,7 @@ git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-in
   feat/tournament-review-decisions feat/identity-decision-files docs/step3-market-data-spec \
   research/step3-probe feat/pause-old-forecast research/step3a-trial \
   feat/step3a-price-store research/step3b-kalshi-shapes research/step3b-kalshi-trial \
+  feat/step3b-kalshi feat/step3c-devig feat/step3-bet365-history feat/step3d-results-kalshi \
   claude/bootstrap-v5-history-setup-3pxlyr
 ```
 

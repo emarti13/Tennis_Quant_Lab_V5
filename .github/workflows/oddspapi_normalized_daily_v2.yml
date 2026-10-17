@@ -151,6 +151,23 @@ jobs:
             git push origin HEAD:main
           fi
 
+      - name: Live pre-match prices (free /historical-odds, no quota; Step 3 spec 5.3)
+        if: ${{ !cancelled() }}
+        env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: python scripts/pull_live_prices.py --max-minutes 5
+
+      - name: Commit live pre-match prices
+        if: ${{ !cancelled() }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A market_history/live
+          if git diff --cached --quiet; then echo "No live prices to commit."; exit 0; fi
+          git commit -m "Live pre-match prices"
+          git pull --rebase --autostash origin main
+          git push origin HEAD:main
+
       - name: Upload compact live-feed audit
         if: always()
         uses: actions/upload-artifact@v4

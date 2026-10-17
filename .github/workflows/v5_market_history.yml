@@ -10,7 +10,7 @@ on:
     inputs:
       max_minutes:
         description: "Minutes of /historical-odds calls (one per 5 s)"
-        default: "30"
+        default: "27"
       discover_from:
         description: "Optional YYYY-MM-DD: widen fixture discovery once (about 1 quota request per 9 days)"
         default: ""
@@ -69,9 +69,9 @@ jobs:
           if [ -n "${{ inputs.stored_chunks }}" ]; then
             python scripts/pull_market_history.py --stored-chunks "${{ inputs.stored_chunks }}"
           elif [ -n "${{ inputs.discover_from }}" ]; then
-            python scripts/pull_market_history.py --max-minutes "${{ inputs.max_minutes || '30' }}" --discover-from "${{ inputs.discover_from }}"
+            python scripts/pull_market_history.py --max-minutes "${{ inputs.max_minutes || '27' }}" --discover-from "${{ inputs.discover_from }}"
           else
-            python scripts/pull_market_history.py --max-minutes "${{ inputs.max_minutes || '30' }}"
+            python scripts/pull_market_history.py --max-minutes "${{ inputs.max_minutes || '27' }}"
           fi
 
       - name: Collect settled Kalshi markets (public API, no key)
