@@ -22,6 +22,11 @@ Rule, per fixture, using only what is known before the match:
    meeting a direct entrant in the first round), at Challengers and WTA 125 either of them
    (OddsPapi often misses a qualifier's first qualifying match); else main draw if the
    edition already had matches on an earlier day; else unknown.
+   Before that: main draw if either player lost their previous match in this edition (a
+   qualifying loser is out of qualifying, so playing again means a lucky loser in the main
+   draw, often against a qualifier, which the "already played" test alone calls
+   qualifying). Only results passed in (`winners`) count: callers pass those known when
+   the price is made.
 Measured on January-August 2026 Challenger and WTA fixtures, with TennisMyLife (main draws
 only) as the answer: docs/experiments/2026-10-17-fixture-stage.md.
 """
@@ -58,11 +63,14 @@ def edition_levels(schedule: pd.DataFrame) -> dict[str, str]:
 
 
 def fixture_stages(fixtures: pd.DataFrame, kalshi: pd.DataFrame | None = None,
-                   levels: dict[str, str] | None = None) -> pd.DataFrame:
+                   levels: dict[str, str] | None = None, winners: pd.DataFrame | None = None) -> pd.DataFrame:
     """fixtures: fixture_id, edition_key, start_time_utc, participant1_id, participant2_id.
     kalshi: optional fixture_id, rules_primary (one or more markets per fixture).
-    levels: edition_key -> circuit level (edition_levels); unknown levels use the default."""
+    levels: edition_key -> circuit level (edition_levels); unknown levels use the default.
+    winners: optional fixture_id, winner_side ("p1"/"p2") of earlier matches, as known when
+    the price is made (v5_market_results.load_fixture_winners)."""
     levels = levels or {}
+    won = {} if winners is None else dict(zip(winners["fixture_id"].astype(str), winners["winner_side"]))
     f = fixtures[fixtures["edition_key"].astype(str) != ""].copy()
     if f.empty:
         return pd.DataFrame(columns=STAGE_COLUMNS)
@@ -77,12 +85,20 @@ def fixture_stages(fixtures: pd.DataFrame, kalshi: pd.DataFrame | None = None,
             if len(calls) == 1:
                 by_kalshi[fid] = calls.pop()
     seen: dict[str, set] = {}
+    last: dict[str, dict] = {}       # edition -> player -> (opponent, lost) of their previous match
     first_day: dict[str, int] = {}
     rows = []
     for r in f.itertuples():
         players = seen.setdefault(r.edition_key, set())
-        p1_played, p2_played = str(r.participant1_id) in players, str(r.participant2_id) in players
-        players.update([str(r.participant1_id), str(r.participant2_id)])
+        a, b = str(r.participant1_id), str(r.participant2_id)
+        p1_played, p2_played = a in players, b in players
+        players.update([a, b])
+        prev = last.setdefault(r.edition_key, {})
+        # A repeat of the same pair is a duplicate listing, not a second meeting.
+        lucky_loser = any(prev.get(p, ("", False))[1] and prev[p][0] != o for p, o in ((a, b), (b, a)))
+        side = won.get(str(r.fixture_id))
+        if side in ("p1", "p2"):
+            prev[a], prev[b] = (b, side == "p2"), (a, side == "p1")
         if pd.isna(r.day):
             stage, source = "unknown", "no_start_time"
         else:
@@ -102,6 +118,8 @@ def fixture_stages(fixtures: pd.DataFrame, kalshi: pd.DataFrame | None = None,
                 stage, source = "qualifying", "before_start"
             elif r.day > mixed[1]:
                 stage, source = "main", "after_start"
+            elif lucky_loser:
+                stage, source = "main", "lucky_loser"
             elif quali_pair:
                 stage, source = "qualifying", "played_before"
             elif first_day[r.edition_key] < r.day:
