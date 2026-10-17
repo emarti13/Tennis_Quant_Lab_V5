@@ -1,0 +1,33 @@
+name: Research - live prices trial
+
+# One-off trial on real data (free endpoint, no quota). Runs only on pushes to its research branch.
+on:
+  push:
+    branches: [research/step3e-live-trial]
+    paths: [.github/workflows/research_live_trial.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  trial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --disable-pip-version-check requests pandas
+      - uses: actions/cache/restore@v4
+        with:
+          path: oddspapi_markets_tennis.json
+          key: oddspapi-tennis-markets-v1
+      - env:
+          ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
+        run: python scripts/pull_live_prices.py --max-minutes 2
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A market_history/live
+          git commit -m "Live trial outputs" && git push origin HEAD:research/step3e-live-trial
