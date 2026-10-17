@@ -13,9 +13,9 @@ Each run (spec docs/superpowers/specs/2026-10-16-market-data-layer-design.md §2
    without a reported true start waits up to 3 days for it).
 3. Backfill, with the time left, in one queue oldest first (OddsPapi drops history after
    4-9 months): older fixtures with no stored history (Pinnacle, Bet365, BetRivers), and
-   Bet365 alone for the fixtures the January-August backfill holds without it. Months whose
-   history has expired are found with 3 sample calls each and logged as not found, so the
-   queue starts at the oldest month that still has data.
+   Bet365 alone for the fixtures the January-August backfill holds without it. OddsPapi
+   deletes history by date, so the first fixture that still has it is found with a few
+   probe calls (skip_expired) and everything older is logged as not found.
 /historical-odds is free but allows one call per 5 s and at most 3 books per call.
 
 `--stored-chunks` derives price points from the January-August backfill already in git
@@ -66,7 +66,7 @@ DISCOVERY_DAYS = 9   # one /fixtures call covers the whole daily window
 BACKFILL_SINCE = "2026-01-01"
 COOLDOWN = 5.1
 FLUSH_EVERY = 25
-PROBES_PER_MONTH = 3
+PROBE_WINDOW = 3     # consecutive fixtures tried at each probe point
 
 
 class Api:
@@ -115,38 +115,49 @@ def discover(api: Api, start: datetime, end: datetime, quota: dict | None) -> di
     return {"windows": len(windows), "relevant_seen": len(seen), **result}
 
 
-def skip_expired_months(api: Api, queue: list, probes: int = PROBES_PER_MONTH) -> tuple[list, list[dict]]:
-    """Drop the oldest months whose history OddsPapi has already deleted, without a call per
-    fixture: per (books, month), oldest first, try `probes` fixtures spread over the month; if
-    every one is "not found", log the whole month as expired and go on to the next month.
-    The first month with any data ends the search for that book set (newer months are kept)."""
+def skip_expired(api: Api, queue: list, window: int = PROBE_WINDOW) -> tuple[list, list[dict]]:
+    """Drop the oldest fixtures whose history OddsPapi has already deleted, without a call per
+    fixture. OddsPapi deletes by date (4-9 months back), so per book set, oldest first: probe
+    the oldest fixture; if its history is gone, jump 1, 2, 4, ... fixtures on until a probe
+    finds history, then halve the gap back to the first such point. A probe point has history
+    if any of `window` consecutive fixtures from it does (one fixture can be missing for other
+    reasons); an error other than "not found" counts as history (never drop on an error).
+    Everything before that point is logged as expired; nothing after it is probed."""
     keep, expired = [], []
-    groups: dict[tuple, list] = {}
-    for item in queue:
-        groups.setdefault((item[2], str(item[1]["start_time_utc"])[:7]), []).append(item)
-    alive: set[str] = set()
-    for (books, month), items in sorted(groups.items(), key=lambda kv: kv[0][1]):
-        if books in alive or len(items) < probes:
+    groups: dict[str, list] = {}
+    for item in sorted(queue, key=lambda item: str(item[1]["start_time_utc"])):
+        groups.setdefault(item[2], []).append(item)
+    stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    for books, items in groups.items():
+        found: dict[int, bool] = {}
+
+        def has_history(j: int) -> bool:
+            if j not in found:
+                status, _ = api.get("historical-odds", fixtureId=items[j][1]["fixture_id"], bookmakers=books)
+                time.sleep(COOLDOWN)
+                found[j] = status != 404
+            return found[j]
+
+        def alive(i: int) -> bool:
+            return i >= len(items) or any(has_history(j) for j in range(i, min(i + window, len(items))))
+
+        if alive(0):
             keep += items
             continue
-        sample = [items[int(i * (len(items) - 1) / max(probes - 1, 1))] for i in range(probes)]
-        found = False
-        for _, fx, _ in sample:
-            status, _ = api.get("historical-odds", fixtureId=fx["fixture_id"], bookmakers=books)
-            time.sleep(COOLDOWN)
-            if status != 404:
-                found = True
-                break
-        if found:
-            alive.add(books)
-            keep += items
-            continue
-        stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        lo, step = 0, 1                      # lo: a probe point known to have no history
+        while not alive(lo + step):
+            lo, step = lo + step, step * 2
+        hi = min(lo + step, len(items))
+        while hi - lo > 1:
+            mid = (lo + hi) // 2
+            lo, hi = (lo, mid) if alive(mid) else (mid, hi)
+        first = str(items[hi][1]["start_time_utc"])[:10] if hi < len(items) else "none"
+        keep += items[hi:]
         expired += [{"fixture_id": fx["fixture_id"], "start_time_utc": fx["start_time_utc"], "books": books,
                      "mode": mode, "status": "not_found", "http_status": 404, "quotes": 0, "point_rows": 0,
-                     "pulled_utc": stamp, "detail": f"month expired: {probes} of {probes} sampled fixtures not found"}
-                    for mode, fx, _ in items]
-    keep.sort(key=lambda item: item[1]["start_time_utc"])
+                     "pulled_utc": stamp, "detail": f"history expired: before the first fixture with history ({first})"}
+                    for mode, fx, _ in items[:hi]]
+    keep.sort(key=lambda item: str(item[1]["start_time_utc"]))
     return keep, expired
 
 
@@ -195,7 +206,7 @@ def pull(args) -> dict:
     older = sorted([("backfill", r, books) for r in backfill.to_dict("records")]
                    + [("bet365_backfill", r, EXTRA_BOOK) for r in extra.to_dict("records")],
                    key=lambda item: item[1]["start_time_utc"])
-    older, expired = skip_expired_months(api, older)
+    older, expired = skip_expired(api, older)
     append_pull_log(expired, BASE)
     queue = [("daily", r, books) for r in daily.to_dict("records")] + older
 
@@ -232,7 +243,7 @@ def pull(args) -> dict:
     _flush(points, fixtures, entries, inplay)
     return {"quota_before": quota_before, "quota_after": _quota(api), "discovery": discovery,
             "queued": {"daily": len(daily), "backfill": len(backfill), "bet365_backfill": len(extra),
-                       "expired_by_month_probe": len(expired)},
+                       "expired_by_probe": len(expired)},
             "done": {f"{m}:{s}": n for (m, s), n in sorted(counts.items())},
             "raw_file": raw_path.name, "minutes": round((time.time() - started) / 60, 1)}
 
