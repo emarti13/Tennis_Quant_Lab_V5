@@ -113,6 +113,7 @@ def main() -> int:
                    "without_result_called": int(d[d["winner_side"].isna()]["strict"].isin(["p1", "p2"]).sum())},
         "disagreement_rows": called[called["call"] != called["winner_side"]][["fixture_id", "edition_key", "call", "winner_side", "books"]].head(50).to_dict("records"),
     }
+    d.drop(columns=["books"]).to_csv(BASE / "docs" / "experiments" / "data" / "inplay_winner_calls.csv", index=False)
     out = BASE / args.out
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")
