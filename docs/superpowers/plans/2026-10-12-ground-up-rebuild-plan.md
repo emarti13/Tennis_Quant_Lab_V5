@@ -116,6 +116,18 @@ A step is done only when all of these hold:
 Design: `docs/superpowers/specs/2026-10-16-market-data-layer-design.md` (approved
 2026-10-16). It chooses option (a) below, a daily OddsPapi historical pull, plus Kalshi daily.
 
+**Status 2026-10-17: built.**
+- price store with the daily pull and backfills (#55, #58);
+- Kalshi (#56);
+- de-vig with the cautious edge rule, lam measured per book (#57);
+- winners from TennisMyLife and Kalshi, cross-checked (#59);
+- live pre-match prices and the freshness rule (this step's last PR).
+
+The backfills run for several weeks. Open for Step 4:
+- the board's refresh cadence (the freshness rule's maximum age is 60 min, but the live run
+  is once a day);
+- the stage rule for unpriced qualifying.
+
 - OddsPapi feed with a **start-time-aware freshness rule**: a price is actionable only if
   the snapshot is recent **and** the match has not started. Started fixtures leave the
   live board.

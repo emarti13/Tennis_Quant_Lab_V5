@@ -290,7 +290,7 @@ def from_stored(spec: str) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--max-minutes", type=float, default=30)
+    ap.add_argument("--max-minutes", type=float, default=27)
     ap.add_argument("--books", nargs="+", default=list(DEFAULT_BOOKS))
     ap.add_argument("--backfill-since", default=BACKFILL_SINCE)
     ap.add_argument("--discover-from", default=None)
