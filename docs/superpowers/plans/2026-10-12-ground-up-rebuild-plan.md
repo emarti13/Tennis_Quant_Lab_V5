@@ -164,7 +164,11 @@ The backfills run for several weeks. Open for Step 4:
 
 ### Step 4. Model: leak-free baseline and one pricing function
 
-- Review and merge PR #36 (fatigue_v1, parity/leak tests, `v5_model_guard.py`).
+- Review and merge PR #36 (fatigue_v1, parity/leak tests, `v5_model_guard.py`). Merged 2026-10-17.
+- **Baseline built (2026-10-17):** `v5_baseline_elo.py`, leak-free surface Elo keyed by
+  `player_id`. 2026 out of sample: log loss 0.626, against 0.629 for the current engine's
+  baseline and 0.596 for the Pinnacle close (docs/experiments/2026-10-17-baseline-elo.md).
+  Not yet read by production; the pricing function (next) uses it.
 - Production probability = leak-free baseline (Elo + surface). `v5_workload_features`
   is removed from every path. fatigue_v1 enters only after it passes its own
   out-of-sample gate against this baseline, with the market benchmark reported.
