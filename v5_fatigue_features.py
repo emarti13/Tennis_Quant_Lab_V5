@@ -206,6 +206,7 @@ def canonicalize(raw: pd.DataFrame, report: dict | None = None) -> pd.DataFrame:
         "tid": raw["tourney_id"].astype(str),
         "tourney_name": raw.get("tourney_name"),
         "level": raw.get("tourney_level").astype(str) if "tourney_level" in raw else "",
+        "surface": raw["surface"].astype("string") if "surface" in raw else pd.NA,
         "round": raw["round"].astype(str),
         "date": pd.to_datetime(raw["tourney_date"].astype(str).str[:8], format="%Y%m%d", errors="coerce"),
         "winner_id": raw["winner_id"].astype(str), "loser_id": raw["loser_id"].astype(str),
