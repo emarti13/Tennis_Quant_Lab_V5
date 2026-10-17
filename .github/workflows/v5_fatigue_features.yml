@@ -1,0 +1,40 @@
+name: V5 Fatigue Features (research validation)
+
+# Research tooling, not a production job (PROJECT_MANDATE: Research + Model Profitability).
+# The unit tests in tests/test_v5_fatigue_features.py already run inside "V5 Full Regression Suite" on every
+# PR (real-data tests skip there). This workflow is manual-only to protect the Actions budget: it downloads
+# the 2010+ history, then runs the real-data leak/parity tests and the clock-order diagnostic.
+on:
+  workflow_dispatch:
+    inputs:
+      parity_n:
+        description: "Real fixtures to replay through the live path (parity test)"
+        default: "400"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: v5-fatigue-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest
+      - name: Build historical cache (TennisMyLife 2010..last year)
+        run: python bootstrap_v5_history.py
+      - name: Real-data leak, parity and invariance tests
+        env:
+          V5_FATIGUE_PARITY_N: ${{ inputs.parity_n }}
+        run: python -m pytest tests/test_v5_fatigue_features.py tests/test_v5_model_guard.py -v -s
+      - name: Ordering vs real OddsPapi clock times (must report 0 leak-risk pairs)
+        run: python diagnose_fatigue_ordering_vs_clock.py
