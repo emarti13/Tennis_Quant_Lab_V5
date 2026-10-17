@@ -58,6 +58,14 @@ def call_winner(payload: dict, cutoff: pd.Timestamp) -> tuple[str, dict]:
     return ("conflict" if len(decided) > 1 else "unclear"), calls
 
 
+def clean_call(calls: dict) -> str:
+    """The books that call agree and no book is unclear (one book alone may decide)."""
+    decided = [c for c in calls.values() if c in ("p1", "p2")]
+    if decided and len(set(decided)) == 1 and "unclear" not in calls.values():
+        return decided[0]
+    return "none"
+
+
 def strict_call(calls: dict) -> str:
     """At least two books name the same winner and no book is unclear or names the other."""
     decided = [c for c in calls.values() if c in ("p1", "p2")]
@@ -88,7 +96,7 @@ def main() -> int:
                     continue
                 f = fx.loc[fid].to_dict()
                 call, books = call_winner(rec.get("historical_odds"), close_cutoff(f)[0])
-                rows.append({"fixture_id": fid, "call": call, "strict": strict_call(books), "books": json.dumps(books)})
+                rows.append({"fixture_id": fid, "call": call, "strict": strict_call(books), "clean": clean_call(books), "books": json.dumps(books)})
         print(path.name, len(rows), flush=True)
     d = pd.DataFrame(rows).merge(fx.reset_index(drop=True)[["fixture_id", "edition_key", "player1_id", "player2_id", "resolution"]], on="fixture_id")
     truth = load_fixture_winners(fx.reset_index(drop=True), BASE, sources=("tennismylife",))
@@ -107,13 +115,17 @@ def main() -> int:
                           "agree": int((g["call"] == g["winner_side"]).sum())} for f, g in with_truth.groupby("family")},
         "without_result_called": int(d[d["winner_side"].isna()]["call"].isin(["p1", "p2"]).sum()),
         "without_result": int(d["winner_side"].isna().sum()),
+        "clean": {"called": int(with_truth["clean"].isin(["p1", "p2"]).sum()),
+                  "agree": int((with_truth["clean"] == with_truth["winner_side"]).sum()),
+                  "disagree": int((with_truth["clean"].isin(["p1", "p2"]) & (with_truth["clean"] != with_truth["winner_side"])).sum()),
+                  "without_result_called": int(d[d["winner_side"].isna()]["clean"].isin(["p1", "p2"]).sum())},
         "strict": {"called": int(with_truth["strict"].isin(["p1", "p2"]).sum()),
                    "agree": int((with_truth["strict"] == with_truth["winner_side"]).sum()),
                    "disagree": int((with_truth["strict"].isin(["p1", "p2"]) & (with_truth["strict"] != with_truth["winner_side"])).sum()),
                    "without_result_called": int(d[d["winner_side"].isna()]["strict"].isin(["p1", "p2"]).sum())},
         "disagreement_rows": called[called["call"] != called["winner_side"]][["fixture_id", "edition_key", "call", "winner_side", "books"]].head(50).to_dict("records"),
     }
-    d.drop(columns=["books"]).to_csv(BASE / "docs" / "experiments" / "data" / "inplay_winner_calls.csv", index=False)
+    d.to_csv(BASE / "docs" / "experiments" / "data" / "inplay_winner_calls.csv", index=False)
     out = BASE / args.out
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")

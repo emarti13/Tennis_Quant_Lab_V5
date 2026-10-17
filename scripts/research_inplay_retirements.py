@@ -72,7 +72,7 @@ def main() -> int:
     report = {}
     for cls, g in d.groupby("class"):
         entry = {"matches": int(len(g))}
-        for col in ("call", "strict"):
+        for col in ("call", "clean", "strict"):
             called = g[g[col].isin(["p1", "p2"])]
             entry[col] = {"called": int(len(called)), "agree": int((called[col] == called["truth"]).sum()),
                           "disagree": int((called[col] != called["truth"]).sum())}
