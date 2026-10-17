@@ -1,0 +1,44 @@
+{
+ "fixtures": 481,
+ "calls": {
+  "p1": 225,
+  "p2": 217,
+  "unclear": 34,
+  "no_inplay": 4,
+  "conflict": 1
+ },
+ "with_tennismylife_result": 374,
+ "called_among_those": 344,
+ "coverage": 0.9198,
+ "agree": 343,
+ "disagree": 1,
+ "agreement": 0.99709,
+ "by_family": {
+  "ATP": {
+   "with_result": 131,
+   "called": 127,
+   "agree": 127
+  },
+  "CHALLENGER": {
+   "with_result": 115,
+   "called": 96,
+   "agree": 96
+  },
+  "WTA": {
+   "with_result": 128,
+   "called": 121,
+   "agree": 120
+  }
+ },
+ "without_result_called": 98,
+ "without_result": 107,
+ "disagreement_rows": [
+  {
+   "fixture_id": "id1200257167816738",
+   "edition_key": "WTA|2026-01-19|australian-open|melbourne",
+   "call": "p2",
+   "winner_side": "p1",
+   "books": "{\"betrivers\": \"unclear\", \"pinnacle\": \"unclear\", \"draftkings\": \"p2\"}"
+  }
+ ]
+}
