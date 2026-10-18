@@ -98,3 +98,23 @@ def test_players_are_keyed_by_registry_id_else_by_tennismylife_id(tmp_path):
 
 def test_surface_defaults_to_hard_for_carpet_and_unknown():
     assert be.surface_of("Clay") == "Clay" and be.surface_of("Carpet") == "Hard" and be.surface_of(None) == "Hard"
+
+
+def test_live_elo_prices_the_next_round_and_a_new_event_as_the_history_does():
+    from v5_fatigue_features import tennis_week
+    rows = [("e0", "2026-02-23", "R32", "A", "B"), ("e0", "2026-02-23", "F", "B", "C"),
+            ("e1", "2026-03-02", "R32", "A", "C"), ("e1", "2026-03-02", "R32", "B", "D"),
+            ("e1", "2026-03-02", "F", "A", "B"),
+            ("e2", "2026-03-09", "R32", "C", "A")]
+    params = be.EloParams(k=0.8, blend=0.3)
+    full = be.run(mk(rows), params).set_index("key")["p_winner"]
+    # the final of e1 not played yet
+    live = be.run(mk(rows[:4]), params, live=True)
+    got = be.fixture_probability(live.state(("MEN", "e1")), "A", "B", "Hard", params)
+    assert got["p"] == pytest.approx(full["e1-004"], abs=1e-12)
+    # e2 not started yet: everything before its week counts
+    live = be.run(mk(rows[:5]), params, live=True)
+    got = be.fixture_probability(live.state(("MEN", "e2"), week=tennis_week("2026-03-09")), "C", "A", "Hard", params)
+    assert got["p"] == pytest.approx(full["e2-005"], abs=1e-12)
+    with pytest.raises(ValueError):
+        live.state(("MEN", "e2"))                                   # no results and no week: refuse
