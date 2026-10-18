@@ -275,6 +275,7 @@ collectors writing at least 95% of scheduled snapshots for 14 days. Then Phase 1
 | Step 3 | Bet365 history for the stored January–August fixtures, re-pulled from OddsPapi in the same oldest-first queue as the gap backfill; Kalshi as the second results source, cross-checked against TennisMyLife | Approved 2026-10-16 |
 | Step 3 | Market data layer design; probe run first (done; findings in docs/experiments/2026-10-16-step3-market-source-probe.md) | Approved 2026-10-16; old engine's daily heavy forecast paused until Step 4 (the board is unused; #54) |
 | Results | Third results source: the last in-play prices (middle rule); matches ended before two completed sets and walkovers are void for measuring the model; bets settle by each book's own rules | Approved 2026-10-17 |
+| Step 4 | Minimum history for a model price: both players need at least **18 rated matches** in the baseline Elo; below that the pricing function gives no model price (reason "thin history"). Chosen on January–June 2026, checked on July–October 12 (docs/experiments/2026-10-17-baseline-elo.md) | Approved 2026-10-18 |
 | Approach | Build toward the finished state; no fixes "for today" | User direction 2026-10-13 |
 
 Sheet notes from the user: a Men/Women column will be added; WTA end dates are not in the

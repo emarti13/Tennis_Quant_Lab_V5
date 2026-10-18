@@ -73,6 +73,32 @@ By the less experienced player's rated matches:
   and lower-tier results we do not have) are where the next gains are.
 - Calibration is fine (model guard: worst bucket z = 2.3, under 3).
 
+## Minimum history (user decision 2026-10-18: 18 rated matches)
+
+A model price needs both players to have a rating built on enough matches (fail closed).
+The threshold was chosen on January–June 2026 and checked on July–October 12, on the
+matches that also have a Pinnacle close. "Gap" = this Elo's log loss minus the market's on
+the same matches.
+
+| Minimum (less experienced player) | Priced, Jan–Jun | Gap, Jan–Jun | Priced, Jul–Oct 12 | Gap, Jul–Oct 12 |
+|---|---|---|---|---|
+| none | 100% | 0.0319 | 100% | 0.0343 |
+| 10 | 89.6% | 0.0253 | 85.5% | 0.0250 |
+| 12 | 88.0% | 0.0250 | 83.3% | 0.0231 |
+| 14 | 86.3% | 0.0243 | 81.7% | 0.0186 |
+| 15 | 85.3% | 0.0243 | 80.9% | 0.0176 |
+| 16 | 84.7% | 0.0238 | 80.0% | 0.0176 |
+| 17 | 83.9% | 0.0234 | 79.0% | 0.0174 |
+| **18** | **83.2%** | **0.0232** | **77.9%** | **0.0164** |
+| 19 | 82.5% | 0.0235 | 77.2% | 0.0162 |
+| 20 | 81.8% | 0.0232 | 76.3% | 0.0176 |
+
+Matches where a player has 10–19 rated matches are clearly worse than the rest (gap about
+0.05 against 0.02); the gap falls steadily up to 18 and then stops improving, in both
+halves. Each single step moves only 40–50 matches, so neighbouring thresholds are within
+noise; the trend is clear. This is a safety rule, not an edge: the baseline is behind the
+market at every threshold.
+
 ## Model guard (`python v5_model_guard.py`, 2026 test predictions)
 
 - PASS: orientation, too good to be true, hidden answer, missing history, drift.
