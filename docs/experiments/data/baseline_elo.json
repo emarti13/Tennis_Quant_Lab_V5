@@ -1,0 +1,193 @@
+{
+ "params": {
+  "k": 0.6,
+  "blend": 0.2,
+  "newcomer": 1500.0,
+  "shape": 0.4
+ },
+ "grid": [
+  {
+   "k": 0.3,
+   "blend": 0.1,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64359
+  },
+  {
+   "k": 0.3,
+   "blend": 0.2,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64336
+  },
+  {
+   "k": 0.3,
+   "blend": 0.3,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64357
+  },
+  {
+   "k": 0.3,
+   "blend": 0.5,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64479
+  },
+  {
+   "k": 0.45,
+   "blend": 0.1,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64004
+  },
+  {
+   "k": 0.45,
+   "blend": 0.2,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.63961
+  },
+  {
+   "k": 0.45,
+   "blend": 0.3,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.63979
+  },
+  {
+   "k": 0.45,
+   "blend": 0.5,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64108
+  },
+  {
+   "k": 0.6,
+   "blend": 0.1,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.63936
+  },
+  {
+   "k": 0.6,
+   "blend": 0.2,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.63886
+  },
+  {
+   "k": 0.6,
+   "blend": 0.3,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.63907
+  },
+  {
+   "k": 0.6,
+   "blend": 0.5,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64049
+  },
+  {
+   "k": 1.0,
+   "blend": 0.1,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.6434
+  },
+  {
+   "k": 1.0,
+   "blend": 0.2,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64301
+  },
+  {
+   "k": 1.0,
+   "blend": 0.3,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64349
+  },
+  {
+   "k": 1.0,
+   "blend": 0.5,
+   "newcomer": 1500.0,
+   "log_loss_2025": 0.64551
+  }
+ ],
+ "test_2026_all": {
+  "n": 12192,
+  "p_winner": 0.62621
+ },
+ "test_2026_with_current_engine": {
+  "n": 12192,
+  "p_winner": 0.62621,
+  "p_current": 0.62878,
+  "elo_minus_current": {
+   "mean": -0.00257,
+   "ci95": [
+    -0.00533,
+    0.00018
+   ]
+  }
+ },
+ "test_2026_with_market": {
+  "n": 7132,
+  "p_winner": 0.62875,
+  "market_winner": 0.59636,
+  "elo_minus_market": {
+   "mean": 0.03239,
+   "ci95": [
+    0.02709,
+    0.03766
+   ]
+  },
+  "with_current_engine": {
+   "n": 7132,
+   "p_winner": 0.62875,
+   "p_current": 0.62955,
+   "market_winner": 0.59636,
+   "elo_minus_current": {
+    "mean": -0.0008,
+    "ci95": [
+     -0.00457,
+     0.00272
+    ]
+   },
+   "current_minus_market": {
+    "mean": 0.03319,
+    "ci95": [
+     0.02766,
+     0.03861
+    ]
+   }
+  }
+ },
+ "by_family": {
+  "ATP": {
+   "n": 2030,
+   "p_winner": 0.61898,
+   "market_winner": 0.6002
+  },
+  "CHALLENGER": {
+   "n": 3731,
+   "p_winner": 0.6357,
+   "market_winner": 0.59904
+  },
+  "WTA": {
+   "n": 1371,
+   "p_winner": 0.6243,
+   "market_winner": 0.58341
+  }
+ },
+ "by_experience": {
+  "<10": {
+   "n": 802,
+   "p_winner": 0.61815,
+   "market_winner": 0.52908
+  },
+  "10-29": {
+   "n": 1069,
+   "p_winner": 0.6429,
+   "market_winner": 0.60302
+  },
+  "30-99": {
+   "n": 1885,
+   "p_winner": 0.62714,
+   "market_winner": 0.59588
+  },
+  "100+": {
+   "n": 3376,
+   "p_winner": 0.62769,
+   "market_winner": 0.61051
+  }
+ }
+}

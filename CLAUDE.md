@@ -45,6 +45,7 @@ The goal: a fair-price engine that beats the market, proven first as a taker and
 - Players: `v5_player_registry.py` → `context_registry/players/` (our own `player_id`; TennisMyLife and OddsPapi ids are aliases; built by `scripts/build_player_registry.py`; rows marked `confirmed`, `user` or `rejected` are never overwritten). Not yet read by production; `v5_player_identity.py` (name-only) is retired when the daily batch switches.
 - User decisions: only in the decision files listed in `context_registry/DECISIONS.md` (never in the generated crosswalk/alias tables, which the daily rebuild overwrites; it reads decision files and never writes them).
 - Fixture resolution: `v5_fixture_resolution.py` (fixture → edition, court, best-of, player ids; fails closed). Tables refreshed daily by `scripts/refresh_identity.py` (ratings workflow); flags in `context_registry/identity_status.json`.
+- Baseline model: `v5_baseline_elo.py` (leak-free surface Elo keyed by `player_id`, fatigue ordering; measured in `docs/experiments/2026-10-17-baseline-elo.md`). Not yet read by production.
 - Features: `v5_fatigue_features.py` (leak-free, research candidate; on `main` since #36, not yet in production); `v5_workload_features.py` (**leaky, being retired**).
 - Warehouse/production: `build_v5_context_warehouse.py`, `v5_daily_batch.py`, `v5_interactive_production.py`, `v5_official_performance.py`.
 - Safety: `v5_model_guard.py`, `v5_fatigue_validation.py` (on `main` since #36).
