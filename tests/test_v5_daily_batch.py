@@ -8,7 +8,7 @@ import v5_daily_batch
 
 class DailyBatchModuleTests(unittest.TestCase):
     def test_daily_batch_exports_core_functions(self):
-        for name in ("freeze_key", "eligible_pre_match", "merge_frozen", "rank_board", "resolve_fixture_surface", "infer_best_of"):
+        for name in ("freeze_key", "eligible_pre_match", "merge_frozen", "rank_board", "infer_best_of", "build_daily_outputs"):
             self.assertTrue(callable(getattr(v5_daily_batch, name, None)), name)
 
     def test_freeze_key_is_stable_across_name_formatting_and_numeric_line(self):
@@ -45,17 +45,6 @@ class DailyBatchModuleTests(unittest.TestCase):
         ])
         self.assertEqual(v5_daily_batch.rank_board(board)["selection"].tolist(),["c","b","a","d"])
 
-    def test_surface_comes_only_from_tournament_authority(self):
-        # The legacy hardcoded map (infer_surface) was retired with the 2026-09-21 court-data reset:
-        # surface now comes only from context_registry/tournament_authority.csv and fails closed.
-        self.assertFalse(hasattr(v5_daily_batch, "infer_surface"))
-        self.assertEqual(v5_daily_batch.resolve_fixture_surface("US Open Men Singles", start_time_utc="2026-08-31T15:00:00Z", tour="ATP"),
-                         ("Hard", "Tournament authority"))
-        self.assertEqual(v5_daily_batch.resolve_fixture_surface("Wimbledon Men Singles", start_time_utc="2026-07-01T12:00:00Z", tour="ATP"),
-                         ("Grass", "Tournament authority"))
-        with self.assertRaises(ValueError):
-            v5_daily_batch.resolve_fixture_surface("Mystery Open", start_time_utc="2026-08-31T15:00:00Z", tour="ATP")
-
     def test_infer_best_of_uses_five_sets_only_for_mens_slam_main_draw(self):
         self.assertEqual(v5_daily_batch.infer_best_of("US Open Men Singles","MEN"),5)
         self.assertEqual(v5_daily_batch.infer_best_of("Wimbledon Men Singles","ATP"),5)
@@ -63,85 +52,40 @@ class DailyBatchModuleTests(unittest.TestCase):
         self.assertEqual(v5_daily_batch.infer_best_of("US Open Women Singles","WTA"),3)
         self.assertEqual(v5_daily_batch.infer_best_of("ATP Cincinnati Men Singles","MEN"),3)
 
-    @staticmethod
-    def _ratings():
-        return pd.DataFrame([
-            {"player":"Alice Alpha","surface":"Hard","serve_global":0.02,"return_global":0.01,"surface_points":1000,"serve_surface":0.01,"return_surface":0.01,"elo":1600,"surface_elo":1600,"form_logit":0.08,"day_vol_logit":0.10,"state_confidence":0.9},
-            {"player":"Bob Beta","surface":"Hard","serve_global":-0.01,"return_global":-0.01,"surface_points":1000,"serve_surface":-0.01,"return_surface":-0.01,"elo":1500,"surface_elo":1500,"form_logit":-0.08,"day_vol_logit":0.10,"state_confidence":0.8},
-        ])
-
-    @staticmethod
-    def _summary():
-        return {"MEN":{"baseline":{"Hard":0.62,"Clay":0.60,"Grass":0.65}}}
-
-    @staticmethod
-    def _score_candidate():
-        return {
-            "version":"v5-score-test-baseline",
-            "market_prices_used":False,
-            "MEN":{"selected_candidate":"conditioned_mechanistic","model":None},
-            "WTA":{"selected_candidate":"conditioned_mechanistic","model":None},
-        }
-
-    def test_build_fixture_board_prices_all_moneyline_selections(self):
-        rows=pd.DataFrame([
-            {"snapshot_utc":"2026-09-01T05:00:00Z","fixture_id":"fx1","start_time_utc":"2026-09-01T07:00:00Z","tournament":"US Open Men Singles","tour":"ATP","player1":"Alpha, Alice","player2":"Beta, Bob","market_group":"moneyline","selection":"Alpha, Alice","line":None,"best_bookmaker":"pinnacle","best_decimal_odds":1.8,"best_american_odds":-125,"consensus_no_vig_prob":0.55},
-            {"snapshot_utc":"2026-09-01T05:00:00Z","fixture_id":"fx1","start_time_utc":"2026-09-01T07:00:00Z","tournament":"US Open Men Singles","tour":"ATP","player1":"Alpha, Alice","player2":"Beta, Bob","market_group":"moneyline","selection":"Beta, Bob","line":None,"best_bookmaker":"pinnacle","best_decimal_odds":2.2,"best_american_odds":120,"consensus_no_vig_prob":0.45},
-        ])
-        out=v5_daily_batch.build_fixture_board(rows,{"MEN":self._ratings()},self._summary(),sims=300,score_candidate=self._score_candidate())
-        self.assertEqual(len(out),2)
-        self.assertTrue(out["model_probability"].notna().all())
-        self.assertEqual(set(out["best_of"]),{5})
-        self.assertEqual(set(out["model_version"]),{"V5.1_OUTCOME_CALIBRATED_FALLBACK"})
-        self.assertEqual(set(out["selected_score_candidate"]),{"conditioned_mechanistic"})
-        self.assertEqual(set(out["state_variation_used"]),{False})
-        self.assertTrue((out["model_probability"].between(0,1)).all())
-        p1=out[out["selection"]=="Alpha, Alice"].iloc[0]
-        self.assertAlmostEqual(float(p1["model_probability"]),float(p1["calibrated_probability_p1"]),places=12)
-        self.assertNotEqual(float(p1["raw_sim_probability_p1"]),float(p1["calibrated_probability_p1"]))
-
-    def test_build_fixture_board_prices_requested_large_slam_spread(self):
-        rows=pd.DataFrame([
-            {"fixture_id":"fx2","tournament":"US Open Men Singles","tour":"ATP","player1":"Alpha, Alice","player2":"Beta, Bob","market_group":"game_spread","selection":"Alpha, Alice","line":-9.5,"best_decimal_odds":1.95,"consensus_no_vig_prob":0.50},
-            {"fixture_id":"fx2","tournament":"US Open Men Singles","tour":"ATP","player1":"Alpha, Alice","player2":"Beta, Bob","market_group":"game_spread","selection":"Beta, Bob","line":9.5,"best_decimal_odds":1.95,"consensus_no_vig_prob":0.50},
-        ])
-        out=v5_daily_batch.build_fixture_board(rows,{"MEN":self._ratings()},self._summary(),sims=300,score_candidate=self._score_candidate())
-        self.assertEqual(set(out["best_of"]),{5})
-        self.assertTrue(out["model_probability"].notna().all())
-
     def test_build_daily_outputs_skips_started_fixtures_and_freezes_future_rows(self):
         base={"snapshot_utc":"2026-09-01T05:00:00Z","tournament":"US Open Men Singles","tour":"ATP","player1":"Alpha, Alice","player2":"Beta, Bob","market_group":"moneyline","line":None,"best_bookmaker":"pinnacle","consensus_no_vig_prob":0.5}
         feed=pd.DataFrame([
             {**base,"fixture_id":"future","start_time_utc":"2026-09-01T07:00:00Z","selection":"Alpha, Alice","best_decimal_odds":1.8,"best_american_odds":-125},
             {**base,"fixture_id":"future","start_time_utc":"2026-09-01T07:00:00Z","selection":"Beta, Bob","best_decimal_odds":2.2,"best_american_odds":120},
+            {**base,"fixture_id":"future","start_time_utc":"2026-09-01T07:00:00Z","selection":"Alpha, Alice","market_group":"game_spread","line":-3.5,"best_decimal_odds":1.9},
+            {**base,"fixture_id":"thin","start_time_utc":"2026-09-01T08:00:00Z","selection":"Alpha, Alice","best_decimal_odds":1.8,"best_american_odds":-125},
             {**base,"fixture_id":"past","start_time_utc":"2026-09-01T05:30:00Z","selection":"Alpha, Alice","best_decimal_odds":1.8,"best_american_odds":-125},
-            {**base,"fixture_id":"past","start_time_utc":"2026-09-01T05:30:00Z","selection":"Beta, Bob","best_decimal_odds":2.2,"best_american_odds":120},
         ])
         now=datetime(2026,9,1,6,0,tzinfo=timezone.utc)
-        board,ledger,errors=v5_daily_batch.build_daily_outputs(feed,{"MEN":self._ratings()},self._summary(),existing_ledger=pd.DataFrame(),now=now,sims=100,score_candidate=self._score_candidate())
-        self.assertEqual(set(board["fixture_id"]),{"future"})
-        self.assertEqual(len(ledger),2); self.assertEqual(errors,[]); self.assertTrue(ledger["freeze_key"].is_unique)
+        board,ledger,errors,_states=v5_daily_batch.build_daily_outputs(feed,_FakeContext(),existing_ledger=pd.DataFrame(),now=now)
+        self.assertEqual(set(board["fixture_id"]),{"future","thin"})
+        self.assertEqual(errors,[])
+        future=board[board["fixture_id"]=="future"]
+        ml=future[future["market_group"]=="moneyline"].set_index("selection")["model_probability"]
+        self.assertAlmostEqual(float(ml["Alpha, Alice"]),0.62); self.assertAlmostEqual(float(ml["Beta, Bob"]),0.38)
+        spread=future[future["market_group"]=="game_spread"].iloc[0]
+        self.assertTrue(pd.isna(spread["model_probability"])); self.assertEqual(spread["no_price_reason"],"NOT_MODELLED")
+        thin=board[board["fixture_id"]=="thin"].iloc[0]
+        self.assertTrue(pd.isna(thin["model_probability"])); self.assertEqual(thin["no_price_reason"],"THIN_HISTORY")
+        self.assertEqual(len(ledger),2); self.assertTrue(ledger["freeze_key"].is_unique)   # only priced rows freeze
+        self.assertEqual(set(board["model_version"]),{"baseline_elo_v1"})
+
+
+class _FakeContext:
+    """Stands in for v5_pricing.PricingContext: 'future' prices, 'thin' does not."""
+    def price(self, fixture_id, **kw):
+        from v5_pricing import Price
+        if fixture_id == "future":
+            return Price("future","priced","OK","ATP|2026-08-31|us-open|ny","MEN","ATP","Hard","Outdoor",5,"main","after_start",
+                         "M-1","M-2",(40,30),0.62,True)
+        return Price(fixture_id,"no_price","THIN_HISTORY","ATP|2026-08-31|us-open|ny","MEN","ATP","Hard","Outdoor",5,"main","after_start",
+                     "M-1","M-3",(40,4))
 
 
 if __name__ == "__main__":
     unittest.main()
-
-
-def test_unseen_player_uses_explicit_zero_confidence_cold_start():
-    from v5_daily_batch import _prepare_fixture
-    ratings = DailyBatchModuleTests._ratings()
-    feed = pd.DataFrame([{
-        # A tournament the authority resolves: this test is about cold start, not surface.
-        "fixture_id":"cold-1","start_time_utc":"2026-09-01T07:00:00Z",
-        "tournament":"US Open Men Singles","tour":"MEN",
-        "player1":"Alice Alpha","player2":"New Player",
-    }])
-    summary = {"MEN":{"baseline":{"Hard":0.62,"Clay":0.60,"Grass":0.65}}}
-    prepared = _prepare_fixture(feed, {"MEN":ratings,"WTA":ratings.iloc[0:0]}, summary)
-    assert prepared["player2_cold_start"] is True
-    assert prepared["player1_cold_start"] is False
-    assert prepared["rating_p2"]["state_confidence"] == 0.0
-    assert prepared["rating_p2"]["elo"] == 1500.0
-    assert prepared["rating_p2"]["surface_elo"] == 1500.0
-    assert prepared["rating_p2"]["serve_global"] == 0.0
-    assert prepared["rating_p2"]["return_global"] == 0.0

@@ -8,8 +8,6 @@ import pandas as pd
 from v5_interactive_production import production_board_to_today
 from v5_live_market import market_feed_status
 from v5_recommendation_ledger import official_recommendations_switch
-from v5_master_schedule_context import enrich_daily_board_context
-from v5_tournament_context_registry import apply_overrides, load_overrides
 
 
 def _read_json(path: Path) -> dict:
@@ -111,13 +109,10 @@ def load_canonical_repriced_board(base_dir: str | Path) -> pd.DataFrame:
 
 def load_canonical_today_board(base_dir: str | Path) -> pd.DataFrame:
     base = Path(base_dir)
-    production = load_canonical_repriced_board(base)
-    overrides = load_overrides(base / "context_registry" / "tournament_context_overrides.csv")
-    production = apply_overrides(production, overrides)
-    today = production_board_to_today(production)
-    # Canonical schedule context is attached at read time as well as production time so
-    # a fresh market slate can never render generic None/default venue context.
-    today = enrich_daily_board_context(today, year=2026, schedule_path=base / "context_registry" / "tennis_master_schedule.csv")
+    # Surface, setting and best-of come from the master schedule (and the user's overrides)
+    # through the pricing function; the board already carries them.
+    today = production_board_to_today(load_canonical_repriced_board(base),
+                                      fixtures=_read_csv(base / "v5_daily_ready" / "daily_forecasts.csv"))
     official = _read_csv(base / "v5_daily_ready" / "official_recommendations.csv")
     return _overlay_official_recommendations(today, official)
 
@@ -128,8 +123,8 @@ def official_pause_notice(base_dir: str | Path) -> str | None:
     if switch["enabled"]:
         return None
     since = f" since {switch['since']}" if switch.get("since") else ""
-    return (f"Official recommendations are paused{since}. BET and LEAN labels below come from the "
-            f"pre-rebuild engine and are not recommendations. {switch['reason']}")
+    return (f"Official recommendations are paused{since}. BET and LEAN labels below are not "
+            f"recommendations: the baseline model has not yet passed the out-of-sample market test. {switch['reason']}")
 
 
 def render_official_pause_notice(st_module, base_dir: str | Path) -> None:

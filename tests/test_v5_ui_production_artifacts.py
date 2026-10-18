@@ -76,9 +76,7 @@ def test_canonical_today_board_loads_without_interactive_run(tmp_path):
     assert row["Fixture ID"] == "fx1"
     assert row["P1 V5 %"] == 0.60
     assert row["P1 ML Signal"] == "BET"
-    assert row["Matchup Context"] != "Unavailable"
-    assert row["Workload Context"] != "Unavailable"
-    assert row["Travel Context"] != "Unavailable"
+    assert row["Tour"] == "MEN" and row["Surface"] == "Hard" and row["Best Of"] == 3
 
 
 def test_canonical_today_board_overlays_frozen_official_recommendation(tmp_path):

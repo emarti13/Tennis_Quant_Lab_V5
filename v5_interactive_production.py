@@ -1,312 +1,147 @@
+"""The app's override run (rebuild plan Step 4g): the daily board with the user's edits.
+
+The same pricing function as the daily batch (v5_pricing.price_fixture), with the user's
+edits applied as edition overrides (spec 2026-10-12 §2.6: surface, setting, best-of; only
+the fields changed). With no edits the run reproduces the daily batch exactly (parity
+test). Saving the edits writes context_registry/master_schedule/overrides.csv, the user's
+decision file for court attributes (context_registry/DECISIONS.md).
+"""
 from __future__ import annotations
 
 from datetime import datetime, timezone
 from pathlib import Path
-import math
 
-import numpy as np
 import pandas as pd
 
-from v5_core import american_from_prob
-from v5_daily_batch import (
-    _base_probs_from_ratings,
-    _context_fixture,
-    _load_full_context_assets,
-    _logit_probability,
-    _player_lookup,
-    _resolve_player,
-    _tour_to_v5,
-    build_fixture_board,
-    eligible_pre_match,
-    infer_best_of,
-    resolve_fixture_surface,
-    rank_board,
-)
-from v5_full_context_live import build_live_enriched_history, build_live_matchup_features_from_enriched
+from v5_daily_batch import eligible_pre_match, freeze_key, rank_board
+from v5_fixture_resolution import OVERRIDE_COLUMNS, OVERRIDABLE
 from v5_live_market import canonical_name
-from v5_model_calibration import calibrated_match_probability, calibration_record
+from v5_pricing import PricingContext, board_rows
 
-
-LIVE_CONTEXT_DISPLAY_FIELDS = (
-    "ctx_serve_dominance_diff", "ctx_return_dominance_diff", "ctx_return_strength_diff",
-    "ctx_rest_log1p_diff", "ctx_games_7d_diff", "ctx_minutes_7d_diff", "ctx_matches_7d_diff",
-    "ctx_travel_km_diff", "ctx_timezone_change_abs_diff",
-    "ctx_court_speed_x_serve_dominance_diff", "ctx_court_speed_x_return_dominance_diff", "ctx_big_server_x_altitude",
-    "ctx_state_uncertainty_diff", "ctx_context_quality_diff",
-)
-COURT_CONDITION_DISPLAY_FIELDS = (
-    "environment", "external_cpi", "external_ace_rate_pct", "external_rally_length",
-    "external_relative_air_density", "external_altitude_m", "external_ball_type",
-    "external_overall_speed_rating", "effective_court_speed", "court_conditions_source",
-    "court_conditions_source_quality",
-)
+OVERRIDES_PATH = Path("context_registry") / "master_schedule" / "overrides.csv"
+# Editor column -> edition field. Tour is not editable: it follows the edition.
+EDIT_FIELDS = {"Surface": "surface", "Best Of": "best_of", "Environment": "setting"}
 _SIGNAL_PRIORITY = {"BET": 0, "LEAN": 1, "REVIEW": 2, "PASS": 3, "N/A": 4, "NO PRICE": 5}
 
 
-def _prepare_with_overrides(fixture_rows, ratings_by_tour, summary, context_history=None):
-    first = fixture_rows.iloc[0]
-    tournament = first.get("tournament")
-    tour_override = str(first.get("v5_tour_override") or "").upper().strip()
-    tour = tour_override if tour_override in {"MEN", "WTA"} else _tour_to_v5(first.get("tour"), tournament)
-    ratings = ratings_by_tour[tour]
-
-    surface_override = str(first.get("v5_surface_override") or "").title().strip()
-    if surface_override in {"Hard", "Clay", "Grass"}:
-        surface, surface_source = surface_override, "User override"
-    else:
-        surface, surface_source = resolve_fixture_surface(
-            tournament,
-            start_time_utc=first.get("start_time_utc"),
-            context_history=context_history,
-        )
-
-    bo = pd.to_numeric(pd.Series([first.get("v5_best_of_override")]), errors="coerce").iloc[0]
-    best_of = int(bo) if pd.notna(bo) and int(bo) in (3, 5) else infer_best_of(tournament, tour)
-
-    lookup = _player_lookup(ratings)
-    p1 = _resolve_player(first.get("player1"), lookup)
-    p2 = _resolve_player(first.get("player2"), lookup)
-    if p1 is None or p2 is None:
-        missing = [str(n) for n, resolved in ((first.get("player1"), p1), (first.get("player2"), p2)) if resolved is None]
-        raise ValueError("Unmatched V5 player(s): " + ", ".join(missing))
-    if p1 == p2:
-        raise ValueError("Players resolved to the same V5 identity.")
-
-    baseline = summary.get(tour, {}).get("baseline", {"Hard": 0.62, "Clay": 0.60, "Grass": 0.65})
-    p1_serve, p2_serve, a, b = _base_probs_from_ratings(ratings, p1, p2, surface, baseline)
-    elo_a = 0.35 * float(a.elo) + 0.65 * float(a.surface_elo)
-    elo_b = 0.35 * float(b.elo) + 0.65 * float(b.surface_elo)
-    p_elo = 1 / (1 + 10 ** ((elo_b - elo_a) / 400))
-    calibrated_p = calibrated_match_probability(p1_serve, p2_serve, p_elo, tour)
-    return {
-        "first": first, "tournament": tournament, "tour": tour, "surface": surface,
-        "surface_source": surface_source, "best_of": best_of, "p1": p1, "p2": p2,
-        "p1_serve": p1_serve, "p2_serve": p2_serve, "rating_p1": a, "rating_p2": b,
-        "p_elo": p_elo, "baseline_probability_p1": calibrated_p,
-        "calibration": calibration_record(tour),
-        "x_sr_p1": _logit_probability(p1_serve) - _logit_probability(p2_serve),
-        "x_elo_p1": _logit_probability(p_elo),
-    }
+def edits_to_overrides(edited: pd.DataFrame, ctx: PricingContext, *, note: str = "app override run") -> tuple[list[dict], list[dict]]:
+    """(override rows, errors). One row per fixture edit that differs from what the fixture
+    resolves to now; a fixture that does not resolve cannot be overridden (its error says why)."""
+    rows, errors = [], []
+    today = datetime.now(timezone.utc).date().isoformat()
+    for r in edited.to_dict("records"):
+        fid = str(r.get("Fixture ID") or "")
+        try:
+            resolved = ctx.resolver.resolve(fid)
+        except Exception as exc:
+            errors.append({"fixture_id": fid, "stage": "resolve", "error": str(exc)})
+            continue
+        current = {"surface": resolved.surface, "best_of": resolved.best_of, "setting": resolved.setting}
+        for column, field in EDIT_FIELDS.items():
+            value = r.get(column)
+            if value is None or (isinstance(value, float) and pd.isna(value)) or str(value).strip() == "":
+                continue
+            value = str(int(float(value))) if field == "best_of" else str(value).strip().title()
+            if str(current[field]) != value:
+                rows.append({"edition_key": resolved.edition_key, "field": field, "value": value, "set_on": today, "note": note})
+    return rows, errors
 
 
-def _present_value(value):
-    if value is None:
-        return None
-    try:
-        if pd.isna(value):
-            return None
-    except Exception:
-        pass
-    return value
+def price_board(market_feed: pd.DataFrame, ctx: PricingContext, *, now=None) -> pd.DataFrame:
+    now = now or datetime.now(timezone.utc)
+    frozen_at = pd.Timestamp(now).isoformat()
+    frames = [board_rows(g, ctx.price(fid), frozen_at=frozen_at)
+              for fid, g in eligible_pre_match(market_feed, now=now).groupby("fixture_id", sort=False)]
+    board = rank_board(pd.concat(frames, ignore_index=True, sort=False) if frames else pd.DataFrame())
+    if not board.empty:
+        board["freeze_key"] = board.apply(freeze_key, axis=1)
+    return board
 
 
-def _interactive_context_fixture(prepared):
-    fixture = _context_fixture(prepared)
-    first = prepared["first"]
-    environment = str(first.get("v5_environment_override") or "").title().strip()
-    if environment in {"Indoor", "Outdoor"}:
-        fixture["environment"] = environment
+def run_interactive_production(market_feed: pd.DataFrame, edited: pd.DataFrame, ctx: PricingContext, *, now=None):
+    """(today view, errors, override rows) for the fixtures in the editor."""
+    valid = edited[edited["Player 1"].notna() & edited["Player 2"].notna()].copy()
+    feed = market_feed[market_feed["fixture_id"].astype(str).isin(set(valid["Fixture ID"].astype(str)))]
+    overrides, errors = edits_to_overrides(valid, ctx)
+    board = price_board(feed, ctx.with_overrides(overrides) if overrides else ctx, now=now)
+    return production_board_to_today(board), errors, overrides
 
-    numeric_overrides = {
-        "court_speed_override": "v5_court_speed_override",
-        "external_cpi_override": "v5_cpi_override",
-        "external_ace_rate_pct_override": "v5_ace_rate_override",
-        "external_rally_length_override": "v5_rally_length_override",
-        "external_relative_air_density_override": "v5_rad_override",
-        "external_altitude_m_override": "v5_altitude_override",
-    }
-    for target, source in numeric_overrides.items():
-        value = pd.to_numeric(pd.Series([first.get(source)]), errors="coerce").iloc[0]
-        if pd.notna(value):
-            fixture[target] = float(value)
 
-    ball = _present_value(first.get("v5_ball_type_override"))
-    if ball is not None and str(ball).strip():
-        fixture["external_ball_type_override"] = str(ball).strip()
-    return fixture
+def save_overrides(rows: list[dict], base_dir=".") -> int:
+    """Write the edits to the overrides decision file: one row per edition and field, the
+    newest edit replacing an older one. Returns the number of rows written."""
+    rows = [r for r in rows if r.get("field") in OVERRIDABLE]
+    if not rows:
+        return 0
+    path = Path(base_dir) / OVERRIDES_PATH
+    old = pd.read_csv(path, dtype=str, keep_default_na=False) if path.exists() else pd.DataFrame(columns=OVERRIDE_COLUMNS)
+    new = pd.DataFrame(rows, columns=OVERRIDE_COLUMNS).astype(str)
+    out = pd.concat([old, new], ignore_index=True).drop_duplicates(["edition_key", "field"], keep="last")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    out[OVERRIDE_COLUMNS].to_csv(path, index=False)
+    back = pd.read_csv(path, dtype=str, keep_default_na=False)       # read back: fail loudly if it did not stick
+    for r in new.itertuples():
+        hit = back[(back["edition_key"] == r.edition_key) & (back["field"] == r.field)]
+        if hit.empty or hit.iloc[-1]["value"] != r.value:
+            raise IOError(f"override {r.edition_key}/{r.field} did not persist")
+    return len(new)
 
 
 def _best_market(frame: pd.DataFrame):
     if frame is None or frame.empty:
         return None
     work = frame.copy()
-    work["_sig"] = work["signal"].astype(str).str.upper().map(_SIGNAL_PRIORITY).fillna(9)
-    work["_ev"] = pd.to_numeric(work.get("expected_value"), errors="coerce").fillna(float("-inf"))
+    work["_sig"] = work.get("signal", pd.Series("", index=work.index)).astype(str).str.upper().map(_SIGNAL_PRIORITY).fillna(9)
+    work["_ev"] = pd.to_numeric(work.get("expected_value", pd.Series(index=work.index, dtype=float)), errors="coerce").fillna(float("-inf"))
     return work.sort_values(["_sig", "_ev"], ascending=[True, False], kind="stable").iloc[0]
 
 
-def _context_summary(first: pd.Series, fields):
-    parts = []
-    for label, field in fields:
-        value = pd.to_numeric(pd.Series([first.get(field)]), errors="coerce").iloc[0]
-        if pd.notna(value):
-            parts.append(f"{label} {float(value):+.3f}")
-    return " · ".join(parts) if parts else "Unavailable"
+def _fair(p):
+    return None if p is None else (round(-100 * p / (1 - p)) if p >= 0.5 else round(100 * (1 - p) / p))
 
 
-def _first_present(*values):
-    for value in values:
-        if value is None:
-            continue
-        try:
-            if pd.isna(value):
-                continue
-        except Exception:
-            pass
-        if isinstance(value, str) and not value.strip():
-            continue
-        return value
-    return None
+FIXTURE_FIELDS = ("price_status", "price_reason", "full_context_probability_p1", "tour_v5", "surface", "surface_source",
+                  "setting", "best_of", "stage", "official_eligible", "rated_matches", "model_version")
 
 
-def production_board_to_today(board: pd.DataFrame) -> pd.DataFrame:
+def production_board_to_today(board: pd.DataFrame, fixtures: pd.DataFrame | None = None) -> pd.DataFrame:
+    """One row per fixture for the Daily Board: the model price, why there is none, and the
+    best moneyline per side (after repricing). A repriced board carries the frozen model
+    columns on its moneyline rows only (and none for a fixture with no price), so the
+    fixture's own fields come from any row that has them, else from `fixtures` (the daily
+    forecast, one row per fixture)."""
     if board is None or board.empty:
         return pd.DataFrame()
+    by_fixture = {} if fixtures is None or fixtures.empty else fixtures.drop_duplicates("fixture_id").set_index(
+        fixtures.drop_duplicates("fixture_id")["fixture_id"].astype(str)).to_dict("index")
     rows = []
     for fixture_id, group in board.groupby("fixture_id", sort=False, dropna=False):
-        first = group.iloc[0]
-        tournament = _first_present(first.get("tournament"), "")
-        p1 = str(_first_present(first.get("resolved_player1"), first.get("player1"), "Player 1"))
-        p2 = str(_first_present(first.get("resolved_player2"), first.get("player2"), "Player 2"))
-        tour = _first_present(first.get("tour_v5"))
-        if tour is None:
-            tour = _tour_to_v5(_first_present(first.get("tour"), ""), tournament)
-        best_of = _first_present(first.get("best_of"))
-        if best_of is None:
-            best_of = infer_best_of(tournament, tour)
+        first = group.iloc[0].copy()
+        known = group[group["price_status"].notna()] if "price_status" in group.columns else group.iloc[0:0]
+        source = known.iloc[0].to_dict() if len(known) else by_fixture.get(str(fixture_id), {})
+        for k in FIXTURE_FIELDS:
+            if k in source:
+                first[k] = source[k]
+        p1, p2 = str(first.get("player1")), str(first.get("player2"))
         p1p = pd.to_numeric(pd.Series([first.get("full_context_probability_p1")]), errors="coerce").iloc[0]
         p1p = None if pd.isna(p1p) else float(p1p)
-        p2p = None if p1p is None else 1.0 - p1p
-        disagreement = str(first.get("model_disagreement") or "UNKNOWN").upper()
         row = {
-            "Status": "OK", "Fixture ID": fixture_id, "Tournament": tournament,
-            "Start": first.get("start_time_utc"), "Tour": tour, "Surface": first.get("surface"),
-            "Surface Source": first.get("surface_source"), "Best Of": best_of,
-            "Environment": first.get("environment"), "Court Speed": first.get("effective_court_speed"),
-            "CPI": first.get("external_cpi"), "Ace Rate %": first.get("external_ace_rate_pct"),
-            "Rally Length": first.get("external_rally_length"), "Relative Air Density": first.get("external_relative_air_density"),
-            "Altitude m": first.get("external_altitude_m"), "Ball Type": first.get("external_ball_type"),
-            "Overall Speed Rating": first.get("external_overall_speed_rating"),
-            "Court Conditions Source": first.get("court_conditions_source"),
-            "Player 1": p1, "Player 2": p2, "P1 V5 %": p1p, "P2 V5 %": p2p,
-            "P1 Fair": None if p1p is None else american_from_prob(p1p),
-            "P2 Fair": None if p2p is None else american_from_prob(p2p),
-            "Expected Margin": first.get("expected_margin"), "Expected Total": first.get("expected_total"),
-            "Agreement": {"LOW":"HIGH", "MODERATE":"MODERATE", "HIGH":"LOW"}.get(disagreement, "UNKNOWN"),
-            "Model Disagreement": disagreement, "Model Gap": first.get("model_gap"),
-            "Winner Model": first.get("selected_model_candidate"), "Score Model": first.get("selected_score_candidate"),
-            "P1 State Conf": first.get("state_confidence_p1"), "P2 State Conf": first.get("state_confidence_p2"),
-            "P1 Form": first.get("form_logit_p1"), "P2 Form": first.get("form_logit_p2"),
-            "P1 Form Percentile": first.get("form_percentile_p1"), "P2 Form Percentile": first.get("form_percentile_p2"),
-            "P1 Volatility": first.get("day_vol_logit_p1"), "P2 Volatility": first.get("day_vol_logit_p2"),
-            "P1 Volatility Percentile": first.get("vol_percentile_p1"), "P2 Volatility Percentile": first.get("vol_percentile_p2"),
-            "P1 Volatility Label": first.get("volatility_label_p1"), "P2 Volatility Label": first.get("volatility_label_p2"),
-            "P1 State Conf Label": first.get("state_confidence_label_p1"), "P2 State Conf Label": first.get("state_confidence_label_p2"),
-            "Surface Elo P1 %": first.get("elo_probability_p1"),
-            "Matchup Context": _context_summary(first, (("Serve Δ","ctx_serve_dominance_diff"),("Return Δ","ctx_return_dominance_diff"),("Return strength Δ","ctx_return_strength_diff"))),
-            "Workload Context": _context_summary(first, (("Rest Δ","ctx_rest_log1p_diff"),("Games 7d Δ","ctx_games_7d_diff"),("Minutes 7d Δ","ctx_minutes_7d_diff"))),
-            "Travel Context": _context_summary(first, (("Travel km Δ","ctx_travel_km_diff"),("TZ Δ","ctx_timezone_change_abs_diff"))),
-            "Court Context": _context_summary(first, (("Speed×serve Δ","ctx_court_speed_x_serve_dominance_diff"),("Speed×return Δ","ctx_court_speed_x_return_dominance_diff"),("Altitude serve Δ","ctx_big_server_x_altitude"))),
-            "Player State": _context_summary(first, (("Uncertainty Δ","ctx_state_uncertainty_diff"),("Quality Δ","ctx_context_quality_diff"))),
-            "Context Quality A": first.get("context_quality_a"), "Context Quality B": first.get("context_quality_b"),
-            "Weather Source": first.get("weather_source_quality"), "Court Speed Source": first.get("court_speed_source_quality"),
-            "Note": first.get("context_fallback_reason") or "",
+            "Status": "OK" if first.get("price_status") == "priced" else str(first.get("price_reason") or "NO PRICE"),
+            "Fixture ID": fixture_id, "Tournament": first.get("tournament"), "Start": first.get("start_time_utc"),
+            "Tour": first.get("tour_v5"), "Surface": first.get("surface"), "Surface Source": first.get("surface_source"),
+            "Best Of": first.get("best_of"), "Environment": first.get("setting") or None, "Stage": first.get("stage"),
+            "Official Eligible": bool(first.get("official_eligible")) if pd.notna(first.get("official_eligible")) else False,
+            "Player 1": p1, "Player 2": p2, "P1 V5 %": p1p, "P2 V5 %": None if p1p is None else 1 - p1p,
+            "P1 Fair": _fair(p1p), "P2 Fair": _fair(None if p1p is None else 1 - p1p),
+            "Rated Matches": first.get("rated_matches"), "Model": first.get("model_version"),
+            "Note": "" if first.get("price_status") == "priced" else str(first.get("price_reason") or ""),
         }
-        for field in LIVE_CONTEXT_DISPLAY_FIELDS:
-            row[field] = first.get(field)
-
-        def selected_rows(market, selection):
-            x = group[group["market_group"].astype(str).str.lower().eq(market)]
-            return x[x["selection"].map(canonical_name).eq(canonical_name(selection))]
-
+        ml = group[group["market_group"].astype(str).str.lower().eq("moneyline")]
         for prefix, player in (("P1", p1), ("P2", p2)):
-            ml = _best_market(selected_rows("moneyline", player))
-            if ml is not None:
-                row[f"{prefix} ML"] = ml.get("best_american_odds"); row[f"{prefix} ML EV"] = ml.get("expected_value"); row[f"{prefix} ML Signal"] = ml.get("signal")
-            sp = _best_market(selected_rows("game_spread", player))
-            if sp is not None:
-                row[f"{prefix} Spread"] = sp.get("line"); row[f"{prefix} Spread Odds"] = sp.get("best_american_odds"); row[f"{prefix} Spread EV"] = sp.get("expected_value"); row[f"{prefix} Spread Signal"] = sp.get("signal")
-
-        totals = group[group["market_group"].astype(str).str.lower().eq("total_games")]
-        chosen = _best_market(totals)
-        if chosen is not None:
-            line = pd.to_numeric(pd.Series([chosen.get("line")]), errors="coerce").iloc[0]
-            row["Total"] = line
-            same = totals[pd.to_numeric(totals["line"], errors="coerce").eq(line)]
-            for label, selection in (("Over","over"),("Under","under")):
-                candidate = _best_market(same[same["selection"].astype(str).str.lower().eq(selection)])
-                if candidate is not None:
-                    row[f"{label} Odds"] = candidate.get("best_american_odds"); row[f"{label} EV"] = candidate.get("expected_value"); row[f"{label} Signal"] = candidate.get("signal")
+            best = _best_market(ml[ml["selection"].map(canonical_name).eq(canonical_name(player))])
+            if best is not None:
+                row[f"{prefix} ML"] = best.get("best_american_odds")
+                row[f"{prefix} ML EV"] = best.get("expected_value")
+                row[f"{prefix} ML Signal"] = best.get("signal")
         rows.append(row)
     return pd.DataFrame(rows)
-
-
-def run_interactive_production(market_feed, edited, ratings_by_tour, summary, sims=5000, base_dir="."):
-    valid = edited[edited["Player 1"].notna() & edited["Player 2"].notna()].copy()
-    valid_ids = set(valid["Fixture ID"].astype(str))
-    feed = market_feed[market_feed["fixture_id"].astype(str).isin(valid_ids)].copy()
-    override = valid.copy(); override.index = override["Fixture ID"].astype(str)
-    override_fields = (
-        ("v5_tour_override", "Tour"), ("v5_surface_override", "Surface"), ("v5_best_of_override", "Best Of"),
-        ("v5_environment_override", "Environment"), ("v5_court_speed_override", "Court Speed"),
-        ("v5_cpi_override", "CPI"), ("v5_ace_rate_override", "Ace Rate %"),
-        ("v5_rally_length_override", "Rally Length"), ("v5_rad_override", "Relative Air Density"),
-        ("v5_altitude_override", "Altitude m"), ("v5_ball_type_override", "Ball Type"),
-    )
-    for target, source in override_fields:
-        if source in override.columns:
-            feed[target] = feed["fixture_id"].astype(str).map(override[source].to_dict())
-    feed = eligible_pre_match(feed, now=datetime.now(timezone.utc))
-
-    context_path = Path(base_dir) / "context_warehouse" / "player_match_rows.parquet"
-    if not context_path.exists():
-        return pd.DataFrame(), [{
-            "fixture_id": "*",
-            "stage": "context_unavailable",
-            "error": "Persisted context warehouse is unavailable. Streamlit never rebuilds TennisMyLife context over the network; wait for the scheduled backend refresh.",
-        }]
-    context_history, tournament_registry, weather_cache, production_candidate, score_candidate = _load_full_context_assets()
-
-    prepared_rows, errors = [], []
-    for fixture_id, group in feed.groupby("fixture_id", sort=False):
-        try:
-            prepared_rows.append((fixture_id, group, _prepare_with_overrides(
-                group, ratings_by_tour, summary, context_history=context_history
-            )))
-        except Exception as exc:
-            errors.append({"fixture_id": str(fixture_id), "stage":"prepare_fixture", "error":str(exc)})
-
-    enriched = build_live_enriched_history(
-        context_history, [_interactive_context_fixture(p) for _, _, p in prepared_rows],
-        tournament_registry=tournament_registry, weather_cache=weather_cache,
-    ) if prepared_rows else None
-
-    frames = []
-    for fixture_id, group, prepared in prepared_rows:
-        try:
-            priced = build_fixture_board(
-                group, ratings_by_tour, summary, sims=sims, prepared=prepared,
-                enriched_context=enriched, production_candidate=production_candidate, score_candidate=score_candidate,
-            )
-            live = build_live_matchup_features_from_enriched(
-                enriched, _interactive_context_fixture(prepared), baseline_probability=prepared["baseline_probability_p1"],
-                x_sr_p1=prepared["x_sr_p1"], x_elo_p1=prepared["x_elo_p1"],
-            )
-            for field in LIVE_CONTEXT_DISPLAY_FIELDS + COURT_CONDITION_DISPLAY_FIELDS:
-                priced[field] = live.get(field, np.nan)
-            a, b = prepared["rating_p1"], prepared["rating_p2"]
-            diagnostics = {
-                "state_confidence_p1":float(a.get("state_confidence",0.0)), "state_confidence_p2":float(b.get("state_confidence",0.0)),
-                "form_logit_p1":float(a.get("form_logit",0.0)), "form_logit_p2":float(b.get("form_logit",0.0)),
-                "form_percentile_p1":float(a.get("form_percentile",50.0)), "form_percentile_p2":float(b.get("form_percentile",50.0)),
-                "day_vol_logit_p1":float(a.get("day_vol_logit",0.06)), "day_vol_logit_p2":float(b.get("day_vol_logit",0.06)),
-                "vol_percentile_p1":float(a.get("vol_percentile",50.0)), "vol_percentile_p2":float(b.get("vol_percentile",50.0)),
-                "volatility_label_p1":str(a.get("volatility_label","Average")), "volatility_label_p2":str(b.get("volatility_label","Average")),
-                "state_confidence_label_p1":str(a.get("state_confidence_label","Unknown")), "state_confidence_label_p2":str(b.get("state_confidence_label","Unknown")),
-            }
-            for key, value in diagnostics.items(): priced[key] = value
-            frames.append(priced)
-        except Exception as exc:
-            errors.append({"fixture_id": str(fixture_id), "stage":"price_fixture", "error":str(exc)})
-    production = rank_board(pd.concat(frames, ignore_index=True, sort=False) if frames else pd.DataFrame())
-    return production_board_to_today(production), errors

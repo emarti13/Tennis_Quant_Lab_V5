@@ -175,8 +175,11 @@ settled (#61, lucky losers #63).
 - **Pricing function built (2026-10-18):** `v5_pricing.price_fixture` (resolution, baseline
   Elo with the 18-match minimum, stage label, live quotes with the freshness rule, cautious
   edge per execution book). A replay of 2026-10-06 to 10-12 priced 165 of 309 fixtures (58
-  with a player we have no history for, 80 thin, 5 unresolved, 1 unrated). Next (4g): the
-  daily batch and the override run call it, and the old lookups are removed.
+  with a player we have no history for, 80 thin, 5 unresolved, 1 unrated).
+- **4g-1 (2026-10-18):** the daily batch and the app's override run call `price_fixture`
+  (one `PricingContext`); the app's edits are saved to `master_schedule/overrides.csv`;
+  only the moneyline is modelled. 4g-2 (ratings refresh, Matchup Lab, Model Health) and
+  4g-3 (delete the old engine) follow.
 - Production probability = leak-free baseline (Elo + surface). `v5_workload_features`
   is removed from every path. fatigue_v1 enters only after it passes its own
   out-of-sample gate against this baseline, with the market benchmark reported.
@@ -284,6 +287,7 @@ collectors writing at least 95% of scheduled snapshots for 14 days. Then Phase 1
 | Step 3 | Market data layer design; probe run first (done; findings in docs/experiments/2026-10-16-step3-market-source-probe.md) | Approved 2026-10-16; old engine's daily heavy forecast paused until Step 4 (the board is unused; #54) |
 | Results | Third results source: the last in-play prices (middle rule); matches ended before two completed sets and walkovers are void for measuring the model; bets settle by each book's own rules | Approved 2026-10-17 |
 | Step 4 | Minimum history for a model price: both players need at least **18 rated matches** in the baseline Elo; below that the pricing function gives no model price (reason "thin history"). Chosen on January–June 2026, checked on July–October 12 (docs/experiments/2026-10-17-baseline-elo.md) | Approved 2026-10-18 |
+| Step 4g | Switch production to the pricing function in three PRs (batch and override run; ratings refresh and app; delete the old engine). Set and game score predictions are dropped until a score model passes its own gate against the baseline; Matchup Lab stays, priced by the pricing function (match winner only); weather, travel and venue features are deleted and return only if one beats the baseline | Approved 2026-10-18 |
 | Approach | Build toward the finished state; no fixes "for today" | User direction 2026-10-13 |
 
 Sheet notes from the user: a Men/Women column will be added; WTA end dates are not in the

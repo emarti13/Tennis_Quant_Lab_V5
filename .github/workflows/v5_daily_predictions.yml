@@ -61,9 +61,8 @@ jobs:
           source_commit = ''
           context_newer = True
           context_inputs = [
-              'v5_master_schedule_context.py', 'v5_full_context_live.py', 'v5_forecast_context.py',
-              'build_v5_context_matchups.py', 'build_v5_context_warehouse.py',
-              'context_registry/tennis_master_schedule.csv',
+              'v5_pricing.py', 'v5_baseline_elo.py', 'v5_fixture_resolution.py', 'v5_fixture_stage.py',
+              'v5_daily_batch.py', 'context_registry/master_schedule', 'context_registry/players',
               '.github/workflows/v5_daily_predictions.yml',
           ]
           if status_path.exists() and forecasts.exists() and forecasts.stat().st_size > 0:
@@ -180,6 +179,10 @@ jobs:
           path: context_warehouse
           key: v5-context-warehouse-${{ github.run_id }}
 
+      - name: Build the rating history the pricing function reads (TennisMyLife 2010..last year)
+        if: steps.forecast.outputs.forecast_fresh != 'true'
+        run: python bootstrap_v5_history.py
+
       - name: Build one sportsbook-independent daily forecast
         if: steps.forecast.outputs.forecast_fresh != 'true'
         run: |
@@ -233,12 +236,13 @@ jobs:
           remote_sha="$(git rev-parse origin/main)"
           if [ "$remote_sha" != "$build_sha" ]; then
             changed_context="$(git diff --name-only "$build_sha..$remote_sha" -- \
-              v5_master_schedule_context.py \
-              v5_full_context_live.py \
-              v5_forecast_context.py \
-              build_v5_context_matchups.py \
-              build_v5_context_warehouse.py \
-              context_registry/tennis_master_schedule.csv \
+              v5_pricing.py \
+              v5_baseline_elo.py \
+              v5_fixture_resolution.py \
+              v5_fixture_stage.py \
+              v5_daily_batch.py \
+              context_registry/master_schedule \
+              context_registry/players \
               .github/workflows/v5_daily_predictions.yml)"
             if [ -n "$changed_context" ]; then
               echo "This run was superseded by newer production context/code. Refusing to publish stale artifacts."
@@ -250,6 +254,7 @@ jobs:
 
           for f in \
             v5_daily_ready/latest_board.csv \
+            v5_daily_ready/rating_states.csv \
             v5_daily_ready/latest_summary.json \
             v5_daily_ready/frozen_predictions.csv \
             v5_daily_ready/daily_forecasts.csv \
