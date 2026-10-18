@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -8,25 +7,17 @@ import numpy as np
 import pandas as pd
 
 from v5_active_board import clear_adjusted_board, get_active_board, set_active_board
-from v5_context_transaction import commit_successful_adjustments
-from v5_interactive_production import run_interactive_production
+from v5_interactive_production import run_interactive_production, save_overrides
+from v5_pricing import PricingContext
 from v5_ui_production import render_official_pause_notice, load_canonical_today_board, load_repricing_status, runtime_production_state
 
 
-EDITABLE_CONTEXT_COLUMNS = [
-    "Tour", "Surface", "Best Of", "Environment", "Court Speed", "CPI", "Ace Rate %",
-    "Rally Length", "Relative Air Density", "Altitude m", "Ball Type",
-]
+EDITABLE_CONTEXT_COLUMNS = ["Surface", "Best Of", "Environment"]
 DISPLAY_PRIORITY = [
-    "Status", "Fixture ID", "Tournament", "Start", "Tour", "Surface", "Surface Source",
-    "Environment", "Court Speed", "CPI", "Ace Rate %", "Rally Length", "Relative Air Density",
-    "Altitude m", "Ball Type", "Court Conditions Source", "Player 1", "Player 2", "Best Of",
-    "P1 V5 %", "P1 Fair", "P2 V5 %", "P2 Fair", "Expected Margin", "Expected Total",
-    "Agreement", "Model Disagreement", "Model Gap", "P1 State Conf", "P2 State Conf", "P1 Form",
-    "P2 Form", "P1 Volatility", "P2 Volatility", "P1 ML", "P1 ML EV", "P1 ML Signal", "P2 ML",
-    "P2 ML EV", "P2 ML Signal", "P1 Spread", "P1 Spread Odds", "P1 Spread EV", "P1 Spread Signal",
-    "P2 Spread Odds", "P2 Spread EV", "P2 Spread Signal", "Total", "Over Odds", "Over EV", "Over Signal",
-    "Under Odds", "Under EV", "Under Signal", "Best Signal", "Note",
+    "Status", "Fixture ID", "Tournament", "Start", "Tour", "Surface", "Surface Source", "Environment",
+    "Best Of", "Stage", "Official Eligible", "Player 1", "Player 2", "P1 V5 %", "P1 Fair", "P2 V5 %", "P2 Fair",
+    "Rated Matches", "P1 ML", "P1 ML EV", "P1 ML Signal", "P2 ML", "P2 ML EV", "P2 ML Signal", "Best Signal",
+    "Model", "Note",
 ]
 
 
@@ -37,14 +28,12 @@ def _required(namespace: Mapping[str, Any], name: str):
     return value
 
 
-def _load_summary(base_dir: Path) -> dict:
-    path = base_dir / "v5_build_summary.json"
-    if not path.exists():
-        return {}
-    try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
-        return {}
+def _pricing_context(st_module, base_dir: Path) -> PricingContext:
+    """The daily batch's saved rating states (the app has no history files), loaded once."""
+    cache = getattr(st_module, "cache_resource", None)
+    if cache is None:
+        return PricingContext.from_board(base_dir)
+    return cache(show_spinner=False)(PricingContext.from_board)(str(base_dir))
 
 
 def _editor_source(base_dir: Path, namespace: Mapping[str, Any]) -> pd.DataFrame:
@@ -108,7 +97,7 @@ def render_daily_board(st_module, base_dir: str | Path, namespace: Mapping[str, 
     st_module.markdown('<div class="v5-eyebrow">Tennis Quant Lab V5</div>', unsafe_allow_html=True)
     st_module.markdown('<div class="v5-title">Daily Board</div>', unsafe_allow_html=True)
     render_official_pause_notice(st_module, base_dir)
-    st_module.markdown('<div class="v5-subtitle">Full-slate analytical workspace. Inspect production output, adjust match context, and run verified scenarios. Context changes persist only after a successful adjusted production run.</div>', unsafe_allow_html=True)
+    st_module.markdown('<div class="v5-subtitle">Full-slate analytical workspace. Inspect production output, adjust match context, and run verified scenarios. Surface, setting and best-of edits are saved as overrides only after a successful adjusted run.</div>', unsafe_allow_html=True)
     st_module.caption("Active board: Adjusted Scenario" if active_mode == "adjusted" else "Active board: Production Forecast")
 
     if active_mode == "production":
@@ -138,37 +127,31 @@ def render_daily_board(st_module, base_dir: str | Path, namespace: Mapping[str, 
         editor_source[editor_cols], num_rows="fixed", hide_index=True, use_container_width=True,
         key="v5_full_daily_board_editor", disabled=fixed_front,
         column_config={
-            "Tour": st_module.column_config.SelectboxColumn(options=["MEN", "WTA"]),
             "Surface": st_module.column_config.SelectboxColumn(options=["Hard", "Clay", "Grass"]),
             "Best Of": st_module.column_config.SelectboxColumn(options=[3, 5]),
             "Environment": st_module.column_config.SelectboxColumn(options=["Outdoor", "Indoor"]),
         },
     )
-    precision = st_module.selectbox("Adjusted scenario precision", ["Fast — 2,000 per match", "Standard — 5,000 per match", "High — 10,000 per match"], index=1, key="v5_daily_board_precision")
-    sims = {"Fast — 2,000 per match": 2000, "Standard — 5,000 per match": 5000, "High — 10,000 per match": 10000}[precision]
-
     if st_module.button("RUN ADJUSTED DAILY BOARD", type="primary", key="v5_run_adjusted_daily_board"):
-        load_market_board, load_ratings = _required(namespace, "load_market_board"), _required(namespace, "load_ratings")
-        market_feed = load_market_board()
-        ratings_by_tour = {"MEN": load_ratings("MEN"), "WTA": load_ratings("WTA")}
-        with st_module.spinner("Running adjusted slate through the production model path..."):
-            adjusted, errors = run_interactive_production(market_feed, editor, ratings_by_tour, _load_summary(base_dir), sims=sims, base_dir=base_dir)
-        if errors:
-            st_module.warning(f"{len(errors)} fixture/context issue(s) were flagged. No context changes were committed.")
-            st_module.dataframe(pd.DataFrame(errors), use_container_width=True, hide_index=True)
-        run_succeeded = adjusted is not None and not adjusted.empty and not errors
-        if run_succeeded:
+        market_feed = _required(namespace, "load_market_board")()
+        with st_module.spinner("Pricing the adjusted slate with the production pricing function..."):
             try:
-                committed = commit_successful_adjustments(
-                    base_dir / "context_registry" / "tournament_context_overrides.csv",
-                    editor_source[editor_cols], editor, adjusted_run_succeeded=True,
-                )
-            except Exception as exc:
-                st_module.error(f"Adjusted run succeeded but context persistence/read-back failed: {exc}")
+                ctx = _pricing_context(st_module, base_dir)
+            except FileNotFoundError as exc:
+                st_module.error(f"The daily batch has not saved its rating states yet ({exc}); the adjusted run needs them.")
                 return active
-            adjusted = _with_best_signal(adjusted)
-            set_active_board(st_module.session_state, adjusted, mode="adjusted")
-            st_module.success(f"Adjusted Scenario is active. Verified persistent context updates: {committed} tournament(s).")
+            adjusted, errors, overrides = run_interactive_production(market_feed, editor, ctx)
+        if errors:
+            st_module.warning(f"{len(errors)} fixture(s) could not be adjusted. No overrides were saved.")
+            st_module.dataframe(pd.DataFrame(errors), use_container_width=True, hide_index=True)
+        if adjusted is not None and not adjusted.empty and not errors:
+            try:
+                saved = save_overrides(overrides, base_dir)
+            except Exception as exc:
+                st_module.error(f"Adjusted run succeeded but saving the overrides failed: {exc}")
+                return active
+            set_active_board(st_module.session_state, _with_best_signal(adjusted), mode="adjusted")
+            st_module.success(f"Adjusted Scenario is active. Overrides saved: {saved}.")
             st_module.rerun()
 
     active, active_mode = get_active_board(st_module.session_state, production)

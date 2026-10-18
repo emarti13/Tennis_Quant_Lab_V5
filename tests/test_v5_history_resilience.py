@@ -58,10 +58,12 @@ def test_manifest_fetch_retries_transient_failures(monkeypatch):
 
 
 def test_streamlit_interactive_path_never_builds_context_over_network():
-    source = Path("v5_interactive_production.py").read_text(encoding="utf-8")
-    assert "from build_v5_context_warehouse import build_context_warehouse" not in source
-    assert "build_context_warehouse(str(base_dir))" not in source
-    assert "context_unavailable" in source
+    # The override run prices from files already in the repo (v5_pricing.PricingContext);
+    # it never fetches results or rebuilds a warehouse.
+    for path in ("v5_interactive_production.py", "v5_pricing.py"):
+        source = Path(path).read_text(encoding="utf-8")
+        for banned in ("build_context_warehouse", "refresh_tennismylife", "import requests", "urllib"):
+            assert banned not in source, (path, banned)
 
 
 def test_player_refresh_has_retry_windows_but_skips_when_already_fresh():

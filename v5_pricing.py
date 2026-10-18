@@ -27,6 +27,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+import numpy as np
 import pandas as pd
 
 import v5_baseline_elo as be
@@ -50,6 +51,7 @@ class Price:
     tour: str = ""
     tour_family: str = ""
     surface: str = ""
+    setting: str = ""
     best_of: int | None = None
     stage: str = "unknown"
     stage_source: str = ""
@@ -59,9 +61,10 @@ class Price:
     model_p1: float | None = None
     official_eligible: bool = False
     books: list = field(default_factory=list)      # one dict per book and side
+    rating_vectors: dict = field(default_factory=dict)   # player_id -> the rating vector used (saved for the app)
 
     def as_row(self) -> dict:
-        d = {k: v for k, v in self.__dict__.items() if k != "books"}
+        d = {k: v for k, v in self.__dict__.items() if k not in ("books", "rating_vectors")}
         d["rated_matches"] = "|".join(str(n) for n in self.rated_matches)
         return d
 
@@ -121,16 +124,20 @@ def price_fixture(fixture_id, *, resolver, live_elo: be.LiveElo, events: dict[st
     except FixtureResolutionError as e:
         return Price(fid, "no_price", e.code)
     stage, stage_source = (stages or {}).get(fid, ("unknown", "not_labelled"))
-    out = Price(fid, "no_price", "OK", r.edition_key, r.tour, r.tour_family, r.surface, r.best_of, stage, stage_source,
-                r.player1.player_id or "", r.player2.player_id or "")
+    out = Price(fid, "no_price", "OK", r.edition_key, r.tour, r.tour_family, r.surface, r.setting, r.best_of, stage,
+                stage_source, r.player1.player_id or "", r.player2.player_id or "")
     fx = resolver.fixtures.loc[fid]
     fixture = {"start_time_utc": fx.get("start_time_utc"), "true_start_time_utc": fx.get("true_start_time_utc")}
     if not (r.player1.player_id and r.player2.player_id):
         out.reason = "NO_HISTORY"
     else:
-        event = events.get(r.edition_key)
+        event = events.get(r.edition_key, r.edition_key)
         start = pd.Timestamp(fixture["start_time_utc"])
         state = live_elo.state(event, week=tennis_week(start))
+        for pid in (r.player1.player_id, r.player2.player_id):
+            vec = state(pid)
+            if vec is not None:
+                out.rating_vectors[pid] = [float(x) for x in vec]
         try:
             got = be.fixture_probability(state, r.player1.player_id, r.player2.player_id, r.surface, live_elo.params)
         except KeyError:
@@ -151,4 +158,142 @@ def price_fixture(fixture_id, *, resolver, live_elo: be.LiveElo, events: dict[st
             latest = q[q["fetched_utc"] == q.groupby("bookmaker")["fetched_utc"].transform("max")]
             for book, g in latest.groupby("bookmaker"):
                 out.books += _book_rows(book, g, fixture, now, out.model_p1)
+    return out
+
+
+# ---------------------------------------------------------------- shared by the daily batch and the override run
+MODEL_VERSION = "baseline_elo_v1"
+STAGE_LOOKBACK_DAYS = 21
+
+
+@dataclass
+class PricingContext:
+    """Everything price_fixture needs, loaded once per run."""
+    resolver: object
+    live_elo: be.LiveElo
+    events: dict
+    stages: dict
+
+    @classmethod
+    def from_repo(cls, base=".", *, now=None, matches: pd.DataFrame | None = None) -> "PricingContext":
+        from pathlib import Path
+
+        from v5_fixture_resolution import FixtureResolver
+        from v5_fixture_stage import edition_levels, fixture_stages
+        from v5_market_results import load_fixture_winners
+        from v5_tournament_identity import load_master_schedule
+
+        base = Path(base)
+        now = pd.Timestamp(now or pd.Timestamp.now(tz="UTC"))
+        matches = be.load_matches(base) if matches is None else matches
+        resolver = FixtureResolver.from_repo(base)
+        live = be.run(matches, be.PRODUCTION_PARAMS, live=True)
+        crosswalk = pd.read_csv(base / "context_registry" / "master_schedule" / "crosswalk_tennismylife.csv",
+                                dtype=str, keep_default_na=False)
+        # Stage labels for the fixtures around now (earlier days of each edition count).
+        reg = resolver.fixtures.reset_index()
+        start = pd.to_datetime(reg["start_time_utc"], utc=True, errors="coerce")
+        recent = reg[(start >= now - pd.Timedelta(days=STAGE_LOOKBACK_DAYS)) & (start <= now + pd.Timedelta(days=8))].copy()
+        ids = pd.DataFrame([resolver.identify(f) for f in recent["fixture_id"]], index=recent.index)
+        recent[["edition_key", "player1_id", "player2_id"]] = ids[["edition_key", "player1_id", "player2_id"]]
+        schedules = [load_master_schedule(p)[0] for p in sorted((base / "context_registry" / "master_schedule").glob("master_schedule_*.csv"))]
+        levels = edition_levels(pd.concat(schedules)) if schedules else {}
+        winners = load_fixture_winners(recent.assign(cutoff_utc=recent["start_time_utc"]), base)
+        st = fixture_stages(recent, None, levels, winners)
+        stages = {r.fixture_id: (r.stage, r.stage_source) for r in st.itertuples()}
+        return cls(resolver, live, edition_events(matches, crosswalk), stages)
+
+    @classmethod
+    def from_board(cls, base=".") -> "PricingContext":
+        """The app's context: the batch's saved rating states and stage labels, no history files."""
+        from pathlib import Path
+
+        from v5_fixture_resolution import FixtureResolver
+
+        base = Path(base)
+        states = pd.read_csv(base / RATING_STATES_PATH, dtype={"edition_key": str, "player_id": str})
+        board = pd.read_csv(base / "v5_daily_ready" / "latest_board.csv", dtype={"fixture_id": str}, low_memory=False)
+        first = board.drop_duplicates("fixture_id")
+        stages = {r.fixture_id: (r.stage, r.stage_source) for r in first.itertuples()} if "stage" in first else {}
+        return cls(FixtureResolver.from_repo(base), StoredElo(states), {}, stages)
+
+    def with_overrides(self, rows: list[dict]) -> "PricingContext":
+        """A copy whose resolver applies extra edition overrides (the app's edits) after the
+        stored ones, so the edits win."""
+        import copy
+
+        resolver = copy.copy(self.resolver)
+        resolver.overrides = pd.concat([self.resolver.overrides, pd.DataFrame(rows)], ignore_index=True)
+        return PricingContext(resolver, self.live_elo, self.events, self.stages)
+
+    def price(self, fixture_id, **kw) -> Price:
+        return price_fixture(fixture_id, resolver=self.resolver, live_elo=self.live_elo, events=self.events,
+                             stages=self.stages, **kw)
+
+
+RATING_STATES_PATH = "v5_daily_ready/rating_states.csv"
+RATING_COLUMNS = ["edition_key", "player_id", "overall", "hard", "clay", "grass", "n", "n_hard", "n_clay", "n_grass"]
+
+
+class StoredElo:
+    """The ratings the daily batch priced each edition's players from (rating_states.csv),
+    for the app, which has no history files: the same state, so the same price."""
+
+    def __init__(self, states: pd.DataFrame, params: be.EloParams = be.PRODUCTION_PARAMS):
+        self.params = params
+        self.by_edition: dict[str, dict] = {}
+        for r in states.itertuples(index=False):
+            self.by_edition.setdefault(r.edition_key, {})[r.player_id] = np.array(
+                [r.overall, r.hard, r.clay, r.grass, r.n, r.n_hard, r.n_clay, r.n_grass], dtype=float)
+
+    def state(self, event, week=None):
+        return self.by_edition.get(event, {}).get
+
+
+def rating_state_rows(prices: list["Price"]) -> pd.DataFrame:
+    rows = [[p.edition_key, pid, *vec] for p in prices for pid, vec in p.rating_vectors.items()]
+    return pd.DataFrame(rows, columns=RATING_COLUMNS).drop_duplicates(["edition_key", "player_id"])
+
+
+def _fair_american(p: float) -> float:
+    return round(-100 * p / (1 - p)) if p >= 0.5 else round(100 * (1 - p) / p)
+
+
+def board_rows(feed_rows: pd.DataFrame, price: Price, *, frozen_at: str) -> pd.DataFrame:
+    """The board rows for one fixture's market rows (the feed's own columns kept).
+
+    Only the moneyline gets a model probability (the baseline gives the match winner; set
+    and game scores are not modelled until a score model passes its own gate, user decision
+    2026-10-18). A selection is player 1 or 2 by the feed's own names. Edge, EV and signal
+    are filled in by repricing from the latest prices."""
+    out = feed_rows.copy()
+    p1 = price.model_p1
+    sel = out["selection"].astype(str)
+    is_ml = out["market_group"].astype(str) == "moneyline"
+    side_p = pd.Series(float("nan"), index=out.index)
+    if p1 is not None:
+        side_p[is_ml & (sel == out["player1"].astype(str))] = p1
+        side_p[is_ml & (sel == out["player2"].astype(str))] = 1 - p1
+    out["model_probability"] = side_p
+    out["model_win_probability"] = side_p
+    out["model_push_probability"] = side_p.where(side_p.isna(), 0.0)
+    out["model_loss_probability"] = 1 - side_p
+    out["model_fair_american"] = [None if pd.isna(p) else _fair_american(p) for p in side_p]
+    out["full_context_probability_p1"] = p1        # the frozen P(player 1) column the forecast ledger keys on
+    out["model_version"] = MODEL_VERSION
+    out["price_status"] = price.status
+    out["price_reason"] = price.reason
+    out["no_price_reason"] = [price.reason if pd.isna(p) else "" for p in side_p]
+    out.loc[~is_ml & side_p.isna(), "no_price_reason"] = "NOT_MODELLED"
+    for k in ("edition_key", "tour", "tour_family", "surface", "setting", "best_of", "stage", "stage_source",
+              "player1_id", "player2_id", "official_eligible"):
+        out[k if k != "tour" else "tour_v5"] = getattr(price, k)
+    out["surface_source"] = "master_schedule"
+    out["rated_matches"] = "|".join(str(n) for n in price.rated_matches)
+    out["resolved_player1"] = out["player1"]
+    out["resolved_player2"] = out["player2"]
+    out["frozen_at_utc"] = frozen_at
+    out["result_status"] = "OPEN"
+    out["settled_result"] = ""
+    out["profit_units"] = float("nan")
     return out

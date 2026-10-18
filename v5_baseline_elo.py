@@ -52,6 +52,10 @@ class EloParams:
         return self.k * 250.0 / (n + 5.0) ** self.shape
 
 
+# Chosen on 2025 log loss (docs/experiments/2026-10-17-baseline-elo.md); production uses these.
+PRODUCTION_PARAMS = EloParams(k=0.6, blend=0.2)
+
+
 def surface_of(value) -> str:
     s = "" if pd.isna(value) else str(value).strip().title()
     return s if s in SURFACES else "Hard"

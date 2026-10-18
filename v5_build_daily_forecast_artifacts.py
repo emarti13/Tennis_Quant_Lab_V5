@@ -6,16 +6,13 @@ from zoneinfo import ZoneInfo
 
 import pandas as pd
 
-from v5_daily_batch import _load_full_context_assets, _load_ratings, _load_summary
 from v5_daily_forecast import forecast_rows_from_board, market_probability_rows_from_board
-from v5_forecast_context import enrich_daily_board_context
 from v5_production_artifacts import artifact_status, promote_csv_last_known_good, write_status
 
 
 BASE = Path(__file__).resolve().parent
 OUTDIR = BASE / "v5_daily_ready"
 BOARD_PATH = OUTDIR / "latest_board.csv"
-MARKET_PATH = BASE / "v5_market_ready" / "market_board_input.csv"
 FORECAST_PATH = OUTDIR / "daily_forecasts.csv"
 MARKET_PROB_PATH = OUTDIR / "daily_market_probabilities.csv"
 STATUS_PATH = OUTDIR / "forecast_status.json"
@@ -59,25 +56,8 @@ def main() -> int:
         ))
         return 2
 
-    market_feed = _read_csv(MARKET_PATH)
-    context_errors: list[dict] = []
-    if not market_feed.empty:
-        try:
-            summary = _load_summary()
-            ratings = _load_ratings()
-            context_history, tournament_registry, weather_cache, _, _ = _load_full_context_assets()
-            board, context_errors = enrich_daily_board_context(
-                board,
-                market_feed,
-                ratings,
-                summary,
-                context_history,
-                tournament_registry=tournament_registry,
-                weather_cache=weather_cache,
-            )
-        except Exception as exc:
-            context_errors = [{"fixture_id": "ALL", "stage": "forecast_context", "error": f"{type(exc).__name__}:{exc}"}]
-
+    # The board already carries what the forecast needs (v5_pricing.board_rows); the old
+    # context enrichment (weather, travel, workload) is retired with the old engine.
     forecasts, market_probs = build_forecast_artifacts(board, now_utc=now)
     staging = OUTDIR / ".staging"
     staging.mkdir(parents=True, exist_ok=True)
@@ -99,18 +79,17 @@ def main() -> int:
     source_version = None
     if "frozen_at_utc" in board.columns and not board["frozen_at_utc"].dropna().empty:
         source_version = str(board["frozen_at_utc"].dropna().iloc[0])
-    state = "success" if not context_errors else "partial"
     write_status(STATUS_PATH, artifact_status(
         stage="daily_forecast",
-        state=state,
+        state="success",
         source_version=source_version,
         rows=len(forecasts),
         fixtures=forecasts["fixture_id"].astype(str).nunique(),
         freshness="READY",
-        error=None if not context_errors else f"{len(context_errors)} context display enrichment issue(s)",
+        error=None,
         run_timestamp=now.isoformat(),
-    ) | {"forecast_date": production_date(now), "context_errors": context_errors})
-    print(f"daily forecasts: {len(forecasts)} fixtures; frozen market probabilities: {len(market_probs)}; context_errors={len(context_errors)}")
+    ) | {"forecast_date": production_date(now)})
+    print(f"daily forecasts: {len(forecasts)} fixtures; frozen market probabilities: {len(market_probs)}")
     return 0
 
 

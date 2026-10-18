@@ -15,11 +15,15 @@ def test_production_runtime_no_longer_imports_legacy_court_conditions():
         assert "CourtSpeed canonical conditions" not in source
 
 
-def test_authority_is_the_only_runtime_tournament_court_source():
-    for path in ("v5_daily_batch.py", "v5_full_context_live.py"):
+def test_master_schedule_is_the_only_runtime_tournament_court_source():
+    # Rebuild plan Step 4g: production takes surface, setting and best-of only from the master
+    # schedule through v5_fixture_resolution (CLAUDE.md), via the one pricing function.
+    for path in ("v5_daily_batch.py", "v5_interactive_production.py", "v5_ui_production.py", "v5_ui_daily_board.py"):
         source = Path(path).read_text(encoding="utf-8")
-        assert "v5_tournament_authority" in source
-        assert "resolve_authority" in source
+        for retired in ("v5_tournament_authority", "resolve_authority", "v5_master_schedule_context",
+                        "v5_tournament_context_registry", "tennis_master_schedule.csv"):
+            assert retired not in source, (path, retired)
+    assert "from v5_fixture_resolution import" in Path("v5_pricing.py").read_text(encoding="utf-8")
 
 
 def test_context_builder_neutralizes_retired_court_characteristics():

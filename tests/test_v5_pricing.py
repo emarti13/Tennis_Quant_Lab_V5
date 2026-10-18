@@ -91,3 +91,14 @@ def test_quotes_without_a_time_to_judge_them_raise():
     live = be.run(history(), be.EloParams(), live=True)
     with pytest.raises(ValueError):
         vp.price_fixture("f1", resolver=FakeResolver(("A", "B")), live_elo=live, events={}, quotes=quotes("bet365", 1.3, 3.6))
+
+
+def test_the_saved_rating_states_price_exactly_as_the_live_ratings():
+    # The app re-prices from the states the daily batch saved (it has no history files).
+    live = be.run(history(), be.EloParams(), live=True)
+    p = vp.price_fixture("f1", resolver=FakeResolver(("A", "B")), live_elo=live, events={},
+                         stages={"f1": ("main", "after_start")}, now=NOW)
+    stored = vp.StoredElo(vp.rating_state_rows([p]), be.EloParams())
+    q = vp.price_fixture("f1", resolver=FakeResolver(("A", "B")), live_elo=stored, events={},
+                         stages={"f1": ("main", "after_start")}, now=NOW)
+    assert q.model_p1 == p.model_p1 and q.rated_matches == p.rated_matches
