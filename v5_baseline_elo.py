@@ -38,6 +38,7 @@ from v5_player_registry import USABLE_STATUSES, normalize_tml_id
 SURFACES = ("Hard", "Clay", "Grass")
 REGISTRY_TML = Path("context_registry") / "players" / "alias_tennismylife.csv"
 TOUR_CODE = {"MEN": "M", "WTA": "W"}
+LIVE_SNAPSHOT_WEEKS = 4      # events ending this close to the newest week keep a snapshot for live pricing
 
 
 @dataclass(frozen=True)
@@ -104,15 +105,18 @@ def _events(matches: pd.DataFrame) -> tuple[list, dict]:
     return order, ev[["first_week", "last_week"]].to_dict("index")
 
 
-def run(matches: pd.DataFrame, params: EloParams = EloParams(), stop: tuple | None = None):
+def run(matches: pd.DataFrame, params: EloParams = EloParams(), stop: tuple | None = None, live: bool = False):
     """Price every match (walkovers skipped) from the state the ordering rules allow.
 
     Returns a DataFrame (one row per priced match: key, tour, tid, date, winner_key,
     loser_key, surface, p_winner, n_winner, n_loser). With `stop=((tour, tid), stage, rank)`
     returns instead (ratings, event_local): the committed ratings and the event's own
     updates from rounds strictly before (stage, rank) - the state a fixture in that event
-    and round is priced from (`rating_state`)."""
+    and round is priced from (`rating_state`). With `live=True` returns a LiveElo: the state
+    after every result in the history, for fixtures not played yet."""
     order, weeks = _events(matches)
+    recent = max((w["last_week"] for w in weeks.values()), default=0) - LIVE_SNAPSHOT_WEEKS
+    snapshots: dict[tuple, tuple] = {}
     by_event = {e: g for e, g in matches.groupby(["tour", "tid"], sort=False)}
     ratings: dict[str, np.ndarray] = {}
     pending: list[tuple[float, dict]] = []      # (last_week, deltas) of events not yet visible
@@ -170,10 +174,40 @@ def run(matches: pd.DataFrame, params: EloParams = EloParams(), stop: tuple | No
         for k, d in unknown_deltas.items():
             deltas[k] = deltas.get(k, np.zeros(8)) + d
         pending.append((weeks[e]["last_week"], deltas))
+        if live and weeks[e]["last_week"] >= recent:
+            snapshots[e] = (dict(ratings), dict(local))      # arrays are replaced, never changed
+    if live:
+        return LiveElo(ratings, pending, snapshots, params)
     if stop is not None:
         raise KeyError(f"event {stop[0]} not in the history")
     return pd.DataFrame(rows, columns=["key", "tour", "tid", "date", "winner_key", "loser_key", "surface",
                                        "p_winner", "n_winner", "n_loser"])
+
+
+class LiveElo:
+    """The ratings a fixture not yet played is priced from, by the same rules as `run`.
+
+    - Its event already has results in the history (a later round): the ratings committed
+      when the event began plus the event's own results so far. Each player plays once per
+      round, so the two players' ratings are the ones the history would use for that round.
+    - Its event has none yet: every event whose last week is before the fixture's week.
+    Built once per run (`run(matches, params, live=True)`), then a pure lookup."""
+
+    def __init__(self, committed: dict, pending: list, snapshots: dict, params: EloParams):
+        self.committed, self.pending, self.snapshots, self.params = committed, pending, snapshots, params
+
+    def state(self, event: tuple | None = None, week: float | None = None):
+        if event is not None and event in self.snapshots:
+            ratings, local = self.snapshots[event]
+            return lambda key: local[key] if key in local else ratings.get(key)
+        if week is None:
+            raise ValueError("an event with no results needs the fixture's tennis week")
+        ratings = dict(self.committed)
+        for last, deltas in self.pending:
+            if last < week:
+                for key, d in deltas.items():
+                    ratings[key] = ratings.get(key, _fresh(self.params)) + d
+        return ratings.get
 
 
 def rating_state(matches: pd.DataFrame, event: tuple, stage: int, rank: float, params: EloParams = EloParams()):

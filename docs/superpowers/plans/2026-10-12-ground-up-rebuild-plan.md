@@ -169,6 +169,11 @@ The backfills run for several weeks. Open for Step 4:
   `player_id`. 2026 out of sample: log loss 0.626, against 0.629 for the current engine's
   baseline and 0.596 for the Pinnacle close (docs/experiments/2026-10-17-baseline-elo.md).
   Not yet read by production; the pricing function (next) uses it.
+- **Pricing function built (2026-10-18):** `v5_pricing.price_fixture` (resolution, baseline
+  Elo with the 18-match minimum, stage label, live quotes with the freshness rule, cautious
+  edge per execution book). A replay of 2026-10-06 to 10-12 priced 165 of 309 fixtures (58
+  with a player we have no history for, 80 thin, 5 unresolved, 1 unrated). Next (4g): the
+  daily batch and the override run call it, and the old lookups are removed.
 - Production probability = leak-free baseline (Elo + surface). `v5_workload_features`
   is removed from every path. fatigue_v1 enters only after it passes its own
   out-of-sample gate against this baseline, with the market benchmark reported.
