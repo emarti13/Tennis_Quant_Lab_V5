@@ -207,3 +207,35 @@ def test_each_book_set_has_its_own_boundary_and_all_expired_drops_all(monkeypatc
     assert all(f < "d020" for f in a) and len(a) > 20 - pm.PROBE_WINDOW
     assert len([e for e in expired if e["books"] == "b"]) == 10   # all expired
     assert {k[2] for k in keep} == {"a"}
+
+
+def test_a_dropped_connection_is_retried_and_never_ends_the_run(monkeypatch):
+    import sys
+    import requests
+    sys.path.insert(0, "scripts")
+    import pull_market_history as pm
+    monkeypatch.setattr(pm, "NETWORK_PAUSE", 0)
+
+    class Resp:
+        status_code = 200
+        text = "{}"
+
+        def json(self):
+            return {"ok": True}
+
+    class Flaky:
+        def __init__(self, fails):
+            self.fails, self.calls = fails, 0
+
+        def get(self, *a, **k):
+            self.calls += 1
+            if self.calls <= self.fails:
+                raise requests.exceptions.ConnectionError("Remote end closed connection without response")
+            return Resp()
+
+    api = pm.Api("key")
+    api.session = Flaky(fails=2)
+    assert api.get("historical-odds", fixtureId="x") == (200, {"ok": True})
+    api.session = Flaky(fails=99)
+    status, body = api.get("historical-odds", fixtureId="x")
+    assert status == 0 and body["error"]["network"] == "ConnectionError" and api.session.calls == 4
