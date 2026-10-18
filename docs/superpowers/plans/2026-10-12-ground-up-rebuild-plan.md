@@ -121,12 +121,15 @@ Design: `docs/superpowers/specs/2026-10-16-market-data-layer-design.md` (approve
 - Kalshi (#56);
 - de-vig with the cautious edge rule, lam measured per book (#57);
 - winners from TennisMyLife and Kalshi, cross-checked (#59);
-- live pre-match prices and the freshness rule (this step's last PR).
+- live pre-match prices and the freshness rule (#60);
+- in-play calls as the third results source; retirements before two sets void (#62);
+- the backfill finds where OddsPapi history starts by date (#64). OddsPapi had already
+  deleted Bet365 history through at least 2026-04-05 when the re-pull began, so Bet365 closes
+  exist only from about April on (the next run logs the exact date).
 
-The backfills run for several weeks. Open for Step 4:
-- the board's refresh cadence (the freshness rule's maximum age is 60 min, but the live run
-  is once a day);
-- the stage rule for unpriced qualifying.
+The backfills run for several weeks. Open for Step 4: the board's refresh cadence (the
+freshness rule's maximum age is 60 min, but the live run is once a day). The stage rule is
+settled (#61, lucky losers #63).
 
 - OddsPapi feed with a **start-time-aware freshness rule**: a price is actionable only if
   the snapshot is recent **and** the match has not started. Started fixtures leave the
