@@ -65,6 +65,7 @@ DAILY_DAYS = 8
 DISCOVERY_DAYS = 9   # one /fixtures call covers the whole daily window
 BACKFILL_SINCE = "2026-01-01"
 COOLDOWN = 5.1
+NETWORK_PAUSE = 5.0   # first pause after a dropped connection (then 10 s, 20 s)
 FLUSH_EVERY = 25
 PROBE_WINDOW = 3     # consecutive fixtures tried at each probe point
 
@@ -74,9 +75,18 @@ class Api:
         self.key, self.session = key, requests.Session()
 
     def get(self, endpoint: str, retries: int = 4, **params):
-        """(status, body). Honours the per-endpoint cooldown (HTTP 429 retryMs)."""
-        for _ in range(retries):
-            r = self.session.get(f"{API}/{endpoint}", params={**params, "apiKey": self.key}, timeout=60)
+        """(status, body). Honours the per-endpoint cooldown (HTTP 429 retryMs). A dropped
+        connection or timeout is retried with a growing pause; if it persists the call
+        returns status 0 ("error" in the pull log, retried by a later run) instead of
+        ending the run and losing everything collected before it."""
+        for attempt in range(retries):
+            try:
+                r = self.session.get(f"{API}/{endpoint}", params={**params, "apiKey": self.key}, timeout=60)
+            except requests.RequestException as exc:
+                if attempt == retries - 1:
+                    return 0, {"error": {"network": type(exc).__name__, "detail": str(exc)[:200]}}
+                time.sleep(NETWORK_PAUSE * 2 ** attempt)
+                continue
             try:
                 body = r.json()
             except ValueError:
