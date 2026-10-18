@@ -288,6 +288,7 @@ collectors writing at least 95% of scheduled snapshots for 14 days. Then Phase 1
 | Results | Third results source: the last in-play prices (middle rule); matches ended before two completed sets and walkovers are void for measuring the model; bets settle by each book's own rules | Approved 2026-10-17 |
 | Step 4 | Minimum history for a model price: both players need at least **18 rated matches** in the baseline Elo; below that the pricing function gives no model price (reason "thin history"). Chosen on January–June 2026, checked on July–October 12 (docs/experiments/2026-10-17-baseline-elo.md) | Approved 2026-10-18 |
 | Step 4g | Switch production to the pricing function in three PRs (batch and override run; ratings refresh and app; delete the old engine). Set and game score predictions are dropped until a score model passes its own gate against the baseline; Matchup Lab stays, priced by the pricing function (match winner only); weather, travel and venue features are deleted and return only if one beats the baseline | Approved 2026-10-18 |
+| Step 4 | Model guard: a model price more than 15 points from the market's fair price (Pinnacle, else consensus) is REVIEW, never BET, LEAN or official (docs/experiments/2026-10-18-market-gap-guard.md). Spreads and totals are paused, not dropped: they return when a score model passes its gate | Approved 2026-10-18 |
 | Approach | Build toward the finished state; no fixes "for today" | User direction 2026-10-13 |
 
 Sheet notes from the user: a Men/Women column will be added; WTA end dates are not in the
