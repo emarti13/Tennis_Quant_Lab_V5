@@ -133,6 +133,37 @@ def fair_at(path: list, t) -> float | None:
     return p
 
 
+def mid_fair(best_bid, best_ask) -> float | None:
+    """Kalshi's own mid as the fair price: only from a two-sided book no wider than 20c."""
+    if best_bid and best_ask and 0 < best_bid < best_ask < 1 and best_ask - best_bid <= 0.20:
+        return (best_bid + best_ask) / 2
+    return None
+
+
+def quotes(fair: float, h: float, best_bid, best_ask) -> tuple[float, float]:
+    """Our buy and sell: fair -/+ h to the cent, never crossing the standing book."""
+    f = min(max(fair, 0.02), 0.98)
+    bid, ask = math.floor(round((f - h) * 100, 6)) / 100, math.ceil(round((f + h) * 100, 6)) / 100
+    if best_ask is not None:
+        bid = min(bid, round(best_ask - 0.01, 2))
+    if best_bid is not None:
+        ask = max(ask, round(best_bid + 0.01, 2))
+    return bid, ask
+
+
+def fill(taker: str, x: float, count: float, bid: float, ask: float, best_bid, best_ask, pos: float):
+    """Does a real trade (taker side, YES price x, size) fill our quote? (side, price, contracts)
+    or None. Through our price, or at it while we were strictly the best; at most the trade's
+    size, the quote size and what the position limit leaves."""
+    if taker == "yes" and pos > -LIMIT and 0 < ask < 1:                  # taker buys YES: our sell
+        if x > ask or (x == ask and (best_ask is None or ask < best_ask)):
+            return ("sell", ask, min(count, SIZE, LIMIT + pos))
+    elif taker == "no" and pos < LIMIT and 0 < bid < 1:                  # taker sells YES: our buy
+        if x < bid or (x == bid and (best_bid is None or bid > best_bid)):
+            return ("buy", bid, min(count, SIZE, LIMIT - pos))
+    return None
+
+
 def replay(market: dict, fair_path: list | None, start, h: float, lean: float) -> list[tuple[str, float, float]]:
     """Fills [(side 'buy'/'sell', price, contracts)] for one market. With no fair path the
     fair price is Kalshi's own mid standing before the trade (quotes start once a two-sided
@@ -144,32 +175,14 @@ def replay(market: dict, fair_path: list | None, start, h: float, lean: float) -
         while ci + 1 < len(candles) and candles[ci + 1][0] <= ts:
             ci += 1
         best_bid, best_ask = (candles[ci][1], candles[ci][2]) if ci >= 0 else (None, None)
-        if fair_path is not None:
-            fair = fair_at(fair_path, ts)
-        elif best_bid and best_ask and 0 < best_bid < best_ask < 1 and best_ask - best_bid <= 0.20:
-            fair = (best_bid + best_ask) / 2
-        else:
-            fair = None
+        fair = fair_at(fair_path, ts) if fair_path is not None else mid_fair(best_bid, best_ask)
         if fair is None:
             continue
-        f = min(max(fair + lean, 0.02), 0.98)
-        bid, ask = math.floor(round((f - h) * 100, 6)) / 100, math.ceil(round((f + h) * 100, 6)) / 100
-        if best_ask is not None:
-            bid = min(bid, round(best_ask - 0.01, 2))
-        if best_bid is not None:
-            ask = max(ask, round(best_bid + 0.01, 2))
-        if taker == "yes" and pos > -LIMIT and 0 < ask < 1:              # taker buys YES: our sell
-            first = best_ask is None or ask < best_ask
-            if x > ask or (x == ask and first):
-                q = min(count, SIZE, LIMIT + pos)
-                fills.append(("sell", ask, q))
-                pos -= q
-        elif taker == "no" and pos < LIMIT and 0 < bid < 1:              # taker sells YES: our buy
-            first = best_bid is None or bid > best_bid
-            if x < bid or (x == bid and first):
-                q = min(count, SIZE, LIMIT - pos)
-                fills.append(("buy", bid, q))
-                pos += q
+        bid, ask = quotes(fair + lean, h, best_bid, best_ask)
+        got = fill(taker, x, count, bid, ask, best_bid, best_ask, pos)
+        if got:
+            fills.append(got)
+            pos += got[2] if got[0] == "buy" else -got[2]
     return fills
 
 
