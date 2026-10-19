@@ -48,7 +48,14 @@ local clone with the command shown.
 | `feat/step4c-lucky-loser` | Merged (PR #63) | 2026-10-17 |
 | `fix/market-history-expiry-by-date` | Merged (PR #64) | 2026-10-17 |
 | `repair/fatigue-v1-safety-layer` | Merged (PR #36) | 2026-10-17 |
-| `docs/repo-map-step4` | This change, once merged | 2026-10-17 |
+| `docs/repo-map-step4` | Merged (PR #65) | 2026-10-17 |
+| `feat/step4e-baseline` | Merged (PR #66); also the base #67 merged into by mistake | 2026-10-19 |
+| `feat/step4f-pricing` | Merged into `feat/step4e-baseline` (PR #67), re-landed on `main` as #69 | 2026-10-19 |
+| `feat/step4f-pricing-to-main` | Merged (PR #69) | 2026-10-19 |
+| `fix/oddspapi-network-errors` | Merged (PR #68) | 2026-10-19 |
+| `feat/step4g1-production-switch` | Merged (PR #70) | 2026-10-19 |
+| `feat/step4-market-gap-guard` | Merged (PR #71) | 2026-10-19 |
+| `docs/manual-cleanup-step4` | This change, once merged | 2026-10-19 |
 | `claude/bootstrap-v5-history-setup-3pxlyr` | Agent session branch; all its work reached `main` via #39–#43 | 2026-10-12 |
 
 ```bash
@@ -65,6 +72,8 @@ git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-in
   feat/step3e-live-prices research/step3e-live-trial research/inplay-winners \
   feat/step4a-fixture-stage feat/step4b-results-inplay feat/step4c-lucky-loser \
   fix/market-history-expiry-by-date docs/repo-map-step4 repair/fatigue-v1-safety-layer \
+  feat/step4e-baseline feat/step4f-pricing feat/step4f-pricing-to-main fix/oddspapi-network-errors \
+  feat/step4g1-production-switch feat/step4-market-gap-guard docs/manual-cleanup-step4 \
   claude/bootstrap-v5-history-setup-3pxlyr
 ```
 
