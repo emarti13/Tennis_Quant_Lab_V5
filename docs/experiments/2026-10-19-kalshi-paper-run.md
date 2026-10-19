@@ -75,9 +75,10 @@ interval above zero at the half-width carried forward (5¢, the stronger replay 
 mean 5-minute markout not negative. Divergence from the replay's 0.7 to 2.2¢ a contract is
 reported either way.
 
+## Demo keys
+`KALSHI_DEMO_KEY_ID` and `KALSHI_DEMO_PRIVATE_KEY_B64` work: a signed read-only
+`GET /portfolio/balance` on `demo-api.kalshi.co` returned HTTP 200 (2026-10-19; values not
+printed). The paper run does not use them; they are for demo orders later (Phase 5).
+
 ## Not done
-- The read-only balance check of the demo keys (`KALSHI_DEMO_KEY_ID`,
-  `KALSHI_DEMO_PRIVATE_KEY_B64` on `demo-api.kalshi.co`). Both are set and the key decodes
-  as an RSA private key, but the signed request was blocked in this session. The paper
-  run does not need the keys.
 - Pinnacle fair and the model lean (sim "Next" 1): waiting on the price-store backfill.
