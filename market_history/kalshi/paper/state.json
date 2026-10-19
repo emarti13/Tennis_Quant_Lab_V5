@@ -10,7 +10,7 @@
     "0.05": 0.0
    },
    "snapshot": null,
-   "volume": 27899.29
+   "volume": 27901.29
   },
   "KXATPCHALLENGERMATCH-26OCT18SILRIT-SIL": {
    "cutoff": "2026-10-18T10:59:00+00:00",
@@ -22,7 +22,7 @@
     "0.05": 0.0
    },
    "snapshot": null,
-   "volume": 57656.95
+   "volume": 57889.95
   },
   "KXATPCHALLENGERMATCH-26OCT19AGAHOU-AGA": {
    "cutoff": "2026-10-19T13:39:00+00:00",
@@ -36,7 +36,7 @@
    "snapshot": {
     "best_ask": 0.29,
     "best_bid": 0.28,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 62.58
   },
@@ -52,7 +52,7 @@
    "snapshot": {
     "best_ask": 0.72,
     "best_bid": 0.71,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 120.12
   },
@@ -68,7 +68,7 @@
    "snapshot": {
     "best_ask": 0.72,
     "best_bid": 0.71,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 3.72
   },
@@ -84,14 +84,14 @@
    "snapshot": {
     "best_ask": 0.29,
     "best_bid": 0.27,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 6.0
   },
   "KXATPCHALLENGERMATCH-26OCT19ALKILA-ALK": {
    "cutoff": "2026-10-19T09:29:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19ALKILA",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:14:38.35874Z",
    "player": "Mert Alkaya",
    "pos": {
     "0.03": 0.0,
@@ -100,14 +100,14 @@
    "snapshot": {
     "best_ask": 0.36,
     "best_bid": 0.35,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 538.32
+   "volume": 799.88
   },
   "KXATPCHALLENGERMATCH-26OCT19ALKILA-ILA": {
    "cutoff": "2026-10-19T09:29:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19ALKILA",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:15:49.1136Z",
    "player": "Andre Ilagan",
    "pos": {
     "0.03": 0.0,
@@ -115,15 +115,15 @@
    },
    "snapshot": {
     "best_ask": 0.65,
-    "best_bid": 0.63,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "best_bid": 0.64,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 1187.69
+   "volume": 1976.69
   },
   "KXATPCHALLENGERMATCH-26OCT19ALMMAR-ALM": {
    "cutoff": "2026-10-19T10:59:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19ALMMAR",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:24:44.305859Z",
    "player": "Izan Almazan Valiente",
    "pos": {
     "0.03": 0.0,
@@ -132,9 +132,9 @@
    "snapshot": {
     "best_ask": 0.57,
     "best_bid": 0.56,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 766.37
+   "volume": 850.37
   },
   "KXATPCHALLENGERMATCH-26OCT19ALMMAR-MAR": {
    "cutoff": "2026-10-19T10:59:00+00:00",
@@ -148,7 +148,7 @@
    "snapshot": {
     "best_ask": 0.45,
     "best_bid": 0.43,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 445.02
   },
@@ -164,7 +164,7 @@
    "snapshot": {
     "best_ask": 0.76,
     "best_bid": 0.75,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 99.83
   },
@@ -180,7 +180,71 @@
    "snapshot": {
     "best_ask": 0.25,
     "best_bid": 0.22,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
+   },
+   "volume": 0.0
+  },
+  "KXATPCHALLENGERMATCH-26OCT19ANTPED-ANT": {
+   "cutoff": "2026-10-19T20:09:00+00:00",
+   "event": "KXATPCHALLENGERMATCH-26OCT19ANTPED",
+   "last_trade_ts": null,
+   "player": "Michael Antonius",
+   "pos": {
+    "0.03": 0.0,
+    "0.05": 0.0
+   },
+   "snapshot": {
+    "best_ask": 0.66,
+    "best_bid": 0.62,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
+   },
+   "volume": 0.0
+  },
+  "KXATPCHALLENGERMATCH-26OCT19ANTPED-PED": {
+   "cutoff": "2026-10-19T20:09:00+00:00",
+   "event": "KXATPCHALLENGERMATCH-26OCT19ANTPED",
+   "last_trade_ts": null,
+   "player": "Albert Pedrico Kravtsov",
+   "pos": {
+    "0.03": 0.0,
+    "0.05": 0.0
+   },
+   "snapshot": {
+    "best_ask": 0.38,
+    "best_bid": 0.17,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
+   },
+   "volume": 0.0
+  },
+  "KXATPCHALLENGERMATCH-26OCT19BIGZAH-BIG": {
+   "cutoff": "2026-10-19T20:09:00+00:00",
+   "event": "KXATPCHALLENGERMATCH-26OCT19BIGZAH",
+   "last_trade_ts": "2026-10-19T05:24:39.963189Z",
+   "player": "Kaylan Bigun",
+   "pos": {
+    "0.03": 0.0,
+    "0.05": 0.0
+   },
+   "snapshot": {
+    "best_ask": 0.58,
+    "best_bid": 0.54,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
+   },
+   "volume": 141.17
+  },
+  "KXATPCHALLENGERMATCH-26OCT19BIGZAH-ZAH": {
+   "cutoff": "2026-10-19T20:09:00+00:00",
+   "event": "KXATPCHALLENGERMATCH-26OCT19BIGZAH",
+   "last_trade_ts": null,
+   "player": "Patrick Zahraj",
+   "pos": {
+    "0.03": 0.0,
+    "0.05": 0.0
+   },
+   "snapshot": {
+    "best_ask": 0.43,
+    "best_bid": 0.38,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
@@ -196,7 +260,7 @@
    "snapshot": {
     "best_ask": 0.24,
     "best_bid": 0.22,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 15.0
   },
@@ -212,7 +276,7 @@
    "snapshot": {
     "best_ask": 0.77,
     "best_bid": 0.75,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 61.81
   },
@@ -228,7 +292,7 @@
    "snapshot": {
     "best_ask": 0.49,
     "best_bid": 0.46,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 13.0
   },
@@ -244,7 +308,7 @@
    "snapshot": {
     "best_ask": 0.52,
     "best_bid": 0.5,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 10.88
   },
@@ -260,7 +324,7 @@
    "snapshot": {
     "best_ask": 0.39,
     "best_bid": 0.36,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 1.0
   },
@@ -276,7 +340,7 @@
    "snapshot": {
     "best_ask": 0.62,
     "best_bid": 0.6,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 15.0
   },
@@ -291,10 +355,10 @@
    },
    "snapshot": {
     "best_ask": 0.53,
-    "best_bid": 0.52,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "best_bid": 0.51,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 411.42
+   "volume": 422.42
   },
   "KXATPCHALLENGERMATCH-26OCT19DAMPIE-PIE": {
    "cutoff": "2026-10-19T13:19:00+00:00",
@@ -306,9 +370,9 @@
     "0.05": 0.0
    },
    "snapshot": {
-    "best_ask": 0.48,
+    "best_ask": 0.49,
     "best_bid": 0.47,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 154.27
   },
@@ -324,7 +388,7 @@
    "snapshot": {
     "best_ask": 0.93,
     "best_bid": 0.91,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 21.14
   },
@@ -340,7 +404,7 @@
    "snapshot": {
     "best_ask": 0.09,
     "best_bid": 0.07,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 242.02
   },
@@ -356,7 +420,7 @@
    "snapshot": {
     "best_ask": 0.39,
     "best_bid": 0.38,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 145.0
   },
@@ -372,7 +436,7 @@
    "snapshot": {
     "best_ask": 0.6,
     "best_bid": 0.59,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 40.86
   },
@@ -388,7 +452,7 @@
    "snapshot": {
     "best_ask": 0.41,
     "best_bid": 0.4,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 395.95
   },
@@ -404,7 +468,7 @@
    "snapshot": {
     "best_ask": 0.6,
     "best_bid": 0.58,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
@@ -420,7 +484,7 @@
    "snapshot": {
     "best_ask": 0.68,
     "best_bid": 0.64,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
@@ -436,41 +500,41 @@
    "snapshot": {
     "best_ask": 0.35,
     "best_bid": 0.31,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
   "KXATPCHALLENGERMATCH-26OCT19JASMAT-JAS": {
    "cutoff": "2026-10-19T06:59:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19JASMAT",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:26:24.047175Z",
    "player": "Omar Jasika",
    "pos": {
-    "0.03": 0.0,
-    "0.05": 0.0
+    "0.03": -206.97999999999993,
+    "0.05": -233.97999999999993
    },
    "snapshot": {
-    "best_ask": 0.48,
-    "best_bid": 0.47,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "best_ask": 0.4,
+    "best_bid": 0.39,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 147377.61
+   "volume": 210030.28
   },
   "KXATPCHALLENGERMATCH-26OCT19JASMAT-MAT": {
    "cutoff": "2026-10-19T06:59:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19JASMAT",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:26:20.005083Z",
    "player": "Koki Matsuda",
    "pos": {
-    "0.03": 0.0,
-    "0.05": 0.0
+    "0.03": -249.89999999999995,
+    "0.05": -249.89999999999995
    },
    "snapshot": {
-    "best_ask": 0.54,
-    "best_bid": 0.52,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "best_ask": 0.61,
+    "best_bid": 0.6,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 168056.93
+   "volume": 201623.69
   },
   "KXATPCHALLENGERMATCH-26OCT19KOLBON-BON": {
    "cutoff": "2026-10-19T13:19:00+00:00",
@@ -484,7 +548,7 @@
    "snapshot": {
     "best_ask": 0.44,
     "best_bid": 0.43,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 10.0
   },
@@ -500,14 +564,14 @@
    "snapshot": {
     "best_ask": 0.57,
     "best_bid": 0.56,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 562.0
   },
   "KXATPCHALLENGERMATCH-26OCT19LEOCAS-CAS": {
    "cutoff": "2026-10-19T08:09:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19LEOCAS",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:25:32.602705Z",
    "player": "Luca Castelnuovo",
    "pos": {
     "0.03": 0.0,
@@ -516,9 +580,9 @@
    "snapshot": {
     "best_ask": 0.56,
     "best_bid": 0.55,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 1805.79
+   "volume": 10432.7
   },
   "KXATPCHALLENGERMATCH-26OCT19LEOCAS-LEO": {
    "cutoff": "2026-10-19T08:09:00+00:00",
@@ -532,9 +596,9 @@
    "snapshot": {
     "best_ask": 0.46,
     "best_bid": 0.45,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 796.39
+   "volume": 798.48
   },
   "KXATPCHALLENGERMATCH-26OCT19LEODOM-DOM": {
    "cutoff": "2026-10-19T11:59:00+00:00",
@@ -548,7 +612,7 @@
    "snapshot": {
     "best_ask": 0.79,
     "best_bid": 0.78,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 390.06
   },
@@ -564,25 +628,25 @@
    "snapshot": {
     "best_ask": 0.21,
     "best_bid": 0.19,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 258.61
   },
   "KXATPCHALLENGERMATCH-26OCT19MAGSAL-MAG": {
    "cutoff": "2026-10-19T17:59:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19MAGSAL",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:18:32.029136Z",
    "player": "Alan Magadan",
    "pos": {
     "0.03": 0.0,
     "0.05": 0.0
    },
    "snapshot": {
-    "best_ask": 0.71,
+    "best_ask": 0.69,
     "best_bid": 0.63,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 52.33
+   "volume": 72.33
   },
   "KXATPCHALLENGERMATCH-26OCT19MAGSAL-SAL": {
    "cutoff": "2026-10-19T17:59:00+00:00",
@@ -596,7 +660,7 @@
    "snapshot": {
     "best_ask": 0.41,
     "best_bid": 0.21,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
@@ -612,7 +676,7 @@
    "snapshot": {
     "best_ask": 0.21,
     "best_bid": 0.2,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
@@ -628,14 +692,14 @@
    "snapshot": {
     "best_ask": 0.79,
     "best_bid": 0.78,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 116.95
   },
   "KXATPCHALLENGERMATCH-26OCT19MCCYME-MCC": {
    "cutoff": "2026-10-19T09:29:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19MCCYME",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:14:59.765043Z",
    "player": "James McCabe",
    "pos": {
     "0.03": 0.0,
@@ -644,14 +708,14 @@
    "snapshot": {
     "best_ask": 0.4,
     "best_bid": 0.39,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 387.21
+   "volume": 414.21
   },
   "KXATPCHALLENGERMATCH-26OCT19MCCYME-YME": {
    "cutoff": "2026-10-19T09:29:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19MCCYME",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:16:52.344785Z",
    "player": "Elias Ymer",
    "pos": {
     "0.03": 0.0,
@@ -660,9 +724,9 @@
    "snapshot": {
     "best_ask": 0.61,
     "best_bid": 0.59,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 946.56
+   "volume": 1147.81
   },
   "KXATPCHALLENGERMATCH-26OCT19MELGOM-GOM": {
    "cutoff": "2026-10-19T19:09:00+00:00",
@@ -674,9 +738,9 @@
     "0.05": 0.0
    },
    "snapshot": {
-    "best_ask": 0.08,
-    "best_bid": 0.06,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "best_ask": 0.09,
+    "best_bid": 0.08,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 2.0
   },
@@ -690,9 +754,9 @@
     "0.05": 0.0
    },
    "snapshot": {
-    "best_ask": 0.93,
+    "best_ask": 0.92,
     "best_bid": 0.9,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 47.0
   },
@@ -708,7 +772,7 @@
    "snapshot": {
     "best_ask": 0.31,
     "best_bid": 0.3,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
@@ -724,7 +788,7 @@
    "snapshot": {
     "best_ask": 0.7,
     "best_bid": 0.69,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 119.17
   },
@@ -740,7 +804,7 @@
    "snapshot": {
     "best_ask": 0.73,
     "best_bid": 0.72,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 13.32
   },
@@ -756,7 +820,7 @@
    "snapshot": {
     "best_ask": 0.28,
     "best_bid": 0.26,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 213.85
   },
@@ -772,7 +836,7 @@
    "snapshot": {
     "best_ask": 0.47,
     "best_bid": 0.44,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
@@ -788,7 +852,7 @@
    "snapshot": {
     "best_ask": 0.54,
     "best_bid": 0.52,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
@@ -803,8 +867,8 @@
    },
    "snapshot": {
     "best_ask": 0.48,
-    "best_bid": 0.47,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "best_bid": 0.46,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 59.0
   },
@@ -820,7 +884,7 @@
    "snapshot": {
     "best_ask": 0.53,
     "best_bid": 0.51,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
@@ -834,9 +898,9 @@
     "0.05": 0.0
    },
    "snapshot": {
-    "best_ask": 0.92,
+    "best_ask": 0.93,
     "best_bid": 0.91,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 496.34
   },
@@ -852,14 +916,14 @@
    "snapshot": {
     "best_ask": 0.09,
     "best_bid": 0.08,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 1644.87
   },
   "KXATPCHALLENGERMATCH-26OCT19PALPAN-PAL": {
    "cutoff": "2026-10-19T06:59:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19PALPAN",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:16:59.370831Z",
    "player": "Dominik Palan",
    "pos": {
     "0.03": 0.0,
@@ -868,14 +932,14 @@
    "snapshot": {
     "best_ask": 1.0,
     "best_bid": 0.99,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:20:22+00:00"
    },
-   "volume": 83547.46
+   "volume": 93267.88
   },
   "KXATPCHALLENGERMATCH-26OCT19PALPAN-PAN": {
    "cutoff": "2026-10-19T06:59:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19PALPAN",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:18:00.509255Z",
    "player": "Semen Pankin",
    "pos": {
     "0.03": 0.0,
@@ -884,9 +948,9 @@
    "snapshot": {
     "best_ask": 0.01,
     "best_bid": 0.0,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:20:22+00:00"
    },
-   "volume": 80067.76
+   "volume": 84973.72
   },
   "KXATPCHALLENGERMATCH-26OCT19PERSAK-PER": {
    "cutoff": "2026-10-19T10:59:00+00:00",
@@ -900,7 +964,7 @@
    "snapshot": {
     "best_ask": 0.71,
     "best_bid": 0.7,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 10.0
   },
@@ -916,7 +980,7 @@
    "snapshot": {
     "best_ask": 0.3,
     "best_bid": 0.28,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 132.34
   },
@@ -932,7 +996,7 @@
    "snapshot": {
     "best_ask": 0.51,
     "best_bid": 0.5,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 2361.67
   },
@@ -948,41 +1012,41 @@
    "snapshot": {
     "best_ask": 0.5,
     "best_bid": 0.48,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 458.57
   },
   "KXATPCHALLENGERMATCH-26OCT19PURSUL-PUR": {
    "cutoff": "2026-10-19T06:59:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19PURSUL",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:26:20.233934Z",
    "player": "Saba Purtseladze",
    "pos": {
-    "0.03": 0.0,
-    "0.05": 0.0
+    "0.03": 18.87000000000002,
+    "0.05": -151.85
    },
    "snapshot": {
-    "best_ask": 0.16,
-    "best_bid": 0.15,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "best_ask": 0.18,
+    "best_bid": 0.17,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 50447.04
+   "volume": 79498.94
   },
   "KXATPCHALLENGERMATCH-26OCT19PURSUL-SUL": {
    "cutoff": "2026-10-19T06:59:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19PURSUL",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:26:23.906984Z",
    "player": "Khumoyun Sultanov",
    "pos": {
-    "0.03": 0.0,
-    "0.05": 0.0
+    "0.03": -300.0,
+    "0.05": -300.0
    },
    "snapshot": {
-    "best_ask": 0.85,
-    "best_bid": 0.84,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "best_ask": 0.84,
+    "best_bid": 0.83,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 37063.1
+   "volume": 52187.27
   },
   "KXATPCHALLENGERMATCH-26OCT19PURZHU-PUR": {
    "cutoff": "2026-10-19T08:09:00+00:00",
@@ -994,27 +1058,27 @@
     "0.05": 0.0
    },
    "snapshot": {
-    "best_ask": 0.8,
-    "best_bid": 0.77,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "best_ask": 0.79,
+    "best_bid": 0.78,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 145.09
+   "volume": 145.35
   },
   "KXATPCHALLENGERMATCH-26OCT19PURZHU-ZHU": {
    "cutoff": "2026-10-19T08:09:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19PURZHU",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:22:44.030086Z",
    "player": "Evan Zhu",
    "pos": {
     "0.03": 0.0,
     "0.05": 0.0
    },
    "snapshot": {
-    "best_ask": 0.21,
-    "best_bid": 0.2,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "best_ask": 0.23,
+    "best_bid": 0.21,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 38.27
+   "volume": 196.88
   },
   "KXATPCHALLENGERMATCH-26OCT19RIBVAS-RIB": {
    "cutoff": "2026-10-19T14:29:00+00:00",
@@ -1028,7 +1092,7 @@
    "snapshot": {
     "best_ask": 0.58,
     "best_bid": 0.57,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
@@ -1044,7 +1108,7 @@
    "snapshot": {
     "best_ask": 0.44,
     "best_bid": 0.42,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
@@ -1060,7 +1124,7 @@
    "snapshot": {
     "best_ask": 0.63,
     "best_bid": 0.62,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 183.76
   },
@@ -1076,7 +1140,7 @@
    "snapshot": {
     "best_ask": 0.38,
     "best_bid": 0.36,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 117.04
   },
@@ -1090,16 +1154,16 @@
     "0.05": 0.0
    },
    "snapshot": {
-    "best_ask": 0.27,
-    "best_bid": 0.22,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "best_ask": 0.25,
+    "best_bid": 0.21,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
   "KXATPCHALLENGERMATCH-26OCT19RODHER-ROD": {
    "cutoff": "2026-10-19T19:09:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19RODHER",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:15:55.132053Z",
    "player": "Santiago Rodriguez Taverna",
    "pos": {
     "0.03": 0.0,
@@ -1107,10 +1171,10 @@
    },
    "snapshot": {
     "best_ask": 0.77,
-    "best_bid": 0.73,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "best_bid": 0.75,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 0.0
+   "volume": 75.15
   },
   "KXATPCHALLENGERMATCH-26OCT19RYBART-ART": {
    "cutoff": "2026-10-19T18:59:00+00:00",
@@ -1124,7 +1188,7 @@
    "snapshot": {
     "best_ask": 0.37,
     "best_bid": 0.34,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
@@ -1140,14 +1204,14 @@
    "snapshot": {
     "best_ask": 0.65,
     "best_bid": 0.63,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
   "KXATPCHALLENGERMATCH-26OCT19SAMDEM-DEM": {
    "cutoff": "2026-10-19T08:09:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19SAMDEM",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:21:36.3527Z",
    "player": "Yaroslav Demin",
    "pos": {
     "0.03": 0.0,
@@ -1156,14 +1220,14 @@
    "snapshot": {
     "best_ask": 0.48,
     "best_bid": 0.46,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 1762.84
+   "volume": 2045.84
   },
   "KXATPCHALLENGERMATCH-26OCT19SAMDEM-SAM": {
    "cutoff": "2026-10-19T08:09:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19SAMDEM",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:20:05.625163Z",
    "player": "Kasidit Samrej",
    "pos": {
     "0.03": 0.0,
@@ -1172,9 +1236,9 @@
    "snapshot": {
     "best_ask": 0.54,
     "best_bid": 0.52,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 1653.14
+   "volume": 1928.19
   },
   "KXATPCHALLENGERMATCH-26OCT19SANWEH-SAN": {
    "cutoff": "2026-10-19T14:19:00+00:00",
@@ -1188,7 +1252,7 @@
    "snapshot": {
     "best_ask": 0.73,
     "best_bid": 0.72,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 130.58
   },
@@ -1204,7 +1268,7 @@
    "snapshot": {
     "best_ask": 0.27,
     "best_bid": 0.26,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 87.44
   },
@@ -1220,7 +1284,7 @@
    "snapshot": {
     "best_ask": 0.55,
     "best_bid": 0.54,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 344.29
   },
@@ -1236,7 +1300,7 @@
    "snapshot": {
     "best_ask": 0.46,
     "best_bid": 0.43,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 1447.0
   },
@@ -1252,7 +1316,7 @@
    "snapshot": {
     "best_ask": 0.36,
     "best_bid": 0.34,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 17.47
   },
@@ -1268,14 +1332,14 @@
    "snapshot": {
     "best_ask": 0.66,
     "best_bid": 0.64,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 68.24
   },
   "KXATPCHALLENGERMATCH-26OCT19WONDEL-DEL": {
    "cutoff": "2026-10-19T12:59:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26OCT19WONDEL",
-   "last_trade_ts": null,
+   "last_trade_ts": "2026-10-19T05:23:42.102923Z",
    "player": "Jake Delaney",
    "pos": {
     "0.03": 0.0,
@@ -1284,9 +1348,9 @@
    "snapshot": {
     "best_ask": 0.1,
     "best_bid": 0.09,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
-   "volume": 18674.6
+   "volume": 18681.6
   },
   "KXATPCHALLENGERMATCH-26OCT19WONDEL-WON": {
    "cutoff": "2026-10-19T12:59:00+00:00",
@@ -1300,7 +1364,7 @@
    "snapshot": {
     "best_ask": 0.91,
     "best_bid": 0.9,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 1283.9
   },
@@ -1316,7 +1380,7 @@
    "snapshot": {
     "best_ask": 0.61,
     "best_bid": 0.59,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   },
@@ -1331,8 +1395,8 @@
    },
    "snapshot": {
     "best_ask": 0.4,
-    "best_bid": 0.39,
-    "polled_utc": "2026-10-19T05:11:00+00:00"
+    "best_bid": 0.38,
+    "polled_utc": "2026-10-19T05:26:22+00:00"
    },
    "volume": 0.0
   }
