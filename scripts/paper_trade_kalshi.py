@@ -57,7 +57,7 @@ FILL_COLS = ["ticker", "event_ticker", "h", "trade_id", "trade_utc", "taker_side
 class Kalshi:
     """Public market data, throttled, retrying on rate limits and network errors."""
 
-    def __init__(self, pause: float = 0.35):
+    def __init__(self, pause: float = 0.6):
         self.s, self.pause, self.calls = requests.Session(), pause, 0
 
     def get(self, path: str, params: dict | None = None) -> dict:
@@ -127,7 +127,7 @@ def save_state(state: dict) -> None:
 def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
     """One poll: score the trades since the last poll against the quote that was standing,
     then record the new standing book. Returns counts for the log line."""
-    snaps, fills, seen = [], [], 0
+    snaps, fills, seen, failed = [], [], 0, 0
     for series in SERIES:
         for m in api.open_markets(series):
             t = m["ticker"]
@@ -140,14 +140,20 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
             st["cutoff"] = cutoff.isoformat()
             volume = _f(m.get("volume_fp"))
             snap = st.get("snapshot")
-            # 1) trades since the last poll, against the quote standing from the last snapshot
+            # 1) trades since the last poll, against the quote standing from the last snapshot.
+            # A market whose trades cannot be fetched keeps its state and is retried next poll.
             if snap is not None and volume is not None and volume != st.get("volume"):
-                min_ts = int(pd.Timestamp(snap["polled_utc"]).timestamp())
-                for tr in sorted(api.trades(t, min_ts), key=lambda x: x["created_time"]):
+                try:
+                    tape = api.trades(t, int(pd.Timestamp(snap["polled_utc"]).timestamp()))
+                except RuntimeError:
+                    failed += 1
+                    continue
+                pos, last_ts, found = dict(st["pos"]), st["last_trade_ts"], []
+                for tr in sorted(tape, key=lambda x: x["created_time"]):
                     ts = pd.Timestamp(tr["created_time"])
                     if ts <= pd.Timestamp(snap["polled_utc"]) or ts > cutoff:
                         continue
-                    if st["last_trade_ts"] and ts <= pd.Timestamp(st["last_trade_ts"]):
+                    if last_ts and ts <= pd.Timestamp(last_ts):
                         continue
                     seen += 1
                     fair = mid_fair(snap["best_bid"], snap["best_ask"])
@@ -155,16 +161,18 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
                         for h in HALF_WIDTHS:
                             bid, ask = quotes(fair, h, snap["best_bid"], snap["best_ask"])
                             got = fill(tr["taker_side"], float(tr["yes_price_dollars"]), float(tr["count_fp"]),
-                                       bid, ask, snap["best_bid"], snap["best_ask"], st["pos"][str(h)])
+                                       bid, ask, snap["best_bid"], snap["best_ask"], pos[str(h)])
                             if got:
                                 side, price, q = got
-                                st["pos"][str(h)] += q if side == "buy" else -q
-                                fills.append({"ticker": t, "event_ticker": st["event"], "h": h, "trade_id": tr.get("trade_id"),
+                                pos[str(h)] += q if side == "buy" else -q
+                                found.append({"ticker": t, "event_ticker": st["event"], "h": h, "trade_id": tr.get("trade_id"),
                                               "trade_utc": tr["created_time"], "taker_side": tr["taker_side"],
                                               "trade_price": float(tr["yes_price_dollars"]), "trade_count": float(tr["count_fp"]),
                                               "side": side, "price": price, "contracts": q, "standing_bid": bid,
                                               "standing_ask": ask, "snapshot_utc": snap["polled_utc"]})
-                    st["last_trade_ts"] = tr["created_time"]
+                    last_ts = tr["created_time"]
+                st["pos"], st["last_trade_ts"] = pos, last_ts
+                fills += found
             # 2) the book standing from now until the next poll
             if now < cutoff:
                 snap = {"polled_utc": now.isoformat(), "best_bid": _f(m.get("yes_bid_dollars")),
@@ -176,7 +184,8 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
             st["volume"] = volume
     _append("snapshots", snaps, SNAP_COLS, now)
     _append("fills", fills, FILL_COLS, now)
-    return {"markets": len(snaps), "trades_checked": seen, "fills": len(fills), "api_calls": api.calls}
+    return {"markets": len(snaps), "trades_checked": seen, "fills": len(fills), "markets_retry_next_poll": failed,
+            "api_calls": api.calls}
 
 
 def settle(api: Kalshi) -> pd.DataFrame:

@@ -48,3 +48,17 @@ def test_a_trade_is_never_counted_twice(tmp_path, monkeypatch):
     api.volume = 41.0                                                        # volume moves again, same tape
     pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:02:00Z"))
     assert len(pd.read_csv(tmp_path / "fills_2026-10.csv")) == 1
+
+
+def test_a_failed_trade_fetch_keeps_the_market_for_the_next_poll(tmp_path, monkeypatch):
+    monkeypatch.setattr(pt, "PAPER_DIR", tmp_path)
+    api, state = FakeKalshi(), {"markets": {}}
+    pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:00:00Z"))
+    api.tape, api.volume = [trade("2026-10-20T10:00:30Z", 0.59, 40, "yes", "1")], 40.0
+    real = api.trades
+    api.trades = lambda *a: (_ for _ in ()).throw(RuntimeError("rate limited"))
+    info = pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:01:00Z"))
+    assert info["markets_retry_next_poll"] == 1 and state["markets"]["T-A"]["last_trade_ts"] is None
+    api.trades = real
+    pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:02:00Z"))
+    assert len(pd.read_csv(tmp_path / "fills_2026-10.csv")) == 1               # scored once, after the retry
