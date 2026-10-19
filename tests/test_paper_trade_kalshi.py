@@ -9,9 +9,16 @@ import scripts.paper_trade_kalshi as pt
 class FakeKalshi:
     def __init__(self):
         self.book, self.volume, self.tape, self.calls = (0.50, 0.60), 0.0, [], 0
+        self.status = "not_started"
+
+    def milestone(self, event):
+        return {"id": "m1", "type": "tennis_tournament_singles", "start_date": "2026-10-20T12:00:00Z"}
+
+    def live_status(self, milestone):
+        return self.status
 
     def open_markets(self, series):
-        return [{"ticker": "T-A", "event_ticker": "T", "yes_sub_title": "A", "occurrence_datetime": "2026-10-20T12:00:00Z",
+        return [{"ticker": "T-A", "event_ticker": "T", "yes_sub_title": "A", "occurrence_datetime": "2026-10-20T15:00:00Z",
                  "yes_bid_dollars": str(self.book[0]), "yes_ask_dollars": str(self.book[1]), "volume_fp": str(self.volume)}]
 
     def trades(self, ticker, min_ts):
@@ -62,3 +69,23 @@ def test_a_failed_trade_fetch_keeps_the_market_for_the_next_poll(tmp_path, monke
     api.trades = real
     pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:02:00Z"))
     assert len(pd.read_csv(tmp_path / "fills_2026-10.csv")) == 1               # scored once, after the retry
+
+
+def test_once_the_match_is_live_nothing_after_the_previous_poll_counts(tmp_path, monkeypatch):
+    monkeypatch.setattr(pt, "PAPER_DIR", tmp_path)
+    api, state = FakeKalshi(), {"markets": {}}
+    pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:30:00Z"))           # 1.5 h before: status checked
+    api.tape, api.volume, api.status = [trade("2026-10-20T10:30:30Z", 0.59, 40, "yes", "1")], 40.0, "live/1st_set"
+    pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:31:00Z"))           # an early start: the trade may be in play
+    assert not (tmp_path / "fills_2026-10.csv").exists()
+    assert state["events"]["T"]["stop_at"] == "2026-10-20T10:30:00+00:00"
+    snaps = pd.read_csv(tmp_path / "snapshots_2026-10.csv")
+    assert list(snaps["polled_utc"]) == ["2026-10-20T10:30:00+00:00"]            # no quote after the start is known
+
+
+def test_an_event_with_no_known_start_is_not_quoted(tmp_path, monkeypatch):
+    monkeypatch.setattr(pt, "PAPER_DIR", tmp_path)
+    api, state = FakeKalshi(), {"markets": {}}
+    api.milestone = lambda event: None
+    pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:00:00Z"))
+    assert not (tmp_path / "snapshots_2026-10.csv").exists()

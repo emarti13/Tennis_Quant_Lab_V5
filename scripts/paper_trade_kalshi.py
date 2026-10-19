@@ -25,9 +25,13 @@ state.json (last trade seen and positions per market and setting), results.csv (
 These fixtures are in the sealed period (from 2026-10-13): the paper run is the forward test of
 settings chosen before it and must not be used to choose new ones (CLAUDE.md).
 
-Limits: the cutoff is Kalshi's scheduled time (`occurrence_datetime`); a match that starts
-earlier than scheduled lets in-play trades in until then. Snapshots are as fresh as the poll
-interval.
+Start of the match: Kalshi's market `occurrence_datetime` is about 3 hours after the real
+start (the first runs on 2026-10-19 quoted into matches already being played; those logs were
+discarded). The cutoff is the match's `start_date` from Kalshi's milestone for the event, one
+minute before; and from 2 hours before that, the milestone's live data is checked every poll:
+once it is anything but "not_started" (including "match about to start"), nothing after the
+previous poll counts. An event without a milestone is not quoted (fail closed). Snapshots are
+as fresh as the poll interval.
 """
 from __future__ import annotations
 
@@ -49,7 +53,8 @@ SERIES = ("KXATPCHALLENGERMATCH",)
 HALF_WIDTHS = (0.03, 0.05)
 PAPER_DIR = BASE / "market_history" / "kalshi" / "paper"
 CUTOFF_MINUTES = 1
-SNAP_COLS = ["ticker", "event_ticker", "player", "polled_utc", "occurrence_utc", "best_bid", "best_ask", "volume"]
+LIVE_CHECK_HOURS = 2
+SNAP_COLS = ["ticker", "event_ticker", "player", "polled_utc", "start_utc", "best_bid", "best_ask", "volume"]
 FILL_COLS = ["ticker", "event_ticker", "h", "trade_id", "trade_utc", "taker_side", "trade_price", "trade_count",
              "side", "price", "contracts", "standing_bid", "standing_ask", "snapshot_utc"]
 
@@ -85,6 +90,19 @@ class Kalshi:
             cursor = page.get("cursor")
             if not cursor:
                 return out
+
+    def milestone(self, event_ticker: str) -> dict | None:
+        """The event's match: {id, type, start_date}, or None."""
+        ms = self.get("/milestones", {"related_event_ticker": event_ticker, "limit": 5}).get("milestones", [])
+        ms = [m for m in ms if event_ticker in (m.get("primary_event_tickers") or [])] or ms
+        return {k: ms[0].get(k) for k in ("id", "type", "start_date")} if ms else None
+
+    def live_status(self, milestone: dict) -> str:
+        """'not_started' until the match is about to begin; anything else means stop."""
+        d = self.get(f"/live_data/{milestone['type']}/milestone/{milestone['id']}").get("live_data", {}).get("details", {})
+        if d.get("status") == "not_started" and not d.get("match_status"):
+            return "not_started"
+        return f"{d.get('status')}/{d.get('match_status')}"
 
     def trades(self, ticker: str, min_ts: int) -> list[dict]:
         out, cursor = [], None
@@ -128,60 +146,86 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
     """One poll: score the trades since the last poll against the quote that was standing,
     then record the new standing book. Returns counts for the log line."""
     snaps, fills, seen, failed = [], [], 0, 0
-    for series in SERIES:
-        for m in api.open_markets(series):
-            t = m["ticker"]
-            occ = pd.Timestamp(m.get("occurrence_datetime") or m.get("expected_expiration_time"))
-            cutoff = occ - pd.Timedelta(minutes=CUTOFF_MINUTES)
-            st = state["markets"].setdefault(t, {"event": m.get("event_ticker"), "player": m.get("yes_sub_title"),
-                                                 "cutoff": cutoff.isoformat(), "last_trade_ts": None,
-                                                 "volume": None, "snapshot": None,
-                                                 "pos": {str(h): 0.0 for h in HALF_WIDTHS}})
-            st["cutoff"] = cutoff.isoformat()
-            volume = _f(m.get("volume_fp"))
-            snap = st.get("snapshot")
-            # 1) trades since the last poll, against the quote standing from the last snapshot.
-            # A market whose trades cannot be fetched keeps its state and is retried next poll.
-            if snap is not None and volume is not None and volume != st.get("volume"):
-                try:
-                    tape = api.trades(t, int(pd.Timestamp(snap["polled_utc"]).timestamp()))
-                except RuntimeError:
-                    failed += 1
+    events = state.setdefault("events", {})
+    previous_poll = state.get("last_poll")
+    markets = [m for series in SERIES for m in api.open_markets(series)]
+    for ev in sorted({m["event_ticker"] for m in markets}):
+        e = events.setdefault(ev, {"milestone": None, "stop_at": None, "status": None})
+        try:
+            if e["milestone"] is None:
+                e["milestone"] = api.milestone(ev)
+            ms = e["milestone"]
+            if ms and ms.get("start_date") and e["stop_at"] is None and \
+                    now >= pd.Timestamp(ms["start_date"]) - pd.Timedelta(hours=LIVE_CHECK_HOURS):
+                e["status"] = api.live_status(ms)
+                if e["status"] != "not_started":       # started (or about to): nothing after the previous poll counts
+                    e["stop_at"] = previous_poll or now.isoformat()
+        except (RuntimeError, requests.HTTPError):
+            failed += 1
+            ms = e.get("milestone")
+            if ms and ms.get("start_date") and e["stop_at"] is None and \
+                    now >= pd.Timestamp(ms["start_date"]) - pd.Timedelta(hours=LIVE_CHECK_HOURS):
+                e["stop_at"] = previous_poll or now.isoformat()   # cannot confirm it has not started: stop
+    for m in markets:
+        t = m["ticker"]
+        e = events.get(m["event_ticker"], {})
+        ms = e.get("milestone")
+        if not ms or not ms.get("start_date"):
+            continue                                   # no known start: fail closed, do not quote
+        start = pd.Timestamp(ms["start_date"])
+        cutoff = start - pd.Timedelta(minutes=CUTOFF_MINUTES)
+        if e.get("stop_at"):
+            cutoff = min(cutoff, pd.Timestamp(e["stop_at"]))
+        st = state["markets"].setdefault(t, {"event": m.get("event_ticker"), "player": m.get("yes_sub_title"),
+                                             "cutoff": cutoff.isoformat(), "last_trade_ts": None,
+                                             "volume": None, "snapshot": None,
+                                             "pos": {str(h): 0.0 for h in HALF_WIDTHS}})
+        st["cutoff"] = cutoff.isoformat()
+        volume = _f(m.get("volume_fp"))
+        snap = st.get("snapshot")
+        # 1) trades since the last poll, against the quote standing from the last snapshot.
+        # A market whose trades cannot be fetched keeps its state and is retried next poll.
+        if snap is not None and volume is not None and volume != st.get("volume"):
+            try:
+                tape = api.trades(t, int(pd.Timestamp(snap["polled_utc"]).timestamp()))
+            except RuntimeError:
+                failed += 1
+                continue
+            pos, last_ts, found = dict(st["pos"]), st["last_trade_ts"], []
+            for tr in sorted(tape, key=lambda x: x["created_time"]):
+                ts = pd.Timestamp(tr["created_time"])
+                if ts <= pd.Timestamp(snap["polled_utc"]) or ts > cutoff:
                     continue
-                pos, last_ts, found = dict(st["pos"]), st["last_trade_ts"], []
-                for tr in sorted(tape, key=lambda x: x["created_time"]):
-                    ts = pd.Timestamp(tr["created_time"])
-                    if ts <= pd.Timestamp(snap["polled_utc"]) or ts > cutoff:
-                        continue
-                    if last_ts and ts <= pd.Timestamp(last_ts):
-                        continue
-                    seen += 1
-                    fair = mid_fair(snap["best_bid"], snap["best_ask"])
-                    if fair is not None:
-                        for h in HALF_WIDTHS:
-                            bid, ask = quotes(fair, h, snap["best_bid"], snap["best_ask"])
-                            got = fill(tr["taker_side"], float(tr["yes_price_dollars"]), float(tr["count_fp"]),
-                                       bid, ask, snap["best_bid"], snap["best_ask"], pos[str(h)])
-                            if got:
-                                side, price, q = got
-                                pos[str(h)] += q if side == "buy" else -q
-                                found.append({"ticker": t, "event_ticker": st["event"], "h": h, "trade_id": tr.get("trade_id"),
-                                              "trade_utc": tr["created_time"], "taker_side": tr["taker_side"],
-                                              "trade_price": float(tr["yes_price_dollars"]), "trade_count": float(tr["count_fp"]),
-                                              "side": side, "price": price, "contracts": q, "standing_bid": bid,
-                                              "standing_ask": ask, "snapshot_utc": snap["polled_utc"]})
-                    last_ts = tr["created_time"]
-                st["pos"], st["last_trade_ts"] = pos, last_ts
-                fills += found
-            # 2) the book standing from now until the next poll
-            if now < cutoff:
-                snap = {"polled_utc": now.isoformat(), "best_bid": _f(m.get("yes_bid_dollars")),
-                        "best_ask": _f(m.get("yes_ask_dollars"))}
-                st["snapshot"] = snap
-                snaps.append({"ticker": t, "event_ticker": st["event"], "player": st["player"], "polled_utc": snap["polled_utc"],
-                              "occurrence_utc": occ.isoformat(), "best_bid": snap["best_bid"], "best_ask": snap["best_ask"],
-                              "volume": volume})
-            st["volume"] = volume
+                if last_ts and ts <= pd.Timestamp(last_ts):
+                    continue
+                seen += 1
+                fair = mid_fair(snap["best_bid"], snap["best_ask"])
+                if fair is not None:
+                    for h in HALF_WIDTHS:
+                        bid, ask = quotes(fair, h, snap["best_bid"], snap["best_ask"])
+                        got = fill(tr["taker_side"], float(tr["yes_price_dollars"]), float(tr["count_fp"]),
+                                   bid, ask, snap["best_bid"], snap["best_ask"], pos[str(h)])
+                        if got:
+                            side, price, q = got
+                            pos[str(h)] += q if side == "buy" else -q
+                            found.append({"ticker": t, "event_ticker": st["event"], "h": h, "trade_id": tr.get("trade_id"),
+                                          "trade_utc": tr["created_time"], "taker_side": tr["taker_side"],
+                                          "trade_price": float(tr["yes_price_dollars"]), "trade_count": float(tr["count_fp"]),
+                                          "side": side, "price": price, "contracts": q, "standing_bid": bid,
+                                          "standing_ask": ask, "snapshot_utc": snap["polled_utc"]})
+                last_ts = tr["created_time"]
+            st["pos"], st["last_trade_ts"] = pos, last_ts
+            fills += found
+        # 2) the book standing from now until the next poll
+        if now < cutoff:
+            snap = {"polled_utc": now.isoformat(), "best_bid": _f(m.get("yes_bid_dollars")),
+                    "best_ask": _f(m.get("yes_ask_dollars"))}
+            st["snapshot"] = snap
+            snaps.append({"ticker": t, "event_ticker": st["event"], "player": st["player"], "polled_utc": snap["polled_utc"],
+                          "start_utc": start.isoformat(), "best_bid": snap["best_bid"], "best_ask": snap["best_ask"],
+                          "volume": volume})
+        st["volume"] = volume
+    state["last_poll"] = now.isoformat()
     _append("snapshots", snaps, SNAP_COLS, now)
     _append("fills", fills, FILL_COLS, now)
     return {"markets": len(snaps), "trades_checked": seen, "fills": len(fills), "markets_retry_next_poll": failed,
@@ -202,7 +246,7 @@ def settle(api: Kalshi) -> pd.DataFrame:
         for h in HALF_WIDTHS:
             f = fills[(fills["ticker"] == t) & (fills["h"] == h)]
             row = {"ticker": t, "event_ticker": last["event_ticker"], "h": h, "result": result,
-                   "occurrence_utc": last["occurrence_utc"], "contracts": float(f["contracts"].sum()),
+                   "start_utc": last["start_utc"], "contracts": float(f["contracts"].sum()),
                    "end_position": float((f["contracts"] * f["side"].map({"buy": 1, "sell": -1})).sum())}
             fee = float((MAKER_FEE_RATE * f["contracts"] * f["price"] * (1 - f["price"])).sum())
             for name, value in (("held", {"yes": 1.0, "no": 0.0}.get(result)), ("marked", mark)):
