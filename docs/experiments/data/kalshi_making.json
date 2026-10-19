@@ -1,0 +1,875 @@
+{
+ "markets": 2810,
+ "events": 1405,
+ "dates": [
+  "2026-08-10",
+  "2026-09-02"
+ ],
+ "settings": [
+  {
+   "h": 0.01,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "ATP",
+   "markets": 698,
+   "markets_filled": 527,
+   "contracts": 122479,
+   "profit": 770.7,
+   "profit_ci95": [
+    -3718.32,
+    5335.41
+   ],
+   "marked_at_last_mid": -1800.47,
+   "marked_ci95": [
+    -2410.52,
+    -1233.86
+   ],
+   "flattened_at_start": -3655.58,
+   "flattened_ci95": [
+    -4315.98,
+    -3007.6
+   ],
+   "cents_per_contract": 0.63,
+   "worst_market": -258.69,
+   "mean_abs_end_position": 127.6
+  },
+  {
+   "h": 0.01,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "CHALLENGER",
+   "markets": 1370,
+   "markets_filled": 714,
+   "contracts": 147908,
+   "profit": 992.58,
+   "profit_ci95": [
+    -3572.51,
+    5429.36
+   ],
+   "marked_at_last_mid": -693.35,
+   "marked_ci95": [
+    -1129.26,
+    -264.9
+   ],
+   "flattened_at_start": -3747.7,
+   "flattened_ci95": [
+    -4322.26,
+    -3209.63
+   ],
+   "cents_per_contract": 0.67,
+   "worst_market": -272.2,
+   "mean_abs_end_position": 82.1
+  },
+  {
+   "h": 0.01,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "WTA",
+   "markets": 680,
+   "markets_filled": 441,
+   "contracts": 79778,
+   "profit": 62.52,
+   "profit_ci95": [
+    -3412.08,
+    3341.49
+   ],
+   "marked_at_last_mid": -848.07,
+   "marked_ci95": [
+    -1229.21,
+    -470.9
+   ],
+   "flattened_at_start": -2200.52,
+   "flattened_ci95": [
+    -2643.32,
+    -1753.83
+   ],
+   "cents_per_contract": 0.08,
+   "worst_market": -240.0,
+   "mean_abs_end_position": 93.4
+  },
+  {
+   "h": 0.01,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "WTA125",
+   "markets": 62,
+   "markets_filled": 34,
+   "contracts": 5480,
+   "profit": 265.07,
+   "profit_ci95": [
+    -426.11,
+    1003.52
+   ],
+   "marked_at_last_mid": -29.83,
+   "marked_ci95": [
+    -75.01,
+    9.72
+   ],
+   "flattened_at_start": -111.38,
+   "flattened_ci95": [
+    -167.34,
+    -59.19
+   ],
+   "cents_per_contract": 4.84,
+   "worst_market": -141.0,
+   "mean_abs_end_position": 77.3
+  },
+  {
+   "h": 0.01,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "ATP",
+   "markets": 698,
+   "markets_filled": 527,
+   "contracts": 122479,
+   "profit": 301.96,
+   "profit_ci95": [
+    -4154.71,
+    4785.51
+   ],
+   "marked_at_last_mid": -2269.21,
+   "marked_ci95": [
+    -2896.96,
+    -1674.93
+   ],
+   "flattened_at_start": -4124.32,
+   "flattened_ci95": [
+    -4775.2,
+    -3437.74
+   ],
+   "cents_per_contract": 0.25,
+   "worst_market": -259.35,
+   "mean_abs_end_position": 127.6
+  },
+  {
+   "h": 0.01,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "CHALLENGER",
+   "markets": 1370,
+   "markets_filled": 714,
+   "contracts": 147908,
+   "profit": 444.74,
+   "profit_ci95": [
+    -4084.91,
+    4908.43
+   ],
+   "marked_at_last_mid": -1241.19,
+   "marked_ci95": [
+    -1717.65,
+    -805.48
+   ],
+   "flattened_at_start": -4295.54,
+   "flattened_ci95": [
+    -4891.87,
+    -3748.18
+   ],
+   "cents_per_contract": 0.3,
+   "worst_market": -279.05,
+   "mean_abs_end_position": 82.1
+  },
+  {
+   "h": 0.01,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "WTA",
+   "markets": 680,
+   "markets_filled": 441,
+   "contracts": 79778,
+   "profit": -236.59,
+   "profit_ci95": [
+    -3615.09,
+    3428.54
+   ],
+   "marked_at_last_mid": -1147.19,
+   "marked_ci95": [
+    -1547.37,
+    -757.4
+   ],
+   "flattened_at_start": -2499.63,
+   "flattened_ci95": [
+    -2974.25,
+    -2058.92
+   ],
+   "cents_per_contract": -0.3,
+   "worst_market": -240.84,
+   "mean_abs_end_position": 93.4
+  },
+  {
+   "h": 0.01,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "WTA125",
+   "markets": 62,
+   "markets_filled": 34,
+   "contracts": 5480,
+   "profit": 249.62,
+   "profit_ci95": [
+    -424.97,
+    999.81
+   ],
+   "marked_at_last_mid": -45.29,
+   "marked_ci95": [
+    -87.07,
+    -4.54
+   ],
+   "flattened_at_start": -126.84,
+   "flattened_ci95": [
+    -191.78,
+    -70.65
+   ],
+   "cents_per_contract": 4.56,
+   "worst_market": -142.31,
+   "mean_abs_end_position": 77.3
+  },
+  {
+   "h": 0.02,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "ATP",
+   "markets": 698,
+   "markets_filled": 345,
+   "contracts": 56034,
+   "profit": 975.62,
+   "profit_ci95": [
+    -2041.39,
+    4067.37
+   ],
+   "marked_at_last_mid": -790.64,
+   "marked_ci95": [
+    -1312.13,
+    -340.12
+   ],
+   "flattened_at_start": -1770.01,
+   "flattened_ci95": [
+    -2318.37,
+    -1263.13
+   ],
+   "cents_per_contract": 1.74,
+   "worst_market": -255.57,
+   "mean_abs_end_position": 67.4
+  },
+  {
+   "h": 0.02,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "CHALLENGER",
+   "markets": 1370,
+   "markets_filled": 445,
+   "contracts": 74898,
+   "profit": -345.88,
+   "profit_ci95": [
+    -3616.71,
+    3043.78
+   ],
+   "marked_at_last_mid": 47.09,
+   "marked_ci95": [
+    -304.53,
+    391.43
+   ],
+   "flattened_at_start": -1800.2,
+   "flattened_ci95": [
+    -2245.36,
+    -1395.11
+   ],
+   "cents_per_contract": -0.46,
+   "worst_market": -262.34,
+   "mean_abs_end_position": 45.1
+  },
+  {
+   "h": 0.02,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "WTA",
+   "markets": 680,
+   "markets_filled": 282,
+   "contracts": 36553,
+   "profit": -969.06,
+   "profit_ci95": [
+    -3439.9,
+    1537.59
+   ],
+   "marked_at_last_mid": -374.34,
+   "marked_ci95": [
+    -673.29,
+    -87.35
+   ],
+   "flattened_at_start": -1067.77,
+   "flattened_ci95": [
+    -1398.35,
+    -736.37
+   ],
+   "cents_per_contract": -2.65,
+   "worst_market": -223.07,
+   "mean_abs_end_position": 49.3
+  },
+  {
+   "h": 0.02,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "WTA125",
+   "markets": 62,
+   "markets_filled": 18,
+   "contracts": 2066,
+   "profit": 313.35,
+   "profit_ci95": [
+    -130.77,
+    846.68
+   ],
+   "marked_at_last_mid": -0.45,
+   "marked_ci95": [
+    -30.74,
+    30.47
+   ],
+   "flattened_at_start": -38.59,
+   "flattened_ci95": [
+    -69.37,
+    -10.5
+   ],
+   "cents_per_contract": 15.17,
+   "worst_market": -71.3,
+   "mean_abs_end_position": 32.2
+  },
+  {
+   "h": 0.02,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "ATP",
+   "markets": 698,
+   "markets_filled": 345,
+   "contracts": 56034,
+   "profit": 761.98,
+   "profit_ci95": [
+    -2259.09,
+    3644.78
+   ],
+   "marked_at_last_mid": -1004.28,
+   "marked_ci95": [
+    -1482.88,
+    -530.24
+   ],
+   "flattened_at_start": -1983.66,
+   "flattened_ci95": [
+    -2538.69,
+    -1483.67
+   ],
+   "cents_per_contract": 1.36,
+   "worst_market": -256.28,
+   "mean_abs_end_position": 67.4
+  },
+  {
+   "h": 0.02,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "CHALLENGER",
+   "markets": 1370,
+   "markets_filled": 445,
+   "contracts": 74898,
+   "profit": -622.51,
+   "profit_ci95": [
+    -3991.17,
+    2730.37
+   ],
+   "marked_at_last_mid": -229.54,
+   "marked_ci95": [
+    -577.55,
+    104.76
+   ],
+   "flattened_at_start": -2076.83,
+   "flattened_ci95": [
+    -2552.44,
+    -1652.84
+   ],
+   "cents_per_contract": -0.83,
+   "worst_market": -267.42,
+   "mean_abs_end_position": 45.1
+  },
+  {
+   "h": 0.02,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "WTA",
+   "markets": 680,
+   "markets_filled": 282,
+   "contracts": 36553,
+   "profit": -1107.14,
+   "profit_ci95": [
+    -3541.98,
+    1439.08
+   ],
+   "marked_at_last_mid": -512.43,
+   "marked_ci95": [
+    -820.65,
+    -216.01
+   ],
+   "flattened_at_start": -1205.85,
+   "flattened_ci95": [
+    -1557.66,
+    -881.99
+   ],
+   "cents_per_contract": -3.03,
+   "worst_market": -224.07,
+   "mean_abs_end_position": 49.3
+  },
+  {
+   "h": 0.02,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "WTA125",
+   "markets": 62,
+   "markets_filled": 18,
+   "contracts": 2066,
+   "profit": 306.35,
+   "profit_ci95": [
+    -123.49,
+    782.56
+   ],
+   "marked_at_last_mid": -7.45,
+   "marked_ci95": [
+    -38.22,
+    24.22
+   ],
+   "flattened_at_start": -45.59,
+   "flattened_ci95": [
+    -83.2,
+    -14.64
+   ],
+   "cents_per_contract": 14.83,
+   "worst_market": -71.97,
+   "mean_abs_end_position": 32.2
+  },
+  {
+   "h": 0.03,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "ATP",
+   "markets": 698,
+   "markets_filled": 237,
+   "contracts": 30458,
+   "profit": 1472.55,
+   "profit_ci95": [
+    -792.63,
+    3658.62
+   ],
+   "marked_at_last_mid": -397.14,
+   "marked_ci95": [
+    -839.03,
+    -28.17
+   ],
+   "flattened_at_start": -959.54,
+   "flattened_ci95": [
+    -1385.94,
+    -561.84
+   ],
+   "cents_per_contract": 4.83,
+   "worst_market": -192.34,
+   "mean_abs_end_position": 38.8
+  },
+  {
+   "h": 0.03,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "CHALLENGER",
+   "markets": 1370,
+   "markets_filled": 302,
+   "contracts": 44319,
+   "profit": 694.22,
+   "profit_ci95": [
+    -1900.9,
+    3349.77
+   ],
+   "marked_at_last_mid": 331.85,
+   "marked_ci95": [
+    45.41,
+    640.17
+   ],
+   "flattened_at_start": -858.24,
+   "flattened_ci95": [
+    -1223.07,
+    -505.79
+   ],
+   "cents_per_contract": 1.57,
+   "worst_market": -263.81,
+   "mean_abs_end_position": 27.3
+  },
+  {
+   "h": 0.03,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "WTA",
+   "markets": 680,
+   "markets_filled": 185,
+   "contracts": 19855,
+   "profit": -951.6,
+   "profit_ci95": [
+    -2719.31,
+    784.92
+   ],
+   "marked_at_last_mid": -202.31,
+   "marked_ci95": [
+    -432.82,
+    14.72
+   ],
+   "flattened_at_start": -579.34,
+   "flattened_ci95": [
+    -837.16,
+    -334.83
+   ],
+   "cents_per_contract": -4.79,
+   "worst_market": -198.0,
+   "mean_abs_end_position": 27.1
+  },
+  {
+   "h": 0.03,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "WTA125",
+   "markets": 62,
+   "markets_filled": 13,
+   "contracts": 1146,
+   "profit": 298.32,
+   "profit_ci95": [
+    43.75,
+    611.95
+   ],
+   "marked_at_last_mid": -0.14,
+   "marked_ci95": [
+    -25.55,
+    28.2
+   ],
+   "flattened_at_start": -20.0,
+   "flattened_ci95": [
+    -45.57,
+    2.69
+   ],
+   "cents_per_contract": 26.04,
+   "worst_market": -24.79,
+   "mean_abs_end_position": 18.3
+  },
+  {
+   "h": 0.03,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "ATP",
+   "markets": 698,
+   "markets_filled": 237,
+   "contracts": 30458,
+   "profit": 1356.24,
+   "profit_ci95": [
+    -854.48,
+    3538.13
+   ],
+   "marked_at_last_mid": -513.45,
+   "marked_ci95": [
+    -918.02,
+    -151.19
+   ],
+   "flattened_at_start": -1075.85,
+   "flattened_ci95": [
+    -1527.98,
+    -678.48
+   ],
+   "cents_per_contract": 4.45,
+   "worst_market": -193.67,
+   "mean_abs_end_position": 38.8
+  },
+  {
+   "h": 0.03,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "CHALLENGER",
+   "markets": 1370,
+   "markets_filled": 302,
+   "contracts": 44319,
+   "profit": 530.46,
+   "profit_ci95": [
+    -1992.15,
+    2855.52
+   ],
+   "marked_at_last_mid": 168.09,
+   "marked_ci95": [
+    -148.54,
+    449.3
+   ],
+   "flattened_at_start": -1022.0,
+   "flattened_ci95": [
+    -1399.1,
+    -667.13
+   ],
+   "cents_per_contract": 1.2,
+   "worst_market": -268.0,
+   "mean_abs_end_position": 27.3
+  },
+  {
+   "h": 0.03,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "WTA",
+   "markets": 680,
+   "markets_filled": 185,
+   "contracts": 19855,
+   "profit": -1026.34,
+   "profit_ci95": [
+    -2877.78,
+    718.24
+   ],
+   "marked_at_last_mid": -277.04,
+   "marked_ci95": [
+    -503.95,
+    -67.17
+   ],
+   "flattened_at_start": -654.07,
+   "flattened_ci95": [
+    -921.03,
+    -421.46
+   ],
+   "cents_per_contract": -5.17,
+   "worst_market": -199.18,
+   "mean_abs_end_position": 27.1
+  },
+  {
+   "h": 0.03,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "WTA125",
+   "markets": 62,
+   "markets_filled": 13,
+   "contracts": 1146,
+   "profit": 294.83,
+   "profit_ci95": [
+    54.24,
+    616.79
+   ],
+   "marked_at_last_mid": -3.64,
+   "marked_ci95": [
+    -28.42,
+    22.6
+   ],
+   "flattened_at_start": -23.49,
+   "flattened_ci95": [
+    -49.73,
+    -1.66
+   ],
+   "cents_per_contract": 25.73,
+   "worst_market": -25.06,
+   "mean_abs_end_position": 18.3
+  },
+  {
+   "h": 0.05,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "ATP",
+   "markets": 698,
+   "markets_filled": 122,
+   "contracts": 11540,
+   "profit": 492.59,
+   "profit_ci95": [
+    -837.83,
+    1827.7
+   ],
+   "marked_at_last_mid": -100.87,
+   "marked_ci95": [
+    -345.86,
+    120.65
+   ],
+   "flattened_at_start": -317.68,
+   "flattened_ci95": [
+    -575.54,
+    -99.46
+   ],
+   "cents_per_contract": 4.27,
+   "worst_market": -185.94,
+   "mean_abs_end_position": 15.6
+  },
+  {
+   "h": 0.05,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "CHALLENGER",
+   "markets": 1370,
+   "markets_filled": 148,
+   "contracts": 20422,
+   "profit": 489.28,
+   "profit_ci95": [
+    -1350.39,
+    2299.76
+   ],
+   "marked_at_last_mid": 443.51,
+   "marked_ci95": [
+    211.14,
+    674.73
+   ],
+   "flattened_at_start": -210.36,
+   "flattened_ci95": [
+    -490.09,
+    32.15
+   ],
+   "cents_per_contract": 2.4,
+   "worst_market": -250.57,
+   "mean_abs_end_position": 12.8
+  },
+  {
+   "h": 0.05,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "WTA",
+   "markets": 680,
+   "markets_filled": 74,
+   "contracts": 7532,
+   "profit": 82.04,
+   "profit_ci95": [
+    -933.46,
+    1052.2
+   ],
+   "marked_at_last_mid": -16.95,
+   "marked_ci95": [
+    -158.28,
+    133.81
+   ],
+   "flattened_at_start": -156.24,
+   "flattened_ci95": [
+    -317.31,
+    -8.18
+   ],
+   "cents_per_contract": 1.09,
+   "worst_market": -153.0,
+   "mean_abs_end_position": 10.2
+  },
+  {
+   "h": 0.05,
+   "fair": "kalshi_mid",
+   "maker_fee": false,
+   "family": "WTA125",
+   "markets": 62,
+   "markets_filled": 5,
+   "contracts": 434,
+   "profit": 64.61,
+   "profit_ci95": [
+    -22.16,
+    215.4
+   ],
+   "marked_at_last_mid": 1.54,
+   "marked_ci95": [
+    -15.16,
+    20.82
+   ],
+   "flattened_at_start": -4.89,
+   "flattened_ci95": [
+    -18.31,
+    5.04
+   ],
+   "cents_per_contract": 14.89,
+   "worst_market": -9.28,
+   "mean_abs_end_position": 6.9
+  },
+  {
+   "h": 0.05,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "ATP",
+   "markets": 698,
+   "markets_filled": 122,
+   "contracts": 11540,
+   "profit": 450.77,
+   "profit_ci95": [
+    -872.8,
+    1813.64
+   ],
+   "marked_at_last_mid": -142.69,
+   "marked_ci95": [
+    -380.41,
+    75.09
+   ],
+   "flattened_at_start": -359.5,
+   "flattened_ci95": [
+    -628.18,
+    -132.38
+   ],
+   "cents_per_contract": 3.91,
+   "worst_market": -187.27,
+   "mean_abs_end_position": 15.6
+  },
+  {
+   "h": 0.05,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "CHALLENGER",
+   "markets": 1370,
+   "markets_filled": 148,
+   "contracts": 20422,
+   "profit": 413.74,
+   "profit_ci95": [
+    -1372.78,
+    2152.42
+   ],
+   "marked_at_last_mid": 367.97,
+   "marked_ci95": [
+    140.81,
+    591.51
+   ],
+   "flattened_at_start": -285.89,
+   "flattened_ci95": [
+    -580.27,
+    -31.14
+   ],
+   "cents_per_contract": 2.03,
+   "worst_market": -254.62,
+   "mean_abs_end_position": 12.8
+  },
+  {
+   "h": 0.05,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "WTA",
+   "markets": 680,
+   "markets_filled": 74,
+   "contracts": 7532,
+   "profit": 54.04,
+   "profit_ci95": [
+    -1009.55,
+    1063.82
+   ],
+   "marked_at_last_mid": -44.94,
+   "marked_ci95": [
+    -188.41,
+    93.97
+   ],
+   "flattened_at_start": -184.23,
+   "flattened_ci95": [
+    -349.63,
+    -35.41
+   ],
+   "cents_per_contract": 0.72,
+   "worst_market": -154.31,
+   "mean_abs_end_position": 10.2
+  },
+  {
+   "h": 0.05,
+   "fair": "kalshi_mid",
+   "maker_fee": true,
+   "family": "WTA125",
+   "markets": 62,
+   "markets_filled": 5,
+   "contracts": 434,
+   "profit": 63.39,
+   "profit_ci95": [
+    -23.48,
+    211.39
+   ],
+   "marked_at_last_mid": 0.32,
+   "marked_ci95": [
+    -15.64,
+    17.95
+   ],
+   "flattened_at_start": -6.11,
+   "flattened_ci95": [
+    -18.97,
+    2.87
+   ],
+   "cents_per_contract": 14.61,
+   "worst_market": -9.43,
+   "mean_abs_end_position": 6.9
+  }
+ ],
+ "lean_vs_none_same_markets": []
+}
