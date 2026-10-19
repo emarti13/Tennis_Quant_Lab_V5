@@ -31,7 +31,8 @@ discarded). The cutoff is the match's `start_date` from Kalshi's milestone for t
 minute before; and from 2 hours before that, the milestone's live data is checked every poll:
 once it is anything but "not_started" (including "match about to start"), nothing after the
 previous poll counts. An event without a milestone is not quoted (fail closed). Snapshots are
-as fresh as the poll interval.
+as fresh as the poll interval; a trade more than 5 minutes after the last snapshot (a gap
+between runs) is not scored.
 """
 from __future__ import annotations
 
@@ -54,6 +55,7 @@ HALF_WIDTHS = (0.03, 0.05)
 PAPER_DIR = BASE / "market_history" / "kalshi" / "paper"
 CUTOFF_MINUTES = 1
 LIVE_CHECK_HOURS = 2
+MAX_QUOTE_AGE_MINUTES = 5      # a snapshot older than this (a gap between runs) stands for nothing
 SNAP_COLS = ["ticker", "event_ticker", "player", "polled_utc", "start_utc", "best_bid", "best_ask", "volume"]
 FILL_COLS = ["ticker", "event_ticker", "h", "trade_id", "trade_utc", "taker_side", "trade_price", "trade_count",
              "side", "price", "contracts", "standing_bid", "standing_ask", "snapshot_utc"]
@@ -199,6 +201,9 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
                 if last_ts and ts <= pd.Timestamp(last_ts):
                     continue
                 seen += 1
+                if ts - pd.Timestamp(snap["polled_utc"]) > pd.Timedelta(minutes=MAX_QUOTE_AGE_MINUTES):
+                    last_ts = tr["created_time"]
+                    continue                           # no fresh quote was standing: not scored
                 fair = mid_fair(snap["best_bid"], snap["best_ask"])
                 if fair is not None:
                     for h in HALF_WIDTHS:

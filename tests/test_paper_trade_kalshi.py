@@ -89,3 +89,12 @@ def test_an_event_with_no_known_start_is_not_quoted(tmp_path, monkeypatch):
     api.milestone = lambda event: None
     pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:00:00Z"))
     assert not (tmp_path / "snapshots_2026-10.csv").exists()
+
+
+def test_a_trade_after_a_gap_between_runs_is_not_scored(tmp_path, monkeypatch):
+    monkeypatch.setattr(pt, "PAPER_DIR", tmp_path)
+    api, state = FakeKalshi(), {"markets": {}}
+    pt.poll_once(api, state, pd.Timestamp("2026-10-20T08:00:00Z"))
+    api.tape, api.volume = [trade("2026-10-20T08:20:00Z", 0.59, 40, "yes", "1")], 40.0   # 20 minutes later
+    info = pt.poll_once(api, state, pd.Timestamp("2026-10-20T08:21:00Z"))
+    assert info["trades_checked"] == 1 and not (tmp_path / "fills_2026-10.csv").exists()
