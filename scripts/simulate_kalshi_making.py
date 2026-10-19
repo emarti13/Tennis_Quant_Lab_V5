@@ -39,7 +39,6 @@ from __future__ import annotations
 import argparse
 import gzip
 import json
-import math
 import sys
 from pathlib import Path
 
@@ -50,12 +49,10 @@ BASE = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BASE))
 from v5_devig import book_lam, devig  # noqa: E402
 from v5_kalshi_history import rebuild_fixture_map  # noqa: E402
+from v5_kalshi_making import STOP_BEFORE, fill, kalshi_mid, pnl, quotes, signed  # noqa: E402
 
 SEALED_FROM = pd.Timestamp("2026-10-13", tz="UTC")
 HALF_WIDTHS = (0.01, 0.02, 0.03, 0.05)
-SIZE = 100                  # contracts per quote
-LIMIT = 300                 # net contracts per market before a side stops quoting
-MAKER_FEE_RATE = 0.0175
 KALSHI_TAKER = 0.07         # taker fee rate (v5_devig.KALSHI_TAKER_FEE_RATE), paid when flattening
 CHECKPOINTS = (24, 12, 6, 1)
 BOOTSTRAP = 2000
@@ -136,61 +133,30 @@ def fair_at(path: list, t) -> float | None:
 def replay(market: dict, fair_path: list | None, start, h: float, lean: float) -> list[tuple[str, float, float]]:
     """Fills [(side 'buy'/'sell', price, contracts)] for one market. With no fair path the
     fair price is Kalshi's own mid standing before the trade (quotes start once a two-sided
-    book exists)."""
-    stop = start - pd.Timedelta(minutes=1)
+    book exists). Quote and fill rules: v5_kalshi_making (shared with the paper run)."""
+    stop = start - STOP_BEFORE
     candles = [c for c in market["candles"] if c[0] <= stop]
     fills, pos, ci = [], 0.0, -1
     for ts, x, count, taker in sorted(t for t in market["trades"] if t[0] <= stop):
         while ci + 1 < len(candles) and candles[ci + 1][0] <= ts:
             ci += 1
         best_bid, best_ask = (candles[ci][1], candles[ci][2]) if ci >= 0 else (None, None)
-        if fair_path is not None:
-            fair = fair_at(fair_path, ts)
-        elif best_bid and best_ask and 0 < best_bid < best_ask < 1 and best_ask - best_bid <= 0.20:
-            fair = (best_bid + best_ask) / 2
-        else:
-            fair = None
+        fair = fair_at(fair_path, ts) if fair_path is not None else kalshi_mid(best_bid, best_ask)
         if fair is None:
             continue
-        f = min(max(fair + lean, 0.02), 0.98)
-        bid, ask = math.floor(round((f - h) * 100, 6)) / 100, math.ceil(round((f + h) * 100, 6)) / 100
-        if best_ask is not None:
-            bid = min(bid, round(best_ask - 0.01, 2))
-        if best_bid is not None:
-            ask = max(ask, round(best_bid + 0.01, 2))
-        if taker == "yes" and pos > -LIMIT and 0 < ask < 1:              # taker buys YES: our sell
-            first = best_ask is None or ask < best_ask
-            if x > ask or (x == ask and first):
-                q = min(count, SIZE, LIMIT + pos)
-                fills.append(("sell", ask, q))
-                pos -= q
-        elif taker == "no" and pos < LIMIT and 0 < bid < 1:              # taker sells YES: our buy
-            first = best_bid is None or bid > best_bid
-            if x < bid or (x == bid and first):
-                q = min(count, SIZE, LIMIT - pos)
-                fills.append(("buy", bid, q))
-                pos += q
+        bid, ask = quotes(fair, h, best_bid, best_ask, lean)
+        f = fill(x, count, taker, bid, ask, best_bid, best_ask, pos)
+        if f is not None:
+            fills.append(f)
+            pos += signed(f[0], f[2])
     return fills
 
 
 def last_quote(market: dict, start) -> tuple[float | None, float | None]:
     """Kalshi's best bid/ask standing one minute before the start."""
-    stop = start - pd.Timedelta(minutes=1)
+    stop = start - STOP_BEFORE
     before = [c for c in market["candles"] if c[0] <= stop and c[1] and c[2] and c[1] < c[2]]
     return (before[-1][1], before[-1][2]) if before else (None, None)
-
-
-def pnl(fills: list, won: float, maker_fee: bool) -> tuple[float, float, float]:
-    """(profit, contracts traded, net position at the start). `won` is the settlement (1/0),
-    or a mark price (Kalshi's last mid) to value the fills without the match result."""
-    total, vol, pos = 0.0, 0.0, 0.0
-    for side, price, q in fills:
-        total += q * ((won - price) if side == "buy" else (price - won))
-        if maker_fee:
-            total -= MAKER_FEE_RATE * q * price * (1 - price)
-        vol += q
-        pos += q if side == "buy" else -q
-    return total, vol, pos
 
 
 def boot(x: np.ndarray, rng) -> list[float]:

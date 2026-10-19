@@ -71,3 +71,6 @@ business yet.
 2. Confirm Kalshi's maker fee on tennis markets.
 3. If those hold up: a paper-trading run (quotes computed live, nothing sent) on the user's
    own machine, since Kalshi's API is blocked in this workspace and Actions cannot poll.
+   Built: `scripts/paper_kalshi_making.py`, Challenger at 3¢ and 5¢ around Kalshi's mid
+   (docs/experiments/2026-10-19-kalshi-paper-run.md). The quote and fill rules of this
+   replay now live in `v5_kalshi_making.py`, shared with the paper run (same fills, tested).
