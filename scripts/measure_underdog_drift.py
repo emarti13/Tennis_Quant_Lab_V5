@@ -16,7 +16,12 @@ every pre-start trade per Kalshi market).
    - exit B: a resting sell 4c above the entry price, filled when a later pre-start trade
      bought YES at that price or higher (no taker fee); if never filled, exit A;
    - exit C: hold to the result.
-   Return per dollar staked, 95% bootstrap range, by entry price band. Taker fee:
+   Return per dollar staked, 95% bootstrap range, by entry price band.
+3) Kalshi in play (the user's trade): buy the underdog at the best ask one minute before the
+   start (or one hour before), then sell to the best bid the first minute during the match it
+   stands at entry + X (4, 8, 15c) or at 50c or more; if that never happens, hold to the
+   result. Same fees on both trades; also without the exit fee as an upper bound.
+   Taker fee:
    v5_devig.kalshi_fee on 100-contract orders; maker fee: none (not confirmed for tennis).
 """
 from __future__ import annotations
@@ -87,8 +92,7 @@ def standing(candles, at):
     return best
 
 
-def kalshi_trades(base: Path, raw_dir: Path, rng) -> dict:
-    raw = load_raw(raw_dir)
+def kalshi_trades(base: Path, raw: dict, rng) -> dict:
     mk = pd.concat([pd.read_csv(p, dtype=str, keep_default_na=False) for p in sorted((base / "market_history" / "kalshi" / "markets").glob("*.csv"))]).drop_duplicates("ticker")
     reg = pd.read_csv(base / "oddspapi_registry" / "fixtures.csv", dtype=str, keep_default_na=False)
     fmap = rebuild_fixture_map(mk, reg)
@@ -136,13 +140,69 @@ def kalshi_trades(base: Path, raw_dir: Path, rng) -> dict:
     return out
 
 
+INPLAY_TARGETS = (("+4c", 0.04), ("+8c", 0.08), ("+15c", 0.15), ("50c", None))
+
+
+def kalshi_inplay(base: Path, raw: dict, rng) -> dict:
+    mk = pd.concat([pd.read_csv(p, dtype=str, keep_default_na=False) for p in sorted((base / "market_history" / "kalshi" / "markets").glob("*.csv"))]).drop_duplicates("ticker")
+    reg = pd.read_csv(base / "oddspapi_registry" / "fixtures.csv", dtype=str, keep_default_na=False)
+    fmap = rebuild_fixture_map(mk, reg)
+    fmap = fmap[fmap["match_method"] == "names"].merge(mk[["ticker", "family"]], on="ticker")
+    starts = reg.drop_duplicates("fixture_id").set_index("fixture_id")
+    fee = lambda p: kalshi_fee(p, CONTRACTS) / CONTRACTS  # noqa: E731
+    rows = []
+    for r in fmap.itertuples():
+        m = raw.get(r.ticker)
+        if m is None or m["result"] not in ("yes", "no") or r.fixture_id not in starts.index:
+            continue
+        f = starts.loc[r.fixture_id]
+        if not f["true_start_time_utc"]:
+            continue
+        start = pd.to_datetime(f["true_start_time_utc"], utc=True)
+        if start >= SEALED_FROM:
+            continue
+        candles = sorted(m["candles"])
+        live = [(ts, bid) for ts, bid, ask in candles if ts > start and bid is not None]
+        won = 1.0 if m["result"] == "yes" else 0.0
+        for when, at in (("at_start", start - pd.Timedelta(minutes=1)), ("T-1h", start - pd.Timedelta(hours=1))):
+            q = standing(candles, at)
+            if q is None or q[1] - q[0] > 0.05 or q[1] >= 0.50 or not live:
+                continue
+            entry = q[1]
+            cost = entry + fee(entry)
+            row = {"ticker": r.ticker, "family": r.family, "when": when, "entry": entry, "hold": won / cost - 1}
+            for name, x in INPLAY_TARGETS:
+                target = round(entry + x, 2) if x is not None else 0.50
+                hit = next((b for _, b in live if b >= target), None)
+                row[f"hit_{name}"] = hit is not None
+                row[f"ret_{name}"] = ((hit - fee(hit)) if hit is not None else won) / cost - 1
+                row[f"ret_{name}_no_exit_fee"] = (hit if hit is not None else won) / cost - 1
+            rows.append(row)
+    d = pd.DataFrame(rows)
+    d["band"] = pd.cut(d["entry"], BANDS, labels=LABELS, right=False)
+    out = {"markets": int(d["ticker"].nunique())}
+    for when, g in d.groupby("when"):
+        part = {}
+        for b, gb in [("all", g)] + [(b, g[g["band"] == b]) for b in LABELS]:
+            if gb.empty:
+                continue
+            part[b] = {"n": int(len(gb)), "won_share": round(float((gb["hold"] > 0).mean()), 4), "hold_to_result": boot(gb["hold"], rng),
+                       **{name: {"reached": round(float(gb[f"hit_{name}"].mean()), 4), "return": boot(gb[f"ret_{name}"], rng),
+                                 "return_no_exit_fee": boot(gb[f"ret_{name}_no_exit_fee"], rng)} for name, _ in INPLAY_TARGETS}}
+        part["by_family_+8c"] = {fam: boot(gf["ret_+8c"], rng) for fam, gf in g.groupby("family")}
+        out[when] = part
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--raw", required=True)
     ap.add_argument("--out", default="docs/experiments/data/underdog_drift.json")
     args = ap.parse_args()
     rng = np.random.default_rng(20261019)
-    report = {"pinnacle_open_to_close": pinnacle_drift(BASE, rng), "kalshi": kalshi_trades(BASE, Path(args.raw), rng)}
+    raw = load_raw(Path(args.raw))
+    report = {"pinnacle_open_to_close": pinnacle_drift(BASE, rng), "kalshi": kalshi_trades(BASE, raw, rng),
+              "kalshi_inplay": kalshi_inplay(BASE, raw, rng)}
     out = BASE / args.out
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")

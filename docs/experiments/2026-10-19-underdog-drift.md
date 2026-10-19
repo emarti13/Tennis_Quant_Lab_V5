@@ -39,3 +39,32 @@ ATP, WTA and Challenger all lose by about the same amount.
 - Holding to the result loses too (long shots are overpriced, the earlier band study).
 - Not pursued further. Of the ideas so far, only a maker (who earns the spread instead of
   paying it, and pays no taker fee) showed a positive result (2026-10-19 Kalshi simulation).
+
+## 3. In play: buy the underdog, sell during the match once it has risen
+Asked as a follow-up ("buy the underdog and sell mid-match after it has risen; they often
+win or lead the first set"). Kalshi keeps trading in play, and its 1-minute best bid/ask
+covers the match. Buy at the best ask one minute before the true start; sell to the best bid
+the first minute in play it stands at entry + X, or at 50c; if never, hold to the result.
+Taker fees on both trades. 1,313 underdog markets, August 10 to October 12.
+
+| Underdog at the start | Rule | Reached the target in play | Return per dollar |
+|---|---|---|---|
+| 46–50c | sell at 50c | **84%** | −14.4% (−20.5 to −9.0) |
+| 46–50c | sell at +4c | 81% | −14.8% |
+| 40–46c | sell at 50c | 76% | −10.9% |
+| 40–46c | sell at +8c | 74% | −11.7% |
+| 30–40c | sell at +8c | 75% | −9.0% (−13.9 to −3.8) |
+| under 30c | sell at +8c | 59% | −17.0% |
+| all | sell at +4c | 79% | −13.0% (−15.4 to −10.6) |
+
+Without the exit fee (an upper bound) every row still loses (best: −5%, 30–40c). Entering an
+hour before the start is the same. ATP −9.6%, Challenger −16.7%, WTA −13.2% (+8c rule).
+
+The user's observation is right: underdogs very often trade higher at some point in the match
+(a 46–50c underdog reached 50c in 84% of matches). It does not make money, because of how a
+fairly priced contract behaves: the chance of touching a higher price before the end is about
+(price now) ÷ (target). From 48c, reaching 50c happens about 96% of the time in theory; the
+other 4% go to zero. 96% × 50c + 4% × 0 = 48c, exactly the price paid. The many small wins
+are paid for by the few total losses, before fees; fees and the spread then make it
+negative. Minute bars also flatter the strategy (a high bid that lasted seconds counts), so
+real results would be worse.
