@@ -3,7 +3,7 @@ name: V5 Market History
 # Rebuild plan Step 3 (spec docs/superpowers/specs/2026-10-16-market-data-layer-design.md):
 # once a day, after the day's matches, store open/close/checkpoint prices for every relevant
 # fixture from OddsPapi /historical-odds (free; one call per 5 s), then spend the time left
-# on the gap backfill, oldest first; then settled Kalshi match markets (spec §2.4).
+# on the gap backfill, newest first; then settled Kalshi match markets (spec §2.4).
 # Budget: v5_actions_budget.py "market_history".
 on:
   workflow_dispatch:

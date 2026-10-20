@@ -11,8 +11,8 @@ Each run (spec docs/superpowers/specs/2026-10-16-market-data-layer-design.md §2
    when it would leave fewer than 50 requests for live pricing.
 2. Daily: fixtures that started in the last 8 days and have no finished pull (one
    without a reported true start waits up to 3 days for it).
-3. Backfill, with the time left, in one queue oldest first (OddsPapi drops history after
-   4-9 months): older fixtures with no stored history (Pinnacle, Bet365, BetRivers), and
+3. Backfill, with the time left, in one queue newest first (user, 2026-10-20; OddsPapi drops
+   history after 4-9 months, so the oldest months may expire first): older fixtures with no stored history (Pinnacle, Bet365, BetRivers), and
    Bet365 alone for the fixtures the January-August backfill holds without it. OddsPapi
    deletes history by date, so the first fixture that still has it is found with a few
    probe calls (skip_expired) and everything older is logged as not found.
@@ -125,6 +125,17 @@ def discover(api: Api, start: datetime, end: datetime, quota: dict | None) -> di
     return {"windows": len(windows), "relevant_seen": len(seen), **result}
 
 
+def backfill_queue(api: Api, items: list) -> tuple[list, list[dict]]:
+    """The gap backfill, newest first (user, 2026-10-20): the recent months are the ones the
+    research needs now (Pinnacle August-October for the Kalshi simulation), and at about 300
+    fixtures a run the oldest-first queue would reach them only after two weeks. The cost is
+    that the oldest months may expire (OddsPapi keeps 4-9 months) before they are reached.
+    Fixtures whose history is already gone are dropped first (`skip_expired`, which probes from
+    the oldest)."""
+    keep, expired = skip_expired(api, items)
+    return sorted(keep, key=lambda item: str(item[1]["start_time_utc"]), reverse=True), expired
+
+
 def skip_expired(api: Api, queue: list, window: int = PROBE_WINDOW) -> tuple[list, list[dict]]:
     """Drop the oldest fixtures whose history OddsPapi has already deleted, without a call per
     fixture. OddsPapi deletes by date (4-9 months back), so per book set, oldest first: probe
@@ -212,11 +223,8 @@ def pull(args) -> dict:
     # Bet365 for the fixtures the January-August backfill holds without it (user, 2026-10-16).
     extra = pending_fixtures(registry, log, now=now, since=args.backfill_since, books=EXTRA_BOOK,
                              relevant=relevant_fixture, only_stored=True) if not args.no_extra_book else registry.iloc[0:0]
-    # One queue, oldest first: OddsPapi drops history after 4-9 months, whichever book it is for.
-    older = sorted([("backfill", r, books) for r in backfill.to_dict("records")]
-                   + [("bet365_backfill", r, EXTRA_BOOK) for r in extra.to_dict("records")],
-                   key=lambda item: item[1]["start_time_utc"])
-    older, expired = skip_expired(api, older)
+    older, expired = backfill_queue(api, [("backfill", r, books) for r in backfill.to_dict("records")]
+                                    + [("bet365_backfill", r, EXTRA_BOOK) for r in extra.to_dict("records")])
     append_pull_log(expired, BASE)
     queue = [("daily", r, books) for r in daily.to_dict("records")] + older
 
