@@ -199,6 +199,9 @@ def load_repo_matches(root: str = ".", report: dict | None = None) -> pd.DataFra
     return canonicalize(raw, report)
 
 
+SERVE_COLUMNS = [f"{side}_{stat}" for side in ("w", "l") for stat in ("svpt", "1stIn", "1stWon", "2ndWon", "ace", "df")]
+
+
 def canonicalize(raw: pd.DataFrame, report: dict | None = None) -> pd.DataFrame:
     report = report if report is not None else {}
     df = pd.DataFrame({
@@ -217,6 +220,8 @@ def canonicalize(raw: pd.DataFrame, report: dict | None = None) -> pd.DataFrame:
         "winner_age": pd.to_numeric(raw.get("winner_age"), errors="coerce"),
         "loser_age": pd.to_numeric(raw.get("loser_age"), errors="coerce"),
         "source": raw.get("source", ""), "source_priority": raw.get("source_priority", 0),
+        # point counts on serve, carried for research (court pace, serve/return); unused by the features
+        **{c: pd.to_numeric(raw[c], errors="coerce") if c in raw else np.nan for c in SERVE_COLUMNS},
     })
     missing = lambda s: s.isna() | s.astype("string").str.strip().isin(["nan", "", "None", "<NA>"]).fillna(True)
     bad = df["date"].isna() | missing(raw["winner_id"].reindex(df.index)) | missing(raw["loser_id"].reindex(df.index)) \
