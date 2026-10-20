@@ -1,18 +1,13 @@
 {
   "stage": "repricing",
-  "run_timestamp": "2026-10-17T03:15:22.343752+00:00",
-  "source_version": "2026-10-17T03:15:15.613232+00:00",
-  "state": "success",
-  "rows": 1034,
-  "fixtures": 50,
-  "freshness": "READY",
-  "error": null,
-  "forecast_date": "2026-10-16",
-  "matched_model_rows": 20,
-  "actionable_rows": 9,
-  "official_recommendations": 1809,
-  "market_history_retention": "permanent",
-  "official_recommendations_state": "paused",
-  "official_recommendations_paused_since": "2026-10-13",
-  "official_recommendations_reason": "Rebuild in progress. Recommendations from the pre-rebuild engine are not trusted (owner decision 2026-10-13) and will be re-simulated with the rebuilt engine. Prices and results are still collected."
+  "run_timestamp": "2026-10-20T03:41:51.548498+00:00",
+  "source_version": "2026-10-20T03:41:46.044431+00:00",
+  "state": "blocked",
+  "rows": 0,
+  "fixtures": 63,
+  "freshness": "STALE_FORECAST",
+  "error": "no frozen model forecast for production date 2026-10-19",
+  "available_forecast_dates": [
+    "2026-10-16"
+  ]
 }
