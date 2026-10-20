@@ -130,7 +130,9 @@ answers "No historical odds found" for it with `bookmakers=pinnacle`. Item 2 sta
    call per fixture would add about 240 minutes a month and break the 2,100 guardrail.
 2. **History disappears after 4–9 months.** A January fixture whose Pinnacle quotes we
    stored now returns "not found"; June still answers. Proposal: run the gap backfill (§2.2) right after the store code
-   lands, **oldest first**, before more of it expires. Fixtures already past the window are
+   lands, **oldest first**, before more of it expires. *Changed 2026-10-20 (user, in chat):
+   newest first, so August-October reaches the research within days; the oldest months may
+   expire before they are reached.* Fixtures already past the window are
    lost; the stored 1.4 GB backfill is the only copy of them and must be kept.
 3. **A free pre-match source.** `/historical-odds` answers for matches that have not started
    yet. Proposal: inside the existing live run (no new schedule, no polling), also fetch it

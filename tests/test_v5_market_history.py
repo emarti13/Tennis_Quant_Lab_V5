@@ -239,3 +239,12 @@ def test_a_dropped_connection_is_retried_and_never_ends_the_run(monkeypatch):
     api.session = Flaky(fails=99)
     status, body = api.get("historical-odds", fixtureId="x")
     assert status == 0 and body["error"]["network"] == "ConnectionError" and api.session.calls == 4
+
+
+def test_the_gap_backfill_runs_newest_first_after_dropping_expired(monkeypatch):
+    pm = _pm(monkeypatch)
+    api = _DatedApi(first="d020")
+    keep, expired = pm.backfill_queue(api, _queue(40))
+    starts = [k[1]["start_time_utc"] for k in keep]
+    assert starts == sorted(starts, reverse=True) and keep[0][1]["fixture_id"] == "d039"
+    assert expired and all(e["fixture_id"] < "d020" for e in expired)
