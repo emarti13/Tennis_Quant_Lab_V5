@@ -1,0 +1,205 @@
+{
+ "params": {
+  "half_life_weeks": 52.0,
+  "shrink_points": 300.0,
+  "pace_shrink_points": 3000.0
+ },
+ "alone_2026": {
+  "n": 10213,
+  "p_winner": 0.62722,
+  "p_pt0": 0.64769,
+  "p_pt": 0.64759,
+  "pt_minus_elo": {
+   "mean": 0.02047,
+   "ci95": [
+    0.01565,
+    0.02559
+   ]
+  },
+  "pace_minus_no_pace": {
+   "mean": -0.0001,
+   "ci95": [
+    -0.00024,
+    4e-05
+   ]
+  }
+ },
+ "pace_stability": {
+  "editions": 755,
+  "corr_prior_vs_final": 0.907,
+  "pace_sd_logit": 0.0387,
+  "by_level_corr": {
+   "250": 0.904,
+   "500": 0.874,
+   "C": 0.906,
+   "G": 0.946,
+   "M": 0.915
+  }
+ },
+ "on_pinnacle_open": {
+  "n_train": 4596,
+  "n_test": 1280,
+  "open": 0.61693,
+  "close": 0.61274,
+  "models": {
+   "open+elo+fatigue": {
+    "log_loss": 0.61652,
+    "model_minus_open": {
+     "mean": -0.0004,
+     "ci95": [
+      -0.00538,
+      0.00415
+     ]
+    },
+    "move_toward_pick": {
+     "n": 1280,
+     "mean": 0.0069,
+     "ci95": [
+      0.00469,
+      0.00914
+     ]
+    },
+    "move_toward_pick_by_family": {
+     "ATP": {
+      "n": 431,
+      "mean": 0.00543,
+      "ci95": [
+       0.00156,
+       0.00938
+      ]
+     },
+     "CHALLENGER": {
+      "n": 608,
+      "mean": 0.00976,
+      "ci95": [
+       0.0065,
+       0.01293
+      ]
+     },
+     "WTA": {
+      "n": 241,
+      "mean": 0.00231,
+      "ci95": [
+       -0.00273,
+       0.00696
+      ]
+     }
+    },
+    "weights": {
+     "elo_gap": 0.0802,
+     "d_prev_in_event_minutes": 0.0242,
+     "d_prev_in_event_sets": 0.0503,
+     "d_prev_in_event_went_distance": -0.1104
+    }
+   },
+   "+point model": {
+    "log_loss": 0.61651,
+    "model_minus_open": {
+     "mean": -0.00041,
+     "ci95": [
+      -0.0051,
+      0.00439
+     ]
+    },
+    "move_toward_pick": {
+     "n": 1280,
+     "mean": 0.00679,
+     "ci95": [
+      0.00462,
+      0.00911
+     ]
+    },
+    "move_toward_pick_by_family": {
+     "ATP": {
+      "n": 431,
+      "mean": 0.00482,
+      "ci95": [
+       0.0007,
+       0.00889
+      ]
+     },
+     "CHALLENGER": {
+      "n": 608,
+      "mean": 0.00995,
+      "ci95": [
+       0.0065,
+       0.01324
+      ]
+     },
+     "WTA": {
+      "n": 241,
+      "mean": 0.00233,
+      "ci95": [
+       -0.00232,
+       0.00732
+      ]
+     }
+    },
+    "weights": {
+     "elo_gap": 0.0757,
+     "pt_gap": 0.01,
+     "d_prev_in_event_minutes": 0.0242,
+     "d_prev_in_event_sets": 0.0498
+    }
+   },
+   "+point model+pace": {
+    "log_loss": 0.61724,
+    "model_minus_open": {
+     "mean": 0.00031,
+     "ci95": [
+      -0.00436,
+      0.0053
+     ]
+    },
+    "move_toward_pick": {
+     "n": 1280,
+     "mean": 0.0064,
+     "ci95": [
+      0.00429,
+      0.00876
+     ]
+    },
+    "move_toward_pick_by_family": {
+     "ATP": {
+      "n": 431,
+      "mean": 0.00386,
+      "ci95": [
+       -0.00021,
+       0.00815
+      ]
+     },
+     "CHALLENGER": {
+      "n": 608,
+      "mean": 0.00895,
+      "ci95": [
+       0.00566,
+       0.01237
+      ]
+     },
+     "WTA": {
+      "n": 241,
+      "mean": 0.00449,
+      "ci95": [
+       -0.00024,
+       0.00962
+      ]
+     }
+    },
+    "weights": {
+     "elo_gap": 0.0761,
+     "pt_gap": 0.0103,
+     "pace_gap": -0.0211,
+     "pace_x_serve": -0.0497
+    }
+   }
+  },
+  "pace_model_minus_baseline_move": {
+   "n": 1280,
+   "mean": -0.0005,
+   "ci95": [
+    -0.00172,
+    0.00058
+   ]
+  }
+ }
+}
