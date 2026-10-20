@@ -18,6 +18,13 @@ Every poll, from Kalshi's public API (no account, no key):
 `settle` scores markets whose result is final: held to settlement, and marked at the last mid
 before the cutoff.
 
+"join" (added 2026-10-20, before any of its results): a buy at the best bid and a sell at the
+best ask, joining the back of each queue. Every poll reads the public order book: the
+contracts ahead of us are the depth at our price when we joined, and only trades at our
+price after those are filled us (orders cancelled ahead of us are not credited: cautious). A
+trade through our price fills us. If the best price moves, we re-join at the back.
+Same size and position limit as the other settings.
+
 Files (append-only, in market_history/kalshi/paper/): snapshots_YYYY-MM.csv, fills_YYYY-MM.csv,
 state.json (last trade seen and positions per market and setting), results.csv (rewritten by
 `settle` from the fills).
@@ -47,11 +54,14 @@ import requests
 
 BASE = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BASE))
-from scripts.simulate_kalshi_making import MAKER_FEE_RATE, fill, mid_fair, quotes  # noqa: E402
+from scripts.simulate_kalshi_making import LIMIT, MAKER_FEE_RATE, SIZE, fill, mid_fair, quotes  # noqa: E402
 
 API = "https://api.elections.kalshi.com/trade-api/v2"
 SERIES = ("KXATPCHALLENGERMATCH",)
 HALF_WIDTHS = (0.03, 0.05)
+JOIN = "join"                  # added 2026-10-20 (user): quote at the best bid and ask, at the back of the queue
+SETTINGS = tuple(str(h) for h in HALF_WIDTHS) + (JOIN,)
+DEPTH_COLS = ["ticker", "polled_utc", "best_bid", "bid_depth", "best_ask", "ask_depth", "join_bid_ahead", "join_ask_ahead"]
 PAPER_DIR = BASE / "market_history" / "kalshi" / "paper"
 CUTOFF_MINUTES = 1
 LIVE_CHECK_HOURS = 2
@@ -106,6 +116,12 @@ class Kalshi:
             return "not_started"
         return f"{d.get('status')}/{d.get('match_status')}"
 
+    def depth(self, ticker: str) -> dict:
+        """{'yes': {price: contracts}, 'no': {price: contracts}}: resting bids on each side
+        (a YES ask at a is a NO bid at 1 - a)."""
+        ob = self.get(f"/markets/{ticker}/orderbook").get("orderbook_fp", {})
+        return {side: {round(float(p), 2): float(q) for p, q in (ob.get(f"{side}_dollars") or [])} for side in ("yes", "no")}
+
     def trades(self, ticker: str, min_ts: int) -> list[dict]:
         out, cursor = [], None
         while True:
@@ -117,6 +133,45 @@ class Kalshi:
             cursor = page.get("cursor")
             if not cursor:
                 return out
+
+
+def join_fill(taker: str, x: float, count: float, j: dict, pos: float):
+    """A trade against our queued quotes (j: bid, bid_ahead, ask, ask_ahead; updated in place).
+    Returns (side, price, contracts) or None."""
+    if taker == "no" and j.get("bid") and pos < LIMIT:            # a seller hits the bids
+        if x < j["bid"]:
+            return ("buy", j["bid"], min(count, SIZE, LIMIT - pos))
+        if x == j["bid"]:
+            left = count - j["bid_ahead"]
+            j["bid_ahead"] = max(0.0, -left)
+            if left > 0:
+                return ("buy", j["bid"], min(left, SIZE, LIMIT - pos))
+    elif taker == "yes" and j.get("ask") and pos > -LIMIT:        # a buyer lifts the asks
+        if x > j["ask"]:
+            return ("sell", j["ask"], min(count, SIZE, LIMIT + pos))
+        if x == j["ask"]:
+            left = count - j["ask_ahead"]
+            j["ask_ahead"] = max(0.0, -left)
+            if left > 0:
+                return ("sell", j["ask"], min(left, SIZE, LIMIT + pos))
+    return None
+
+
+def join_quote(prev: dict | None, best_bid, best_ask, book: dict) -> dict | None:
+    """Our join quotes for the next interval: the best bid and ask, behind what rests there
+    (behind less if contracts ahead of us were traded or cancelled; at the back after a move)."""
+    if mid_fair(best_bid, best_ask) is None:
+        return None
+    bid_depth = book["yes"].get(round(best_bid, 2), 0.0)
+    ask_depth = book["no"].get(round(1 - best_ask, 2), 0.0)
+    j = {"bid": best_bid, "ask": best_ask, "bid_ahead": bid_depth, "ask_ahead": ask_depth,
+         "bid_depth": bid_depth, "ask_depth": ask_depth}
+    if prev:
+        if prev.get("bid") == best_bid:
+            j["bid_ahead"] = min(prev["bid_ahead"], bid_depth)
+        if prev.get("ask") == best_ask:
+            j["ask_ahead"] = min(prev["ask_ahead"], ask_depth)
+    return j
 
 
 def _f(v):
@@ -147,7 +202,7 @@ def save_state(state: dict) -> None:
 def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
     """One poll: score the trades since the last poll against the quote that was standing,
     then record the new standing book. Returns counts for the log line."""
-    snaps, fills, seen, failed = [], [], 0, 0
+    snaps, fills, seen, failed, depth_rows = [], [], 0, 0, []
     events = state.setdefault("events", {})
     previous_poll = state.get("last_poll")
     markets = [m for series in SERIES for m in api.open_markets(series)]
@@ -181,7 +236,8 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
         st = state["markets"].setdefault(t, {"event": m.get("event_ticker"), "player": m.get("yes_sub_title"),
                                              "cutoff": cutoff.isoformat(), "last_trade_ts": None,
                                              "volume": None, "snapshot": None,
-                                             "pos": {str(h): 0.0 for h in HALF_WIDTHS}})
+                                             "pos": {k: 0.0 for k in SETTINGS}})
+        st["pos"].setdefault(JOIN, 0.0)
         st["cutoff"] = cutoff.isoformat()
         volume = _f(m.get("volume_fp"))
         snap = st.get("snapshot")
@@ -194,6 +250,7 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
                 failed += 1
                 continue
             pos, last_ts, found = dict(st["pos"]), st["last_trade_ts"], []
+            jq = dict(st["join"]) if st.get("join") else None
             for tr in sorted(tape, key=lambda x: x["created_time"]):
                 ts = pd.Timestamp(tr["created_time"])
                 if ts <= pd.Timestamp(snap["polled_utc"]) or ts > cutoff:
@@ -218,14 +275,37 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
                                           "trade_price": float(tr["yes_price_dollars"]), "trade_count": float(tr["count_fp"]),
                                           "side": side, "price": price, "contracts": q, "standing_bid": bid,
                                           "standing_ask": ask, "snapshot_utc": snap["polled_utc"]})
+                if jq:
+                    got = join_fill(tr["taker_side"], float(tr["yes_price_dollars"]), float(tr["count_fp"]), jq, pos[JOIN])
+                    if got:
+                        side, price, q = got
+                        pos[JOIN] += q if side == "buy" else -q
+                        found.append({"ticker": t, "event_ticker": st["event"], "h": JOIN, "trade_id": tr.get("trade_id"),
+                                      "trade_utc": tr["created_time"], "taker_side": tr["taker_side"],
+                                      "trade_price": float(tr["yes_price_dollars"]), "trade_count": float(tr["count_fp"]),
+                                      "side": side, "price": price, "contracts": q, "standing_bid": jq["bid"],
+                                      "standing_ask": jq["ask"], "snapshot_utc": snap["polled_utc"]})
                 last_ts = tr["created_time"]
             st["pos"], st["last_trade_ts"] = pos, last_ts
+            if jq:
+                st["join"] = jq
             fills += found
         # 2) the book standing from now until the next poll
         if now < cutoff:
             snap = {"polled_utc": now.isoformat(), "best_bid": _f(m.get("yes_bid_dollars")),
                     "best_ask": _f(m.get("yes_ask_dollars"))}
             st["snapshot"] = snap
+            try:
+                book = api.depth(t) if mid_fair(snap["best_bid"], snap["best_ask"]) is not None else None
+            except (RuntimeError, requests.HTTPError):
+                book = None
+                failed += 1
+            st["join"] = join_quote(st.get("join"), snap["best_bid"], snap["best_ask"], book) if book else None
+            if st["join"]:
+                j = st["join"]
+                depth_rows.append({"ticker": t, "polled_utc": snap["polled_utc"], "best_bid": j["bid"], "bid_depth": j["bid_depth"],
+                                   "best_ask": j["ask"], "ask_depth": j["ask_depth"], "join_bid_ahead": j["bid_ahead"],
+                                   "join_ask_ahead": j["ask_ahead"]})
             snaps.append({"ticker": t, "event_ticker": st["event"], "player": st["player"], "polled_utc": snap["polled_utc"],
                           "start_utc": start.isoformat(), "best_bid": snap["best_bid"], "best_ask": snap["best_ask"],
                           "volume": volume})
@@ -233,6 +313,7 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
     state["last_poll"] = now.isoformat()
     _append("snapshots", snaps, SNAP_COLS, now)
     _append("fills", fills, FILL_COLS, now)
+    _append("depth", depth_rows, DEPTH_COLS, now)
     return {"markets": len(snaps), "trades_checked": seen, "fills": len(fills), "markets_retry_next_poll": failed,
             "api_calls": api.calls}
 
@@ -248,8 +329,8 @@ def settle(api: Kalshi) -> pd.DataFrame:
         result = m.get("result")
         last = g.sort_values("polled_utc").iloc[-1]
         mark = mid_fair(last["best_bid"], last["best_ask"])
-        for h in HALF_WIDTHS:
-            f = fills[(fills["ticker"] == t) & (fills["h"] == h)]
+        for h in SETTINGS:
+            f = fills[(fills["ticker"] == t) & (fills["h"].astype(str) == h)]
             row = {"ticker": t, "event_ticker": last["event_ticker"], "h": h, "result": result,
                    "start_utc": last["start_utc"], "contracts": float(f["contracts"].sum()),
                    "end_position": float((f["contracts"] * f["side"].map({"buy": 1, "sell": -1})).sum())}
@@ -276,7 +357,7 @@ def main() -> int:
     if args.command == "settle":
         out = settle(api)
         done = out[out["result"].isin(["yes", "no"])]
-        for h, g in done.groupby("h"):
+        for h, g in done.groupby(done["h"].astype(str)):
             print(f"h={h}: markets {g['ticker'].nunique()}, contracts {g['contracts'].sum():.0f}, "
                   f"marked ${g['marked'].sum():.2f}, held ${g['held'].sum():.2f}")
         return 0

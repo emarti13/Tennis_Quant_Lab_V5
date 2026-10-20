@@ -10,12 +10,17 @@ class FakeKalshi:
     def __init__(self):
         self.book, self.volume, self.tape, self.calls = (0.50, 0.60), 0.0, [], 0
         self.status = "not_started"
+        self.ahead = 50.0                 # contracts resting at the best bid and at the best ask
 
     def milestone(self, event):
         return {"id": "m1", "type": "tennis_tournament_singles", "start_date": "2026-10-20T12:00:00Z"}
 
     def live_status(self, milestone):
         return self.status
+
+    def depth(self, ticker):
+        bid, ask = self.book
+        return {"yes": {round(bid, 2): self.ahead}, "no": {round(1 - ask, 2): self.ahead}}
 
     def open_markets(self, series):
         return [{"ticker": "T-A", "event_ticker": "T", "yes_sub_title": "A", "occurrence_datetime": "2026-10-20T15:00:00Z",
@@ -98,3 +103,26 @@ def test_a_trade_after_a_gap_between_runs_is_not_scored(tmp_path, monkeypatch):
     api.tape, api.volume = [trade("2026-10-20T08:20:00Z", 0.59, 40, "yes", "1")], 40.0   # 20 minutes later
     info = pt.poll_once(api, state, pd.Timestamp("2026-10-20T08:21:00Z"))
     assert info["trades_checked"] == 1 and not (tmp_path / "fills_2026-10.csv").exists()
+
+
+def test_join_fills_only_after_the_queue_ahead_has_traded(tmp_path, monkeypatch):
+    monkeypatch.setattr(pt, "PAPER_DIR", tmp_path)
+    api, state = FakeKalshi(), {"markets": {}}
+    pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:00:00Z"))            # join at 0.50 bid / 0.60 ask, 50 ahead each
+    api.tape = [trade("2026-10-20T10:00:20Z", 0.60, 30, "yes", "1"),         # 30 of the 50 ahead
+                trade("2026-10-20T10:00:40Z", 0.60, 40, "yes", "2"),         # 20 more ahead, then 20 to us
+                trade("2026-10-20T10:00:50Z", 0.49, 10, "no", "3")]          # through our 0.50 bid
+    api.volume = 80.0
+    pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:01:00Z"))
+    f = pd.read_csv(tmp_path / "fills_2026-10.csv")
+    j = f[f["h"].astype(str) == "join"]
+    assert list(zip(j["side"], j["price"], j["contracts"])) == [("sell", 0.60, 20.0), ("buy", 0.50, 10.0)]
+    assert state["markets"]["T-A"]["pos"]["join"] == -10.0
+    d = pd.read_csv(tmp_path / "depth_2026-10.csv")
+    assert list(d["join_ask_ahead"]) == [50.0, 0.0]                           # same price: still at the front
+
+
+def test_join_requeues_at_the_back_when_the_best_price_moves():
+    j = pt.join_quote({"bid": 0.50, "ask": 0.60, "bid_ahead": 5.0, "ask_ahead": 0.0}, 0.51, 0.60,
+                      {"yes": {0.51: 300.0}, "no": {0.40: 80.0}})
+    assert j["bid_ahead"] == 300.0 and j["ask_ahead"] == 0.0                  # new bid level: back of the queue
