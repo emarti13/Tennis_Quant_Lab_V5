@@ -265,9 +265,13 @@ def build(m: pd.DataFrame):
     lr = LogisticRegression(C=1e6, fit_intercept=False).fit(x[:, None], np.r_[np.ones(ok.sum()), np.zeros(ok.sum())])
     kw = float(lr.coef_[0, 0])
     pieces = match_pieces(m, kg, kw)
-    # event country: modal ioc of the event's wildcards, else of all its entrants (draw known pre-event)
-    long = pd.concat([m[["tour", "tid", "winner_ioc", "winner_entry"]].set_axis(["tour", "tid", "ioc", "entry"], axis=1),
-                      m[["tour", "tid", "loser_ioc", "loser_entry"]].set_axis(["tour", "tid", "ioc", "entry"], axis=1)])
+    # event country: modal ioc of the event's wildcards, else of all its entrants (draw known pre-event).
+    # LEAK FIX 2026-10-21: count each player ONCE per event. Counting match rows weighted players
+    # by how far they went, so the country whose players won most became "home" (home win rate
+    # 54.4% with match rows vs 50.7% with one row per player).
+    long = pd.concat([m[["tour", "tid", "winner_key", "winner_ioc", "winner_entry"]].set_axis(["tour", "tid", "pk", "ioc", "entry"], axis=1),
+                      m[["tour", "tid", "loser_key", "loser_ioc", "loser_entry"]].set_axis(["tour", "tid", "pk", "ioc", "entry"], axis=1)])
+    long = long.drop_duplicates(["tour", "tid", "pk"])
     long["entry"] = long["entry"].astype(str).str.upper()
     wc = long[long["entry"] == "WC"].groupby(["tour", "tid"])["ioc"].agg(lambda s: s.value_counts().index[0] if s.notna().any() else np.nan)
     def mode_share(s):
