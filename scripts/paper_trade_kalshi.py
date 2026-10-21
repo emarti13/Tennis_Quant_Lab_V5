@@ -25,7 +25,7 @@ price after those are filled us (orders cancelled ahead of us are not credited: 
 trade through our price fills us. If the best price moves, we re-join at the back.
 Same size and position limit as the other settings.
 
-Files (append-only, in market_history/kalshi/paper/): snapshots_YYYY-MM.csv, fills_YYYY-MM.csv,
+Files (append-only, in market_history/kalshi/paper/): snapshots_YYYY-MM-DD.csv, fills_YYYY-MM-DD.csv (UTC day; the server gzips past days),
 state.json (last trade seen and positions per market and setting), results.csv (rewritten by
 `settle` from the fills).
 
@@ -185,7 +185,7 @@ def _append(name: str, rows: list[dict], cols: list[str], when: pd.Timestamp) ->
     if not rows:
         return
     PAPER_DIR.mkdir(parents=True, exist_ok=True)
-    path = PAPER_DIR / f"{name}_{when:%Y-%m}.csv"
+    path = PAPER_DIR / f"{name}_{when:%Y-%m-%d}.csv"
     pd.DataFrame(rows, columns=cols).to_csv(path, mode="a", header=not path.exists(), index=False)
 
 
@@ -321,8 +321,9 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
 def settle(api: Kalshi) -> pd.DataFrame:
     """Per market and setting: contracts, profit held to settlement, and marked at the last
     mid before the cutoff (with and without Kalshi's maker fee schedule)."""
-    fills = pd.concat([pd.read_csv(p) for p in sorted(PAPER_DIR.glob("fills_*.csv"))]) if list(PAPER_DIR.glob("fills_*.csv")) else pd.DataFrame(columns=FILL_COLS)
-    snaps = pd.concat([pd.read_csv(p) for p in sorted(PAPER_DIR.glob("snapshots_*.csv"))])
+    fill_files = sorted(PAPER_DIR.glob("fills_*.csv*"))                # daily files; past days gzipped
+    fills = pd.concat([pd.read_csv(p) for p in fill_files]) if fill_files else pd.DataFrame(columns=FILL_COLS)
+    snaps = pd.concat([pd.read_csv(p) for p in sorted(PAPER_DIR.glob("snapshots_*.csv*"))])
     rows = []
     for t, g in snaps.groupby("ticker"):
         m = api.get(f"/markets/{t}").get("market", {})

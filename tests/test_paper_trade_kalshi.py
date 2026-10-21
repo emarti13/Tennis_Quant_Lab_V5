@@ -43,7 +43,7 @@ def test_fills_use_the_standing_quote_and_stop_at_the_cutoff(tmp_path, monkeypat
                 trade("2026-10-20T11:59:30Z", 0.40, 50, "no", "3")]         # after the cutoff: ignored
     api.volume, api.book = 100.0, (0.30, 0.40)                                # the book moved; old quotes still apply
     info = pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:01:00Z"))
-    fills = pd.read_csv(tmp_path / "fills_2026-10.csv")
+    fills = pd.read_csv(tmp_path / "fills_2026-10-20.csv")
     assert info["trades_checked"] == 2
     three = fills[fills["h"] == 0.03]
     assert list(three["side"]) == ["sell"] and three["price"].iloc[0] == 0.58 and three["contracts"].iloc[0] == 40
@@ -59,7 +59,7 @@ def test_a_trade_is_never_counted_twice(tmp_path, monkeypatch):
     pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:01:00Z"))
     api.volume = 41.0                                                        # volume moves again, same tape
     pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:02:00Z"))
-    assert len(pd.read_csv(tmp_path / "fills_2026-10.csv")) == 1
+    assert len(pd.read_csv(tmp_path / "fills_2026-10-20.csv")) == 1
 
 
 def test_a_failed_trade_fetch_keeps_the_market_for_the_next_poll(tmp_path, monkeypatch):
@@ -73,7 +73,7 @@ def test_a_failed_trade_fetch_keeps_the_market_for_the_next_poll(tmp_path, monke
     assert info["markets_retry_next_poll"] == 1 and state["markets"]["T-A"]["last_trade_ts"] is None
     api.trades = real
     pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:02:00Z"))
-    assert len(pd.read_csv(tmp_path / "fills_2026-10.csv")) == 1               # scored once, after the retry
+    assert len(pd.read_csv(tmp_path / "fills_2026-10-20.csv")) == 1               # scored once, after the retry
 
 
 def test_once_the_match_is_live_nothing_after_the_previous_poll_counts(tmp_path, monkeypatch):
@@ -82,9 +82,9 @@ def test_once_the_match_is_live_nothing_after_the_previous_poll_counts(tmp_path,
     pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:30:00Z"))           # 1.5 h before: status checked
     api.tape, api.volume, api.status = [trade("2026-10-20T10:30:30Z", 0.59, 40, "yes", "1")], 40.0, "live/1st_set"
     pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:31:00Z"))           # an early start: the trade may be in play
-    assert not (tmp_path / "fills_2026-10.csv").exists()
+    assert not (tmp_path / "fills_2026-10-20.csv").exists()
     assert state["events"]["T"]["stop_at"] == "2026-10-20T10:30:00+00:00"
-    snaps = pd.read_csv(tmp_path / "snapshots_2026-10.csv")
+    snaps = pd.read_csv(tmp_path / "snapshots_2026-10-20.csv")
     assert list(snaps["polled_utc"]) == ["2026-10-20T10:30:00+00:00"]            # no quote after the start is known
 
 
@@ -93,7 +93,7 @@ def test_an_event_with_no_known_start_is_not_quoted(tmp_path, monkeypatch):
     api, state = FakeKalshi(), {"markets": {}}
     api.milestone = lambda event: None
     pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:00:00Z"))
-    assert not (tmp_path / "snapshots_2026-10.csv").exists()
+    assert not (tmp_path / "snapshots_2026-10-20.csv").exists()
 
 
 def test_a_trade_after_a_gap_between_runs_is_not_scored(tmp_path, monkeypatch):
@@ -102,7 +102,7 @@ def test_a_trade_after_a_gap_between_runs_is_not_scored(tmp_path, monkeypatch):
     pt.poll_once(api, state, pd.Timestamp("2026-10-20T08:00:00Z"))
     api.tape, api.volume = [trade("2026-10-20T08:20:00Z", 0.59, 40, "yes", "1")], 40.0   # 20 minutes later
     info = pt.poll_once(api, state, pd.Timestamp("2026-10-20T08:21:00Z"))
-    assert info["trades_checked"] == 1 and not (tmp_path / "fills_2026-10.csv").exists()
+    assert info["trades_checked"] == 1 and not (tmp_path / "fills_2026-10-20.csv").exists()
 
 
 def test_join_fills_only_after_the_queue_ahead_has_traded(tmp_path, monkeypatch):
@@ -114,11 +114,11 @@ def test_join_fills_only_after_the_queue_ahead_has_traded(tmp_path, monkeypatch)
                 trade("2026-10-20T10:00:50Z", 0.49, 10, "no", "3")]          # through our 0.50 bid
     api.volume = 80.0
     pt.poll_once(api, state, pd.Timestamp("2026-10-20T10:01:00Z"))
-    f = pd.read_csv(tmp_path / "fills_2026-10.csv")
+    f = pd.read_csv(tmp_path / "fills_2026-10-20.csv")
     j = f[f["h"].astype(str) == "join"]
     assert list(zip(j["side"], j["price"], j["contracts"])) == [("sell", 0.60, 20.0), ("buy", 0.50, 10.0)]
     assert state["markets"]["T-A"]["pos"]["join"] == -10.0
-    d = pd.read_csv(tmp_path / "depth_2026-10.csv")
+    d = pd.read_csv(tmp_path / "depth_2026-10-20.csv")
     assert list(d["join_ask_ahead"]) == [50.0, 0.0]                           # same price: still at the front
 
 

@@ -65,7 +65,7 @@ def build(settle: str | None, tests: str | None, tests_rc: str | None, notes: li
     disk = shutil.disk_usage(BASE)
     services = {s: _sh("systemctl", "is-active", s) for s in ("tql-paper", "tql-live", "tql-daily.timer")}
     parts = [f"# Server status, {now.isoformat()}", "",
-             f"Code: `{_sh('git', '-C', str(BASE), 'log', '-1', '--format=%h %s')}`  ",
+             f"Code: `{_sh('git', '-C', str(BASE), 'log', '-1', '--format=%h %s', '--', '.', ':!market_history')}`  ",
              f"Disk free: {disk.free / 2**30:.1f} GB  ",
              "Services: " + ", ".join(f"{k} {v}" for k, v in services.items()), ""]
     if tests is not None:

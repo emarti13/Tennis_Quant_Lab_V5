@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Daily job (systemd timer tql-daily). No Claude, no Actions minutes:
 #   1. settle the paper trader against Kalshi results
-#   2. gzip finished days of the live-score log
+#   2. gzip finished days of the logs
 #   3. commit the logs to the data branch
 #   4. bring in new code from the code branch; keep it only if the tests pass
 #   5. write market_history/vm_status.md, commit, push the data branch
@@ -23,11 +23,11 @@ if ! $PY scripts/paper_trade_kalshi.py settle > /tmp/tql_settle.txt 2>&1; then
   STATUS_ARGS+=(--note "settle failed: $(tail -1 /tmp/tql_settle.txt)")
 fi
 
-# 2. gzip every live-score day except today (only .csv.gz is committed)
+# 2. gzip every finished day of the logs (only .csv.gz is committed; today's file keeps growing)
 today=$(date -u +%Y-%m-%d)
-for f in "$LIVE"/*.csv; do
+for f in "$LIVE"/*.csv market_history/kalshi/paper/{snapshots,fills,depth}_*.csv; do
   [ -e "$f" ] || continue
-  [ "$(basename "$f" .csv)" = "$today" ] && continue
+  case "$f" in *"$today"*) continue ;; esac
   gzip -f "$f"
 done
 
