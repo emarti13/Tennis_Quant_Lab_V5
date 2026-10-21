@@ -49,32 +49,32 @@
   }
  },
  "Ladbrokes": {
-  "fixtures": 38753,
-  "mean_abs_pover_shift": 0.0012,
+  "fixtures": 29756,
+  "mean_abs_pover_shift": 0.0011,
   "E1_beta_totals": {
-   "beta": 0.8535,
-   "se": 0.1151,
-   "z": 7.4132,
-   "n": 18212
+   "beta": 0.9018,
+   "se": 0.125,
+   "z": 7.2114,
+   "n": 13981
   },
   "E2_open_to_close_move_on_shift": {
-   "beta": 0.0221,
-   "se": 0.0372,
-   "z": 0.5926,
-   "n": 18212,
-   "placebo_mean": 0.0111,
-   "placebo_sd": 0.052,
-   "share_moved": 0.4745
+   "beta": 0.0583,
+   "se": 0.0422,
+   "z": 1.3833,
+   "n": 13981,
+   "placebo_mean": 0.0307,
+   "placebo_sd": 0.0604,
+   "share_moved": 0.5242
   },
   "E3_post_toss_inferable_subset": {
    "ev>0.00": {
-    "bets": 14,
+    "bets": 13,
     "realised": {
-     "mean": 0.09,
-     "se": 0.2636,
-     "n": 14
+     "mean": 0.1738,
+     "se": 0.27,
+     "n": 13
     },
-    "model_expected_same_selection": 0.1578
+    "model_expected_same_selection": 0.1606
    },
    "ev>0.02": {
     "bets": 5,
@@ -87,12 +87,12 @@
    }
   },
   "E3b_model_implied_all": {
-   "bet_share": 0.0007,
-   "EV_per_bet": 0.012
+   "bet_share": 0.0008,
+   "EV_per_bet": 0.0125
   },
   "over_rate_vs_fair": {
-   "over_rate": 0.6036,
-   "mean_fair": 0.476
+   "over_rate": 0.4911,
+   "mean_fair": 0.5018
   }
  },
  "Unibet": {
@@ -109,8 +109,8 @@
    "se": 0.0375,
    "z": 3.2642,
    "n": 22798,
-   "placebo_mean": 0.063,
-   "placebo_sd": 0.0664,
+   "placebo_mean": 0.06,
+   "placebo_sd": 0.0591,
    "share_moved": 0.7477
   },
   "E3_post_toss_inferable_subset": {

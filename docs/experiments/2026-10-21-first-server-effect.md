@@ -119,9 +119,8 @@ as the market's).
   shows the server, and books that still take pre-match bets in that window; neither is
   established here). Kalshi has no handicap or totals match markets in our data.
 
-## Not done
-The Kaggle odds dataset (alimoh89/tennis-results-and-betting-odds-20142025) could not be
-downloaded: the environment's network policy refuses api.kaggle.com. Its bookmaker totals and
-handicaps (if it has any; the tennis-data.co.uk layout carries match odds only) were therefore
-not tested. The stored OddsPapi totals and handicaps for 2026 stand in. The join for those files
-is ready in `research_tests/kaggle_odds/join_odds.py` but has not been run on the real data.
+## Kaggle bookmaker totals (added after the download worked)
+See `2026-10-21-kaggle-odds-edge-search.md`: on 2014-2025 Bet365, Ladbrokes and Unibet totals
+the realised totals carry the server shift (slope 0.86 to 0.94), the books do not move between
+open and close with the server, and at their main lines the shift is too small to beat the
+margin. The file's handicaps are unusable, so the handicap question stays open.
