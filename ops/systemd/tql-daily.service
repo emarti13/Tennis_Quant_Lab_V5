@@ -1,0 +1,9 @@
+[Unit]
+Description=Tennis Quant Lab: daily settle, tests, commit logs, pull new code
+
+[Service]
+Type=oneshot
+User=@USER@
+WorkingDirectory=@DIR@
+ExecStart=/bin/bash @DIR@/ops/daily.sh
+TimeoutStartSec=2h

@@ -10,3 +10,8 @@ __pycache__/
 market_history/raw/
 market_history/kalshi/raw/
 oddspapi_markets_tennis.json
+
+# Server runner (ops/): local settings and venv; today's live-score file (committed gzipped next day)
+ops/env
+.venv/
+market_history/kalshi/live_scores/*.csv

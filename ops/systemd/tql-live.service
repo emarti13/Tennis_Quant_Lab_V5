@@ -1,0 +1,14 @@
+[Unit]
+Description=Tennis Quant Lab: Kalshi live score + price logger (public data, no orders)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=@USER@
+WorkingDirectory=@DIR@
+ExecStart=@DIR@/.venv/bin/python scripts/log_kalshi_live.py --minutes 1440 --interval 30
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

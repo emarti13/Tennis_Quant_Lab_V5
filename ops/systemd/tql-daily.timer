@@ -1,0 +1,9 @@
+[Unit]
+Description=Run the Tennis Quant Lab daily job at 07:17 UTC
+
+[Timer]
+OnCalendar=*-*-* 07:17:00 UTC
+Persistent=true
+
+[Install]
+WantedBy=timers.target
