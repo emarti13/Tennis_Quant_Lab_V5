@@ -10,3 +10,6 @@ __pycache__/
 market_history/raw/
 market_history/kalshi/raw/
 oddspapi_markets_tennis.json
+
+# research caches (rebuild with research_tests/features/build_features.py)
+research_tests/features/features.pkl

@@ -1,0 +1,769 @@
+{
+ "A_inference": {
+  "ATP": {
+   "matches": 66088,
+   "indeterminate": 34872,
+   "svgms": 29780,
+   "breaks": 967,
+   "no_data": 419,
+   "inconsistent": 50,
+   "determined_pct": 46.5243
+  },
+  "Challenger": {
+   "matches": 76322,
+   "indeterminate": 40938,
+   "svgms": 34891,
+   "no_data": 443,
+   "breaks": 27,
+   "inconsistent": 23,
+   "determined_pct": 45.7509
+  },
+  "WTA": {
+   "matches": 39144,
+   "indeterminate": 20486,
+   "svgms": 11863,
+   "breaks": 5783,
+   "no_data": 950,
+   "inconsistent": 62,
+   "determined_pct": 45.0797
+  },
+  "svgms_vs_breaks": {
+   "both_determined": 76367,
+   "agree_pct": 99.0323
+  }
+ },
+ "B_paper_replication": {
+  "ATP": {
+   "W_first": {
+    "observed_resid": {
+     "mean": 0.1068,
+     "se": 0.0314,
+     "n": 19758
+    },
+    "iid_fair_toss_expected": -1.1257,
+    "share_of_determined": 0.6437
+   },
+   "L_first": {
+    "observed_resid": {
+     "mean": 1.9093,
+     "se": 0.0454,
+     "n": 10938
+    },
+    "iid_fair_toss_expected": 0.578,
+    "share_of_determined": 0.3563
+   },
+   "gap_L_minus_W": {
+    "observed": 1.8025,
+    "iid_expected": 1.7038
+   },
+   "table4_beta_observed": 1.7281,
+   "table4_beta_iid_fair_toss": 0.246,
+   "mean_P_winner_first_observed": 0.6437,
+   "mean_P_winner_first_iid_fair_toss": 0.6263
+  },
+  "WTA": {
+   "W_first": {
+    "observed_resid": {
+     "mean": 0.5411,
+     "se": 0.0363,
+     "n": 10638
+    },
+    "iid_fair_toss_expected": -0.7188,
+    "share_of_determined": 0.6079
+   },
+   "L_first": {
+    "observed_resid": {
+     "mean": 1.535,
+     "se": 0.0459,
+     "n": 6861
+    },
+    "iid_fair_toss_expected": 0.0512,
+    "share_of_determined": 0.3921
+   },
+   "gap_L_minus_W": {
+    "observed": 0.9939,
+    "iid_expected": 0.7701
+   },
+   "table4_beta_observed": 1.0365,
+   "table4_beta_iid_fair_toss": -0.1382,
+   "mean_P_winner_first_observed": 0.6079,
+   "mean_P_winner_first_iid_fair_toss": 0.5813
+  },
+  "Challenger": {
+   "W_first": {
+    "observed_resid": {
+     "mean": 0.2531,
+     "se": 0.0269,
+     "n": 21577
+    },
+    "iid_fair_toss_expected": -1.0294,
+    "share_of_determined": 0.6196
+   },
+   "L_first": {
+    "observed_resid": {
+     "mean": 1.6729,
+     "se": 0.0347,
+     "n": 13248
+    },
+    "iid_fair_toss_expected": 0.4022,
+    "share_of_determined": 0.3804
+   },
+   "gap_L_minus_W": {
+    "observed": 1.4198,
+    "iid_expected": 1.4316
+   },
+   "table4_beta_observed": 0.7991,
+   "table4_beta_iid_fair_toss": -0.0019,
+   "mean_P_winner_first_observed": 0.6196,
+   "mean_P_winner_first_iid_fair_toss": 0.6217
+  }
+ },
+ "C_effect_from_prematch_strength": {
+  "all": {
+   "n_determined": 72155,
+   "fav_first_share": 0.5492,
+   "fav_first": {
+    "T_obs": 23.1105,
+    "T_model_given_server": 24.9897,
+    "T_model_server_blind": 25.3342,
+    "Hfav_obs": 2.9893,
+    "Hfav_model_given_server": 2.8514
+   },
+   "dog_first": {
+    "T_obs": 23.5936,
+    "T_model_given_server": 25.7081,
+    "T_model_server_blind": 25.3243,
+    "Hfav_obs": -0.0116,
+    "Hfav_model_given_server": 0.4252
+   },
+   "beta_total": {
+    "beta": 0.8426,
+    "se": 0.0502,
+    "z": 16.7887,
+    "n": 72155
+   },
+   "beta_margin": {
+    "beta": 1.2248,
+    "se": 0.0168,
+    "z": 73.0087,
+    "n": 72155
+   },
+   "exact_total_loglik_gain_per_match": {
+    "mean": 0.003,
+    "se": 0.0004,
+    "n": 72155
+   },
+   "placebo_beta_total": {
+    "beta": 0.0551,
+    "se": 0.0497,
+    "z": 1.1073,
+    "n": 72155
+   }
+  },
+  "ATP": {
+   "n_determined": 28158,
+   "fav_first_share": 0.5556,
+   "fav_first": {
+    "T_obs": 24.8051,
+    "T_model_given_server": 26.9414,
+    "T_model_server_blind": 27.3567,
+    "Hfav_obs": 3.1999,
+    "Hfav_model_given_server": 2.8861
+   },
+   "dog_first": {
+    "T_obs": 25.2539,
+    "T_model_given_server": 27.7356,
+    "T_model_server_blind": 27.2843,
+    "Hfav_obs": -0.3392,
+    "Hfav_model_given_server": 0.1943
+   },
+   "beta_total": {
+    "beta": 0.9076,
+    "se": 0.0745,
+    "z": 12.1763,
+    "n": 28158
+   },
+   "beta_margin": {
+    "beta": 1.3142,
+    "se": 0.0249,
+    "z": 52.783,
+    "n": 28158
+   },
+   "exact_total_loglik_gain_per_match": {
+    "mean": 0.0054,
+    "se": 0.0008,
+    "n": 28158
+   },
+   "placebo_beta_total": {
+    "beta": 0.0659,
+    "se": 0.0736,
+    "z": 0.8954,
+    "n": 28158
+   }
+  },
+  "WTA": {
+   "n_determined": 15297,
+   "fav_first_share": 0.56,
+   "fav_first": {
+    "T_obs": 21.4493,
+    "T_model_given_server": 23.3542,
+    "T_model_server_blind": 23.6213,
+    "Hfav_obs": 3.1066,
+    "Hfav_model_given_server": 2.9732
+   },
+   "dog_first": {
+    "T_obs": 22.0247,
+    "T_model_given_server": 24.0581,
+    "T_model_server_blind": 23.7726,
+    "Hfav_obs": 0.7064,
+    "Hfav_model_given_server": 0.9496
+   },
+   "beta_total": {
+    "beta": 0.6907,
+    "se": 0.1353,
+    "z": 5.1047,
+    "n": 15297
+   },
+   "beta_margin": {
+    "beta": 1.1564,
+    "se": 0.0467,
+    "z": 24.7602,
+    "n": 15297
+   },
+   "exact_total_loglik_gain_per_match": {
+    "mean": 0.002,
+    "se": 0.0007,
+    "n": 15297
+   },
+   "placebo_beta_total": {
+    "beta": -0.0902,
+    "se": 0.133,
+    "z": -0.6783,
+    "n": 15297
+   }
+  },
+  "Challenger": {
+   "n_determined": 28700,
+   "fav_first_share": 0.5371,
+   "fav_first": {
+    "T_obs": 22.3139,
+    "T_model_given_server": 23.9179,
+    "T_model_server_blind": 24.2335,
+    "Hfav_obs": 2.7103,
+    "Hfav_model_given_server": 2.7484
+   },
+   "dog_first": {
+    "T_obs": 22.8246,
+    "T_model_given_server": 24.6343,
+    "T_model_server_blind": 24.2643,
+    "Hfav_obs": -0.0666,
+    "Hfav_model_given_server": 0.3772
+   },
+   "beta_total": {
+    "beta": 0.7422,
+    "se": 0.0807,
+    "z": 9.201,
+    "n": 28700
+   },
+   "beta_margin": {
+    "beta": 1.1487,
+    "se": 0.0257,
+    "z": 44.6118,
+    "n": 28700
+   },
+   "exact_total_loglik_gain_per_match": {
+    "mean": 0.0012,
+    "se": 0.0006,
+    "n": 28700
+   },
+   "placebo_beta_total": {
+    "beta": -0.0632,
+    "se": 0.081,
+    "z": -0.7808,
+    "n": 28700
+   }
+  },
+  "gap_lt_0.15": {
+   "n_determined": 41282,
+   "fav_first_share": 0.5233,
+   "fav_first": {
+    "T_obs": 23.4696,
+    "T_model_given_server": 25.4257,
+    "T_model_server_blind": 25.6221,
+    "Hfav_obs": 2.1802,
+    "Hfav_model_given_server": 2.0013
+   },
+   "dog_first": {
+    "T_obs": 23.6274,
+    "T_model_given_server": 25.8405,
+    "T_model_server_blind": 25.6334,
+    "Hfav_obs": -0.8679,
+    "Hfav_model_given_server": -0.4829
+   },
+   "beta_total": {
+    "beta": 0.4403,
+    "se": 0.1219,
+    "z": 3.6113,
+    "n": 41282
+   },
+   "beta_margin": {
+    "beta": 1.2067,
+    "se": 0.0208,
+    "z": 58.028,
+    "n": 41282
+   },
+   "exact_total_loglik_gain_per_match": {
+    "mean": -0.0004,
+    "se": 0.0003,
+    "n": 41282
+   },
+   "placebo_beta_total": {
+    "beta": 0.0702,
+    "se": 0.1216,
+    "z": 0.5768,
+    "n": 41282
+   }
+  },
+  "gap_0.15_0.30": {
+   "n_determined": 23157,
+   "fav_first_share": 0.5676,
+   "fav_first": {
+    "T_obs": 22.9048,
+    "T_model_given_server": 24.7646,
+    "T_model_server_blind": 25.2602,
+    "Hfav_obs": 3.4713,
+    "Hfav_model_given_server": 3.4119
+   },
+   "dog_first": {
+    "T_obs": 23.7142,
+    "T_model_given_server": 25.7799,
+    "T_model_server_blind": 25.1695,
+    "Hfav_obs": 0.7989,
+    "Hfav_model_given_server": 1.2985
+   },
+   "beta_total": {
+    "beta": 0.8393,
+    "se": 0.0684,
+    "z": 12.2749,
+    "n": 23157
+   },
+   "beta_margin": {
+    "beta": 1.2325,
+    "se": 0.0315,
+    "z": 39.1424,
+    "n": 23157
+   },
+   "exact_total_loglik_gain_per_match": {
+    "mean": 0.005,
+    "se": 0.001,
+    "n": 23157
+   },
+   "placebo_beta_total": {
+    "beta": -0.1045,
+    "se": 0.0684,
+    "z": -1.5274,
+    "n": 23157
+   }
+  },
+  "gap_ge_0.30": {
+   "n_determined": 7716,
+   "fav_first_share": 0.6323,
+   "fav_first": {
+    "T_obs": 22.075,
+    "T_model_given_server": 23.666,
+    "T_model_server_blind": 24.2584,
+    "Hfav_obs": 5.2728,
+    "Hfav_model_given_server": 5.1047
+   },
+   "dog_first": {
+    "T_obs": 22.9334,
+    "T_model_given_server": 24.5366,
+    "T_model_server_blind": 23.7267,
+    "Hfav_obs": 3.0687,
+    "Hfav_model_given_server": 3.6433
+   },
+   "beta_total": {
+    "beta": 1.1375,
+    "se": 0.0932,
+    "z": 12.2054,
+    "n": 7716
+   },
+   "beta_margin": {
+    "beta": 1.4914,
+    "se": 0.0756,
+    "z": 19.7207,
+    "n": 7716
+   },
+   "exact_total_loglik_gain_per_match": {
+    "mean": 0.0152,
+    "se": 0.0021,
+    "n": 7716
+   },
+   "placebo_beta_total": {
+    "beta": -0.0379,
+    "se": 0.0916,
+    "z": -0.414,
+    "n": 7716
+   }
+  },
+  "best_of_5": {
+   "n_determined": 4423,
+   "fav_first_share": 0.5768,
+   "fav_first": {
+    "T_obs": 35.7574,
+    "T_model_given_server": 40.51,
+    "T_model_server_blind": 41.1111,
+    "Hfav_obs": 5.0274,
+    "Hfav_model_given_server": 3.6246
+   },
+   "dog_first": {
+    "T_obs": 37.438,
+    "T_model_given_server": 42.2461,
+    "T_model_server_blind": 41.6374,
+    "Hfav_obs": 0.1603,
+    "Hfav_model_given_server": 1.1065
+   },
+   "beta_total": {
+    "beta": 1.226,
+    "se": 0.2012,
+    "z": 6.0944,
+    "n": 4423
+   },
+   "beta_margin": {
+    "beta": 2.2099,
+    "se": 0.0971,
+    "z": 22.7593,
+    "n": 4423
+   },
+   "exact_total_loglik_gain_per_match": {
+    "mean": 0.0213,
+    "se": 0.0029,
+    "n": 4423
+   },
+   "placebo_beta_total": {
+    "beta": -0.1065,
+    "se": 0.1938,
+    "z": -0.5493,
+    "n": 4423
+   }
+  }
+ },
+ "D_who_serves_first": {
+  "all": {
+   "n": 156730,
+   "n_determined": 72130,
+   "naive_det_only_beta": 0.3367,
+   "full_likelihood": {
+    "beta": 0.1211,
+    "se": 0.0076
+   },
+   "naive_fav_first_share": 0.5578,
+   "full_P_fav_first_at_elo_p_0.75": 0.5332
+  },
+  "ATP": {
+   "n": 60490,
+   "n_determined": 28134,
+   "naive_det_only_beta": 0.4061,
+   "full_likelihood": {
+    "beta": 0.1626,
+    "se": 0.0112
+   },
+   "naive_fav_first_share": 0.5724,
+   "full_P_fav_first_at_elo_p_0.75": 0.5445
+  },
+  "WTA": {
+   "n": 33329,
+   "n_determined": 15296,
+   "naive_det_only_beta": 0.338,
+   "full_likelihood": {
+    "beta": 0.1776,
+    "se": 0.0162
+   },
+   "naive_fav_first_share": 0.5635,
+   "full_P_fav_first_at_elo_p_0.75": 0.5486
+  },
+  "Challenger": {
+   "n": 62911,
+   "n_determined": 28700,
+   "naive_det_only_beta": 0.2388,
+   "full_likelihood": {
+    "beta": 0.0166,
+    "se": 0.0137
+   },
+   "naive_fav_first_share": 0.5403,
+   "full_P_fav_first_at_elo_p_0.75": 0.5046
+  },
+  "train_2010_2021": {
+   "n": 104059,
+   "n_determined": 47475,
+   "naive_det_only_beta": 0.349,
+   "full_likelihood": {
+    "beta": 0.1302,
+    "se": 0.0094
+   },
+   "naive_fav_first_share": 0.5602,
+   "full_P_fav_first_at_elo_p_0.75": 0.5357
+  },
+  "test_2022_2026": {
+   "n": 52671,
+   "n_determined": 24655,
+   "naive_det_only_beta": 0.3126,
+   "full_likelihood": {
+    "beta": 0.1032,
+    "se": 0.0132
+   },
+   "naive_fav_first_share": 0.5531,
+   "full_P_fav_first_at_elo_p_0.75": 0.5283
+  }
+ },
+ "E_markets_2026": {
+  "n_fixtures": 7934,
+  "n_inverted_close": 7084,
+  "n_determined": 3680,
+  "model_level_check": {
+   "model_ET_blind_mean": 24.5769,
+   "observed_T_mean": 23.1457,
+   "pinnacle_line_mean": 21.6406,
+   "model_line_mean": 23.8693
+  },
+  "model_shift_unconditional": {
+   "mean_abs_ET_A_minus_ET_B_games": 0.0614,
+   "mean_abs_pover_shift_vs_blind": 0.0008,
+   "p90_abs_pover_shift": 0.001,
+   "mean_abs_pcover_shift_vs_blind": 0.0118,
+   "p90_abs_pcover_shift": 0.0264
+  },
+  "E1_realised_vs_model_given_selection": {
+   "totals_beta": {
+    "beta": 1.3152,
+    "se": 0.2626,
+    "z": 5.0083,
+    "n": 2970
+   },
+   "totals_logloss_gain_per_bet": {
+    "mean": 0.0041,
+    "se": 0.0013,
+    "n": 2970
+   },
+   "handicap_beta": {
+    "beta": 0.9102,
+    "se": 0.0801,
+    "z": 11.3624,
+    "n": 2933
+   },
+   "handicap_logloss_gain_per_bet": {
+    "mean": 0.021,
+    "se": 0.0042,
+    "n": 2933
+   }
+  },
+  "E2_does_the_close_price_the_toss": {
+   "totals_close_move_on_shift": {
+    "beta": 0.5887,
+    "se": 0.0726,
+    "z": 8.1069,
+    "n": 2995
+   },
+   "totals_mean_abs_move": 0.0052,
+   "handicap_close_move_on_shift": {
+    "beta": 0.2366,
+    "se": 0.0179,
+    "z": 13.2147,
+    "n": 2983
+   },
+   "totals_close_move_on_shift_ctrl_outcome": {
+    "beta": 0.5775,
+    "se": 0.0726,
+    "z": 7.9533,
+    "n": 2995
+   },
+   "handicap_close_move_on_shift_ctrl_outcome": {
+    "beta": 0.2277,
+    "se": 0.0182,
+    "z": 12.5237,
+    "n": 2983
+   }
+  },
+  "E3_post_toss_bets_determinable_subset": {
+   "totals|betrivers|ev>0.00": {
+    "bets": 24,
+    "realised_roi": {
+     "mean": -0.3308,
+     "se": 0.1975,
+     "n": 24
+    },
+    "model_expected_roi_same_selection": 0.0301,
+    "claimed_ev": 0.0351
+   },
+   "totals|best|ev>0.00": {
+    "bets": 33,
+    "realised_roi": {
+     "mean": -0.201,
+     "se": 0.1757,
+     "n": 33
+    },
+    "model_expected_roi_same_selection": 0.0689,
+    "claimed_ev": 0.0382
+   },
+   "handicap|pinnacle|ev>0.00": {
+    "bets": 712,
+    "realised_roi": {
+     "mean": 0.1834,
+     "se": 0.0341,
+     "n": 712
+    },
+    "model_expected_roi_same_selection": 0.2151,
+    "claimed_ev": 0.0307
+   },
+   "handicap|betrivers|ev>0.00": {
+    "bets": 181,
+    "realised_roi": {
+     "mean": 0.0866,
+     "se": 0.0728,
+     "n": 181
+    },
+    "model_expected_roi_same_selection": 0.1535,
+    "claimed_ev": 0.0344
+   },
+   "handicap|draftkings|ev>0.00": {
+    "bets": 20,
+    "realised_roi": {
+     "mean": -0.0414,
+     "se": 0.2205,
+     "n": 20
+    },
+    "model_expected_roi_same_selection": 0.1562,
+    "claimed_ev": 0.0476
+   },
+   "handicap|best|ev>0.00": {
+    "bets": 791,
+    "realised_roi": {
+     "mean": 0.1549,
+     "se": 0.0329,
+     "n": 791
+    },
+    "model_expected_roi_same_selection": 0.2035,
+    "claimed_ev": 0.032
+   },
+   "handicap|pinnacle|ev>0.02": {
+    "bets": 323,
+    "realised_roi": {
+     "mean": 0.1283,
+     "se": 0.0511,
+     "n": 323
+    },
+    "model_expected_roi_same_selection": 0.2003,
+    "claimed_ev": 0.0566
+   },
+   "handicap|betrivers|ev>0.02": {
+    "bets": 99,
+    "realised_roi": {
+     "mean": 0.0325,
+     "se": 0.1006,
+     "n": 99
+    },
+    "model_expected_roi_same_selection": 0.1815,
+    "claimed_ev": 0.0558
+   },
+   "handicap|best|ev>0.02": {
+    "bets": 373,
+    "realised_roi": {
+     "mean": 0.1197,
+     "se": 0.0484,
+     "n": 373
+    },
+    "model_expected_roi_same_selection": 0.1984,
+    "claimed_ev": 0.0577
+   },
+   "handicap|pinnacle|ev>0.04": {
+    "bets": 207,
+    "realised_roi": {
+     "mean": 0.1302,
+     "se": 0.0632,
+     "n": 207
+    },
+    "model_expected_roi_same_selection": 0.2134,
+    "claimed_ev": 0.0728
+   },
+   "handicap|betrivers|ev>0.04": {
+    "bets": 55,
+    "realised_roi": {
+     "mean": -0.0895,
+     "se": 0.1387,
+     "n": 55
+    },
+    "model_expected_roi_same_selection": 0.1862,
+    "claimed_ev": 0.0765
+   },
+   "handicap|best|ev>0.04": {
+    "bets": 234,
+    "realised_roi": {
+     "mean": 0.0811,
+     "se": 0.0609,
+     "n": 234
+    },
+    "model_expected_roi_same_selection": 0.2091,
+    "claimed_ev": 0.0753
+   }
+  },
+  "E3b_model_implied_all_fixtures_if_toss_seen": {
+   "totals|pinnacle": {
+    "fixtures": 6683,
+    "bet_share": 0.0013,
+    "model_EV_per_bet": 0.0218
+   },
+   "totals|betrivers": {
+    "fixtures": 2209,
+    "bet_share": 0.0197,
+    "model_EV_per_bet": 0.0276
+   },
+   "totals|draftkings": {
+    "fixtures": 991,
+    "bet_share": 0.0126,
+    "model_EV_per_bet": 0.0502
+   },
+   "totals|bet365": {
+    "fixtures": 111,
+    "bet_share": 0.036,
+    "model_EV_per_bet": 0.0057
+   },
+   "handicap|pinnacle": {
+    "fixtures": 6631,
+    "bet_share": 0.2251,
+    "model_EV_per_bet": 0.0292
+   },
+   "handicap|betrivers": {
+    "fixtures": 2128,
+    "bet_share": 0.1748,
+    "model_EV_per_bet": 0.0337
+   },
+   "handicap|draftkings": {
+    "fixtures": 448,
+    "bet_share": 0.1083,
+    "model_EV_per_bet": 0.0361
+   },
+   "handicap|bet365": {
+    "fixtures": 106,
+    "bet_share": 0.1085,
+    "model_EV_per_bet": 0.0492
+   }
+  }
+ },
+ "F_totals_prior": {
+  "history_exact_total_loglik_gain": {
+   "mean": 0.0003,
+   "se": 0.0,
+   "n": 52672
+  },
+  "history_mean_abs_ET_shift_games": 0.0015,
+  "pinnacle_totals_logloss": 0.6921,
+  "prior_shifted_logloss": 0.6921,
+  "logloss_gain_vs_pinnacle": {
+   "mean": -0.0,
+   "se": 0.0,
+   "n": 6458
+  },
+  "mean_abs_shift_prob": 0.0001,
+  "beta_used": 0.1302
+ }
+}
