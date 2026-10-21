@@ -60,7 +60,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 1022351,M,"Duan, Hao",,no_history,no candidate in our history,0,,,2026-10-17
 1022355,M,"Yang, Xiaoyin",,no_history,no candidate in our history,0,,,2026-10-20
 1022539,M,"Roche, Matis",,no_history,no candidate in our history,0,,,2026-10-13
-1022799,M,"Young, Gavin",,no_history,no candidate in our history,0,,,2026-10-13
+1022799,M,"Young, Gavin",M-006040,auto,same match,1,,,2026-10-21
 1022809,W,"Frey, Anna",,no_history,no candidate in our history,0,,,2026-10-13
 1022815,W,"Akli, Ayana",,no_history,no candidate in our history,0,,,2026-10-13
 102339,M,"Van de Zandschulp, Botic",M-000271,confirmed,draw order + same match,45,,,2026-10-13
@@ -1953,7 +1953,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 761156,W,"Soke, Duru",,no_history,no candidate in our history,0,,,2026-10-13
 761210,M,"Puello , Alberto",,no_history,no candidate in our history,0,,,2026-10-13
 76263,M,"Matos, Rafael",M-002272,auto,"exact name, unique in tour",0,,,2026-10-13
-762700,M,"Demin, Yaroslav",M-002157,auto,same match,1,,,2026-10-13
+762700,M,"Demin, Yaroslav",M-002157,confirmed,same match,2,,,2026-10-21
 762708,W,"Lopez Martinez, Carmen",,no_history,no candidate in our history,0,,,2026-10-13
 762722,W,"Garcia Cid, Maria",,no_history,no candidate in our history,0,,,2026-10-13
 762762,W,"Seidel, Ella",W-001403,confirmed,same match,13,,,2026-10-13
@@ -2274,7 +2274,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 897995,M,"Brunclik, Petr",M-001331,confirmed,same match,25,,,2026-10-13
 898011,M,"Haupt, Henri",M-004282,auto,same match,1,,,2026-10-13
 898019,M,"Gil Garcia, Aaron",M-004727,auto,"exact name, unique in tour",0,,,2026-10-13
-898025,M,"Pedrico Kravtsov, Albert",M-005582,auto,"exact name, unique in tour",0,,,2026-10-20
+898025,M,"Pedrico Kravtsov, Albert",M-005582,auto,same match,1,,,2026-10-20
 898039,M,"Iemmi, Leonardo",,no_history,no candidate in our history,0,,,2026-10-13
 898045,W,"Sidorova, Kristiana",W-005906,auto,"exact name, unique in tour",0,,,2026-10-13
 898261,W,"Yesypchuk, Daria",,no_history,no candidate in our history,0,,,2026-10-13

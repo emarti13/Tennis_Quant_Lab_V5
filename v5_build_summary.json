@@ -6,26 +6,26 @@
       "Clay": 0.6038733421037568,
       "Grass": 0.6545235247982056
     },
-    "matches": 152741,
-    "holdout_matches": 20720,
-    "players": 4370,
+    "matches": 152812,
+    "holdout_matches": 20791,
+    "players": 4372,
     "volatility_calibration": {
       "Hard": {
-        "prior_volatility": 0.17300641831175753,
+        "prior_volatility": 0.17299727271737828,
         "q05": 0.11836324564247809,
-        "q95": 0.20685364233700893,
+        "q95": 0.2068321167482252,
         "reference_n": 1859
       },
       "Clay": {
-        "prior_volatility": 0.16977982842381648,
+        "prior_volatility": 0.1698539324255729,
         "q05": 0.1145168808495596,
-        "q95": 0.20354768623330444,
+        "q95": 0.20408236889722292,
         "reference_n": 1859
       },
       "Grass": {
-        "prior_volatility": 0.156542675142396,
+        "prior_volatility": 0.1565481357109852,
         "q05": 0.10648347639661526,
-        "q95": 0.1940062167785218,
+        "q95": 0.19391742513381857,
         "reference_n": 1859
       }
     }
@@ -37,26 +37,26 @@
       "Clay": 0.552999353211016,
       "Grass": 0.5884295913148093
     },
-    "matches": 44794,
-    "holdout_matches": 4919,
+    "matches": 44803,
+    "holdout_matches": 4928,
     "players": 1695,
     "volatility_calibration": {
       "Hard": {
-        "prior_volatility": 0.17074121975077733,
+        "prior_volatility": 0.17058799503538039,
         "q05": 0.12424714934789247,
-        "q95": 0.20072860744420556,
+        "q95": 0.200749186459072,
         "reference_n": 643
       },
       "Clay": {
-        "prior_volatility": 0.16726251170404047,
+        "prior_volatility": 0.1672076977087455,
         "q05": 0.11974561458191661,
         "q95": 0.1978339280321176,
         "reference_n": 643
       },
       "Grass": {
-        "prior_volatility": 0.15917122252404206,
+        "prior_volatility": 0.15896685002810493,
         "q05": 0.11331959300776064,
-        "q95": 0.1952564296324334,
+        "q95": 0.19516085264232202,
         "reference_n": 643
       }
     }
