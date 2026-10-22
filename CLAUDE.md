@@ -6,6 +6,7 @@ Status: Approved by the user in chat, 2026-10-12.
 1. `PROJECT_MANDATE.md`: precedence is mandate > specs > plans > code > fixes.
 2. `docs/superpowers/specs/2026-10-12-fair-price-to-market-making-roadmap-design.md`: the program goal and the current phase/gate.
 3. Any spec or plan for the area you are touching (`docs/superpowers/specs/`, `docs/superpowers/plans/`).
+4. For research work: `docs/Research/DIGEST.md` (what each paper in `docs/Research/` claims, how far to trust it, and the ranked tests it suggests) and the write-ups in `docs/experiments/`.
 
 The goal: a fair-price engine that beats the market, proven first as a taker and then used for market making. Any work that doesn't move a roadmap gate forward or keep production safe needs a reason.
 
