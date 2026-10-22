@@ -44,7 +44,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 1020165,M,"Xia, Zhiheng",,no_history,no candidate in our history,0,,,2026-10-17
 1020177,W,"Huang, Yujia",,no_history,no candidate in our history,0,,,2026-10-13
 1020179,W,"Zhu, Chenting",W-005907,auto,"exact name, unique in tour",0,,,2026-10-13
-1020185,W,"Qu, Yihan",W-006035,auto,"exact name, unique in tour",0,,,2026-10-13
+1020185,W,"Qu, Yihan",W-006066,auto,"exact name, unique in tour",0,,,2026-10-22
 1020265,W,"Kozak, Vlada",,no_history,no candidate in our history,0,,,2026-10-13
 1020291,M,"Bieldiugin, Tymur",,no_history,no candidate in our history,0,,,2026-10-13
 1020301,M,"Warik, Caheer",,no_history,no candidate in our history,0,,,2026-10-13
@@ -60,7 +60,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 1022351,M,"Duan, Hao",,no_history,no candidate in our history,0,,,2026-10-17
 1022355,M,"Yang, Xiaoyin",,no_history,no candidate in our history,0,,,2026-10-20
 1022539,M,"Roche, Matis",,no_history,no candidate in our history,0,,,2026-10-13
-1022799,M,"Young, Gavin",,no_history,no candidate in our history,0,,,2026-10-13
+1022799,M,"Young, Gavin",M-006040,auto,same match,1,,,2026-10-21
 1022809,W,"Frey, Anna",,no_history,no candidate in our history,0,,,2026-10-13
 1022815,W,"Akli, Ayana",,no_history,no candidate in our history,0,,,2026-10-13
 102339,M,"Van de Zandschulp, Botic",M-000271,confirmed,draw order + same match,45,,,2026-10-13
@@ -167,7 +167,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 1078644,M,"Oki, Yuto",M-004062,auto,same match,1,,,2026-10-13
 1078886,M,"Paldanius, Oskari",M-003417,auto,same match,1,,,2026-10-13
 1080616,W,"Jialin, Tian",,no_history,no candidate in our history,0,,,2026-10-17
-1080692,W,"Efremova, Ksenia",W-006018,auto,same match,1,,,2026-10-13
+1080692,W,"Efremova, Ksenia",W-006052,auto,same match,1,,,2026-10-22
 1084232,M,"Carrascosa Diaz, Enrique",,no_history,no candidate in our history,0,,,2026-10-13
 1084234,W,"Lujan Jecalo, Carlota",,no_history,no candidate in our history,0,,,2026-10-13
 1084240,M,"Carrascosa Diaz, Maxi",M-006013,auto,same match,1,,,2026-10-13
@@ -289,7 +289,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 115335,M,"Roberts, Justin",M-005560,auto,"exact name, unique in tour",0,,,2026-10-13
 1154183,M,"Ceban, Mark",M-003122,confirmed,same match,5,,,2026-10-13
 1154467,M,"Lawlor, Rhys",,no_history,no candidate in our history,0,,,2026-10-13
-1154511,W,"Barros, Victoria Luiza",W-004526,auto,"exact name, unique in tour",0,,,2026-10-13
+1154511,W,"Barros, Victoria Luiza",,review,"exact name, several players",0,"W-004526, W-006062",,2026-10-22
 1154603,W,"Isakova, Polina",,no_history,no candidate in our history,0,,,2026-10-13
 1154605,W,"Hurkacz, Nika",,no_history,no candidate in our history,0,,,2026-10-13
 1154975,M,"Ortenblad Nogueira, Henrique",,no_history,no candidate in our history,0,,,2026-10-13
@@ -307,12 +307,12 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 1167865,M,"Ardila, Landon",M-004065,confirmed,same match,2,,,2026-10-13
 1171189,M,"Berto, Lorenzo",M-006008,auto,same match,1,,,2026-10-13
 1171257,M,"Leeman, Dylan",,no_history,no candidate in our history,0,,,2026-10-13
-1173459,W,"Lin, Yu Jun",W-006033,auto,"exact name, unique in tour",0,,,2026-10-13
+1173459,W,"Lin, Yu Jun",W-006064,auto,"exact name, unique in tour",0,,,2026-10-22
 1173467,W,"Wei, Zhang-Qian",,no_history,no candidate in our history,0,,,2026-10-13
 1173765,M,"Nittmann, Yannic",,no_history,no candidate in our history,0,,,2026-10-13
 1176139,W,"Vazquez Valles, Martina",,no_history,no candidate in our history,0,,,2026-10-13
 1176159,M,"Visser, Mac",M-005941,auto,same match,1,,,2026-10-13
-1176503,W,"Shao, Yushan",W-006034,auto,"exact name, unique in tour",0,,,2026-10-13
+1176503,W,"Shao, Yushan",W-006065,auto,"exact name, unique in tour",0,,,2026-10-22
 1178437,M,"Hu, Jia",M-005932,auto,same match,1,,,2026-10-13
 1178629,M,"Sterniczuk, Oliwier",,no_history,no candidate in our history,0,,,2026-10-17
 117866,M,"Mukund, Sasikumar",M-000804,confirmed,same match,11,,,2026-10-13
@@ -326,7 +326,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 1181745,M,"Willwerth, Benjamin",M-002547,confirmed,same match,8,,,2026-10-13
 1181751,M,"Vasami, Jacopo",M-001589,confirmed,same match,23,,,2026-10-13
 1181755,M,"Castro, Leonel Cesar",,no_history,no candidate in our history,0,,,2026-10-13
-118526,W,"Wolff, Vivian",W-006031,auto,same match,1,,,2026-10-13
+118526,W,"Wolff, Vivian",W-006063,auto,same match,1,,,2026-10-22
 1186585,M,"Kozlovsky, Matyas",,no_history,no candidate in our history,0,,,2026-10-13
 1186895,W,"Liutova, Kristina",W-002935,confirmed,same match,4,,,2026-10-13
 1187389,W,"Kovacevic, Tea",,no_history,no candidate in our history,0,,,2026-10-16
@@ -376,7 +376,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 1222981,W,"Chen, Emilie",,no_history,no candidate in our history,0,,,2026-10-13
 1222983,W,"Russell, Tori",,no_history,no candidate in our history,0,,,2026-10-13
 1222989,M,"Strydom, Jeffrey",,no_history,no candidate in our history,0,,,2026-10-13
-1222991,W,"Kovackova, Jana",W-006027,auto,same match,1,,,2026-10-13
+1222991,W,"Kovackova, Jana",W-006060,auto,same match,1,,,2026-10-22
 122366,M,"Tsitsipas, Stefanos",M-000050,confirmed,draw order + same match,43,,,2026-10-13
 122368,M,"Griekspoor, Tallon",M-000223,confirmed,same match,30,,,2026-10-13
 122556,M,"Papac, Tomislav Edward",,no_history,no candidate in our history,0,,,2026-10-13
@@ -937,7 +937,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 227358,M,"Walton, Adam",M-000526,confirmed,same match,61,,,2026-10-13
 227390,W,"Brancaccio, Nuria",W-002203,auto,same match,1,,,2026-10-13
 227486,W,"Zantedeschi, Aurora",W-005865,auto,"exact name, unique in tour",0,,,2026-10-13
-227490,W,"Tubello, Alice",W-006020,auto,same match,1,,,2026-10-13
+227490,W,"Tubello, Alice",W-006053,auto,same match,1,,,2026-10-22
 228372,M,"Soriano Barrera, Adria",M-001518,confirmed,same match,3,,,2026-10-13
 228418,W,"Navarro, Emma",W-000657,confirmed,same match,39,,,2026-10-13
 228766,M,"Braynin, Aleksandr",M-003046,auto,"exact name, unique in tour",0,,,2026-10-13
@@ -1060,7 +1060,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 262023,W,"Wang, Meiling",W-004496,auto,"exact name, unique in tour",0,,,2026-10-13
 26204,M,"Basilashvili, Nikoloz",M-000060,confirmed,draw order + same match,52,,,2026-10-13
 262679,M,"Gray, Alastair",M-001197,confirmed,same match,33,,,2026-10-13
-262701,W,"Hodzic, Mina",W-006022,auto,same match,1,,,2026-10-13
+262701,W,"Hodzic, Mina",W-006055,auto,same match,1,,,2026-10-22
 262759,W,"Wang, Xiyu",W-000766,confirmed,same match,8,,,2026-10-13
 262865,M,"Shiraishi, Hikaru",M-002139,confirmed,same match,4,,,2026-10-13
 263857,M,"De Krom, Michiel",M-003117,confirmed,same match,2,,,2026-10-13
@@ -1205,7 +1205,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 324677,W,"Fullana, Luiza",W-005900,auto,"exact name, unique in tour",0,,,2026-10-17
 325729,W,"Oliynykova, Oleksandra",W-001595,confirmed,same match,31,,,2026-10-13
 325737,M,"Moro Canas, Alejandro",M-000617,confirmed,same match,49,,,2026-10-13
-325837,W,"Sakellaridi, Sapfo",W-006023,auto,same match,1,,,2026-10-13
+325837,W,"Sakellaridi, Sapfo",W-006056,auto,same match,1,,,2026-10-22
 327753,M,"Larwig, Noel",,no_history,no candidate in our history,0,,,2026-10-13
 328985,M,"Maloney, Patrick",M-001558,confirmed,same match,6,,,2026-10-13
 329009,W,"Ryser, Valentina",,no_history,no candidate in our history,0,,,2026-10-13
@@ -1244,8 +1244,8 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 345060,M,"Kingsley, Cannon",M-001236,confirmed,same match,14,,,2026-10-13
 345070,W,"Arseneault, Ariana",W-004525,auto,same match,1,,,2026-10-13
 345576,M,"Michalski, Daniel",M-000868,confirmed,same match,32,,,2026-10-13
-348196,W,"Amariei, Ilinca Dalina",W-006025,auto,same match,1,,,2026-10-13
-348216,W,"Argyrokastriti, Marianne",W-006021,auto,same match,1,,,2026-10-13
+348196,W,"Amariei, Ilinca Dalina",W-006057,auto,same match,1,,,2026-10-22
+348216,W,"Argyrokastriti, Marianne",W-006054,auto,same match,1,,,2026-10-22
 348308,M,"Sheehy, Joshua",M-002141,confirmed,same match,4,,,2026-10-13
 348370,M,"Kim, Dong Ju",M-005472,auto,"exact name, unique in tour",0,,,2026-10-13
 348760,W,"Zheng, Qinwen",W-000582,confirmed,same match,32,,,2026-10-13
@@ -1597,7 +1597,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 513646,M,"Chaiyarin, Credit",M-004390,auto,"exact name, unique in tour",0,,,2026-10-13
 51387,W,"Townsend, Taylor",W-000788,confirmed,same match,25,,,2026-10-13
 51392,W,"Vickery, Sachia",W-001081,auto,"exact name, unique in tour",0,,,2026-10-13
-515432,W,"Ruggeri, Jennifer",W-006016,auto,same match,1,,,2026-10-13
+515432,W,"Ruggeri, Jennifer",W-006051,auto,same match,1,,,2026-10-22
 515478,M,"Sakellaridis, Stefanos",M-000987,confirmed,same match,43,,,2026-10-13
 515498,M,"Rodrigues, Natan",M-003632,confirmed,draw order + same match,2,,,2026-10-13
 515510,M,"Heide, Gustavo",M-000680,confirmed,same match,46,,,2026-10-13
@@ -1953,7 +1953,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 761156,W,"Soke, Duru",,no_history,no candidate in our history,0,,,2026-10-13
 761210,M,"Puello , Alberto",,no_history,no candidate in our history,0,,,2026-10-13
 76263,M,"Matos, Rafael",M-002272,auto,"exact name, unique in tour",0,,,2026-10-13
-762700,M,"Demin, Yaroslav",M-002157,auto,same match,1,,,2026-10-13
+762700,M,"Demin, Yaroslav",M-002157,confirmed,same match,2,,,2026-10-21
 762708,W,"Lopez Martinez, Carmen",,no_history,no candidate in our history,0,,,2026-10-13
 762722,W,"Garcia Cid, Maria",,no_history,no candidate in our history,0,,,2026-10-13
 762762,W,"Seidel, Ella",W-001403,confirmed,same match,13,,,2026-10-13
@@ -2220,7 +2220,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 870883,M,"Jones, Lennon Roark",M-004392,auto,"exact name, unique in tour",0,,,2026-10-13
 870927,M,"Alvarez Valdes, Luis Carlos",M-001921,confirmed,same match,5,,,2026-10-13
 870929,M,"Gandolfi, Giammarco",,no_history,no candidate in our history,0,,,2026-10-13
-870979,W,"Kinoshita, Hayu",W-006030,auto,"exact name, unique in tour",0,,,2026-10-13
+870979,W,"Kinoshita, Hayu",W-006061,auto,"exact name, unique in tour",0,,,2026-10-22
 870983,W,"Saito, Sara",W-003104,auto,"exact name, unique in tour",0,,,2026-10-13
 871495,M,"Michelsen, Alex",M-000541,confirmed,same match,48,,,2026-10-13
 871583,W,"Andreeva, Mirra",W-000691,confirmed,same match,58,,,2026-10-13
@@ -2274,7 +2274,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 897995,M,"Brunclik, Petr",M-001331,confirmed,same match,25,,,2026-10-13
 898011,M,"Haupt, Henri",M-004282,auto,same match,1,,,2026-10-13
 898019,M,"Gil Garcia, Aaron",M-004727,auto,"exact name, unique in tour",0,,,2026-10-13
-898025,M,"Pedrico Kravtsov, Albert",M-005582,auto,"exact name, unique in tour",0,,,2026-10-20
+898025,M,"Pedrico Kravtsov, Albert",M-005582,auto,same match,1,,,2026-10-20
 898039,M,"Iemmi, Leonardo",,no_history,no candidate in our history,0,,,2026-10-13
 898045,W,"Sidorova, Kristiana",W-005906,auto,"exact name, unique in tour",0,,,2026-10-13
 898261,W,"Yesypchuk, Daria",,no_history,no candidate in our history,0,,,2026-10-13
@@ -2385,7 +2385,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 931437,M,"Voelzke, Gray",M-005974,auto,same match,1,,,2026-10-13
 932795,M,"Beraldo, Lorenzo",,no_history,no candidate in our history,0,,,2026-10-17
 932821,W,"Monteleone, Giulia Alessia",,no_history,no candidate in our history,0,,,2026-10-13
-933453,W,"Brockmann, Tessa Johanna",W-006028,auto,same match,1,,,2026-10-13
+933453,W,"Brockmann, Tessa Johanna",W-006058,auto,same match,1,,,2026-10-22
 933891,M,"Hipfl, Nico",M-003347,confirmed,same match,3,,,2026-10-17
 934155,M,"Forger, Abel",M-004397,auto,same match,1,,,2026-10-13
 935745,M,"Motoyama, Shion",,no_history,no candidate in our history,0,,,2026-10-13
@@ -2416,7 +2416,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 948185,M,"Mrva, Maxim",M-001140,confirmed,draw order + same match,43,,,2026-10-13
 948505,M,"Matsuda, Koki",M-001999,confirmed,same match,11,,,2026-10-13
 950187,W,"Khan, Laquisa",,no_history,no candidate in our history,0,,,2026-10-13
-950919,W,"Oktiabreva, Alisa",W-006026,auto,same match,1,,,2026-10-13
+950919,W,"Oktiabreva, Alisa",W-006059,auto,same match,1,,,2026-10-22
 950977,W,"Roura Llaverias, Ruth",,no_history,no candidate in our history,0,,,2026-10-13
 951223,M,"Sanchez Quilez, Alejo",M-001779,confirmed,same match,21,,,2026-10-13
 951299,M,"Tobon, Miguel",M-001401,confirmed,same match,22,,,2026-10-13
@@ -2514,7 +2514,7 @@ participant_id,tour,names,player_id,status,method,shared_matches,candidates,note
 984125,M,"Yilmaz, Kerem",M-004535,confirmed,same match,2,,,2026-10-13
 98503,M,"Goyal, Medhir",,no_history,no candidate in our history,0,,,2026-10-13
 98523,W,"Ye, Qiu Yu",,no_history,no candidate in our history,0,,,2026-10-13
-98733,W,"Burillo Escorihuela, Irene",W-006015,auto,same match,1,,,2026-10-13
+98733,W,"Burillo Escorihuela, Irene",W-002784,auto,same match,1,,,2026-10-22
 987339,M,"Gundacker, Jonas",,no_history,no candidate in our history,0,,,2026-10-13
 988851,W,"Ng, Kai Ning Chanya",,no_history,no candidate in our history,0,,,2026-10-13
 988927,M,"Eichenseher, David",,no_history,no candidate in our history,0,,,2026-10-13
