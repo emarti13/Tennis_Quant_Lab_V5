@@ -49,6 +49,12 @@ A positive result that has not cleared these rules is a hypothesis, not a findin
 | 8 | Prieto-Lage et al. 2023, point-win probabilities | `pone.0286076.pdf` | descriptive | priors only |
 | 9 | Lv 2024, momentum and Markov chain | `Research_on_Tennis_Match_Strategies_Based_on_Machi.pdf` | very low | not worth testing |
 | none | placeholder | `Teadme.md` | n/a | ignore |
+| 10 | Klaassen & Magnus 2003, in-play win probability | `On_the_probability_of_winning_a_tennis_m.pdf` | high (classic) | queued (test 6, totals level) |
+| 11 | Lisi, Grigoletto & Canesso 2019, winning with fewer points or games | `Winning_tennis_matches_with_fewer_points_or_games_.pdf` | high | priors and checks only |
+| 12 | Gutiérrez-Santiago et al. 2024, women's point-win probabilities | `applsci-14-06761-v2.pdf` | descriptive | priors only |
+| 13 | Dayekh 2022, WTA Grand Slam winners (master's thesis) | `content (1).pdf` | very low | not worth testing |
+| 14 | Bozděch, Puda & Grasgruber 2024, ATP season statistics vs ranking | `pone.0309085.pdf` | low (cross-sectional) | not worth testing |
+| 8 (dup) | duplicate of `pone.0286076.pdf` (identical bytes) | `journal.pone.0286076.pdf` | n/a | ignore; can be deleted |
 
 ---
 
@@ -205,7 +211,91 @@ lose after fees (about −3.7%).
 **Use.** None beyond the Markov state-space description, which `v5_core.simulate_match` already
 covers.
 
+## 10. Klaassen & Magnus (2003): *On the probability of winning a tennis match* (Medicine and Science in Tennis 8:10-11, file `On_the_probability_of_winning_a_tennis_m.pdf`)
+**Claim.** A short note on their in-play forecaster ("Tennisprob", Eur J Oper Res 2003). Given
+the rules, the score, the server and iid points, the match-win probability at every point
+needs only two inputs:
+- the **pre-match win probability**;
+- the **sum of the two serve-point probabilities** (pA + pB, e.g. 1.16 for WTA).
+
+The match probability hardly depends on the sum. So the sum can come from a rough rankings
+model, and the pre-match probability can come from anywhere (rankings, odds, judgement).
+Their independent-and-identically-distributed justification is Klaassen & Magnus (JASA 2001).
+**Trust.** High: the classic, exact-computation reference for in-play iid pricing.
+**Relation to our work.**
+- This is the parameterisation our first-server work ended up using: the gap comes from the
+  moneyline and the level (pA + pB) from history.
+- The *totals and handicaps* depend strongly on the sum, unlike the match probability. That
+  is why our iid model ran about 1.5 games long against Pinnacle's lines: the level is the
+  weak input.
+- Kalshi in-play: the Klaassen-Magnus update is the natural "fair mid" benchmark for the
+  in-play work (`research_tests/inplay/`).
+
+**Worth testing: rank 6.** Model the level (pA + pB) per match from surface, tour, both players'
+serve and return history and conditions. Measure it by how well the iid model then reproduces
+Pinnacle's main total line, out of sample, before any totals edge claim.
+
+## 11. Lisi, Grigoletto & Canesso (2019): *Winning tennis matches with fewer points or games than the opponent* (J Sports Analytics, DOI 10.3233/JSA-190328, file `Winning_tennis_matches_with_fewer_points_or_games_.pdf`)
+**Claim.**
+- **Fewer points:** the match winner won fewer points in 4.41% of ATP matches (2012-17) and
+  3.24% of WTA matches. The ATP rate is unchanged since 1991 (Wright et al.: 4.52%) and has
+  no surface or tier effect.
+- **Fewer games:** men 2.15% (46k matches 2000-17), women 1.85%.
+- **WTA Slams:** significantly lower rates.
+- **Simulation:** an iid Monte Carlo over δ = pA − pB and γ = pA + pB reproduces the observed
+  rates; the rate depends mainly on δ. So there is no evidence of players "tanking" return
+  games. The "Federer paradox" (losing most such matches) reflects strength, not weakness.
+
+**Trust.** High: large samples, likelihood-ratio tests, simulation benchmark.
+**Relation to our work.**
+- It supports the iid model as the data-generating process for score shapes.
+- The match winner loses the games count about 2% of the time. That links the moneyline to
+  the game handicap near ±0.5 to ±1.5, a consistency check for our handicap pricing.
+- "Won more points but lost" is the luck component our features hold (`win_luck`,
+  `games_luck`).
+
+**Worth testing:** no new test. Use it as a check: our iid model should reproduce 4.4% / 2.2%
+(men) and 3.2% / 1.9% (women).
+
+## 12. Gutiérrez-Santiago et al. (2024): *Women's Singles Tennis Match Analysis and Probability of Winning a Point* (Applied Sciences 14:6761, file `applsci-14-06761-v2.pdf`)
+**Content.** The women's companion to paper 8: 3,239 points, 2021 Slam quarter-finals onward.
+- **First serve:** points won on clay 61%, grass 70%, hard 69%.
+- **Second serve:** 55-57%.
+- **Rally length:** short rallies (1-4 shots) are 70-71% of points. The server wins 65%
+  (clay) to 75% (grass, hard) of first-serve short rallies, and 55-57% at 5-8 shots.
+
+**Trust and use.** As paper 8: small, elite-only, descriptive. Priors for women's serve-point
+levels (lower than men's, especially on clay). Nothing to test.
+
+## 13. Dayekh (2022): *Statistical techniques in predicting the winners of professional women tennis in Grand Slams 2001-2022* (UPC master's thesis, file `content (1).pdf`)
+**Content.**
+- **Descriptive:** WTA Grand Slams via Sackmann plus scraped WTA data. Taller players reach
+  better career ranks (best-ranked mean 177 cm vs 173 cm). There are fewer aces on clay.
+  Upsets are rarer at larger rank gaps and in Slams, and usually go three sets. Comebacks
+  after losing the first set happen in about 15% of matches.
+- **Predictive:** logistic regression, trees, random forest, LDA, KNN and XGBoost report 74-82%
+  accuracy on about 130 test matches.
+
+**Trust.** Very low for prediction. The target is "the winner had more ranking points",
+computed from winner/loser-labelled columns, so the features carry the label's orientation.
+The test set is tiny, nothing is compared with a market, and the split is random.
+**Use.** The descriptive facts (height, three-set upsets) are consistent with priors already
+in our features (height, rank, best-of). Nothing to test.
+
+## 14. Bozděch, Puda & Grasgruber (2024): *A detailed analysis of game statistics of professional tennis players: an inferential and machine learning approach* (PLOS ONE 19(11) e0309085, file `pone.0309085.pdf`)
+**Content.** 1,990 ATP players, 2022 season, end-of-season ATP website statistics.
+- **What predicts rank:** MANOVA, multinomial logit and neural networks explain end-of-season
+  rank bands. Age, height and serve metrics matter (1st-serve points won, service games won,
+  break points saved).
+- **Prize money:** very skewed toward the top.
+
+**Trust.** Low for our purpose. It is cross-sectional: the same season's statistics explain the
+same season's rank. Nothing is pre-match, and no match outcomes or markets are involved.
+**Use.** None beyond confirming that serve-hold metrics carry most of the ranking signal,
+which our EW serve and return features already hold.
+
 ## (`Teadme.md` is a 1-byte placeholder.)
+`journal.pone.0286076.pdf` is a byte-for-byte duplicate of `pone.0286076.pdf` (section 8).
 
 ---
 
@@ -225,7 +315,14 @@ covers.
    tier weights.
 5. **Shin de-vig vs per-book lam de-vig (paper 6).** A quick calibration comparison on 2026
    Pinnacle and the execution books.
+6. **Totals level model (papers 10, 11).** The iid model prices the match from the gap, but
+   totals and handicaps hinge on the level pA + pB. Model the level per match (surface, tour,
+   serve and return history). Score it by how well the iid model then reproduces Pinnacle's
+   main total, out of sample, and check it against the fewer-points and fewer-games rates of
+   paper 11. This is a prerequisite for any totals or handicap edge claim, including the
+   post-toss handicap candidate from paper 2.
 
 Already done or not worth doing: the first-server effect (paper 2, done; forward test pending),
 the Cornman and Lv betting and momentum claims (methodologically unusable), and the Moi
-accuracy comparison (consistent with ours).
+accuracy comparison (consistent with ours), the Dayekh and Bozděch prediction claims
+(label orientation, cross-sectional), and the two point-level descriptive studies (priors only).
