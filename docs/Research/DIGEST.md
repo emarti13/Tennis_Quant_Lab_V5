@@ -54,7 +54,6 @@ A positive result that has not cleared these rules is a hypothesis, not a findin
 | 12 | Gutiérrez-Santiago et al. 2024, women's point-win probabilities | `applsci-14-06761-v2.pdf` | descriptive | priors only |
 | 13 | Dayekh 2022, WTA Grand Slam winners (master's thesis) | `content (1).pdf` | very low | not worth testing |
 | 14 | Bozděch, Puda & Grasgruber 2024, ATP season statistics vs ranking | `pone.0309085.pdf` | low (cross-sectional) | not worth testing |
-| 8 (dup) | duplicate of `pone.0286076.pdf` (identical bytes) | `journal.pone.0286076.pdf` | n/a | ignore; can be deleted |
 
 ---
 
@@ -295,7 +294,7 @@ same season's rank. Nothing is pre-match, and no match outcomes or markets are i
 which our EW serve and return features already hold.
 
 ## (`Teadme.md` is a 1-byte placeholder.)
-`journal.pone.0286076.pdf` is a byte-for-byte duplicate of `pone.0286076.pdf` (section 8).
+A byte-for-byte duplicate of `pone.0286076.pdf` (uploaded as journal.pone.0286076.pdf) was removed on 2026-10-22.
 
 ---
 
