@@ -1,0 +1,37 @@
+[
+ {
+  "check": "rows (completed, non-retired, with features and both prices)",
+  "value": 97175.0,
+  "lo": 80000,
+  "hi": 110000,
+  "ok": true
+ },
+ {
+  "check": "A win share",
+  "value": 0.498523,
+  "lo": 0.48,
+  "hi": 0.52,
+  "ok": true
+ },
+ {
+  "check": "consensus close log loss",
+  "value": 0.594702,
+  "lo": 0.56,
+  "hi": 0.63,
+  "ok": true
+ },
+ {
+  "check": "consensus close beats open (log loss gap)",
+  "value": 0.009335,
+  "lo": 0.0,
+  "hi": 0.03,
+  "ok": true
+ },
+ {
+  "check": "duplicate keys",
+  "value": 0.0,
+  "lo": 0,
+  "hi": 0,
+  "ok": true
+ }
+]

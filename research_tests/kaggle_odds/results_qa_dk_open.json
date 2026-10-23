@@ -1,0 +1,78 @@
+{
+ "qa": [
+  {
+   "check": "bets",
+   "value": 633,
+   "lo": null,
+   "hi": null,
+   "ok": true
+  },
+  {
+   "check": "duplicate fixtures among bets",
+   "value": 0.0,
+   "lo": 0,
+   "hi": 0,
+   "ok": true
+  },
+  {
+   "check": "all bet fixtures start before the seal",
+   "value": 1.0,
+   "lo": 1.0,
+   "hi": 1.0,
+   "ok": true
+  },
+  {
+   "check": "bet price equals raw DraftKings open price",
+   "value": 1.0,
+   "lo": 0.999,
+   "hi": 1.0,
+   "ok": true
+  },
+  {
+   "check": "Pinnacle close fair equals raw recompute",
+   "value": 1.0,
+   "lo": 0.999,
+   "hi": 1.0,
+   "ok": true
+  },
+  {
+   "check": "bets with an official winner (v5_market_results)",
+   "value": 0.99684,
+   "lo": 0.95,
+   "hi": 1.0,
+   "ok": true
+  },
+  {
+   "check": "our outcome agrees with the official winner",
+   "value": 1.0,
+   "lo": 0.995,
+   "hi": 1.0,
+   "ok": true
+  },
+  {
+   "check": "bet prices within 1.01..30",
+   "value": 1.0,
+   "lo": 1.0,
+   "hi": 1.0,
+   "ok": true
+  },
+  {
+   "check": "DraftKings open is before the start",
+   "value": 1.0,
+   "lo": 1.0,
+   "hi": 1.0,
+   "ok": true
+  }
+ ],
+ "roi_ours": 0.0799,
+ "roi_official_winners": 0.0779,
+ "n_official": 631,
+ "hours_dk_open_before_start_median": 24.4,
+ "share_dk_open_before_pinnacle_open": 0.878,
+ "null_pinnacle_fair_mean": 0.0233,
+ "null_pinnacle_fair_p_value": 0.053,
+ "win_rate": 0.6619,
+ "mean_pinnacle_close_prob": 0.6213,
+ "mean_model_prob": 0.6581,
+ "mean_price": 1.743
+}

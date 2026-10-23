@@ -1,0 +1,30 @@
+[
+ {
+  "check": "share of target matches given a score",
+  "value": 0.99419,
+  "lo": 0.98,
+  "hi": 1.0,
+  "ok": true
+ },
+ {
+  "check": "NaN scores among scored matches",
+  "value": 0.0,
+  "lo": 0,
+  "hi": 0,
+  "ok": true
+ },
+ {
+  "check": "share with prior direct meeting (I* > 0); paper top tiers 0.42",
+  "value": 0.366927,
+  "lo": 0.25,
+  "hi": 0.55,
+  "ok": true
+ },
+ {
+  "check": "I* never negative",
+  "value": 1.0,
+  "lo": 1.0,
+  "hi": 1.0,
+  "ok": true
+ }
+]

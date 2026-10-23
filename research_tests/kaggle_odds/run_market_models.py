@@ -36,6 +36,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "research_tests", "features"))
 from run_features import prep_lr  # noqa: E402
+sys.path.insert(0, os.path.join(ROOT, "research_tests"))
+from qa import QA  # noqa: E402
 
 SCRATCH = os.environ.get("FS_SCRATCH", "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/a0609b44-84ba-59ef-a5f1-f66b68d375ec/scratchpad")
 RNG = np.random.default_rng(20261021)
@@ -84,6 +86,8 @@ def load():
     J = pd.read_pickle(os.path.join(SCRATCH, "kaggle_joined.pkl"))
     J = J.drop(columns=["tour", "tid", "level", "date", "y"])
     D = F.merge(J, on="key", how="inner")
+    QA("market_models_cache").check("odds rows found in the feature table (caches built from the same load)",
+                                    J.key.isin(F.key).mean(), 0.98, 1.0)
     D = D[~D.retired.astype(bool) & (D.completed == 1)].reset_index(drop=True)
     for when, suf in (("close", ""), ("open", "_opening")):
         L, n = np.zeros(len(D)), np.zeros(len(D))
@@ -104,6 +108,14 @@ def load():
     D["month"] = D.mdate.dt.month.astype(float)
     D["move"] = D.mkt_close - D.mkt_open
     D["kyear"] = D.mdate.dt.year
+    qa = QA("market_models_load")
+    qa.check("rows (completed, non-retired, with features and both prices)", len(D), 80000, 110000)
+    qa.check("A win share", D.y.mean(), 0.48, 0.52)
+    qa.check("consensus close log loss", ll(D.y.to_numpy(), sig(D.mkt_close.to_numpy())).mean(), 0.56, 0.63)
+    qa.check("consensus close beats open (log loss gap)",
+             (ll(D.y.to_numpy(), sig(D.mkt_open.to_numpy())) - ll(D.y.to_numpy(), sig(D.mkt_close.to_numpy()))).mean(), 0.0, 0.03)
+    qa.zero("duplicate keys", D.key.duplicated().sum())
+    qa.save(HERE)
     return D
 
 

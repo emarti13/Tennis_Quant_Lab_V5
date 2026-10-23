@@ -30,6 +30,13 @@ for bk in ("draftkings", "betrivers"):
             clv = np.concatenate([oa[ta] * pin[ta] - 1, ob[tb] * (1 - pin[tb]) - 1])
             st = pd.to_datetime(np.concatenate([Xs.start.to_numpy()[ta], Xs.start.to_numpy()[tb]]), utc=True)
             h1 = st < pd.Timestamp("2026-06-01", tz="UTC")
+            if mdl == "ens" and thr == 0.05:
+                pd.DataFrame({"fixture_id": np.concatenate([Xs.fixture_id.to_numpy()[ta], Xs.fixture_id.to_numpy()[tb]]),
+                              "side_a": np.r_[np.ones(ta.sum(), bool), np.zeros(tb.sum(), bool)],
+                              "a_is_p1": np.concatenate([(Xs.a_key == Xs.a_key_mk).to_numpy()[ta], (Xs.a_key == Xs.a_key_mk).to_numpy()[tb]]),
+                              "price": np.r_[oa[ta], ob[tb]], "p_model": np.r_[p[ta], 1 - p[tb]],
+                              "won": np.r_[y[ta] == 1, y[tb] == 0], "pin_close": np.r_[pin[ta], 1 - pin[tb]],
+                              "start": st}).to_pickle(os.path.join(rm.SCRATCH, f"bets_{bk}_open_ens05.pkl"))
             R[f"{bk}|{mdl}|ev>{thr:.2f}"] = {"roi": rm.boot_mean(r), "clv": rm.boot_mean(clv),
                                              "roi_jan_may": rm.boot_mean(r[h1]), "roi_jun_oct": rm.boot_mean(r[~h1]),
                                              "clv_jan_may": rm.boot_mean(clv[h1]), "clv_jun_oct": rm.boot_mean(clv[~h1])}

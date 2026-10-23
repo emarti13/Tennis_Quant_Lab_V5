@@ -1,0 +1,79 @@
+[
+ {
+  "check": "source: player_a is the winner (completed rows)",
+  "value": 1.0,
+  "lo": 0.999,
+  "hi": 1.0,
+  "ok": true
+ },
+ {
+  "check": "non-ITF source rows",
+  "value": 124771,
+  "lo": null,
+  "hi": null,
+  "ok": true
+ },
+ {
+  "check": "joined rows",
+  "value": 101423,
+  "lo": null,
+  "hi": null,
+  "ok": true
+ },
+ {
+  "check": "join rate (non-ITF)",
+  "value": 0.812873,
+  "lo": 0.7,
+  "hi": 0.95,
+  "ok": true
+ },
+ {
+  "check": "duplicate match keys",
+  "value": 0.0,
+  "lo": 0,
+  "hi": 0,
+  "ok": true
+ },
+ {
+  "check": "A win share after re-orientation",
+  "value": 0.498437,
+  "lo": 0.48,
+  "hi": 0.52,
+  "ok": true
+ },
+ {
+  "check": "bet365 close odds within 1.001..201",
+  "value": 0.999329,
+  "lo": 0.999,
+  "hi": 1.0,
+  "ok": true
+ },
+ {
+  "check": "Betfair close odds within 1.001..201",
+  "value": 1.0,
+  "lo": 0.999,
+  "hi": 1.0,
+  "ok": true
+ },
+ {
+  "check": "Ladbrokes close odds within 1.001..201",
+  "value": 0.999778,
+  "lo": 0.999,
+  "hi": 1.0,
+  "ok": true
+ },
+ {
+  "check": "Unibet close odds within 1.001..201",
+  "value": 0.999994,
+  "lo": 0.999,
+  "hi": 1.0,
+  "ok": true
+ },
+ {
+  "check": "bet365 close log loss (known range for tennis)",
+  "value": 0.601399,
+  "lo": 0.55,
+  "hi": 0.65,
+  "ok": true
+ }
+]

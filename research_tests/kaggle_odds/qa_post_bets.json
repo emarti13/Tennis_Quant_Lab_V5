@@ -1,0 +1,30 @@
+[
+ {
+  "check": "close: backing every side at bet365 loses about the margin",
+  "value": -0.09149,
+  "lo": -0.13,
+  "hi": -0.05,
+  "ok": true
+ },
+ {
+  "check": "close: backing every side at books_avg loses about the margin",
+  "value": -0.07981,
+  "lo": -0.12,
+  "hi": -0.04,
+  "ok": true
+ },
+ {
+  "check": "open: backing every side at bet365 loses about the margin",
+  "value": -0.09207,
+  "lo": -0.13,
+  "hi": -0.05,
+  "ok": true
+ },
+ {
+  "check": "open: backing every side at books_avg loses about the margin",
+  "value": -0.07969,
+  "lo": -0.12,
+  "hi": -0.04,
+  "ok": true
+ }
+]

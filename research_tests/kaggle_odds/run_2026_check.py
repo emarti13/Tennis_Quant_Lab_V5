@@ -31,7 +31,7 @@ EXEC = ["betrivers", "draftkings", "bet365"]
 def load_2026(F):
     mk = pd.read_pickle(os.path.join(SCRATCH, "fs_market.pkl"))
     F26 = F[F.year == 2026]
-    x = F26.merge(mk[["key", "a_key", "y", "start"] + [c for c in mk.columns if c.startswith("ml_")]],
+    x = F26.merge(mk[["key", "fixture_id", "a_key", "y", "start"] + [c for c in mk.columns if c.startswith("ml_")]],
                   on="key", suffixes=("", "_mk"))
     a_p1 = (x.a_key == x.a_key_mk).to_numpy()                  # features' A is fixture player1
     x["y"] = np.where(a_p1, x.y_mk, 1 - x.y_mk)

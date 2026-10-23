@@ -30,6 +30,8 @@ import pandas as pd
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 sys.path.insert(0, ROOT)
+sys.path.insert(0, os.path.join(ROOT, "research_tests"))
+from qa import QA  # noqa: E402
 
 ML_BOOKS = ["bet365", "Betfair", "Ladbrokes", "Unibet"]
 TOT_BOOKS = ["bet365", "Ladbrokes", "Unibet"]
@@ -116,6 +118,24 @@ def main(path, out):
     n_k = len(k)
     print(f"non-ITF Kaggle rows {n_k}, joined {len(out_df)} ({100 * len(out_df) / n_k:.1f}%)")
     print(out_df.groupby([out_df.mdate.dt.year, "tour"]).size().unstack().fillna(0).astype(int).to_string())
+    qa = QA("kaggle_join")
+    raw = pd.read_csv(path, low_memory=False, usecols=["total_sets_a", "total_sets_b", "completed"])
+    done = raw[raw.completed == 1]
+    qa.check("source: player_a is the winner (completed rows)", (done.total_sets_a > done.total_sets_b).mean(), 0.999, 1.0)
+    qa.count("non-ITF source rows", n_k)
+    qa.count("joined rows", len(out_df))
+    qa.check("join rate (non-ITF)", len(out_df) / n_k, 0.70, 0.95)
+    qa.zero("duplicate match keys", out_df.key.duplicated().sum())
+    qa.check("A win share after re-orientation", out_df.y.mean(), 0.48, 0.52)
+    for b in ML_BOOKS:
+        o = out_df[[f"{b}_A", f"{b}_B"]].to_numpy(float)
+        o = o[np.isfinite(o)]
+        qa.check(f"{b} close odds within 1.001..201", ((o > 1.001) & (o < 201)).mean(), 0.999, 1.0)
+    pb = (1 / out_df.bet365_A) / (1 / out_df.bet365_A + 1 / out_df.bet365_B)
+    okp = pb.notna()
+    ll = -np.mean(np.where(out_df.y[okp] == 1, np.log(pb[okp]), np.log(1 - pb[okp])))
+    qa.check("bet365 close log loss (known range for tennis)", ll, 0.55, 0.65)
+    qa.save(os.path.dirname(os.path.abspath(__file__)))
     out_df.to_pickle(out)
 
 

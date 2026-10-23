@@ -29,6 +29,8 @@ from v5_fatigue_features import event_table  # noqa: E402
 import fs_core as fc  # noqa: E402
 import run_market_models as rm  # noqa: E402
 from post_bets import odds_kind  # noqa: E402
+sys.path.insert(0, os.path.join(ROOT, "research_tests"))
+from qa import QA  # noqa: E402
 
 LAM = 0.38                                     # per year
 SURF = {"Hard": 0, "Clay": 1, "Grass": 2}
@@ -124,6 +126,13 @@ def build_istar(target_keys):
     m["t"] = (m.date - pd.Timestamp("2000-01-01")).dt.days / 365.25
     m["s"] = m.surface.map(be.surface_of).map(SURF).fillna(0).astype(int)
     m["beta"] = m.level.astype(str).map(BETA).fillna(BETA_OTHER)
+    return compute_istar(m, ev, target_keys)
+
+
+def compute_istar(m, ev, target_keys):
+    """I* for target matches. m: key, tour, tid, winner_key, loser_key, g, t, s, beta.
+    ev: per (tour, tid) first_week and done_week. A match sees only events with
+    done_week < its event's first_week."""
     store = Store()
     by_ev = {k: g for k, g in m.groupby(["tour", "tid"])}
     order = ev.sort_values("first_week").index.tolist()
@@ -164,6 +173,13 @@ def main():
     y = dd.y.to_numpy(float)
     gain = rm.ll(y, P.mkt.to_numpy()) - rm.ll(y, P.ens.to_numpy())      # > 0: ensemble beats the consensus close
     yr = dd.kyear.to_numpy(); I = dd.istar.to_numpy(); grp = dd.group.to_numpy()
+    qa = QA("intransitivity")
+    qa.check("share of target matches given a score", np.isfinite(I).mean(), 0.98, 1.0)
+    qa.zero("NaN scores among scored matches", int(np.isnan(np.array([v[0] for v in ist.values()])).sum()))
+    prior = np.isfinite(I) & (I > 0)
+    qa.check("share with prior direct meeting (I* > 0); paper top tiers 0.42", prior.mean(), 0.25, 0.55)
+    qa.check("I* never negative", (I[np.isfinite(I)] >= 0).mean(), 1.0, 1.0)
+    qa.save(HERE)
     ok = np.isfinite(I)
     pos_disc = I[ok & (yr <= 2021) & (I > 0)]
     cuts = np.percentile(pos_disc, [100 / 3, 200 / 3])

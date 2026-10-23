@@ -21,6 +21,7 @@ import pandas as pd
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import run_market_models as rm  # noqa: E402
+from qa import QA  # noqa: E402
 
 COMMISSION = 0.05
 
@@ -72,6 +73,11 @@ def main():
             oa, ob = odds_kind(dd, kind, suf, "A"), odds_kind(dd, kind, suf, "B")
             r = np.r_[np.where(y == 1, oa - 1, -1.0), np.where(y == 0, ob - 1, -1.0)]
             R[f"{base}|back_everything|{kind}"] = rm.boot_mean(r)
+    qa = QA("post_bets")
+    for base in ("close", "open"):
+        for kind, lo, hi in (("bet365", -0.13, -0.05), ("books_avg", -0.12, -0.04)):
+            qa.check(f"{base}: backing every side at {kind} loses about the margin", R[f"{base}|back_everything|{kind}"]["mean"], lo, hi)
+    qa.save(HERE)
     json.dump(R, open(os.path.join(HERE, "results_post_bets.json"), "w"), indent=1)
     for k, v in R.items():
         a = v.get("all", v)
