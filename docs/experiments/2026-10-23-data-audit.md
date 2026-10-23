@@ -97,8 +97,10 @@ used them; it is a known data-quality pocket.
 **Reading:** much of the DraftKings "edge" is catching openers far from the market (stale or
 erroneous prices). Books can void those under palpable-error rules, so they may not stand.
 On normal prices the closing-line value is about +1%, it fades through the summer, it is
-before fees, and it needs the richer feature model (the Elo-based model finds none). C1 stays a
-candidate for a shadow test only, with a pre-declared cap on the price gap.
+before fees, and it needs the richer feature model (the Elo-based model finds none). Also, **DraftKings is not an execution book** (CLAUDE.md), and the collector requests
+Pinnacle, Bet365 and BetRivers from September on, so this result is not executable as it stands.
+C1 survives only as a shadow test at Bet365's and BetRivers' openers, with a pre-declared cap
+on the price gap.
 
 ## What this audit does not cover
 - The market-model ensemble itself has not been re-implemented blind (heavy).

@@ -42,7 +42,7 @@ is ordered by evidence and by how the gate would treat each.
 
 | # | Segment | Evidence so far | Type of gate it can pass |
 |---|---|---|---|
-| C1 | **Early decisions: model vs the line standing at decision time.** Pinnacle open, or the execution-book opener when Pinnacle is not yet up. | The model moves the close toward itself (about 15% of its disagreement). On DraftKings' opener (timing-safe, ensemble, EV > 5%): closing-line value vs Pinnacle's close +2.3% (1.3, 3.4), n 633. **Audit (`docs/experiments/2026-10-23-data-audit.md`):** 82% of that comes from the 5% of bets where DraftKings' opener is far from the market. With the gap capped at 0.10 it is +1.0% (0.3, 1.7). It fades: Jul +0.6%, Aug +0.4%. A blind replication with an Elo-based model finds negative closing-line value. DraftKings prices in our data stop on 2026-08-09. | Phase 3-style (closing-line value after fees), not Gate 2's log loss vs the close. Weak; shadow only. |
+| C1 | **Early decisions: model vs the line standing at decision time.** Pinnacle open, or the execution-book opener when Pinnacle is not yet up. | The model moves the close toward itself (about 15% of its disagreement). On DraftKings' opener (timing-safe, ensemble, EV > 5%): closing-line value vs Pinnacle's close +2.3% (1.3, 3.4), n 633. **Audit (`docs/experiments/2026-10-23-data-audit.md`):** 82% of that comes from the 5% of bets where DraftKings' opener is far from the market. With the gap capped at 0.10 it is +1.0% (0.3, 1.7). It fades: Jul +0.6%, Aug +0.4%. A blind replication with an Elo-based model finds negative closing-line value. DraftKings prices in our data stop on 2026-08-09. **DraftKings is not on the execution list (CLAUDE.md: Bet365, BetRivers, Kalshi, Polymarket, Novig)**, and from September the collector requests Pinnacle, Bet365 and BetRivers instead. At BetRivers' opener the same rule has negative closing-line value; Bet365 openers are thin in our data. | Not executable as it stands. Kept only as a Bet365/BetRivers-opener shadow (below); DraftKings only if you add it as an execution book. |
 | C2 | **Challenger main draw and qualifying** (the roadmap's own example) | The model's largest gain over the soft-book consensus is here (+0.0018 in 2022-25 among matches with no prior meeting). Pinnacle's coverage of Challengers is thinner. | Gate 2 (log loss vs Pinnacle close) |
 | C3 | **All tours, Pinnacle close** (the control segment) | +0.0009 (ns) on 2026 | Gate 2 |
 | C4 | **Post-toss game handicaps** | The server shift is real (slope 0.84 totals, 1.22 margin). Pinnacle reprices only about 23% of the handicap shift. Model value about +3% on about 20% of fixtures. | Needs a live first-server feed; spread markets are out of the roadmap's gates (§6), so research only |
@@ -72,11 +72,12 @@ Closed (not candidates):
   on top of the market input available at decision time (the Layer 3 blend). Its version hash is
   recorded in the evaluation write-up.
 - **C1, shadow (Phase 3 measure, starts now, costs nothing):**
-  - Rule: EV > 5% at DraftKings' opener, DraftKings' own opener as the only market input, and
+  - Rule: EV > 5% at the execution book's opener, that book's own opener as the only market input, and
     the opener within 0.10 of the model's probability (excludes stale or erroneous openers,
     which books may void under palpable-error rules).
-  - Data check first: DraftKings prices in `market_history` stop on 2026-08-09; the live feed
-    must be collecting DraftKings openers again before the shadow can start.
+  - Execution books only: run the shadow at Bet365's and BetRivers' openers (both collected
+    now). DraftKings is not an execution book (CLAUDE.md) and has not been collected since
+    2026-08-09; it would need your decision to add it.
   - Measure: closing-line value against Pinnacle's no-vig close, after fees.
   - Pass: at least 500 decisions with mean closing-line value > 0, interval excluding zero.
     These are Gate 3's numbers, applied early as a shadow.
