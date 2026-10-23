@@ -1,0 +1,95 @@
+# Gate 1 segment report (Phase 1: honest benchmark)
+
+**DRAFT — pending user approval.**
+
+Written 2026-10-23. Roadmap: `2026-10-12-fair-price-to-market-making-roadmap-design.md` §4.
+Gate 1 asks for:
+- a written segment report the user reviews and approves;
+- candidate segments and Phase 2 metrics fixed in writing before Phase 2 starts.
+
+Everything below uses data before the sealed period (matches on or after 2026-10-13 are sealed).
+
+Evidence lives in `docs/experiments/`:
+- 2026-10-21-first-server-effect
+- 2026-10-21-kaggle-odds-edge-search
+- 2026-10-23-intransitivity-bet365-band
+
+It also draws on `research_tests/README.md` on the research branches
+(`research/kalshi-making-sim`, `claude/clever-fermi-hv34lk`).
+
+## 1. What Phase 1 asked for, and what was measured
+
+| Roadmap item | Status | Finding |
+|---|---|---|
+| **Pinnacle close efficiency** (calibration, favourite-longshot bias by tour/tier, surface, price, time before start) | Partly | Pinnacle's close beats its open by 0.0055 log loss, and almost nothing arrives after t-24h. Long shots are overpriced at every soft book (ITF worst). No calibration table by segment *for Pinnacle* has been written yet (**gap 1**). |
+| **Does the leak-free model add information beyond the market** (`logit p = a·logit p_mkt + b·logit p_model`, b by segment) | Partly | Measured with research models, not the production V5 probability. Every result is below. No reliable b > 0 against Pinnacle; the production-probability version is **gap 2**. |
+| **Open-to-close gap** (how much the market learns, and when) | Done | The close absorbs about 15% of the model's disagreement with the open: +1.0 point toward the model, +1.6 where the model differs by 5+ points. DraftKings opens a median 2 hours before Pinnacle. |
+
+The model-versus-market results behind the second row:
+- **Against soft books:** the model beats the soft-book consensus close by +0.0013, positive in
+  every year 2017-25.
+- **Against Pinnacle:** in 2026 at the close the gain is +0.0009, with a range from −0.0002 to
+  +0.0020. On top of Pinnacle's open it is not significant.
+- **Segment searches found nothing robust.** About 2,800 cells were searched per base, then
+  pre-registered tests run on intransitivity and the Bet365 underdog band.
+- **Leak found and fixed:** the research feature table chose an event's home country from
+  match results; production has no such feature.
+
+## 2. Candidate segments, ranked
+No segment shows a reliable b > 0 against Pinnacle's close. The roadmap's rule for that case
+is that Phase 2 focuses on the segments with the largest open-to-close movement, so the list
+is ordered by evidence and by how the gate would treat each.
+
+| # | Segment | Evidence so far | Type of gate it can pass |
+|---|---|---|---|
+| C1 | **Early decisions: model vs the line standing at decision time.** Pinnacle open, or the execution-book opener when Pinnacle is not yet up. | The model moves the close toward itself (about 15% of its disagreement). On DraftKings' opener with a timing-safe input (DraftKings' own opener only), EV > 5% gave +8.0% ROI (1.6, 14.7), n 633, closing-line value vs Pinnacle's close +2.3% (1.3, 3.4). It decays within 2026: closing-line value +3.2% Jan-May, +1.2% Jun-Oct. | Phase 3-style (closing-line value after fees), not Gate 2's log loss vs the close |
+| C2 | **Challenger main draw and qualifying** (the roadmap's own example) | The model's largest gain over the soft-book consensus is here (+0.0018 in 2022-25 among matches with no prior meeting). Pinnacle's coverage of Challengers is thinner. | Gate 2 (log loss vs Pinnacle close) |
+| C3 | **All tours, Pinnacle close** (the control segment) | +0.0009 (ns) on 2026 | Gate 2 |
+| C4 | **Post-toss game handicaps** | The server shift is real (slope 0.84 totals, 1.22 margin). Pinnacle reprices only about 23% of the handicap shift. Model value about +3% on about 20% of fixtures. | Needs a live first-server feed; spread markets are out of the roadmap's gates (§6), so research only |
+| C5 | **Bet365 prices that later move** (moneyline openers, handicap openers) | Another session's study: +5.1% / +10.8% on Bet365 openers, but only on openers Bet365 later corrected (openers that stood: −2.7% / −4.4%). Handicap openers +7.7% with closing-line value −4 to −5%. | Needs timestamped live Bet365 quotes; an upper bound until then |
+
+Closed (not candidates):
+- market-only Bet365 underdog bands;
+- intransitive matchups;
+- the pre-match first-server prior;
+- post-toss totals;
+- line-shopping alone;
+- BetRivers;
+- Kalshi in-play taker rules;
+- betting at the 2026 close.
+
+## 3. Phase 2 metrics (fixed here, before Phase 2 starts)
+- **Primary (Gate 2):** per-match log loss of the frozen engine against the no-vig Pinnacle
+  close.
+  - Run in segments C2 and C3, plus C1's Pinnacle-open variant (engine vs Pinnacle's open) as a
+    secondary.
+  - Match-resampled bootstrap, 2,000 draws.
+  - Pass: the 95% interval excludes zero with at least 300 sealed matches in the segment.
+- **Evaluation timing:** each segment is evaluated once, when it first reaches 300 settled
+  sealed matches, and again at 1,000. Nothing on the sealed period is used for tuning,
+  selection or thresholds.
+- **Engine:** frozen before the first sealed evaluation. That is the leak-fixed feature ensemble
+  on top of the market input available at decision time (the Layer 3 blend). Its version hash is
+  recorded in the evaluation write-up.
+- **C1, shadow (Phase 3 measure, starts now, costs nothing):**
+  - Rule: EV > 5% at DraftKings' opener, DraftKings' own opener as the only market input.
+  - Measure: closing-line value against Pinnacle's no-vig close, after fees.
+  - Pass: at least 500 decisions with mean closing-line value > 0, interval excluding zero.
+    These are Gate 3's numbers, applied early as a shadow.
+- **Voids:** walkovers and matches retired before two completed sets
+  (`v5_market_results.py`).
+
+## 4. What must be done before Gate 1 can be approved
+1. **Gap 1:** a Pinnacle calibration table by tour/tier, surface and price band for 2026
+   pre-seal fixtures (OddsPapi).
+2. **Gap 2:** fit `logit p = a·logit p_Pinnacle + b·logit p_V5` with the production V5
+   probability, by segment.
+3. The user approves the segment list and the metrics above, possibly amended. From then on
+   they are fixed.
+
+## 5. Open questions for the user
+- Accept the C1 shadow test as described, measured by closing-line value rather than ROI?
+- Keep C4 and C5 as research only? Both need data we do not collect: a live first-server feed;
+  timestamped Bet365 quotes.
+- The data cost rule (roadmap §5.1, "no paid data sources") rules out a paid live feed. Change
+  it only by explicit decision.
