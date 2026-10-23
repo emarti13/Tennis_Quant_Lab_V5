@@ -39,9 +39,9 @@ A positive result that has not cleared these rules is a hypothesis, not a findin
 ## Index
 | # | Paper | File | Trust | Status |
 |---|---|---|---|---|
-| 1 | Clegg & Cartlidge 2025, intransitivity and graph neural network | `2510.20454v1` | medium | queued (test 1) |
+| 1 | Clegg & Cartlidge 2025, intransitivity and graph neural network | `2510.20454v1` | medium | tested 2026-10-23: market not measurably worse at high intransitivity (`docs/experiments/2026-10-23-intransitivity-bet365-band.md`) |
 | 2 | Mohammadi 2026, first server and totals | `2605.04867.pdf` | theory sound, empirics flawed | tested 2026-10-21 (`docs/experiments/2026-10-21-first-server-effect.md`); forward test pending |
-| 3 | Ciobanu 2023, men's tennis profitability | `content.pdf` | low | queued (test 2, with our Bet365 result) |
+| 3 | Ciobanu 2023, men's tennis profitability | `content.pdf` | low | tested 2026-10-23: market-only Bet365 underdog rule loses in every band (same write-up) |
 | 4 | Cornman, Spellman & Wright, ML betting | `5242116.pdf` | very low | not worth testing |
 | 5 | Moi et al. 2017, Elo vs odds | `2017_Tennis_Moi_ELO-1.pdf` | descriptive | consistent with ours; nothing to test |
 | 6 | Baselines cited by paper 1 (Weighted Elo, Shin, ...) | none | n/a | queued (tests 4, 5) |
