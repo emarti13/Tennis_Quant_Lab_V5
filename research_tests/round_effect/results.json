@@ -1,0 +1,864 @@
+{
+ "source_claim": {
+  "first_round": {
+   "fav": -0.017,
+   "dog": -0.059
+  },
+  "later": {
+   "fav": -0.038,
+   "dog": 0.0
+  },
+  "r2_fav_bye": {
+   "fav": -0.065,
+   "dog": 0.035
+  },
+  "years": "2017-2026, Pinnacle close"
+ },
+ "kaggle_2017_2025_fair": {
+  "all": {
+   "fav": {
+    "n": 15420,
+    "roi": -0.0015,
+    "lo": -0.0131,
+    "hi": 0.0099
+   },
+   "dog": {
+    "n": 15420,
+    "roi": -0.0144,
+    "lo": -0.0366,
+    "hi": 0.0094
+   },
+   "gap_dog_minus_fav": -0.0129,
+   "lo": -0.0497,
+   "hi": 0.022,
+   "median_fav_odds": 1.55,
+   "median_dog_odds": 2.82
+  },
+  "first_round": {
+   "fav": {
+    "n": 6705,
+    "roi": 0.0076,
+    "lo": -0.0115,
+    "hi": 0.0259
+   },
+   "dog": {
+    "n": 6705,
+    "roi": -0.0392,
+    "lo": -0.0727,
+    "hi": -0.0054
+   },
+   "gap_dog_minus_fav": -0.0468,
+   "lo": -0.0959,
+   "hi": 0.0047,
+   "median_fav_odds": 1.59,
+   "median_dog_odds": 2.68
+  },
+  "later_rounds": {
+   "fav": {
+    "n": 8715,
+    "roi": -0.0085,
+    "lo": -0.0242,
+    "hi": 0.0066
+   },
+   "dog": {
+    "n": 8715,
+    "roi": 0.0046,
+    "lo": -0.0291,
+    "hi": 0.038
+   },
+   "gap_dog_minus_fav": 0.0131,
+   "lo": -0.0338,
+   "hi": 0.0629,
+   "median_fav_odds": 1.52,
+   "median_dog_odds": 2.92
+  },
+  "second_round_fav_bye": {
+   "fav": {
+    "n": 2193,
+    "roi": -0.0392,
+    "lo": -0.0676,
+    "hi": -0.0118
+   },
+   "dog": {
+    "n": 2193,
+    "roi": 0.0369,
+    "lo": -0.0333,
+    "hi": 0.1142
+   },
+   "gap_dog_minus_fav": 0.0761,
+   "lo": -0.0242,
+   "hi": 0.1801,
+   "median_fav_odds": 1.39,
+   "median_dog_odds": 3.53
+  },
+  "second_round_fav_played_r1": {
+   "fav": {
+    "n": 2407,
+    "roi": -0.0002,
+    "lo": -0.0307,
+    "hi": 0.0293
+   },
+   "dog": {
+    "n": 2407,
+    "roi": -0.022,
+    "lo": -0.0768,
+    "hi": 0.0366
+   },
+   "gap_dog_minus_fav": -0.0218,
+   "lo": -0.1097,
+   "hi": 0.0669,
+   "median_fav_odds": 1.58,
+   "median_dog_odds": 2.72
+  },
+  "third_round_on": {
+   "fav": {
+    "n": 4115,
+    "roi": 0.003,
+    "lo": -0.0181,
+    "hi": 0.0261
+   },
+   "dog": {
+    "n": 4115,
+    "roi": 0.003,
+    "lo": -0.0478,
+    "hi": 0.0507
+   },
+   "gap_dog_minus_fav": 0.0,
+   "lo": -0.0681,
+   "hi": 0.073,
+   "median_fav_odds": 1.54,
+   "median_dog_odds": 2.86
+  },
+  "swing_later_minus_first": {
+   "swing": 0.0599,
+   "lo": -0.0083,
+   "hi": 0.1315
+  }
+ },
+ "kaggle_2017_2025_bet365": {
+  "all": {
+   "fav": {
+    "n": 15197,
+    "roi": -0.0596,
+    "lo": -0.0703,
+    "hi": -0.0486
+   },
+   "dog": {
+    "n": 15197,
+    "roi": -0.0653,
+    "lo": -0.0894,
+    "hi": -0.0422
+   },
+   "gap_dog_minus_fav": -0.0058,
+   "lo": -0.04,
+   "hi": 0.0275,
+   "median_fav_odds": 1.44,
+   "median_dog_odds": 2.75
+  },
+  "first_round": {
+   "fav": {
+    "n": 6606,
+    "roi": -0.0544,
+    "lo": -0.0722,
+    "hi": -0.0376
+   },
+   "dog": {
+    "n": 6606,
+    "roi": -0.0861,
+    "lo": -0.1194,
+    "hi": -0.0536
+   },
+   "gap_dog_minus_fav": -0.0317,
+   "lo": -0.0794,
+   "hi": 0.0158,
+   "median_fav_odds": 1.5,
+   "median_dog_odds": 2.5
+  },
+  "later_rounds": {
+   "fav": {
+    "n": 8591,
+    "roi": -0.0635,
+    "lo": -0.0783,
+    "hi": -0.0491
+   },
+   "dog": {
+    "n": 8591,
+    "roi": -0.0493,
+    "lo": -0.0822,
+    "hi": -0.0161
+   },
+   "gap_dog_minus_fav": 0.0142,
+   "lo": -0.0296,
+   "hi": 0.0609,
+   "median_fav_odds": 1.44,
+   "median_dog_odds": 2.75
+  },
+  "second_round_fav_bye": {
+   "fav": {
+    "n": 2154,
+    "roi": -0.0914,
+    "lo": -0.1176,
+    "hi": -0.0644
+   },
+   "dog": {
+    "n": 2154,
+    "roi": -0.0214,
+    "lo": -0.0927,
+    "hi": 0.0493
+   },
+   "gap_dog_minus_fav": 0.07,
+   "lo": -0.0228,
+   "hi": 0.1598,
+   "median_fav_odds": 1.33,
+   "median_dog_odds": 3.4
+  },
+  "second_round_fav_played_r1": {
+   "fav": {
+    "n": 2371,
+    "roi": -0.0621,
+    "lo": -0.0897,
+    "hi": -0.0327
+   },
+   "dog": {
+    "n": 2371,
+    "roi": -0.0729,
+    "lo": -0.1267,
+    "hi": -0.0151
+   },
+   "gap_dog_minus_fav": -0.0108,
+   "lo": -0.0893,
+   "hi": 0.0688,
+   "median_fav_odds": 1.5,
+   "median_dog_odds": 2.62
+  },
+  "third_round_on": {
+   "fav": {
+    "n": 4066,
+    "roi": -0.0496,
+    "lo": -0.0721,
+    "hi": -0.0288
+   },
+   "dog": {
+    "n": 4066,
+    "roi": -0.0504,
+    "lo": -0.0975,
+    "hi": -0.001
+   },
+   "gap_dog_minus_fav": -0.0008,
+   "lo": -0.0657,
+   "hi": 0.0659,
+   "median_fav_odds": 1.44,
+   "median_dog_odds": 2.75
+  },
+  "swing_later_minus_first": {
+   "swing": 0.0459,
+   "lo": -0.0187,
+   "hi": 0.1102
+  }
+ },
+ "kaggle_2014_2016_fair": {
+  "all": {
+   "fav": {
+    "n": 5309,
+    "roi": 0.0128,
+    "lo": -0.0057,
+    "hi": 0.0311
+   },
+   "dog": {
+    "n": 5309,
+    "roi": -0.0504,
+    "lo": -0.0934,
+    "hi": -0.005
+   },
+   "gap_dog_minus_fav": -0.0632,
+   "lo": -0.1242,
+   "hi": -0.0021,
+   "median_fav_odds": 1.47,
+   "median_dog_odds": 3.11
+  },
+  "first_round": {
+   "fav": {
+    "n": 2327,
+    "roi": 0.0129,
+    "lo": -0.0163,
+    "hi": 0.043
+   },
+   "dog": {
+    "n": 2327,
+    "roi": -0.0294,
+    "lo": -0.0949,
+    "hi": 0.039
+   },
+   "gap_dog_minus_fav": -0.0423,
+   "lo": -0.1289,
+   "hi": 0.0458,
+   "median_fav_odds": 1.52,
+   "median_dog_odds": 2.92
+  },
+  "later_rounds": {
+   "fav": {
+    "n": 2982,
+    "roi": 0.0127,
+    "lo": -0.0117,
+    "hi": 0.0378
+   },
+   "dog": {
+    "n": 2982,
+    "roi": -0.0667,
+    "lo": -0.1289,
+    "hi": -0.0045
+   },
+   "gap_dog_minus_fav": -0.0795,
+   "lo": -0.1616,
+   "hi": 0.0078,
+   "median_fav_odds": 1.43,
+   "median_dog_odds": 3.33
+  },
+  "second_round_fav_bye": {
+   "fav": {
+    "n": 714,
+    "roi": 0.0262,
+    "lo": -0.0181,
+    "hi": 0.0717
+   },
+   "dog": {
+    "n": 714,
+    "roi": -0.0666,
+    "lo": -0.228,
+    "hi": 0.0931
+   },
+   "gap_dog_minus_fav": -0.0927,
+   "lo": -0.2811,
+   "hi": 0.0997,
+   "median_fav_odds": 1.33,
+   "median_dog_odds": 4.0
+  },
+  "second_round_fav_played_r1": {
+   "fav": {
+    "n": 854,
+    "roi": 0.0263,
+    "lo": -0.0208,
+    "hi": 0.0744
+   },
+   "dog": {
+    "n": 854,
+    "roi": -0.1308,
+    "lo": -0.2194,
+    "hi": -0.0383
+   },
+   "gap_dog_minus_fav": -0.1571,
+   "lo": -0.2957,
+   "hi": -0.019,
+   "median_fav_odds": 1.51,
+   "median_dog_odds": 2.98
+  },
+  "third_round_on": {
+   "fav": {
+    "n": 1414,
+    "roi": -0.0023,
+    "lo": -0.0384,
+    "hi": 0.033
+   },
+   "dog": {
+    "n": 1414,
+    "roi": -0.0282,
+    "lo": -0.1145,
+    "hi": 0.0611
+   },
+   "gap_dog_minus_fav": -0.0259,
+   "lo": -0.1434,
+   "hi": 0.0943,
+   "median_fav_odds": 1.44,
+   "median_dog_odds": 3.29
+  },
+  "swing_later_minus_first": {
+   "swing": -0.0372,
+   "lo": -0.1608,
+   "hi": 0.0854
+  }
+ },
+ "kaggle_2014_2016_bet365": {
+  "all": {
+   "fav": {
+    "n": 5164,
+    "roi": -0.0528,
+    "lo": -0.0694,
+    "hi": -0.0351
+   },
+   "dog": {
+    "n": 5164,
+    "roi": -0.1043,
+    "lo": -0.1487,
+    "hi": -0.0594
+   },
+   "gap_dog_minus_fav": -0.0515,
+   "lo": -0.1099,
+   "hi": 0.0062,
+   "median_fav_odds": 1.38,
+   "median_dog_odds": 3.0
+  },
+  "first_round": {
+   "fav": {
+    "n": 2265,
+    "roi": -0.0551,
+    "lo": -0.082,
+    "hi": -0.0276
+   },
+   "dog": {
+    "n": 2265,
+    "roi": -0.0907,
+    "lo": -0.1515,
+    "hi": -0.0277
+   },
+   "gap_dog_minus_fav": -0.0357,
+   "lo": -0.1205,
+   "hi": 0.0524,
+   "median_fav_odds": 1.4,
+   "median_dog_odds": 2.75
+  },
+  "later_rounds": {
+   "fav": {
+    "n": 2899,
+    "roi": -0.051,
+    "lo": -0.0736,
+    "hi": -0.0278
+   },
+   "dog": {
+    "n": 2899,
+    "roi": -0.1149,
+    "lo": -0.1737,
+    "hi": -0.0529
+   },
+   "gap_dog_minus_fav": -0.0639,
+   "lo": -0.1418,
+   "hi": 0.0153,
+   "median_fav_odds": 1.36,
+   "median_dog_odds": 3.25
+  },
+  "second_round_fav_bye": {
+   "fav": {
+    "n": 697,
+    "roi": -0.0356,
+    "lo": -0.0778,
+    "hi": 0.0052
+   },
+   "dog": {
+    "n": 697,
+    "roi": -0.1208,
+    "lo": -0.2703,
+    "hi": 0.0296
+   },
+   "gap_dog_minus_fav": -0.0852,
+   "lo": -0.254,
+   "hi": 0.1021,
+   "median_fav_odds": 1.25,
+   "median_dog_odds": 3.75
+  },
+  "second_round_fav_played_r1": {
+   "fav": {
+    "n": 824,
+    "roi": -0.042,
+    "lo": -0.0879,
+    "hi": 0.0009
+   },
+   "dog": {
+    "n": 824,
+    "roi": -0.183,
+    "lo": -0.2728,
+    "hi": -0.0933
+   },
+   "gap_dog_minus_fav": -0.141,
+   "lo": -0.2778,
+   "hi": -0.0107,
+   "median_fav_odds": 1.4,
+   "median_dog_odds": 2.75
+  },
+  "third_round_on": {
+   "fav": {
+    "n": 1378,
+    "roi": -0.0641,
+    "lo": -0.0974,
+    "hi": -0.03
+   },
+   "dog": {
+    "n": 1378,
+    "roi": -0.0711,
+    "lo": -0.1582,
+    "hi": 0.0167
+   },
+   "gap_dog_minus_fav": -0.007,
+   "lo": -0.1198,
+   "hi": 0.1108,
+   "median_fav_odds": 1.36,
+   "median_dog_odds": 3.25
+  },
+  "swing_later_minus_first": {
+   "swing": -0.0282,
+   "lo": -0.1496,
+   "hi": 0.0871
+  }
+ },
+ "kaggle_2022_2025_fair": {
+  "all": {
+   "fav": {
+    "n": 7551,
+    "roi": 0.0042,
+    "lo": -0.0127,
+    "hi": 0.0216
+   },
+   "dog": {
+    "n": 7551,
+    "roi": -0.0303,
+    "lo": -0.0652,
+    "hi": 0.0022
+   },
+   "gap_dog_minus_fav": -0.0345,
+   "lo": -0.0827,
+   "hi": 0.0164,
+   "median_fav_odds": 1.55,
+   "median_dog_odds": 2.82
+  },
+  "first_round": {
+   "fav": {
+    "n": 3244,
+    "roi": 0.0185,
+    "lo": -0.007,
+    "hi": 0.0434
+   },
+   "dog": {
+    "n": 3244,
+    "roi": -0.0608,
+    "lo": -0.1077,
+    "hi": -0.0115
+   },
+   "gap_dog_minus_fav": -0.0793,
+   "lo": -0.1511,
+   "hi": -0.0081,
+   "median_fav_odds": 1.6,
+   "median_dog_odds": 2.67
+  },
+  "later_rounds": {
+   "fav": {
+    "n": 4307,
+    "roi": -0.0066,
+    "lo": -0.0285,
+    "hi": 0.0155
+   },
+   "dog": {
+    "n": 4307,
+    "roi": -0.0074,
+    "lo": -0.0554,
+    "hi": 0.0435
+   },
+   "gap_dog_minus_fav": -0.0008,
+   "lo": -0.0683,
+   "hi": 0.0659,
+   "median_fav_odds": 1.52,
+   "median_dog_odds": 2.93
+  },
+  "second_round_fav_bye": {
+   "fav": {
+    "n": 1143,
+    "roi": -0.0269,
+    "lo": -0.0656,
+    "hi": 0.0111
+   },
+   "dog": {
+    "n": 1143,
+    "roi": 0.0111,
+    "lo": -0.0928,
+    "hi": 0.1172
+   },
+   "gap_dog_minus_fav": 0.038,
+   "lo": -0.0986,
+   "hi": 0.1796,
+   "median_fav_odds": 1.4,
+   "median_dog_odds": 3.51
+  },
+  "second_round_fav_played_r1": {
+   "fav": {
+    "n": 1130,
+    "roi": -0.0098,
+    "lo": -0.0549,
+    "hi": 0.0323
+   },
+   "dog": {
+    "n": 1130,
+    "roi": -0.0232,
+    "lo": -0.1051,
+    "hi": 0.0604
+   },
+   "gap_dog_minus_fav": -0.0134,
+   "lo": -0.1323,
+   "hi": 0.1073,
+   "median_fav_odds": 1.59,
+   "median_dog_odds": 2.7
+  },
+  "third_round_on": {
+   "fav": {
+    "n": 2034,
+    "roi": 0.0067,
+    "lo": -0.0256,
+    "hi": 0.0369
+   },
+   "dog": {
+    "n": 2034,
+    "roi": -0.009,
+    "lo": -0.0799,
+    "hi": 0.0653
+   },
+   "gap_dog_minus_fav": -0.0156,
+   "lo": -0.1082,
+   "hi": 0.0823,
+   "median_fav_odds": 1.53,
+   "median_dog_odds": 2.88
+  },
+  "swing_later_minus_first": {
+   "swing": 0.0785,
+   "lo": -0.018,
+   "hi": 0.1756
+  }
+ },
+ "kaggle_2022_2025_bet365": {
+  "all": {
+   "fav": {
+    "n": 7461,
+    "roi": -0.0496,
+    "lo": -0.065,
+    "hi": -0.0338
+   },
+   "dog": {
+    "n": 7461,
+    "roi": -0.0724,
+    "lo": -0.1077,
+    "hi": -0.0398
+   },
+   "gap_dog_minus_fav": -0.0228,
+   "lo": -0.0701,
+   "hi": 0.0259,
+   "median_fav_odds": 1.44,
+   "median_dog_odds": 2.75
+  },
+  "first_round": {
+   "fav": {
+    "n": 3201,
+    "roi": -0.0375,
+    "lo": -0.0619,
+    "hi": -0.013
+   },
+   "dog": {
+    "n": 3201,
+    "roi": -0.0971,
+    "lo": -0.1431,
+    "hi": -0.0522
+   },
+   "gap_dog_minus_fav": -0.0596,
+   "lo": -0.131,
+   "hi": 0.0075,
+   "median_fav_odds": 1.5,
+   "median_dog_odds": 2.62
+  },
+  "later_rounds": {
+   "fav": {
+    "n": 4260,
+    "roi": -0.0587,
+    "lo": -0.0791,
+    "hi": -0.0383
+   },
+   "dog": {
+    "n": 4260,
+    "roi": -0.0539,
+    "lo": -0.0994,
+    "hi": -0.0066
+   },
+   "gap_dog_minus_fav": 0.0049,
+   "lo": -0.0627,
+   "hi": 0.0663,
+   "median_fav_odds": 1.44,
+   "median_dog_odds": 2.75
+  },
+  "second_round_fav_bye": {
+   "fav": {
+    "n": 1128,
+    "roi": -0.0765,
+    "lo": -0.1149,
+    "hi": -0.0418
+   },
+   "dog": {
+    "n": 1128,
+    "roi": -0.0371,
+    "lo": -0.1357,
+    "hi": 0.0582
+   },
+   "gap_dog_minus_fav": 0.0394,
+   "lo": -0.0866,
+   "hi": 0.1734,
+   "median_fav_odds": 1.33,
+   "median_dog_odds": 3.4
+  },
+  "second_round_fav_played_r1": {
+   "fav": {
+    "n": 1123,
+    "roi": -0.0634,
+    "lo": -0.1043,
+    "hi": -0.0195
+   },
+   "dog": {
+    "n": 1123,
+    "roi": -0.066,
+    "lo": -0.1469,
+    "hi": 0.0128
+   },
+   "gap_dog_minus_fav": -0.0026,
+   "lo": -0.1257,
+   "hi": 0.1143,
+   "median_fav_odds": 1.5,
+   "median_dog_odds": 2.63
+  },
+  "third_round_on": {
+   "fav": {
+    "n": 2009,
+    "roi": -0.0462,
+    "lo": -0.0748,
+    "hi": -0.0154
+   },
+   "dog": {
+    "n": 2009,
+    "roi": -0.0565,
+    "lo": -0.1232,
+    "hi": 0.0121
+   },
+   "gap_dog_minus_fav": -0.0103,
+   "lo": -0.105,
+   "hi": 0.0872,
+   "median_fav_odds": 1.44,
+   "median_dog_odds": 2.75
+  },
+  "swing_later_minus_first": {
+   "swing": 0.0645,
+   "lo": -0.0323,
+   "hi": 0.1588
+  }
+ },
+ "pinnacle_2026": {
+  "all": {
+   "fav": {
+    "n": 1335,
+    "roi": -0.0175,
+    "lo": -0.056,
+    "hi": 0.0196
+   },
+   "dog": {
+    "n": 1335,
+    "roi": -0.0654,
+    "lo": -0.1462,
+    "hi": 0.0145
+   },
+   "gap_dog_minus_fav": -0.0479,
+   "lo": -0.1591,
+   "hi": 0.0583,
+   "median_fav_odds": 1.49,
+   "median_dog_odds": 2.8
+  },
+  "first_round": {
+   "fav": {
+    "n": 565,
+    "roi": 0.029,
+    "lo": -0.0284,
+    "hi": 0.0881
+   },
+   "dog": {
+    "n": 565,
+    "roi": -0.141,
+    "lo": -0.2514,
+    "hi": -0.0285
+   },
+   "gap_dog_minus_fav": -0.17,
+   "lo": -0.3354,
+   "hi": -0.0046,
+   "median_fav_odds": 1.53,
+   "median_dog_odds": 2.65
+  },
+  "later_rounds": {
+   "fav": {
+    "n": 770,
+    "roi": -0.0517,
+    "lo": -0.1028,
+    "hi": -0.0023
+   },
+   "dog": {
+    "n": 770,
+    "roi": -0.01,
+    "lo": -0.1163,
+    "hi": 0.0958
+   },
+   "gap_dog_minus_fav": 0.0417,
+   "lo": -0.1022,
+   "hi": 0.1959,
+   "median_fav_odds": 1.45,
+   "median_dog_odds": 2.94
+  },
+  "second_round_fav_bye": {
+   "fav": {
+    "n": 210,
+    "roi": -0.0825,
+    "lo": -0.1722,
+    "hi": 0.0007
+   },
+   "dog": {
+    "n": 210,
+    "roi": -0.0108,
+    "lo": -0.2076,
+    "hi": 0.2184
+   },
+   "gap_dog_minus_fav": 0.0716,
+   "lo": -0.2271,
+   "hi": 0.375,
+   "median_fav_odds": 1.38,
+   "median_dog_odds": 3.27
+  },
+  "second_round_fav_played_r1": {
+   "fav": {
+    "n": 203,
+    "roi": -0.0486,
+    "lo": -0.1452,
+    "hi": 0.0503
+   },
+   "dog": {
+    "n": 203,
+    "roi": 0.0148,
+    "lo": -0.1875,
+    "hi": 0.2301
+   },
+   "gap_dog_minus_fav": 0.0634,
+   "lo": -0.2243,
+   "hi": 0.3734,
+   "median_fav_odds": 1.49,
+   "median_dog_odds": 2.8
+  },
+  "third_round_on": {
+   "fav": {
+    "n": 342,
+    "roi": -0.0297,
+    "lo": -0.1063,
+    "hi": 0.0455
+   },
+   "dog": {
+    "n": 342,
+    "roi": -0.029,
+    "lo": -0.1819,
+    "hi": 0.1316
+   },
+   "gap_dog_minus_fav": 0.0006,
+   "lo": -0.2401,
+   "hi": 0.2382,
+   "median_fav_odds": 1.49,
+   "median_dog_odds": 2.84
+  },
+  "swing_later_minus_first": {
+   "swing": 0.2117,
+   "lo": -0.0049,
+   "hi": 0.4332
+  }
+ }
+}

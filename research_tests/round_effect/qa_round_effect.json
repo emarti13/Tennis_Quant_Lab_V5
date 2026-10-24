@@ -1,0 +1,44 @@
+[
+ {
+  "check": "share of events whose first round is R32 or R64 or R128",
+  "value": 1.0,
+  "lo": 0.95,
+  "hi": 1.0,
+  "ok": true
+ },
+ {
+  "check": "share of matches in the first round",
+  "value": 0.436331,
+  "lo": 0.4,
+  "hi": 0.55,
+  "ok": true
+ },
+ {
+  "check": "Kaggle matches 2014-2025 in the universe",
+  "value": 20729,
+  "lo": null,
+  "hi": null,
+  "ok": true
+ },
+ {
+  "check": "favourite win rate (consensus close)",
+  "value": 0.671378,
+  "lo": 0.62,
+  "hi": 0.72,
+  "ok": true
+ },
+ {
+  "check": "second-round favourites on a bye: share",
+  "value": 0.471304,
+  "lo": 0.2,
+  "hi": 0.7,
+  "ok": true
+ },
+ {
+  "check": "2026 matches with a Pinnacle close",
+  "value": 1335,
+  "lo": null,
+  "hi": null,
+  "ok": true
+ }
+]
