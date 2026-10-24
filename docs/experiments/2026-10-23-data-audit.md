@@ -102,6 +102,12 @@ Pinnacle, Bet365 and BetRivers from September on, so this result is not executab
 C1 survives only as a shadow test at Bet365's and BetRivers' openers, with a pre-declared cap
 on the price gap.
 
+## Found after the audit (2026-10-24)
+Research comparisons used multiplicatively de-vigged market prices, while production uses
+`v5_devig` with each book's measured λ. The multiplicative split makes the market look about
+0.001 log loss worse than it is, so model gains were overstated. Corrected numbers:
+`2026-10-24-gate1-gaps.md`.
+
 ## What this audit does not cover
 - The market-model ensemble itself has not been re-implemented blind (heavy).
 - The post-toss handicap estimate (model-implied, not measured) and Pinnacle's partial

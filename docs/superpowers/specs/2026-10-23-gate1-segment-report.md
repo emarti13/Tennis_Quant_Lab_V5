@@ -21,15 +21,16 @@ It also draws on `research_tests/README.md` on the research branches
 
 | Roadmap item | Status | Finding |
 |---|---|---|
-| **Pinnacle close efficiency** (calibration, favourite-longshot bias by tour/tier, surface, price, time before start) | Done 2026-10-24 (`docs/experiments/2026-10-24-gate1-gaps.md`): near-calibrated with the measured de-vig (slope 1.06); bias strongest in Challenger and WTA125; favourites do not pay at real prices; the market learns by t-24h | Previously partly. | Pinnacle's close beats its open by 0.0055 log loss, and almost nothing arrives after t-24h. Long shots are overpriced at every soft book (ITF worst). No calibration table by segment *for Pinnacle* has been written yet (**gap 1**). |
-| **Does the leak-free model add information beyond the market** (`logit p = a·logit p_mkt + b·logit p_model`, b by segment) | Done 2026-10-24: production Elo b = −0.04 (−0.16, +0.08), never reliably above zero in any segment; the feature ensemble's gain over a correctly de-vigged Pinnacle close is +0.0001 (−0.0009, +0.0011) | Previously partly. | Measured with research models, not the production V5 probability. Every result is below. No reliable b > 0 against Pinnacle; the production-probability version is **gap 2**. |
+| **Pinnacle close efficiency** (calibration, favourite-longshot bias by tour/tier, surface, price, time before start) | Done 2026-10-24 | `docs/experiments/2026-10-24-gate1-gaps.md`. Pinnacle's close beats its open by 0.0055 log loss; almost nothing arrives after t-24h. With the measured de-vig (λ 1.5) the close is near-calibrated (slope 1.06; multiplicative 1.15). The bias is strongest in Challenger and WTA125. Backing favourites does not pay at real prices. Long shots are overpriced at every soft book. |
+| **Does the leak-free model add information beyond the market** (`logit p = a·logit p_mkt + b·logit p_model`, b by segment) | Done 2026-10-24 | Production-parameter Elo: b = −0.04 (−0.16, +0.08), never reliably above zero in any segment. Feature ensemble vs a correctly de-vigged Pinnacle close: +0.0001 (−0.0009, +0.0011). |
 | **Open-to-close gap** (how much the market learns, and when) | Done | The close absorbs about 15% of the model's disagreement with the open: +1.0 point toward the model, +1.6 where the model differs by 5+ points. DraftKings opens a median 2 hours before Pinnacle. |
 
 The model-versus-market results behind the second row:
-- **Against soft books:** the model beats the soft-book consensus close by +0.0013, positive in
-  every year 2017-25.
-- **Against Pinnacle:** in 2026 at the close the gain is +0.0009, with a range from −0.0002 to
-  +0.0020. On top of Pinnacle's open it is not significant.
+- **Against soft books:** the model beats the soft-book consensus close by +0.0007 with a
+  calibrated de-vig (+0.0013 with the multiplicative one; see §2b).
+- **Against Pinnacle:** in 2026 at the close the gain is +0.0001 (−0.0009, +0.0011) with the
+  calibrated de-vig (+0.0009 with the multiplicative one). On top of Pinnacle's open it is not
+  significant.
 - **Segment searches found nothing robust.** About 2,800 cells were searched per base, then
   pre-registered tests run on intransitivity and the Bet365 underdog band.
 - **Leak found and fixed:** the research feature table chose an event's home country from
@@ -44,7 +45,7 @@ is ordered by evidence and by how the gate would treat each.
 |---|---|---|---|
 | C1 | **Early decisions: model vs the line standing at decision time.** Pinnacle open, or the execution-book opener when Pinnacle is not yet up. | The model moves the close toward itself (about 15% of its disagreement). On DraftKings' opener (timing-safe, ensemble, EV > 5%): closing-line value vs Pinnacle's close +2.3% (1.3, 3.4), n 633. **Audit (`docs/experiments/2026-10-23-data-audit.md`):** 82% of that comes from the 5% of bets where DraftKings' opener is far from the market. With the gap capped at 0.10 it is +1.0% (0.3, 1.7). It fades: Jul +0.6%, Aug +0.4%. A blind replication with an Elo-based model finds negative closing-line value. DraftKings prices in our data stop on 2026-08-09. **DraftKings is not on the execution list (CLAUDE.md: Bet365, BetRivers, Kalshi, Polymarket, Novig)**, and from September the collector requests Pinnacle, Bet365 and BetRivers instead. At BetRivers' opener the same rule has negative closing-line value; Bet365 openers are thin in our data. | Not executable as it stands. Kept only as a Bet365/BetRivers-opener shadow (below); DraftKings only if you add it as an execution book. |
 | C2 | **Challenger main draw and qualifying** (the roadmap's own example) | The model's largest gain over the soft-book consensus is here (+0.0018 in 2022-25 among matches with no prior meeting). Pinnacle's coverage of Challengers is thinner. | Gate 2 (log loss vs Pinnacle close) |
-| C3 | **All tours, Pinnacle close** (the control segment) | +0.0009 (ns) on 2026 | Gate 2 |
+| C3 | **All tours, Pinnacle close** (the control segment) | +0.0001 (ns) on 2026 with the calibrated de-vig | Gate 2 |
 | C4 | **Post-toss game handicaps** | The server shift is real (slope 0.84 totals, 1.22 margin). Pinnacle reprices only about 23% of the handicap shift. Model value about +3% on about 20% of fixtures. | Needs a live first-server feed; spread markets are out of the roadmap's gates (§6), so research only |
 | C5 | **Bet365 prices that later move** (moneyline openers, handicap openers) | Another session's study: +5.1% / +10.8% on Bet365 openers, but only on openers Bet365 later corrected (openers that stood: −2.7% / −4.4%). Handicap openers +7.7% with closing-line value −4 to −5%. | Needs timestamped live Bet365 quotes; an upper bound until then |
 
