@@ -23,6 +23,8 @@ import pandas as pd
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import run_market_models as rm  # noqa: E402
+sys.path.insert(0, rm.ROOT)
+from v5_devig import book_lam, devig  # noqa: E402
 
 SCRATCH = rm.SCRATCH
 EXEC = ["betrivers", "draftkings", "bet365"]
@@ -73,8 +75,22 @@ def main():
             P = rm.predict_all(M, Xs, m[ok], Xs.group.to_numpy())
             y = Xs.y.to_numpy(float)
             pin_same, pin_close = Xs[f"p_pinnacle_{base}"].to_numpy(), Xs.p_pinnacle_close.to_numpy()
+            # Pinnacle de-vigged at its measured lam (v5_devig.BOOK_LAM, 1.5), the calibrated benchmark;
+            # the multiplicative split above loads too much margin on favourites.
+            def pin_lam(cp):
+                oa, ob = Xs[f"pinnacle_{cp}_A"].to_numpy(float), Xs[f"pinnacle_{cp}_B"].to_numpy(float)
+                good = np.isfinite(oa) & np.isfinite(ob) & (oa > 1) & (ob > 1)
+                out = np.full(len(oa), np.nan)
+                out[good] = [devig([x, z], book_lam("pinnacle"))[0] for x, z in zip(oa[good], ob[good])]
+                return out
+            pin_same_lam, pin_close_lam = pin_lam(base), pin_lam("close")
+            okl = np.isfinite(pin_same_lam) & np.isfinite(pin_close_lam)
             cell = {"n": int(ok.sum()), "logloss": {"pinnacle_same_time": round(float(rm.ll(y, pin_same).mean()), 5),
-                                                    "pinnacle_close": round(float(rm.ll(y, pin_close).mean()), 5)}}
+                                                    "pinnacle_close": round(float(rm.ll(y, pin_close).mean()), 5)},
+                    "n_lam": int(okl.sum()),
+                    "pinnacle_same_time_lam15": round(float(rm.ll(y[okl], pin_same_lam[okl]).mean()), 5)}
+            for mdl in rm.MODELS:
+                cell[f"gain_vs_pinnacle_lam15_same_time|{mdl}"] = rm.boot_mean(rm.ll(y[okl], pin_same_lam[okl]) - rm.ll(y[okl], P[mdl].to_numpy()[okl]))
             for mdl in ["mkt"] + rm.MODELS:
                 cell["logloss"][mdl] = round(float(rm.ll(y, P[mdl].to_numpy()).mean()), 5)
                 cell[f"gain_vs_pinnacle_same_time|{mdl}"] = rm.boot_mean(rm.ll(y, pin_same) - rm.ll(y, P[mdl].to_numpy()))

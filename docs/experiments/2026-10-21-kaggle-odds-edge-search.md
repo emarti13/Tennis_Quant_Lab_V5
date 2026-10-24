@@ -31,6 +31,11 @@ statement that schedule/context, including home country, is irreplaceable; that 
 re-run on the fixed table. Also noted, not changed: two global constants of the games-luck
 feature are fitted on all years (negligible).
 
+**Correction 2026-10-24** (`2026-10-24-gate1-gaps.md`): the gains below use multiplicatively
+de-vigged benchmarks. Against a calibrated consensus (λ 1.5 fitted on 2014-16), the ensemble's
+2017-25 gain is +0.0007 (0.0003, 0.0011), not +0.0013. Against Pinnacle's calibrated 2026 close
+it is +0.0001, not significant.
+
 ## Step 2: models on top of the market, rolling yearly tests (2017-2025, 72,979 matches)
 Train 2014..Y-2, early stopping on Y-1, test Y. Gains are log loss, market minus model
 (positive = model better), with 95% match-resampled ranges.

@@ -21,8 +21,8 @@ It also draws on `research_tests/README.md` on the research branches
 
 | Roadmap item | Status | Finding |
 |---|---|---|
-| **Pinnacle close efficiency** (calibration, favourite-longshot bias by tour/tier, surface, price, time before start) | Partly | Pinnacle's close beats its open by 0.0055 log loss, and almost nothing arrives after t-24h. Long shots are overpriced at every soft book (ITF worst). No calibration table by segment *for Pinnacle* has been written yet (**gap 1**). |
-| **Does the leak-free model add information beyond the market** (`logit p = a·logit p_mkt + b·logit p_model`, b by segment) | Partly | Measured with research models, not the production V5 probability. Every result is below. No reliable b > 0 against Pinnacle; the production-probability version is **gap 2**. |
+| **Pinnacle close efficiency** (calibration, favourite-longshot bias by tour/tier, surface, price, time before start) | Done 2026-10-24 (`docs/experiments/2026-10-24-gate1-gaps.md`): near-calibrated with the measured de-vig (slope 1.06); bias strongest in Challenger and WTA125; favourites do not pay at real prices; the market learns by t-24h | Previously partly. | Pinnacle's close beats its open by 0.0055 log loss, and almost nothing arrives after t-24h. Long shots are overpriced at every soft book (ITF worst). No calibration table by segment *for Pinnacle* has been written yet (**gap 1**). |
+| **Does the leak-free model add information beyond the market** (`logit p = a·logit p_mkt + b·logit p_model`, b by segment) | Done 2026-10-24: production Elo b = −0.04 (−0.16, +0.08), never reliably above zero in any segment; the feature ensemble's gain over a correctly de-vigged Pinnacle close is +0.0001 (−0.0009, +0.0011) | Previously partly. | Measured with research models, not the production V5 probability. Every result is below. No reliable b > 0 against Pinnacle; the production-probability version is **gap 2**. |
 | **Open-to-close gap** (how much the market learns, and when) | Done | The close absorbs about 15% of the model's disagreement with the open: +1.0 point toward the model, +1.6 where the model differs by 5+ points. DraftKings opens a median 2 hours before Pinnacle. |
 
 The model-versus-market results behind the second row:
@@ -58,9 +58,18 @@ Closed (not candidates):
 - Kalshi in-play taker rules;
 - betting at the 2026 close.
 
+## 2b. Correction (2026-10-24)
+The +0.0013 and +0.0009 model gains above used multiplicatively de-vigged prices, which make
+the market look about 0.001 worse than it is. Against a calibrated benchmark they are +0.0007
+(soft-book consensus) and +0.0001 (Pinnacle close, not significant). No model beats Pinnacle's
+close. Under the roadmap's rule, Phase 2 should focus on the segments with the largest
+open-to-close movement. The market learns mostly before t-24h, so that means early decisions
+(C1); the lower tiers (C2) have the strongest remaining bias.
+
 ## 3. Phase 2 metrics (fixed here, before Phase 2 starts)
 - **Primary (Gate 2):** per-match log loss of the frozen engine against the no-vig Pinnacle
-  close.
+  close, de-vigged with `v5_devig` at Pinnacle's measured λ (1.5 as of 2026-10-16), not
+  multiplicatively.
   - Run in segments C2 and C3, plus C1's Pinnacle-open variant (engine vs Pinnacle's open) as a
     secondary.
   - Match-resampled bootstrap, 2,000 draws.
@@ -85,9 +94,11 @@ Closed (not candidates):
   (`v5_market_results.py`).
 
 ## 4. What must be done before Gate 1 can be approved
-1. **Gap 1:** a Pinnacle calibration table by tour/tier, surface and price band for 2026
+Gaps 1 and 2 were done on 2026-10-24 (see the table in §1). Remaining:
+
+1. ~~**Gap 1:**~~ a Pinnacle calibration table by tour/tier, surface and price band for 2026
    pre-seal fixtures (OddsPapi).
-2. **Gap 2:** fit `logit p = a·logit p_Pinnacle + b·logit p_V5` with the production V5
+2. ~~**Gap 2:**~~ fit `logit p = a·logit p_Pinnacle + b·logit p_V5` with the production V5
    probability, by segment.
 3. The user approves the segment list and the metrics above, possibly amended. From then on
    they are fixed.

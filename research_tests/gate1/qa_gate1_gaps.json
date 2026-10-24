@@ -1,0 +1,44 @@
+[
+ {
+  "check": "fixtures before the seal with a non-void winner",
+  "value": 10716,
+  "lo": null,
+  "hi": null,
+  "ok": true
+ },
+ {
+  "check": "share with a Pinnacle close",
+  "value": 0.897816,
+  "lo": 0.8,
+  "hi": 1.0,
+  "ok": true
+ },
+ {
+  "check": "player1 win share",
+  "value": 0.511478,
+  "lo": 0.45,
+  "hi": 0.56,
+  "ok": true
+ },
+ {
+  "check": "Pinnacle close log loss (all)",
+  "value": 0.582472,
+  "lo": 0.55,
+  "hi": 0.63,
+  "ok": true
+ },
+ {
+  "check": "share with an Elo probability",
+  "value": 0.982083,
+  "lo": 0.9,
+  "hi": 1.0,
+  "ok": true
+ },
+ {
+  "check": "share joined to the match table (surface, stage)",
+  "value": 0.739082,
+  "lo": 0.5,
+  "hi": 0.95,
+  "ok": true
+ }
+]
