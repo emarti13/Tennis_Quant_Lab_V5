@@ -1,21 +1,21 @@
 {
-  "generated_utc": "2026-10-24T10:30:24+00:00",
-  "as_of": "2026-10-24",
+  "generated_utc": "2026-10-25T10:57:28+00:00",
+  "as_of": "2026-10-25",
   "season": 2026,
   "schedule_years": [
     2026
   ],
   "tournament_mappings": {
-    "confirmed": 610,
-    "auto": 80,
+    "confirmed": 614,
+    "auto": 83,
     "user": 14,
-    "rejected": 2,
-    "review": 1
+    "review": 4,
+    "rejected": 2
   },
   "oddspapi_players": {
     "confirmed": 1046,
-    "no_history": 834,
-    "auto": 610,
+    "no_history": 856,
+    "auto": 613,
     "placeholder": 30,
     "user": 15,
     "rejected": 5,
@@ -23,8 +23,35 @@
   },
   "flags": [
     {
+      "flag": "UPCOMING_UNMATCHED",
+      "detail": "WTA 125K Queretaro, Mexico Women Singles from 2026-10-25: unmatched",
+      "candidates": ""
+    },
+    {
+      "flag": "UPCOMING_UNMATCHED",
+      "detail": "WTA 125K Curitiba, Brazil Women Singles from 2026-10-25: unmatched",
+      "candidates": ""
+    },
+    {
+      "flag": "UPCOMING_UNMATCHED",
+      "detail": "WTA 125K Courmayeur, Italy Women Singles from 2026-10-25: unmatched",
+      "candidates": ""
+    },
+    {
       "flag": "REVIEW_OPEN",
-      "detail": "tournament tennismylife 2026-7742@2026-10-19 Del Monte Lisboa Belém Open: unmatched; candidates: Lisbon (Lisbon, 2026-10-19) | Cali (Cali, 2026-10-19) | Fort Worth (Fort Worth, 2026-10-19) | Guangzhou (Nansha) (Guangzhou, 2026-10-19) | Florence (Florence, 2026-10-19) | suggested by results: CHALLENGER|2026-10-19|lisbon|lisbon (26 shared matches)"
+      "detail": "tournament oddspapi 48154@2026-10-25 WTA 125K Queretaro, Mexico Women Singles: unmatched"
+    },
+    {
+      "flag": "REVIEW_OPEN",
+      "detail": "tournament oddspapi 52454@2026-10-25 WTA 125K Curitiba, Brazil Women Singles: unmatched"
+    },
+    {
+      "flag": "REVIEW_OPEN",
+      "detail": "tournament oddspapi 52460@2026-10-25 WTA 125K Courmayeur, Italy Women Singles: unmatched"
+    },
+    {
+      "flag": "REVIEW_OPEN",
+      "detail": "tournament tennismylife 2026-7742@2026-10-19 Del Monte Lisboa Belém Open: unmatched; candidates: Lisbon (Lisbon, 2026-10-19) | Cali (Cali, 2026-10-19) | Fort Worth (Fort Worth, 2026-10-19) | Guangzhou (Nansha) (Guangzhou, 2026-10-19) | Florence (Florence, 2026-10-19) | suggested by results: CHALLENGER|2026-10-19|lisbon|lisbon (28 shared matches)"
     },
     {
       "flag": "REVIEW_OPEN",

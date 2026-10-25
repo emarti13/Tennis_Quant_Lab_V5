@@ -1,15 +1,15 @@
 {
-  "started_utc": "2026-10-24T10:29:45.907083+00:00",
+  "started_utc": "2026-10-25T10:57:02.373794+00:00",
   "year": 2026,
   "status": "SUCCESS",
-  "last_successful_utc": "2026-10-24T10:30:23.727118+00:00",
+  "last_successful_utc": "2026-10-25T10:57:27.331381+00:00",
   "files": {
     "2026.csv": {
       "source_name": "2026.csv",
       "prior_rows": null,
-      "size_bytes": 546269,
-      "sha256": "ab634c569f222fbbfcfd99e67542c507c7a5dcce3a7f5969e94158d585ea7adb",
-      "rows": 2576,
+      "size_bytes": 546316,
+      "sha256": "bfae58a6268179b6088375fa1e6f57f0c921e4652b0727f35f9e0992e78e018c",
+      "rows": 2575,
       "columns": 50,
       "missing_required_columns": [],
       "warnings": [],
@@ -18,9 +18,9 @@
     "2026_atp_quali.csv": {
       "source_name": "atp_quali/2026_atp_quali.csv",
       "prior_rows": null,
-      "size_bytes": 252257,
-      "sha256": "e91f9f96762b5a9a5e496382cf163fdbb678507fc676c5c3a7d824b352fa2936",
-      "rows": 1225,
+      "size_bytes": 254973,
+      "sha256": "bf6b3d43dee5fc47835b6ddfcdf4f50fade2edd587100d658db76b50cebf05ce",
+      "rows": 1241,
       "columns": 50,
       "missing_required_columns": [],
       "warnings": [],
@@ -40,8 +40,8 @@
     "2026_wta.csv": {
       "source_name": "2026_wta.csv",
       "prior_rows": null,
-      "size_bytes": 491269,
-      "sha256": "f1a5a64cbda79bc8058e78db5ea0c77ac037874c3adad367c378d49b446bc354",
+      "size_bytes": 491689,
+      "sha256": "bde7634dac79424f9c1fa5eed1bb83fea21c5f891efba2251f84a79d2dc19337",
       "rows": 2375,
       "columns": 50,
       "missing_required_columns": [],
@@ -51,9 +51,9 @@
     "ongoing_tourneys.csv": {
       "source_name": "ongoing_tourneys.csv",
       "prior_rows": null,
-      "size_bytes": 15154,
-      "sha256": "f75548053a19ec2271cb10c9da15b70915e0b562c8c6e1fc6b59ea95b264095b",
-      "rows": 72,
+      "size_bytes": 16401,
+      "sha256": "c8cc0c7eb855674a75bb0122c5935ead03b668e92c65d475129fbd9866aef6f2",
+      "rows": 78,
       "columns": 50,
       "missing_required_columns": [],
       "warnings": [],
@@ -62,9 +62,9 @@
     "challenger_ongoing_tourneys.csv": {
       "source_name": "challenger_ongoing_tourneys.csv",
       "prior_rows": null,
-      "size_bytes": 31407,
-      "sha256": "3676efa8469cb07ac3cd25d9935c367914ab3fdbed58be3d6a654fb4c685155b",
-      "rows": 140,
+      "size_bytes": 33855,
+      "sha256": "4e34c6941317031dfafb4cd58a333f4d2d7d75a71bb369345bf5d59538f2e367",
+      "rows": 151,
       "columns": 50,
       "missing_required_columns": [],
       "warnings": [],
@@ -73,9 +73,9 @@
     "wta_ongoing_tourneys.csv": {
       "source_name": "wta_ongoing_tourneys.csv",
       "prior_rows": null,
-      "size_bytes": 11684,
-      "sha256": "97b794cfdf0389e5bc00cca9ddf228b856681d654020f61e59a93b3005e3b494",
-      "rows": 55,
+      "size_bytes": 12086,
+      "sha256": "d59e06314a227a887b7d753d9a9a242f4044f609ad540ad799756c3650f2790a",
+      "rows": 57,
       "columns": 50,
       "missing_required_columns": [],
       "warnings": [],
@@ -84,20 +84,20 @@
   },
   "build": {
     "returncode": 0,
-    "stdout_tail": "==========================================================\nTENNIS QUANT LAB V5 \u2014 CALIBRATED STATE BUILD\n==========================================================\n\n[1/3] Loading MEN source files...\n      Reading ATP.csv (11.4 MB)...\n      ATP.csv: 45,616 rows loaded in 0.1s\n      Reading ATPQualifiers.csv (5.7 MB)...\n      ATPQualifiers.csv: 23,459 rows loaded in 0.0s\n      Reading Challenger.csv (17.6 MB)...\n      Challenger.csv: 73,376 rows loaded in 0.1s\n      Reading 2026.csv (0.5 MB)...\n      2026.csv: 2,576 rows loaded in 0.0s\n      Reading 2026_atp_quali.csv (0.2 MB)...\n      2026_atp_quali.csv: 1,225 rows loaded in 0.0s\n      Reading 2026_challenger.csv (1.3 MB)...\n      2026_challenger.csv: 6,447 rows loaded in 0.0s\n      Reading ongoing_tourneys.csv (0.0 MB)...\n      ongoing_tourneys.csv: 72 rows loaded in 0.0s\n      Reading challenger_ongoing_tourneys.csv (0.0 MB)...\n      challenger_ongoing_tourneys.csv: 140 rows loaded in 0.0s\n      De-duplication: 152,911 -> 152,908\n      MEN combined rows: 152,908\n      Building MEN chronological states from 152,908 matches...\n        10,000/152,908 matches (7%) | 6,195 matches/s | ~0.4 min remaining\n        20,000/152,908 matches (13%) | 6,652 matches/s | ~0.3 min remaining\n        30,000/152,908 matches (20%) | 6,824 matches/s | ~0.3 min remaining\n        40,000/152,908 matches (26%) | 6,915 matches/s | ~0.3 min remaining\n        50,000/152,908 matches (33%) | 6,954 matches/s | ~0.2 min remaining\n        60,000/152,908 matches (39%) | 6,975 matches/s | ~0.2 min remaining\n        70,000/152,908 matches (46%) | 6,982 matches/s | ~0.2 min remaining\n        80,000/152,908 matches (52%) | 6,996 matches/s | ~0.2 min remaining\n        90,000/152,908 matches (59%) | 7,008 matches/s | ~0.1 min remaining\n        100,000/152,908 matches (65%) | 7,011 matches/s | ~0.1 min remaining\n        110,000/152,908 matches (72%) | 6,998 matches/s | ~0.1 min remaining\n        120,000/152,908 matches (78%) | 7,009 matches/s | ~0.1 min remaining\n        130,000/152,908 matches (85%) | 7,020 matches/s | ~0.1 min remaining\n        140,000/152,908 matches (92%) | 6,989 matches/s | ~0.0 min remaining\n        150,000/152,908 matches (98%) | 6,937 matches/s | ~0.0 min remaining\n        152,908/152,908 matches (100%) | 6,925 matches/s | ~0.0 min remaining\n      MEN match processing complete.\n      Writing current states for 4,372 MEN players...\n\n[2/3] Loading WTA source files...\n      Reading WTA.csv (10.1 MB)...\n      WTA.csv: 42,394 rows loaded in 0.1s\n      Reading 2026_wta.csv (0.5 MB)...\n      2026_wta.csv: 2,375 rows loaded in 0.0s\n      Reading wta_ongoing_tourneys.csv (0.0 MB)...\n      wta_ongoing_tourneys.csv: 55 rows loaded in 0.0s\n      De-duplication: 44,824 -> 44,824\n      WTA combined rows: 44,824\n      Building WTA chronological states from 44,824 matches...\n        10,000/44,824 matches (22%) | 7,175 matches/s | ~0.1 min remaining\n        20,000/44,824 matches (45%) | 7,280 matches/s | ~0.1 min remaining\n        30,000/44,824 matches (67%) | 7,243 matches/s | ~0.0 min remaining\n        40,000/44,824 matches (89%) | 7,238 matches/s | ~0.0 min remaining\n        44,824/44,824 matches (100%) | 7,156 matches/s | ~0.0 min remaining\n      WTA match processing complete.\n      Writing current states for 1,695 WTA players...\n\n[3/3] Saving build summary...\n\n[3/3] COMPLETE\nCurrent V5 rating states and walk-forward files written.\n",
+    "stdout_tail": "==========================================================\nTENNIS QUANT LAB V5 \u2014 CALIBRATED STATE BUILD\n==========================================================\n\n[1/3] Loading MEN source files...\n      Reading ATP.csv (11.4 MB)...\n      ATP.csv: 45,616 rows loaded in 0.1s\n      Reading ATPQualifiers.csv (5.7 MB)...\n      ATPQualifiers.csv: 23,459 rows loaded in 0.0s\n      Reading Challenger.csv (17.6 MB)...\n      Challenger.csv: 73,376 rows loaded in 0.1s\n      Reading 2026.csv (0.5 MB)...\n      2026.csv: 2,575 rows loaded in 0.0s\n      Reading 2026_atp_quali.csv (0.2 MB)...\n      2026_atp_quali.csv: 1,241 rows loaded in 0.0s\n      Reading 2026_challenger.csv (1.3 MB)...\n      2026_challenger.csv: 6,447 rows loaded in 0.0s\n      Reading ongoing_tourneys.csv (0.0 MB)...\n      ongoing_tourneys.csv: 78 rows loaded in 0.0s\n      Reading challenger_ongoing_tourneys.csv (0.0 MB)...\n      challenger_ongoing_tourneys.csv: 151 rows loaded in 0.0s\n      De-duplication: 152,943 -> 152,940\n      MEN combined rows: 152,940\n      Building MEN chronological states from 152,940 matches...\n        10,000/152,940 matches (7%) | 10,848 matches/s | ~0.2 min remaining\n        20,000/152,940 matches (13%) | 11,960 matches/s | ~0.2 min remaining\n        30,000/152,940 matches (20%) | 12,368 matches/s | ~0.2 min remaining\n        40,000/152,940 matches (26%) | 12,572 matches/s | ~0.1 min remaining\n        50,000/152,940 matches (33%) | 12,710 matches/s | ~0.1 min remaining\n        60,000/152,940 matches (39%) | 12,812 matches/s | ~0.1 min remaining\n        70,000/152,940 matches (46%) | 12,855 matches/s | ~0.1 min remaining\n        80,000/152,940 matches (52%) | 12,901 matches/s | ~0.1 min remaining\n        90,000/152,940 matches (59%) | 12,946 matches/s | ~0.1 min remaining\n        100,000/152,940 matches (65%) | 12,982 matches/s | ~0.1 min remaining\n        110,000/152,940 matches (72%) | 13,004 matches/s | ~0.1 min remaining\n        120,000/152,940 matches (78%) | 13,020 matches/s | ~0.0 min remaining\n        130,000/152,940 matches (85%) | 13,031 matches/s | ~0.0 min remaining\n        140,000/152,940 matches (92%) | 12,955 matches/s | ~0.0 min remaining\n        150,000/152,940 matches (98%) | 12,856 matches/s | ~0.0 min remaining\n        152,940/152,940 matches (100%) | 12,830 matches/s | ~0.0 min remaining\n      MEN match processing complete.\n      Writing current states for 4,371 MEN players...\n\n[2/3] Loading WTA source files...\n      Reading WTA.csv (10.1 MB)...\n      WTA.csv: 42,394 rows loaded in 0.1s\n      Reading 2026_wta.csv (0.5 MB)...\n      2026_wta.csv: 2,375 rows loaded in 0.0s\n      Reading wta_ongoing_tourneys.csv (0.0 MB)...\n      wta_ongoing_tourneys.csv: 57 rows loaded in 0.0s\n      De-duplication: 44,826 -> 44,826\n      WTA combined rows: 44,826\n      Building WTA chronological states from 44,826 matches...\n        10,000/44,826 matches (22%) | 13,000 matches/s | ~0.0 min remaining\n        20,000/44,826 matches (45%) | 13,190 matches/s | ~0.0 min remaining\n        30,000/44,826 matches (67%) | 13,044 matches/s | ~0.0 min remaining\n        40,000/44,826 matches (89%) | 13,012 matches/s | ~0.0 min remaining\n        44,826/44,826 matches (100%) | 12,855 matches/s | ~0.0 min remaining\n      WTA match processing complete.\n      Writing current states for 1,695 WTA players...\n\n[3/3] Saving build summary...\n\n[3/3] COMPLETE\nCurrent V5 rating states and walk-forward files written.\n",
     "stderr_tail": ""
   },
   "outputs": {
     "v5_men_ratings.csv": {
-      "rows": 13116,
-      "size_bytes": 4042533,
-      "sha256": "bc525440635e3a896a28145fbba13a80a0e79d2714317f52dc2c6e565b597e3a"
+      "rows": 13113,
+      "size_bytes": 4040509,
+      "sha256": "3bc949ca7585ff2147605c7dfbc1493e688f1e3fc36caa365c182c4892c7e8ae"
     },
     "v5_wta_ratings.csv": {
       "rows": 5085,
-      "size_bytes": 1488317,
-      "sha256": "033e9ba8dc9ccec621dcfb2bc26515ce65dbe3d6695dd87d1dbcbfd4b4bfaa0f"
+      "size_bytes": 1488232,
+      "sha256": "a5bb7c33855f2ad08b2c14ae5bd27a54050703047062bd32a93b2b0277e563aa"
     }
   },
-  "finished_utc": "2026-10-24T10:30:23.727118+00:00"
+  "finished_utc": "2026-10-25T10:57:27.331381+00:00"
 }
