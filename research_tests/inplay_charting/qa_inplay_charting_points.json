@@ -1,0 +1,51 @@
+[
+ {
+  "check": "share of charted matches since 2011 linked to our Elo",
+  "value": 0.908655,
+  "lo": 0.6,
+  "hi": 1.0,
+  "ok": true
+ },
+ {
+  "check": "share of charted matches passing the score-consistency check",
+  "value": 0.989923,
+  "lo": 0.85,
+  "hi": 1.0,
+  "ok": true
+ },
+ {
+  "check": "matches",
+  "value": 7877,
+  "lo": null,
+  "hi": null,
+  "ok": true
+ },
+ {
+  "check": "points",
+  "value": 1213759,
+  "lo": null,
+  "hi": null,
+  "ok": true
+ },
+ {
+  "check": "P1 match win share",
+  "value": 0.526596,
+  "lo": 0.4,
+  "hi": 0.7,
+  "ok": true
+ },
+ {
+  "check": "server wins point share",
+  "value": 0.616575,
+  "lo": 0.55,
+  "hi": 0.68,
+  "ok": true
+ },
+ {
+  "check": "Elo log loss on the linked matches",
+  "value": 0.590072,
+  "lo": 0.5,
+  "hi": 0.68,
+  "ok": true
+ }
+]

@@ -1,0 +1,37 @@
+[
+ {
+  "check": "train matches",
+  "value": 2859,
+  "lo": null,
+  "hi": null,
+  "ok": true
+ },
+ {
+  "check": "test matches",
+  "value": 5018,
+  "lo": null,
+  "hi": null,
+  "ok": true
+ },
+ {
+  "check": "server point-win rate, MEN (train)",
+  "value": 0.643142,
+  "lo": 0.58,
+  "hi": 0.68,
+  "ok": true
+ },
+ {
+  "check": "server point-win rate, WTA (train)",
+  "value": 0.568203,
+  "lo": 0.52,
+  "hi": 0.6,
+  "ok": true
+ },
+ {
+  "check": "V1 at the first point equals Elo (median abs diff)",
+  "value": 0.002485,
+  "lo": 0,
+  "hi": 0.03,
+  "ok": true
+ }
+]

@@ -1,0 +1,96 @@
+{
+ "p_V1_iid_from_elo": {
+  "0.5-0.60": {
+   "points": 148805,
+   "matches": 3288,
+   "predicted": 0.5498,
+   "won": 0.5454,
+   "won_minus_pred": -0.0045,
+   "lo": -0.0158,
+   "hi": 0.0063
+  },
+  "0.6-0.70": {
+   "points": 148336,
+   "matches": 3933,
+   "predicted": 0.65,
+   "won": 0.6451,
+   "won_minus_pred": -0.0049,
+   "lo": -0.0186,
+   "hi": 0.0086
+  },
+  "0.7-0.80": {
+   "points": 146785,
+   "matches": 4505,
+   "predicted": 0.7501,
+   "won": 0.7498,
+   "won_minus_pred": -0.0003,
+   "lo": -0.0155,
+   "hi": 0.0138
+  },
+  "0.8-0.90": {
+   "points": 152707,
+   "matches": 4855,
+   "predicted": 0.8503,
+   "won": 0.858,
+   "won_minus_pred": 0.0077,
+   "lo": -0.0034,
+   "hi": 0.0204
+  },
+  "0.9-0.98": {
+   "points": 129429,
+   "matches": 4848,
+   "predicted": 0.9412,
+   "won": 0.9449,
+   "won_minus_pred": 0.0036,
+   "lo": -0.0053,
+   "hi": 0.012
+  }
+ },
+ "p_V2_updating": {
+  "0.5-0.60": {
+   "points": 135518,
+   "matches": 3489,
+   "predicted": 0.5499,
+   "won": 0.5374,
+   "won_minus_pred": -0.0126,
+   "lo": -0.0214,
+   "hi": -0.0031
+  },
+  "0.6-0.70": {
+   "points": 135368,
+   "matches": 4085,
+   "predicted": 0.6501,
+   "won": 0.643,
+   "won_minus_pred": -0.0071,
+   "lo": -0.0191,
+   "hi": 0.0047
+  },
+  "0.7-0.80": {
+   "points": 138304,
+   "matches": 4578,
+   "predicted": 0.7503,
+   "won": 0.7404,
+   "won_minus_pred": -0.0099,
+   "lo": -0.0233,
+   "hi": 0.004
+  },
+  "0.8-0.90": {
+   "points": 152972,
+   "matches": 4903,
+   "predicted": 0.8511,
+   "won": 0.8399,
+   "won_minus_pred": -0.0112,
+   "lo": -0.0245,
+   "hi": 0.0009
+  },
+  "0.9-0.98": {
+   "points": 144153,
+   "matches": 4922,
+   "predicted": 0.9418,
+   "won": 0.932,
+   "won_minus_pred": -0.0098,
+   "lo": -0.0197,
+   "hi": -0.0015
+  }
+ }
+}
