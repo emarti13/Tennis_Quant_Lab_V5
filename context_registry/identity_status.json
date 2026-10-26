@@ -1,12 +1,12 @@
 {
-  "generated_utc": "2026-10-25T10:57:28+00:00",
-  "as_of": "2026-10-25",
+  "generated_utc": "2026-10-26T12:27:58+00:00",
+  "as_of": "2026-10-26",
   "season": 2026,
   "schedule_years": [
     2026
   ],
   "tournament_mappings": {
-    "confirmed": 614,
+    "confirmed": 618,
     "auto": 83,
     "user": 14,
     "review": 4,
@@ -14,8 +14,8 @@
   },
   "oddspapi_players": {
     "confirmed": 1046,
-    "no_history": 856,
-    "auto": 613,
+    "no_history": 857,
+    "auto": 615,
     "placeholder": 30,
     "user": 15,
     "rejected": 5,
@@ -24,7 +24,7 @@
   "flags": [
     {
       "flag": "UPCOMING_UNMATCHED",
-      "detail": "WTA 125K Queretaro, Mexico Women Singles from 2026-10-25: unmatched",
+      "detail": "WTA 125K Queretaro, Mexico Women Singles from 2026-10-26: unmatched",
       "candidates": ""
     },
     {
@@ -39,10 +39,6 @@
     },
     {
       "flag": "REVIEW_OPEN",
-      "detail": "tournament oddspapi 48154@2026-10-25 WTA 125K Queretaro, Mexico Women Singles: unmatched"
-    },
-    {
-      "flag": "REVIEW_OPEN",
       "detail": "tournament oddspapi 52454@2026-10-25 WTA 125K Curitiba, Brazil Women Singles: unmatched"
     },
     {
@@ -51,7 +47,11 @@
     },
     {
       "flag": "REVIEW_OPEN",
-      "detail": "tournament tennismylife 2026-7742@2026-10-19 Del Monte Lisboa Belém Open: unmatched; candidates: Lisbon (Lisbon, 2026-10-19) | Cali (Cali, 2026-10-19) | Fort Worth (Fort Worth, 2026-10-19) | Guangzhou (Nansha) (Guangzhou, 2026-10-19) | Florence (Florence, 2026-10-19) | suggested by results: CHALLENGER|2026-10-19|lisbon|lisbon (28 shared matches)"
+      "detail": "tournament oddspapi 48154@2026-10-26 WTA 125K Queretaro, Mexico Women Singles: unmatched"
+    },
+    {
+      "flag": "REVIEW_OPEN",
+      "detail": "tournament tennismylife 2026-7742@2026-10-19 Del Monte Lisboa Belém Open: unmatched; candidates: Lisbon (Lisbon, 2026-10-19) | Cali (Cali, 2026-10-19) | Fort Worth (Fort Worth, 2026-10-19) | Guangzhou (Nansha) (Guangzhou, 2026-10-19) | Florence (Florence, 2026-10-19) | suggested by results: CHALLENGER|2026-10-19|lisbon|lisbon (29 shared matches)"
     },
     {
       "flag": "REVIEW_OPEN",
