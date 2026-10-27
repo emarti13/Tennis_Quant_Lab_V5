@@ -1,18 +1,18 @@
 {
-  "normalized_rows": 1448,
-  "fixtures_with_any_market": 70,
+  "normalized_rows": 1378,
+  "fixtures_with_any_market": 67,
   "books": [
     "pinnacle"
   ],
   "coverage_by_book": {
     "pinnacle": {
-      "moneyline": 70,
-      "game_spread": 69,
-      "total_games": 67
+      "moneyline": 67,
+      "game_spread": 67,
+      "total_games": 66
     }
   },
-  "best_price_rows": 1448,
-  "all_book_price_rows": 1448,
+  "best_price_rows": 1378,
+  "all_book_price_rows": 1378,
   "paired_market_integrity": "verified upstream: each market_id had 2 outcomes in uploaded snapshot",
   "integration_status": "READY_FOR_V5_PREDICTION_JOIN"
 }
