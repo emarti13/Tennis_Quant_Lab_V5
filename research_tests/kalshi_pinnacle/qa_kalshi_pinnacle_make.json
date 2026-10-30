@@ -1,0 +1,23 @@
+[
+ {
+  "check": "Kalshi markets in the raw files",
+  "value": 6288,
+  "lo": null,
+  "hi": null,
+  "ok": true
+ },
+ {
+  "check": "sealed Kalshi markets with a Pinnacle path and a trade tape",
+  "value": 708,
+  "lo": null,
+  "hi": null,
+  "ok": true
+ },
+ {
+  "check": "median |Kalshi mid - Pinnacle fair| at checkpoints",
+  "value": 0.005343,
+  "lo": 0.0,
+  "hi": 0.05,
+  "ok": true
+ }
+]

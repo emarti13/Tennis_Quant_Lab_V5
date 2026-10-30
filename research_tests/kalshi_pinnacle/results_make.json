@@ -1,0 +1,37 @@
+{
+ "rules": {
+  "half_widths": [
+   0.03,
+   0.05
+  ],
+  "max_gap": 0.1,
+  "size": 100,
+  "limit": 300,
+  "maker_fee_rate": 0.0175,
+  "min_contracts": 1000
+ },
+ "h=0.03": {
+  "fixtures": 346,
+  "fixtures_with_fills": 49,
+  "contracts": 10160.23,
+  "marked_at_pinnacle_close_usd": 115.77,
+  "cents_per_contract": 1.139,
+  "lo": 0.508,
+  "hi": 1.718,
+  "held_to_result_usd": -123.02,
+  "trades_skipped_cant_price": 11,
+  "pass": true
+ },
+ "h=0.05": {
+  "fixtures": 346,
+  "fixtures_with_fills": 17,
+  "contracts": 3010.84,
+  "marked_at_pinnacle_close_usd": 107.51,
+  "cents_per_contract": 3.571,
+  "lo": 2.586,
+  "hi": 4.507,
+  "held_to_result_usd": -58.02,
+  "trades_skipped_cant_price": 11,
+  "pass": true
+ }
+}

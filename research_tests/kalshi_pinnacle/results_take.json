@@ -1,0 +1,155 @@
+{
+ "rules": {
+  "edge": 0.02,
+  "max_gap": 0.1,
+  "max_spread": 0.05,
+  "min_n": 100
+ },
+ "fixtures": 354,
+ "fixture_dates": [
+  "2026-10-13 21:05:19+00:00",
+  "2026-10-21 06:51:20+00:00"
+ ],
+ "primary": {
+  "clv_vs_pinnacle_close": {
+   "n": 2,
+   "mean": 0.0175,
+   "lo": 0.0118,
+   "hi": 0.0231
+  },
+  "clv_vs_kalshi_close_mid": {
+   "n": 2,
+   "mean": -0.0064,
+   "lo": -0.0149,
+   "hi": 0.0021
+  },
+  "settled_pnl_per_contract": {
+   "n": 2,
+   "mean": 0.1411,
+   "lo": 0.1221,
+   "hi": 0.1601
+  },
+  "mean_ask": 0.85,
+  "mean_ev_at_entry": 0.0222
+ },
+ "pass": false,
+ "by_family": {
+  "CHALLENGER": {
+   "clv_vs_pinnacle_close": {
+    "n": 1,
+    "mean": 0.0231,
+    "lo": 0.0231,
+    "hi": 0.0231
+   },
+   "clv_vs_kalshi_close_mid": {
+    "n": 1,
+    "mean": 0.0021,
+    "lo": 0.0021,
+    "hi": 0.0021
+   },
+   "settled_pnl_per_contract": {
+    "n": 1,
+    "mean": 0.1221,
+    "lo": 0.1221,
+    "hi": 0.1221
+   },
+   "mean_ask": 0.87,
+   "mean_ev_at_entry": 0.0231
+  },
+  "WTA": {
+   "clv_vs_pinnacle_close": {
+    "n": 1,
+    "mean": 0.0118,
+    "lo": 0.0118,
+    "hi": 0.0118
+   },
+   "clv_vs_kalshi_close_mid": {
+    "n": 1,
+    "mean": -0.0149,
+    "lo": -0.0149,
+    "hi": -0.0149
+   },
+   "settled_pnl_per_contract": {
+    "n": 1,
+    "mean": 0.1601,
+    "lo": 0.1601,
+    "hi": 0.1601
+   },
+   "mean_ask": 0.83,
+   "mean_ev_at_entry": 0.0213
+  }
+ },
+ "by_checkpoint": {
+  "t1h": {
+   "clv_vs_pinnacle_close": {
+    "n": 1,
+    "mean": 0.0231,
+    "lo": 0.0231,
+    "hi": 0.0231
+   },
+   "clv_vs_kalshi_close_mid": {
+    "n": 1,
+    "mean": 0.0021,
+    "lo": 0.0021,
+    "hi": 0.0021
+   },
+   "settled_pnl_per_contract": {
+    "n": 1,
+    "mean": 0.1221,
+    "lo": 0.1221,
+    "hi": 0.1221
+   },
+   "mean_ask": 0.87,
+   "mean_ev_at_entry": 0.0231
+  },
+  "t6h": {
+   "clv_vs_pinnacle_close": {
+    "n": 1,
+    "mean": 0.0118,
+    "lo": 0.0118,
+    "hi": 0.0118
+   },
+   "clv_vs_kalshi_close_mid": {
+    "n": 1,
+    "mean": -0.0149,
+    "lo": -0.0149,
+    "hi": -0.0149
+   },
+   "settled_pnl_per_contract": {
+    "n": 1,
+    "mean": 0.1601,
+    "lo": 0.1601,
+    "hi": 0.1601
+   },
+   "mean_ask": 0.83,
+   "mean_ev_at_entry": 0.0213
+  }
+ },
+ "sensitivity": {
+  "0.01": {
+   "clv_vs_pinnacle_close": {
+    "n": 12,
+    "mean": 0.0036,
+    "lo": -0.0054,
+    "hi": 0.0113
+   },
+   "clv_vs_kalshi_close_mid": {
+    "n": 12,
+    "mean": -0.0146,
+    "lo": -0.0221,
+    "hi": -0.0072
+   },
+   "settled_pnl_per_contract": {
+    "n": 12,
+    "mean": -0.0375,
+    "lo": -0.2644,
+    "hi": 0.1413
+   },
+   "mean_ask": 0.7783,
+   "mean_ev_at_entry": 0.0146
+  },
+  "0.03": {
+   "n": 0
+  }
+ }
+}

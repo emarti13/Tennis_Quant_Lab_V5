@@ -1,0 +1,44 @@
+[
+ {
+  "check": "sealed fixtures with Kalshi and Pinnacle",
+  "value": 354,
+  "lo": null,
+  "hi": null,
+  "ok": true
+ },
+ {
+  "check": "share of rows with a Pinnacle t1h fair",
+  "value": 0.951977,
+  "lo": 0.5,
+  "hi": 1.0,
+  "ok": true
+ },
+ {
+  "check": "share of rows with a Kalshi t1h ask",
+  "value": 1.0,
+  "lo": 0.5,
+  "hi": 1.0,
+  "ok": true
+ },
+ {
+  "check": "median |Pinnacle fair - Kalshi mid| at t1h",
+  "value": 0.006098,
+  "lo": 0.0,
+  "hi": 0.05,
+  "ok": true
+ },
+ {
+  "check": "p1 fair + p2 fair at t1h (per fixture, median)",
+  "value": 1.0,
+  "lo": 0.99,
+  "hi": 1.01,
+  "ok": true
+ },
+ {
+  "check": "share of non-void fixtures with a winner",
+  "value": 1.0,
+  "lo": 0.97,
+  "hi": 1.0,
+  "ok": true
+ }
+]
