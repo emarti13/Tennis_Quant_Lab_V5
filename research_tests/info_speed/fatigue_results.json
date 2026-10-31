@@ -1,0 +1,246 @@
+{
+ "manifest": {
+  "run_utc": "2026-10-31T18:17:34.822601+00:00",
+  "command": "python research_tests/info_speed/run_fatigue_shock.py /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/matches_serve.pkl /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/info_speed/fatigue.json",
+  "git_commit": "721d53f17741b132dfa608b64ea4d8cf49021566",
+  "uncommitted_changes": true,
+  "python": "3.13.16",
+  "packages": {
+   "pandas": "3.0.5",
+   "numpy": "2.5.3",
+   "scikit-learn": "1.9.1",
+   "lightgbm": "4.7.0",
+   "scipy": "1.18.1"
+  },
+  "seeds": {
+   "orientation": 20261031,
+   "bootstrap": 20261031
+  },
+  "inputs": {
+   "matches": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/matches_serve.pkl",
+    "sha256": "97b1cf37a7c4360ee270c8177690f38f3513c6c68473e3f0bf3bd6709350722c"
+   },
+   "joined": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl",
+    "sha256": "1888802164c3ff67906c3f818ca0762650bf8ba450f2d7ba03c318dbf31598bf"
+   }
+  }
+ },
+ "eligible_matches": 40994,
+ "results": {
+  "PRIMARY gap>=45, Betfair close: residual (tired won - close prob) [mean, lo, hi, n]": [
+   -0.006,
+   -0.0142,
+   0.002,
+   12755
+  ],
+  "PRIMARY money: back the fresh player at Betfair close, 2% commission": {
+   "n": 12755,
+   "roi": -0.0274,
+   "range": [
+    -0.0446,
+    -0.0098
+   ]
+  },
+  "gap>=30, Betfair close residual": [
+   -0.0054,
+   -0.0121,
+   0.001,
+   19571
+  ],
+  "gap>=60, Betfair close residual": [
+   -0.0139,
+   -0.0244,
+   -0.0041,
+   7760
+  ],
+  "gap>=90, Betfair close residual": [
+   -0.0059,
+   -0.0246,
+   0.0146,
+   2025
+  ],
+  "gap>=45, ATP main, Betfair close residual": [
+   -0.0044,
+   -0.0182,
+   0.0098,
+   3826
+  ],
+  "gap>=45, ATP main, back fresh at Betfair close": {
+   "n": 3826,
+   "roi": -0.026,
+   "range": [
+    -0.0591,
+    0.0066
+   ]
+  },
+  "gap>=45, WTA main, Betfair close residual": [
+   -0.0079,
+   -0.024,
+   0.0084,
+   2815
+  ],
+  "gap>=45, WTA main, back fresh at Betfair close": {
+   "n": 2815,
+   "roi": -0.0151,
+   "range": [
+    -0.052,
+    0.0219
+   ]
+  },
+  "gap>=45, Challenger, Betfair close residual": [
+   -0.0062,
+   -0.0182,
+   0.0057,
+   6114
+  ],
+  "gap>=45, Challenger, back fresh at Betfair close": {
+   "n": 6114,
+   "roi": -0.034,
+   "range": [
+    -0.0591,
+    -0.0086
+   ]
+  },
+  "gap>=45, best of 5, Betfair close residual": [
+   -0.0116,
+   -0.0346,
+   0.0124,
+   1185
+  ],
+  "gap>=45, b365_open residual": [
+   -0.0215,
+   -0.0296,
+   -0.0137,
+   13030
+  ],
+  "gap>=45, back fresh at b365_open": {
+   "n": 13030,
+   "roi": -0.0252,
+   "range": [
+    -0.0411,
+    -0.0076
+   ]
+  },
+  "gap>=45, b365_close residual": [
+   -0.0089,
+   -0.017,
+   -0.0011,
+   13019
+  ],
+  "gap>=45, back fresh at b365_close": {
+   "n": 13019,
+   "roi": -0.0472,
+   "range": [
+    -0.0634,
+    -0.0304
+   ]
+  },
+  "gap>=45, best_close residual": [
+   -0.0059,
+   -0.0137,
+   0.0018,
+   13387
+  ],
+  "gap>=45, back fresh at best_close": {
+   "n": 13387,
+   "roi": 0.0061,
+   "range": [
+    -0.0124,
+    0.024
+   ]
+  },
+  "gap>=45, bet365 open->close move of the tired player's prob (pts) [mean, lo, hi]": [
+   -1.255,
+   -1.322,
+   -1.187
+  ],
+  "control gap<10 (similar previous match), Betfair close residual": [
+   -0.0056,
+   -0.0169,
+   0.005,
+   6898
+  ],
+  "by gap, Betfair close": {
+   "[0, 15)": [
+    -0.0065,
+    -0.0151,
+    0.0025,
+    10423
+   ],
+   "[15, 30)": [
+    -0.0005,
+    -0.0103,
+    0.009,
+    8985
+   ],
+   "[30, 45)": [
+    -0.0041,
+    -0.0147,
+    0.0075,
+    6816
+   ],
+   "[45, 60)": [
+    0.0063,
+    -0.0072,
+    0.0185,
+    4995
+   ],
+   "[60, 90)": [
+    -0.0168,
+    -0.0282,
+    -0.005,
+    5735
+   ],
+   "[90, 600)": [
+    -0.0059,
+    -0.0246,
+    0.0146,
+    2025
+   ]
+  }
+ },
+ "checks": {
+  "swap_source": {
+   "pass": true,
+   "columns_differing": [],
+   "labels_inverted": true,
+   "rows": 26655
+  },
+  "time_travel": {
+   "pass": true,
+   "previous_not_earlier": 0,
+   "duplicate_player_rounds": 0,
+   "rule": "the previous match is from an earlier round of the same event (merge on tid)"
+  },
+  "planted_shift": {
+   "pass": true,
+   "planted": -0.03,
+   "found": [
+    -0.0339,
+    -0.0419,
+    -0.026
+   ]
+  },
+  "market_null": {
+   "pass": true,
+   "found": [
+    0.003,
+    -0.0049,
+    0.0111
+   ]
+  },
+  "known_answers": {
+   "pass": true,
+   "market_log_loss": 0.59967,
+   "expected_range": [
+    0.56,
+    0.66
+   ],
+   "A_win_share": 0.502
+  }
+ },
+ "checks_passed": true,
+ "alarms": []
+}
