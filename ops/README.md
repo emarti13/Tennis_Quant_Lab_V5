@@ -15,7 +15,7 @@ No API keys are used. Everything reads Kalshi's public market data. Nothing plac
 | Unit | What | When |
 |---|---|---|
 | `tql-paper.service` | `scripts/paper_trade_kalshi.py poll`: paper quotes on Challenger matches, fills from real trades | always (restarts daily) |
-| `tql-live.service` | `scripts/log_kalshi_live.py`: score + both players' bid/ask every 30 s while a match is live | always (restarts daily) |
+| `tql-live.service` | `scripts/log_kalshi_live.py`: score + both players' bid/ask every 10 s while a match is live | always (restarts daily) |
 | `tql-daily.timer` → `ops/daily.sh` | settle paper fills; gzip yesterday's live log; commit; merge new code from `CODE_BRANCH`; run the tests (if they fail, roll back to the old code); write `market_history/vm_status.md`; push | 07:17 UTC daily |
 
 ## One-time setup (about 30 minutes, works from a phone)
@@ -63,7 +63,7 @@ bash ops/bootstrap.sh
 bash ops/check.sh
 ```
 
-All three units should read `active`. The live logger prints a line every 30 s, for example `{"rows": 4, "live_matches": 4, ...}`. Run the daily job once by hand to confirm the push works:
+All three units should read `active`. The live logger prints a line every 10 s, for example `{"rows": 4, "live_matches": 4, ...}`. Run the daily job once by hand to confirm the push works:
 
 ```bash
 sudo systemctl start tql-daily.service && bash ops/check.sh

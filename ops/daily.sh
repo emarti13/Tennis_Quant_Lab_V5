@@ -62,6 +62,10 @@ if [ "$test_rc" -ne 0 ] && [ "$code_changed" = yes ]; then
   code_changed=no
 fi
 if [ "$code_changed" = yes ]; then
+  for unit in ops/systemd/*; do      # pick up changed unit files (same rendering as bootstrap.sh)
+    sed -e "s#@USER@#$(id -un)#g" -e "s#@DIR@#$DIR#g" "$unit" | sudo -n tee "/etc/systemd/system/$(basename "$unit")" >/dev/null
+  done
+  sudo -n systemctl daemon-reload 2>/dev/null
   sudo -n systemctl restart tql-paper.service tql-live.service 2>/dev/null \
     || STATUS_ARGS+=(--note "new code merged; services pick it up at their daily restart")
 fi

@@ -6,7 +6,7 @@ Wants=network-online.target
 [Service]
 User=@USER@
 WorkingDirectory=@DIR@
-ExecStart=@DIR@/.venv/bin/python scripts/log_kalshi_live.py --minutes 1440 --interval 30
+ExecStart=@DIR@/.venv/bin/python scripts/log_kalshi_live.py --minutes 1440 --interval 10
 Restart=always
 RestartSec=30
 

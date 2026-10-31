@@ -1,12 +1,18 @@
 """Log Kalshi tennis prices together with the live score, during matches (research data).
 
-Usage:  python scripts/log_kalshi_live.py [--minutes 0 (forever)] [--interval 30]
+Usage:  python scripts/log_kalshi_live.py [--minutes 0 (forever)] [--interval 10]
 
 Kalshi's history gives prices but not the score; an in-play model needs both at the same
 moment. Every interval, for each open Kalshi tennis match (ATP, Challenger, WTA) whose match
 milestone has started and not finished, this records the score from Kalshi's public live data
-(sets, games in the current set, set scores so far, server, advantage, status) next to both
-players' best bid and ask. Public endpoints only: no account, no key, no orders.
+(sets, games in the current set, point score in the current game, set scores so far, server,
+advantage, status) and each player's running match statistics (points won, serve points won and
+lost, first and second serves in, aces, double faults, break points), next to both players'
+best bid and ask. The running points-won totals change by one per point, so polling every 10 s
+gives a timestamped point-by-point record. Public endpoints only: no account, no key, no orders.
+
+Files written before 2026-10-31 08:00 UTC used games_1/games_2 for what is the point score
+(Kalshi's current_round_score); they have no points_* or statistics columns.
 
 Output (append-only): market_history/kalshi/live_scores/YYYY-MM-DD.csv (UTC day), and
 market_history/kalshi/live_scores/state.json (milestones found, matches finished).
@@ -31,9 +37,14 @@ SERIES = ("KXATPMATCH", "KXATPCHALLENGERMATCH", "KXWTAMATCH")
 OUT_DIR = BASE / "market_history" / "kalshi" / "live_scores"
 WATCH_BEFORE_MIN = 10
 FINISHED = {"closed", "ended", "finished", "complete", "completed", "cancelled", "canceled"}
-COLS = ["polled_utc", "series", "event_ticker", "milestone_id", "status", "match_status", "widget_status",
-        "server", "advantage", "sets_1", "sets_2", "games_1", "games_2", "round_scores_1", "round_scores_2",
-        "competitor_1", "competitor_2", "ticker_1", "bid_1", "ask_1", "ticker_2", "bid_2", "ask_2"]
+STATS = ("points_won", "service_points_won", "service_points_lost", "first_serve_successful",
+         "second_serve_successful", "first_serve_points_won", "second_serve_points_won", "aces",
+         "double_faults", "breakpoints_won", "total_breakpoints", "tiebreaks_won")
+COLS = (["polled_utc", "series", "event_ticker", "milestone_id", "status", "match_status", "widget_status",
+         "server", "advantage", "sets_1", "sets_2", "games_1", "games_2", "points_1", "points_2",
+         "round_scores_1", "round_scores_2", "competitor_1", "competitor_2"]
+        + [f"{k}_{i}" for i in (1, 2) for k in STATS]
+        + ["ticker_1", "bid_1", "ask_1", "ticker_2", "bid_2", "ask_2"])
 
 
 def _f(v):
@@ -66,13 +77,16 @@ def row_for(series: str, event: str, ms: dict, d: dict, markets: list[dict], now
     if m1 is None or m2 is None:
         m1, m2 = (markets + [None, None])[:2]
     scores = lambda k: json.dumps([s.get("score") for s in (d.get(k) or [])])  # noqa: E731
+    games = lambda k: ((d.get(k) or [{}])[-1]).get("score")  # noqa: E731   current (last) set
+    stats = {f"{k}_{i}": (d.get(f"competitor{i}_statistics") or {}).get(k) for i in (1, 2) for k in STATS}
     return {"polled_utc": now.isoformat(), "series": series, "event_ticker": event, "milestone_id": ms.get("id"),
             "status": d.get("status"), "match_status": d.get("match_status"), "widget_status": d.get("widget_status"),
             "server": d.get("server"), "advantage": d.get("advantage"),
             "sets_1": d.get("competitor1_overall_score"), "sets_2": d.get("competitor2_overall_score"),
-            "games_1": d.get("competitor1_current_round_score"), "games_2": d.get("competitor2_current_round_score"),
+            "games_1": games("competitor1_round_scores"), "games_2": games("competitor2_round_scores"),
+            "points_1": d.get("competitor1_current_round_score"), "points_2": d.get("competitor2_current_round_score"),
             "round_scores_1": scores("competitor1_round_scores"), "round_scores_2": scores("competitor2_round_scores"),
-            "competitor_1": c1, "competitor_2": c2,
+            "competitor_1": c1, "competitor_2": c2, **stats,
             "ticker_1": m1 and m1.get("ticker"), "bid_1": m1 and _f(m1.get("yes_bid_dollars")), "ask_1": m1 and _f(m1.get("yes_ask_dollars")),
             "ticker_2": m2 and m2.get("ticker"), "bid_2": m2 and _f(m2.get("yes_bid_dollars")), "ask_2": m2 and _f(m2.get("yes_ask_dollars"))}
 
@@ -121,7 +135,7 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--minutes", type=float, default=0, help="stop after this long (0 = run forever)")
-    ap.add_argument("--interval", type=float, default=30)
+    ap.add_argument("--interval", type=float, default=10)
     args = ap.parse_args()
     api, state = Kalshi(), load_state()
     end = time.time() + args.minutes * 60 if args.minutes else None
