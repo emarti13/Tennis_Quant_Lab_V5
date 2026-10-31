@@ -1,0 +1,466 @@
+{
+ "version": "v1",
+ "manifest": {
+  "run_utc": "2026-10-31T14:09:46.346753+00:00",
+  "command": "python research_tests/point_dna/run_point_dna.py /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/mcp_data /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/point_dna/results_v1.json v1",
+  "git_commit": "9e439032a813dac1bf382b32067541714426fc14",
+  "uncommitted_changes": true,
+  "python": "3.13.16",
+  "packages": {
+   "pandas": "3.0.5",
+   "numpy": "2.5.3",
+   "scikit-learn": "1.9.1",
+   "lightgbm": "4.7.0",
+   "scipy": "1.18.1"
+  },
+  "seeds": {
+   "orientation": 20261031,
+   "bootstrap": 20261031
+  },
+  "inputs": {
+   "mcp": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/mcp_data",
+    "sha256": "e6fd0f1a6b081b72c49fb6aa18b7e83a601c2396101bef3cfa3de5e6b62f11ef"
+   },
+   "joined": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl",
+    "sha256": "1888802164c3ff67906c3f818ca0762650bf8ba450f2d7ba03c318dbf31598bf"
+   }
+  }
+ },
+ "rows_by_year_level": {
+  "ATP main": {
+   "2014": 230,
+   "2015": 450,
+   "2016": 605,
+   "2017": 565,
+   "2018": 692,
+   "2019": 1105,
+   "2020": 537,
+   "2021": 1024,
+   "2022": 1093,
+   "2023": 1239,
+   "2024": 1776,
+   "2025": 1481
+  },
+  "Challenger": {
+   "2014": 0,
+   "2015": 1,
+   "2016": 1,
+   "2017": 2,
+   "2018": 4,
+   "2019": 3,
+   "2020": 24,
+   "2021": 35,
+   "2022": 30,
+   "2023": 72,
+   "2024": 123,
+   "2025": 102
+  },
+  "WTA main": {
+   "2014": 126,
+   "2015": 367,
+   "2016": 414,
+   "2017": 366,
+   "2018": 323,
+   "2019": 443,
+   "2020": 339,
+   "2021": 858,
+   "2022": 835,
+   "2023": 994,
+   "2024": 1301,
+   "2025": 1295
+  }
+ },
+ "results": {
+  "bf_close | PRIMARY 2021-25 main tours": {
+   "n": 11896,
+   "ll_market_raw": 0.60401,
+   "ll_M0": 0.60418,
+   "M1_minus_M0": [
+    0.00145,
+    0.00053,
+    0.00241
+   ],
+   "M1gb_minus_M0": [
+    0.00556,
+    0.0038,
+    0.00745
+   ],
+   "M1_minus_M0_by_year": {
+    "2021": [
+     1882,
+     0.0019
+    ],
+    "2022": [
+     1928,
+     0.00294
+    ],
+    "2023": [
+     2233,
+     -0.00013
+    ],
+    "2024": [
+     3077,
+     0.00213
+    ],
+    "2025": [
+     2776,
+     0.00064
+    ]
+   }
+  },
+  "bf_close | all test years 2018-25, all levels": {
+   "n": 15728,
+   "ll_market_raw": 0.60733,
+   "ll_M0": 0.60748,
+   "M1_minus_M0": [
+    0.00221,
+    0.00125,
+    0.00313
+   ],
+   "M1gb_minus_M0": [
+    0.00728,
+    0.00544,
+    0.009
+   ],
+   "M1_minus_M0_by_year": {
+    "2018": [
+     1019,
+     0.00874
+    ],
+    "2019": [
+     1551,
+     0.00601
+    ],
+    "2020": [
+     900,
+     -0.00017
+    ],
+    "2021": [
+     1917,
+     0.00173
+    ],
+    "2022": [
+     1958,
+     0.0029
+    ],
+    "2023": [
+     2305,
+     -7e-05
+    ],
+    "2024": [
+     3200,
+     0.00201
+    ],
+    "2025": [
+     2878,
+     0.00053
+    ]
+   }
+  },
+  "b365_open | PRIMARY 2021-25 main tours": {
+   "n": 11772,
+   "ll_market_raw": 0.61036,
+   "ll_M0": 0.61054,
+   "M1_minus_M0": [
+    0.00125,
+    0.00018,
+    0.00228
+   ],
+   "M1gb_minus_M0": [
+    0.00516,
+    0.00329,
+    0.00709
+   ],
+   "M1_minus_M0_by_year": {
+    "2021": [
+     1853,
+     0.00202
+    ],
+    "2022": [
+     1893,
+     0.00267
+    ],
+    "2023": [
+     2215,
+     -0.00087
+    ],
+    "2024": [
+     3055,
+     0.00219
+    ],
+    "2025": [
+     2756,
+     0.00041
+    ]
+   }
+  },
+  "b365_open | all test years 2018-25, all levels": {
+   "n": 15549,
+   "ll_market_raw": 0.61299,
+   "ll_M0": 0.61321,
+   "M1_minus_M0": [
+    0.00199,
+    0.00097,
+    0.00299
+   ],
+   "M1gb_minus_M0": [
+    0.00712,
+    0.00521,
+    0.00895
+   ],
+   "M1_minus_M0_by_year": {
+    "2018": [
+     994,
+     0.00901
+    ],
+    "2019": [
+     1540,
+     0.00566
+    ],
+    "2020": [
+     890,
+     -0.00054
+    ],
+    "2021": [
+     1887,
+     0.00182
+    ],
+    "2022": [
+     1922,
+     0.00259
+    ],
+    "2023": [
+     2282,
+     -0.00087
+    ],
+    "2024": [
+     3177,
+     0.00205
+    ],
+    "2025": [
+     2857,
+     0.00029
+    ]
+   }
+  },
+  "no market: DNA vs basic serve/return (all test rows)": {
+   "n": 15728,
+   "ll_basic": 0.66753,
+   "ll_dna": 0.66006,
+   "dna_minus_basic": [
+    -0.00747,
+    -0.01099,
+    -0.00389
+   ],
+   "ll_bf_close": 0.60733
+  },
+  "b365 open->close move toward DNA's extra lean (test 2018-25, all levels)": {
+   "n": 15541,
+   "share_of_dna_lean_absorbed": [
+    0.0569,
+    0.0345,
+    0.0799
+   ],
+   "where_dna_shifts_3pts_or_more": {
+    "n": 3616,
+    "move_toward_dna_pts": [
+     0.311,
+     0.175,
+     0.448
+    ]
+   }
+  }
+ },
+ "betting_test_2018_25": {
+  "bf_close M1 edge>=0.03": {
+   "n": 1925,
+   "roi": -0.0556,
+   "range": [
+    -0.1147,
+    0.0083
+   ]
+  },
+  "bf_close M1 edge>=0.05": {
+   "n": 707,
+   "roi": -0.1496,
+   "range": [
+    -0.241,
+    -0.0556
+   ]
+  },
+  "bf_close M1 edge>=0.08": {
+   "n": 198,
+   "roi": -0.0508,
+   "range": [
+    -0.2178,
+    0.1216
+   ]
+  },
+  "bf_close M1gb edge>=0.03": {
+   "n": 6187,
+   "roi": -0.0322,
+   "range": [
+    -0.0718,
+    0.0068
+   ]
+  },
+  "bf_close M1gb edge>=0.05": {
+   "n": 3645,
+   "roi": -0.0298,
+   "range": [
+    -0.0825,
+    0.0256
+   ]
+  },
+  "bf_close M1gb edge>=0.08": {
+   "n": 1635,
+   "roi": -0.0833,
+   "range": [
+    -0.1489,
+    -0.009
+   ]
+  },
+  "b365_open M1 edge>=0.03": {
+   "n": 889,
+   "roi": -0.1232,
+   "range": [
+    -0.1938,
+    -0.0557
+   ]
+  },
+  "b365_open M1 edge>=0.05": {
+   "n": 343,
+   "roi": -0.1546,
+   "range": [
+    -0.2685,
+    -0.0391
+   ]
+  },
+  "b365_open M1 edge>=0.08": {
+   "n": 114,
+   "roi": -0.0546,
+   "range": [
+    -0.2543,
+    0.1511
+   ]
+  },
+  "b365_open M1gb edge>=0.03": {
+   "n": 4267,
+   "roi": -0.0676,
+   "range": [
+    -0.1059,
+    -0.0286
+   ]
+  },
+  "b365_open M1gb edge>=0.05": {
+   "n": 2479,
+   "roi": -0.072,
+   "range": [
+    -0.1207,
+    -0.025
+   ]
+  },
+  "b365_open M1gb edge>=0.08": {
+   "n": 1052,
+   "roi": -0.0744,
+   "range": [
+    -0.1492,
+    0.0043
+   ]
+  }
+ },
+ "coef_M1_bf_close": {
+  "mkt": 0.9806,
+  "d_net_freq": -0.1308,
+  "x_net": 0.1027,
+  "d_short_sv": 0.0888,
+  "d_ret_wide": 0.0659,
+  "d_ret_v1": -0.0622,
+  "d_ret_t": 0.0436,
+  "d_dir_entropy": 0.0432,
+  "d_wide_share": 0.0428,
+  "d_unret": -0.0324,
+  "d_first_won": -0.0323,
+  "d_net_won": -0.0288,
+  "d_ret_v2": -0.0273,
+  "x_rally": 0.0271,
+  "d_t_share": 0.0269,
+  "d_bh_w": 0.0267,
+  "d_sv_won": -0.0238,
+  "d_long_share": 0.0235,
+  "d_second_won": -0.0225,
+  "log_n": 0.0207,
+  "d_ace": 0.0205,
+  "d_fh_ue": 0.0178,
+  "x_target": -0.0177,
+  "d_win_long": 0.0171,
+  "x_lefty_vs_wide_ret": -0.0167,
+  "d_winners": 0.0142,
+  "d_fh_w": 0.0117,
+  "d_clutch": 0.0099,
+  "d_bp_won": -0.0091,
+  "x_serve_vs_return": -0.0086,
+  "d_df": 0.007,
+  "d_first_in": -0.0055,
+  "d_ue": -0.0052,
+  "d_win_short": 0.0048,
+  "d_ret_won": 0.0033,
+  "d_ret_inplay": -0.0027,
+  "x_lefty": -0.0023,
+  "d_bh_ue": 0.0012,
+  "d_win_mid": 0.0003
+ },
+ "checks": {
+  "swap_source": {
+   "pass": true,
+   "columns_differing": [],
+   "labels_inverted": true,
+   "rows": 7933
+  },
+  "time_travel": {
+   "pass": true,
+   "checked": 200,
+   "mismatched_rows": 0,
+   "columns": []
+  },
+  "planted_edge": {
+   "pass": true,
+   "expected_improvement": 0.00636,
+   "found_delta": [
+    -0.00347,
+    -0.0057,
+    -0.00126
+   ],
+   "size": 0.25
+  },
+  "market_null": {
+   "pass": true,
+   "found_delta": [
+    0.00172,
+    0.00069,
+    0.00274
+   ]
+  },
+  "shuffled_null": {
+   "pass": true,
+   "model_minus_coin": [
+    0.00242,
+    0.00141,
+    0.00345
+   ]
+  },
+  "known_answers": {
+   "pass": true,
+   "market_log_loss": 0.60401,
+   "expected_range": [
+    0.57,
+    0.64
+   ],
+   "A_win_share": 0.5034
+  }
+ },
+ "alarms": [],
+ "checks_passed": true
+}
