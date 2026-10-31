@@ -126,3 +126,11 @@ def test_join_requeues_at_the_back_when_the_best_price_moves():
     j = pt.join_quote({"bid": 0.50, "ask": 0.60, "bid_ahead": 5.0, "ask_ahead": 0.0}, 0.51, 0.60,
                       {"yes": {0.51: 300.0}, "no": {0.40: 80.0}})
     assert j["bid_ahead"] == 300.0 and j["ask_ahead"] == 0.0                  # new bid level: back of the queue
+
+
+def test_settle_reads_numbers_as_numbers_and_names_a_bad_value(tmp_path, capsys):
+    p = tmp_path / "fills_2026-10-31.csv"
+    p.write_text("ticker,price,contracts\nT,0.5,3\nT,0.4,oops\n")
+    df = pt._read_log(p, ("price", "contracts"))
+    assert df["contracts"].dtype.kind == "f" and df["contracts"].iloc[0] == 3 and pd.isna(df["contracts"].iloc[1])
+    assert "fills_2026-10-31.csv: 1 non-numeric contracts values, e.g. 'oops'" in capsys.readouterr().err

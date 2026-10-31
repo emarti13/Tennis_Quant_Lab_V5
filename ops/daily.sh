@@ -49,7 +49,8 @@ else
   STATUS_ARGS+=(--note "git fetch failed")
 fi
 if [ "$code_changed" = yes ]; then
-  $PY -m pip install -q -r requirements.txt pytest pyyaml scipy scikit-learn lightgbm openpyxl -c ops/constraints.txt || true
+  $PY -m pip install -q -r requirements.txt pytest pyyaml scipy scikit-learn lightgbm openpyxl -c ops/constraints.txt \
+    > /tmp/tql_pip.txt 2>&1 || STATUS_ARGS+=(--note "package install failed: $(grep -m1 -E 'ERROR|error' /tmp/tql_pip.txt)")
 fi
 # shellcheck disable=SC2086
 timeout 90m $PY -m pytest $TESTS > /tmp/tql_tests.txt 2>&1
@@ -57,9 +58,21 @@ test_rc=$?
 STATUS_ARGS+=(--tests "$(tail -1 /tmp/tql_tests.txt)" --tests-rc "$test_rc")
 while read -r line; do STATUS_ARGS+=(--note "test $line"); done < <(grep -E '^(FAILED|ERROR) ' /tmp/tql_tests.txt | head -5)
 if [ "$test_rc" -ne 0 ] && [ "$code_changed" = yes ]; then
+  # Roll back only if the new code breaks a test the old code passed: a failure both share
+  # (a package change on the server, say) must not block the code that fixes it.
+  merged=$(git rev-parse HEAD)
+  grep -E '^(FAILED|ERROR) ' /tmp/tql_tests.txt | cut -d' ' -f2 | sort -u > /tmp/tql_fail_new.txt
   git reset -q --hard "$before"
-  STATUS_ARGS+=(--note "tests failed on new code from $CODE_BRANCH; rolled back to ${before:0:7}")
-  code_changed=no
+  # shellcheck disable=SC2086
+  timeout 90m $PY -m pytest $TESTS > /tmp/tql_tests_old.txt 2>&1
+  grep -E '^(FAILED|ERROR) ' /tmp/tql_tests_old.txt | cut -d' ' -f2 | sort -u > /tmp/tql_fail_old.txt
+  if [ -s /tmp/tql_fail_old.txt ] && [ -z "$(comm -23 /tmp/tql_fail_new.txt /tmp/tql_fail_old.txt)" ]; then
+    git reset -q --hard "$merged"
+    STATUS_ARGS+=(--note "tests fail on new code from $CODE_BRANCH, but the old code fails the same ones; kept the new code")
+  else
+    STATUS_ARGS+=(--note "tests failed on new code from $CODE_BRANCH; rolled back to ${before:0:7}")
+    code_changed=no
+  fi
 fi
 if [ "$code_changed" = yes ]; then
   for unit in ops/systemd/*; do      # pick up changed unit files (same rendering as bootstrap.sh)

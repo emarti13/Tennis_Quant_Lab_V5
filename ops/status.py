@@ -102,6 +102,7 @@ def main() -> int:
     if a.print:
         print(text)
     else:
+        OUT.parent.mkdir(parents=True, exist_ok=True)
         OUT.write_text(text)
     return 0
 
