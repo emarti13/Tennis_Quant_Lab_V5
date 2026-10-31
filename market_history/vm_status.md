@@ -1,10 +1,10 @@
-# Server status, 2026-10-31T03:30:48+00:00
+# Server status, 2026-10-31T03:32:01+00:00
 
 Code: `a0883ef feat: daily log files gzipped by the server; status page; README setup steps`  
 Disk free: 33.5 GB  
 Services: tql-paper active, tql-live active, tql-daily.timer active
 
-Tests (FAIL): `1 failed, 251 passed, 7 skipped in 56.11s`
+Tests (FAIL): `1 failed, 251 passed, 7 skipped in 52.34s`
 
 ## Problems
 
@@ -14,7 +14,7 @@ Tests (FAIL): `1 failed, 251 passed, 7 skipped in 56.11s`
 
 | day | rows | matches |
 |---|---|---|
-| 2026-10-31 | 26 | 4 |
+| 2026-10-31 | 32 | 4 |
 
 ## Paper market-making (settled markets)
 
