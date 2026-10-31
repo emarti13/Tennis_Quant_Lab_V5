@@ -12,7 +12,7 @@ sudo apt-get update -qq
 sudo apt-get install -y -qq python3 python3-venv python3-pip git
 python3 -m venv .venv
 .venv/bin/pip install -q --upgrade pip
-.venv/bin/pip install -q -r requirements.txt pytest pyyaml scipy scikit-learn lightgbm openpyxl
+.venv/bin/pip install -q -r requirements.txt pytest pyyaml scipy scikit-learn lightgbm openpyxl -c ops/constraints.txt
 
 git config user.name  "tql-server"
 git config user.email "tql-server@users.noreply.github.com"

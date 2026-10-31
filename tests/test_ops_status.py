@@ -22,3 +22,15 @@ def test_status_page_reports_logs_results_and_problems(tmp_path, monkeypatch):
     assert "- merge conflicted" in text and "Tests (pass)" in text
     assert "| 2026-10-20 | 1 | 1 |" in text and "| 2026-10-21 | 3 | 2 |" in text
     assert "| join | 1 | 10 | 1.50 | 1.40 | 0.20 |" in text
+
+
+def test_settle_traceback_keeps_repo_frames_and_the_error():
+    text = "\n".join(['Traceback (most recent call last):',
+                      '  File "/home/u/tql/scripts/paper_trade_kalshi.py", line 337, in settle',
+                      '    fee = float((MAKER_FEE_RATE * f["contracts"]).sum())',
+                      '  File "/home/u/tql/.venv/lib/python3.12/site-packages/pandas/core/base.py", line 1717',
+                      '    result = ops.arithmetic_op(lvalues, rvalues, op)',
+                      'TypeError: Can only string multiply by an integer.'])
+    out = st.settle_text(text)
+    assert "paper_trade_kalshi.py" in out and "MAKER_FEE_RATE" in out
+    assert "site-packages" not in out and out.endswith("integer.")

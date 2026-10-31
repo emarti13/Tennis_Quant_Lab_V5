@@ -49,12 +49,13 @@ else
   STATUS_ARGS+=(--note "git fetch failed")
 fi
 if [ "$code_changed" = yes ]; then
-  $PY -m pip install -q -r requirements.txt || true
+  $PY -m pip install -q -r requirements.txt pytest pyyaml scipy scikit-learn lightgbm openpyxl -c ops/constraints.txt || true
 fi
 # shellcheck disable=SC2086
 timeout 90m $PY -m pytest $TESTS > /tmp/tql_tests.txt 2>&1
 test_rc=$?
 STATUS_ARGS+=(--tests "$(tail -1 /tmp/tql_tests.txt)" --tests-rc "$test_rc")
+while read -r line; do STATUS_ARGS+=(--note "test $line"); done < <(grep -E '^(FAILED|ERROR) ' /tmp/tql_tests.txt | head -5)
 if [ "$test_rc" -ne 0 ] && [ "$code_changed" = yes ]; then
   git reset -q --hard "$before"
   STATUS_ARGS+=(--note "tests failed on new code from $CODE_BRANCH; rolled back to ${before:0:7}")

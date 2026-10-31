@@ -60,6 +60,18 @@ def paper_summary() -> list[str]:
     return lines
 
 
+def settle_text(text: str) -> str:
+    """Settle output, with a traceback cut down to this repo's frames and the error line."""
+    lines = text.strip().splitlines()
+    if not any(l.startswith("Traceback") for l in lines):
+        return "\n".join(lines[-40:])
+    keep = []
+    for i, l in enumerate(lines):
+        if l.startswith('  File "') and "site-packages" not in l and "pandas/_libs" not in l:
+            keep += [l] + ([lines[i + 1]] if i + 1 < len(lines) else [])
+    return "\n".join(keep + lines[-1:])
+
+
 def build(settle: str | None, tests: str | None, tests_rc: str | None, notes: list[str]) -> str:
     now = pd.Timestamp.now(tz="UTC").floor("s")
     disk = shutil.disk_usage(BASE)
@@ -74,7 +86,7 @@ def build(settle: str | None, tests: str | None, tests_rc: str | None, notes: li
     parts += ["## Live score log (last 7 days)", "", "| day | rows | matches |", "|---|---|---|"] + live_days() + [""]
     parts += ["## Paper market-making (settled markets)", ""] + paper_summary() + [""]
     if settle and Path(settle).exists():
-        parts += ["Settle output:", "```", Path(settle).read_text().strip()[-2000:], "```", ""]
+        parts += ["Settle output:", "```", settle_text(Path(settle).read_text()), "```", ""]
     return "\n".join(parts)
 
 
