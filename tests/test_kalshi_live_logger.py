@@ -64,3 +64,14 @@ def test_a_finished_match_is_logged_once_then_dropped(tmp_path, monkeypatch):
     assert ll.poll_once(api, state, pd.Timestamp("2026-10-21T14:00:00Z"))["rows"] == 1
     assert state["events"]["EV"]["finished"] is True
     assert ll.poll_once(api, state, pd.Timestamp("2026-10-21T14:01:00Z"))["rows"] == 0
+
+
+def test_prematch_quotes_every_five_minutes_from_the_same_listing(tmp_path, monkeypatch):
+    monkeypatch.setattr(ll, "OUT_DIR", tmp_path)
+    api, state = FakeKalshi(), {"events": {}}
+    info = ll.poll_once(api, state, pd.Timestamp("2026-10-21T09:00:00Z"))            # 3 h before: no live row
+    assert info["rows"] == 0 and info["prematch_quotes"] == 2
+    q = pd.read_csv(tmp_path / "prematch" / "2026-10-21.csv")
+    assert set(q["ticker"]) == {"EV-A", "EV-B"} and q.loc[q.ticker == "EV-A", "bid"].iloc[0] == 0.70
+    assert ll.poll_once(api, state, pd.Timestamp("2026-10-21T09:04:00Z"))["prematch_quotes"] == 0
+    assert ll.poll_once(api, state, pd.Timestamp("2026-10-21T09:05:00Z"))["prematch_quotes"] == 2

@@ -14,6 +14,10 @@ gives a timestamped point-by-point record. Public endpoints only: no account, no
 Files written before 2026-10-31 08:00 UTC used games_1/games_2 for what is the point score
 (Kalshi's current_round_score); they have no points_* or statistics columns.
 
+Every 5 minutes it also records every open market's quote, before and during play, in
+market_history/kalshi/live_scores/prematch/YYYY-MM-DD.csv (from the same listing call), so a
+next-round price can be followed from the moment the previous match ends.
+
 Output (append-only): market_history/kalshi/live_scores/YYYY-MM-DD.csv (UTC day), and
 market_history/kalshi/live_scores/state.json (milestones found, matches finished).
 A match is watched from 10 minutes before its milestone start until Kalshi reports it ended.
@@ -36,6 +40,8 @@ from scripts.paper_trade_kalshi import Kalshi  # noqa: E402
 SERIES = ("KXATPMATCH", "KXATPCHALLENGERMATCH", "KXWTAMATCH")
 OUT_DIR = BASE / "market_history" / "kalshi" / "live_scores"
 WATCH_BEFORE_MIN = 10
+PREMATCH_EVERY_MIN = 5
+PRE_COLS = ["polled_utc", "series", "event_ticker", "ticker", "competitor", "start_date", "bid", "ask", "last", "volume"]
 FINISHED = {"closed", "ended", "finished", "complete", "completed", "cancelled", "canceled"}
 STATS = ("points_won", "service_points_won", "service_points_lost", "first_serve_successful",
          "second_serve_successful", "first_serve_points_won", "second_serve_points_won", "aces",
@@ -91,14 +97,33 @@ def row_for(series: str, event: str, ms: dict, d: dict, markets: list[dict], now
             "ticker_2": m2 and m2.get("ticker"), "bid_2": m2 and _f(m2.get("yes_bid_dollars")), "ask_2": m2 and _f(m2.get("yes_ask_dollars"))}
 
 
+def prematch_rows(series: str, markets: list[dict], state: dict, now: pd.Timestamp) -> list[dict]:
+    """Every open market's quote, before and during play (from the same listing call: no extra
+    requests). With the live log's start and end times this shows how a next-round price moves
+    once the previous match is over."""
+    out = []
+    for m in markets:
+        ms = (state["events"].get(m["event_ticker"]) or {}).get("milestone") or {}
+        out.append({"polled_utc": now.isoformat(), "series": series, "event_ticker": m["event_ticker"],
+                    "ticker": m.get("ticker"), "competitor": (m.get("custom_strike") or {}).get("tennis_competitor"),
+                    "start_date": ms.get("start_date"), "bid": _f(m.get("yes_bid_dollars")), "ask": _f(m.get("yes_ask_dollars")),
+                    "last": _f(m.get("last_price_dollars")), "volume": _f(m.get("volume_fp", m.get("volume")))})
+    return out
+
+
 def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
     rows, failed, watched = [], 0, 0
+    last = state.get("last_prematch_utc")
+    prematch_due = last is None or now - pd.Timestamp(last) >= pd.Timedelta(minutes=PREMATCH_EVERY_MIN)
+    pre = []
     for series in SERIES:
         try:
             markets = api.open_markets(series)
         except RuntimeError:
             failed += 1
             continue
+        if prematch_due:
+            pre += prematch_rows(series, markets, state, now)
         by_event: dict[str, list] = {}
         for m in markets:
             by_event.setdefault(m["event_ticker"], []).append(m)
@@ -129,7 +154,12 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
         OUT_DIR.mkdir(parents=True, exist_ok=True)
         path = OUT_DIR / f"{now:%Y-%m-%d}.csv"
         pd.DataFrame(rows, columns=COLS).to_csv(path, mode="a", header=not path.exists(), index=False)
-    return {"rows": len(rows), "live_matches": watched, "failures": failed, "api_calls": api.calls}
+    if pre:
+        (OUT_DIR / "prematch").mkdir(parents=True, exist_ok=True)
+        path = OUT_DIR / "prematch" / f"{now:%Y-%m-%d}.csv"
+        pd.DataFrame(pre, columns=PRE_COLS).to_csv(path, mode="a", header=not path.exists(), index=False)
+        state["last_prematch_utc"] = now.isoformat()
+    return {"rows": len(rows), "live_matches": watched, "prematch_quotes": len(pre), "failures": failed, "api_calls": api.calls}
 
 
 def main() -> int:
