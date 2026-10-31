@@ -1,5 +1,13 @@
 {
  "events": {
+  "KXATPCHALLENGERMATCH-26OCT31ABODEL": {
+   "finished": false,
+   "milestone": {
+    "id": "130416ff-04c7-4c78-a9db-fb9d69f72469",
+    "start_date": "2026-10-31T19:00:00Z",
+    "type": "tennis_tournament_singles"
+   }
+  },
   "KXATPCHALLENGERMATCH-26OCT31BARBRO": {
    "finished": false,
    "milestone": {
@@ -24,8 +32,16 @@
     "type": "tennis_tournament_singles"
    }
   },
-  "KXATPCHALLENGERMATCH-26OCT31HARATM": {
+  "KXATPCHALLENGERMATCH-26OCT31DIEMAY": {
    "finished": false,
+   "milestone": {
+    "id": "b8186f43-302b-4fed-963c-e8b868eba32d",
+    "start_date": "2026-10-31T18:10:00Z",
+    "type": "tennis_tournament_singles"
+   }
+  },
+  "KXATPCHALLENGERMATCH-26OCT31HARATM": {
+   "finished": true,
    "milestone": {
     "id": "bdc90a81-bf68-43aa-bcc3-7f79b1b464fa",
     "start_date": "2026-10-31T05:10:00Z",
@@ -41,7 +57,7 @@
    }
   },
   "KXATPCHALLENGERMATCH-26OCT31WONJAS": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "885c7475-e7f7-4c5f-b9d5-34edf94d9c59",
     "start_date": "2026-10-31T04:00:00Z",
@@ -193,7 +209,7 @@
    }
   },
   "KXWTAMATCH-26OCT30FERRAK": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "4690addf-6d53-4b5d-8695-6e055cc0fa92",
     "start_date": "2026-10-31T03:00:00Z",
@@ -201,7 +217,7 @@
    }
   },
   "KXWTAMATCH-26OCT30JONWAT": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "8d603dfb-cd36-48b6-8e18-96c7781b90dc",
     "start_date": "2026-10-31T03:15:00Z",
@@ -209,7 +225,7 @@
    }
   },
   "KXWTAMATCH-26OCT30LAILEE": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "0f6bd10d-3b5e-4056-baef-832848c88125",
     "start_date": "2026-10-31T05:00:00Z",
@@ -241,7 +257,7 @@
    }
   },
   "KXWTAMATCH-26OCT30STOIBR": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "61033eac-feca-4984-8c84-f108737e6ce2",
     "start_date": "2026-10-31T02:00:00Z",
@@ -313,7 +329,7 @@
    }
   },
   "KXWTAMATCH-26OCT31SHNPOH": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "e93eceed-e4b8-42c6-aa65-e641757dde4d",
     "start_date": "2026-10-31T04:10:00Z",
