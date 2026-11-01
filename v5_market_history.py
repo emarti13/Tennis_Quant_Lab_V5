@@ -236,7 +236,7 @@ def pending_fixtures(registry: pd.DataFrame, log: pd.DataFrame, *, now, since, b
     f = registry.copy()
     known = f["true_start_time_utc"].astype(str).str.len() > 0
     f["_start"] = pd.to_datetime(f["true_start_time_utc"].where(known, f["start_time_utc"]), utc=True, errors="coerce")
-    wait = pd.Timedelta(hours=settle_hours) + (~known) * pd.Timedelta(hours=true_start_wait_hours)
+    wait = pd.Timedelta(hours=settle_hours) + (~known).astype(int) * pd.Timedelta(hours=true_start_wait_hours)
     f = f[f["_start"].notna() & (f["_start"] >= _ts(since)) & (f["_start"] <= now - wait)]
     f = f[pd.Series([relevant(_as_fixture(r)) for r in f.to_dict("records")], index=f.index, dtype=bool)]
     if (skip_stored or only_stored) and "historical_status" in f:
