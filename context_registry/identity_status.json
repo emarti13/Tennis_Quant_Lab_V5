@@ -1,27 +1,42 @@
 {
-  "generated_utc": "2026-10-31T11:52:06+00:00",
-  "as_of": "2026-10-31",
+  "generated_utc": "2026-11-01T12:50:46+00:00",
+  "as_of": "2026-11-01",
   "season": 2026,
   "schedule_years": [
     2026
   ],
   "tournament_mappings": {
-    "confirmed": 626,
-    "auto": 80,
+    "confirmed": 628,
+    "auto": 84,
     "user": 14,
-    "review": 5,
+    "review": 8,
     "rejected": 2
   },
   "oddspapi_players": {
     "confirmed": 1049,
-    "no_history": 866,
-    "auto": 614,
+    "no_history": 884,
+    "auto": 615,
     "placeholder": 30,
     "user": 15,
-    "rejected": 5,
-    "review": 3
+    "review": 5,
+    "rejected": 5
   },
   "flags": [
+    {
+      "flag": "UPCOMING_UNMATCHED",
+      "detail": "WTA 125K Cali, Colombia Women Singles from 2026-11-01: unmatched",
+      "candidates": ""
+    },
+    {
+      "flag": "UPCOMING_UNMATCHED",
+      "detail": "WTA 125K Luanda, Angola Women Singles from 2026-11-01: unmatched",
+      "candidates": ""
+    },
+    {
+      "flag": "UPCOMING_UNMATCHED",
+      "detail": "ATP Challenger Taranto, Italy Men Singles from 2026-11-01: unmatched",
+      "candidates": "Seoul (Seoul, 2026-10-26) | Brest (Brest, 2026-10-26) | Sioux Falls (Sioux Falls, 2026-10-26) | Guayaquil (Guayaquil, 2026-10-26) | Ningbo (Ningbo, 2026-10-26) | Costa do Sauipe (Costa do Sauipe, 2026-11-02) | Bratislava 2 (Bratislava, 2026-11-02) | Taipei (Taipei, 2026-11-02) | Charlottesville (Charlottesville, 2026-11-02) | Villa Maria (Villa Maria, 2026-11-02)"
+    },
     {
       "flag": "REVIEW_OPEN",
       "detail": "tournament oddspapi 52454@2026-10-25 WTA 125K Curitiba, Brazil Women Singles: unmatched"
@@ -36,15 +51,27 @@
     },
     {
       "flag": "REVIEW_OPEN",
+      "detail": "tournament oddspapi 52466@2026-11-01 WTA 125K Luanda, Angola Women Singles: unmatched"
+    },
+    {
+      "flag": "REVIEW_OPEN",
+      "detail": "tournament oddspapi 53546@2026-11-01 ATP Challenger Taranto, Italy Men Singles: unmatched; candidates: Seoul (Seoul, 2026-10-26) | Brest (Brest, 2026-10-26) | Sioux Falls (Sioux Falls, 2026-10-26) | Guayaquil (Guayaquil, 2026-10-26) | Ningbo (Ningbo, 2026-10-26) | Costa do Sauipe (Costa do Sauipe, 2026-11-02) | Bratislava 2 (Bratislava, 2026-11-02) | Taipei (Taipei, 2026-11-02) | Charlottesville (Charlottesville, 2026-11-02) | Villa Maria (Villa Maria, 2026-11-02)"
+    },
+    {
+      "flag": "REVIEW_OPEN",
+      "detail": "tournament oddspapi 9419@2026-11-01 WTA 125K Cali, Colombia Women Singles: unmatched"
+    },
+    {
+      "flag": "REVIEW_OPEN",
       "detail": "tournament tennismylife 2026-7742@2026-10-19 Del Monte Lisboa Belém Open: unmatched; candidates: Lisbon (Lisbon, 2026-10-19) | Cali (Cali, 2026-10-19) | Fort Worth (Fort Worth, 2026-10-19) | Guangzhou (Nansha) (Guangzhou, 2026-10-19) | Florence (Florence, 2026-10-19) | suggested by results: CHALLENGER|2026-10-19|lisbon|lisbon (29 shared matches)"
     },
     {
       "flag": "REVIEW_OPEN",
-      "detail": "tournament tennismylife 2026-2951@2026-10-26 MarketBeat Open: unmatched; candidates: Seoul (Seoul, 2026-10-26) | Brest (Brest, 2026-10-26) | Sioux Falls (Sioux Falls, 2026-10-26) | Guayaquil (Guayaquil, 2026-10-26) | Ningbo (Ningbo, 2026-10-26) | suggested by results: CHALLENGER|2026-10-26|sioux-falls|sioux-falls (21 shared matches)"
+      "detail": "tournament tennismylife 2026-2951@2026-10-26 MarketBeat Open: unmatched; candidates: Seoul (Seoul, 2026-10-26) | Brest (Brest, 2026-10-26) | Sioux Falls (Sioux Falls, 2026-10-26) | Guayaquil (Guayaquil, 2026-10-26) | Ningbo (Ningbo, 2026-10-26) | suggested by results: CHALLENGER|2026-10-26|sioux-falls|sioux-falls (25 shared matches)"
     },
     {
       "flag": "REVIEW_OPEN",
-      "detail": "5 player questions"
+      "detail": "7 player questions"
     }
   ]
 }
