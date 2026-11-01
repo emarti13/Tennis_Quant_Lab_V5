@@ -318,12 +318,27 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
             "api_calls": api.calls}
 
 
+def _read_log(path: Path, numeric: tuple[str, ...]) -> pd.DataFrame:
+    """One log file with its number columns as numbers. A value that is not a number (a line cut
+    by a write in progress, say) becomes empty and is reported, so settle names the bad file."""
+    df = pd.read_csv(path, dtype={c: str for c in numeric})
+    for c in numeric:
+        raw = df[c]
+        df[c] = pd.to_numeric(raw, errors="coerce")
+        bad = raw.notna() & df[c].isna()
+        if bad.any():
+            print(f"{path.name}: {int(bad.sum())} non-numeric {c} values, e.g. {raw[bad].iloc[0]!r} (row {bad.idxmax()})",
+                  file=sys.stderr)
+    return df
+
+
 def settle(api: Kalshi) -> pd.DataFrame:
     """Per market and setting: contracts, profit held to settlement, and marked at the last
     mid before the cutoff (with and without Kalshi's maker fee schedule)."""
     fill_files = sorted(PAPER_DIR.glob("fills_*.csv*"))                # daily files; past days gzipped
-    fills = pd.concat([pd.read_csv(p) for p in fill_files]) if fill_files else pd.DataFrame(columns=FILL_COLS)
-    snaps = pd.concat([pd.read_csv(p) for p in sorted(PAPER_DIR.glob("snapshots_*.csv*"))])
+    fills = (pd.concat([_read_log(p, ("trade_price", "trade_count", "price", "contracts")) for p in fill_files])
+             if fill_files else pd.DataFrame(columns=FILL_COLS))
+    snaps = pd.concat([_read_log(p, ("best_bid", "best_ask", "volume")) for p in sorted(PAPER_DIR.glob("snapshots_*.csv*"))])
     rows = []
     for t, g in snaps.groupby("ticker"):
         m = api.get(f"/markets/{t}").get("market", {})
