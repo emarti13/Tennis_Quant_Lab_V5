@@ -1612,7 +1612,7 @@
    "stop_at": "2026-10-31T03:59:26+00:00"
   }
  },
- "last_poll": "2026-11-01T07:15:14+00:00",
+ "last_poll": "2026-11-01T07:16:35+00:00",
  "markets": {
   "KXATPCHALLENGERMATCH-26NOV01AGUDEL-AGU": {
    "cutoff": "2026-11-01T15:59:00+00:00",
@@ -1635,7 +1635,7 @@
    "snapshot": {
     "best_ask": 0.36,
     "best_bid": 0.35,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -1660,7 +1660,7 @@
    "snapshot": {
     "best_ask": 0.65,
     "best_bid": 0.63,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 576.72
   },
@@ -1687,7 +1687,7 @@
     "best_bid": 0.51,
     "polled_utc": "2026-11-01T04:58:02+00:00"
    },
-   "volume": 112338.22
+   "volume": 112370.7
   },
   "KXATPCHALLENGERMATCH-26NOV01ATMWON-WON": {
    "cutoff": "2026-11-01T04:59:00+00:00",
@@ -1712,7 +1712,7 @@
     "best_bid": 0.48,
     "polled_utc": "2026-11-01T04:58:02+00:00"
    },
-   "volume": 92841.23
+   "volume": 93182.95
   },
   "KXATPCHALLENGERMATCH-26NOV01AVEUCH-AVE": {
    "cutoff": "2026-11-01T08:09:00+00:00",
@@ -1720,10 +1720,10 @@
    "join": {
     "ask": 0.51,
     "ask_ahead": 43.0,
-    "ask_depth": 43.0,
+    "ask_depth": 2267.0,
     "bid": 0.49,
     "bid_ahead": 335.77,
-    "bid_depth": 335.77
+    "bid_depth": 2207.12
    },
    "last_trade_ts": "2026-11-01T07:14:51.908487Z",
    "player": "Alafia Ayeni",
@@ -1735,7 +1735,7 @@
    "snapshot": {
     "best_ask": 0.51,
     "best_bid": 0.49,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 160.18
   },
@@ -1745,10 +1745,10 @@
    "join": {
     "ask": 0.5,
     "ask_ahead": 0.0,
-    "ask_depth": 532.79,
-    "bid": 0.49,
-    "bid_ahead": 0.0,
-    "bid_depth": 0.0
+    "ask_depth": 2132.79,
+    "bid": 0.48,
+    "bid_ahead": 338.57,
+    "bid_depth": 338.57
    },
    "last_trade_ts": "2026-11-01T06:45:07.336683Z",
    "player": "Kaichi Uchida",
@@ -1759,8 +1759,8 @@
    },
    "snapshot": {
     "best_ask": 0.5,
-    "best_bid": 0.49,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "best_bid": 0.48,
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 2195.79
   },
@@ -1787,7 +1787,7 @@
     "best_bid": 0.4,
     "polled_utc": "2026-11-01T05:58:50+00:00"
    },
-   "volume": 343699.91
+   "volume": 353742.64
   },
   "KXATPCHALLENGERMATCH-26NOV01BARDEM-DEM": {
    "cutoff": "2026-11-01T05:59:00+00:00",
@@ -1812,7 +1812,7 @@
     "best_bid": 0.59,
     "polled_utc": "2026-11-01T05:58:50+00:00"
    },
-   "volume": 300013.69
+   "volume": 314559.32
   },
   "KXATPCHALLENGERMATCH-26NOV01BAVMAK-BAV": {
    "cutoff": "2026-11-01T10:09:00+00:00",
@@ -1835,7 +1835,7 @@
    "snapshot": {
     "best_ask": 0.05,
     "best_bid": 0.04,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 212.16
   },
@@ -1860,7 +1860,7 @@
    "snapshot": {
     "best_ask": 0.96,
     "best_bid": 0.95,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 126.18
   },
@@ -1885,7 +1885,7 @@
    "snapshot": {
     "best_ask": 0.07,
     "best_bid": 0.06,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.1
   },
@@ -1910,7 +1910,7 @@
    "snapshot": {
     "best_ask": 0.94,
     "best_bid": 0.93,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.01
   },
@@ -1923,7 +1923,7 @@
     "ask_depth": 495.57,
     "bid": 0.14,
     "bid_ahead": 12.0,
-    "bid_depth": 32.0
+    "bid_depth": 19.0
    },
    "last_trade_ts": "2026-11-01T06:59:24.251528Z",
    "player": "Leonardo Borrelli",
@@ -1935,7 +1935,7 @@
    "snapshot": {
     "best_ask": 0.15,
     "best_bid": 0.14,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 1117.42
   },
@@ -1945,7 +1945,7 @@
    "join": {
     "ask": 0.86,
     "ask_ahead": 5.0,
-    "ask_depth": 69.58,
+    "ask_depth": 56.08,
     "bid": 0.85,
     "bid_ahead": 266.0,
     "bid_depth": 266.01
@@ -1960,7 +1960,7 @@
    "snapshot": {
     "best_ask": 0.86,
     "best_bid": 0.85,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 51.26
   },
@@ -1985,7 +1985,7 @@
    "snapshot": {
     "best_ask": 0.89,
     "best_bid": 0.88,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 34.45
   },
@@ -2010,7 +2010,7 @@
    "snapshot": {
     "best_ask": 0.11,
     "best_bid": 0.1,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 31.14
   },
@@ -2035,7 +2035,7 @@
    "snapshot": {
     "best_ask": 0.23,
     "best_bid": 0.22,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 2.0
   },
@@ -2060,7 +2060,7 @@
    "snapshot": {
     "best_ask": 0.77,
     "best_bid": 0.76,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 10.0
   },
@@ -2087,7 +2087,7 @@
     "best_bid": 0.1,
     "polled_utc": "2026-11-01T05:28:06+00:00"
    },
-   "volume": 90706.65
+   "volume": 94391.53
   },
   "KXATPCHALLENGERMATCH-26NOV01CHELEO-LEO": {
    "cutoff": "2026-11-01T05:29:00+00:00",
@@ -2112,18 +2112,18 @@
     "best_bid": 0.89,
     "polled_utc": "2026-11-01T05:28:06+00:00"
    },
-   "volume": 18449.69
+   "volume": 18609.98
   },
   "KXATPCHALLENGERMATCH-26NOV01COLAND-AND": {
    "cutoff": "2026-11-01T10:09:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26NOV01COLAND",
    "join": {
-    "ask": 0.7,
-    "ask_ahead": 0.0,
-    "ask_depth": 0.0,
+    "ask": 0.71,
+    "ask_ahead": 1155.0,
+    "ask_depth": 1155.0,
     "bid": 0.68,
     "bid_ahead": 8.0,
-    "bid_depth": 190.01
+    "bid_depth": 240.01
    },
    "last_trade_ts": "2026-11-01T06:50:48.344334Z",
    "player": "Adrian Andreev",
@@ -2133,9 +2133,9 @@
     "join": -9.38
    },
    "snapshot": {
-    "best_ask": 0.7,
+    "best_ask": 0.71,
     "best_bid": 0.68,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 232.63
   },
@@ -2160,7 +2160,7 @@
    "snapshot": {
     "best_ask": 0.3,
     "best_bid": 0.29,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 4.0
   },
@@ -2185,7 +2185,7 @@
    "snapshot": {
     "best_ask": 0.84,
     "best_bid": 0.82,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -2210,7 +2210,7 @@
    "snapshot": {
     "best_ask": 0.17,
     "best_bid": 0.15,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 18.0
   },
@@ -2285,7 +2285,7 @@
    "snapshot": {
     "best_ask": 0.7,
     "best_bid": 0.69,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 824.86
   },
@@ -2310,7 +2310,7 @@
    "snapshot": {
     "best_ask": 0.3,
     "best_bid": 0.29,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 57.31
   },
@@ -2335,7 +2335,7 @@
    "snapshot": {
     "best_ask": 0.7,
     "best_bid": 0.68,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -2360,7 +2360,7 @@
    "snapshot": {
     "best_ask": 0.31,
     "best_bid": 0.29,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -2385,7 +2385,7 @@
    "snapshot": {
     "best_ask": 0.06,
     "best_bid": 0.05,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 19.53
   },
@@ -2398,7 +2398,7 @@
     "ask_depth": 2864.44,
     "bid": 0.93,
     "bid_ahead": 451.87,
-    "bid_depth": 547.53
+    "bid_depth": 547.63
    },
    "last_trade_ts": "2026-11-01T05:40:57.383703Z",
    "player": "Santiago De la Fuente",
@@ -2410,7 +2410,7 @@
    "snapshot": {
     "best_ask": 0.96,
     "best_bid": 0.93,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 422.01
   },
@@ -2423,7 +2423,7 @@
     "ask_depth": 13.0,
     "bid": 0.41,
     "bid_ahead": 135.0,
-    "bid_depth": 1081.0
+    "bid_depth": 2343.0
    },
    "last_trade_ts": "2026-11-01T07:06:00.304891Z",
    "player": "Alexander Donski",
@@ -2435,7 +2435,7 @@
    "snapshot": {
     "best_ask": 0.42,
     "best_bid": 0.41,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 116.97
   },
@@ -2445,10 +2445,10 @@
    "join": {
     "ask": 0.58,
     "ask_ahead": 539.26,
-    "ask_depth": 539.26,
+    "ask_depth": 1347.14,
     "bid": 0.57,
     "bid_ahead": 1.4600000000000009,
-    "bid_depth": 127.83
+    "bid_depth": 2526.83
    },
    "last_trade_ts": "2026-11-01T06:42:01.31081Z",
    "player": "Omar Jasika",
@@ -2460,7 +2460,7 @@
    "snapshot": {
     "best_ask": 0.58,
     "best_bid": 0.57,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 1917.24
   },
@@ -2485,7 +2485,7 @@
    "snapshot": {
     "best_ask": 0.57,
     "best_bid": 0.55,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -2510,7 +2510,7 @@
    "snapshot": {
     "best_ask": 0.44,
     "best_bid": 0.43,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -2521,9 +2521,9 @@
     "ask": 0.43,
     "ask_ahead": 0.0,
     "ask_depth": 271.46,
-    "bid": 0.42,
-    "bid_ahead": 0.0,
-    "bid_depth": 0.0
+    "bid": 0.41,
+    "bid_ahead": 338.97,
+    "bid_depth": 338.97
    },
    "last_trade_ts": "2026-11-01T07:13:30.146533Z",
    "player": "Valentin Basel",
@@ -2534,8 +2534,8 @@
    },
    "snapshot": {
     "best_ask": 0.43,
-    "best_bid": 0.42,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "best_bid": 0.41,
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 184.0
   },
@@ -2560,7 +2560,7 @@
    "snapshot": {
     "best_ask": 0.58,
     "best_bid": 0.57,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 65.84
   },
@@ -2569,11 +2569,11 @@
    "event": "KXATPCHALLENGERMATCH-26NOV01FENPOL",
    "join": {
     "ask": 0.64,
-    "ask_ahead": 35.15,
-    "ask_depth": 35.15,
+    "ask_ahead": 30.15,
+    "ask_depth": 30.15,
     "bid": 0.62,
     "bid_ahead": 0.01,
-    "bid_depth": 0.01
+    "bid_depth": 20.03
    },
    "last_trade_ts": null,
    "player": "Andrew Fenty",
@@ -2585,7 +2585,7 @@
    "snapshot": {
     "best_ask": 0.64,
     "best_bid": 0.62,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -2594,8 +2594,8 @@
    "event": "KXATPCHALLENGERMATCH-26NOV01FENPOL",
    "join": {
     "ask": 0.38,
-    "ask_ahead": 37.23,
-    "ask_depth": 37.23,
+    "ask_ahead": 32.23,
+    "ask_depth": 32.23,
     "bid": 0.35,
     "bid_ahead": 0.02,
     "bid_depth": 0.02
@@ -2610,7 +2610,7 @@
    "snapshot": {
     "best_ask": 0.38,
     "best_bid": 0.35,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -2635,7 +2635,7 @@
    "snapshot": {
     "best_ask": 0.63,
     "best_bid": 0.61,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 23.8
   },
@@ -2660,7 +2660,7 @@
    "snapshot": {
     "best_ask": 0.39,
     "best_bid": 0.37,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 17.37
   },
@@ -2685,7 +2685,7 @@
    "snapshot": {
     "best_ask": 0.94,
     "best_bid": 0.92,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 1.92
   },
@@ -2710,7 +2710,7 @@
    "snapshot": {
     "best_ask": 0.07,
     "best_bid": 0.06,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -2735,7 +2735,7 @@
    "snapshot": {
     "best_ask": 0.72,
     "best_bid": 0.7,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -2748,7 +2748,7 @@
     "ask_depth": 31.62,
     "bid": 0.27,
     "bid_ahead": 230.25,
-    "bid_depth": 302.74
+    "bid_depth": 332.74
    },
    "last_trade_ts": null,
    "player": "Valentin Garay",
@@ -2760,7 +2760,7 @@
    "snapshot": {
     "best_ask": 0.29,
     "best_bid": 0.27,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -2785,7 +2785,7 @@
    "snapshot": {
     "best_ask": 0.4,
     "best_bid": 0.39,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 127.05
   },
@@ -2798,7 +2798,7 @@
     "ask_depth": 150.0,
     "bid": 0.59,
     "bid_ahead": 5.0,
-    "bid_depth": 7.0
+    "bid_depth": 5.0
    },
    "last_trade_ts": "2026-11-01T04:40:09.002063Z",
    "player": "Ryan Peniston",
@@ -2810,7 +2810,7 @@
    "snapshot": {
     "best_ask": 0.6,
     "best_bid": 0.59,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 10.35
   },
@@ -2835,7 +2835,7 @@
    "snapshot": {
     "best_ask": 0.21,
     "best_bid": 0.2,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 25.0
   },
@@ -2860,7 +2860,7 @@
    "snapshot": {
     "best_ask": 0.8,
     "best_bid": 0.78,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -2870,7 +2870,7 @@
    "join": {
     "ask": 0.97,
     "ask_ahead": 340.0,
-    "ask_depth": 427.0,
+    "ask_depth": 938.0,
     "bid": 0.96,
     "bid_ahead": 99.99,
     "bid_depth": 134.99
@@ -2885,7 +2885,7 @@
    "snapshot": {
     "best_ask": 0.97,
     "best_bid": 0.96,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 345.16
   },
@@ -2895,10 +2895,10 @@
    "join": {
     "ask": 0.04,
     "ask_ahead": 52.130000000000024,
-    "ask_depth": 511.23,
+    "ask_depth": 131.0,
     "bid": 0.03,
     "bid_ahead": 551.0,
-    "bid_depth": 571.0
+    "bid_depth": 707.0
    },
    "last_trade_ts": "2026-11-01T06:49:42.995686Z",
    "player": "Dominik Macej",
@@ -2910,7 +2910,7 @@
    "snapshot": {
     "best_ask": 0.04,
     "best_bid": 0.03,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 658.04
   },
@@ -2935,7 +2935,7 @@
    "snapshot": {
     "best_ask": 0.35,
     "best_bid": 0.28,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 118.58
   },
@@ -2945,10 +2945,10 @@
    "join": {
     "ask": 0.69,
     "ask_ahead": 0.04,
-    "ask_depth": 0.04,
-    "bid": 0.6,
-    "bid_ahead": 3.0,
-    "bid_depth": 3.0
+    "ask_depth": 5.0,
+    "bid": 0.64,
+    "bid_ahead": 0.0,
+    "bid_depth": 0.0
    },
    "last_trade_ts": "2026-11-01T06:12:23.499865Z",
    "player": "Arklon Huertas Del Pino Cordova",
@@ -2959,8 +2959,8 @@
    },
    "snapshot": {
     "best_ask": 0.69,
-    "best_bid": 0.6,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "best_bid": 0.64,
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 67.29
   },
@@ -2985,7 +2985,7 @@
    "snapshot": {
     "best_ask": 0.24,
     "best_bid": 0.22,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.2
   },
@@ -3010,7 +3010,7 @@
    "snapshot": {
     "best_ask": 0.78,
     "best_bid": 0.76,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 10.6
   },
@@ -3035,7 +3035,7 @@
    "snapshot": {
     "best_ask": 0.36,
     "best_bid": 0.34,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 7.51
   },
@@ -3060,7 +3060,7 @@
    "snapshot": {
     "best_ask": 0.66,
     "best_bid": 0.64,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 607.01
   },
@@ -3087,7 +3087,7 @@
     "best_bid": 0.06,
     "polled_utc": "2026-11-01T06:58:48+00:00"
    },
-   "volume": 2877.43
+   "volume": 2902.76
   },
   "KXATPCHALLENGERMATCH-26NOV01KACHOU-KAC": {
    "cutoff": "2026-11-01T06:59:00+00:00",
@@ -3118,9 +3118,9 @@
    "cutoff": "2026-11-01T17:19:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26NOV01KIMBAR",
    "join": {
-    "ask": 0.66,
-    "ask_ahead": 323.32,
-    "ask_depth": 580.26,
+    "ask": 0.65,
+    "ask_ahead": 21.06,
+    "ask_depth": 21.06,
     "bid": 0.63,
     "bid_ahead": 0.01,
     "bid_depth": 0.01
@@ -3133,9 +3133,9 @@
     "join": 0.0
    },
    "snapshot": {
-    "best_ask": 0.66,
+    "best_ask": 0.65,
     "best_bid": 0.63,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -3160,7 +3160,7 @@
    "snapshot": {
     "best_ask": 0.37,
     "best_bid": 0.35,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -3185,9 +3185,9 @@
    "snapshot": {
     "best_ask": 0.51,
     "best_bid": 0.5,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
-   "volume": 4852.84
+   "volume": 4890.75
   },
   "KXATPCHALLENGERMATCH-26NOV01KOUDAM-KOU": {
    "cutoff": "2026-11-01T13:59:00+00:00",
@@ -3210,7 +3210,7 @@
    "snapshot": {
     "best_ask": 0.5,
     "best_bid": 0.49,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 7560.73
   },
@@ -3235,7 +3235,7 @@
    "snapshot": {
     "best_ask": 0.89,
     "best_bid": 0.86,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -3260,7 +3260,7 @@
    "snapshot": {
     "best_ask": 0.13,
     "best_bid": 0.11,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -3335,7 +3335,7 @@
    "snapshot": {
     "best_ask": 0.56,
     "best_bid": 0.54,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 327.72
   },
@@ -3345,7 +3345,7 @@
    "join": {
     "ask": 0.47,
     "ask_ahead": 8.0,
-    "ask_depth": 746.83,
+    "ask_depth": 750.83,
     "bid": 0.44,
     "bid_ahead": 0.07,
     "bid_depth": 4.07
@@ -3360,7 +3360,7 @@
    "snapshot": {
     "best_ask": 0.47,
     "best_bid": 0.44,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 10.56
   },
@@ -3385,7 +3385,7 @@
    "snapshot": {
     "best_ask": 0.08,
     "best_bid": 0.05,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.07
   },
@@ -3410,7 +3410,7 @@
    "snapshot": {
     "best_ask": 0.94,
     "best_bid": 0.89,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 1052.01
   },
@@ -3435,7 +3435,7 @@
    "snapshot": {
     "best_ask": 0.09,
     "best_bid": 0.08,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 8.18
   },
@@ -3460,7 +3460,7 @@
    "snapshot": {
     "best_ask": 0.92,
     "best_bid": 0.9,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 17.01
   },
@@ -3485,7 +3485,7 @@
    "snapshot": {
     "best_ask": 0.5,
     "best_bid": 0.49,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 40.0
   },
@@ -3510,7 +3510,7 @@
    "snapshot": {
     "best_ask": 0.51,
     "best_bid": 0.49,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 47.51
   },
@@ -3535,7 +3535,7 @@
    "snapshot": {
     "best_ask": 0.16,
     "best_bid": 0.14,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 50.0
   },
@@ -3560,7 +3560,7 @@
    "snapshot": {
     "best_ask": 0.85,
     "best_bid": 0.84,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 17.92
   },
@@ -3570,7 +3570,7 @@
    "join": {
     "ask": 0.71,
     "ask_ahead": 1.86,
-    "ask_depth": 763.4,
+    "ask_depth": 776.0,
     "bid": 0.68,
     "bid_ahead": 0.01,
     "bid_depth": 0.01
@@ -3585,7 +3585,7 @@
    "snapshot": {
     "best_ask": 0.71,
     "best_bid": 0.68,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 19.14
   },
@@ -3598,7 +3598,7 @@
     "ask_depth": 6.0,
     "bid": 0.29,
     "bid_ahead": 6.0,
-    "bid_depth": 268.39
+    "bid_depth": 281.0
    },
    "last_trade_ts": null,
    "player": "Thiago Agustin Pernas",
@@ -3610,7 +3610,7 @@
    "snapshot": {
     "best_ask": 0.31,
     "best_bid": 0.29,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -3635,7 +3635,7 @@
    "snapshot": {
     "best_ask": 0.14,
     "best_bid": 0.13,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -3660,7 +3660,7 @@
    "snapshot": {
     "best_ask": 0.86,
     "best_bid": 0.85,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 116.19
   },
@@ -3685,7 +3685,7 @@
    "snapshot": {
     "best_ask": 0.12,
     "best_bid": 0.11,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -3710,7 +3710,7 @@
    "snapshot": {
     "best_ask": 0.89,
     "best_bid": 0.88,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 26.95
   },
@@ -3735,7 +3735,7 @@
    "snapshot": {
     "best_ask": 0.45,
     "best_bid": 0.44,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 1286.01
   },
@@ -3760,7 +3760,7 @@
    "snapshot": {
     "best_ask": 0.56,
     "best_bid": 0.55,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 1059.11
   },
@@ -3785,7 +3785,7 @@
    "snapshot": {
     "best_ask": 0.64,
     "best_bid": 0.62,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -3810,7 +3810,7 @@
    "snapshot": {
     "best_ask": 0.38,
     "best_bid": 0.35,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 55.0
   },
@@ -3835,7 +3835,7 @@
    "snapshot": {
     "best_ask": 0.06,
     "best_bid": 0.05,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -3860,7 +3860,7 @@
    "snapshot": {
     "best_ask": 0.95,
     "best_bid": 0.93,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 2.92
   },
@@ -3873,7 +3873,7 @@
     "ask_depth": 108.01,
     "bid": 0.37,
     "bid_ahead": 22.97,
-    "bid_depth": 77.92
+    "bid_depth": 28.88
    },
    "last_trade_ts": "2026-11-01T06:50:17.664564Z",
    "player": "Alessio Balestrieri",
@@ -3885,7 +3885,7 @@
    "snapshot": {
     "best_ask": 0.4,
     "best_bid": 0.37,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 2094.1
   },
@@ -3895,10 +3895,10 @@
    "join": {
     "ask": 0.64,
     "ask_ahead": 5.0,
-    "ask_depth": 6.55,
+    "ask_depth": 15.67,
     "bid": 0.58,
     "bid_ahead": 1.0,
-    "bid_depth": 1.0
+    "bid_depth": 7.0
    },
    "last_trade_ts": "2026-11-01T06:42:40.479076Z",
    "player": "Leonardo Rossi",
@@ -3910,7 +3910,7 @@
    "snapshot": {
     "best_ask": 0.64,
     "best_bid": 0.58,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 6255.52
   },
@@ -3935,7 +3935,7 @@
    "snapshot": {
     "best_ask": 0.04,
     "best_bid": 0.03,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 1098.03
   },
@@ -3960,7 +3960,7 @@
    "snapshot": {
     "best_ask": 0.96,
     "best_bid": 0.95,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 342.02
   },
@@ -4035,7 +4035,7 @@
    "snapshot": {
     "best_ask": 0.57,
     "best_bid": 0.55,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 454.0
   },
@@ -4060,7 +4060,7 @@
    "snapshot": {
     "best_ask": 0.45,
     "best_bid": 0.43,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -4085,7 +4085,7 @@
    "snapshot": {
     "best_ask": 0.67,
     "best_bid": 0.65,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.18
   },
@@ -4098,7 +4098,7 @@
     "ask_depth": 0.77,
     "bid": 0.3,
     "bid_ahead": 2630.23,
-    "bid_depth": 3415.26
+    "bid_depth": 3385.26
    },
    "last_trade_ts": "2026-11-01T04:42:23.689349Z",
    "player": "Joshua Sheehy",
@@ -4110,7 +4110,7 @@
    "snapshot": {
     "best_ask": 0.31,
     "best_bid": 0.3,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 46.23
   },
@@ -4135,7 +4135,7 @@
    "snapshot": {
     "best_ask": 0.89,
     "best_bid": 0.86,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -4143,12 +4143,12 @@
    "cutoff": "2026-11-01T18:59:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26NOV01SOULEI",
    "join": {
-    "ask": 0.15,
-    "ask_ahead": 22.0,
-    "ask_depth": 22.0,
+    "ask": 0.14,
+    "ask_ahead": 6.0,
+    "ask_depth": 6.0,
     "bid": 0.11,
     "bid_ahead": 0.09,
-    "bid_depth": 1.09
+    "bid_depth": 0.09
    },
    "last_trade_ts": null,
    "player": "Andre Souza",
@@ -4158,9 +4158,9 @@
     "join": 0.0
    },
    "snapshot": {
-    "best_ask": 0.15,
+    "best_ask": 0.14,
     "best_bid": 0.11,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -4173,7 +4173,7 @@
     "ask_depth": 37.0,
     "bid": 0.63,
     "bid_ahead": 0.0,
-    "bid_depth": 0.0
+    "bid_depth": 5.0
    },
    "last_trade_ts": null,
    "player": "Jose Pereira",
@@ -4185,7 +4185,7 @@
    "snapshot": {
     "best_ask": 0.65,
     "best_bid": 0.63,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -4193,9 +4193,9 @@
    "cutoff": "2026-11-01T18:59:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26NOV01STOPER",
    "join": {
-    "ask": 0.39,
-    "ask_ahead": 21.0,
-    "ask_depth": 21.0,
+    "ask": 0.38,
+    "ask_ahead": 210.0,
+    "ask_depth": 210.0,
     "bid": 0.35,
     "bid_ahead": 50.02,
     "bid_depth": 50.02
@@ -4208,16 +4208,23 @@
     "join": 0.0
    },
    "snapshot": {
-    "best_ask": 0.39,
+    "best_ask": 0.38,
     "best_bid": 0.35,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
   "KXATPCHALLENGERMATCH-26NOV01TOBBOG-BOG": {
    "cutoff": "2026-11-01T18:59:00+00:00",
    "event": "KXATPCHALLENGERMATCH-26NOV01TOBBOG",
-   "join": null,
+   "join": {
+    "ask": 0.05,
+    "ask_ahead": 228.0,
+    "ask_depth": 228.0,
+    "bid": 0.04,
+    "bid_ahead": 127.0,
+    "bid_depth": 127.0
+   },
    "last_trade_ts": "2026-11-01T07:13:37.714114Z",
    "player": "Enrique Bogo",
    "pos": {
@@ -4226,9 +4233,9 @@
     "join": 0.0
    },
    "snapshot": {
-    "best_ask": 0.54,
+    "best_ask": 0.05,
     "best_bid": 0.04,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 100.0
   },
@@ -4238,7 +4245,7 @@
    "join": {
     "ask": 0.96,
     "ask_ahead": 47.0,
-    "ask_depth": 47.0,
+    "ask_depth": 64.0,
     "bid": 0.95,
     "bid_ahead": 0.01,
     "bid_depth": 0.01
@@ -4253,7 +4260,7 @@
    "snapshot": {
     "best_ask": 0.96,
     "best_bid": 0.95,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -4278,7 +4285,7 @@
    "snapshot": {
     "best_ask": 0.78,
     "best_bid": 0.77,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 10.0
   },
@@ -4291,7 +4298,7 @@
     "ask_depth": 43.0,
     "bid": 0.21,
     "bid_ahead": 59.0,
-    "bid_depth": 292.41
+    "bid_depth": 350.85
    },
    "last_trade_ts": "2026-11-01T05:37:56.055769Z",
    "player": "Rocco Valente",
@@ -4303,7 +4310,7 @@
    "snapshot": {
     "best_ask": 0.23,
     "best_bid": 0.21,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 31.0
   },
@@ -4312,8 +4319,8 @@
    "event": "KXATPCHALLENGERMATCH-26NOV01VASDES",
    "join": {
     "ask": 0.33,
-    "ask_ahead": 4.0,
-    "ask_depth": 4.0,
+    "ask_ahead": 0.0,
+    "ask_depth": 0.0,
     "bid": 0.32,
     "bid_ahead": 0.03,
     "bid_depth": 0.03
@@ -4328,7 +4335,7 @@
    "snapshot": {
     "best_ask": 0.33,
     "best_bid": 0.32,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 111.0
   },
@@ -4338,10 +4345,10 @@
    "join": {
     "ask": 0.68,
     "ask_ahead": 2372.33,
-    "ask_depth": 2385.05,
+    "ask_depth": 2380.05,
     "bid": 0.67,
-    "bid_ahead": 4.0,
-    "bid_depth": 4.0
+    "bid_ahead": 0.0,
+    "bid_depth": 0.0
    },
    "last_trade_ts": "2026-11-01T06:39:20.148649Z",
    "player": "Jacopo Vasami",
@@ -4353,7 +4360,7 @@
    "snapshot": {
     "best_ask": 0.68,
     "best_bid": 0.67,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 187.07
   },
@@ -4378,7 +4385,7 @@
    "snapshot": {
     "best_ask": 0.68,
     "best_bid": 0.66,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 1.14
   },
@@ -4403,7 +4410,7 @@
    "snapshot": {
     "best_ask": 0.32,
     "best_bid": 0.31,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 12.5
   },
@@ -4428,7 +4435,7 @@
    "snapshot": {
     "best_ask": 0.55,
     "best_bid": 0.53,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 1.32
   },
@@ -4453,7 +4460,7 @@
    "snapshot": {
     "best_ask": 0.47,
     "best_bid": 0.45,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 14.0
   },
@@ -4478,7 +4485,7 @@
    "snapshot": {
     "best_ask": 0.69,
     "best_bid": 0.68,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },
@@ -4503,7 +4510,7 @@
    "snapshot": {
     "best_ask": 0.31,
     "best_bid": 0.3,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 53.73
   },
@@ -4578,7 +4585,7 @@
    "snapshot": {
     "best_ask": 0.82,
     "best_bid": 0.8,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 10.0
   },
@@ -4603,7 +4610,7 @@
    "snapshot": {
     "best_ask": 0.19,
     "best_bid": 0.18,
-    "polled_utc": "2026-11-01T07:15:14+00:00"
+    "polled_utc": "2026-11-01T07:16:35+00:00"
    },
    "volume": 0.0
   },

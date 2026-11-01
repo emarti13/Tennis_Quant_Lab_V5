@@ -1,21 +1,21 @@
-# Server status, 2026-10-31T07:18:09+00:00
+# Server status, 2026-11-01T07:18:27+00:00
 
-Code: `a0883ef feat: daily log files gzipped by the server; status page; README setup steps`  
+Code: `1b82d32 feat: live logger also records every open Kalshi tennis quote every 5 minutes`  
 Disk free: 33.4 GB  
 Services: tql-paper active, tql-live active, tql-daily.timer active
 
-Tests (FAIL): `1 failed, 252 passed, 7 skipped in 52.52s`
+Tests (pass): `492 passed, 7 skipped, 12 warnings in 70.54s (0:01:10)`
 
 ## Problems
 
 - settle failed: TypeError: Can only string multiply by an integer.
-- tests failed on new code from feat/vm-runner; rolled back to 3e0889b
 
 ## Live score log (last 7 days)
 
 | day | rows | matches |
 |---|---|---|
-| 2026-10-31 | 1731 | 12 |
+| 2026-10-31 | 10237 | 47 |
+| 2026-11-01 | 2238 | 15 |
 
 ## Paper market-making (settled markets)
 
@@ -29,31 +29,11 @@ run_failures.log: 1 lines
 
 Settle output:
 ```
-hod(self, other, op)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ubuntu/tql/.venv/lib/python3.12/site-packages/pandas/core/base.py", line 1717, in _arith_method
-    result = ops.arithmetic_op(lvalues, rvalues, op)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ubuntu/tql/.venv/lib/python3.12/site-packages/pandas/core/ops/array_ops.py", line 282, in arithmetic_op
-    res_values = op(left, right)
-                 ^^^^^^^^^^^^^^^
-  File "/home/ubuntu/tql/.venv/lib/python3.12/site-packages/pandas/core/arrays/arrow/array.py", line 1228, in __array_ufunc__
-    result = super().__array_ufunc__(ufunc, method, *inputs, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ubuntu/tql/.venv/lib/python3.12/site-packages/pandas/core/arrays/base.py", line 2966, in __array_ufunc__
-    result = arraylike.maybe_dispatch_ufunc_to_dunder_op(
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "pandas/_libs/ops_dispatch.pyx", line 113, in pandas._libs.ops_dispatch.maybe_dispatch_ufunc_to_dunder_op
-  File "/home/ubuntu/tql/.venv/lib/python3.12/site-packages/pandas/core/ops/common.py", line 140, in new_method
-    return method(self, other)
-           ^^^^^^^^^^^^^^^^^^^
-  File "/home/ubuntu/tql/.venv/lib/python3.12/site-packages/pandas/core/arraylike.py", line 231, in __rmul__
-    return self._arith_method(other, roperator.rmul)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ubuntu/tql/.venv/lib/python3.12/site-packages/pandas/core/arrays/arrow/array.py", line 1536, in _arith_method
-    result = self._evaluate_op_method(other, op, ARROW_ARITHMETIC_FUNCS)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ubuntu/tql/.venv/lib/python3.12/site-packages/pandas/core/arrays/arrow/array.py", line 1423, in _evaluate_op_method
-    raise TypeError("Can only string multiply by an integer.")
+  File "/home/ubuntu/tql/scripts/paper_trade_kalshi.py", line 382, in <module>
+    raise SystemExit(main())
+  File "/home/ubuntu/tql/scripts/paper_trade_kalshi.py", line 359, in main
+    out = settle(api)
+  File "/home/ubuntu/tql/scripts/paper_trade_kalshi.py", line 337, in settle
+    "end_position": float((f["contracts"] * f["side"].map({"buy": 1, "sell": -1})).sum())}
 TypeError: Can only string multiply by an integer.
 ```
