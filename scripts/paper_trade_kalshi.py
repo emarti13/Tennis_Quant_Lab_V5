@@ -49,6 +49,7 @@ import sys
 import time
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import requests
 
@@ -336,9 +337,9 @@ def settle(api: Kalshi) -> pd.DataFrame:
     """Per market and setting: contracts, profit held to settlement, and marked at the last
     mid before the cutoff (with and without Kalshi's maker fee schedule)."""
     fill_files = sorted(PAPER_DIR.glob("fills_*.csv*"))                # daily files; past days gzipped
-    fills = (pd.concat([_read_log(p, ("trade_price", "trade_count", "price", "contracts")) for p in fill_files])
+    fills = (pd.concat([_read_log(p, ("trade_price", "trade_count", "price", "contracts")) for p in fill_files], ignore_index=True)
              if fill_files else pd.DataFrame(columns=FILL_COLS))
-    snaps = pd.concat([_read_log(p, ("best_bid", "best_ask", "volume")) for p in sorted(PAPER_DIR.glob("snapshots_*.csv*"))])
+    snaps = pd.concat([_read_log(p, ("best_bid", "best_ask", "volume")) for p in sorted(PAPER_DIR.glob("snapshots_*.csv*"))], ignore_index=True)
     rows = []
     for t, g in snaps.groupby("ticker"):
         m = api.get(f"/markets/{t}").get("market", {})
@@ -349,7 +350,8 @@ def settle(api: Kalshi) -> pd.DataFrame:
             f = fills[(fills["ticker"] == t) & (fills["h"].astype(str) == h)]
             row = {"ticker": t, "event_ticker": last["event_ticker"], "h": h, "result": result,
                    "start_utc": last["start_utc"], "contracts": float(f["contracts"].sum()),
-                   "end_position": float((f["contracts"] * f["side"].map({"buy": 1, "sell": -1})).sum())}
+                   # np.where, not .map: on pandas 3.1 mapping an empty text column stays text
+                   "end_position": float((f["contracts"].to_numpy(float) * np.where(f["side"].to_numpy() == "buy", 1, -1)).sum())}
             fee = float((MAKER_FEE_RATE * f["contracts"] * f["price"] * (1 - f["price"])).sum())
             for name, value in (("held", {"yes": 1.0, "no": 0.0}.get(result)), ("marked", mark)):
                 if value is None:

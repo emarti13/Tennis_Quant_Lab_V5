@@ -134,3 +134,22 @@ def test_settle_reads_numbers_as_numbers_and_names_a_bad_value(tmp_path, capsys)
     df = pt._read_log(p, ("price", "contracts"))
     assert df["contracts"].dtype.kind == "f" and df["contracts"].iloc[0] == 3 and pd.isna(df["contracts"].iloc[1])
     assert "fills_2026-10-31.csv: 1 non-numeric contracts values, e.g. 'oops'" in capsys.readouterr().err
+
+
+def test_settle_handles_a_market_with_no_fills_for_a_setting(tmp_path, monkeypatch):
+    """pandas 3.1: an empty text column mapped to numbers stays text; settle must not multiply by it."""
+    monkeypatch.setattr(pt, "PAPER_DIR", tmp_path)
+    pd.DataFrame([{c: None for c in pt.FILL_COLS} | {"ticker": "T", "event_ticker": "E", "h": "join", "side": "buy",
+                                                       "price": 0.4, "contracts": 10.0, "trade_price": 0.4, "trade_count": 10.0}]
+                 ).to_csv(tmp_path / "fills_2026-10-31.csv", index=False)
+    pd.DataFrame([{"ticker": "T", "event_ticker": "E", "player": "p", "polled_utc": "2026-10-31T10:00:00+00:00",
+                   "start_utc": "2026-10-31T12:00:00+00:00", "best_bid": 0.4, "best_ask": 0.42, "volume": 1.0}]
+                 ).to_csv(tmp_path / "snapshots_2026-10-31.csv", index=False)
+
+    class Api:
+        def get(self, path, params=None):
+            return {"market": {"result": "yes"}}
+    out = pt.settle(Api())
+    row = out[out["h"].astype(str) == "join"].iloc[0]
+    assert row["end_position"] == 10.0 and row["held"] == 6.0
+    assert out[out["h"].astype(str) == "0.03"].iloc[0]["contracts"] == 0.0
