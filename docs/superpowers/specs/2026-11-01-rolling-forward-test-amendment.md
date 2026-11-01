@@ -1,8 +1,7 @@
 # Amendment: replace the fixed sealed period with a forward test per idea
 
-Status: **DRAFT — pending user approval.** Requested by the user in chat on 2026-11-01. Until it
-is approved, the roadmap's sealed period (§4, Phase 0) and CLAUDE.md's "Sealed period" rule
-stay in force.
+Status: **Approved by the user in chat, 2026-11-01** ("Allow everything"), including the in-play
+research question below. Applied to the roadmap and CLAUDE.md in the same change.
 
 Amends: `docs/superpowers/specs/2026-10-12-fair-price-to-market-making-roadmap-design.md`
 (§4 Phase 0 "Seal a forward period", Gates 2, 3 and 4) and `CLAUDE.md` ("Sealed period").
@@ -53,7 +52,7 @@ never seen, with rules fixed in advance.
    together); in-play rules enough matches for the interval the pass rule needs (the server
    logs about 40 to 50 matches a day).
 
-## Changes to the roadmap when approved
+## Changes made to the roadmap
 
 - §4 Phase 0: replace "Seal a forward period starting on the approval date …" with: "Every
   idea is examined on a forward window that starts after its registration (see
@@ -65,6 +64,8 @@ never seen, with rules fixed in advance.
   window opens (as now).
 - Gate 4: "on the sealed collection window" becomes "on a registered forward window of
   collected data".
+- §4 Phase 4: "In-play is out of scope until the pre-match simulation is positive" becomes
+  "In-play is in scope for research; real money on it needs a passed registered forward test."
 - CLAUDE.md "Sealed period" becomes: "**Forward tests.** An idea is accepted only on a forward
   window that starts after its registration (`docs/registrations/`). Do not change a
   registered rule during its window, and never re-score a failed idea on the same window."
@@ -81,12 +82,13 @@ their lock dates:
 - the in-play calibration hypothesis, locked 2026-10-20
   (`docs/experiments/2026-10-20-inplay-calibration.md`, branch `research/kalshi-making-sim`).
 
-## A separate question for the user (not part of this amendment unless approved)
+## In-play (approved with this amendment)
 
-The roadmap also says in-play is out of scope until the pre-match simulation is positive (§4,
+The roadmap said in-play is out of scope until the pre-match simulation is positive (§4,
 Phase 4). The server now collects in-play data (point score, running statistics and prices
-every 10 seconds). The user may want to lift that restriction for research, keeping it for real
-money until a registered forward test passes. Decide separately.
+every 10 seconds). In-play is now in scope for research. Real money on any in-play idea follows
+the same rule as everything else: a passed registered forward test, the research_kit checks and
+a second forward window first.
 
 ## Trade-off
 

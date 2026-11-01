@@ -9,7 +9,7 @@ Subordinate to: `PROJECT_MANDATE.md`. Builds on (does not replace): `2026-09-01-
 
 Build **one fair-price engine** for tennis match winners that:
 
-1. beats the market on a sealed, forward period (better Brier / log loss than the sharp close in at least one tradeable segment), then
+1. beats the market on a registered forward window (better Brier / log loss than the sharp close in at least one tradeable segment), then
 2. makes money as a **taker** at prices the user can actually get (positive closing-line value after fees), and later
 3. powers **market making** on venues that allow resting orders (Kalshi first), where profit comes from fair price + spread capture − adverse selection − fees.
 
@@ -42,7 +42,7 @@ Goal: a trustworthy pipeline and a clean evaluation clock.
 - Get CI green: triage the 21 failures (retire dead court tests with a spec note, fix workflow drift, fix the `_clean` robustness bug, repair the broken tests).
 - Make the leak/parity tests and `v5_model_guard.py` **required checks** on any PR that touches features, models, or production.
 - Switch production probabilities to the leak-free baseline (Elo + surface, plus `fatigue_v1` only after it passes its own gate). Label the old workload features as retired.
-- **Seal a forward period** starting on the approval date: **matches played on or after 2026-10-13 (UTC)** are sealed. No model selection, tuning, or threshold choices may use results from inside it until the Phase 2 gate evaluation.
+- ~~Seal a forward period starting on 2026-10-13.~~ Replaced 2026-11-01 (user-approved): every idea is examined on a forward window that starts after its registration (`docs/superpowers/specs/2026-11-01-rolling-forward-test-amendment.md`, `docs/registrations/`). Data before 2026-11-01 is open for exploration.
 - **Start collecting market data at zero extra cost** (see §5.1 for the budget):
   - Kalshi trades and 1-minute bid/ask candlesticks for every settled tennis market, pulled once a day after the fact from Kalshi's free public endpoints.
   - Kalshi order-book depth snapshots, taken only inside the already-scheduled daily runs (no new jobs).
@@ -72,7 +72,7 @@ Goal: a calibrated probability that beats the close in at least one candidate se
 - Layer 3, combination with the market: a calibrated blend of model and market inputs available at decision time (opening line for early decisions, current line later), per the market-aware design spec.
 - Bridge for missing historical timestamps: a frozen round→day schedule estimator calibrated on 2026 clock data and used identically in history and live; an exact-rest-hours residual layer is allowed on 2026+ data only.
 
-**Gate 2:** on the sealed forward period, the engine's log loss beats the no-vig sharp close in at least one pre-declared segment, with a bootstrap interval that excludes zero, and at least 300 matches in that segment. If it fails, return to Phase 1 with the evidence. Do not tune on the sealed period.
+**Gate 2:** on a registered forward window, the engine's log loss beats the no-vig sharp close in at least one pre-declared segment, with a bootstrap interval that excludes zero, and at least 300 matches in that segment. If it fails, return to Phase 1 with the evidence. Do not change a registered rule during its window, and never re-score a failed idea on the same window.
 
 ### Phase 3: Taker validation (shadow, then small stakes)
 
@@ -93,9 +93,9 @@ Uses the order-book and trade data collected since Phase 0.
 - Fill model: probability a resting quote at distance *d* from fair fills, by segment and time to start.
 - Adverse-selection model: price move after a fill (markout at 1 min, 5 min, close). Toxic flow = fills followed by moves against us.
 - Simulator: quote both sides around the fair price with an inventory skew and position limits; include maker fees where they apply (some sports markets charge 0.0175 per contract); report P&L, inventory risk, and worst day.
-- In-play is out of scope until the pre-match simulation is positive.
+- In-play is in scope for research (amended 2026-11-01); real money on it needs a passed registered forward test.
 
-**Gate 4:** simulated net P&L positive on the sealed collection window after fees and adverse selection, positive markouts on average, and drawdown within limits the user sets.
+**Gate 4:** simulated net P&L positive on a registered forward window of collected data after fees and adverse selection, positive markouts on average, and drawdown within limits the user sets.
 
 ### Phase 5: Live market making (small)
 
