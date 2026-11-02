@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Daily job (systemd timer tql-daily). No Claude, no Actions minutes:
-#   1. settle the paper trader against Kalshi results
-#   2. gzip finished days of the logs
-#   3. commit the logs to the data branch
-#   4. bring in new code from the code branch; keep it only if the tests pass
+#   1. gzip finished days of the logs
+#   2. commit the logs to the data branch
+#   3. bring in new code from the code branch; keep it only if the tests pass
+#   4. settle the paper trader against Kalshi results (with the code now in place)
 #   5. write market_history/vm_status.md, commit, push the data branch
 set -uo pipefail
 DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -18,12 +18,7 @@ commit_logs() {
   git diff --cached --quiet || git commit -q -m "data: server logs $(date -u +%Y-%m-%d)"
 }
 
-# 1. settle (writes market_history/kalshi/paper/results.csv)
-if ! $PY scripts/paper_trade_kalshi.py settle > /tmp/tql_settle.txt 2>&1; then
-  STATUS_ARGS+=(--note "settle failed: $(tail -1 /tmp/tql_settle.txt)")
-fi
-
-# 2. gzip every finished day of the logs (only .csv.gz is committed; today's file keeps growing)
+# 1. gzip every finished day of the logs (only .csv.gz is committed; today's file keeps growing)
 today=$(date -u +%Y-%m-%d)
 for f in "$LIVE"/*.csv "$LIVE"/prematch/*.csv market_history/kalshi/paper/{snapshots,fills,depth}_*.csv; do
   [ -e "$f" ] || continue
@@ -31,10 +26,10 @@ for f in "$LIVE"/*.csv "$LIVE"/prematch/*.csv market_history/kalshi/paper/{snaps
   gzip -f "$f"
 done
 
-# 3. commit logs before touching code
+# 2. commit logs before touching code
 commit_logs
 
-# 4. new code: merge, test, keep or roll back
+# 3. new code: merge, test, keep or roll back
 before=$(git rev-parse HEAD)
 code_changed=no
 if git fetch -q origin "$CODE_BRANCH" "$DATA_BRANCH"; then
@@ -81,6 +76,11 @@ if [ "$code_changed" = yes ]; then
   sudo -n systemctl daemon-reload 2>/dev/null
   sudo -n systemctl restart tql-paper.service tql-live.service 2>/dev/null \
     || STATUS_ARGS+=(--note "new code merged; services pick it up at their daily restart")
+fi
+
+# 4. settle with the code now in place, so a settle fix applies the same day (writes paper/results.csv)
+if ! $PY scripts/paper_trade_kalshi.py settle > /tmp/tql_settle.txt 2>&1; then
+  STATUS_ARGS+=(--note "settle failed: $(tail -1 /tmp/tql_settle.txt)")
 fi
 
 # 5. status, commit, push (retries with backoff)
