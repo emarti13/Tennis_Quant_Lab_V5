@@ -1,10 +1,10 @@
-# Server status, 2026-11-01T07:18:27+00:00
+# Server status, 2026-11-02T07:20:04+00:00
 
-Code: `1b82d32 feat: live logger also records every open Kalshi tennis quote every 5 minutes`  
-Disk free: 33.4 GB  
+Code: `c2adc29 fix: paper settle crashed on pandas 3.1 for markets with no fills in a setting`  
+Disk free: 33.3 GB  
 Services: tql-paper active, tql-live active, tql-daily.timer active
 
-Tests (pass): `492 passed, 7 skipped, 12 warnings in 70.54s (0:01:10)`
+Tests (pass): `493 passed, 7 skipped in 92.27s (0:01:32)`
 
 ## Problems
 
@@ -15,7 +15,8 @@ Tests (pass): `492 passed, 7 skipped, 12 warnings in 70.54s (0:01:10)`
 | day | rows | matches |
 |---|---|---|
 | 2026-10-31 | 10237 | 47 |
-| 2026-11-01 | 2238 | 15 |
+| 2026-11-01 | 18593 | 92 |
+| 2026-11-02 | 2600 | 11 |
 
 ## Paper market-making (settled markets)
 
@@ -29,11 +30,11 @@ run_failures.log: 1 lines
 
 Settle output:
 ```
-  File "/home/ubuntu/tql/scripts/paper_trade_kalshi.py", line 382, in <module>
+  File "/home/ubuntu/tql/scripts/paper_trade_kalshi.py", line 397, in <module>
     raise SystemExit(main())
-  File "/home/ubuntu/tql/scripts/paper_trade_kalshi.py", line 359, in main
+  File "/home/ubuntu/tql/scripts/paper_trade_kalshi.py", line 374, in main
     out = settle(api)
-  File "/home/ubuntu/tql/scripts/paper_trade_kalshi.py", line 337, in settle
+  File "/home/ubuntu/tql/scripts/paper_trade_kalshi.py", line 352, in settle
     "end_position": float((f["contracts"] * f["side"].map({"buy": 1, "sell": -1})).sum())}
 TypeError: Can only string multiply by an integer.
 ```
