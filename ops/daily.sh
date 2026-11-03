@@ -90,6 +90,8 @@ daily_main() {
   # 4c. registered forward tests (paper only)
   $PY scripts/track_longshot_rule.py > /tmp/tql_reg.txt 2>&1 \
     || STATUS_ARGS+=(--note "longshot registration tracker failed: $(tail -1 /tmp/tql_reg.txt)")
+  $PY scripts/track_season_end_rule.py > /tmp/tql_reg2.txt 2>&1 \
+    || STATUS_ARGS+=(--note "season-end registration tracker failed: $(tail -1 /tmp/tql_reg2.txt)")
 
   # 5. status, commit, push (retries with backoff)
   $PY ops/status.py --settle /tmp/tql_settle.txt "${STATUS_ARGS[@]}"
