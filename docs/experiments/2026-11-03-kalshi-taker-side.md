@@ -35,7 +35,7 @@ maker fee), range includes it. Planted shift (YES wins 3 points less than priced
 What does show up, after the fact (so a hypothesis, not a finding), is the favourite-longshot
 pattern, the same one seen at every bookmaker in the Kaggle data:
 
-- Last pre-start price against the result, one row per market (2,265 markets with fills):
+- Last pre-start price against the result, one row per market (3,265 markets):
   long shots priced 0-10% won 1.6 points less than priced, 10-20% 3.7 less, 20-30% 3.7 less;
   favourites priced 70-80% won 2.4 more, 80-90% 3.4 more. No single band is significant on
   its own; the shape is consistent.
