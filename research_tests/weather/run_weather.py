@@ -56,7 +56,8 @@ def attributes(hist_dir: Path) -> pd.DataFrame:
     ev["cum_ace"] = g["ace"].cumsum() - ev["ace"]                      # earlier events only
     ev["cum_svpt"] = g["svpt"].cumsum() - ev["svpt"]
     ev["ace_rate"] = (ev["cum_ace"] + 500 * 0.08) / (ev["cum_svpt"] + 500)
-    rate = ev.set_index(["name", "tid"])["ace_rate"]
+    # one value per (player, event): the same event id can appear on two dates (e.g. a qualifying week)
+    rate = ev.drop_duplicates(["name", "tid"]).set_index(["name", "tid"])["ace_rate"].to_dict()
     out = pd.DataFrame({"tid": h["tourney_id"], "round": h["round"], "w": h["winner_name"], "l": h["loser_name"],
                         "indoor": h["indoor"], "age_w": h["winner_age"], "age_l": h["loser_age"], "ht_w": h["winner_ht"], "ht_l": h["loser_ht"]})
     out["ace_w"] = [rate.get((n, t), np.nan) for n, t in zip(out["w"], out["tid"])]
