@@ -101,10 +101,11 @@ def main() -> int:
     done = set(arts["name"])
     s = requests.Session()
     todo = [n for n in names if n not in done]
-    found = find_articles(s, todo)
-    arts = pd.concat([arts, pd.DataFrame([{"name": n, "title": t, "how": h} for n, (t, h) in found.items()])], ignore_index=True)
-    arts.to_csv(art_path, index=False)
-    print(f"articles: {arts['title'].notna().sum()} of {len(arts)} names", flush=True)
+    for k in range(0, len(todo), 200):                    # save every 200 names (resumable under rate limits)
+        found = find_articles(s, todo[k:k + 200])
+        arts = pd.concat([arts, pd.DataFrame([{"name": n, "title": t, "how": h} for n, (t, h) in found.items()])], ignore_index=True)
+        arts.to_csv(art_path, index=False)
+        print(f"articles: {len(arts)} of {len(names)} names looked up, {arts['title'].notna().sum()} found", flush=True)
     views = pd.read_csv(views_path) if views_path.exists() else pd.DataFrame(columns=["title", "month", "views"])
     have = set(views["title"])
     rows = []

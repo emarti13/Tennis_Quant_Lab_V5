@@ -1,0 +1,126 @@
+{
+ "manifest": {
+  "run_utc": "2026-11-03T05:37:26.721009+00:00",
+  "command": "python research_tests/retirement/run_retirement.py /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl .v5_history_cache /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/retirement/results.json",
+  "git_commit": "fe4230aa3f04d85e052cd6c04e7d787180f5fddb",
+  "uncommitted_changes": true,
+  "python": "3.13.16",
+  "packages": {
+   "pandas": "3.0.5",
+   "numpy": "2.5.3",
+   "scikit-learn": "1.9.1",
+   "lightgbm": "4.7.0",
+   "scipy": "1.18.1"
+  },
+  "seeds": {
+   "orientation": 20261103,
+   "bootstrap": 20261103
+  },
+  "inputs": {
+   "joined": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl",
+    "sha256": "1888802164c3ff67906c3f818ca0762650bf8ba450f2d7ba03c318dbf31598bf"
+   },
+   "history": {
+    "path": ".v5_history_cache",
+    "sha256": "46c890566bc717ce3937640b00fba7de4a4b5de24254b9af7213eb0f10d33204"
+   }
+  }
+ },
+ "rows": 84956,
+ "flag_rates": {
+  "retired_recent": 0.0363,
+  "walkover_recent": 0.0068
+ },
+ "base_retirement_rate": 0.0326,
+ "results": {
+  "PRIMARY M1 (retirement flags) minus M0, Betfair close, 2022-25": [
+   5e-05,
+   -1e-05,
+   0.00012,
+   39684
+  ],
+  "retired_recent: flagged player won minus Betfair close (pts)": {
+   "all": [
+    -0.31,
+    -1.93,
+    1.31,
+    3084
+   ],
+   "2016-21": [
+    -1.0,
+    -3.14,
+    1.37,
+    1600
+   ],
+   "flagged player retires again in this match": 0.0256
+  },
+  "walkover_recent: flagged player won minus Betfair close (pts)": {
+   "all": [
+    1.41,
+    -2.3,
+    5.01,
+    581
+   ],
+   "2016-21": [
+    4.29,
+    -0.54,
+    9.13,
+    303
+   ],
+   "flagged player retires again in this match": 0.0224
+  },
+  "MONEY walkover_recent: back the flagged player at bf_close, 2022-25": {
+   "n": 278,
+   "roi": -0.079,
+   "range": [
+    -0.1912,
+    0.0383
+   ]
+  },
+  "MONEY walkover_recent: back the flagged player at b365_close, 2022-25": {
+   "n": 275,
+   "roi": -0.0919,
+   "range": [
+    -0.1978,
+    0.0282
+   ]
+  }
+ },
+ "checks": {
+  "swap_source": {
+   "pass": true,
+   "columns_differing": [],
+   "labels_inverted": true,
+   "rows": 26605
+  },
+  "planted_edge": {
+   "pass": true,
+   "expected_improvement": 0.00237,
+   "found_delta": [
+    -0.00243,
+    -0.00307,
+    -0.0018
+   ],
+   "size": 0.15
+  },
+  "market_null": {
+   "pass": true,
+   "found_delta": [
+    3e-05,
+    -1e-05,
+    6e-05
+   ]
+  },
+  "known_answers": {
+   "pass": true,
+   "market_log_loss": 0.60791,
+   "expected_range": [
+    0.55,
+    0.66
+   ],
+   "A_win_share": 0.4935
+  }
+ },
+ "checks_passed": true
+}
