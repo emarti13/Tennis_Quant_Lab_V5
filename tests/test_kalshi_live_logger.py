@@ -31,6 +31,7 @@ class FakeKalshi:
         return {"id": "m1", "type": "tennis_tournament_singles", "start_date": "2026-10-21T12:00:00Z"}
 
     def get(self, path, params=None):
+        self.calls += 1
         return {"live_data": {"details": self.details}}
 
 
@@ -55,6 +56,11 @@ def test_not_started_and_too_early_are_skipped(tmp_path, monkeypatch):
     assert ll.poll_once(api, state, pd.Timestamp("2026-10-21T11:00:00Z"))["rows"] == 0     # an hour before the start
     api.details = {"status": "not_started", "match_status": None}
     assert ll.poll_once(api, state, pd.Timestamp("2026-10-21T11:55:00Z"))["rows"] == 0     # in the window, not started
+    calls = api.calls
+    ll.poll_once(api, state, pd.Timestamp("2026-10-21T11:55:30Z"))                          # 30 s later: not re-checked
+    assert api.calls == calls
+    ll.poll_once(api, state, pd.Timestamp("2026-10-21T11:56:00Z"))                          # a minute later: re-checked
+    assert api.calls == calls + 1
 
 
 def test_a_finished_match_is_logged_once_then_dropped(tmp_path, monkeypatch):
