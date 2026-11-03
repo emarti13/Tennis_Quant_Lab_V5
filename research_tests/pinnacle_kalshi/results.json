@@ -1,0 +1,130 @@
+{
+ "manifest": {
+  "run_utc": "2026-11-03T04:07:52.374957+00:00",
+  "command": "python research_tests/pinnacle_kalshi/run_pinnacle_kalshi.py /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kalshi_raw.pkl /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kmarkets /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/ppoints /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/pk/results.json",
+  "git_commit": "c7d4232906a9803b4b38f854326ce577f5e41de8",
+  "uncommitted_changes": true,
+  "python": "3.13.16",
+  "packages": {
+   "pandas": "3.0.5",
+   "numpy": "2.5.3",
+   "scikit-learn": "1.9.1",
+   "lightgbm": "4.7.0",
+   "scipy": "1.18.1"
+  },
+  "seeds": {
+   "bootstrap": 20261103
+  },
+  "inputs": {
+   "kalshi_raw": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kalshi_raw.pkl",
+    "sha256": "c8ae5deeaeacbe441808abfcecc87a5dab95b484c8f19521e9c71d2cca98ccdd"
+   },
+   "kalshi_markets": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kmarkets",
+    "sha256": "e0f82539aeaccf801487e30bb86edf400b6f158332699f08b3fe8700202c4095"
+   },
+   "price_points": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/ppoints",
+    "sha256": "526047a0a7a820c7c4bed35deba5c00dd2809106709d28a1db8da84360680769"
+   }
+  }
+ },
+ "matches_with_any_checkpoint": 187,
+ "skipped": {
+  "no_two_markets": 0,
+  "no_pinnacle_both": 2496
+ },
+ "results": {
+  "t12h: matches compared": 105,
+  "t12h: mean |Pinnacle fair - Kalshi mid| (pts)": 0.85,
+  "t12h: Kalshi mid moves toward Pinnacle by this share of the gap before the start": -0.029,
+  "t12h, edge >= 0 pts": {
+   "n": 9,
+   "cents_per_contract": 17.23,
+   "range": [
+    -7.11,
+    49.97
+   ],
+   "mean_edge_cents": 0.5,
+   "mean_price": 0.152
+  },
+  "t12h, edge >= 2 pts": {
+   "n": 0
+  },
+  "t12h, edge >= 4 pts": {
+   "n": 0
+  },
+  "t6h: matches compared": 169,
+  "t6h: mean |Pinnacle fair - Kalshi mid| (pts)": 0.92,
+  "t6h: Kalshi mid moves toward Pinnacle by this share of the gap before the start": 0.447,
+  "t6h, edge >= 0 pts": {
+   "n": 23,
+   "cents_per_contract": -4.03,
+   "range": [
+    -16.59,
+    11.02
+   ],
+   "mean_edge_cents": 0.87,
+   "mean_price": 0.203
+  },
+  "t6h, edge >= 2 pts": {
+   "n": 2,
+   "cents_per_contract": 22.18,
+   "range": [
+    -20.08,
+    64.43
+   ],
+   "mean_edge_cents": 2.31,
+   "mean_price": 0.265
+  },
+  "t6h, edge >= 4 pts": {
+   "n": 0
+  },
+  "t1h: matches compared": 183,
+  "t1h: mean |Pinnacle fair - Kalshi mid| (pts)": 0.83,
+  "t1h: Kalshi mid moves toward Pinnacle by this share of the gap before the start": 0.198,
+  "t1h, edge >= 0 pts": {
+   "n": 21,
+   "cents_per_contract": -0.78,
+   "range": [
+    -14.31,
+    15.54
+   ],
+   "mean_edge_cents": 0.56,
+   "mean_price": 0.234
+  },
+  "PRIMARY t1h, edge >= 2 pts": {
+   "n": 0
+  },
+  "t1h, edge >= 4 pts": {
+   "n": 0
+  },
+  "close: matches compared": 72,
+  "close: mean |Pinnacle fair - Kalshi mid| (pts)": 0.89,
+  "close: Kalshi mid moves toward Pinnacle by this share of the gap before the start": 0.399,
+  "close, edge >= 0 pts": {
+   "n": 8,
+   "cents_per_contract": -4.16,
+   "range": [
+    -28.48,
+    24.11
+   ],
+   "mean_edge_cents": 0.74,
+   "mean_price": 0.279
+  },
+  "close, edge >= 2 pts": {
+   "n": 1,
+   "cents_per_contract": -11.69,
+   "range": [
+    -11.69,
+    -11.69
+   ],
+   "mean_edge_cents": 2.59,
+   "mean_price": 0.11
+  },
+  "close, edge >= 4 pts": {
+   "n": 0
+  }
+ }
+}
