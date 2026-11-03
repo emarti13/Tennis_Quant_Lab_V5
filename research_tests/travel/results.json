@@ -1,0 +1,190 @@
+{
+ "manifest": {
+  "run_utc": "2026-11-03T05:31:06.943462+00:00",
+  "command": "python research_tests/travel/run_travel.py /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/travel/events.csv /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/travel/results.json",
+  "git_commit": "d74762a5a90a03d0456014c89a9dfbf83edd284e",
+  "uncommitted_changes": true,
+  "python": "3.13.16",
+  "packages": {
+   "pandas": "3.0.5",
+   "numpy": "2.5.3",
+   "scikit-learn": "1.9.1",
+   "lightgbm": "4.7.0",
+   "scipy": "1.18.1"
+  },
+  "seeds": {
+   "orientation": 20261103,
+   "bootstrap": 20261103
+  },
+  "inputs": {
+   "joined": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl",
+    "sha256": "1888802164c3ff67906c3f818ca0762650bf8ba450f2d7ba03c318dbf31598bf"
+   },
+   "events": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/travel/events.csv",
+    "sha256": "9952f8086071c667120deaae8300aab30e1eacfbae93b0d60c77fcb5177c0a6e"
+   }
+  }
+ },
+ "rows": 84946,
+ "flag_rates": {
+  "jet_east": 0.0042,
+  "jet_west": 0.0038,
+  "body_night": 0.0022
+ },
+ "results": {
+  "PRIMARY M1 (travel flags) minus M0, Betfair close, 2022-25 log loss": [
+   -4e-05,
+   -8e-05,
+   1e-05,
+   39747
+  ],
+  "jet_east: flagged player won minus Betfair close (pts)": {
+   "all": [
+    -3.19,
+    -8.09,
+    1.61,
+    361
+   ],
+   "2016-21": [
+    2.0,
+    -4.68,
+    8.59,
+    194
+   ]
+  },
+  "MONEY jet_east: back the flagged player at bf_close, 2022-25": {
+   "n": 167,
+   "roi": -0.2243,
+   "range": [
+    -0.3592,
+    -0.0825
+   ]
+  },
+  "MONEY jet_east: back the flagged player at b365_close, 2022-25": {
+   "n": 155,
+   "roi": -0.2506,
+   "range": [
+    -0.3867,
+    -0.1094
+   ]
+  },
+  "jet_west: flagged player won minus Betfair close (pts)": {
+   "all": [
+    -4.24,
+    -9.29,
+    0.71,
+    319
+   ],
+   "2016-21": [
+    -2.29,
+    -9.05,
+    4.84,
+    153
+   ]
+  },
+  "MONEY jet_west: back the other player at bf_close, 2022-25": {
+   "n": 166,
+   "roi": 0.0916,
+   "range": [
+    -0.0901,
+    0.2931
+   ]
+  },
+  "MONEY jet_west: back the other player at b365_close, 2022-25": {
+   "n": 160,
+   "roi": 0.0539,
+   "range": [
+    -0.1366,
+    0.2488
+   ]
+  },
+  "body_night: flagged player won minus Betfair close (pts)": {
+   "all": [
+    -4.14,
+    -10.93,
+    2.65,
+    189
+   ],
+   "2016-21": [
+    -1.58,
+    -11.18,
+    7.88,
+    100
+   ]
+  },
+  "night_jet: flagged player won minus Betfair close (pts)": {
+   "all": [
+    -9.07,
+    -23.26,
+    4.56,
+    40
+   ],
+   "2016-21": [
+    -8.03,
+    -28.23,
+    11.07,
+    19
+   ]
+  },
+  "MONEY night_jet: back the other player at bf_close, 2022-25": {
+   "n": 21,
+   "roi": 0.1207,
+   "range": [
+    -0.3769,
+    0.6753
+   ]
+  },
+  "MONEY night_jet: back the other player at b365_close, 2022-25": {
+   "n": 20,
+   "roi": 0.1075,
+   "range": [
+    -0.406,
+    0.6966
+   ]
+  }
+ },
+ "checks": {
+  "swap_source": {
+   "pass": true,
+   "columns_differing": [],
+   "labels_inverted": true,
+   "rows": 26660
+  },
+  "planted_edge": {
+   "pass": true,
+   "expected_improvement": 0.00237,
+   "found_delta": [
+    -0.00229,
+    -0.00298,
+    -0.0016
+   ],
+   "size": 0.15
+  },
+  "market_null": {
+   "pass": true,
+   "found_delta": [
+    3e-05,
+    -3e-05,
+    0.0001
+   ]
+  },
+  "known_answers": {
+   "pass": true,
+   "market_log_loss": 0.60789,
+   "expected_range": [
+    0.55,
+    0.66
+   ],
+   "A_win_share": 0.4937
+  }
+ },
+ "checks_passed": true,
+ "flags_reported": [
+  "jet_east",
+  "jet_west",
+  "body_night",
+  "night_jet"
+ ]
+}

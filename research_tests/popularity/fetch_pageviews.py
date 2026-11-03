@@ -3,7 +3,8 @@
 Usage:  python research_tests/popularity/fetch_pageviews.py JOINED_PKL OUT_DIR
 
 For each player name in the odds join: find the article ("Name (tennis player)", "Name (tennis)",
-then "Name"), accept it only if its summary mentions tennis (so a namesake is not used), follow
+then "Name"; 50 titles per batch request), accept it only if its short description mentions tennis
+and it is not a disambiguation page (so a namesake is not used), follow
 redirects to the canonical title, then fetch monthly page views (all access, users only) from
 2015-07 to 2025-12. Writes OUT_DIR/articles.csv (name, title, how) and OUT_DIR/views.csv (title,
 month, views). Resumable: names and titles already done are skipped. Free public APIs; a fixed
@@ -24,17 +25,54 @@ SUMMARY = "https://en.wikipedia.org/api/rest_v1/page/summary/"
 VIEWS = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{t}/monthly/2015070100/2025123100"
 
 
-def get(s, url, tries=4):
+def get(s, url, tries=8, params=None):
+    """GET that waits as long as Wikimedia's Retry-After asks (it throttles clients without contact
+    details; no personal details are sent)."""
     for i in range(tries):
         try:
-            r = s.get(url, headers=UA, timeout=30)
+            r = s.get(url, headers=UA, params=params, timeout=60)
             if r.status_code == 429 or r.status_code >= 500:
-                time.sleep(2 ** i)
+                time.sleep(float(r.headers.get("retry-after") or 2 ** i) + 1)
                 continue
             return r
         except requests.RequestException:
             time.sleep(2 ** i)
     return None
+
+
+ACTION = "https://en.wikipedia.org/w/api.php"
+
+
+def find_articles(s, names: list[str]) -> dict:
+    """Batch lookup (50 titles per request): for each name try "Name (tennis player)", "Name (tennis)",
+    "Name"; accept a page whose short description mentions tennis and is not a disambiguation page."""
+    cands = {}
+    for n in names:
+        base = n.strip()
+        for suffix, how in ((" (tennis player)", "tennis_player"), (" (tennis)", "tennis"), ("", "plain")):
+            cands.setdefault(n, []).append((base + suffix, how))
+    titles = sorted({t for v in cands.values() for t, _ in v})
+    info = {}                                   # requested title -> (canonical, is_tennis)
+    for i in range(0, len(titles), 50):
+        chunk = titles[i:i + 50]
+        r = get(s, ACTION, params={"action": "query", "format": "json", "titles": "|".join(chunk), "redirects": 1,
+                                   "prop": "pageprops", "ppprop": "wikibase-shortdesc|disambiguation"})
+        if r is None or r.status_code != 200:
+            continue
+        q = r.json().get("query", {})
+        norm = {x["from"]: x["to"] for x in q.get("normalized", [])}
+        redir = {x["from"]: x["to"] for x in q.get("redirects", [])}
+        pages = {p["title"]: p for p in q.get("pages", {}).values()}
+        for t in chunk:
+            u = norm.get(t, t)
+            u = redir.get(u, u)
+            p = pages.get(u)
+            if not p or "missing" in p:
+                continue
+            pp = p.get("pageprops", {})
+            info[t] = (u.replace(" ", "_"), "disambiguation" not in pp and "tennis" in pp.get("wikibase-shortdesc", "").lower())
+        time.sleep(0.5)
+    return {n: next(((info[t][0], how) for t, how in v if t in info and info[t][1]), (None, "not_found")) for n, v in cands.items()}
 
 
 def find_article(s, name: str):
@@ -62,19 +100,11 @@ def main() -> int:
     arts = pd.read_csv(art_path) if art_path.exists() else pd.DataFrame(columns=["name", "title", "how"])
     done = set(arts["name"])
     s = requests.Session()
-    new = []
-    for i, n in enumerate(names):
-        if n in done:
-            continue
-        t, how = find_article(s, n)
-        new.append({"name": n, "title": t, "how": how})
-        if len(new) % 200 == 0:
-            arts = pd.concat([arts, pd.DataFrame(new)], ignore_index=True)
-            arts.to_csv(art_path, index=False)
-            new = []
-            print(f"articles {i + 1}/{len(names)}", flush=True)
-    arts = pd.concat([arts, pd.DataFrame(new)], ignore_index=True)
+    todo = [n for n in names if n not in done]
+    found = find_articles(s, todo)
+    arts = pd.concat([arts, pd.DataFrame([{"name": n, "title": t, "how": h} for n, (t, h) in found.items()])], ignore_index=True)
     arts.to_csv(art_path, index=False)
+    print(f"articles: {arts['title'].notna().sum()} of {len(arts)} names", flush=True)
     views = pd.read_csv(views_path) if views_path.exists() else pd.DataFrame(columns=["title", "month", "views"])
     have = set(views["title"])
     rows = []
@@ -86,11 +116,12 @@ def main() -> int:
                 rows.append({"title": t, "month": it["timestamp"][:6], "views": it["views"]})
         else:
             rows.append({"title": t, "month": None, "views": None})
-        if (i + 1) % 200 == 0:
+        if (i + 1) % 50 == 0:
             views = pd.concat([views, pd.DataFrame(rows)], ignore_index=True)
             views.to_csv(views_path, index=False)
             rows = []
             print(f"views {i + 1}/{len(titles)}", flush=True)
+        time.sleep(1.0)
     views = pd.concat([views, pd.DataFrame(rows)], ignore_index=True)
     views.to_csv(views_path, index=False)
     print(f"done: {len(arts)} names, {arts['title'].notna().sum()} articles, {views['title'].nunique()} with views", flush=True)
