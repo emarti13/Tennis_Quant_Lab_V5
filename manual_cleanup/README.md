@@ -13,50 +13,7 @@ local clone with the command shown.
 
 | Branch | Why it can go | Added |
 |---|---|---|
-| `docs/roadmap-fair-price-to-market-making` | Fully merged into `main` (PR #38) | 2026-10-12 |
-| `fix/retired-infer-surface-imports` | Fully merged into `main` (PR #37) | 2026-10-12 |
-| `fix/phase0-ci-green-and-season-rollover` | Merged (PR #39) | 2026-10-12 |
-| `docs/rebuild-plan-and-tournament-identity` | Merged (PR #40) | 2026-10-12 |
-| `feat/master-schedule-reconciliation` | Merged into #39's branch (PR #41), then into `main` via #43 | 2026-10-12 |
-| `repair/step1-repo-cleanup` | Merged into #39's branch (PR #42), then into `main` via #43 | 2026-10-12 |
-| `repair/land-step1-and-schedule-on-main` | Merged (PR #43) | 2026-10-12 |
-| `feat/step2a-schedule-locations` | Merged (PR #44) | 2026-10-12 |
-| `feat/step2b-tournament-crosswalks` | Merged (PR #45) | 2026-10-13 |
-| `docs/player-identity-spec` | Merged (PR #47) | 2026-10-13 |
-| `feat/official-ledger-switch` | Merged (PR #48) | 2026-10-13 |
-| `fix/no-bet-without-player-history` | PR #46 closed without merging (owner decision: no patches to the old engine) | 2026-10-13 |
-| `feat/step2c-player-identity` | Merged (PR #49) | 2026-10-15 |
-| `feat/step2d-production-identity` | Merged (PR #50); its last commit moved to `feat/tournament-review-decisions` | 2026-10-15 |
-| `feat/tournament-review-decisions` | Merged (PR #51) | 2026-10-16 |
-| `feat/identity-decision-files` | Merged (PR #52) | 2026-10-16 |
-| `docs/step3-market-data-spec` | Merged (PR #53) | 2026-10-16 |
-| `research/step3-probe` | One-off probe; findings in `docs/experiments/2026-10-16-step3-market-source-probe.md`. Never merged | 2026-10-16 |
-| `feat/pause-old-forecast` | Merged (PR #54) | 2026-10-16 |
-| `research/step3a-trial` | One-off trial; findings in `docs/experiments/2026-10-16-price-store-trial.md`. Never merged | 2026-10-16 |
-| `feat/step3a-price-store` | Merged (PR #55) | 2026-10-16 |
-| `research/step3b-kalshi-shapes` | One-off probe; findings in `docs/experiments/2026-10-16-kalshi-collector-trial.md`. Never merged | 2026-10-16 |
-| `research/step3b-kalshi-trial` | One-off trial; same note. Never merged | 2026-10-16 |
-| `feat/step3b-kalshi` | Merged (PR #56) | 2026-10-17 |
-| `feat/step3c-devig` | Merged (PR #57) | 2026-10-17 |
-| `feat/step3-bet365-history` | Merged (PR #58) | 2026-10-17 |
-| `feat/step3d-results-kalshi` | Merged (PR #59) | 2026-10-17 |
-| `feat/step3e-live-prices` | Merged (PR #60) | 2026-10-17 |
-| `research/step3e-live-trial` | One-off trial for #60. Never merged | 2026-10-17 |
-| `research/inplay-winners` | One-off research; findings in `docs/experiments/2026-10-17-inplay-winners.md`. Never merged | 2026-10-17 |
-| `feat/step4a-fixture-stage` | Merged (PR #61) | 2026-10-17 |
-| `feat/step4b-results-inplay` | Merged (PR #62) | 2026-10-17 |
-| `feat/step4c-lucky-loser` | Merged (PR #63) | 2026-10-17 |
-| `fix/market-history-expiry-by-date` | Merged (PR #64) | 2026-10-17 |
-| `repair/fatigue-v1-safety-layer` | Merged (PR #36) | 2026-10-17 |
-| `docs/repo-map-step4` | Merged (PR #65) | 2026-10-17 |
-| `feat/step4e-baseline` | Merged (PR #66); also the base #67 merged into by mistake | 2026-10-19 |
-| `feat/step4f-pricing` | Merged into `feat/step4e-baseline` (PR #67), re-landed on `main` as #69 | 2026-10-19 |
-| `feat/step4f-pricing-to-main` | Merged (PR #69) | 2026-10-19 |
-| `fix/oddspapi-network-errors` | Merged (PR #68) | 2026-10-19 |
-| `feat/step4g1-production-switch` | Merged (PR #70) | 2026-10-19 |
-| `feat/step4-market-gap-guard` | Merged (PR #71) | 2026-10-19 |
-| `docs/manual-cleanup-step4` | This change, once merged | 2026-10-19 |
-| `claude/bootstrap-v5-history-setup-3pxlyr` | Agent session branch; all its work reached `main` via #39–#43 | 2026-10-12 |
+
 
 ```bash
 git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-infer-surface-imports \
