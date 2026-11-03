@@ -32,7 +32,11 @@ class FakeKalshi:
 
     def get(self, path, params=None):
         self.calls += 1
+        if path.startswith("/markets/"):
+            return {"market": self.quotes.get(path.split("/")[-1], {})}
         return {"live_data": {"details": self.details}}
+
+    quotes: dict = {}
 
 
 def test_logs_score_with_each_players_own_quote(tmp_path, monkeypatch):
@@ -96,3 +100,13 @@ def test_a_new_layout_mid_day_goes_to_a_new_file_and_mixed_files_are_readable(tm
                      + ",".join(["2026-11-01T09:00:00+00:00", "KXWTAMATCH"] + ["7"] * (len(ll.COLS) - 2)) + "\n")
     df = ll.read_log(mixed)
     assert len(df) == 2 and df["series"].tolist() == ["KXATPMATCH", "KXWTAMATCH"] and df["points_won_1"].iloc[1] == 7
+
+
+def test_live_rows_use_quotes_read_after_the_score(tmp_path, monkeypatch):
+    monkeypatch.setattr(ll, "OUT_DIR", tmp_path)
+    api, state = FakeKalshi(), {"events": {}}
+    api.quotes = {"EV-A": {"yes_bid_dollars": "0.80", "yes_ask_dollars": "0.81"}}       # moved since the listing
+    ll.poll_once(api, state, pd.Timestamp("2026-10-21T12:30:00Z"))
+    r = pd.read_csv(tmp_path / "2026-10-21.csv").iloc[0]
+    assert r["bid_2"] == 0.80 and r["ask_2"] == 0.81            # EV-A is competitor 2: the fresh quote
+    assert r["bid_1"] == 0.28                                   # EV-B had no fresh quote: listing kept

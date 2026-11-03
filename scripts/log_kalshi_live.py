@@ -194,7 +194,15 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
                 continue
             e.pop("not_started_checked_utc", None)
             watched += 1
-            rows.append(row_for(series, event, ms, d, ms_list, now))
+            # re-read this match's quotes right after its score: the listing above can be tens of
+            # seconds older, which made breaks look under-priced (docs/experiments/2026-11-03-inplay-breaks.md)
+            fresh = []
+            for m in ms_list:
+                try:
+                    fresh.append({**m, **(api.get(f"/markets/{m['ticker']}").get("market") or {})})
+                except (RuntimeError, requests.HTTPError):
+                    fresh.append(m)
+            rows.append(row_for(series, event, ms, d, fresh, now))
             if status in FINISHED or str(d.get("match_status") or "").lower() in FINISHED:
                 e["finished"] = True
     if rows:
