@@ -97,6 +97,44 @@ def row_for(series: str, event: str, ms: dict, d: dict, markets: list[dict], now
             "ticker_2": m2 and m2.get("ticker"), "bid_2": m2 and _f(m2.get("yes_bid_dollars")), "ask_2": m2 and _f(m2.get("yes_ask_dollars"))}
 
 
+def _append(folder: Path, day: str, df: pd.DataFrame) -> Path:
+    """Append to the day's file; if that file was started with other columns (a code update
+    during the day), continue in day-v2, day-v3, ... so no file mixes two layouts."""
+    n = 1
+    while True:
+        path = folder / (f"{day}.csv" if n == 1 else f"{day}-v{n}.csv")
+        if not path.exists():
+            df.to_csv(path, index=False)
+            return path
+        with open(path) as f:
+            if f.readline().rstrip("\n").split(",") == list(df.columns):
+                df.to_csv(path, mode="a", header=False, index=False)
+                return path
+        n += 1
+
+
+def read_log(path) -> pd.DataFrame:
+    """Read a live-score log, including the one day (2026-11-01) whose file mixes the 23-column
+    layout (before that day's update) with the 49-column one appended without a header."""
+    import csv
+    import gzip
+    opener = gzip.open if str(path).endswith(".gz") else open
+    with opener(path, "rt", newline="") as f:
+        rows = list(csv.reader(f))
+    head, out, extra = rows[0], [], []
+    for r in rows[1:]:
+        (out if len(r) == len(head) else extra).append(r)
+    frames = [pd.DataFrame(out, columns=head)]
+    if extra and len(extra[0]) == len(COLS):
+        frames.append(pd.DataFrame([r for r in extra if len(r) == len(COLS)], columns=COLS))
+    df = pd.concat(frames, ignore_index=True).replace("", None)
+    for c in df.columns:
+        num = pd.to_numeric(df[c], errors="coerce")
+        if num.notna().sum() == df[c].notna().sum():            # every value is a number
+            df[c] = num
+    return df
+
+
 def prematch_rows(series: str, markets: list[dict], state: dict, now: pd.Timestamp) -> list[dict]:
     """Every open market's quote, before and during play (from the same listing call: no extra
     requests). With the live log's start and end times this shows how a next-round price moves
@@ -152,12 +190,10 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
                 e["finished"] = True
     if rows:
         OUT_DIR.mkdir(parents=True, exist_ok=True)
-        path = OUT_DIR / f"{now:%Y-%m-%d}.csv"
-        pd.DataFrame(rows, columns=COLS).to_csv(path, mode="a", header=not path.exists(), index=False)
+        _append(OUT_DIR, f"{now:%Y-%m-%d}", pd.DataFrame(rows, columns=COLS))
     if pre:
         (OUT_DIR / "prematch").mkdir(parents=True, exist_ok=True)
-        path = OUT_DIR / "prematch" / f"{now:%Y-%m-%d}.csv"
-        pd.DataFrame(pre, columns=PRE_COLS).to_csv(path, mode="a", header=not path.exists(), index=False)
+        _append(OUT_DIR / "prematch", f"{now:%Y-%m-%d}", pd.DataFrame(pre, columns=PRE_COLS))
         state["last_prematch_utc"] = now.isoformat()
     return {"rows": len(rows), "live_matches": watched, "prematch_quotes": len(pre), "failures": failed, "api_calls": api.calls}
 

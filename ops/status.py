@@ -9,6 +9,7 @@ import argparse
 import gzip
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import pandas as pd
@@ -44,6 +45,21 @@ def live_days(n: int = 7) -> list[str]:
     return out
 
 
+def poll_gap() -> str:
+    files = sorted(LIVE.glob("*.csv*"), key=lambda p: p.name)
+    if not files:
+        return "no log"
+    try:
+        sys.path.insert(0, str(BASE))
+        from scripts.log_kalshi_live import read_log
+        df = read_log(files[-1])
+        t = pd.to_datetime(df["polled_utc"], utc=True, errors="coerce")
+        gaps = df.assign(t=t).sort_values("t").groupby("event_ticker")["t"].diff().dt.total_seconds().dropna()
+        return f"{gaps.median():.0f}" if len(gaps) else "n/a"
+    except Exception as exc:                                     # the status page must not fail
+        return f"unreadable ({type(exc).__name__})"
+
+
 def paper_summary() -> list[str]:
     p = PAPER / "results.csv"
     if not p.exists():
@@ -76,10 +92,14 @@ def build(settle: str | None, tests: str | None, tests_rc: str | None, notes: li
     now = pd.Timestamp.now(tz="UTC").floor("s")
     disk = shutil.disk_usage(BASE)
     services = {s: _sh("systemctl", "is-active", s) for s in ("tql-paper", "tql-live", "tql-daily.timer")}
+    live_cmd = _sh("systemctl", "show", "tql-live", "-p", "ExecStart", "--value")
+    live_cmd = live_cmd.split("argv[]=")[-1].split(";")[0].strip() if "argv[]=" in live_cmd else live_cmd
     parts = [f"# Server status, {now.isoformat()}", "",
              f"Code: `{_sh('git', '-C', str(BASE), 'log', '-1', '--format=%h %s', '--', '.', ':!market_history')}`  ",
              f"Disk free: {disk.free / 2**30:.1f} GB  ",
-             "Services: " + ", ".join(f"{k} {v}" for k, v in services.items()), ""]
+             "Services: " + ", ".join(f"{k} {v}" for k, v in services.items()) + "  ",
+             f"Live logger command: `{live_cmd}`  ",
+             f"Live polling gap (median seconds between a match's rows, latest day): {poll_gap()}", ""]
     if tests is not None:
         parts += [f"Tests ({'pass' if tests_rc == '0' else 'FAIL'}): `{tests}`", ""]
     parts += ["## Problems", ""] + ([f"- {n}" for n in notes] or ["- none"]) + [""]

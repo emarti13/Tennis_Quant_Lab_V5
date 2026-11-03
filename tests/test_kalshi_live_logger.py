@@ -75,3 +75,18 @@ def test_prematch_quotes_every_five_minutes_from_the_same_listing(tmp_path, monk
     assert set(q["ticker"]) == {"EV-A", "EV-B"} and q.loc[q.ticker == "EV-A", "bid"].iloc[0] == 0.70
     assert ll.poll_once(api, state, pd.Timestamp("2026-10-21T09:04:00Z"))["prematch_quotes"] == 0
     assert ll.poll_once(api, state, pd.Timestamp("2026-10-21T09:05:00Z"))["prematch_quotes"] == 2
+
+
+def test_a_new_layout_mid_day_goes_to_a_new_file_and_mixed_files_are_readable(tmp_path):
+    old = pd.DataFrame({"a": [1], "b": [2]})
+    new = pd.DataFrame({"a": [3], "b": [4], "c": [5]})
+    p1 = ll._append(tmp_path, "2026-11-02", old)
+    p2 = ll._append(tmp_path, "2026-11-02", new)
+    assert p1.name == "2026-11-02.csv" and p2.name == "2026-11-02-v2.csv"
+    assert ll._append(tmp_path, "2026-11-02", new) == p2 and len(pd.read_csv(p2)) == 2
+    # the 2026-11-01 case: old header, new-layout rows appended without one
+    mixed = tmp_path / "mixed.csv"
+    mixed.write_text("polled_utc,series\n2026-11-01T01:00:00+00:00,KXATPMATCH\n"
+                     + ",".join(["2026-11-01T09:00:00+00:00", "KXWTAMATCH"] + ["7"] * (len(ll.COLS) - 2)) + "\n")
+    df = ll.read_log(mixed)
+    assert len(df) == 2 and df["series"].tolist() == ["KXATPMATCH", "KXWTAMATCH"] and df["points_won_1"].iloc[1] == 7
