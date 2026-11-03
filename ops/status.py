@@ -60,6 +60,19 @@ def poll_gap() -> str:
         return f"unreadable ({type(exc).__name__})"
 
 
+def registrations() -> list[str]:
+    files = sorted((BASE / "market_history" / "kalshi" / "registrations").glob("*_summary.json"))
+    if not files:
+        return ["none yet"]
+    import json
+    lines = ["| test | status | settled / needed | cents per contract | 95% range | favourite won |", "|---|---|---|---|---|---|"]
+    for p in files:
+        s = json.loads(p.read_text())
+        lines.append(f"| {p.stem.replace('_summary', '')} | {s.get('status')} | {s.get('settled')} / {s.get('min_matches')} | "
+                     f"{s.get('cents_per_contract', '')} | {s.get('range_cents', '')} | {s.get('favourite_won', '')} |")
+    return lines
+
+
 def paper_summary() -> list[str]:
     p = PAPER / "results.csv"
     if not p.exists():
@@ -104,6 +117,7 @@ def build(settle: str | None, tests: str | None, tests_rc: str | None, notes: li
         parts += [f"Tests ({'pass' if tests_rc == '0' else 'FAIL'}): `{tests}`", ""]
     parts += ["## Problems", ""] + ([f"- {n}" for n in notes] or ["- none"]) + [""]
     parts += ["## Live score log (last 7 days)", "", "| day | rows | matches |", "|---|---|---|"] + live_days() + [""]
+    parts += ["## Registered forward tests (paper)", ""] + registrations() + [""]
     parts += ["## Paper market-making (settled markets)", ""] + paper_summary() + [""]
     if settle and Path(settle).exists():
         parts += ["Settle output:", "```", settle_text(Path(settle).read_text()), "```", ""]

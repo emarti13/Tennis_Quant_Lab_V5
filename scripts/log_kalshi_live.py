@@ -41,6 +41,8 @@ SERIES = ("KXATPMATCH", "KXATPCHALLENGERMATCH", "KXWTAMATCH")
 OUT_DIR = BASE / "market_history" / "kalshi" / "live_scores"
 WATCH_BEFORE_MIN = 10
 PREMATCH_EVERY_MIN = 5
+NOT_STARTED_RECHECK_S = 60
+API_PAUSE_S = 0.25          # between requests (the paper trader keeps its own 0.6 s)
 PRE_COLS = ["polled_utc", "series", "event_ticker", "ticker", "competitor", "start_date", "bid", "ask", "last", "volume"]
 FINISHED = {"closed", "ended", "finished", "complete", "completed", "cancelled", "canceled"}
 STATS = ("points_won", "service_points_won", "service_points_lost", "first_serve_successful",
@@ -177,15 +179,30 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
                     continue
                 if now < pd.Timestamp(ms["start_date"]) - pd.Timedelta(minutes=WATCH_BEFORE_MIN):
                     continue
+                # a match past its scheduled time but not started yet ("followed by" scheduling)
+                # is re-checked once a minute, not every poll: dozens of them made each poll take ~30 s
+                waiting = e.get("not_started_checked_utc")
+                if waiting and now - pd.Timestamp(waiting) < pd.Timedelta(seconds=NOT_STARTED_RECHECK_S):
+                    continue
                 d = live_details(api, ms)
             except (RuntimeError, requests.HTTPError):
                 failed += 1
                 continue
             status = str(d.get("status") or "").lower()
             if status == "not_started" and not d.get("match_status"):
+                e["not_started_checked_utc"] = now.isoformat()
                 continue
+            e.pop("not_started_checked_utc", None)
             watched += 1
-            rows.append(row_for(series, event, ms, d, ms_list, now))
+            # re-read this match's quotes right after its score: the listing above can be tens of
+            # seconds older, which made breaks look under-priced (docs/experiments/2026-11-03-inplay-breaks.md)
+            fresh = []
+            for m in ms_list:
+                try:
+                    fresh.append({**m, **(api.get(f"/markets/{m['ticker']}").get("market") or {})})
+                except (RuntimeError, requests.HTTPError):
+                    fresh.append(m)
+            rows.append(row_for(series, event, ms, d, fresh, now))
             if status in FINISHED or str(d.get("match_status") or "").lower() in FINISHED:
                 e["finished"] = True
     if rows:
@@ -203,7 +220,7 @@ def main() -> int:
     ap.add_argument("--minutes", type=float, default=0, help="stop after this long (0 = run forever)")
     ap.add_argument("--interval", type=float, default=10)
     args = ap.parse_args()
-    api, state = Kalshi(), load_state()
+    api, state = Kalshi(pause=API_PAUSE_S), load_state()
     end = time.time() + args.minutes * 60 if args.minutes else None
     while True:
         started = time.time()

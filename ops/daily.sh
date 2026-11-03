@@ -18,7 +18,7 @@ daily_main() {
   STATUS_ARGS=()
 
   commit_logs() {
-    git add -A market_history/kalshi/paper "$LIVE" market_history/vm_status.md 2>/dev/null
+    git add -A market_history/kalshi/paper "$LIVE" market_history/kalshi/registrations market_history/vm_status.md 2>/dev/null
     git diff --cached --quiet || git commit -q -m "data: server logs $(date -u +%Y-%m-%d)"
   }
 
@@ -86,6 +86,12 @@ daily_main() {
   if ! $PY scripts/paper_trade_kalshi.py settle > /tmp/tql_settle.txt 2>&1; then
     STATUS_ARGS+=(--note "settle failed: $(tail -1 /tmp/tql_settle.txt)")
   fi
+
+  # 4c. registered forward tests (paper only)
+  $PY scripts/track_longshot_rule.py > /tmp/tql_reg.txt 2>&1 \
+    || STATUS_ARGS+=(--note "longshot registration tracker failed: $(tail -1 /tmp/tql_reg.txt)")
+  $PY scripts/track_season_end_rule.py > /tmp/tql_reg2.txt 2>&1 \
+    || STATUS_ARGS+=(--note "season-end registration tracker failed: $(tail -1 /tmp/tql_reg2.txt)")
 
   # 5. status, commit, push (retries with backoff)
   $PY ops/status.py --settle /tmp/tql_settle.txt "${STATUS_ARGS[@]}"
