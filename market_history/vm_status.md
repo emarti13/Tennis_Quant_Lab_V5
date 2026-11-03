@@ -1,4 +1,4 @@
-# Server status, 2026-11-03T01:45:38+00:00
+# Server status, 2026-11-03T01:54:30+00:00
 
 Code: `9c44f46 fix: server scripts run as one function so a self-update cannot corrupt the run`  
 Disk free: 33.3 GB  
@@ -6,7 +6,7 @@ Services: tql-paper active, tql-live active, tql-daily.timer active
 Live logger command: `/home/ubuntu/tql/.venv/bin/python scripts/log_kalshi_live.py --minutes 1440 --interval 10`  
 Live polling gap (median seconds between a match's rows, latest day): 31
 
-Tests (pass): `494 passed, 7 skipped in 84.53s (0:01:24)`
+Tests (pass): `494 passed, 7 skipped in 81.35s (0:01:21)`
 
 ## Problems
 
@@ -19,7 +19,7 @@ Tests (pass): `494 passed, 7 skipped in 84.53s (0:01:24)`
 | 2026-10-31 | 10237 | 47 |
 | 2026-11-01 | 18593 | 92 |
 | 2026-11-02 | 13928 | 67 |
-| 2026-11-03 | 425 | 5 |
+| 2026-11-03 | 441 | 5 |
 
 ## Paper market-making (settled markets)
 
