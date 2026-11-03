@@ -57,6 +57,12 @@ local clone with the command shown.
 | `feat/step4-market-gap-guard` | Merged (PR #71) | 2026-10-19 |
 | `docs/manual-cleanup-step4` | This change, once merged | 2026-10-19 |
 | `claude/bootstrap-v5-history-setup-3pxlyr` | Agent session branch; all its work reached `main` via #39–#43 | 2026-10-12 |
+| `feat/backfill-newest-first` | Merged (PR #73) | 2026-11-03 |
+| `docs/research-hub` | Merged (PR #74) | 2026-11-03 |
+| `fix/pandas-3-1-timedelta` | Merged (PR #75) | 2026-11-03 |
+| `docs/rolling-forward-test` | Merged (PR #76) | 2026-11-03 |
+| `docs/registration-kalshi-longshot` | Merged (PR #77) | 2026-11-03 |
+| `docs/manual-cleanup-nov` | This change, once merged | 2026-11-03 |
 
 ```bash
 git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-infer-surface-imports \
@@ -74,7 +80,9 @@ git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-in
   fix/market-history-expiry-by-date docs/repo-map-step4 repair/fatigue-v1-safety-layer \
   feat/step4e-baseline feat/step4f-pricing feat/step4f-pricing-to-main fix/oddspapi-network-errors \
   feat/step4g1-production-switch feat/step4-market-gap-guard docs/manual-cleanup-step4 \
-  claude/bootstrap-v5-history-setup-3pxlyr
+  claude/bootstrap-v5-history-setup-3pxlyr \
+  feat/backfill-newest-first docs/research-hub fix/pandas-3-1-timedelta docs/rolling-forward-test \
+  docs/registration-kalshi-longshot docs/manual-cleanup-nov
 ```
 
 ### Pending your decision (not yet recommended for deletion)
