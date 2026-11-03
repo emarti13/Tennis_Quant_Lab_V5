@@ -13,25 +13,16 @@ local clone with the command shown.
 
 | Branch | Why it can go | Added |
 |---|---|---|
-
+| `feat/backfill-newest-first` | Merged (PR #73) | 2026-11-03 |
+| `docs/research-hub` | Merged (PR #74) | 2026-11-03 |
+| `fix/pandas-3-1-timedelta` | Merged (PR #75) | 2026-11-03 |
+| `docs/rolling-forward-test` | Merged (PR #76) | 2026-11-03 |
+| `docs/registration-kalshi-longshot` | Merged (PR #77) | 2026-11-03 |
+| `docs/manual-cleanup-nov` | This change, once merged | 2026-11-03 |
 
 ```bash
-git push origin --delete docs/roadmap-fair-price-to-market-making fix/retired-infer-surface-imports \
-  fix/phase0-ci-green-and-season-rollover docs/rebuild-plan-and-tournament-identity \
-  feat/master-schedule-reconciliation repair/step1-repo-cleanup \
-  repair/land-step1-and-schedule-on-main feat/step2a-schedule-locations \
-  feat/step2b-tournament-crosswalks docs/player-identity-spec feat/official-ledger-switch \
-  fix/no-bet-without-player-history feat/step2c-player-identity feat/step2d-production-identity \
-  feat/tournament-review-decisions feat/identity-decision-files docs/step3-market-data-spec \
-  research/step3-probe feat/pause-old-forecast research/step3a-trial \
-  feat/step3a-price-store research/step3b-kalshi-shapes research/step3b-kalshi-trial \
-  feat/step3b-kalshi feat/step3c-devig feat/step3-bet365-history feat/step3d-results-kalshi \
-  feat/step3e-live-prices research/step3e-live-trial research/inplay-winners \
-  feat/step4a-fixture-stage feat/step4b-results-inplay feat/step4c-lucky-loser \
-  fix/market-history-expiry-by-date docs/repo-map-step4 repair/fatigue-v1-safety-layer \
-  feat/step4e-baseline feat/step4f-pricing feat/step4f-pricing-to-main fix/oddspapi-network-errors \
-  feat/step4g1-production-switch feat/step4-market-gap-guard docs/manual-cleanup-step4 \
-  claude/bootstrap-v5-history-setup-3pxlyr
+git push origin --delete feat/backfill-newest-first docs/research-hub fix/pandas-3-1-timedelta \
+  docs/rolling-forward-test docs/registration-kalshi-longshot docs/manual-cleanup-nov
 ```
 
 ### Pending your decision (not yet recommended for deletion)
