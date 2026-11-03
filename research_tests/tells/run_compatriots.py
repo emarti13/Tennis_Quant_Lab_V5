@@ -68,7 +68,7 @@ def main() -> int:
             o = np.where(fav_is_w == back_dog, ol, ow)                 # backing the underdog: the loser's odds when the favourite is the winner
             won = np.where(back_dog, x["fav_won"] == 0, x["fav_won"] == 1)
             ok = np.isfinite(o) & (o > 1)
-            pnl = np.where(won, (o - 1) * (1 - (0.02 if book == "bf_close" else 0.0)), -1.0)[ok]
+            pnl = np.where(won, (o - 1) * (1 - 0.0), -1.0)[ok]
             mm, lo, hi = boot_mean(pnl, seed=SEED)
             R[f"MONEY compatriot matches: back the {'underdog' if back_dog else 'favourite'} at {book}, 2022-25"] = {"n": int(ok.sum()), "roi": round(mm, 4), "range": [round(lo, 4), round(hi, 4)]}
     g = np.random.default_rng(SEED)

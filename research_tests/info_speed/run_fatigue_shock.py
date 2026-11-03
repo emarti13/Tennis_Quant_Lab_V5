@@ -44,7 +44,8 @@ SEED = 20261031
 RANK = {"Q1": 0, "Q2": 1, "Q3": 2, "R128": 3, "R64": 4, "R32": 5, "R16": 6, "QF": 7, "SF": 8, "F": 9}
 BOOKS = {"bf_close": ("bf_w", "bf_l"), "b365_close": ("b365_w", "b365_l"), "b365_open": ("b365_w_opening", "b365_l_opening"),
          "best_close": ("best_w", "best_l")}
-COMMISSION = {"bf_close": 0.02, "b365_close": 0.0, "b365_open": 0.0, "best_close": 0.0}
+# the Kaggle "Betfair" price is a sportsbook price with its margin in it (audit 2026-11-03): no commission
+COMMISSION = {"bf_close": 0.0, "b365_close": 0.0, "b365_open": 0.0, "best_close": 0.0}
 
 
 def previous_matches(m: pd.DataFrame) -> pd.DataFrame:
@@ -140,7 +141,7 @@ def main() -> int:
     R = res["results"]
     P = t["gap"] >= 45
     R["PRIMARY gap>=45, Betfair close: residual (tired won - close prob) [mean, lo, hi, n]"] = residual(t[P], "bf_close")
-    R["PRIMARY money: back the fresh player at Betfair close, 2% commission"] = fresh_bets(t[P], "bf_close")
+    R["PRIMARY money: back the fresh player at the Betfair close (a sportsbook price; no commission)"] = fresh_bets(t[P], "bf_close")
     for g in (30, 60, 90):
         R[f"gap>={g}, Betfair close residual"] = residual(t[t["gap"] >= g], "bf_close")
     for lv in ("ATP main", "WTA main", "Challenger"):
@@ -180,7 +181,7 @@ def main() -> int:
     C["known_answers"] = checks.known_answers(allm["y"].to_numpy(), allm["p_bf_close"].to_numpy(), (0.56, 0.66))
     res["checks"] = C
     res["checks_passed"] = all(c["pass"] for c in C.values())
-    prim = R["PRIMARY money: back the fresh player at Betfair close, 2% commission"]
+    prim = R["PRIMARY money: back the fresh player at the Betfair close (a sportsbook price; no commission)"]
     res["alarms"] = checks.alarms((0, 0, 0), prim["roi"] if prim["n"] >= 100 else None)
     Path(out_json).write_text(json.dumps(res, indent=1, default=str) + "\n")
     print(json.dumps({k: res[k] for k in ("eligible_matches", "results", "checks", "checks_passed", "alarms")}, indent=1, default=str))

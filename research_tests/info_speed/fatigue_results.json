@@ -1,8 +1,8 @@
 {
  "manifest": {
-  "run_utc": "2026-10-31T18:17:34.822601+00:00",
+  "run_utc": "2026-11-03T06:16:26.726523+00:00",
   "command": "python research_tests/info_speed/run_fatigue_shock.py /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/matches_serve.pkl /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/info_speed/fatigue.json",
-  "git_commit": "721d53f17741b132dfa608b64ea4d8cf49021566",
+  "git_commit": "c2c2705512b5a3949f0efb10ffdb802cb3574761",
   "uncommitted_changes": true,
   "python": "3.13.16",
   "packages": {
@@ -37,10 +37,10 @@
   ],
   "PRIMARY money: back the fresh player at Betfair close, 2% commission": {
    "n": 12755,
-   "roi": -0.0274,
+   "roi": -0.0193,
    "range": [
-    -0.0446,
-    -0.0098
+    -0.0366,
+    -0.0015
    ]
   },
   "gap>=30, Betfair close residual": [
@@ -69,10 +69,10 @@
   ],
   "gap>=45, ATP main, back fresh at Betfair close": {
    "n": 3826,
-   "roi": -0.026,
+   "roi": -0.0182,
    "range": [
-    -0.0591,
-    0.0066
+    -0.0519,
+    0.0147
    ]
   },
   "gap>=45, WTA main, Betfair close residual": [
@@ -83,10 +83,10 @@
   ],
   "gap>=45, WTA main, back fresh at Betfair close": {
    "n": 2815,
-   "roi": -0.0151,
+   "roi": -0.007,
    "range": [
-    -0.052,
-    0.0219
+    -0.0443,
+    0.0307
    ]
   },
   "gap>=45, Challenger, Betfair close residual": [
@@ -97,10 +97,10 @@
   ],
   "gap>=45, Challenger, back fresh at Betfair close": {
    "n": 6114,
-   "roi": -0.034,
+   "roi": -0.0257,
    "range": [
-    -0.0591,
-    -0.0086
+    -0.0511,
+    -0.0
    ]
   },
   "gap>=45, best of 5, Betfair close residual": [

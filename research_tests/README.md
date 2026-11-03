@@ -27,3 +27,13 @@ match files).
 | Retirement risk: retired in one of the last two matches or gave a walkover within 30 days (date-then-round ordering), 84,956 matches 2016-2025; checks pass | `retirement/run_retirement.py` | On top of Betfair close +0.00005 (n.s.). Recently retired players win as priced (−0.3 pts) and retire again less often than the base rate (2.6% vs 3.3%); walkover flag's money test −7.9% (noise). Closed. |
 | Compatriot matches (same nationality): favourite won minus Betfair close, 84,956 matches 2016-2025; checks pass | `tells/run_compatriots.py` | +0.46 pts (−0.58 to +1.53) against +0.06 elsewhere; signs differ by level and period. Closed. Doubles withdrawals and coach changes: no free data. |
 | Heat and wind matched to the player (Meteostat hourly at the start hour, outdoor ATP and Challenger, 22,070 matches 2016-2025): heat × age, heat × height, wind × ace rate; checks pass | `weather/run_weather.py` | On top of Betfair close −0.00001 (n.s.). Older players in heat −1.9 pts, no different from mild conditions (−1.6); big servers in wind −2.1 (n.s.), money −0.8%. By-product: a general age bias (5+ yrs older −1.6 pts, −2.6 to −0.6) too small to bet alone; a blend candidate. |
+
+## After the independent audit (2026-11-03)
+
+See `docs/experiments/2026-11-03-audit.md` for the full revised verdicts with minimum detectable effects.
+
+- The Kaggle "Betfair" price is a sportsbook price, so the 2% commission charged in the money tests was double-counted; it is removed.
+- The retirement write-up is corrected: recently retired players retire again 1.6 times as often.
+- Rows above that say "closed" or "nothing" should be read with the audit's labels: confirmed / candidate / inconclusive below X / ruled out above X.
+
+| Blend: age gap, qualifier, pre-Slam, end of season, jet lag on top of the sportsbook close, walk-forward test 2022-25; checks pass | `blend/run_blend.py` | Log loss −0.00025 (−0.00054 to +0.00003); ATP main −0.00079 (−0.00139 to −0.00019). Money at the sportsbook close: edge ≥2 pts +11.7% (+3.3% to +20.5%, n=660), edge ≥3 pts +9.8% (n.s., n=219). Inputs were chosen on 2016-25, so this is a candidate for a registered forward test (ATP main first). |

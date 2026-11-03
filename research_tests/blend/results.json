@@ -1,0 +1,238 @@
+{
+ "manifest": {
+  "run_utc": "2026-11-03T06:15:46.494432+00:00",
+  "command": "python research_tests/blend/run_blend.py /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl .v5_history_cache research_tests/travel/events.csv /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/blend/results.json",
+  "git_commit": "c2c2705512b5a3949f0efb10ffdb802cb3574761",
+  "uncommitted_changes": true,
+  "python": "3.13.16",
+  "packages": {
+   "pandas": "3.0.5",
+   "numpy": "2.5.3",
+   "scikit-learn": "1.9.1",
+   "lightgbm": "4.7.0",
+   "scipy": "1.18.1"
+  },
+  "seeds": {
+   "orientation": 20261103,
+   "bootstrap": 20261103
+  },
+  "inputs": {
+   "joined": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl",
+    "sha256": "1888802164c3ff67906c3f818ca0762650bf8ba450f2d7ba03c318dbf31598bf"
+   },
+   "history": {
+    "path": ".v5_history_cache",
+    "sha256": "46c890566bc717ce3937640b00fba7de4a4b5de24254b9af7213eb0f10d33204"
+   },
+   "events": {
+    "path": "research_tests/travel/events.csv",
+    "sha256": "9952f8086071c667120deaae8300aab30e1eacfbae93b0d60c77fcb5177c0a6e"
+   }
+  }
+ },
+ "rows": 84956,
+ "by_level": {
+  "Challenger": 41062,
+  "ATP main": 22599,
+  "WTA main": 21295
+ },
+ "input_nonzero_share": {
+  "age_gap": 0.9996,
+  "qualifier": 0.1127,
+  "pre_slam": 0.0292,
+  "season_end": 0.0153,
+  "jet_lag": 0.008,
+  "main_tour": 0.5167
+ },
+ "results": {
+  "PRIMARY M1 (blend) minus M0, 'Betfair' close, 2022-25 log loss": [
+   -0.00025,
+   -0.00054,
+   3e-05,
+   39684
+  ],
+  "money: model edge >= 2 pts at bf_close, 2022-25": {
+   "n": 660,
+   "roi": 0.117,
+   "range": [
+    0.0327,
+    0.2047
+   ],
+   "share_on_A_side": 0.395
+  },
+  "  (market-only recalibration, same rule) edge >= 2 at bf_close": {
+   "n": 0
+  },
+  "PRIMARY money: model edge >= 3 pts at bf_close, 2022-25": {
+   "n": 219,
+   "roi": 0.0977,
+   "range": [
+    -0.0489,
+    0.2505
+   ],
+   "share_on_A_side": 0.393
+  },
+  "  (market-only recalibration, same rule) edge >= 3 at bf_close": {
+   "n": 0
+  },
+  "money: model edge >= 5 pts at bf_close, 2022-25": {
+   "n": 38,
+   "roi": -0.1542,
+   "range": [
+    -0.4679,
+    0.1868
+   ],
+   "share_on_A_side": 0.316
+  },
+  "  (market-only recalibration, same rule) edge >= 5 at bf_close": {
+   "n": 0
+  },
+  "money: model edge >= 2 pts at b365_close, 2022-25": {
+   "n": 1789,
+   "roi": 0.1063,
+   "range": [
+    0.0394,
+    0.1758
+   ],
+   "share_on_A_side": 0.435
+  },
+  "  (market-only recalibration, same rule) edge >= 2 at b365_close": {
+   "n": 676,
+   "roi": 0.0951,
+   "range": [
+    -0.034,
+    0.2342
+   ],
+   "share_on_A_side": 0.463
+  },
+  "PRIMARY money: model edge >= 3 pts at b365_close, 2022-25": {
+   "n": 853,
+   "roi": 0.0836,
+   "range": [
+    -0.0149,
+    0.1928
+   ],
+   "share_on_A_side": 0.451
+  },
+  "  (market-only recalibration, same rule) edge >= 3 at b365_close": {
+   "n": 335,
+   "roi": -0.0662,
+   "range": [
+    -0.2202,
+    0.0977
+   ],
+   "share_on_A_side": 0.493
+  },
+  "money: model edge >= 5 pts at b365_close, 2022-25": {
+   "n": 243,
+   "roi": 0.0672,
+   "range": [
+    -0.1118,
+    0.2568
+   ],
+   "share_on_A_side": 0.449
+  },
+  "  (market-only recalibration, same rule) edge >= 5 at b365_close": {
+   "n": 157,
+   "roi": -0.0038,
+   "range": [
+    -0.2432,
+    0.235
+   ],
+   "share_on_A_side": 0.49
+  },
+  "M1 minus M0 by level: ATP main": [
+   -0.00079,
+   -0.00139,
+   -0.00019,
+   9852
+  ],
+  "money edge >= 3 at bf_close, ATP main": {
+   "n": 84,
+   "roi": 0.1457,
+   "range": [
+    -0.072,
+    0.3735
+   ],
+   "share_on_A_side": 0.369
+  },
+  "M1 minus M0 by level: WTA main": [
+   2e-05,
+   -0.00064,
+   0.00069,
+   9019
+  ],
+  "money edge >= 3 at bf_close, WTA main": {
+   "n": 100,
+   "roi": 0.0319,
+   "range": [
+    -0.1865,
+    0.2578
+   ],
+   "share_on_A_side": 0.42
+  },
+  "M1 minus M0 by level: Challenger": [
+   -0.00012,
+   -0.00046,
+   0.00025,
+   20813
+  ],
+  "money edge >= 3 at bf_close, Challenger": {
+   "n": 35,
+   "roi": 0.1706,
+   "range": [
+    -0.2238,
+    0.5962
+   ],
+   "share_on_A_side": 0.371
+  },
+  "weights fitted on 2016-21 (log-odds per unit)": {
+   "mkt": 1.0408,
+   "age_gap": -0.0511,
+   "qualifier": 0.0533,
+   "pre_slam": -0.0337,
+   "season_end": -0.1189,
+   "jet_lag": 0.0071,
+   "main_tour": -0.0005,
+   "age_known": -0.0011
+  }
+ },
+ "checks": {
+  "swap_source": {
+   "pass": true,
+   "columns_differing": [],
+   "labels_inverted": true,
+   "rows": 26605
+  },
+  "planted_edge": {
+   "pass": true,
+   "expected_improvement": 0.00237,
+   "found_delta": [
+    -0.00238,
+    -0.00302,
+    -0.00176
+   ],
+   "size": 0.15
+  },
+  "market_null": {
+   "pass": true,
+   "found_delta": [
+    0.00013,
+    6e-05,
+    0.00019
+   ]
+  },
+  "known_answers": {
+   "pass": true,
+   "market_log_loss": 0.60791,
+   "expected_range": [
+    0.55,
+    0.66
+   ],
+   "A_win_share": 0.4935
+  }
+ },
+ "checks_passed": true,
+ "alarms": []
+}

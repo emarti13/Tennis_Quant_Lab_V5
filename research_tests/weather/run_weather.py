@@ -40,7 +40,8 @@ from research_kit.core import boot_mean, coin_flip, devig, log_loss, logit, orie
 SEED = 20261103
 TEST_YEARS = range(2022, 2026)
 BOOKS = {"bf_close": ("bf_w", "bf_l"), "b365_close": ("b365_w", "b365_l")}
-COMMISSION = {"bf_close": 0.02, "b365_close": 0.0}
+# the Kaggle "Betfair" price is a sportsbook price with its margin in it (audit 2026-11-03): no commission
+COMMISSION = {"bf_close": 0.0, "b365_close": 0.0}
 COLS = ["d_hot_age", "d_hot_ht", "d_wind_ace"]
 
 

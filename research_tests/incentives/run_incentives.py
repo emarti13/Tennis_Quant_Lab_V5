@@ -46,7 +46,8 @@ SEED = 20261103
 TEST_YEARS = range(2022, 2026)
 FLAGS = ["bubble_main", "bubble_quali", "defending", "pre_slam", "season_end", "wildcard", "qualifier"]
 BOOKS = {"bf_close": ("bf_w", "bf_l"), "b365_close": ("b365_w", "b365_l")}
-COMMISSION = {"bf_close": 0.02, "b365_close": 0.0}
+# the Kaggle "Betfair" price is a sportsbook price with its margin in it (audit 2026-11-03): no commission
+COMMISSION = {"bf_close": 0.0, "b365_close": 0.0}
 ROUND_RANK = {"Q1": 0, "Q2": 1, "Q3": 2, "R128": 3, "R64": 4, "R32": 5, "R16": 6, "QF": 7, "SF": 8, "F": 9}
 
 

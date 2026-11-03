@@ -1,8 +1,8 @@
 {
  "manifest": {
-  "run_utc": "2026-11-03T05:31:06.943462+00:00",
-  "command": "python research_tests/travel/run_travel.py /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/travel/events.csv /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/travel/results.json",
-  "git_commit": "d74762a5a90a03d0456014c89a9dfbf83edd284e",
+  "run_utc": "2026-11-03T06:16:26.604687+00:00",
+  "command": "python research_tests/travel/run_travel.py /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl research_tests/travel/events.csv /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/travel/results.json",
+  "git_commit": "c2c2705512b5a3949f0efb10ffdb802cb3574761",
   "uncommitted_changes": true,
   "python": "3.13.16",
   "packages": {
@@ -22,7 +22,7 @@
     "sha256": "1888802164c3ff67906c3f818ca0762650bf8ba450f2d7ba03c318dbf31598bf"
    },
    "events": {
-    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/travel/events.csv",
+    "path": "research_tests/travel/events.csv",
     "sha256": "9952f8086071c667120deaae8300aab30e1eacfbae93b0d60c77fcb5177c0a6e"
    }
   }
@@ -56,10 +56,10 @@
   },
   "MONEY jet_east: back the flagged player at bf_close, 2022-25": {
    "n": 167,
-   "roi": -0.2243,
+   "roi": -0.2183,
    "range": [
-    -0.3592,
-    -0.0825
+    -0.3548,
+    -0.0748
    ]
   },
   "MONEY jet_east: back the flagged player at b365_close, 2022-25": {
@@ -86,10 +86,10 @@
   },
   "MONEY jet_west: back the other player at bf_close, 2022-25": {
    "n": 166,
-   "roi": 0.0916,
+   "roi": 0.1036,
    "range": [
-    -0.0901,
-    0.2931
+    -0.0802,
+    0.3076
    ]
   },
   "MONEY jet_west: back the other player at b365_close, 2022-25": {
@@ -130,10 +130,10 @@
   },
   "MONEY night_jet: back the other player at bf_close, 2022-25": {
    "n": 21,
-   "roi": 0.1207,
+   "roi": 0.1329,
    "range": [
-    -0.3769,
-    0.6753
+    -0.3691,
+    0.6958
    ]
   },
   "MONEY night_jet: back the other player at b365_close, 2022-25": {
