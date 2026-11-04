@@ -1,0 +1,105 @@
+{
+ "model": "P(A) = sigmoid(open * logit(p_open_A) + sum w_i * x_i); x_i = A minus B; no intercept",
+ "inputs": [
+  "age_gap",
+  "qualifier",
+  "season_end",
+  "wildcard",
+  "defending",
+  "hangover",
+  "venue",
+  "layoff",
+  "surface",
+  "surface_spec",
+  "freepass"
+ ],
+ "weights": {
+  "open": 1.077709,
+  "age_gap": -0.059488,
+  "qualifier": 0.09994,
+  "season_end": -0.20729,
+  "wildcard": 0.025175,
+  "defending": 0.014919,
+  "hangover": -0.013481,
+  "venue": -0.014286,
+  "layoff": -0.154744,
+  "surface": -0.042566,
+  "surface_spec": 0.050017,
+  "freepass": 0.005298
+ },
+ "C": 0.3,
+ "fit_rows": 82199,
+ "fit_years": "2016-2025",
+ "orientation agrees across builds": true,
+ "check (walk-forward, test 2022-25)": {
+  "M minus open, log loss": [
+   -0.00068,
+   -0.00117,
+   -0.00018
+  ],
+  "M minus close, log loss": [
+   0.00659,
+   0.00546,
+   0.00776
+  ],
+  "edge >= 3 at bet365 open": {
+   "n": 353,
+   "clv_roi": [
+    -0.0108,
+    -0.0232,
+    0.0008
+   ],
+   "roi": [
+    -0.0279,
+    -0.1265,
+    0.0725
+   ],
+   "move_pts": [
+    2.09,
+    1.51,
+    2.65
+   ],
+   "clv_hit": 0.643,
+   "mean_open_odds": 2.01
+  }
+ },
+ "manifest": {
+  "run_utc": "2026-11-04T06:37:00.757176+00:00",
+  "command": "python research_tests/open_clv/freeze_kalshi_blend.py /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/canon_matches.pkl .v5_history_cache research_tests/travel/events.csv research_tests/scout/data/elevations_srtm90m.csv research_tests/open_clv/kalshi_blend_weights.json",
+  "git_commit": "27445aa5f4b079a7aa10800717cfc1c24692f943",
+  "uncommitted_changes": true,
+  "python": "3.13.16",
+  "packages": {
+   "pandas": "3.0.5",
+   "numpy": "2.5.3",
+   "scikit-learn": "1.9.1",
+   "lightgbm": "4.7.0",
+   "scipy": "1.18.1"
+  },
+  "seeds": {
+   "orientation": 20261103
+  },
+  "inputs": {
+   "joined": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl",
+    "sha256": "1888802164c3ff67906c3f818ca0762650bf8ba450f2d7ba03c318dbf31598bf"
+   },
+   "canon": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/canon_matches.pkl",
+    "sha256": "a6ea1e70d562a7f8d2c0c6feba1b568b8d69313af87eafcaa966d9898e89db58"
+   },
+   "history": {
+    "path": ".v5_history_cache",
+    "sha256": "46c890566bc717ce3937640b00fba7de4a4b5de24254b9af7213eb0f10d33204"
+   },
+   "events": {
+    "path": "research_tests/travel/events.csv",
+    "sha256": "9952f8086071c667120deaae8300aab30e1eacfbae93b0d60c77fcb5177c0a6e"
+   },
+   "elev": {
+    "path": "research_tests/scout/data/elevations_srtm90m.csv",
+    "sha256": "ad2af09707ed578b13c8a8d0135adc2efed9e8482cc5394b021849658773acfc"
+   }
+  }
+ }
+}

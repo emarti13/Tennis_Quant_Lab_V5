@@ -60,16 +60,22 @@ def poll_gap() -> str:
         return f"unreadable ({type(exc).__name__})"
 
 
+def note(s: dict) -> str:
+    if s.get("note"):
+        return str(s["note"])
+    return f"favourite won {s['favourite_won']}" if "favourite_won" in s else ""
+
+
 def registrations() -> list[str]:
     files = sorted((BASE / "market_history" / "kalshi" / "registrations").glob("*_summary.json"))
     if not files:
         return ["none yet"]
     import json
-    lines = ["| test | status | settled / needed | cents per contract | 95% range | favourite won |", "|---|---|---|---|---|---|"]
+    lines = ["| test | status | settled / needed | cents per contract | 95% range | note |", "|---|---|---|---|---|---|"]
     for p in files:
         s = json.loads(p.read_text())
         lines.append(f"| {p.stem.replace('_summary', '')} | {s.get('status')} | {s.get('settled')} / {s.get('min_matches')} | "
-                     f"{s.get('cents_per_contract', '')} | {s.get('range_cents', '')} | {s.get('favourite_won', '')} |")
+                     f"{s.get('cents_per_contract', '')} | {s.get('range_cents', '')} | {note(s)} |")
     return lines
 
 
