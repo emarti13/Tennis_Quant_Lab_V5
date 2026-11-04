@@ -12,6 +12,7 @@ many ideas were tried.
 | 2026-10-20 | In-play calibration | `docs/experiments/2026-10-20-inplay-calibration.md` (branch `research/kalshi-making-sim`) | as stated in the file | open |
 | 2026-11-03 | Back the favourite when a Kalshi tennis long shot's YES bid is 20¢ or less (6 h to 60 min before the start), after the taker fee | `docs/registrations/2026-11-03-kalshi-longshot-favourite.md` (tracked daily by the server: `market_history/kalshi/registrations/` on `data/vm-logs`) | 300 settled matches or 2027-01-31 | running |
 | 2026-11-03 | Season end: after Oct 20, back the opponent of an ATP player ranked 31-90 (Kalshi, after the taker fee) | `docs/registrations/2026-11-03-season-end-motivation.md` (tracked daily by the server: `market_history/kalshi/registrations/` on `data/vm-logs`) | 300 settled matches or 2027-12-31 | running |
+| 2026-11-04 | Blend of body/schedule signals, bet at the Kalshi opening quote; scored on CLV against the Kalshi close, after the taker fee | `docs/registrations/2026-11-04-kalshi-blend-at-open.md` (tracked daily by the server: `market_history/kalshi/registrations/` on `data/vm-logs`) | 300 bets or 2027-10-31 | running |
 
 New registrations: `docs/registrations/YYYY-MM-DD-<name>.md` (hypothesis and the decision it
 would change; segment, prices, venue, timing, fees; metric, pass rule, minimum sample; planned
