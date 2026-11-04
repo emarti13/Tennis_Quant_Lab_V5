@@ -126,8 +126,8 @@ def bet_stats(d: pd.DataFrame, back_a: np.ndarray, cluster=None) -> dict:
             "clv_hit": round(float((pc > po).mean()), 3), "mean_open_odds": round(float(o.mean()), 2)}
 
 
-def main() -> int:
-    joined_pkl, canon_pkl, hist_dir, events_csv, elev_csv, out_json = sys.argv[1:7]
+def inputs_frame(joined_pkl, canon_pkl, hist_dir, events_csv, elev_csv):
+    """Every input, prices and outcome per match (one row per odds match from 2016; same code as the tests)."""
     joined = pd.read_pickle(joined_pkl)
     joined = joined[joined["tour"].isin(["ATP", "WTA"]) & joined["odds_level"].isin(["ATP main", "WTA main", "Challenger"])].reset_index(drop=True)
     joined = joined.assign(match_key=np.arange(len(joined)), flip=coin_flip(len(joined), SEED))
@@ -151,6 +151,12 @@ def main() -> int:
     df = b.merge(ie, on="match_key").merge(s, on="match_key", suffixes=("", "_s")).merge(prices(joined), on="match_key")
     orient_ok = bool((df["y"] == df["y_s"]).all())
     df = df[(df["year"] >= 2016) & df["p_open"].notna() & df["p_close"].notna()].reset_index(drop=True)
+    return joined, df, orient_ok
+
+
+def main() -> int:
+    joined_pkl, canon_pkl, hist_dir, events_csv, elev_csv, out_json = sys.argv[1:7]
+    joined, df, orient_ok = inputs_frame(joined_pkl, canon_pkl, hist_dir, events_csv, elev_csv)
     cols = BLEND + INC_EXTRA + SCOUT + SCOUT_CONT
 
     res = {"manifest": provenance.manifest({"joined": joined_pkl, "canon": canon_pkl, "history": hist_dir, "events": events_csv, "elev": elev_csv},
