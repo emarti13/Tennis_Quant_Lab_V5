@@ -35,7 +35,7 @@ On the sportsbook data this was true, but Bet365's 6.7% opening margin ate the g
 
 The inputs were chosen on 2016–25, so only this forward window counts.
 
-## The rule (scored by `scripts/track_kalshi_blend_rule.py` at commit `0435ea28d57266ec2fb58a36357b99c03e47ceea`, branch `feat/vm-runner`)
+## The rule (scored by `scripts/track_kalshi_blend_rule.py` at commit `a6469af09c03dd985918847f41b167963fb639cd`, branch `feat/vm-runner`)
 
 - **Markets:** Kalshi series KXATPMATCH, KXWTAMATCH and KXATPCHALLENGERMATCH.
 - **Window:** matches whose scheduled start (Kalshi milestone `start_date`) is after **2026-11-04T18:00:00Z** (set in the code before this file was committed).
@@ -67,7 +67,14 @@ The inputs were chosen on 2016–25, so only this forward window counts.
   - realised P&L on Kalshi results (the backed player's market: `yes` or `no`; anything else is void);
   - the move in mid toward the bet;
   - the share of bets with positive CLV;
-  - results by series.
+  - results by series;
+  - **where each bet's edge came from:**
+    - the stretch of the opening price by w_open alone (with no signals);
+    - the signals' part;
+    - whether the bet would still clear 3 points with the signals on the unstretched price (w_open = 1);
+    - CLV for the bets that clear on signals alone versus the rest.
+
+    This splits the result between the long-shot correction and the signals. It does not change which bets are made.
   - A Pinnacle-close version of the CLV will be added as a separate report when the Pinnacle closes are joined to these fixtures. It is not part of this rule.
 
 ## Not allowed during the window
