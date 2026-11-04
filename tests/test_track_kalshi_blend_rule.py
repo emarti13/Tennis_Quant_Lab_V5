@@ -53,3 +53,18 @@ def test_cost_takes_the_cheaper_route_and_the_fee():
     assert b["price"] in (round(side_a, 4), round(min(0.49, 1 - 0.50), 4))
     assert b["fee_per_contract"] == T.taker_fee_per_contract(b["price"])
     assert b["bet"] is False                            # no signal, no 3-point edge
+
+
+def test_edge_split_adds_up_and_stretch_alone_never_bets():
+    w = json.loads((Path(T.__file__).resolve().parents[1] / "research_tests/open_clv/kalshi_blend_weights.json").read_text())["weights"]
+    o = pd.DataFrame({"bid": [0.79, 0.19], "ask": [0.81, 0.21]}, index=["A", "B"])
+    b = T.bet_for(o, "A", "B", {k: 0.0 for k in w if k != "open"}, w)
+    assert b["signal_pts"] == pytest.approx(0.0, abs=1e-9)          # no signals: all of the move is the stretch
+    assert 0 < abs(b["stretch_pts"]) < 2.0
+    assert b["bet"] is False and b["clears_on_signals_alone"] is False
+    x = {k: 0.0 for k in w if k != "open"}
+    x["layoff"] = -1.0
+    b2 = T.bet_for(o, "A", "B", x, w)
+    p_back = b2["model_chance"]
+    p_open_back = 0.80 if b2["backed_ticker"] == "A" else 0.20
+    assert (b2["stretch_pts"] + b2["signal_pts"]) / 100 == pytest.approx(p_back - p_open_back, abs=1e-4)

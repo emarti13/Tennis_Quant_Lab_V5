@@ -208,19 +208,26 @@ def bet_for(open_q: pd.DataFrame, ta: str, tb: str, x: dict, w: dict) -> dict:
     ma = (open_q.loc[ta, "bid"] + open_q.loc[ta, "ask"]) / 2
     mb = (open_q.loc[tb, "bid"] + open_q.loc[tb, "ask"]) / 2
     pa = ma / (ma + mb)
-    z = w["open"] * math.log(pa / (1 - pa)) + sum(w[k] * v for k, v in x.items())
-    p = sigmoid(z)
+    lo = math.log(pa / (1 - pa))
+    sig = sum(w[k] * v for k, v in x.items())
+    p = sigmoid(w["open"] * lo + sig)
+    p_stretch = sigmoid(w["open"] * lo)                 # the opening price stretched, no signals
+    p_signals = sigmoid(lo + sig)                       # the signals on the unstretched opening price (report only)
     out = {"p_open_a": round(pa, 4), "p_model_a": round(p, 4)}
     sides = []
-    for t, o, pt in ((ta, tb, p), (tb, ta, 1 - p)):
+    for t, o, pt, ps, pg, po in ((ta, tb, p, p_stretch, p_signals, pa), (tb, ta, 1 - p, 1 - p_stretch, 1 - p_signals, 1 - pa)):
         yes, no = float(open_q.loc[t, "ask"]), 1 - float(open_q.loc[o, "bid"])
         how, price = ("YES", yes) if yes <= no else ("NO on opponent", no)
         fee = taker_fee_per_contract(price)
         sides.append({"backed_ticker": t, "other_ticker": o, "how": how, "price": round(price, 4), "fee_per_contract": fee,
-                      "model_chance": round(pt, 4), "edge": round(pt - price - fee, 4)})
+                      "model_chance": round(pt, 4), "edge": round(pt - price - fee, 4),
+                      # report only (registration 2026-11-04): where the backed side's edge came from
+                      "stretch_pts": round(100 * (ps - po), 3), "signal_pts": round(100 * (pt - ps), 3),
+                      "edge_signals_only": round(pg - price - fee, 4)})
     best = max(sides, key=lambda s: s["edge"])
     out.update(best)
     out["bet"] = bool(best["edge"] >= EDGE)
+    out["clears_on_signals_alone"] = bool(out["bet"] and best["edge_signals_only"] >= EDGE)
     return out
 
 
@@ -259,7 +266,15 @@ def summary(d: pd.DataFrame, counts: dict) -> dict:
                     "dollars_at_100_contracts": round(float(100 * pnl.sum()), 2) if len(pnl) else None,
                     "by_series": {s: int(n) for s, n in b["series"].value_counts().items()},
                     "status": ("PASS" if lo > 0 else "FAIL") if len(b) >= MIN_BETS else "running"})
-        out["note"] = f"P&L {out['pnl_cents_per_contract']}c on {len(pnl)} settled" if len(pnl) else ""
+        sa = b[b["clears_on_signals_alone"].astype(bool)] if "clears_on_signals_alone" in b else b.iloc[:0]
+        out["edge split (report only)"] = {
+            "mean stretch pts": round(float(b["stretch_pts"].mean()), 3) if "stretch_pts" in b else None,
+            "mean signal pts": round(float(b["signal_pts"].mean()), 3) if "signal_pts" in b else None,
+            "bets that clear 3 pts on signals alone": int(len(sa)),
+            "their CLV cents per contract": round(100 * float(sa["clv_per_contract"].mean()), 3) if len(sa) else None,
+            "other bets' CLV cents per contract": round(100 * float(b.drop(sa.index)["clv_per_contract"].mean()), 3) if len(b) > len(sa) else None}
+        out["note"] = (f"P&L {out['pnl_cents_per_contract']}c on {len(pnl)} settled; " if len(pnl) else "") + \
+            f"{len(sa)} of {len(b)} clear on signals alone"
     else:
         out["status"] = "running"
     return out
