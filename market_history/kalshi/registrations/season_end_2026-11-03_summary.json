@@ -1,21 +1,21 @@
 {
  "registration": "docs/registrations/2026-11-03-season-end-motivation.md",
- "decisions": 10,
- "settled": 4,
+ "decisions": 19,
+ "settled": 15,
  "min_matches": 300,
  "window_end": "2027-12-31",
  "skipped": {
-  "no_name": 5,
-  "no_rank": 8,
-  "not_flagged": 29
+  "no_name": 0,
+  "no_rank": 6,
+  "not_flagged": 68
  },
- "cents_per_contract": -29.348,
+ "cents_per_contract": -29.111,
  "range_cents": [
-  -57.905,
-  9.768
+  -48.491,
+  -6.852
  ],
- "favourite_won": 0.25,
- "mean_price": 0.5275,
- "dollars_at_100_contracts": -117.39,
+ "favourite_won": 0.3333,
+ "mean_price": 0.6107,
+ "dollars_at_100_contracts": -436.66,
  "status": "running"
 }
