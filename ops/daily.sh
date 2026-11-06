@@ -24,7 +24,7 @@ daily_main() {
 
   # 1. gzip every finished day of the logs (only .csv.gz is committed; today's file keeps growing)
   today=$(date -u +%Y-%m-%d)
-  for f in "$LIVE"/*.csv "$LIVE"/prematch/*.csv market_history/kalshi/paper/{snapshots,fills,depth}_*.csv; do
+  for f in "$LIVE"/*.csv "$LIVE"/{prematch,props,orderbook}/*.csv market_history/kalshi/paper/{snapshots,fills,depth}_*.csv; do
     [ -e "$f" ] || continue
     case "$f" in *"$today"*) continue ;; esac
     gzip -f "$f"
