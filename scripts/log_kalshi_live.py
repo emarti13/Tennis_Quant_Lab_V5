@@ -18,6 +18,15 @@ Every 5 minutes it also records every open market's quote, before and during pla
 market_history/kalshi/live_scores/prematch/YYYY-MM-DD.csv (from the same listing call), so a
 next-round price can be followed from the moment the previous match ends.
 
+A second thread (every 5 minutes, its own throttled client) records, for every open Kalshi tennis
+market in the match-winner series and in the game-spread, total-games and set-winner series:
+- the quotes of the spread / total / set markets in market_history/kalshi/live_scores/props/YYYY-MM-DD.csv;
+- the order book in market_history/kalshi/live_scores/orderbook/YYYY-MM-DD.csv: the 10 price levels
+  nearest the best price on each side (YES bids and NO bids, "price:size;..."), and each side's total
+  resting size. A row is written only when the book changed since the last row for that market.
+The match_suffix column (event ticker after the series, e.g. 26NOV06FRIALC) ties a spread, total or
+set market to its match-winner event.
+
 Output (append-only): market_history/kalshi/live_scores/YYYY-MM-DD.csv (UTC day), and
 market_history/kalshi/live_scores/state.json (milestones found, matches finished).
 A match is watched from 10 minutes before its milestone start until Kalshi reports it ended.
@@ -27,6 +36,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import threading
 import time
 from pathlib import Path
 
@@ -44,6 +54,13 @@ PREMATCH_EVERY_MIN = 5
 NOT_STARTED_RECHECK_S = 60
 API_PAUSE_S = 0.25          # between requests (the paper trader keeps its own 0.6 s)
 PRE_COLS = ["polled_utc", "series", "event_ticker", "ticker", "competitor", "start_date", "bid", "ask", "last", "volume"]
+EXTRA_SERIES = ("KXATPGSPREAD", "KXATPGTOTAL", "KXWTAGSPREAD", "KXWTAGTOTAL", "KXATPSETWINNER", "KXWTASETWINNER")
+BOOK_EVERY_MIN = 5
+BOOK_LEVELS = 10
+PROP_COLS = ["polled_utc", "series", "event_ticker", "match_suffix", "ticker", "yes_sub_title", "line", "strike_type",
+             "bid", "ask", "last", "volume", "open_interest"]
+BOOK_COLS = ["polled_utc", "series", "ticker", "match_suffix", "best_yes_bid", "best_no_bid", "yes_total", "no_total",
+             "yes_levels", "no_levels"]
 FINISHED = {"closed", "ended", "finished", "complete", "completed", "cancelled", "canceled"}
 STATS = ("points_won", "service_points_won", "service_points_lost", "first_serve_successful",
          "second_serve_successful", "first_serve_points_won", "second_serve_points_won", "aces",
@@ -215,12 +232,92 @@ def poll_once(api: Kalshi, state: dict, now: pd.Timestamp) -> dict:
     return {"rows": len(rows), "live_matches": watched, "prematch_quotes": len(pre), "failures": failed, "api_calls": api.calls}
 
 
+def match_suffix(event_ticker: str) -> str:
+    return str(event_ticker).split("-", 1)[1] if "-" in str(event_ticker) else ""
+
+
+def _levels(raw) -> list[tuple[float, float]]:
+    """[["0.4200", "15.00"], ...] -> [(0.42, 15.0), ...], best (highest) price first."""
+    out = []
+    for lv in raw or []:
+        p, q = _f(lv[0]) if len(lv) > 0 else None, _f(lv[1]) if len(lv) > 1 else None
+        if p is not None and q is not None and q > 0:
+            out.append((p, q))
+    return sorted(out, key=lambda x: -x[0])
+
+
+def book_row(series: str, ticker: str, event_ticker: str, book: dict, now: pd.Timestamp) -> dict:
+    y, n = _levels(book.get("yes_dollars")), _levels(book.get("no_dollars"))
+    fmt = lambda lv: ";".join(f"{p:.2f}:{q:g}" for p, q in lv[:BOOK_LEVELS])  # noqa: E731
+    return {"polled_utc": now.isoformat(), "series": series, "ticker": ticker, "match_suffix": match_suffix(event_ticker),
+            "best_yes_bid": y[0][0] if y else None, "best_no_bid": n[0][0] if n else None,
+            "yes_total": round(sum(q for _, q in y), 2), "no_total": round(sum(q for _, q in n), 2),
+            "yes_levels": fmt(y), "no_levels": fmt(n)}
+
+
+def prop_row(series: str, m: dict, now: pd.Timestamp) -> dict:
+    return {"polled_utc": now.isoformat(), "series": series, "event_ticker": m.get("event_ticker"),
+            "match_suffix": match_suffix(m.get("event_ticker")), "ticker": m.get("ticker"), "yes_sub_title": m.get("yes_sub_title"),
+            "line": _f(m.get("floor_strike")), "strike_type": m.get("strike_type"),
+            "bid": _f(m.get("yes_bid_dollars")), "ask": _f(m.get("yes_ask_dollars")), "last": _f(m.get("last_price_dollars")),
+            "volume": _f(m.get("volume_fp", m.get("volume"))), "open_interest": _f(m.get("open_interest_fp", m.get("open_interest")))}
+
+
+def books_once(api: Kalshi, last_seen: dict, now: pd.Timestamp) -> dict:
+    """One sweep: quotes of the spread / total / set markets, and every open market's order book
+    (written only when it changed since the last row for that market)."""
+    props, books, failed = [], [], 0
+    for series in SERIES + EXTRA_SERIES:
+        try:
+            markets = api.open_markets(series)
+        except RuntimeError:
+            failed += 1
+            continue
+        if series in EXTRA_SERIES:
+            props += [prop_row(series, m, now) for m in markets]
+        for m in markets:
+            try:
+                book = api.get(f"/markets/{m['ticker']}/orderbook").get("orderbook_fp") or {}
+            except (RuntimeError, requests.HTTPError):
+                failed += 1
+                continue
+            row = book_row(series, m["ticker"], m["event_ticker"], book, now)
+            sig = (row["yes_levels"], row["no_levels"], row["yes_total"], row["no_total"])
+            if last_seen.get(m["ticker"]) != sig:
+                books.append(row)
+                last_seen[m["ticker"]] = sig
+    day = f"{now:%Y-%m-%d}"
+    if props:
+        (OUT_DIR / "props").mkdir(parents=True, exist_ok=True)
+        _append(OUT_DIR / "props", day, pd.DataFrame(props, columns=PROP_COLS))
+    if books:
+        (OUT_DIR / "orderbook").mkdir(parents=True, exist_ok=True)
+        _append(OUT_DIR / "orderbook", day, pd.DataFrame(books, columns=BOOK_COLS))
+    return {"prop_quotes": len(props), "book_rows": len(books), "book_failures": failed}
+
+
+def books_loop(stop: threading.Event) -> None:
+    api, last_seen = Kalshi(pause=API_PAUSE_S), {}
+    while not stop.is_set():
+        started = time.time()
+        now = pd.Timestamp.now(tz="UTC").floor("s")
+        try:
+            print(f"{now.isoformat()} books {json.dumps(books_once(api, last_seen, now))}", flush=True)
+        except Exception as exc:                               # keep going; the next sweep retries
+            print(f"{now.isoformat()} books sweep failed: {exc}", flush=True)
+        stop.wait(max(0.0, BOOK_EVERY_MIN * 60 - (time.time() - started)))
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--minutes", type=float, default=0, help="stop after this long (0 = run forever)")
     ap.add_argument("--interval", type=float, default=10)
+    ap.add_argument("--no-books", action="store_true", help="do not record order books and spread/total quotes")
     args = ap.parse_args()
     api, state = Kalshi(pause=API_PAUSE_S), load_state()
+    stop = threading.Event()
+    if not args.no_books:
+        threading.Thread(target=books_loop, args=(stop,), daemon=True, name="books").start()
     end = time.time() + args.minutes * 60 if args.minutes else None
     while True:
         started = time.time()
@@ -232,6 +329,7 @@ def main() -> int:
         except Exception as exc:                               # keep logging; the next poll retries
             print(f"{now.isoformat()} poll failed: {exc}", flush=True)
         if end is not None and time.time() >= end:
+            stop.set()
             return 0
         time.sleep(max(0.0, args.interval - (time.time() - started)))
 

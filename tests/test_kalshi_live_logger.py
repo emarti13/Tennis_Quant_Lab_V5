@@ -110,3 +110,44 @@ def test_live_rows_use_quotes_read_after_the_score(tmp_path, monkeypatch):
     r = pd.read_csv(tmp_path / "2026-10-21.csv").iloc[0]
     assert r["bid_2"] == 0.80 and r["ask_2"] == 0.81            # EV-A is competitor 2: the fresh quote
     assert r["bid_1"] == 0.28                                   # EV-B had no fresh quote: listing kept
+
+
+class FakeBooks:
+    calls = 0
+    book = {"yes_dollars": [["0.0100", "500.00"], ["0.4000", "20.00"], ["0.4200", "15.00"]],
+            "no_dollars": [["0.5500", "300.00"], ["0.5600", "10.00"]]}
+
+    def open_markets(self, series):
+        if series == "KXATPMATCH":
+            return [{"ticker": "KXATPMATCH-26NOV06FRIALC-FRI", "event_ticker": "KXATPMATCH-26NOV06FRIALC"}]
+        if series == "KXATPGTOTAL":
+            return [{"ticker": "KXATPGTOTAL-26NOV06FRIALC-22", "event_ticker": "KXATPGTOTAL-26NOV06FRIALC",
+                     "yes_sub_title": "Over 22.5 games", "floor_strike": 22.5, "strike_type": "greater",
+                     "yes_bid_dollars": "0.5100", "yes_ask_dollars": "0.5400", "volume_fp": "129.00", "open_interest_fp": "80.00"}]
+        return []
+
+    def get(self, path, params=None):
+        self.calls += 1
+        return {"orderbook_fp": self.book}
+
+
+def test_book_row_best_first_with_side_totals():
+    r = ll.book_row("KXATPMATCH", "T", "KXATPMATCH-26NOV06FRIALC", FakeBooks.book, pd.Timestamp("2026-11-06T12:00Z"))
+    assert r["match_suffix"] == "26NOV06FRIALC"
+    assert r["best_yes_bid"] == 0.42 and r["best_no_bid"] == 0.56
+    assert r["yes_levels"].startswith("0.42:15;0.40:20;0.01:500")
+    assert r["yes_total"] == 535 and r["no_total"] == 310
+
+
+def test_books_once_writes_props_and_only_changed_books(tmp_path, monkeypatch):
+    monkeypatch.setattr(ll, "OUT_DIR", tmp_path)
+    api, seen = FakeBooks(), {}
+    a = ll.books_once(api, seen, pd.Timestamp("2026-11-06T12:00Z"))
+    assert a == {"prop_quotes": 1, "book_rows": 2, "book_failures": 0}
+    b = ll.books_once(api, seen, pd.Timestamp("2026-11-06T12:05Z"))       # nothing changed: no new book rows
+    assert b["book_rows"] == 0 and b["prop_quotes"] == 1
+    props = pd.read_csv(tmp_path / "props" / "2026-11-06.csv")
+    assert list(props.columns) == ll.PROP_COLS and props["line"].iloc[0] == 22.5
+    assert props["match_suffix"].iloc[0] == "26NOV06FRIALC"
+    books = pd.read_csv(tmp_path / "orderbook" / "2026-11-06.csv")
+    assert len(books) == 2 and set(books["series"]) == {"KXATPMATCH", "KXATPGTOTAL"}
