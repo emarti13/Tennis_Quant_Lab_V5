@@ -1,38 +1,38 @@
 {
   "quota_before": {
     "limit": 250,
-    "used": 36,
-    "remaining": 214,
+    "used": 41,
+    "remaining": 209,
     "valid_from": "2026-08-26T14:33:08.55076+00:00",
     "valid_until": null
   },
   "quota_after": {
     "limit": 250,
-    "used": 37,
-    "remaining": 213,
+    "used": 42,
+    "remaining": 208,
     "valid_from": "2026-08-26T14:33:08.55076+00:00",
     "valid_until": null
   },
   "discovery": {
     "windows": 1,
-    "relevant_seen": 634,
-    "inserted": 2,
-    "updated": 632,
-    "registry_rows": 20883,
+    "relevant_seen": 615,
+    "inserted": 0,
+    "updated": 615,
+    "registry_rows": 20911,
     "path": "/home/runner/work/Tennis_Quant_Lab_V5/Tennis_Quant_Lab_V5/oddspapi_registry/fixtures.csv"
   },
   "queued": {
-    "daily": 53,
-    "backfill": 3655,
+    "daily": 42,
+    "backfill": 3434,
     "bet365_backfill": 7994,
     "expired_by_probe": 0
   },
   "done": {
-    "backfill:not_found": 6,
-    "backfill:ok": 215,
-    "daily:ok": 53
+    "backfill:not_found": 1,
+    "backfill:ok": 231,
+    "daily:ok": 42
   },
-  "raw_file": "2026-11-06_1505.jsonl.gz",
+  "raw_file": "2026-11-07_1404.jsonl.gz",
   "minutes": 27.1,
-  "run_utc": "2026-11-06T15:32:32+00:00"
+  "run_utc": "2026-11-07T14:31:48+00:00"
 }
