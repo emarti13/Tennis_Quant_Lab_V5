@@ -1,15 +1,15 @@
 {
  "registration": "docs/registrations/2026-11-04-kalshi-blend-at-open.md",
- "decisions": 52,
+ "decisions": 77,
  "bets": 4,
  "settled": 4,
  "min_matches": 300,
  "window_end": "2027-10-31",
  "counts": {
-  "no_quotes": 320,
-  "no_row_yet": 57,
+  "no_quotes": 323,
+  "no_row_yet": 65,
   "no_row": 0,
-  "decided": 29
+  "decided": 25
  },
  "metric": "CLV cents per contract (close mid of the backed player minus price and fee)",
  "cents_per_contract": -0.11,
@@ -19,9 +19,9 @@
  ],
  "clv_hit": 1.0,
  "move_cents": 2.525,
- "results_settled": 3,
- "pnl_cents_per_contract": 29.187,
- "dollars_at_100_contracts": 87.56,
+ "results_settled": 4,
+ "pnl_cents_per_contract": 8.453,
+ "dollars_at_100_contracts": 33.81,
  "by_series": {
   "KXATPMATCH": 3,
   "KXWTAMATCH": 1
@@ -34,5 +34,5 @@
   "their CLV cents per contract": 0.017,
   "other bets' CLV cents per contract": -0.49
  },
- "note": "P&L 29.187c on 3 settled; 3 of 4 clear on signals alone"
+ "note": "P&L 8.453c on 4 settled; 3 of 4 clear on signals alone"
 }
