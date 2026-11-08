@@ -1,27 +1,32 @@
 {
-  "generated_utc": "2026-11-07T12:39:02+00:00",
-  "as_of": "2026-11-07",
+  "generated_utc": "2026-11-08T12:56:05+00:00",
+  "as_of": "2026-11-08",
   "season": 2026,
   "schedule_years": [
     2026
   ],
   "tournament_mappings": {
-    "confirmed": 636,
-    "auto": 81,
+    "confirmed": 638,
+    "auto": 88,
     "user": 14,
-    "review": 11,
+    "review": 12,
     "rejected": 2
   },
   "oddspapi_players": {
-    "confirmed": 1061,
-    "no_history": 887,
-    "auto": 614,
+    "confirmed": 1062,
+    "no_history": 894,
+    "auto": 617,
     "placeholder": 30,
     "user": 15,
     "review": 5,
     "rejected": 5
   },
   "flags": [
+    {
+      "flag": "UPCOMING_UNMATCHED",
+      "detail": "WTA 125K Sopo, Colombia Women Singles from 2026-11-08: unmatched",
+      "candidates": ""
+    },
     {
       "flag": "REVIEW_OPEN",
       "detail": "tournament oddspapi 52454@2026-10-25 WTA 125K Curitiba, Brazil Women Singles: unmatched"
@@ -48,6 +53,10 @@
     },
     {
       "flag": "REVIEW_OPEN",
+      "detail": "tournament oddspapi 53480@2026-11-08 WTA 125K Sopo, Colombia Women Singles: unmatched"
+    },
+    {
+      "flag": "REVIEW_OPEN",
       "detail": "tournament tennismylife 2026-7742@2026-10-19 Del Monte Lisboa Belém Open: unmatched; candidates: Lisbon (Lisbon, 2026-10-19) | Cali (Cali, 2026-10-19) | Fort Worth (Fort Worth, 2026-10-19) | Guangzhou (Nansha) (Guangzhou, 2026-10-19) | Florence (Florence, 2026-10-19) | suggested by results: CHALLENGER|2026-10-19|lisbon|lisbon (29 shared matches)"
     },
     {
@@ -56,15 +65,15 @@
     },
     {
       "flag": "REVIEW_OPEN",
-      "detail": "tournament tennismylife 2026-2278@2026-11-02 TAIWAN SANTAIZI CHALLENGER: unmatched; candidates: Costa do Sauipe (Costa do Sauipe, 2026-11-02) | Bratislava 2 (Bratislava, 2026-11-02) | Taipei (Taipei, 2026-11-02) | Charlottesville (Charlottesville, 2026-11-02) | Villa Maria (Villa Maria, 2026-11-02) | suggested by results: CHALLENGER|2026-11-02|taipei|taipei (30 shared matches)"
+      "detail": "tournament tennismylife 2026-2278@2026-11-02 TAIWAN SANTAIZI CHALLENGER: unmatched; candidates: Costa do Sauipe (Costa do Sauipe, 2026-11-02) | Bratislava 2 (Bratislava, 2026-11-02) | Taipei (Taipei, 2026-11-02) | Charlottesville (Charlottesville, 2026-11-02) | Villa Maria (Villa Maria, 2026-11-02) | suggested by results: CHALLENGER|2026-11-02|taipei|taipei (31 shared matches)"
     },
     {
       "flag": "REVIEW_OPEN",
-      "detail": "tournament tennismylife 2026-444@2026-11-02 Slovak Open: unmatched; candidates: Costa do Sauipe (Costa do Sauipe, 2026-11-02) | Bratislava 2 (Bratislava, 2026-11-02) | Taipei (Taipei, 2026-11-02) | Charlottesville (Charlottesville, 2026-11-02) | Villa Maria (Villa Maria, 2026-11-02) | suggested by results: CHALLENGER|2026-11-02|bratislava-2|bratislava (27 shared matches)"
+      "detail": "tournament tennismylife 2026-444@2026-11-02 Slovak Open: unmatched; candidates: Costa do Sauipe (Costa do Sauipe, 2026-11-02) | Bratislava 2 (Bratislava, 2026-11-02) | Taipei (Taipei, 2026-11-02) | Charlottesville (Charlottesville, 2026-11-02) | Villa Maria (Villa Maria, 2026-11-02) | suggested by results: CHALLENGER|2026-11-02|bratislava-2|bratislava (29 shared matches)"
     },
     {
       "flag": "REVIEW_OPEN",
-      "detail": "tournament tennismylife 2026-6055@2026-11-02 Jonathan Fried Men's Pro Challenger: unmatched; candidates: Costa do Sauipe (Costa do Sauipe, 2026-11-02) | Bratislava 2 (Bratislava, 2026-11-02) | Taipei (Taipei, 2026-11-02) | Charlottesville (Charlottesville, 2026-11-02) | Villa Maria (Villa Maria, 2026-11-02) | suggested by results: CHALLENGER|2026-11-02|charlottesville|charlottesville (23 shared matches)"
+      "detail": "tournament tennismylife 2026-6055@2026-11-02 Jonathan Fried Men's Pro Challenger: unmatched; candidates: Costa do Sauipe (Costa do Sauipe, 2026-11-02) | Bratislava 2 (Bratislava, 2026-11-02) | Taipei (Taipei, 2026-11-02) | Charlottesville (Charlottesville, 2026-11-02) | Villa Maria (Villa Maria, 2026-11-02) | suggested by results: CHALLENGER|2026-11-02|charlottesville|charlottesville (24 shared matches)"
     },
     {
       "flag": "REVIEW_OPEN",
