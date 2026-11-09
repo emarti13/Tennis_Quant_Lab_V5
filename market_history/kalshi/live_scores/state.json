@@ -2369,7 +2369,7 @@
    }
   },
   "KXATPCHALLENGERMATCH-26NOV08AVEWIN": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "c95085c4-4a7f-4384-80ff-1f13544cc632",
     "start_date": "2026-11-09T03:00:00Z",
@@ -2441,7 +2441,7 @@
    }
   },
   "KXATPCHALLENGERMATCH-26NOV08HARKUS": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "4c567aaf-7866-4943-916f-586406f9e180",
     "start_date": "2026-11-09T04:30:00Z",
@@ -2653,6 +2653,14 @@
    "milestone": {
     "id": "33776e06-5407-4e0d-96c5-4263ce7c3631",
     "start_date": "2026-11-09T18:00:00Z",
+    "type": "tennis_tournament_singles"
+   }
+  },
+  "KXATPCHALLENGERMATCH-26NOV09BUDGUE": {
+   "finished": false,
+   "milestone": {
+    "id": "68638d80-0ee9-4a98-b700-83aecad8ff27",
+    "start_date": "2026-11-09T19:30:00Z",
     "type": "tennis_tournament_singles"
    }
   },
@@ -4861,5 +4869,5 @@
    }
   }
  },
- "last_prematch_utc": "2026-11-09T07:14:26+00:00"
+ "last_prematch_utc": "2026-11-09T07:34:34+00:00"
 }
