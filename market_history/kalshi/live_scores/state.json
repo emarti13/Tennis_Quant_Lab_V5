@@ -2985,7 +2985,7 @@
    }
   },
   "KXATPCHALLENGERMATCH-26NOV09LANIBR": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "f93fe064-0f04-47de-ab33-b5647baae086",
     "start_date": "2026-11-10T03:30:00Z",
@@ -3137,7 +3137,7 @@
    }
   },
   "KXATPCHALLENGERMATCH-26NOV09NOGMIC": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "bde2e2ab-a986-456b-bda2-3850e89e24d4",
     "start_date": "2026-11-10T04:00:00Z",
@@ -3520,6 +3520,14 @@
     "type": "tennis_tournament_singles"
    }
   },
+  "KXATPCHALLENGERMATCH-26NOV10GREJAC": {
+   "finished": false,
+   "milestone": {
+    "id": "b6b05ea8-d9af-404d-a68c-858538153329",
+    "start_date": "2026-11-10T19:10:00Z",
+    "type": "tennis_tournament_singles"
+   }
+  },
   "KXATPCHALLENGERMATCH-26NOV10KIMPLA": {
    "finished": false,
    "milestone": {
@@ -3591,7 +3599,7 @@
     "start_date": "2026-11-10T06:30:00Z",
     "type": "tennis_tournament_singles"
    },
-   "not_started_checked_utc": "2026-11-10T07:16:53+00:00"
+   "not_started_checked_utc": "2026-11-10T07:39:58+00:00"
   },
   "KXATPCHALLENGERMATCH-26NOV10NEDRIB": {
    "finished": false,
@@ -5550,5 +5558,5 @@
    }
   }
  },
- "last_prematch_utc": "2026-11-10T07:15:48+00:00"
+ "last_prematch_utc": "2026-11-10T07:36:42+00:00"
 }
