@@ -1,12 +1,12 @@
-# Server status, 2026-11-10T07:40:54+00:00
+# Server status, 2026-11-11T07:42:12+00:00
 
 Code: `91f9212 feat: live logger records Kalshi tennis order books and spread / total / set quotes every 5 minutes`  
 Disk free: 33.0 GB  
 Services: tql-paper active, tql-live active, tql-daily.timer active  
 Live logger command: `/home/ubuntu/tql/.venv/bin/python scripts/log_kalshi_live.py --minutes 1440 --interval 10`  
-Live polling gap (median seconds between a match's rows, latest day): 23
+Live polling gap (median seconds between a match's rows, latest day): 10
 
-Tests (pass): `508 passed, 7 skipped in 82.44s (0:01:22)`
+Tests (pass): `508 passed, 7 skipped in 82.49s (0:01:22)`
 
 ## Problems
 
@@ -16,35 +16,35 @@ Tests (pass): `508 passed, 7 skipped in 82.44s (0:01:22)`
 
 | day | rows | matches |
 |---|---|---|
-| 2026-11-04 | 46609 | 67 |
 | 2026-11-05 | 35098 | 48 |
 | 2026-11-06 | 34350 | 38 |
 | 2026-11-07 | 22773 | 25 |
 | 2026-11-08 | 47221 | 44 |
 | 2026-11-09 | 72490 | 82 |
-| 2026-11-10 | 31995 | 45 |
+| 2026-11-10 | 96136 | 99 |
+| 2026-11-11 | 9435 | 16 |
 
 ## Registered forward tests (paper)
 
 | test | status | settled / needed | cents per contract | 95% range | note |
 |---|---|---|---|---|---|
-| kalshi_blend_2026-11-04 | running | 4 / 300 | -0.11 | [-1.06, 1.255] | P&L 8.453c on 4 settled; 3 of 4 clear on signals alone |
-| longshot_2026-11-03 | running | 52 / 300 | 1.866 | [-7.326, 9.614] | favourite won 0.8846 |
-| season_end_2026-11-03 | running | 38 / 300 | -7.051 | [-20.763, 7.489] | favourite won 0.4474 |
+| kalshi_blend_2026-11-04 | running | 5 / 300 | -0.036 | [-0.822, 1.056] | P&L -8.886c on 5 settled; 3 of 5 clear on signals alone |
+| longshot_2026-11-03 | running | 68 / 300 | -3.736 | [-12.716, 4.61] | favourite won 0.8235 |
+| season_end_2026-11-03 | running | 44 / 300 | -5.358 | [-18.675, 8.523] | favourite won 0.4545 |
 
 ## Paper market-making (settled markets)
 
 | setting | markets | contracts | held $ | held after fee $ | marked $ |
 |---|---|---|---|---|---|
-| 0.03 | 998 | 1434 | -1.99 | -6.48 | 5.12 |
-| 0.05 | 998 | 126 | 33.89 | 33.43 | 3.25 |
-| join | 998 | 89616 | 910.41 | 577.96 | -71.29 |
+| 0.03 | 1138 | 1783 | 113.42 | 107.51 | 9.04 |
+| 0.05 | 1138 | 225 | 75.82 | 74.94 | 8.81 |
+| join | 1138 | 101409 | 318.06 | -57.72 | -161.95 |
 
 run_failures.log: 1 lines
 
 Settle output:
 ```
-h=0.03: markets 998, contracts 1434, marked $5.12, held $-1.99
-h=0.05: markets 998, contracts 126, marked $3.25, held $33.89
-h=join: markets 998, contracts 89616, marked $-71.29, held $910.41
+h=0.03: markets 1138, contracts 1783, marked $9.04, held $113.42
+h=0.05: markets 1138, contracts 225, marked $8.81, held $75.82
+h=join: markets 1138, contracts 101409, marked $-161.95, held $318.06
 ```

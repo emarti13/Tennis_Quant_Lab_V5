@@ -3558,8 +3558,7 @@
     "id": "2bd42c3c-2af8-4b9d-89d3-981f15500c60",
     "start_date": "2026-11-11T03:30:00Z",
     "type": "tennis_tournament_singles"
-   },
-   "not_started_checked_utc": "2026-11-11T07:17:04+00:00"
+   }
   },
   "KXATPCHALLENGERMATCH-26NOV10HSUMCD": {
    "finished": true,
@@ -3816,7 +3815,15 @@
     "start_date": "2026-11-11T06:30:00Z",
     "type": "tennis_tournament_singles"
    },
-   "not_started_checked_utc": "2026-11-11T07:17:04+00:00"
+   "not_started_checked_utc": "2026-11-11T07:41:52+00:00"
+  },
+  "KXATPCHALLENGERMATCH-26NOV11BELGUE": {
+   "finished": false,
+   "milestone": {
+    "id": "2904572b-a5a7-479a-a556-0f26e091eee7",
+    "start_date": "2026-11-11T19:10:00Z",
+    "type": "tennis_tournament_singles"
+   }
   },
   "KXATPCHALLENGERMATCH-26NOV11BERSEA": {
    "finished": false,
@@ -3871,6 +3878,14 @@
    "milestone": {
     "id": "aae4b9a0-1e81-416f-b97f-e3053b1e6649",
     "start_date": "2026-11-11T13:10:00Z",
+    "type": "tennis_tournament_singles"
+   }
+  },
+  "KXATPCHALLENGERMATCH-26NOV11DRANES": {
+   "finished": false,
+   "milestone": {
+    "id": "59394c0f-1350-40d1-b78c-346c00733ac3",
+    "start_date": "2026-11-11T19:30:00Z",
     "type": "tennis_tournament_singles"
    }
   },
@@ -5863,5 +5878,5 @@
    }
   }
  },
- "last_prematch_utc": "2026-11-11T07:13:44+00:00"
+ "last_prematch_utc": "2026-11-11T07:38:52+00:00"
 }
