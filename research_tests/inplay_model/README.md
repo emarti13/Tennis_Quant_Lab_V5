@@ -18,7 +18,7 @@ The WTA stats are not in the files, so a published average of 0.56 is used; it i
 The level mainly sets how far one break moves the price. The gap between the players comes from the market.
 
 **Replay:** `replay_match.py` prints the fair price next to Kalshi's at every game of a logged match.
-It is a mechanics check only. On ATP Paris, Musetti vs Sam (?), 2026-11-10, the two agreed within
+It is a mechanics check only. On one ATP match (event KXATPMATCH-26NOV10MUSSAM, 2026-11-10), the two agreed within
 0-2 points at every game, and Kalshi was slightly above the fair price for the favourite.
 
 **Not done yet:** the registered forward tests (overreaction taker, in-play maker); surface and
