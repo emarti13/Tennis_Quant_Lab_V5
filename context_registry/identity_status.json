@@ -1,21 +1,21 @@
 {
-  "generated_utc": "2026-11-15T13:38:15+00:00",
-  "as_of": "2026-11-15",
+  "generated_utc": "2026-11-16T15:09:07+00:00",
+  "as_of": "2026-11-16",
   "season": 2026,
   "schedule_years": [
     2026
   ],
   "tournament_mappings": {
     "confirmed": 653,
-    "auto": 89,
+    "auto": 90,
+    "review": 16,
     "user": 14,
-    "review": 14,
     "rejected": 2
   },
   "oddspapi_players": {
     "confirmed": 1070,
-    "no_history": 914,
-    "auto": 628,
+    "no_history": 918,
+    "auto": 629,
     "placeholder": 30,
     "user": 15,
     "review": 7,
@@ -81,7 +81,15 @@
     },
     {
       "flag": "REVIEW_OPEN",
-      "detail": "tournament tennismylife 2026-6579@2026-11-09 Igma Open: unmatched; candidates: Orleans (Orleans, 2026-11-09) | Brisbane 3 (Brisbane, 2026-11-09) | Knoxville (Knoxville, 2026-11-09) | Lima (Lima, 2026-11-09) | Matsuyama (Matsuyama, 2026-11-09) | Hersonissos 3 (Hersonissos, 2026-11-09) | Monastir 1 (Monastir, 2026-11-09) | suggested by results: CHALLENGER|2026-11-09|lima|lima (29 shared matches)"
+      "detail": "tournament tennismylife 2026-6579@2026-11-09 Igma Open: unmatched; candidates: Orleans (Orleans, 2026-11-09) | Brisbane 3 (Brisbane, 2026-11-09) | Knoxville (Knoxville, 2026-11-09) | Lima (Lima, 2026-11-09) | Matsuyama (Matsuyama, 2026-11-09) | Hersonissos 3 (Hersonissos, 2026-11-09) | Monastir 1 (Monastir, 2026-11-09) | suggested by results: CHALLENGER|2026-11-09|lima|lima (30 shared matches)"
+    },
+    {
+      "flag": "REVIEW_OPEN",
+      "detail": "tournament tennismylife 2026-2817@2026-11-16 NSW Open: unmatched; candidates: Helsinki (Helsinki, 2026-11-16) | Metz (Metz, 2026-11-16) | Drummondville (Drummondville, 2026-11-16) | Kobe (Kobe, 2026-11-16) | Montevideo (Montevideo, 2026-11-16) | Sydney (Sydney, 2026-11-16) | Champaign (Champaign, 2026-11-16)"
+    },
+    {
+      "flag": "REVIEW_OPEN",
+      "detail": "tournament tennismylife 2026-7397@2026-11-16 Hyogo Noah Challenger: unmatched; candidates: Helsinki (Helsinki, 2026-11-16) | Metz (Metz, 2026-11-16) | Drummondville (Drummondville, 2026-11-16) | Kobe (Kobe, 2026-11-16) | Montevideo (Montevideo, 2026-11-16) | Sydney (Sydney, 2026-11-16) | Champaign (Champaign, 2026-11-16) | suggested by results: CHALLENGER|2026-11-16|kobe|kobe (3 shared matches)"
     },
     {
       "flag": "REVIEW_OPEN",
