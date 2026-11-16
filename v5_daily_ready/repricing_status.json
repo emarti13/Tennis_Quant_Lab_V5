@@ -1,12 +1,12 @@
 {
   "stage": "repricing",
-  "run_timestamp": "2026-11-15T05:06:02.838238+00:00",
-  "source_version": "2026-11-15T05:05:51.438378+00:00",
+  "run_timestamp": "2026-11-16T05:02:47.693316+00:00",
+  "source_version": "2026-11-16T05:02:43.032566+00:00",
   "state": "blocked",
   "rows": 0,
-  "fixtures": 60,
+  "fixtures": 18,
   "freshness": "STALE_FORECAST",
-  "error": "no frozen model forecast for production date 2026-11-15",
+  "error": "no frozen model forecast for production date 2026-11-16",
   "available_forecast_dates": [
     "2026-10-16"
   ]
