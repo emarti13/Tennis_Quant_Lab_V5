@@ -5915,7 +5915,7 @@
    }
   },
   "KXATPCHALLENGERMATCH-26NOV16SCHOVE": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "8444c528-a444-4493-adea-eb24f462aec1",
     "start_date": "2026-11-17T03:10:00Z",
@@ -6096,8 +6096,7 @@
     "id": "f223a86d-320e-4253-976c-210e45b9dfc1",
     "start_date": "2026-11-17T05:20:00Z",
     "type": "tennis_tournament_singles"
-   },
-   "not_started_checked_utc": "2026-11-17T07:17:03+00:00"
+   }
   },
   "KXATPCHALLENGERMATCH-26NOV17JUSRIN": {
    "finished": false,
@@ -6130,7 +6129,7 @@
     "start_date": "2026-11-17T05:30:00Z",
     "type": "tennis_tournament_singles"
    },
-   "not_started_checked_utc": "2026-11-17T07:17:03+00:00"
+   "not_started_checked_utc": "2026-11-17T07:51:03+00:00"
   },
   "KXATPCHALLENGERMATCH-26NOV17LAGGUL": {
    "finished": false,
@@ -6161,6 +6160,14 @@
    "milestone": {
     "id": "97f4b9ff-f9ff-44f8-84c6-62ad19e6fe9d",
     "start_date": "2026-11-17T05:30:00Z",
+    "type": "tennis_tournament_singles"
+   }
+  },
+  "KXATPCHALLENGERMATCH-26NOV17MITREH": {
+   "finished": false,
+   "milestone": {
+    "id": "84998f74-2437-4554-815e-ea20fd36ab05",
+    "start_date": "2026-11-17T19:30:00Z",
     "type": "tennis_tournament_singles"
    }
   },
@@ -8441,5 +8448,5 @@
    }
   }
  },
- "last_prematch_utc": "2026-11-17T07:13:53+00:00"
+ "last_prematch_utc": "2026-11-17T07:48:53+00:00"
 }
