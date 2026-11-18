@@ -51,7 +51,7 @@ def games_table(mcp: Path, tour: str) -> pd.DataFrame:
     pts = pts.dropna().astype({c: int for c in ("Pt", "Set1", "Set2", "Gm1", "Gm2", "Svr", "PtWinner")})
     pts = pts[pts["Svr"].isin([1, 2]) & pts["PtWinner"].isin([1, 2])]
     mt = pd.read_csv(mcp / f"charting-{tour}-matches.csv", low_memory=False)
-    bo = pd.to_numeric(mt.set_index("match_id")["Best of"], errors="coerce")
+    bo = pd.to_numeric(mt.drop_duplicates("match_id").set_index("match_id")["Best of"], errors="coerce")
     pts = pts.sort_values(["match_id", "Pt"], kind="stable")
     key = ["match_id", "Set1", "Set2", "Gm1", "Gm2"]
     g = pts.groupby(key, sort=False).agg(server=("Svr", "first"), n_srv=("Svr", "nunique"), winner=("PtWinner", "last"),
