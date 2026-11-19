@@ -1,0 +1,392 @@
+{
+ "manifest": {
+  "run_utc": "2026-11-03T03:37:33.109489+00:00",
+  "command": "python research_tests/info_speed/run_kalshi_fatigue_window.py /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kalshi_raw.pkl /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kmarkets /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/info_speed/kalshi_fatigue.json",
+  "git_commit": "86ec426199b6bed59a2241bd045e4ffd532d4407",
+  "uncommitted_changes": true,
+  "python": "3.13.16",
+  "packages": {
+   "pandas": "3.0.5",
+   "numpy": "2.5.3",
+   "scikit-learn": "1.9.1",
+   "lightgbm": "4.7.0",
+   "scipy": "1.18.1"
+  },
+  "seeds": {
+   "bootstrap": 20261103
+  },
+  "inputs": {
+   "kalshi_raw": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kalshi_raw.pkl",
+    "sha256": "c8ae5deeaeacbe441808abfcecc87a5dab95b484c8f19521e9c71d2cca98ccdd"
+   },
+   "markets": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kmarkets",
+    "sha256": "e0f82539aeaccf801487e30bb86edf400b6f158332699f08b3fe8700202c4095"
+   }
+  }
+ },
+ "matches_built": 485,
+ "skipped": {
+  "no_both_previous": 2151,
+  "no_quote_by_entry": 496,
+  "result_not_settled": 12
+ },
+ "PRIMARY gap>=45": {
+  "n": 195,
+  "PRIMARY drift last pre-start minus entry (pts)": [
+   -1.321,
+   -2.674,
+   -0.031
+  ],
+  "move t0 to entry (pts)": [
+   NaN,
+   NaN,
+   NaN
+  ],
+  "MONEY back fresh at entry, after fee (cents per contract)": [
+   -2.062,
+   -8.207,
+   4.45
+  ],
+  "tired won vs entry mid (pts)": [
+   -0.8,
+   -7.326,
+   5.203
+  ],
+  "tired won vs last pre-start mid (pts)": [
+   0.521,
+   -5.68,
+   6.198
+  ],
+  "median hours entry to start": 14.27,
+  "median hours previous end to entry": 7.74,
+  "move entry to 1h (pts)": [
+   -0.426,
+   -0.821,
+   -0.041,
+   195
+  ],
+  "move entry to 3h (pts)": [
+   -0.333,
+   -0.777,
+   0.113,
+   195
+  ]
+ },
+ "control gap<10": {
+  "n": 85,
+  "PRIMARY drift last pre-start minus entry (pts)": [
+   0.929,
+   -1.788,
+   3.324
+  ],
+  "move t0 to entry (pts)": [
+   NaN,
+   NaN,
+   NaN
+  ],
+  "MONEY back fresh at entry, after fee (cents per contract)": [
+   -1.98,
+   -12.115,
+   8.367
+  ],
+  "tired won vs entry mid (pts)": [
+   -0.288,
+   -10.242,
+   9.53
+  ],
+  "tired won vs last pre-start mid (pts)": [
+   -1.218,
+   -11.0,
+   8.472
+  ],
+  "median hours entry to start": 13.19,
+  "median hours previous end to entry": 7.97,
+  "move entry to 1h (pts)": [
+   0.082,
+   -0.376,
+   0.512,
+   85
+  ],
+  "move entry to 3h (pts)": [
+   0.653,
+   -0.082,
+   1.447,
+   85
+  ]
+ },
+ "gap 10-45": {
+  "n": 205,
+  "PRIMARY drift last pre-start minus entry (pts)": [
+   -0.237,
+   -1.856,
+   1.376
+  ],
+  "move t0 to entry (pts)": [
+   NaN,
+   NaN,
+   NaN
+  ],
+  "MONEY back fresh at entry, after fee (cents per contract)": [
+   -2.835,
+   -9.263,
+   3.593
+  ],
+  "tired won vs entry mid (pts)": [
+   -0.144,
+   -6.518,
+   6.301
+  ],
+  "tired won vs last pre-start mid (pts)": [
+   0.093,
+   -6.198,
+   6.222
+  ],
+  "median hours entry to start": 13.94,
+  "median hours previous end to entry": 9.06,
+  "move entry to 1h (pts)": [
+   -0.346,
+   -0.895,
+   0.18,
+   205
+  ],
+  "move entry to 3h (pts)": [
+   -0.293,
+   -0.807,
+   0.229,
+   205
+  ]
+ },
+ "gap>=90": {
+  "n": 43,
+  "PRIMARY drift last pre-start minus entry (pts)": [
+   -1.163,
+   -2.756,
+   0.547
+  ],
+  "move t0 to entry (pts)": [
+   NaN,
+   NaN,
+   NaN
+  ],
+  "MONEY back fresh at entry, after fee (cents per contract)": [
+   -1.65,
+   -14.24,
+   11.059
+  ],
+  "tired won vs entry mid (pts)": [
+   -1.349,
+   -14.116,
+   11.442
+  ],
+  "tired won vs last pre-start mid (pts)": [
+   -0.186,
+   -12.919,
+   12.632
+  ],
+  "median hours entry to start": 13.81,
+  "median hours previous end to entry": 7.7,
+  "move entry to 1h (pts)": [
+   -0.419,
+   -1.547,
+   0.523,
+   43
+  ],
+  "move entry to 3h (pts)": [
+   -0.581,
+   -1.477,
+   0.384,
+   43
+  ]
+ },
+ "PRIMARY KXATPCHALLENGERMATCH": {
+  "n": 103,
+  "PRIMARY drift last pre-start minus entry (pts)": [
+   -1.218,
+   -3.364,
+   0.791
+  ],
+  "move t0 to entry (pts)": [
+   NaN,
+   NaN,
+   NaN
+  ],
+  "MONEY back fresh at entry, after fee (cents per contract)": [
+   3.223,
+   -5.09,
+   11.43
+  ],
+  "tired won vs entry mid (pts)": [
+   -6.175,
+   -14.428,
+   2.162
+  ],
+  "tired won vs last pre-start mid (pts)": [
+   -4.956,
+   -12.85,
+   3.287
+  ],
+  "median hours entry to start": 12.23,
+  "median hours previous end to entry": 8.94,
+  "move entry to 1h (pts)": [
+   -0.175,
+   -0.651,
+   0.223,
+   103
+  ],
+  "move entry to 3h (pts)": [
+   -0.359,
+   -0.738,
+   0.01,
+   103
+  ]
+ },
+ "PRIMARY KXATPMATCH": {
+  "n": 39,
+  "PRIMARY drift last pre-start minus entry (pts)": [
+   -1.692,
+   -3.667,
+   0.167
+  ],
+  "move t0 to entry (pts)": [
+   NaN,
+   NaN,
+   NaN
+  ],
+  "MONEY back fresh at entry, after fee (cents per contract)": [
+   -14.299,
+   -28.744,
+   0.705
+  ],
+  "tired won vs entry mid (pts)": [
+   11.654,
+   -3.221,
+   25.809
+  ],
+  "tired won vs last pre-start mid (pts)": [
+   13.346,
+   -0.77,
+   26.771
+  ],
+  "median hours entry to start": 24.02,
+  "median hours previous end to entry": 4.21,
+  "move entry to 1h (pts)": [
+   -0.346,
+   -1.064,
+   0.334,
+   39
+  ],
+  "move entry to 3h (pts)": [
+   -0.756,
+   -1.705,
+   0.179,
+   39
+  ]
+ },
+ "PRIMARY KXWTACHALLENGERMATCH": {
+  "n": 10,
+  "PRIMARY drift last pre-start minus entry (pts)": [
+   0.4,
+   -1.701,
+   1.95
+  ],
+  "move t0 to entry (pts)": [
+   NaN,
+   NaN,
+   NaN
+  ],
+  "MONEY back fresh at entry, after fee (cents per contract)": [
+   12.353,
+   -10.924,
+   33.063
+  ],
+  "tired won vs entry mid (pts)": [
+   -15.05,
+   -35.801,
+   8.15
+  ],
+  "tired won vs last pre-start mid (pts)": [
+   -15.45,
+   -37.301,
+   9.105
+  ],
+  "median hours entry to start": 12.28,
+  "median hours previous end to entry": 28.59,
+  "move entry to 1h (pts)": [
+   -0.1,
+   -0.45,
+   0.25,
+   10
+  ],
+  "move entry to 3h (pts)": [
+   0.35,
+   -0.25,
+   0.9,
+   10
+  ]
+ },
+ "PRIMARY KXWTAMATCH": {
+  "n": 43,
+  "PRIMARY drift last pre-start minus entry (pts)": [
+   -1.628,
+   -4.582,
+   1.221
+  ],
+  "move t0 to entry (pts)": [
+   NaN,
+   NaN,
+   NaN
+  ],
+  "MONEY back fresh at entry, after fee (cents per contract)": [
+   -6.975,
+   -19.553,
+   6.636
+  ],
+  "tired won vs entry mid (pts)": [
+   4.093,
+   -9.478,
+   16.71
+  ],
+  "tired won vs last pre-start mid (pts)": [
+   5.721,
+   -7.198,
+   17.745
+  ],
+  "median hours entry to start": 22.3,
+  "median hours previous end to entry": 3.88,
+  "move entry to 1h (pts)": [
+   -1.174,
+   -2.593,
+   0.058,
+   43
+  ],
+  "move entry to 3h (pts)": [
+   -0.047,
+   -1.675,
+   1.663,
+   43
+  ]
+ },
+ "checks": {
+  "market_null": {
+   "pass": true,
+   "found_cents": [
+    0.502,
+    -6.189,
+    7.077
+   ],
+   "expected_cents": -1.519
+  },
+  "planted_3pts": {
+   "pass": false,
+   "found_cents": [
+    -0.524,
+    -6.907,
+    5.775
+   ],
+   "expected_cents": 1.481
+  }
+ },
+ "checks_passed": false
+}

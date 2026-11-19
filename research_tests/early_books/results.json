@@ -1,0 +1,3309 @@
+{
+ "blend_weights": [
+  0.7392,
+  0.2741,
+  -0.0135
+ ],
+ "cells": [
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "betrivers",
+   "bets": 3906,
+   "ret": -0.0376,
+   "ret_ci95": [
+    -0.0751,
+    -0.0018
+   ],
+   "clv": -0.0583,
+   "clv_ci95": [
+    -0.062,
+    -0.0545
+   ],
+   "ret_jan_jun": -0.0488,
+   "ret_jul_oct": -0.0058
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "draftkings",
+   "bets": 4153,
+   "ret": 0.0313,
+   "ret_ci95": [
+    -0.0078,
+    0.0682
+   ],
+   "clv": -0.0253,
+   "clv_ci95": [
+    -0.0302,
+    -0.0206
+   ],
+   "ret_jan_jun": 0.031,
+   "ret_jul_oct": 0.0323
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "bet365",
+   "bets": 28,
+   "ret": 0.0736,
+   "ret_ci95": [
+    -0.3033,
+    0.4561
+   ],
+   "clv": -0.0111,
+   "clv_ci95": [
+    -0.0497,
+    0.0358
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0736
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "any",
+   "bets": 5184,
+   "ret": 0.0193,
+   "ret_ci95": [
+    -0.0137,
+    0.0545
+   ],
+   "clv": -0.0189,
+   "clv_ci95": [
+    -0.0227,
+    -0.0151
+   ],
+   "ret_jan_jun": 0.0135,
+   "ret_jul_oct": 0.0364
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "betrivers",
+   "bets": 1434,
+   "ret": -0.063,
+   "ret_ci95": [
+    -0.1293,
+    0.0053
+   ],
+   "clv": -0.0691,
+   "clv_ci95": [
+    -0.0755,
+    -0.0631
+   ],
+   "ret_jan_jun": -0.0781,
+   "ret_jul_oct": -0.0184
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "draftkings",
+   "bets": 2176,
+   "ret": -0.047,
+   "ret_ci95": [
+    -0.1037,
+    0.0096
+   ],
+   "clv": -0.0617,
+   "clv_ci95": [
+    -0.0672,
+    -0.0562
+   ],
+   "ret_jan_jun": -0.0517,
+   "ret_jul_oct": -0.0344
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "bet365",
+   "bets": 18
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "any",
+   "bets": 2418,
+   "ret": -0.0413,
+   "ret_ci95": [
+    -0.0926,
+    0.0154
+   ],
+   "clv": -0.0545,
+   "clv_ci95": [
+    -0.0597,
+    -0.0491
+   ],
+   "ret_jan_jun": -0.0473,
+   "ret_jul_oct": -0.0244
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "betrivers",
+   "bets": 2812,
+   "ret": -0.0546,
+   "ret_ci95": [
+    -0.0976,
+    -0.0109
+   ],
+   "clv": -0.0746,
+   "clv_ci95": [
+    -0.0781,
+    -0.0711
+   ],
+   "ret_jan_jun": -0.0662,
+   "ret_jul_oct": -0.0216
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "draftkings",
+   "bets": 3631,
+   "ret": -0.0493,
+   "ret_ci95": [
+    -0.0884,
+    -0.0083
+   ],
+   "clv": -0.0741,
+   "clv_ci95": [
+    -0.0776,
+    -0.0706
+   ],
+   "ret_jan_jun": -0.0419,
+   "ret_jul_oct": -0.0702
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "bet365",
+   "bets": 23,
+   "ret": -0.1143,
+   "ret_ci95": [
+    -0.4683,
+    0.2674
+   ],
+   "clv": -0.0495,
+   "clv_ci95": [
+    -0.0954,
+    0.0073
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.1143
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "any",
+   "bets": 4140,
+   "ret": -0.0492,
+   "ret_ci95": [
+    -0.0857,
+    -0.011
+   ],
+   "clv": -0.0642,
+   "clv_ci95": [
+    -0.0675,
+    -0.0609
+   ],
+   "ret_jan_jun": -0.0465,
+   "ret_jul_oct": -0.057
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "betrivers",
+   "bets": 3646,
+   "ret": -0.0871,
+   "ret_ci95": [
+    -0.1259,
+    -0.0483
+   ],
+   "clv": -0.0785,
+   "clv_ci95": [
+    -0.0817,
+    -0.0753
+   ],
+   "ret_jan_jun": -0.1068,
+   "ret_jul_oct": -0.0345
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "draftkings",
+   "bets": 3883,
+   "ret": -0.0584,
+   "ret_ci95": [
+    -0.0985,
+    -0.0179
+   ],
+   "clv": -0.0811,
+   "clv_ci95": [
+    -0.0841,
+    -0.0782
+   ],
+   "ret_jan_jun": -0.062,
+   "ret_jul_oct": -0.0487
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "bet365",
+   "bets": 24,
+   "ret": -0.0833,
+   "ret_ci95": [
+    -0.4258,
+    0.2596
+   ],
+   "clv": -0.0487,
+   "clv_ci95": [
+    -0.0928,
+    0.0071
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0833
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "any",
+   "bets": 4547,
+   "ret": -0.0657,
+   "ret_ci95": [
+    -0.1009,
+    -0.0295
+   ],
+   "clv": -0.0687,
+   "clv_ci95": [
+    -0.0715,
+    -0.066
+   ],
+   "ret_jan_jun": -0.0757,
+   "ret_jul_oct": -0.0378
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "betrivers",
+   "bets": 3131,
+   "ret": -0.0368,
+   "ret_ci95": [
+    -0.0819,
+    0.008
+   ],
+   "clv": -0.0599,
+   "clv_ci95": [
+    -0.0644,
+    -0.0556
+   ],
+   "ret_jan_jun": -0.0549,
+   "ret_jul_oct": 0.0149
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "draftkings",
+   "bets": 3359,
+   "ret": 0.0291,
+   "ret_ci95": [
+    -0.0166,
+    0.0764
+   ],
+   "clv": -0.0206,
+   "clv_ci95": [
+    -0.0262,
+    -0.015
+   ],
+   "ret_jan_jun": 0.032,
+   "ret_jul_oct": 0.0212
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "bet365",
+   "bets": 18
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "any",
+   "bets": 4239,
+   "ret": 0.0188,
+   "ret_ci95": [
+    -0.0217,
+    0.0577
+   ],
+   "clv": -0.016,
+   "clv_ci95": [
+    -0.0206,
+    -0.0113
+   ],
+   "ret_jan_jun": 0.0152,
+   "ret_jul_oct": 0.0295
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "betrivers",
+   "bets": 1132,
+   "ret": -0.0726,
+   "ret_ci95": [
+    -0.1506,
+    0.0045
+   ],
+   "clv": -0.0748,
+   "clv_ci95": [
+    -0.0817,
+    -0.0681
+   ],
+   "ret_jan_jun": -0.0995,
+   "ret_jul_oct": 0.0092
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "draftkings",
+   "bets": 1778,
+   "ret": -0.0463,
+   "ret_ci95": [
+    -0.1102,
+    0.0174
+   ],
+   "clv": -0.0621,
+   "clv_ci95": [
+    -0.0683,
+    -0.0556
+   ],
+   "ret_jan_jun": -0.0504,
+   "ret_jul_oct": -0.0353
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "bet365",
+   "bets": 9
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "any",
+   "bets": 1964,
+   "ret": -0.0401,
+   "ret_ci95": [
+    -0.1007,
+    0.0211
+   ],
+   "clv": -0.056,
+   "clv_ci95": [
+    -0.0616,
+    -0.0496
+   ],
+   "ret_jan_jun": -0.0513,
+   "ret_jul_oct": -0.0089
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "betrivers",
+   "bets": 2190,
+   "ret": -0.0454,
+   "ret_ci95": [
+    -0.0969,
+    0.0064
+   ],
+   "clv": -0.0804,
+   "clv_ci95": [
+    -0.0851,
+    -0.0759
+   ],
+   "ret_jan_jun": -0.065,
+   "ret_jul_oct": 0.0103
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "draftkings",
+   "bets": 2875,
+   "ret": -0.0427,
+   "ret_ci95": [
+    -0.0932,
+    0.0063
+   ],
+   "clv": -0.0785,
+   "clv_ci95": [
+    -0.0827,
+    -0.0742
+   ],
+   "ret_jan_jun": -0.0471,
+   "ret_jul_oct": -0.0303
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "bet365",
+   "bets": 11
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "any",
+   "bets": 3283,
+   "ret": -0.0348,
+   "ret_ci95": [
+    -0.0794,
+    0.0093
+   ],
+   "clv": -0.0681,
+   "clv_ci95": [
+    -0.0719,
+    -0.0645
+   ],
+   "ret_jan_jun": -0.0367,
+   "ret_jul_oct": -0.0293
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "betrivers",
+   "bets": 2887,
+   "ret": -0.0778,
+   "ret_ci95": [
+    -0.1231,
+    -0.0322
+   ],
+   "clv": -0.0845,
+   "clv_ci95": [
+    -0.0882,
+    -0.0807
+   ],
+   "ret_jan_jun": -0.0964,
+   "ret_jul_oct": -0.0281
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "draftkings",
+   "bets": 3062,
+   "ret": -0.0556,
+   "ret_ci95": [
+    -0.1023,
+    -0.0072
+   ],
+   "clv": -0.0881,
+   "clv_ci95": [
+    -0.0917,
+    -0.0844
+   ],
+   "ret_jan_jun": -0.0616,
+   "ret_jul_oct": -0.0392
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "bet365",
+   "bets": 15
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "any",
+   "bets": 3631,
+   "ret": -0.0535,
+   "ret_ci95": [
+    -0.0967,
+    -0.01
+   ],
+   "clv": -0.0744,
+   "clv_ci95": [
+    -0.0776,
+    -0.071
+   ],
+   "ret_jan_jun": -0.0623,
+   "ret_jul_oct": -0.0288
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "betrivers",
+   "bets": 2468,
+   "ret": -0.0368,
+   "ret_ci95": [
+    -0.0878,
+    0.0154
+   ],
+   "clv": -0.0641,
+   "clv_ci95": [
+    -0.0692,
+    -0.0592
+   ],
+   "ret_jan_jun": -0.0587,
+   "ret_jul_oct": 0.0246
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "draftkings",
+   "bets": 2709,
+   "ret": 0.0493,
+   "ret_ci95": [
+    -0.0054,
+    0.1005
+   ],
+   "clv": -0.017,
+   "clv_ci95": [
+    -0.0236,
+    -0.0105
+   ],
+   "ret_jan_jun": 0.052,
+   "ret_jul_oct": 0.0416
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "bet365",
+   "bets": 14
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "any",
+   "bets": 3451,
+   "ret": 0.0357,
+   "ret_ci95": [
+    -0.0115,
+    0.0827
+   ],
+   "clv": -0.0147,
+   "clv_ci95": [
+    -0.02,
+    -0.0092
+   ],
+   "ret_jan_jun": 0.0252,
+   "ret_jul_oct": 0.0667
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "betrivers",
+   "bets": 883,
+   "ret": -0.0608,
+   "ret_ci95": [
+    -0.1523,
+    0.0341
+   ],
+   "clv": -0.0804,
+   "clv_ci95": [
+    -0.089,
+    -0.072
+   ],
+   "ret_jan_jun": -0.0683,
+   "ret_jul_oct": -0.0379
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "draftkings",
+   "bets": 1427,
+   "ret": -0.0487,
+   "ret_ci95": [
+    -0.1245,
+    0.0256
+   ],
+   "clv": -0.064,
+   "clv_ci95": [
+    -0.0719,
+    -0.0561
+   ],
+   "ret_jan_jun": -0.0578,
+   "ret_jul_oct": -0.0242
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "bet365",
+   "bets": 5
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "any",
+   "bets": 1580,
+   "ret": -0.0463,
+   "ret_ci95": [
+    -0.1133,
+    0.0284
+   ],
+   "clv": -0.058,
+   "clv_ci95": [
+    -0.0651,
+    -0.051
+   ],
+   "ret_jan_jun": -0.0588,
+   "ret_jul_oct": -0.0116
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "betrivers",
+   "bets": 1711,
+   "ret": -0.0349,
+   "ret_ci95": [
+    -0.0964,
+    0.0308
+   ],
+   "clv": -0.0863,
+   "clv_ci95": [
+    -0.0916,
+    -0.0813
+   ],
+   "ret_jan_jun": -0.0469,
+   "ret_jul_oct": -0.0011
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "draftkings",
+   "bets": 2265,
+   "ret": -0.0554,
+   "ret_ci95": [
+    -0.1114,
+    0.0004
+   ],
+   "clv": -0.0824,
+   "clv_ci95": [
+    -0.0875,
+    -0.077
+   ],
+   "ret_jan_jun": -0.0651,
+   "ret_jul_oct": -0.0277
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "bet365",
+   "bets": 7
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "any",
+   "bets": 2593,
+   "ret": -0.0458,
+   "ret_ci95": [
+    -0.0982,
+    0.0085
+   ],
+   "clv": -0.0722,
+   "clv_ci95": [
+    -0.0766,
+    -0.0674
+   ],
+   "ret_jan_jun": -0.0534,
+   "ret_jul_oct": -0.0242
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "betrivers",
+   "bets": 2255,
+   "ret": -0.0541,
+   "ret_ci95": [
+    -0.1093,
+    -0.0013
+   ],
+   "clv": -0.0908,
+   "clv_ci95": [
+    -0.095,
+    -0.0862
+   ],
+   "ret_jan_jun": -0.0722,
+   "ret_jul_oct": -0.0059
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "draftkings",
+   "bets": 2422,
+   "ret": -0.0546,
+   "ret_ci95": [
+    -0.1083,
+    0.0008
+   ],
+   "clv": -0.0927,
+   "clv_ci95": [
+    -0.0969,
+    -0.0884
+   ],
+   "ret_jan_jun": -0.0597,
+   "ret_jul_oct": -0.0403
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "bet365",
+   "bets": 11
+  },
+  {
+   "fair": "pm",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "any",
+   "bets": 2868,
+   "ret": -0.05,
+   "ret_ci95": [
+    -0.0986,
+    0.002
+   ],
+   "clv": -0.0798,
+   "clv_ci95": [
+    -0.0837,
+    -0.0759
+   ],
+   "ret_jan_jun": -0.0615,
+   "ret_jul_oct": -0.0174
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "betrivers",
+   "bets": 2603,
+   "ret": -0.0408,
+   "ret_ci95": [
+    -0.0896,
+    0.0117
+   ],
+   "clv": -0.0721,
+   "clv_ci95": [
+    -0.0771,
+    -0.0673
+   ],
+   "ret_jan_jun": -0.0691,
+   "ret_jul_oct": 0.0362
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "draftkings",
+   "bets": 2584,
+   "ret": -0.0192,
+   "ret_ci95": [
+    -0.0707,
+    0.0321
+   ],
+   "clv": -0.0486,
+   "clv_ci95": [
+    -0.0553,
+    -0.0421
+   ],
+   "ret_jan_jun": -0.0357,
+   "ret_jul_oct": 0.0246
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "bet365",
+   "bets": 13
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "any",
+   "bets": 3062,
+   "ret": -0.0002,
+   "ret_ci95": [
+    -0.0481,
+    0.0457
+   ],
+   "clv": -0.0357,
+   "clv_ci95": [
+    -0.0409,
+    -0.0304
+   ],
+   "ret_jan_jun": -0.0227,
+   "ret_jul_oct": 0.064
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "betrivers",
+   "bets": 918,
+   "ret": -0.0299,
+   "ret_ci95": [
+    -0.1164,
+    0.0641
+   ],
+   "clv": -0.0779,
+   "clv_ci95": [
+    -0.0857,
+    -0.0704
+   ],
+   "ret_jan_jun": -0.0448,
+   "ret_jul_oct": 0.0134
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "draftkings",
+   "bets": 1410,
+   "ret": -0.0365,
+   "ret_ci95": [
+    -0.1067,
+    0.0343
+   ],
+   "clv": -0.0698,
+   "clv_ci95": [
+    -0.0763,
+    -0.063
+   ],
+   "ret_jan_jun": -0.0485,
+   "ret_jul_oct": -0.005
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "bet365",
+   "bets": 9
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "any",
+   "bets": 1505,
+   "ret": -0.0223,
+   "ret_ci95": [
+    -0.0898,
+    0.0483
+   ],
+   "clv": -0.0625,
+   "clv_ci95": [
+    -0.0689,
+    -0.0559
+   ],
+   "ret_jan_jun": -0.0384,
+   "ret_jul_oct": 0.0209
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "betrivers",
+   "bets": 1834,
+   "ret": -0.0369,
+   "ret_ci95": [
+    -0.0958,
+    0.0208
+   ],
+   "clv": -0.0813,
+   "clv_ci95": [
+    -0.0863,
+    -0.0765
+   ],
+   "ret_jan_jun": -0.0552,
+   "ret_jul_oct": 0.0154
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "draftkings",
+   "bets": 2357,
+   "ret": -0.0439,
+   "ret_ci95": [
+    -0.0971,
+    0.0103
+   ],
+   "clv": -0.081,
+   "clv_ci95": [
+    -0.0853,
+    -0.0768
+   ],
+   "ret_jan_jun": -0.0602,
+   "ret_jul_oct": -0.0006
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "bet365",
+   "bets": 13
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "any",
+   "bets": 2598,
+   "ret": -0.04,
+   "ret_ci95": [
+    -0.0873,
+    0.0118
+   ],
+   "clv": -0.0704,
+   "clv_ci95": [
+    -0.0744,
+    -0.0664
+   ],
+   "ret_jan_jun": -0.0584,
+   "ret_jul_oct": 0.0108
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "betrivers",
+   "bets": 2407,
+   "ret": -0.059,
+   "ret_ci95": [
+    -0.1077,
+    -0.0074
+   ],
+   "clv": -0.0836,
+   "clv_ci95": [
+    -0.0879,
+    -0.0797
+   ],
+   "ret_jan_jun": -0.0878,
+   "ret_jul_oct": 0.0165
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "draftkings",
+   "bets": 2520,
+   "ret": -0.0459,
+   "ret_ci95": [
+    -0.0967,
+    0.0082
+   ],
+   "clv": -0.0861,
+   "clv_ci95": [
+    -0.0901,
+    -0.0822
+   ],
+   "ret_jan_jun": -0.0595,
+   "ret_jul_oct": -0.011
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "bet365",
+   "bets": 14
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "any",
+   "bets": 2841,
+   "ret": -0.0461,
+   "ret_ci95": [
+    -0.0951,
+    -0.0002
+   ],
+   "clv": -0.0729,
+   "clv_ci95": [
+    -0.0763,
+    -0.0692
+   ],
+   "ret_jan_jun": -0.0684,
+   "ret_jul_oct": 0.0143
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "betrivers",
+   "bets": 2375,
+   "ret": -0.042,
+   "ret_ci95": [
+    -0.0962,
+    0.014
+   ],
+   "clv": -0.071,
+   "clv_ci95": [
+    -0.0763,
+    -0.0659
+   ],
+   "ret_jan_jun": -0.075,
+   "ret_jul_oct": 0.0501
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "draftkings",
+   "bets": 2340,
+   "ret": -0.0187,
+   "ret_ci95": [
+    -0.0726,
+    0.0375
+   ],
+   "clv": -0.0432,
+   "clv_ci95": [
+    -0.0503,
+    -0.0362
+   ],
+   "ret_jan_jun": -0.0322,
+   "ret_jul_oct": 0.0171
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "bet365",
+   "bets": 9
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "any",
+   "bets": 2853,
+   "ret": -0.0055,
+   "ret_ci95": [
+    -0.0506,
+    0.0448
+   ],
+   "clv": -0.0331,
+   "clv_ci95": [
+    -0.0388,
+    -0.0274
+   ],
+   "ret_jan_jun": -0.0275,
+   "ret_jul_oct": 0.0581
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "betrivers",
+   "bets": 840,
+   "ret": -0.0329,
+   "ret_ci95": [
+    -0.123,
+    0.0584
+   ],
+   "clv": -0.0785,
+   "clv_ci95": [
+    -0.0862,
+    -0.0701
+   ],
+   "ret_jan_jun": -0.0518,
+   "ret_jul_oct": 0.0255
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "draftkings",
+   "bets": 1303,
+   "ret": -0.0336,
+   "ret_ci95": [
+    -0.1088,
+    0.0442
+   ],
+   "clv": -0.0677,
+   "clv_ci95": [
+    -0.075,
+    -0.0604
+   ],
+   "ret_jan_jun": -0.0461,
+   "ret_jul_oct": -0.0
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "bet365",
+   "bets": 6
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "any",
+   "bets": 1397,
+   "ret": -0.017,
+   "ret_ci95": [
+    -0.0855,
+    0.0578
+   ],
+   "clv": -0.0615,
+   "clv_ci95": [
+    -0.0683,
+    -0.0544
+   ],
+   "ret_jan_jun": -0.036,
+   "ret_jul_oct": 0.0355
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "betrivers",
+   "bets": 1664,
+   "ret": -0.0407,
+   "ret_ci95": [
+    -0.1044,
+    0.0239
+   ],
+   "clv": -0.0836,
+   "clv_ci95": [
+    -0.0891,
+    -0.0783
+   ],
+   "ret_jan_jun": -0.0651,
+   "ret_jul_oct": 0.0291
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "draftkings",
+   "bets": 2123,
+   "ret": -0.039,
+   "ret_ci95": [
+    -0.0957,
+    0.0179
+   ],
+   "clv": -0.0823,
+   "clv_ci95": [
+    -0.0868,
+    -0.0775
+   ],
+   "ret_jan_jun": -0.0558,
+   "ret_jul_oct": 0.0064
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "bet365",
+   "bets": 7
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "any",
+   "bets": 2366,
+   "ret": -0.0363,
+   "ret_ci95": [
+    -0.0884,
+    0.0183
+   ],
+   "clv": -0.0716,
+   "clv_ci95": [
+    -0.076,
+    -0.0671
+   ],
+   "ret_jan_jun": -0.0543,
+   "ret_jul_oct": 0.0141
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "betrivers",
+   "bets": 2185,
+   "ret": -0.0613,
+   "ret_ci95": [
+    -0.1151,
+    -0.0063
+   ],
+   "clv": -0.0863,
+   "clv_ci95": [
+    -0.0909,
+    -0.0819
+   ],
+   "ret_jan_jun": -0.0908,
+   "ret_jul_oct": 0.0162
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "draftkings",
+   "bets": 2255,
+   "ret": -0.0389,
+   "ret_ci95": [
+    -0.095,
+    0.0184
+   ],
+   "clv": -0.0895,
+   "clv_ci95": [
+    -0.0935,
+    -0.0854
+   ],
+   "ret_jan_jun": -0.0497,
+   "ret_jul_oct": -0.0105
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "bet365",
+   "bets": 10
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "any",
+   "bets": 2592,
+   "ret": -0.0416,
+   "ret_ci95": [
+    -0.0944,
+    0.0109
+   ],
+   "clv": -0.0754,
+   "clv_ci95": [
+    -0.079,
+    -0.0716
+   ],
+   "ret_jan_jun": -0.0604,
+   "ret_jul_oct": 0.0095
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "betrivers",
+   "bets": 2069,
+   "ret": -0.0396,
+   "ret_ci95": [
+    -0.0971,
+    0.0197
+   ],
+   "clv": -0.0711,
+   "clv_ci95": [
+    -0.077,
+    -0.0653
+   ],
+   "ret_jan_jun": -0.07,
+   "ret_jul_oct": 0.0456
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "draftkings",
+   "bets": 2065,
+   "ret": -0.0058,
+   "ret_ci95": [
+    -0.0627,
+    0.0554
+   ],
+   "clv": -0.0373,
+   "clv_ci95": [
+    -0.0445,
+    -0.0295
+   ],
+   "ret_jan_jun": -0.0216,
+   "ret_jul_oct": 0.0371
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "bet365",
+   "bets": 8
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "any",
+   "bets": 2589,
+   "ret": 0.0015,
+   "ret_ci95": [
+    -0.0513,
+    0.0569
+   ],
+   "clv": -0.0303,
+   "clv_ci95": [
+    -0.0363,
+    -0.0243
+   ],
+   "ret_jan_jun": -0.025,
+   "ret_jul_oct": 0.0784
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "betrivers",
+   "bets": 738,
+   "ret": -0.0306,
+   "ret_ci95": [
+    -0.1314,
+    0.0773
+   ],
+   "clv": -0.0813,
+   "clv_ci95": [
+    -0.0907,
+    -0.0724
+   ],
+   "ret_jan_jun": -0.0439,
+   "ret_jul_oct": 0.0112
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "draftkings",
+   "bets": 1166,
+   "ret": -0.0226,
+   "ret_ci95": [
+    -0.1034,
+    0.0618
+   ],
+   "clv": -0.067,
+   "clv_ci95": [
+    -0.0745,
+    -0.0591
+   ],
+   "ret_jan_jun": -0.0365,
+   "ret_jul_oct": 0.0152
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "bet365",
+   "bets": 4
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "any",
+   "bets": 1267,
+   "ret": -0.0163,
+   "ret_ci95": [
+    -0.0927,
+    0.0681
+   ],
+   "clv": -0.0607,
+   "clv_ci95": [
+    -0.0681,
+    -0.0539
+   ],
+   "ret_jan_jun": -0.0388,
+   "ret_jul_oct": 0.0469
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "betrivers",
+   "bets": 1432,
+   "ret": -0.031,
+   "ret_ci95": [
+    -0.0981,
+    0.0379
+   ],
+   "clv": -0.0866,
+   "clv_ci95": [
+    -0.0926,
+    -0.0806
+   ],
+   "ret_jan_jun": -0.0528,
+   "ret_jul_oct": 0.0331
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "draftkings",
+   "bets": 1835,
+   "ret": -0.0384,
+   "ret_ci95": [
+    -0.1003,
+    0.026
+   ],
+   "clv": -0.0848,
+   "clv_ci95": [
+    -0.09,
+    -0.0799
+   ],
+   "ret_jan_jun": -0.0549,
+   "ret_jul_oct": 0.0073
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "bet365",
+   "bets": 5
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "any",
+   "bets": 2075,
+   "ret": -0.0356,
+   "ret_ci95": [
+    -0.0923,
+    0.0271
+   ],
+   "clv": -0.0738,
+   "clv_ci95": [
+    -0.0788,
+    -0.0687
+   ],
+   "ret_jan_jun": -0.0539,
+   "ret_jul_oct": 0.0165
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "betrivers",
+   "bets": 1870,
+   "ret": -0.045,
+   "ret_ci95": [
+    -0.1097,
+    0.0146
+   ],
+   "clv": -0.0904,
+   "clv_ci95": [
+    -0.0953,
+    -0.0856
+   ],
+   "ret_jan_jun": -0.0694,
+   "ret_jul_oct": 0.0197
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "draftkings",
+   "bets": 1960,
+   "ret": -0.0302,
+   "ret_ci95": [
+    -0.088,
+    0.0342
+   ],
+   "clv": -0.0924,
+   "clv_ci95": [
+    -0.097,
+    -0.088
+   ],
+   "ret_jan_jun": -0.0373,
+   "ret_jul_oct": -0.011
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "bet365",
+   "bets": 7
+  },
+  {
+   "fair": "pm",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "any",
+   "bets": 2272,
+   "ret": -0.0307,
+   "ret_ci95": [
+    -0.0887,
+    0.028
+   ],
+   "clv": -0.0786,
+   "clv_ci95": [
+    -0.0828,
+    -0.0746
+   ],
+   "ret_jan_jun": -0.0467,
+   "ret_jul_oct": 0.0139
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "betrivers",
+   "bets": 618,
+   "ret": -0.0365,
+   "ret_ci95": [
+    -0.1169,
+    0.0415
+   ],
+   "clv": -0.0153,
+   "clv_ci95": [
+    -0.0229,
+    -0.0079
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0365
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "draftkings",
+   "bets": 705,
+   "ret": 0.0455,
+   "ret_ci95": [
+    -0.0293,
+    0.1257
+   ],
+   "clv": 0.0296,
+   "clv_ci95": [
+    0.0208,
+    0.0389
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0455
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "bet365",
+   "bets": 13
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "any",
+   "bets": 987,
+   "ret": 0.0277,
+   "ret_ci95": [
+    -0.0391,
+    0.097
+   ],
+   "clv": 0.0173,
+   "clv_ci95": [
+    0.0107,
+    0.0242
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0277
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "betrivers",
+   "bets": 204,
+   "ret": 0.0289,
+   "ret_ci95": [
+    -0.1156,
+    0.1718
+   ],
+   "clv": -0.0279,
+   "clv_ci95": [
+    -0.0407,
+    -0.0161
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0289
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "draftkings",
+   "bets": 352,
+   "ret": 0.0485,
+   "ret_ci95": [
+    -0.0632,
+    0.1578
+   ],
+   "clv": -0.0055,
+   "clv_ci95": [
+    -0.0159,
+    0.0048
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0485
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "bet365",
+   "bets": 5
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "any",
+   "bets": 404,
+   "ret": 0.0332,
+   "ret_ci95": [
+    -0.0726,
+    0.1375
+   ],
+   "clv": -0.0059,
+   "clv_ci95": [
+    -0.0151,
+    0.0036
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0332
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "betrivers",
+   "bets": 444,
+   "ret": -0.0368,
+   "ret_ci95": [
+    -0.1281,
+    0.0553
+   ],
+   "clv": -0.0433,
+   "clv_ci95": [
+    -0.0508,
+    -0.0364
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0368
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "draftkings",
+   "bets": 557,
+   "ret": -0.0746,
+   "ret_ci95": [
+    -0.1605,
+    0.0156
+   ],
+   "clv": -0.0411,
+   "clv_ci95": [
+    -0.0477,
+    -0.0341
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0746
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "bet365",
+   "bets": 7
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "any",
+   "bets": 696,
+   "ret": -0.0553,
+   "ret_ci95": [
+    -0.1319,
+    0.0176
+   ],
+   "clv": -0.0354,
+   "clv_ci95": [
+    -0.0413,
+    -0.0289
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0553
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "betrivers",
+   "bets": 587,
+   "ret": -0.0391,
+   "ret_ci95": [
+    -0.124,
+    0.0445
+   ],
+   "clv": -0.0488,
+   "clv_ci95": [
+    -0.0543,
+    -0.0433
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0391
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "draftkings",
+   "bets": 586,
+   "ret": -0.0625,
+   "ret_ci95": [
+    -0.1483,
+    0.0242
+   ],
+   "clv": -0.0574,
+   "clv_ci95": [
+    -0.0631,
+    -0.0519
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0625
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "bet365",
+   "bets": 7
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "any",
+   "bets": 770,
+   "ret": -0.0433,
+   "ret_ci95": [
+    -0.114,
+    0.0344
+   ],
+   "clv": -0.0458,
+   "clv_ci95": [
+    -0.0503,
+    -0.0412
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0433
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "betrivers",
+   "bets": 337,
+   "ret": -0.0425,
+   "ret_ci95": [
+    -0.1577,
+    0.0764
+   ],
+   "clv": -0.0029,
+   "clv_ci95": [
+    -0.0136,
+    0.0076
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0425
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "draftkings",
+   "bets": 437,
+   "ret": 0.0934,
+   "ret_ci95": [
+    -0.0058,
+    0.2049
+   ],
+   "clv": 0.0526,
+   "clv_ci95": [
+    0.0407,
+    0.0648
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0934
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "bet365",
+   "bets": 9
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "any",
+   "bets": 604,
+   "ret": 0.0693,
+   "ret_ci95": [
+    -0.0283,
+    0.1599
+   ],
+   "clv": 0.0359,
+   "clv_ci95": [
+    0.0262,
+    0.0458
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0693
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "betrivers",
+   "bets": 106,
+   "ret": -0.0107,
+   "ret_ci95": [
+    -0.2324,
+    0.2057
+   ],
+   "clv": -0.0193,
+   "clv_ci95": [
+    -0.0369,
+    -0.002
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0107
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "draftkings",
+   "bets": 184,
+   "ret": 0.1356,
+   "ret_ci95": [
+    -0.0322,
+    0.3021
+   ],
+   "clv": 0.0082,
+   "clv_ci95": [
+    -0.008,
+    0.0236
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.1356
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "bet365",
+   "bets": 1
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "any",
+   "bets": 211,
+   "ret": 0.0863,
+   "ret_ci95": [
+    -0.0656,
+    0.2575
+   ],
+   "clv": 0.0084,
+   "clv_ci95": [
+    -0.0053,
+    0.0229
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0863
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "betrivers",
+   "bets": 231,
+   "ret": -0.0348,
+   "ret_ci95": [
+    -0.1716,
+    0.1068
+   ],
+   "clv": -0.0467,
+   "clv_ci95": [
+    -0.0572,
+    -0.036
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0348
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "draftkings",
+   "bets": 315,
+   "ret": -0.0903,
+   "ret_ci95": [
+    -0.215,
+    0.0329
+   ],
+   "clv": -0.0428,
+   "clv_ci95": [
+    -0.0532,
+    -0.0324
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0903
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "bet365",
+   "bets": 1
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "any",
+   "bets": 381,
+   "ret": -0.0508,
+   "ret_ci95": [
+    -0.1598,
+    0.0592
+   ],
+   "clv": -0.0361,
+   "clv_ci95": [
+    -0.0452,
+    -0.0268
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0508
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "betrivers",
+   "bets": 299,
+   "ret": -0.0213,
+   "ret_ci95": [
+    -0.1565,
+    0.1087
+   ],
+   "clv": -0.0555,
+   "clv_ci95": [
+    -0.0638,
+    -0.0482
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0213
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "draftkings",
+   "bets": 341,
+   "ret": -0.0656,
+   "ret_ci95": [
+    -0.1833,
+    0.0515
+   ],
+   "clv": -0.0658,
+   "clv_ci95": [
+    -0.0732,
+    -0.0581
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0656
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "bet365",
+   "bets": 2
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "any",
+   "bets": 421,
+   "ret": -0.0653,
+   "ret_ci95": [
+    -0.1801,
+    0.0513
+   ],
+   "clv": -0.0524,
+   "clv_ci95": [
+    -0.0589,
+    -0.0459
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0653
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "betrivers",
+   "bets": 175,
+   "ret": -0.0893,
+   "ret_ci95": [
+    -0.255,
+    0.0758
+   ],
+   "clv": -0.0018,
+   "clv_ci95": [
+    -0.018,
+    0.0149
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0893
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "draftkings",
+   "bets": 264,
+   "ret": 0.0758,
+   "ret_ci95": [
+    -0.0822,
+    0.2339
+   ],
+   "clv": 0.078,
+   "clv_ci95": [
+    0.0615,
+    0.0951
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0758
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "bet365",
+   "bets": 5
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "any",
+   "bets": 360,
+   "ret": 0.0654,
+   "ret_ci95": [
+    -0.0571,
+    0.1935
+   ],
+   "clv": 0.056,
+   "clv_ci95": [
+    0.0423,
+    0.0697
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0654
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "betrivers",
+   "bets": 54,
+   "ret": 0.1217,
+   "ret_ci95": [
+    -0.2126,
+    0.4656
+   ],
+   "clv": -0.0076,
+   "clv_ci95": [
+    -0.0342,
+    0.0175
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.1217
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "draftkings",
+   "bets": 99,
+   "ret": 0.2665,
+   "ret_ci95": [
+    0.0052,
+    0.5462
+   ],
+   "clv": 0.0207,
+   "clv_ci95": [
+    -0.0028,
+    0.0447
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.2665
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "bet365",
+   "bets": 0
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "any",
+   "bets": 117,
+   "ret": 0.2434,
+   "ret_ci95": [
+    -0.0019,
+    0.5203
+   ],
+   "clv": 0.0181,
+   "clv_ci95": [
+    -0.0017,
+    0.04
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.2434
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "betrivers",
+   "bets": 122,
+   "ret": -0.098,
+   "ret_ci95": [
+    -0.2917,
+    0.1049
+   ],
+   "clv": -0.0464,
+   "clv_ci95": [
+    -0.0615,
+    -0.0319
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.098
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "draftkings",
+   "bets": 181,
+   "ret": -0.0324,
+   "ret_ci95": [
+    -0.1983,
+    0.1416
+   ],
+   "clv": -0.0395,
+   "clv_ci95": [
+    -0.0535,
+    -0.0252
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0324
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "bet365",
+   "bets": 0
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "any",
+   "bets": 217,
+   "ret": -0.0788,
+   "ret_ci95": [
+    -0.2342,
+    0.0798
+   ],
+   "clv": -0.0342,
+   "clv_ci95": [
+    -0.0464,
+    -0.0219
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0788
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "betrivers",
+   "bets": 157,
+   "ret": -0.022,
+   "ret_ci95": [
+    -0.2148,
+    0.1678
+   ],
+   "clv": -0.0626,
+   "clv_ci95": [
+    -0.0738,
+    -0.0511
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.022
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "draftkings",
+   "bets": 182,
+   "ret": -0.0857,
+   "ret_ci95": [
+    -0.255,
+    0.0867
+   ],
+   "clv": -0.0698,
+   "clv_ci95": [
+    -0.0807,
+    -0.0588
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0857
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "bet365",
+   "bets": 0
+  },
+  {
+   "fair": "pb",
+   "gate5": false,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "any",
+   "bets": 233,
+   "ret": -0.0646,
+   "ret_ci95": [
+    -0.2135,
+    0.0828
+   ],
+   "clv": -0.0605,
+   "clv_ci95": [
+    -0.0702,
+    -0.0512
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0646
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "betrivers",
+   "bets": 358,
+   "ret": 0.0127,
+   "ret_ci95": [
+    -0.1026,
+    0.1306
+   ],
+   "clv": -0.0237,
+   "clv_ci95": [
+    -0.0341,
+    -0.0133
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0127
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "draftkings",
+   "bets": 386,
+   "ret": 0.0192,
+   "ret_ci95": [
+    -0.0891,
+    0.1336
+   ],
+   "clv": 0.019,
+   "clv_ci95": [
+    0.0075,
+    0.0302
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0192
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "bet365",
+   "bets": 5
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "open",
+   "book": "any",
+   "bets": 534,
+   "ret": 0.0449,
+   "ret_ci95": [
+    -0.0521,
+    0.1464
+   ],
+   "clv": 0.0091,
+   "clv_ci95": [
+    0.0001,
+    0.0184
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0449
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "betrivers",
+   "bets": 99,
+   "ret": 0.1422,
+   "ret_ci95": [
+    -0.0886,
+    0.381
+   ],
+   "clv": -0.0311,
+   "clv_ci95": [
+    -0.0515,
+    -0.0127
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.1422
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "draftkings",
+   "bets": 203,
+   "ret": 0.1117,
+   "ret_ci95": [
+    -0.0454,
+    0.2708
+   ],
+   "clv": -0.0053,
+   "clv_ci95": [
+    -0.0196,
+    0.0083
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.1117
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "bet365",
+   "bets": 2
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t24h",
+   "book": "any",
+   "bets": 222,
+   "ret": 0.1125,
+   "ret_ci95": [
+    -0.0528,
+    0.2636
+   ],
+   "clv": -0.0042,
+   "clv_ci95": [
+    -0.0183,
+    0.0101
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.1125
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "betrivers",
+   "bets": 245,
+   "ret": -0.0228,
+   "ret_ci95": [
+    -0.1637,
+    0.118
+   ],
+   "clv": -0.0485,
+   "clv_ci95": [
+    -0.0592,
+    -0.0385
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0228
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "draftkings",
+   "bets": 323,
+   "ret": -0.0218,
+   "ret_ci95": [
+    -0.1319,
+    0.0994
+   ],
+   "clv": -0.0435,
+   "clv_ci95": [
+    -0.0536,
+    -0.0333
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0218
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "bet365",
+   "bets": 3
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t12h",
+   "book": "any",
+   "bets": 390,
+   "ret": -0.0134,
+   "ret_ci95": [
+    -0.119,
+    0.0962
+   ],
+   "clv": -0.0383,
+   "clv_ci95": [
+    -0.0476,
+    -0.0295
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0134
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "betrivers",
+   "bets": 340,
+   "ret": -0.0059,
+   "ret_ci95": [
+    -0.1243,
+    0.109
+   ],
+   "clv": -0.0544,
+   "clv_ci95": [
+    -0.0622,
+    -0.0469
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0059
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "draftkings",
+   "bets": 328,
+   "ret": -0.0393,
+   "ret_ci95": [
+    -0.1544,
+    0.0833
+   ],
+   "clv": -0.0641,
+   "clv_ci95": [
+    -0.0715,
+    -0.0569
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0393
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "bet365",
+   "bets": 2
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.0,
+   "checkpoint": "t6h",
+   "book": "any",
+   "bets": 427,
+   "ret": -0.0143,
+   "ret_ci95": [
+    -0.1192,
+    0.0944
+   ],
+   "clv": -0.0507,
+   "clv_ci95": [
+    -0.0576,
+    -0.0442
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0143
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "betrivers",
+   "bets": 227,
+   "ret": -0.0229,
+   "ret_ci95": [
+    -0.1683,
+    0.1297
+   ],
+   "clv": -0.0123,
+   "clv_ci95": [
+    -0.0248,
+    0.0007
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0229
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "draftkings",
+   "bets": 260,
+   "ret": 0.0657,
+   "ret_ci95": [
+    -0.0761,
+    0.212
+   ],
+   "clv": 0.0381,
+   "clv_ci95": [
+    0.0238,
+    0.0528
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0657
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "bet365",
+   "bets": 4
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "open",
+   "book": "any",
+   "bets": 365,
+   "ret": 0.0589,
+   "ret_ci95": [
+    -0.0601,
+    0.1859
+   ],
+   "clv": 0.0234,
+   "clv_ci95": [
+    0.0105,
+    0.0348
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0589
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "betrivers",
+   "bets": 67,
+   "ret": 0.1252,
+   "ret_ci95": [
+    -0.1636,
+    0.4373
+   ],
+   "clv": -0.0223,
+   "clv_ci95": [
+    -0.0435,
+    -0.0009
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.1252
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "draftkings",
+   "bets": 128,
+   "ret": 0.2473,
+   "ret_ci95": [
+    0.04,
+    0.459
+   ],
+   "clv": 0.0106,
+   "clv_ci95": [
+    -0.0088,
+    0.0295
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.2473
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "bet365",
+   "bets": 0
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t24h",
+   "book": "any",
+   "bets": 141,
+   "ret": 0.2208,
+   "ret_ci95": [
+    0.0072,
+    0.4361
+   ],
+   "clv": 0.0108,
+   "clv_ci95": [
+    -0.0067,
+    0.0281
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.2208
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "betrivers",
+   "bets": 144,
+   "ret": 0.0182,
+   "ret_ci95": [
+    -0.1653,
+    0.2015
+   ],
+   "clv": -0.0485,
+   "clv_ci95": [
+    -0.0633,
+    -0.034
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0182
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "draftkings",
+   "bets": 203,
+   "ret": -0.0168,
+   "ret_ci95": [
+    -0.167,
+    0.146
+   ],
+   "clv": -0.0419,
+   "clv_ci95": [
+    -0.0552,
+    -0.0277
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0168
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "bet365",
+   "bets": 1
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t12h",
+   "book": "any",
+   "bets": 238,
+   "ret": 0.0247,
+   "ret_ci95": [
+    -0.1234,
+    0.1695
+   ],
+   "clv": -0.0346,
+   "clv_ci95": [
+    -0.0467,
+    -0.0221
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0247
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "betrivers",
+   "bets": 187,
+   "ret": 0.0449,
+   "ret_ci95": [
+    -0.1265,
+    0.213
+   ],
+   "clv": -0.0562,
+   "clv_ci95": [
+    -0.0661,
+    -0.0462
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0449
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "draftkings",
+   "bets": 205,
+   "ret": -0.0362,
+   "ret_ci95": [
+    -0.1943,
+    0.1181
+   ],
+   "clv": -0.0694,
+   "clv_ci95": [
+    -0.0799,
+    -0.0593
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0362
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "bet365",
+   "bets": 1
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.03,
+   "checkpoint": "t6h",
+   "book": "any",
+   "bets": 252,
+   "ret": -0.0221,
+   "ret_ci95": [
+    -0.168,
+    0.1286
+   ],
+   "clv": -0.0533,
+   "clv_ci95": [
+    -0.0618,
+    -0.0441
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0221
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "betrivers",
+   "bets": 131,
+   "ret": -0.0639,
+   "ret_ci95": [
+    -0.2533,
+    0.1354
+   ],
+   "clv": -0.0069,
+   "clv_ci95": [
+    -0.0247,
+    0.0112
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0639
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "draftkings",
+   "bets": 158,
+   "ret": 0.0671,
+   "ret_ci95": [
+    -0.1417,
+    0.2881
+   ],
+   "clv": 0.0571,
+   "clv_ci95": [
+    0.037,
+    0.0766
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0671
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "bet365",
+   "bets": 2
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "open",
+   "book": "any",
+   "bets": 229,
+   "ret": 0.0672,
+   "ret_ci95": [
+    -0.0917,
+    0.2313
+   ],
+   "clv": 0.037,
+   "clv_ci95": [
+    0.0206,
+    0.0534
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0672
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "betrivers",
+   "bets": 37,
+   "ret": 0.2881,
+   "ret_ci95": [
+    -0.1525,
+    0.7747
+   ],
+   "clv": -0.0088,
+   "clv_ci95": [
+    -0.0426,
+    0.0212
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.2881
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "draftkings",
+   "bets": 72,
+   "ret": 0.409,
+   "ret_ci95": [
+    0.0812,
+    0.7354
+   ],
+   "clv": 0.0114,
+   "clv_ci95": [
+    -0.0178,
+    0.0389
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.409
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "bet365",
+   "bets": 0
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t24h",
+   "book": "any",
+   "bets": 84,
+   "ret": 0.4282,
+   "ret_ci95": [
+    0.1029,
+    0.7426
+   ],
+   "clv": 0.011,
+   "clv_ci95": [
+    -0.0133,
+    0.0355
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.4282
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "betrivers",
+   "bets": 85,
+   "ret": -0.0215,
+   "ret_ci95": [
+    -0.2742,
+    0.2297
+   ],
+   "clv": -0.0454,
+   "clv_ci95": [
+    -0.0639,
+    -0.0269
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0215
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "draftkings",
+   "bets": 132,
+   "ret": 0.0317,
+   "ret_ci95": [
+    -0.1765,
+    0.2475
+   ],
+   "clv": -0.042,
+   "clv_ci95": [
+    -0.0598,
+    -0.0241
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0317
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "bet365",
+   "bets": 0
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t12h",
+   "book": "any",
+   "bets": 154,
+   "ret": 0.0118,
+   "ret_ci95": [
+    -0.1751,
+    0.1988
+   ],
+   "clv": -0.035,
+   "clv_ci95": [
+    -0.0503,
+    -0.0183
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0118
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "betrivers",
+   "bets": 110,
+   "ret": 0.0368,
+   "ret_ci95": [
+    -0.1982,
+    0.2718
+   ],
+   "clv": -0.0619,
+   "clv_ci95": [
+    -0.0758,
+    -0.0477
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": 0.0368
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "draftkings",
+   "bets": 122,
+   "ret": -0.0666,
+   "ret_ci95": [
+    -0.2792,
+    0.1781
+   ],
+   "clv": -0.0765,
+   "clv_ci95": [
+    -0.0904,
+    -0.0634
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0666
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "bet365",
+   "bets": 0
+  },
+  {
+   "fair": "pb",
+   "gate5": true,
+   "ev_over": 0.06,
+   "checkpoint": "t6h",
+   "book": "any",
+   "bets": 155,
+   "ret": -0.0385,
+   "ret_ci95": [
+    -0.2321,
+    0.1526
+   ],
+   "clv": -0.0635,
+   "clv_ci95": [
+    -0.0753,
+    -0.0528
+   ],
+   "ret_jan_jun": null,
+   "ret_jul_oct": -0.0385
+  }
+ ]
+}

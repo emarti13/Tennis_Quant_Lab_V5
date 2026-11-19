@@ -1,0 +1,3030 @@
+{
+ "n_fixtures": 5876,
+ "late_information_test": {
+  "pinnacle": {
+   "n": 1020,
+   "open": 0.61845,
+   "t12h": 0.61563,
+   "t6h": 0.61486,
+   "t1h": 0.61589,
+   "close": 0.61463,
+   "pin_close": 0.61463
+  },
+  "betrivers": {
+   "n": 880,
+   "open": 0.61424,
+   "t12h": 0.61629,
+   "t6h": 0.61474,
+   "t1h": 0.6136,
+   "close": 0.61232,
+   "pin_close": 0.61312
+  },
+  "draftkings": {
+   "n": 1045,
+   "open": 0.61694,
+   "t12h": 0.61348,
+   "t6h": 0.61253,
+   "t1h": 0.61316,
+   "close": 0.61017,
+   "pin_close": 0.61051
+  }
+ },
+ "decisions": {
+  "t12h": {
+   "features": [
+    "m",
+    "pin_move_from_open",
+    "pin_move_from_t24h",
+    "betrivers_open_minus_pinT",
+    "betrivers_t24h_minus_pinT",
+    "betrivers_t12h_minus_pinT",
+    "draftkings_open_minus_pinT",
+    "draftkings_t24h_minus_pinT",
+    "draftkings_t12h_minus_pinT",
+    "bet365_open_minus_pinT",
+    "bet365_t24h_minus_pinT",
+    "bet365_t12h_minus_pinT",
+    "elo_gap",
+    "pt_gap",
+    "pace_gap",
+    "serve_gap",
+    "pace",
+    "pace_x_serve",
+    "d_prev_in_event_minutes",
+    "d_prev_in_event_sets",
+    "d_prev_in_event_went_distance",
+    "d_ev_matches_before",
+    "d_ev_minutes_before",
+    "d_ev_quali_matches_before",
+    "d_weeks_since_prev_event",
+    "d_matches_last_4w",
+    "d_layoff_8w_plus",
+    "d_retired_last_match",
+    "d_retired_or_wo_last5",
+    "d_prev_in_event_minutes_missing",
+    "d_prev_in_event_sets_missing",
+    "d_prev_in_event_went_distance_missing",
+    "d_ev_matches_before_missing",
+    "d_ev_minutes_before_missing",
+    "d_ev_quali_matches_before_missing",
+    "d_weeks_since_prev_event_missing",
+    "d_matches_last_4w_missing",
+    "d_layoff_8w_plus_missing",
+    "d_retired_last_match_missing",
+    "d_retired_or_wo_last5_missing",
+    "tot_line",
+    "tot_q",
+    "spr_line_p1",
+    "spr_q_p1",
+    "m_x_tot",
+    "spr_plus_m",
+    "lvl_G",
+    "lvl_M",
+    "lvl_500",
+    "lvl_250",
+    "lvl_C",
+    "lvl_D",
+    "round_rank",
+    "qualifying",
+    "best_of5",
+    "log_n_min",
+    "hours_open",
+    "fam_ATP",
+    "fam_WTA",
+    "fam_CHALLENGER"
+   ],
+   "fit": {
+    "logistic": {
+     "ridge": 3000,
+     "val_loss": 0.61917,
+     "val_market_loss": 0.61868,
+     "top_weights": {
+      "lvl_500": 0.0154,
+      "d_retired_or_wo_last5": -0.0148,
+      "lvl_250": -0.0137,
+      "betrivers_t24h_minus_pinT": 0.0133,
+      "d_retired_last_match": -0.0118,
+      "fam_ATP": -0.0108,
+      "qualifying": -0.01,
+      "fam_CHALLENGER": 0.0097
+     }
+    },
+    "lightgbm": {
+     "depth": 3,
+     "rounds": 1,
+     "val_loss": 0.61883,
+     "top_gain": {
+      "draftkings_open_minus_pinT": 10.4,
+      "betrivers_t24h_minus_pinT": 9.9,
+      "log_n_min": 7.5,
+      "lvl_500": 3.8,
+      "m": 1.4,
+      "draftkings_t12h_minus_pinT": 0.8,
+      "betrivers_open_minus_pinT": 0.0,
+      "pin_move_from_t24h": 0.0
+     }
+    }
+   },
+   "eval": {
+    "n_train": 3696,
+    "n_test": 1031,
+    "n_test_with_close": 1031,
+    "log_loss": {
+     "pinnacle_T": 0.6165,
+     "pinnacle_close": 0.61556
+    },
+    "logistic": {
+     "log_loss": 0.61637,
+     "minus_pin_T": {
+      "mean": -0.00012,
+      "ci95": [
+       -0.00222,
+       0.00199
+      ]
+     },
+     "minus_pin_close": {
+      "mean": 0.00081,
+      "ci95": [
+       -0.00327,
+       0.00462
+      ]
+     },
+     "by_family": {
+      "ATP": {
+       "n": 357,
+       "minus_pin_T": {
+        "mean": 0.00305,
+        "ci95": [
+         -0.00242,
+         0.00846
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00075,
+        "ci95": [
+         -0.00791,
+         0.00939
+        ]
+       }
+      },
+      "WTA": {
+       "n": 207,
+       "minus_pin_T": {
+        "mean": -0.00317,
+        "ci95": [
+         -0.00738,
+         0.00105
+        ]
+       },
+       "minus_pin_close": {
+        "mean": -0.00165,
+        "ci95": [
+         -0.00969,
+         0.00646
+        ]
+       }
+      },
+      "CHALLENGER": {
+       "n": 467,
+       "minus_pin_T": {
+        "mean": -0.0012,
+        "ci95": [
+         -0.00265,
+         0.00032
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00195,
+        "ci95": [
+         -0.00259,
+         0.00655
+        ]
+       }
+      }
+     }
+    },
+    "lightgbm": {
+     "log_loss": 0.6164,
+     "minus_pin_T": {
+      "mean": -0.0001,
+      "ci95": [
+       -0.00042,
+       0.00022
+      ]
+     },
+     "minus_pin_close": {
+      "mean": 0.00084,
+      "ci95": [
+       -0.00281,
+       0.00425
+      ]
+     },
+     "by_family": {
+      "ATP": {
+       "n": 357,
+       "minus_pin_T": {
+        "mean": -0.00031,
+        "ci95": [
+         -0.00101,
+         0.00036
+        ]
+       },
+       "minus_pin_close": {
+        "mean": -0.00261,
+        "ci95": [
+         -0.00922,
+         0.00413
+        ]
+       }
+      },
+      "WTA": {
+       "n": 207,
+       "minus_pin_T": {
+        "mean": 0.00013,
+        "ci95": [
+         -0.00053,
+         0.00079
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00165,
+        "ci95": [
+         -0.00518,
+         0.00842
+        ]
+       }
+      },
+      "CHALLENGER": {
+       "n": 467,
+       "minus_pin_T": {
+        "mean": -3e-05,
+        "ci95": [
+         -0.00037,
+         0.00034
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00312,
+        "ci95": [
+         -0.00123,
+         0.00775
+        ]
+       }
+      }
+     }
+    },
+    "avg": {
+     "log_loss": 0.61625,
+     "minus_pin_T": {
+      "mean": -0.00025,
+      "ci95": [
+       -0.00132,
+       0.00093
+      ]
+     },
+     "minus_pin_close": {
+      "mean": 0.00069,
+      "ci95": [
+       -0.00289,
+       0.00422
+      ]
+     },
+     "by_family": {
+      "ATP": {
+       "n": 357,
+       "minus_pin_T": {
+        "mean": 0.0011,
+        "ci95": [
+         -0.00164,
+         0.00389
+        ]
+       },
+       "minus_pin_close": {
+        "mean": -0.0012,
+        "ci95": [
+         -0.00889,
+         0.00581
+        ]
+       }
+      },
+      "WTA": {
+       "n": 207,
+       "minus_pin_T": {
+        "mean": -0.00166,
+        "ci95": [
+         -0.00388,
+         0.00045
+        ]
+       },
+       "minus_pin_close": {
+        "mean": -0.00014,
+        "ci95": [
+         -0.00729,
+         0.00716
+        ]
+       }
+      },
+      "CHALLENGER": {
+       "n": 467,
+       "minus_pin_T": {
+        "mean": -0.00065,
+        "ci95": [
+         -0.00143,
+         0.00013
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.0025,
+        "ci95": [
+         -0.00184,
+         0.00703
+        ]
+       }
+      }
+     }
+    },
+    "pin_T_minus_close": {
+     "mean": 0.00094,
+     "ci95": [
+      -0.00241,
+      0.0044
+     ]
+    }
+   },
+   "betting": {
+    "betrivers": {
+     "n_priced": 799,
+     "overround": 0.0571,
+     "pinnacle_T_only": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 62,
+        "mean": -0.0624,
+        "ci95": [
+         -0.2485,
+         0.1242
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 62,
+        "mean": -0.0013,
+        "ci95": [
+         -0.0153,
+         0.0121
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 7,
+        "mean": -0.3943,
+        "ci95": [
+         -0.8329,
+         0.1314
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 7,
+        "mean": 0.0037,
+        "ci95": [
+         -0.016,
+         0.0238
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 1,
+        "mean": -1.0,
+        "ci95": [
+         -1.0,
+         -1.0
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 1,
+        "mean": 0.0472,
+        "ci95": [
+         0.0472,
+         0.0472
+        ]
+       }
+      }
+     },
+     "logistic": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 169,
+        "mean": -0.0082,
+        "ci95": [
+         -0.144,
+         0.1429
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 169,
+        "mean": -0.0326,
+        "ci95": [
+         -0.0417,
+         -0.0229
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 55,
+        "mean": -0.1251,
+        "ci95": [
+         -0.4175,
+         0.1907
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 55,
+        "mean": -0.0481,
+        "ci95": [
+         -0.0664,
+         -0.0294
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 21,
+        "mean": -0.2281,
+        "ci95": [
+         -0.6691,
+         0.2367
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 21,
+        "mean": -0.0282,
+        "ci95": [
+         -0.0564,
+         -0.0017
+        ]
+       }
+      }
+     },
+     "lightgbm": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 65,
+        "mean": -0.1066,
+        "ci95": [
+         -0.288,
+         0.0845
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 65,
+        "mean": -0.0028,
+        "ci95": [
+         -0.0166,
+         0.0117
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 8,
+        "mean": -0.47,
+        "ci95": [
+         -0.8538,
+         0.06
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 8,
+        "mean": -0.0094,
+        "ci95": [
+         -0.0376,
+         0.0188
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 1,
+        "mean": -1.0,
+        "ci95": [
+         -1.0,
+         -1.0
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 1,
+        "mean": 0.0472,
+        "ci95": [
+         0.0472,
+         0.0472
+        ]
+       }
+      }
+     },
+     "avg": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 90,
+        "mean": -0.0793,
+        "ci95": [
+         -0.2514,
+         0.0917
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 90,
+        "mean": -0.0145,
+        "ci95": [
+         -0.0262,
+         -0.002
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 19,
+        "mean": -0.5437,
+        "ci95": [
+         -0.8405,
+         -0.2211
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 19,
+        "mean": -0.0306,
+        "ci95": [
+         -0.0607,
+         -0.0011
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 3,
+        "mean": -1.0,
+        "ci95": [
+         -1.0,
+         -1.0
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 3,
+        "mean": -0.0617,
+        "ci95": [
+         -0.159,
+         0.0472
+        ]
+       }
+      }
+     }
+    },
+    "draftkings": {
+     "n_priced": 906,
+     "overround": 0.06,
+     "pinnacle_T_only": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 12,
+        "mean": -0.0341,
+        "ci95": [
+         -0.4974,
+         0.4426
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 12,
+        "mean": 0.0181,
+        "ci95": [
+         0.0,
+         0.0352
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 2,
+        "mean": 0.07,
+        "ci95": [
+         -1.0,
+         1.14
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 2,
+        "mean": 0.0232,
+        "ci95": [
+         0.0167,
+         0.0297
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 1,
+        "mean": 1.14,
+        "ci95": [
+         1.14,
+         1.14
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 1,
+        "mean": 0.0297,
+        "ci95": [
+         0.0297,
+         0.0297
+        ]
+       }
+      }
+     },
+     "logistic": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 153,
+        "mean": -0.0421,
+        "ci95": [
+         -0.1988,
+         0.1359
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 153,
+        "mean": -0.0449,
+        "ci95": [
+         -0.0559,
+         -0.0337
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 56,
+        "mean": -0.0873,
+        "ci95": [
+         -0.3694,
+         0.2047
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 56,
+        "mean": -0.0469,
+        "ci95": [
+         -0.0688,
+         -0.0259
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 19,
+        "mean": 0.1613,
+        "ci95": [
+         -0.3412,
+         0.7032
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 19,
+        "mean": -0.0274,
+        "ci95": [
+         -0.0735,
+         0.0147
+        ]
+       }
+      }
+     },
+     "lightgbm": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 12,
+        "mean": -0.1083,
+        "ci95": [
+         -0.5492,
+         0.3292
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 12,
+        "mean": 0.0004,
+        "ci95": [
+         -0.0239,
+         0.0189
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 2,
+        "mean": 0.07,
+        "ci95": [
+         -1.0,
+         1.14
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 2,
+        "mean": 0.0232,
+        "ci95": [
+         0.0167,
+         0.0297
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 0
+       },
+       "clv_vs_pin_close": {
+        "n": 0
+       }
+      }
+     },
+     "avg": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 43,
+        "mean": 0.0973,
+        "ci95": [
+         -0.1964,
+         0.418
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 43,
+        "mean": -0.0161,
+        "ci95": [
+         -0.0338,
+         0.0037
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 11,
+        "mean": 0.0936,
+        "ci95": [
+         -0.5965,
+         0.81
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 11,
+        "mean": 0.0066,
+        "ci95": [
+         -0.0378,
+         0.0515
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 2,
+        "mean": 1.18,
+        "ci95": [
+         1.14,
+         1.22
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 2,
+        "mean": -0.0146,
+        "ci95": [
+         -0.059,
+         0.0297
+        ]
+       }
+      }
+     }
+    },
+    "bet365": {
+     "n_priced": 79,
+     "overround": 0.074,
+     "pinnacle_T_only": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 6,
+        "mean": -0.3767,
+        "ci95": [
+         -1.0,
+         0.3567
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 6,
+        "mean": -0.009,
+        "ci95": [
+         -0.1381,
+         0.102
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 4,
+        "mean": -0.065,
+        "ci95": [
+         -1.0,
+         0.87
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 4,
+        "mean": -0.0612,
+        "ci95": [
+         -0.2239,
+         0.0521
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 3,
+        "mean": 0.2467,
+        "ci95": [
+         -1.0,
+         1.2
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 3,
+        "mean": -0.0731,
+        "ci95": [
+         -0.2991,
+         0.0779
+        ]
+       }
+      }
+     },
+     "logistic": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 4,
+        "mean": -0.615,
+        "ci95": [
+         -1.0,
+         0.155
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 4,
+        "mean": -0.066,
+        "ci95": [
+         -0.2287,
+         0.0521
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 4,
+        "mean": -0.615,
+        "ci95": [
+         -1.0,
+         0.155
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 4,
+        "mean": -0.066,
+        "ci95": [
+         -0.2287,
+         0.0521
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 3,
+        "mean": -0.4867,
+        "ci95": [
+         -1.0,
+         0.54
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 3,
+        "mean": 0.0116,
+        "ci95": [
+         -0.0256,
+         0.0779
+        ]
+       }
+      }
+     },
+     "lightgbm": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 6,
+        "mean": -0.3767,
+        "ci95": [
+         -1.0,
+         0.3933
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 6,
+        "mean": -0.009,
+        "ci95": [
+         -0.1451,
+         0.0972
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 4,
+        "mean": -0.065,
+        "ci95": [
+         -1.0,
+         0.87
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 4,
+        "mean": -0.0612,
+        "ci95": [
+         -0.2239,
+         0.0589
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 3,
+        "mean": -0.4867,
+        "ci95": [
+         -1.0,
+         0.54
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 3,
+        "mean": -0.0823,
+        "ci95": [
+         -0.2991,
+         0.0779
+        ]
+       }
+      }
+     },
+     "avg": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 4,
+        "mean": -0.615,
+        "ci95": [
+         -1.0,
+         0.155
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 4,
+        "mean": -0.066,
+        "ci95": [
+         -0.2287,
+         0.0521
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 3,
+        "mean": -0.4867,
+        "ci95": [
+         -1.0,
+         0.54
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 3,
+        "mean": -0.0823,
+        "ci95": [
+         -0.2991,
+         0.0779
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 3,
+        "mean": -0.4867,
+        "ci95": [
+         -1.0,
+         0.54
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 3,
+        "mean": -0.0823,
+        "ci95": [
+         -0.2991,
+         0.0779
+        ]
+       }
+      }
+     }
+    }
+   }
+  },
+  "t6h": {
+   "features": [
+    "m",
+    "pin_move_from_open",
+    "pin_move_from_t24h",
+    "pin_move_from_t12h",
+    "betrivers_open_minus_pinT",
+    "betrivers_t24h_minus_pinT",
+    "betrivers_t12h_minus_pinT",
+    "betrivers_t6h_minus_pinT",
+    "draftkings_open_minus_pinT",
+    "draftkings_t24h_minus_pinT",
+    "draftkings_t12h_minus_pinT",
+    "draftkings_t6h_minus_pinT",
+    "bet365_open_minus_pinT",
+    "bet365_t24h_minus_pinT",
+    "bet365_t12h_minus_pinT",
+    "bet365_t6h_minus_pinT",
+    "elo_gap",
+    "pt_gap",
+    "pace_gap",
+    "serve_gap",
+    "pace",
+    "pace_x_serve",
+    "d_prev_in_event_minutes",
+    "d_prev_in_event_sets",
+    "d_prev_in_event_went_distance",
+    "d_ev_matches_before",
+    "d_ev_minutes_before",
+    "d_ev_quali_matches_before",
+    "d_weeks_since_prev_event",
+    "d_matches_last_4w",
+    "d_layoff_8w_plus",
+    "d_retired_last_match",
+    "d_retired_or_wo_last5",
+    "d_prev_in_event_minutes_missing",
+    "d_prev_in_event_sets_missing",
+    "d_prev_in_event_went_distance_missing",
+    "d_ev_matches_before_missing",
+    "d_ev_minutes_before_missing",
+    "d_ev_quali_matches_before_missing",
+    "d_weeks_since_prev_event_missing",
+    "d_matches_last_4w_missing",
+    "d_layoff_8w_plus_missing",
+    "d_retired_last_match_missing",
+    "d_retired_or_wo_last5_missing",
+    "tot_line",
+    "tot_q",
+    "spr_line_p1",
+    "spr_q_p1",
+    "m_x_tot",
+    "spr_plus_m",
+    "lvl_G",
+    "lvl_M",
+    "lvl_500",
+    "lvl_250",
+    "lvl_C",
+    "lvl_D",
+    "round_rank",
+    "qualifying",
+    "best_of5",
+    "log_n_min",
+    "hours_open",
+    "fam_ATP",
+    "fam_WTA",
+    "fam_CHALLENGER"
+   ],
+   "fit": {
+    "logistic": {
+     "ridge": 3000,
+     "val_loss": 0.61774,
+     "val_market_loss": 0.61777,
+     "top_weights": {
+      "d_retired_or_wo_last5": -0.0195,
+      "lvl_500": 0.0143,
+      "lvl_250": -0.0136,
+      "d_matches_last_4w": 0.0136,
+      "fam_ATP": -0.0126,
+      "betrivers_t24h_minus_pinT": 0.0124,
+      "fam_CHALLENGER": 0.0113,
+      "lvl_C": 0.0113
+     }
+    },
+    "lightgbm": {
+     "depth": 3,
+     "rounds": 6,
+     "val_loss": 0.61769,
+     "top_gain": {
+      "pin_move_from_t12h": 36.5,
+      "tot_q": 28.1,
+      "m_x_tot": 19.6,
+      "pace": 19.3,
+      "draftkings_t24h_minus_pinT": 17.5,
+      "pace_gap": 16.4,
+      "lvl_C": 14.9,
+      "draftkings_t12h_minus_pinT": 14.0
+     }
+    }
+   },
+   "eval": {
+    "n_train": 4356,
+    "n_test": 1233,
+    "n_test_with_close": 1233,
+    "log_loss": {
+     "pinnacle_T": 0.61236,
+     "pinnacle_close": 0.61115
+    },
+    "logistic": {
+     "log_loss": 0.6125,
+     "minus_pin_T": {
+      "mean": 0.00014,
+      "ci95": [
+       -0.002,
+       0.00226
+      ]
+     },
+     "minus_pin_close": {
+      "mean": 0.00135,
+      "ci95": [
+       -0.0021,
+       0.00459
+      ]
+     },
+     "by_family": {
+      "ATP": {
+       "n": 410,
+       "minus_pin_T": {
+        "mean": 0.00369,
+        "ci95": [
+         -0.00145,
+         0.00898
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00467,
+        "ci95": [
+         -0.00295,
+         0.01253
+        ]
+       }
+      },
+      "WTA": {
+       "n": 237,
+       "minus_pin_T": {
+        "mean": -0.00298,
+        "ci95": [
+         -0.00753,
+         0.0018
+        ]
+       },
+       "minus_pin_close": {
+        "mean": -0.00052,
+        "ci95": [
+         -0.00801,
+         0.00731
+        ]
+       }
+      },
+      "CHALLENGER": {
+       "n": 586,
+       "minus_pin_T": {
+        "mean": -0.00109,
+        "ci95": [
+         -0.00297,
+         0.00083
+        ]
+       },
+       "minus_pin_close": {
+        "mean": -0.00022,
+        "ci95": [
+         -0.00371,
+         0.00321
+        ]
+       }
+      }
+     }
+    },
+    "lightgbm": {
+     "log_loss": 0.6115,
+     "minus_pin_T": {
+      "mean": -0.00085,
+      "ci95": [
+       -0.00179,
+       0.00013
+      ]
+     },
+     "minus_pin_close": {
+      "mean": 0.00036,
+      "ci95": [
+       -0.0023,
+       0.00328
+      ]
+     },
+     "by_family": {
+      "ATP": {
+       "n": 410,
+       "minus_pin_T": {
+        "mean": -0.0012,
+        "ci95": [
+         -0.00298,
+         0.00055
+        ]
+       },
+       "minus_pin_close": {
+        "mean": -0.00022,
+        "ci95": [
+         -0.00652,
+         0.00579
+        ]
+       }
+      },
+      "WTA": {
+       "n": 237,
+       "minus_pin_T": {
+        "mean": -0.0005,
+        "ci95": [
+         -0.00252,
+         0.00165
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00196,
+        "ci95": [
+         -0.00417,
+         0.00816
+        ]
+       }
+      },
+      "CHALLENGER": {
+       "n": 586,
+       "minus_pin_T": {
+        "mean": -0.00075,
+        "ci95": [
+         -0.00206,
+         0.00051
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00012,
+        "ci95": [
+         -0.00324,
+         0.00348
+        ]
+       }
+      }
+     }
+    },
+    "avg": {
+     "log_loss": 0.61187,
+     "minus_pin_T": {
+      "mean": -0.00049,
+      "ci95": [
+       -0.00187,
+       0.00095
+      ]
+     },
+     "minus_pin_close": {
+      "mean": 0.00072,
+      "ci95": [
+       -0.00244,
+       0.00374
+      ]
+     },
+     "by_family": {
+      "ATP": {
+       "n": 410,
+       "minus_pin_T": {
+        "mean": 0.00102,
+        "ci95": [
+         -0.00233,
+         0.00397
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.002,
+        "ci95": [
+         -0.00433,
+         0.00834
+        ]
+       }
+      },
+      "WTA": {
+       "n": 237,
+       "minus_pin_T": {
+        "mean": -0.00189,
+        "ci95": [
+         -0.00487,
+         0.0012
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00057,
+        "ci95": [
+         -0.00608,
+         0.00745
+        ]
+       }
+      },
+      "CHALLENGER": {
+       "n": 586,
+       "minus_pin_T": {
+        "mean": -0.00098,
+        "ci95": [
+         -0.00232,
+         0.00042
+        ]
+       },
+       "minus_pin_close": {
+        "mean": -0.00011,
+        "ci95": [
+         -0.00329,
+         0.00319
+        ]
+       }
+      }
+     }
+    },
+    "pin_T_minus_close": {
+     "mean": 0.00121,
+     "ci95": [
+      -0.00132,
+      0.00385
+     ]
+    }
+   },
+   "betting": {
+    "betrivers": {
+     "n_priced": 1120,
+     "overround": 0.0586,
+     "pinnacle_T_only": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 104,
+        "mean": -0.1059,
+        "ci95": [
+         -0.2677,
+         0.0535
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 104,
+        "mean": 0.0167,
+        "ci95": [
+         0.0093,
+         0.024
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 24,
+        "mean": -0.235,
+        "ci95": [
+         -0.5692,
+         0.1242
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 24,
+        "mean": 0.0329,
+        "ci95": [
+         0.0192,
+         0.0481
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 4,
+        "mean": -1.0,
+        "ci95": [
+         -1.0,
+         -1.0
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 4,
+        "mean": 0.078,
+        "ci95": [
+         0.0465,
+         0.1096
+        ]
+       }
+      }
+     },
+     "logistic": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 246,
+        "mean": 0.0067,
+        "ci95": [
+         -0.1026,
+         0.1216
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 246,
+        "mean": -0.0174,
+        "ci95": [
+         -0.0239,
+         -0.0108
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 93,
+        "mean": -0.1111,
+        "ci95": [
+         -0.3157,
+         0.1028
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 93,
+        "mean": -0.0118,
+        "ci95": [
+         -0.0227,
+         -0.0
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 37,
+        "mean": -0.1776,
+        "ci95": [
+         -0.5005,
+         0.1681
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 37,
+        "mean": -0.0045,
+        "ci95": [
+         -0.0251,
+         0.0152
+        ]
+       }
+      }
+     },
+     "lightgbm": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 143,
+        "mean": -0.0237,
+        "ci95": [
+         -0.1551,
+         0.1072
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 143,
+        "mean": 0.0062,
+        "ci95": [
+         -0.0007,
+         0.0129
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 32,
+        "mean": -0.35,
+        "ci95": [
+         -0.6113,
+         -0.0916
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 32,
+        "mean": 0.027,
+        "ci95": [
+         0.0143,
+         0.04
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 4,
+        "mean": -0.1175,
+        "ci95": [
+         -1.0,
+         0.765
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 4,
+        "mean": 0.0889,
+        "ci95": [
+         0.0482,
+         0.1113
+        ]
+       }
+      }
+     },
+     "avg": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 163,
+        "mean": -0.0032,
+        "ci95": [
+         -0.1385,
+         0.1277
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 163,
+        "mean": -0.0016,
+        "ci95": [
+         -0.0081,
+         0.005
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 50,
+        "mean": -0.0954,
+        "ci95": [
+         -0.3588,
+         0.186
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 50,
+        "mean": 0.0094,
+        "ci95": [
+         -0.0041,
+         0.0232
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 10,
+        "mean": -0.72,
+        "ci95": [
+         -1.0,
+         -0.16
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 10,
+        "mean": 0.0193,
+        "ci95": [
+         -0.0208,
+         0.0584
+        ]
+       }
+      }
+     }
+    },
+    "draftkings": {
+     "n_priced": 1105,
+     "overround": 0.0604,
+     "pinnacle_T_only": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 32,
+        "mean": -0.0908,
+        "ci95": [
+         -0.3616,
+         0.1923
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 32,
+        "mean": 0.0182,
+        "ci95": [
+         0.0068,
+         0.0309
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 7,
+        "mean": 0.0243,
+        "ci95": [
+         -0.6543,
+         0.8157
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 7,
+        "mean": 0.0407,
+        "ci95": [
+         0.0057,
+         0.0774
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 1,
+        "mean": -1.0,
+        "ci95": [
+         -1.0,
+         -1.0
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 1,
+        "mean": 0.11,
+        "ci95": [
+         0.11,
+         0.11
+        ]
+       }
+      }
+     },
+     "logistic": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 222,
+        "mean": 0.0153,
+        "ci95": [
+         -0.1154,
+         0.1358
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 222,
+        "mean": -0.0304,
+        "ci95": [
+         -0.0376,
+         -0.0233
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 92,
+        "mean": -0.1364,
+        "ci95": [
+         -0.3439,
+         0.088
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 92,
+        "mean": -0.0255,
+        "ci95": [
+         -0.0377,
+         -0.0137
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 26,
+        "mean": -0.2369,
+        "ci95": [
+         -0.6305,
+         0.1966
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 26,
+        "mean": -0.0167,
+        "ci95": [
+         -0.0383,
+         0.0064
+        ]
+       }
+      }
+     },
+     "lightgbm": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 55,
+        "mean": 0.0379,
+        "ci95": [
+         -0.1812,
+         0.2539
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 55,
+        "mean": 0.0075,
+        "ci95": [
+         -0.0029,
+         0.0183
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 9,
+        "mean": -0.1524,
+        "ci95": [
+         -0.6821,
+         0.3296
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 9,
+        "mean": 0.032,
+        "ci95": [
+         0.0054,
+         0.0614
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 3,
+        "mean": -0.3033,
+        "ci95": [
+         -1.0,
+         1.09
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 3,
+        "mean": 0.0534,
+        "ci95": [
+         -0.0048,
+         0.11
+        ]
+       }
+      }
+     },
+     "avg": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 105,
+        "mean": -0.0714,
+        "ci95": [
+         -0.2398,
+         0.0966
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 105,
+        "mean": -0.0103,
+        "ci95": [
+         -0.0178,
+         -0.0023
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 27,
+        "mean": -0.0145,
+        "ci95": [
+         -0.3808,
+         0.4012
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 27,
+        "mean": 0.0057,
+        "ci95": [
+         -0.0133,
+         0.0237
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 10,
+        "mean": 0.048,
+        "ci95": [
+         -0.717,
+         0.8871
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 10,
+        "mean": 0.0226,
+        "ci95": [
+         -0.0138,
+         0.057
+        ]
+       }
+      }
+     }
+    },
+    "bet365": {
+     "n_priced": 91,
+     "overround": 0.0752,
+     "pinnacle_T_only": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 5,
+        "mean": 0.364,
+        "ci95": [
+         -0.56,
+         1.288
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 5,
+        "mean": 0.0594,
+        "ci95": [
+         0.0043,
+         0.1346
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 2,
+        "mean": 1.31,
+        "ci95": [
+         1.25,
+         1.37
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 2,
+        "mean": 0.0338,
+        "ci95": [
+         -0.0097,
+         0.0772
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 0
+       },
+       "clv_vs_pin_close": {
+        "n": 0
+       }
+      }
+     },
+     "logistic": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 9,
+        "mean": -0.2989,
+        "ci95": [
+         -1.0,
+         0.4022
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 9,
+        "mean": -0.0255,
+        "ci95": [
+         -0.1125,
+         0.0594
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 3,
+        "mean": -0.21,
+        "ci95": [
+         -1.0,
+         1.37
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 3,
+        "mean": -0.0343,
+        "ci95": [
+         -0.206,
+         0.0772
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 2,
+        "mean": -1.0,
+        "ci95": [
+         -1.0,
+         -1.0
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 2,
+        "mean": -0.0901,
+        "ci95": [
+         -0.206,
+         0.0258
+        ]
+       }
+      }
+     },
+     "lightgbm": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 4,
+        "mean": 0.155,
+        "ci95": [
+         -1.0,
+         1.31
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 4,
+        "mean": 0.0738,
+        "ci95": [
+         0.0081,
+         0.1578
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 2,
+        "mean": 1.31,
+        "ci95": [
+         1.25,
+         1.37
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 2,
+        "mean": 0.0338,
+        "ci95": [
+         -0.0097,
+         0.0772
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 0
+       },
+       "clv_vs_pin_close": {
+        "n": 0
+       }
+      }
+     },
+     "avg": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 4,
+        "mean": 0.155,
+        "ci95": [
+         -1.0,
+         1.31
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 4,
+        "mean": 0.0738,
+        "ci95": [
+         0.0081,
+         0.1578
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 2,
+        "mean": 0.185,
+        "ci95": [
+         -1.0,
+         1.37
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 2,
+        "mean": 0.0515,
+        "ci95": [
+         0.0258,
+         0.0772
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 0
+       },
+       "clv_vs_pin_close": {
+        "n": 0
+       }
+      }
+     }
+    }
+   }
+  },
+  "t1h": {
+   "features": [
+    "m",
+    "pin_move_from_open",
+    "pin_move_from_t24h",
+    "pin_move_from_t12h",
+    "pin_move_from_t6h",
+    "betrivers_open_minus_pinT",
+    "betrivers_t24h_minus_pinT",
+    "betrivers_t12h_minus_pinT",
+    "betrivers_t6h_minus_pinT",
+    "betrivers_t1h_minus_pinT",
+    "draftkings_open_minus_pinT",
+    "draftkings_t24h_minus_pinT",
+    "draftkings_t12h_minus_pinT",
+    "draftkings_t6h_minus_pinT",
+    "draftkings_t1h_minus_pinT",
+    "bet365_open_minus_pinT",
+    "bet365_t24h_minus_pinT",
+    "bet365_t12h_minus_pinT",
+    "bet365_t6h_minus_pinT",
+    "bet365_t1h_minus_pinT",
+    "elo_gap",
+    "pt_gap",
+    "pace_gap",
+    "serve_gap",
+    "pace",
+    "pace_x_serve",
+    "d_prev_in_event_minutes",
+    "d_prev_in_event_sets",
+    "d_prev_in_event_went_distance",
+    "d_ev_matches_before",
+    "d_ev_minutes_before",
+    "d_ev_quali_matches_before",
+    "d_weeks_since_prev_event",
+    "d_matches_last_4w",
+    "d_layoff_8w_plus",
+    "d_retired_last_match",
+    "d_retired_or_wo_last5",
+    "d_prev_in_event_minutes_missing",
+    "d_prev_in_event_sets_missing",
+    "d_prev_in_event_went_distance_missing",
+    "d_ev_matches_before_missing",
+    "d_ev_minutes_before_missing",
+    "d_ev_quali_matches_before_missing",
+    "d_weeks_since_prev_event_missing",
+    "d_matches_last_4w_missing",
+    "d_layoff_8w_plus_missing",
+    "d_retired_last_match_missing",
+    "d_retired_or_wo_last5_missing",
+    "tot_line",
+    "tot_q",
+    "spr_line_p1",
+    "spr_q_p1",
+    "m_x_tot",
+    "spr_plus_m",
+    "lvl_G",
+    "lvl_M",
+    "lvl_500",
+    "lvl_250",
+    "lvl_C",
+    "lvl_D",
+    "round_rank",
+    "qualifying",
+    "best_of5",
+    "log_n_min",
+    "hours_open",
+    "fam_ATP",
+    "fam_WTA",
+    "fam_CHALLENGER"
+   ],
+   "fit": {
+    "logistic": {
+     "ridge": 3000,
+     "val_loss": 0.61699,
+     "val_market_loss": 0.61639,
+     "top_weights": {
+      "d_retired_or_wo_last5": -0.0195,
+      "pin_move_from_t6h_nan": 0.014,
+      "lvl_250": -0.0138,
+      "lvl_500": 0.0137,
+      "fam_ATP": -0.0123,
+      "pin_move_from_t12h": -0.0122,
+      "d_ev_minutes_before_missing": -0.0116,
+      "d_matches_last_4w": 0.0116
+     }
+    },
+    "lightgbm": {
+     "depth": 3,
+     "rounds": 1,
+     "val_loss": 0.6163,
+     "top_gain": {
+      "pin_move_from_open": 10.6,
+      "draftkings_t6h_minus_pinT": 8.1,
+      "tot_q": 7.3,
+      "pace_x_serve": 7.1,
+      "betrivers_open_minus_pinT": 6.9,
+      "pin_move_from_t12h": 6.5,
+      "draftkings_open_minus_pinT": 5.2,
+      "pin_move_from_t24h": 0.0
+     }
+    }
+   },
+   "eval": {
+    "n_train": 4537,
+    "n_test": 1269,
+    "n_test_with_close": 1269,
+    "log_loss": {
+     "pinnacle_T": 0.61351,
+     "pinnacle_close": 0.61185
+    },
+    "logistic": {
+     "log_loss": 0.61359,
+     "minus_pin_T": {
+      "mean": 8e-05,
+      "ci95": [
+       -0.00198,
+       0.00223
+      ]
+     },
+     "minus_pin_close": {
+      "mean": 0.00175,
+      "ci95": [
+       -0.00126,
+       0.00475
+      ]
+     },
+     "by_family": {
+      "ATP": {
+       "n": 431,
+       "minus_pin_T": {
+        "mean": 0.00314,
+        "ci95": [
+         -0.00163,
+         0.00815
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.0043,
+        "ci95": [
+         -0.00219,
+         0.01131
+        ]
+       }
+      },
+      "WTA": {
+       "n": 239,
+       "minus_pin_T": {
+        "mean": -0.00337,
+        "ci95": [
+         -0.00801,
+         0.00143
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00065,
+        "ci95": [
+         -0.00583,
+         0.00711
+        ]
+       }
+      },
+      "CHALLENGER": {
+       "n": 599,
+       "minus_pin_T": {
+        "mean": -0.00073,
+        "ci95": [
+         -0.00284,
+         0.00139
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00035,
+        "ci95": [
+         -0.00305,
+         0.00349
+        ]
+       }
+      }
+     }
+    },
+    "lightgbm": {
+     "log_loss": 0.61343,
+     "minus_pin_T": {
+      "mean": -8e-05,
+      "ci95": [
+       -0.00039,
+       0.00024
+      ]
+     },
+     "minus_pin_close": {
+      "mean": 0.00159,
+      "ci95": [
+       -0.00018,
+       0.00334
+      ]
+     },
+     "by_family": {
+      "ATP": {
+       "n": 431,
+       "minus_pin_T": {
+        "mean": -7e-05,
+        "ci95": [
+         -0.00065,
+         0.00049
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00109,
+        "ci95": [
+         -0.00226,
+         0.00441
+        ]
+       }
+      },
+      "WTA": {
+       "n": 239,
+       "minus_pin_T": {
+        "mean": 0.00028,
+        "ci95": [
+         -0.00047,
+         0.00098
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00431,
+        "ci95": [
+         0.00034,
+         0.0087
+        ]
+       }
+      },
+      "CHALLENGER": {
+       "n": 599,
+       "minus_pin_T": {
+        "mean": -0.00023,
+        "ci95": [
+         -0.00067,
+         0.00022
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00086,
+        "ci95": [
+         -0.00134,
+         0.003
+        ]
+       }
+      }
+     }
+    },
+    "avg": {
+     "log_loss": 0.61334,
+     "minus_pin_T": {
+      "mean": -0.00017,
+      "ci95": [
+       -0.00124,
+       0.00099
+      ]
+     },
+     "minus_pin_close": {
+      "mean": 0.0015,
+      "ci95": [
+       -0.00066,
+       0.00368
+      ]
+     },
+     "by_family": {
+      "ATP": {
+       "n": 431,
+       "minus_pin_T": {
+        "mean": 0.00125,
+        "ci95": [
+         -0.00124,
+         0.00374
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00242,
+        "ci95": [
+         -0.00215,
+         0.00711
+        ]
+       }
+      },
+      "WTA": {
+       "n": 239,
+       "minus_pin_T": {
+        "mean": -0.00174,
+        "ci95": [
+         -0.00415,
+         0.00061
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00229,
+        "ci95": [
+         -0.00245,
+         0.00743
+        ]
+       }
+      },
+      "CHALLENGER": {
+       "n": 599,
+       "minus_pin_T": {
+        "mean": -0.00056,
+        "ci95": [
+         -0.00165,
+         0.00063
+        ]
+       },
+       "minus_pin_close": {
+        "mean": 0.00052,
+        "ci95": [
+         -0.00219,
+         0.00299
+        ]
+       }
+      }
+     }
+    },
+    "pin_T_minus_close": {
+     "mean": 0.00166,
+     "ci95": [
+      -0.0,
+      0.00334
+     ]
+    }
+   },
+   "betting": {
+    "betrivers": {
+     "n_priced": 1177,
+     "overround": 0.0589,
+     "pinnacle_T_only": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 122,
+        "mean": -0.1748,
+        "ci95": [
+         -0.3259,
+         -0.0249
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 122,
+        "mean": 0.0128,
+        "ci95": [
+         0.0075,
+         0.0185
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 18,
+        "mean": -0.7467,
+        "ci95": [
+         -1.0,
+         -0.49
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 18,
+        "mean": 0.037,
+        "ci95": [
+         0.0204,
+         0.0578
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 4,
+        "mean": -1.0,
+        "ci95": [
+         -1.0,
+         -1.0
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 4,
+        "mean": 0.0963,
+        "ci95": [
+         0.0562,
+         0.126
+        ]
+       }
+      }
+     },
+     "logistic": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 334,
+        "mean": 0.0524,
+        "ci95": [
+         -0.0525,
+         0.167
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 334,
+        "mean": -0.0194,
+        "ci95": [
+         -0.0243,
+         -0.0144
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 156,
+        "mean": 0.0494,
+        "ci95": [
+         -0.1275,
+         0.2314
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 156,
+        "mean": -0.0137,
+        "ci95": [
+         -0.0216,
+         -0.0059
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 65,
+        "mean": 0.396,
+        "ci95": [
+         0.0663,
+         0.7315
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 65,
+        "mean": -0.0112,
+        "ci95": [
+         -0.0262,
+         0.0035
+        ]
+       }
+      }
+     },
+     "lightgbm": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 133,
+        "mean": -0.1544,
+        "ci95": [
+         -0.2933,
+         -0.0143
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 133,
+        "mean": 0.01,
+        "ci95": [
+         0.0046,
+         0.0154
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 24,
+        "mean": -0.6054,
+        "ci95": [
+         -0.87,
+         -0.3246
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 24,
+        "mean": 0.0366,
+        "ci95": [
+         0.0202,
+         0.0543
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 5,
+        "mean": -1.0,
+        "ci95": [
+         -1.0,
+         -1.0
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 5,
+        "mean": 0.0819,
+        "ci95": [
+         0.0467,
+         0.1171
+        ]
+       }
+      }
+     },
+     "avg": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 203,
+        "mean": 0.0269,
+        "ci95": [
+         -0.1117,
+         0.1665
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 203,
+        "mean": -0.0035,
+        "ci95": [
+         -0.0091,
+         0.0022
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 62,
+        "mean": -0.0106,
+        "ci95": [
+         -0.2661,
+         0.2555
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 62,
+        "mean": 0.0125,
+        "ci95": [
+         -0.0005,
+         0.0251
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 17,
+        "mean": -0.0682,
+        "ci95": [
+         -0.6147,
+         0.4959
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 17,
+        "mean": 0.0119,
+        "ci95": [
+         -0.0276,
+         0.0458
+        ]
+       }
+      }
+     }
+    },
+    "draftkings": {
+     "n_priced": 1125,
+     "overround": 0.0602,
+     "pinnacle_T_only": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 35,
+        "mean": -0.0452,
+        "ci95": [
+         -0.3164,
+         0.2437
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 35,
+        "mean": 0.0096,
+        "ci95": [
+         -0.0013,
+         0.021
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 7,
+        "mean": 0.0963,
+        "ci95": [
+         -0.6775,
+         0.7791
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 7,
+        "mean": 0.0255,
+        "ci95": [
+         0.0084,
+         0.0379
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 3,
+        "mean": 0.4767,
+        "ci95": [
+         -1.0,
+         1.26
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 3,
+        "mean": 0.0366,
+        "ci95": [
+         0.0249,
+         0.0442
+        ]
+       }
+      }
+     },
+     "logistic": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 235,
+        "mean": 0.1082,
+        "ci95": [
+         -0.019,
+         0.2358
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 235,
+        "mean": -0.0312,
+        "ci95": [
+         -0.0368,
+         -0.0261
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 95,
+        "mean": 0.1558,
+        "ci95": [
+         -0.0678,
+         0.3907
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 95,
+        "mean": -0.0308,
+        "ci95": [
+         -0.04,
+         -0.0214
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 38,
+        "mean": 0.4184,
+        "ci95": [
+         0.0236,
+         0.8448
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 38,
+        "mean": -0.0296,
+        "ci95": [
+         -0.0497,
+         -0.0109
+        ]
+       }
+      }
+     },
+     "lightgbm": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 41,
+        "mean": 0.0297,
+        "ci95": [
+         -0.2287,
+         0.2709
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 41,
+        "mean": 0.0088,
+        "ci95": [
+         0.0005,
+         0.0188
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 7,
+        "mean": 0.26,
+        "ci95": [
+         -0.65,
+         1.0057
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 7,
+        "mean": 0.0485,
+        "ci95": [
+         0.0283,
+         0.0797
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 2,
+        "mean": 1.215,
+        "ci95": [
+         1.17,
+         1.26
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 2,
+        "mean": 0.0346,
+        "ci95": [
+         0.0249,
+         0.0442
+        ]
+       }
+      }
+     },
+     "avg": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 103,
+        "mean": 0.1108,
+        "ci95": [
+         -0.0827,
+         0.3064
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 103,
+        "mean": -0.0156,
+        "ci95": [
+         -0.0235,
+         -0.0074
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 23,
+        "mean": 0.1017,
+        "ci95": [
+         -0.4039,
+         0.6426
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 23,
+        "mean": 0.0004,
+        "ci95": [
+         -0.0246,
+         0.0228
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 7,
+        "mean": -0.0171,
+        "ci95": [
+         -0.69,
+         0.7235
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 7,
+        "mean": 0.038,
+        "ci95": [
+         0.012,
+         0.0737
+        ]
+       }
+      }
+     }
+    },
+    "bet365": {
+     "n_priced": 93,
+     "overround": 0.0755,
+     "pinnacle_T_only": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 10,
+        "mean": -0.065,
+        "ci95": [
+         -0.647,
+         0.517
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 10,
+        "mean": 0.0961,
+        "ci95": [
+         0.0273,
+         0.1907
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 6,
+        "mean": -0.03,
+        "ci95": [
+         -0.7717,
+         0.72
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 6,
+        "mean": 0.1133,
+        "ci95": [
+         0.0206,
+         0.248
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 3,
+        "mean": -0.2667,
+        "ci95": [
+         -1.0,
+         1.2
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 3,
+        "mean": 0.2176,
+        "ci95": [
+         0.0954,
+         0.4471
+        ]
+       }
+      }
+     },
+     "logistic": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 14,
+        "mean": -0.0943,
+        "ci95": [
+         -0.5872,
+         0.4251
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 14,
+        "mean": -0.0056,
+        "ci95": [
+         -0.0291,
+         0.0218
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 3,
+        "mean": -0.25,
+        "ci95": [
+         -1.0,
+         1.25
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 3,
+        "mean": -0.0242,
+        "ci95": [
+         -0.0788,
+         0.0159
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 1,
+        "mean": -1.0,
+        "ci95": [
+         -1.0,
+         -1.0
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 1,
+        "mean": 0.0159,
+        "ci95": [
+         0.0159,
+         0.0159
+        ]
+       }
+      }
+     },
+     "lightgbm": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 9,
+        "mean": 0.0389,
+        "ci95": [
+         -0.6033,
+         0.68
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 9,
+        "mean": 0.1003,
+        "ci95": [
+         0.026,
+         0.2056
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 4,
+        "mean": 0.1125,
+        "ci95": [
+         -1.0,
+         1.225
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 4,
+        "mean": 0.1608,
+        "ci95": [
+         0.0203,
+         0.3592
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 3,
+        "mean": -0.2667,
+        "ci95": [
+         -1.0,
+         1.2
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 3,
+        "mean": 0.2176,
+        "ci95": [
+         0.0954,
+         0.4471
+        ]
+       }
+      }
+     },
+     "avg": {
+      "ev_gt_0.0": {
+       "return_per_$": {
+        "n": 7,
+        "mean": 0.0214,
+        "ci95": [
+         -0.6857,
+         0.7343
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 7,
+        "mean": 0.0328,
+        "ci95": [
+         0.0004,
+         0.0689
+        ]
+       }
+      },
+      "ev_gt_0.02": {
+       "return_per_$": {
+        "n": 4,
+        "mean": 0.1125,
+        "ci95": [
+         -1.0,
+         1.225
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 4,
+        "mean": 0.053,
+        "ci95": [
+         0.0031,
+         0.1028
+        ]
+       }
+      },
+      "ev_gt_0.04": {
+       "return_per_$": {
+        "n": 1,
+        "mean": -1.0,
+        "ci95": [
+         -1.0,
+         -1.0
+        ]
+       },
+       "clv_vs_pin_close": {
+        "n": 1,
+        "mean": 0.0159,
+        "ci95": [
+         0.0159,
+         0.0159
+        ]
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,109 @@
+{
+ "fixtures_book_rows": 2990,
+ "share_pinnacle_open_known_at_book_open": 0.347,
+ "median_book_open_minus_pin_open_hours": -2.05,
+ "draftkings|pin_known_only=False|fair=open_p1|ev>3%": {
+  "bets": 374,
+  "ret": 0.0391,
+  "ret_ci95": [
+   -0.0723,
+   0.1516
+  ],
+  "clv": 0.0591,
+  "clv_ci95": [
+   0.0459,
+   0.0726
+  ]
+ },
+ "draftkings|pin_known_only=False|fair=pb|ev>3%": {
+  "bets": 437,
+  "ret": 0.0934,
+  "ret_ci95": [
+   -0.02,
+   0.206
+  ],
+  "clv": 0.0526,
+  "clv_ci95": [
+   0.041,
+   0.0649
+  ]
+ },
+ "draftkings|pin_known_only=True|fair=open_p1|ev>3%": {
+  "bets": 46,
+  "ret": -0.1787,
+  "ret_ci95": [
+   -0.5,
+   0.1498
+  ],
+  "clv": -0.0758,
+  "clv_ci95": [
+   -0.1036,
+   -0.0492
+  ]
+ },
+ "draftkings|pin_known_only=True|fair=pb|ev>3%": {
+  "bets": 45,
+  "ret": 0.1518,
+  "ret_ci95": [
+   -0.1962,
+   0.5121
+  ],
+  "clv": -0.0728,
+  "clv_ci95": [
+   -0.1001,
+   -0.0469
+  ]
+ },
+ "betrivers|pin_known_only=False|fair=open_p1|ev>3%": {
+  "bets": 255,
+  "ret": -0.1018,
+  "ret_ci95": [
+   -0.2311,
+   0.0296
+  ],
+  "clv": -0.0129,
+  "clv_ci95": [
+   -0.0248,
+   0.0003
+  ]
+ },
+ "betrivers|pin_known_only=False|fair=pb|ev>3%": {
+  "bets": 337,
+  "ret": -0.0425,
+  "ret_ci95": [
+   -0.1606,
+   0.0758
+  ],
+  "clv": -0.0029,
+  "clv_ci95": [
+   -0.0136,
+   0.0076
+  ]
+ },
+ "betrivers|pin_known_only=True|fair=open_p1|ev>3%": {
+  "bets": 137,
+  "ret": -0.1345,
+  "ret_ci95": [
+   -0.3107,
+   0.0418
+  ],
+  "clv": -0.054,
+  "clv_ci95": [
+   -0.0671,
+   -0.0408
+  ]
+ },
+ "betrivers|pin_known_only=True|fair=pb|ev>3%": {
+  "bets": 153,
+  "ret": 0.0068,
+  "ret_ci95": [
+   -0.1684,
+   0.1865
+  ],
+  "clv": -0.0423,
+  "clv_ci95": [
+   -0.055,
+   -0.0295
+  ]
+ }
+}

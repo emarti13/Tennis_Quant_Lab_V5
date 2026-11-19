@@ -1,0 +1,177 @@
+{
+ "manifest": {
+  "run_utc": "2026-11-03T05:52:44.426275+00:00",
+  "command": "python research_tests/weather/run_weather.py /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl .v5_history_cache research_tests/travel/events.csv /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/weather /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/weatherout/results.json",
+  "git_commit": "c3850f48cbbf36ce0b5d0f5023ee8a5009bc215c",
+  "uncommitted_changes": true,
+  "python": "3.13.16",
+  "packages": {
+   "pandas": "3.0.5",
+   "numpy": "2.5.3",
+   "scikit-learn": "1.9.1",
+   "lightgbm": "4.7.0",
+   "scipy": "1.18.1"
+  },
+  "seeds": {
+   "orientation": 20261103,
+   "bootstrap": 20261103
+  },
+  "inputs": {
+   "joined": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl",
+    "sha256": "1888802164c3ff67906c3f818ca0762650bf8ba450f2d7ba03c318dbf31598bf"
+   },
+   "history": {
+    "path": ".v5_history_cache",
+    "sha256": "46c890566bc717ce3937640b00fba7de4a4b5de24254b9af7213eb0f10d33204"
+   },
+   "events": {
+    "path": "research_tests/travel/events.csv",
+    "sha256": "9952f8086071c667120deaae8300aab30e1eacfbae93b0d60c77fcb5177c0a6e"
+   },
+   "weather": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/weather",
+    "sha256": "f71f48330e464b7279f520dd54a175e14f8f30d8ba0c823a91bf7b267161ac02"
+   }
+  }
+ },
+ "rows": 22070,
+ "by_level": {
+  "ATP main": 17787,
+  "Challenger": 4283
+ },
+ "hot_share": 0.0928,
+ "windy_share": 0.0995,
+ "results": {
+  "PRIMARY M1 (heat x age, heat x height, wind x ace rate) minus M0, Betfair close, 2022-25": [
+   -1e-05,
+   -0.00027,
+   0.00025,
+   12466
+  ],
+  "older player (5+ yrs) in heat: won minus Betfair close (pts)": {
+   "all": [
+    -1.89,
+    -5.1,
+    1.2,
+    870
+   ],
+   "2016-21": [
+    -1.39,
+    -6.11,
+    3.32,
+    373
+   ]
+  },
+  "taller player (10+ cm) in heat: won minus Betfair close (pts)": {
+   "all": [
+    1.32,
+    -1.97,
+    4.74,
+    742
+   ],
+   "2016-21": [
+    -0.01,
+    -4.63,
+    4.62,
+    336
+   ]
+  },
+  "bigger server (ace rate +0.03) in wind: won minus Betfair close (pts)": {
+   "all": [
+    -2.06,
+    -4.93,
+    0.79,
+    925
+   ],
+   "2016-21": [
+    -2.54,
+    -6.66,
+    1.6,
+    447
+   ]
+  },
+  "MONEY bigger server (ace rate +0.03) in wind: won minus Betfair close (pts): back the other player at bf_close, 2022-25": {
+   "n": 478,
+   "roi": -0.0076,
+   "range": [
+    -0.1207,
+    0.1141
+   ]
+  },
+  "MONEY bigger server (ace rate +0.03) in wind: won minus Betfair close (pts): back the other player at b365_close, 2022-25": {
+   "n": 471,
+   "roi": -0.0208,
+   "range": [
+    -0.1303,
+    0.0922
+   ]
+  },
+  "control: older player in mild conditions (pts)": {
+   "all": [
+    -1.6,
+    -2.55,
+    -0.62,
+    7643
+   ],
+   "2016-21": [
+    -2.08,
+    -3.51,
+    -0.57,
+    3519
+   ]
+  },
+  "MONEY control: older player in mild conditions (pts): back the other player at bf_close, 2022-25": {
+   "n": 4124,
+   "roi": -0.0306,
+   "range": [
+    -0.0665,
+    0.0078
+   ]
+  },
+  "MONEY control: older player in mild conditions (pts): back the other player at b365_close, 2022-25": {
+   "n": 4065,
+   "roi": -0.0459,
+   "range": [
+    -0.0816,
+    -0.01
+   ]
+  }
+ },
+ "checks": {
+  "swap_source": {
+   "pass": true,
+   "columns_differing": [],
+   "labels_inverted": true,
+   "rows": 18419
+  },
+  "planted_edge": {
+   "pass": true,
+   "expected_improvement": 0.0023,
+   "found_delta": [
+    -0.00246,
+    -0.00355,
+    -0.0013
+   ],
+   "size": 0.15
+  },
+  "market_null": {
+   "pass": true,
+   "found_delta": [
+    0.00023,
+    2e-05,
+    0.00045
+   ]
+  },
+  "known_answers": {
+   "pass": true,
+   "market_log_loss": 0.59932,
+   "expected_range": [
+    0.55,
+    0.66
+   ],
+   "A_win_share": 0.4981
+  }
+ },
+ "checks_passed": true
+}

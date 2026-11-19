@@ -1,0 +1,390 @@
+{
+ "manifest": {
+  "run_utc": "2026-11-03T02:07:10.764025+00:00",
+  "command": "python research_tests/kalshi_takers/run_taker_side.py /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kalshi_raw.pkl /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kmarkets /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kalshi_takers/results.json",
+  "git_commit": "9bdbf3dc57cb1f05d003a95248181451530998a9",
+  "uncommitted_changes": true,
+  "python": "3.13.16",
+  "packages": {
+   "pandas": "3.0.5",
+   "numpy": "2.5.3",
+   "scikit-learn": "1.9.1",
+   "lightgbm": "4.7.0",
+   "scipy": "1.18.1"
+  },
+  "seeds": {
+   "bootstrap": 20261103
+  },
+  "inputs": {
+   "kalshi_raw": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kalshi_raw.pkl",
+    "sha256": "c8ae5deeaeacbe441808abfcecc87a5dab95b484c8f19521e9c71d2cca98ccdd"
+   },
+   "markets": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kmarkets",
+    "sha256": "e0f82539aeaccf801487e30bb86edf400b6f158332699f08b3fe8700202c4095"
+   }
+  }
+ },
+ "data": {
+  "trades": 1026460,
+  "markets": 3265,
+  "matches": 1636,
+  "first": "2026-08-11 00:00:01.114264+00:00",
+  "last": "2026-10-17 09:05:14.282989+00:00",
+  "taker_yes_share_of_contracts": 0.852
+ },
+ "results": {
+  "PRIMARY maker vs YES-buying takers, all series (after maker fee)": {
+   "cents_per_contract": 0.612,
+   "range_cents": [
+    -0.934,
+    2.134
+   ],
+   "n_trades": 889815,
+   "contracts": 189179200,
+   "matches": 1636
+  },
+  "maker vs NO-buying takers": {
+   "cents_per_contract": -1.554,
+   "range_cents": [
+    -3.488,
+    0.472
+   ],
+   "n_trades": 136645,
+   "contracts": 32754997,
+   "matches": 1588
+  },
+  "maker vs all takers": {
+   "cents_per_contract": 0.292,
+   "range_cents": [
+    -1.075,
+    1.557
+   ],
+   "n_trades": 1026460,
+   "contracts": 221934197,
+   "matches": 1636
+  },
+  "taker YES buyers, after taker fee": {
+   "cents_per_contract": -2.319,
+   "range_cents": [
+    -3.829,
+    -0.77
+   ],
+   "n_trades": 889815,
+   "contracts": 189179200,
+   "matches": 1636
+  },
+  "taker NO buyers, after taker fee": {
+   "cents_per_contract": 0.138,
+   "range_cents": [
+    -1.935,
+    2.089
+   ],
+   "n_trades": 136645,
+   "contracts": 32754997,
+   "matches": 1588
+  },
+  "maker vs YES takers, KXATPCHALLENGERMATCH": {
+   "cents_per_contract": 1.765,
+   "range_cents": [
+    -0.056,
+    3.554
+   ],
+   "n_trades": 261692,
+   "contracts": 41400352,
+   "matches": 794
+  },
+  "maker vs NO takers, KXATPCHALLENGERMATCH": {
+   "cents_per_contract": -1.144,
+   "range_cents": [
+    -3.231,
+    1.237
+   ],
+   "n_trades": 47649,
+   "contracts": 9774470,
+   "matches": 751
+  },
+  "maker vs YES takers, KXATPMATCH": {
+   "cents_per_contract": 0.551,
+   "range_cents": [
+    -2.128,
+    3.252
+   ],
+   "n_trades": 395473,
+   "contracts": 95026633,
+   "matches": 373
+  },
+  "maker vs NO takers, KXATPMATCH": {
+   "cents_per_contract": -1.634,
+   "range_cents": [
+    -5.02,
+    2.423
+   ],
+   "n_trades": 58518,
+   "contracts": 15831961,
+   "matches": 372
+  },
+  "maker vs YES takers, KXWTACHALLENGERMATCH": {
+   "cents_per_contract": 3.274,
+   "range_cents": [
+    -3.434,
+    8.417
+   ],
+   "n_trades": 8775,
+   "contracts": 1445564,
+   "matches": 71
+  },
+  "maker vs NO takers, KXWTACHALLENGERMATCH": {
+   "cents_per_contract": -3.317,
+   "range_cents": [
+    -14.081,
+    3.477
+   ],
+   "n_trades": 3857,
+   "contracts": 110015,
+   "matches": 67
+  },
+  "maker vs YES takers, KXWTAMATCH": {
+   "cents_per_contract": -0.281,
+   "range_cents": [
+    -2.502,
+    1.838
+   ],
+   "n_trades": 223875,
+   "contracts": 51306652,
+   "matches": 398
+  },
+  "maker vs NO takers, KXWTAMATCH": {
+   "cents_per_contract": -1.916,
+   "range_cents": [
+    -4.814,
+    1.195
+   ],
+   "n_trades": 26621,
+   "contracts": 7038550,
+   "matches": 398
+  },
+  "maker vs YES takers by YES price": {
+   "(0.0, 0.2]": {
+    "cents_per_contract": 5.886,
+    "range_cents": [
+     1.522,
+     8.689
+    ],
+    "n_trades": 96179,
+    "contracts": 24505663,
+    "matches": 353
+   },
+   "(0.2, 0.4]": {
+    "cents_per_contract": 6.708,
+    "range_cents": [
+     -0.168,
+     12.938
+    ],
+    "n_trades": 177302,
+    "contracts": 35556588,
+    "matches": 1061
+   },
+   "(0.4, 0.6]": {
+    "cents_per_contract": -2.367,
+    "range_cents": [
+     -4.752,
+     0.003
+    ],
+    "n_trades": 321162,
+    "contracts": 67437500,
+    "matches": 791
+   },
+   "(0.6, 0.8]": {
+    "cents_per_contract": -1.551,
+    "range_cents": [
+     -8.163,
+     6.293
+    ],
+    "n_trades": 212238,
+    "contracts": 39811955,
+    "matches": 1123
+   },
+   "(0.8, 1.0]": {
+    "cents_per_contract": -2.087,
+    "range_cents": [
+     -8.712,
+     5.804
+    ],
+    "n_trades": 82934,
+    "contracts": 21867493,
+    "matches": 438
+   }
+  },
+  "maker vs NO takers by YES price": {
+   "(0.0, 0.2]": {
+    "cents_per_contract": -7.786,
+    "range_cents": [
+     -9.02,
+     -6.274
+    ],
+    "n_trades": 28792,
+    "contracts": 8311127,
+    "matches": 339
+   },
+   "(0.2, 0.4]": {
+    "cents_per_contract": -7.269,
+    "range_cents": [
+     -14.342,
+     2.057
+    ],
+    "n_trades": 26155,
+    "contracts": 5451275,
+    "matches": 897
+   },
+   "(0.4, 0.6]": {
+    "cents_per_contract": -2.477,
+    "range_cents": [
+     -8.303,
+     2.795
+    ],
+    "n_trades": 38746,
+    "contracts": 8236280,
+    "matches": 713
+   },
+   "(0.6, 0.8]": {
+    "cents_per_contract": 8.876,
+    "range_cents": [
+     1.525,
+     14.29
+    ],
+    "n_trades": 24998,
+    "contracts": 4901985,
+    "matches": 847
+   },
+   "(0.8, 1.0]": {
+    "cents_per_contract": 5.178,
+    "range_cents": [
+     1.888,
+     7.449
+    ],
+    "n_trades": 17954,
+    "contracts": 5854329,
+    "matches": 274
+   }
+  },
+  "maker vs YES takers by hours before start": {
+   "[0.0, 1.0)": {
+    "cents_per_contract": 0.266,
+    "range_cents": [
+     -1.404,
+     1.978
+    ],
+    "n_trades": 340245,
+    "contracts": 86377953,
+    "matches": 1614
+   },
+   "[1.0, 6.0)": {
+    "cents_per_contract": 1.119,
+    "range_cents": [
+     -0.958,
+     3.219
+    ],
+    "n_trades": 368025,
+    "contracts": 77963477,
+    "matches": 1622
+   },
+   "[6.0, 24.0)": {
+    "cents_per_contract": -0.278,
+    "range_cents": [
+     -3.865,
+     3.326
+    ],
+    "n_trades": 153011,
+    "contracts": 21586691,
+    "matches": 1587
+   },
+   "[24.0, 10000.0)": {
+    "cents_per_contract": 3.541,
+    "range_cents": [
+     -1.395,
+     8.717
+    ],
+    "n_trades": 28534,
+    "contracts": 3251079,
+    "matches": 445
+   }
+  },
+  "maker vs YES takers by trade size (contracts)": {
+   "(0.0, 10.0]": {
+    "cents_per_contract": -0.096,
+    "range_cents": [
+     -1.266,
+     1.061
+    ],
+    "n_trades": 282551,
+    "contracts": 1025412,
+    "matches": 1635
+   },
+   "(10.0, 100.0]": {
+    "cents_per_contract": 0.802,
+    "range_cents": [
+     -0.41,
+     1.982
+    ],
+    "n_trades": 376121,
+    "contracts": 14681292,
+    "matches": 1630
+   },
+   "(100.0, 1000.0]": {
+    "cents_per_contract": 1.205,
+    "range_cents": [
+     -0.215,
+     2.483
+    ],
+    "n_trades": 191890,
+    "contracts": 63017065,
+    "matches": 1604
+   },
+   "(1000.0, 1000000000.0]": {
+    "cents_per_contract": 0.255,
+    "range_cents": [
+     -1.687,
+     2.204
+    ],
+    "n_trades": 39253,
+    "contracts": 110455431,
+    "matches": 1254
+   }
+  }
+ },
+ "checks": {
+  "market_null": {
+   "pass": true,
+   "found": {
+    "cents_per_contract": -0.261,
+    "range_cents": [
+     -0.665,
+     0.134
+    ],
+    "n_trades": 889815,
+    "contracts": 189179200,
+    "matches": 1636
+   },
+   "expected_cents": -0.341
+  },
+  "planted_shift_3pts": {
+   "pass": true,
+   "found": {
+    "cents_per_contract": 2.636,
+    "range_cents": [
+     2.172,
+     3.067
+    ],
+    "n_trades": 889815,
+    "contracts": 189179200,
+    "matches": 1636
+   },
+   "expected_cents": 2.659
+  },
+  "events_with_two_markets": 1629,
+  "per_market_maker_pnl_mean_cents": 0.364
+ },
+ "checks_passed": true
+}

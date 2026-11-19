@@ -1,0 +1,5715 @@
+{
+ "meta": {
+  "fixtures_ok_pre_seal": 12447,
+  "fixtures_with_ml_result": 7158,
+  "fixtures_with_game_scores": 6841,
+  "price_point_months": [
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-10"
+  ],
+  "bootstrap": "2000 resamples by fixture",
+  "seal": "2026-10-13 00:00:00+00:00"
+ },
+ "test1_moneyline": {
+  "t24h|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 107,
+     "fixtures": 107,
+     "mean": -0.0118,
+     "lo": -0.2588,
+     "hi": 0.243
+    },
+    "H1_JanJun": {
+     "n": 90,
+     "fixtures": 90,
+     "mean": 0.0516,
+     "lo": -0.2094,
+     "hi": 0.2941
+    },
+    "H2_JulOct12": {
+     "n": 17,
+     "fixtures": 17,
+     "mean": -0.3471,
+     "lo": -1.0,
+     "hi": 0.4559
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 51,
+     "fixtures": 51,
+     "mean": 0.5443,
+     "lo": -0.092,
+     "hi": 1.2375
+    },
+    "H1_JanJun": {
+     "n": 38,
+     "fixtures": 38,
+     "mean": 0.3639,
+     "lo": -0.3014,
+     "hi": 1.1487
+    },
+    "H2_JulOct12": {
+     "n": 13,
+     "fixtures": 13,
+     "mean": 1.0715,
+     "lo": -0.2571,
+     "hi": 2.7508
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 152,
+     "fixtures": 152,
+     "mean": 0.099,
+     "lo": -0.1736,
+     "hi": 0.398
+    },
+    "H1_JanJun": {
+     "n": 121,
+     "fixtures": 121,
+     "mean": 0.136,
+     "lo": -0.1537,
+     "hi": 0.4443
+    },
+    "H2_JulOct12": {
+     "n": 31,
+     "fixtures": 31,
+     "mean": -0.0452,
+     "lo": -0.6616,
+     "hi": 0.7542
+    }
+   },
+   "mean_ev_claimed": 0.0221
+  },
+  "t24h|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 31,
+     "fixtures": 31,
+     "mean": -0.1461,
+     "lo": -0.6107,
+     "hi": 0.4
+    },
+    "H1_JanJun": {
+     "n": 26,
+     "fixtures": 26,
+     "mean": -0.1819,
+     "lo": -0.6331,
+     "hi": 0.324
+    },
+    "H2_JulOct12": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": 0.04,
+     "lo": -1.0,
+     "hi": 2.12
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 25,
+     "fixtures": 25,
+     "mean": 0.9296,
+     "lo": -0.1913,
+     "hi": 2.2553
+    },
+    "H1_JanJun": {
+     "n": 20,
+     "fixtures": 20,
+     "mean": 0.717,
+     "lo": -0.388,
+     "hi": 2.0681
+    },
+    "H2_JulOct12": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": 1.78,
+     "lo": -1.0,
+     "hi": 5.82
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 53,
+     "fixtures": 53,
+     "mean": 0.4096,
+     "lo": -0.1978,
+     "hi": 1.137
+    },
+    "H1_JanJun": {
+     "n": 43,
+     "fixtures": 43,
+     "mean": 0.2933,
+     "lo": -0.3047,
+     "hi": 1.0226
+    },
+    "H2_JulOct12": {
+     "n": 10,
+     "fixtures": 10,
+     "mean": 0.91,
+     "lo": -1.0,
+     "hi": 3.2
+    }
+   },
+   "mean_ev_claimed": 0.0501
+  },
+  "t24h|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 12,
+     "fixtures": 12,
+     "mean": -0.3417,
+     "lo": -1.0,
+     "hi": 0.3333
+    },
+    "H1_JanJun": {
+     "n": 10,
+     "fixtures": 10,
+     "mean": -0.21,
+     "lo": -1.0,
+     "hi": 0.5851
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 17,
+     "fixtures": 17,
+     "mean": 1.3412,
+     "lo": -0.1884,
+     "hi": 3.166
+    },
+    "H1_JanJun": {
+     "n": 13,
+     "fixtures": 13,
+     "mean": 0.9923,
+     "lo": -0.5477,
+     "hi": 2.9231
+    },
+    "H2_JulOct12": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 2.475,
+     "lo": -1.0,
+     "hi": 6.575
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 28,
+     "fixtures": 28,
+     "mean": 0.7036,
+     "lo": -0.2675,
+     "hi": 1.9787
+    },
+    "H1_JanJun": {
+     "n": 22,
+     "fixtures": 22,
+     "mean": 0.5364,
+     "lo": -0.4388,
+     "hi": 1.744
+    },
+    "H2_JulOct12": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": 1.3167,
+     "lo": -1.0,
+     "hi": 4.6833
+    }
+   },
+   "mean_ev_claimed": 0.0712
+  },
+  "t24h|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 10,
+     "fixtures": 10,
+     "mean": 2.064,
+     "lo": -0.0574,
+     "hi": 4.6927
+    },
+    "H1_JanJun": {
+     "n": 8,
+     "fixtures": 8,
+     "mean": 1.0925,
+     "lo": -0.7475,
+     "hi": 3.8425
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 5.95,
+     "lo": 2.8,
+     "hi": 9.1
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 15,
+     "fixtures": 15,
+     "mean": 1.0427,
+     "lo": -0.612,
+     "hi": 2.9828
+    },
+    "H1_JanJun": {
+     "n": 12,
+     "fixtures": 12,
+     "mean": 0.395,
+     "lo": -1.0,
+     "hi": 2.3967
+    },
+    "H2_JulOct12": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": 3.6333,
+     "lo": -1.0,
+     "hi": 9.1
+    }
+   },
+   "mean_ev_claimed": 0.089
+  },
+  "t12h|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 279,
+     "fixtures": 279,
+     "mean": -0.0997,
+     "lo": -0.2428,
+     "hi": 0.0445
+    },
+    "H1_JanJun": {
+     "n": 212,
+     "fixtures": 212,
+     "mean": -0.0933,
+     "lo": -0.2527,
+     "hi": 0.0781
+    },
+    "H2_JulOct12": {
+     "n": 67,
+     "fixtures": 67,
+     "mean": -0.1201,
+     "lo": -0.41,
+     "hi": 0.1748
+    },
+    "fam_CHALLENGER": {
+     "n": 138,
+     "fixtures": 138,
+     "mean": -0.0743,
+     "lo": -0.2681,
+     "hi": 0.1249
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 128,
+     "fixtures": 128,
+     "mean": 0.0727,
+     "lo": -0.174,
+     "hi": 0.3833
+    },
+    "H1_JanJun": {
+     "n": 105,
+     "fixtures": 105,
+     "mean": -0.0122,
+     "lo": -0.2802,
+     "hi": 0.2663
+    },
+    "H2_JulOct12": {
+     "n": 23,
+     "fixtures": 23,
+     "mean": 0.4604,
+     "lo": -0.3165,
+     "hi": 1.4215
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 7,
+     "fixtures": 7,
+     "mean": -0.4657,
+     "lo": -1.0,
+     "hi": 0.2571
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 7,
+     "fixtures": 7,
+     "mean": -0.4657,
+     "lo": -1.0,
+     "hi": 0.1943
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 397,
+     "fixtures": 396,
+     "mean": -0.0489,
+     "lo": -0.1809,
+     "hi": 0.0889
+    },
+    "H1_JanJun": {
+     "n": 304,
+     "fixtures": 304,
+     "mean": -0.0677,
+     "lo": -0.2112,
+     "hi": 0.0747
+    },
+    "H2_JulOct12": {
+     "n": 93,
+     "fixtures": 92,
+     "mean": 0.0125,
+     "lo": -0.2819,
+     "hi": 0.3315
+    },
+    "fam_ATP": {
+     "n": 141,
+     "fixtures": 141,
+     "mean": 0.0538,
+     "lo": -0.1932,
+     "hi": 0.3132
+    },
+    "fam_CHALLENGER": {
+     "n": 177,
+     "fixtures": 176,
+     "mean": -0.0455,
+     "lo": -0.2205,
+     "hi": 0.1433
+    }
+   },
+   "mean_ev_claimed": 0.0301
+  },
+  "t12h|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 87,
+     "fixtures": 87,
+     "mean": -0.2177,
+     "lo": -0.463,
+     "hi": 0.0472
+    },
+    "H1_JanJun": {
+     "n": 68,
+     "fixtures": 68,
+     "mean": -0.1841,
+     "lo": -0.473,
+     "hi": 0.1119
+    },
+    "H2_JulOct12": {
+     "n": 19,
+     "fixtures": 19,
+     "mean": -0.3379,
+     "lo": -0.8526,
+     "hi": 0.3153
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 55,
+     "fixtures": 55,
+     "mean": 0.1671,
+     "lo": -0.291,
+     "hi": 0.6885
+    },
+    "H1_JanJun": {
+     "n": 48,
+     "fixtures": 48,
+     "mean": 0.0948,
+     "lo": -0.3159,
+     "hi": 0.5671
+    },
+    "H2_JulOct12": {
+     "n": 7,
+     "fixtures": 7,
+     "mean": 0.6629,
+     "lo": -1.0,
+     "hi": 3.3771
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": -0.3767,
+     "lo": -1.0,
+     "hi": 0.3567
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": -0.3767,
+     "lo": -1.0,
+     "hi": 0.3567
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 142,
+     "fixtures": 142,
+     "mean": -0.0599,
+     "lo": -0.301,
+     "hi": 0.1989
+    },
+    "H1_JanJun": {
+     "n": 112,
+     "fixtures": 112,
+     "mean": -0.0578,
+     "lo": -0.3057,
+     "hi": 0.2142
+    },
+    "H2_JulOct12": {
+     "n": 30,
+     "fixtures": 30,
+     "mean": -0.068,
+     "lo": -0.6854,
+     "hi": 0.724
+    }
+   },
+   "mean_ev_claimed": 0.0703
+  },
+  "t12h|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 32,
+     "fixtures": 32,
+     "mean": -0.2516,
+     "lo": -0.6819,
+     "hi": 0.236
+    },
+    "H1_JanJun": {
+     "n": 26,
+     "fixtures": 26,
+     "mean": -0.1865,
+     "lo": -0.6893,
+     "hi": 0.3598
+    },
+    "H2_JulOct12": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": -0.5333,
+     "lo": -1.0,
+     "hi": 0.4
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 31,
+     "fixtures": 31,
+     "mean": 0.1242,
+     "lo": -0.4394,
+     "hi": 0.902
+    },
+    "H1_JanJun": {
+     "n": 27,
+     "fixtures": 27,
+     "mean": -0.1404,
+     "lo": -0.5745,
+     "hi": 0.3541
+    },
+    "H2_JulOct12": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 1.91,
+     "lo": -1.0,
+     "hi": 6.125
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -0.56,
+     "lo": -1.0,
+     "hi": 0.32
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -0.56,
+     "lo": -1.0,
+     "hi": 0.32
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 65,
+     "fixtures": 65,
+     "mean": -0.1,
+     "lo": -0.4653,
+     "hi": 0.3198
+    },
+    "H1_JanJun": {
+     "n": 51,
+     "fixtures": 51,
+     "mean": -0.1792,
+     "lo": -0.5198,
+     "hi": 0.1714
+    },
+    "H2_JulOct12": {
+     "n": 14,
+     "fixtures": 14,
+     "mean": 0.1886,
+     "lo": -0.8429,
+     "hi": 1.7415
+    }
+   },
+   "mean_ev_claimed": 0.1195
+  },
+  "t12h|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 15,
+     "fixtures": 15,
+     "mean": -0.172,
+     "lo": -0.8271,
+     "hi": 0.588
+    },
+    "H1_JanJun": {
+     "n": 13,
+     "fixtures": 13,
+     "mean": -0.0446,
+     "lo": -0.8,
+     "hi": 0.8108
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 23,
+     "fixtures": 23,
+     "mean": 0.1526,
+     "lo": -0.58,
+     "hi": 1.1859
+    },
+    "H1_JanJun": {
+     "n": 21,
+     "fixtures": 21,
+     "mean": -0.19,
+     "lo": -0.681,
+     "hi": 0.3619
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 3.75,
+     "lo": -1.0,
+     "hi": 8.5
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 39,
+     "fixtures": 39,
+     "mean": -0.0018,
+     "lo": -0.5426,
+     "hi": 0.6356
+    },
+    "H1_JanJun": {
+     "n": 33,
+     "fixtures": 33,
+     "mean": -0.1082,
+     "lo": -0.5436,
+     "hi": 0.3803
+    },
+    "H2_JulOct12": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": 0.5833,
+     "lo": -1.0,
+     "hi": 3.75
+    }
+   },
+   "mean_ev_claimed": 0.1691
+  },
+  "t6h|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 438,
+     "fixtures": 438,
+     "mean": 0.0371,
+     "lo": -0.094,
+     "hi": 0.1638
+    },
+    "H1_JanJun": {
+     "n": 308,
+     "fixtures": 308,
+     "mean": 0.0672,
+     "lo": -0.0824,
+     "hi": 0.2311
+    },
+    "H2_JulOct12": {
+     "n": 130,
+     "fixtures": 130,
+     "mean": -0.0342,
+     "lo": -0.2403,
+     "hi": 0.187
+    },
+    "fam_CHALLENGER": {
+     "n": 274,
+     "fixtures": 274,
+     "mean": 0.0158,
+     "lo": -0.1514,
+     "hi": 0.1897
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 163,
+     "fixtures": 163,
+     "mean": 0.4132,
+     "lo": -0.0165,
+     "hi": 0.986
+    },
+    "H1_JanJun": {
+     "n": 119,
+     "fixtures": 119,
+     "mean": 0.5431,
+     "lo": -0.032,
+     "hi": 1.2527
+    },
+    "H2_JulOct12": {
+     "n": 44,
+     "fixtures": 44,
+     "mean": 0.062,
+     "lo": -0.4097,
+     "hi": 0.6233
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 11,
+     "fixtures": 11,
+     "mean": -0.1527,
+     "lo": -0.7955,
+     "hi": 0.5065
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 11,
+     "fixtures": 11,
+     "mean": -0.1527,
+     "lo": -0.7955,
+     "hi": 0.4946
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 585,
+     "fixtures": 585,
+     "mean": 0.1131,
+     "lo": -0.0437,
+     "hi": 0.2845
+    },
+    "H1_JanJun": {
+     "n": 410,
+     "fixtures": 410,
+     "mean": 0.1746,
+     "lo": -0.0179,
+     "hi": 0.4179
+    },
+    "H2_JulOct12": {
+     "n": 175,
+     "fixtures": 175,
+     "mean": -0.0311,
+     "lo": -0.244,
+     "hi": 0.1795
+    },
+    "fam_ATP": {
+     "n": 165,
+     "fixtures": 165,
+     "mean": 0.2597,
+     "lo": -0.105,
+     "hi": 0.7672
+    },
+    "fam_CHALLENGER": {
+     "n": 317,
+     "fixtures": 317,
+     "mean": 0.0369,
+     "lo": -0.125,
+     "hi": 0.2086
+    },
+    "fam_WTA": {
+     "n": 103,
+     "fixtures": 103,
+     "mean": 0.1124,
+     "lo": -0.1901,
+     "hi": 0.4358
+    }
+   },
+   "mean_ev_claimed": 0.0285
+  },
+  "t6h|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 160,
+     "fixtures": 160,
+     "mean": -0.0465,
+     "lo": -0.2505,
+     "hi": 0.1769
+    },
+    "H1_JanJun": {
+     "n": 117,
+     "fixtures": 117,
+     "mean": -0.0691,
+     "lo": -0.3368,
+     "hi": 0.2244
+    },
+    "H2_JulOct12": {
+     "n": 43,
+     "fixtures": 43,
+     "mean": 0.0151,
+     "lo": -0.3684,
+     "hi": 0.413
+    },
+    "fam_CHALLENGER": {
+     "n": 108,
+     "fixtures": 108,
+     "mean": 0.0192,
+     "lo": -0.2561,
+     "hi": 0.32
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 69,
+     "fixtures": 69,
+     "mean": 0.6574,
+     "lo": -0.1699,
+     "hi": 1.9085
+    },
+    "H1_JanJun": {
+     "n": 48,
+     "fixtures": 48,
+     "mean": 0.825,
+     "lo": -0.2565,
+     "hi": 2.4531
+    },
+    "H2_JulOct12": {
+     "n": 21,
+     "fixtures": 21,
+     "mean": 0.2743,
+     "lo": -0.5443,
+     "hi": 1.2954
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.155,
+     "lo": -1.0,
+     "hi": 1.31
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.155,
+     "lo": -1.0,
+     "hi": 1.31
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 226,
+     "fixtures": 226,
+     "mean": 0.1234,
+     "lo": -0.1847,
+     "hi": 0.5255
+    },
+    "H1_JanJun": {
+     "n": 162,
+     "fixtures": 162,
+     "mean": 0.1699,
+     "lo": -0.2237,
+     "hi": 0.7421
+    },
+    "H2_JulOct12": {
+     "n": 64,
+     "fixtures": 64,
+     "mean": 0.0055,
+     "lo": -0.3552,
+     "hi": 0.391
+    },
+    "fam_CHALLENGER": {
+     "n": 133,
+     "fixtures": 133,
+     "mean": 0.1049,
+     "lo": -0.1566,
+     "hi": 0.4059
+    }
+   },
+   "mean_ev_claimed": 0.0618
+  },
+  "t6h|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 66,
+     "fixtures": 66,
+     "mean": -0.4555,
+     "lo": -0.7427,
+     "hi": -0.1379
+    },
+    "H1_JanJun": {
+     "n": 50,
+     "fixtures": 50,
+     "mean": -0.5592,
+     "lo": -0.866,
+     "hi": -0.2052
+    },
+    "H2_JulOct12": {
+     "n": 16,
+     "fixtures": 16,
+     "mean": -0.1312,
+     "lo": -0.8,
+     "hi": 0.7001
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 46,
+     "fixtures": 46,
+     "mean": 0.8715,
+     "lo": -0.2655,
+     "hi": 2.5776
+    },
+    "H1_JanJun": {
+     "n": 38,
+     "fixtures": 38,
+     "mean": 1.0087,
+     "lo": -0.3774,
+     "hi": 3.1786
+    },
+    "H2_JulOct12": {
+     "n": 8,
+     "fixtures": 8,
+     "mean": 0.22,
+     "lo": -1.0,
+     "hi": 1.3638
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.125,
+     "lo": -1.0,
+     "hi": 1.25
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.125,
+     "lo": -1.0,
+     "hi": 1.25
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 109,
+     "fixtures": 109,
+     "mean": 0.0537,
+     "lo": -0.477,
+     "hi": 0.8028
+    },
+    "H1_JanJun": {
+     "n": 86,
+     "fixtures": 86,
+     "mean": 0.1159,
+     "lo": -0.5423,
+     "hi": 1.0503
+    },
+    "H2_JulOct12": {
+     "n": 23,
+     "fixtures": 23,
+     "mean": -0.1791,
+     "lo": -0.7235,
+     "hi": 0.3988
+    }
+   },
+   "mean_ev_claimed": 0.0968
+  },
+  "t6h|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 30,
+     "fixtures": 30,
+     "mean": -0.1713,
+     "lo": -0.7013,
+     "hi": 0.4321
+    },
+    "H1_JanJun": {
+     "n": 22,
+     "fixtures": 22,
+     "mean": -0.3336,
+     "lo": -0.8591,
+     "hi": 0.3184
+    },
+    "H2_JulOct12": {
+     "n": 8,
+     "fixtures": 8,
+     "mean": 0.275,
+     "lo": -1.0,
+     "hi": 1.5312
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 30,
+     "fixtures": 30,
+     "mean": 1.2817,
+     "lo": -0.4211,
+     "hi": 3.8784
+    },
+    "H1_JanJun": {
+     "n": 27,
+     "fixtures": 27,
+     "mean": 1.4141,
+     "lo": -0.4015,
+     "hi": 4.2534
+    },
+    "H2_JulOct12": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": 0.09,
+     "lo": -1.0,
+     "hi": 2.27
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 57,
+     "fixtures": 57,
+     "mean": 0.5809,
+     "lo": -0.3744,
+     "hi": 2.0254
+    },
+    "H1_JanJun": {
+     "n": 48,
+     "fixtures": 48,
+     "mean": 0.6633,
+     "lo": -0.4338,
+     "hi": 2.2674
+    },
+    "H2_JulOct12": {
+     "n": 9,
+     "fixtures": 9,
+     "mean": 0.1411,
+     "lo": -1.0,
+     "hi": 1.2822
+    }
+   },
+   "mean_ev_claimed": 0.1403
+  },
+  "t1h|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 497,
+     "fixtures": 497,
+     "mean": -0.0277,
+     "lo": -0.1508,
+     "hi": 0.1
+    },
+    "H1_JanJun": {
+     "n": 354,
+     "fixtures": 354,
+     "mean": -0.0107,
+     "lo": -0.1529,
+     "hi": 0.1289
+    },
+    "H2_JulOct12": {
+     "n": 143,
+     "fixtures": 143,
+     "mean": -0.0697,
+     "lo": -0.3044,
+     "hi": 0.1953
+    },
+    "fam_ATP": {
+     "n": 141,
+     "fixtures": 141,
+     "mean": 0.078,
+     "lo": -0.1779,
+     "hi": 0.3544
+    },
+    "fam_CHALLENGER": {
+     "n": 273,
+     "fixtures": 273,
+     "mean": -0.004,
+     "lo": -0.1726,
+     "hi": 0.1693
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 203,
+     "fixtures": 203,
+     "mean": 0.0508,
+     "lo": -0.1826,
+     "hi": 0.3055
+    },
+    "H1_JanJun": {
+     "n": 163,
+     "fixtures": 163,
+     "mean": 0.0104,
+     "lo": -0.2368,
+     "hi": 0.2901
+    },
+    "H2_JulOct12": {
+     "n": 40,
+     "fixtures": 40,
+     "mean": 0.2154,
+     "lo": -0.3378,
+     "hi": 0.9141
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 12,
+     "fixtures": 12,
+     "mean": -0.2483,
+     "lo": -0.8167,
+     "hi": 0.3301
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 12,
+     "fixtures": 12,
+     "mean": -0.2483,
+     "lo": -0.8167,
+     "hi": 0.3342
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 668,
+     "fixtures": 666,
+     "mean": 0.0064,
+     "lo": -0.1033,
+     "hi": 0.126
+    },
+    "H1_JanJun": {
+     "n": 489,
+     "fixtures": 487,
+     "mean": 0.022,
+     "lo": -0.1083,
+     "hi": 0.1576
+    },
+    "H2_JulOct12": {
+     "n": 179,
+     "fixtures": 179,
+     "mean": -0.0361,
+     "lo": -0.2509,
+     "hi": 0.19
+    },
+    "fam_ATP": {
+     "n": 218,
+     "fixtures": 218,
+     "mean": 0.0087,
+     "lo": -0.1834,
+     "hi": 0.2136
+    },
+    "fam_CHALLENGER": {
+     "n": 326,
+     "fixtures": 324,
+     "mean": 0.0466,
+     "lo": -0.1086,
+     "hi": 0.2133
+    },
+    "fam_WTA": {
+     "n": 124,
+     "fixtures": 124,
+     "mean": -0.1032,
+     "lo": -0.3749,
+     "hi": 0.1816
+    }
+   },
+   "mean_ev_claimed": 0.0373
+  },
+  "t1h|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 188,
+     "fixtures": 188,
+     "mean": -0.0685,
+     "lo": -0.3048,
+     "hi": 0.194
+    },
+    "H1_JanJun": {
+     "n": 138,
+     "fixtures": 138,
+     "mean": 0.017,
+     "lo": -0.2683,
+     "hi": 0.3181
+    },
+    "H2_JulOct12": {
+     "n": 50,
+     "fixtures": 50,
+     "mean": -0.3044,
+     "lo": -0.7259,
+     "hi": 0.1731
+    },
+    "fam_CHALLENGER": {
+     "n": 109,
+     "fixtures": 109,
+     "mean": 0.0898,
+     "lo": -0.228,
+     "hi": 0.4475
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 94,
+     "fixtures": 94,
+     "mean": -0.0141,
+     "lo": -0.3555,
+     "hi": 0.3638
+    },
+    "H1_JanJun": {
+     "n": 81,
+     "fixtures": 81,
+     "mean": -0.1044,
+     "lo": -0.4294,
+     "hi": 0.3072
+    },
+    "H2_JulOct12": {
+     "n": 13,
+     "fixtures": 13,
+     "mean": 0.5485,
+     "lo": -0.4885,
+     "hi": 1.8562
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 7,
+     "fixtures": 7,
+     "mean": -0.3643,
+     "lo": -1.0,
+     "hi": 0.5857
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 7,
+     "fixtures": 7,
+     "mean": -0.3643,
+     "lo": -1.0,
+     "hi": 0.5786
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 274,
+     "fixtures": 273,
+     "mean": -0.0692,
+     "lo": -0.2549,
+     "hi": 0.1286
+    },
+    "H1_JanJun": {
+     "n": 209,
+     "fixtures": 208,
+     "mean": -0.0279,
+     "lo": -0.2537,
+     "hi": 0.2056
+    },
+    "H2_JulOct12": {
+     "n": 65,
+     "fixtures": 65,
+     "mean": -0.2022,
+     "lo": -0.5665,
+     "hi": 0.2151
+    },
+    "fam_CHALLENGER": {
+     "n": 142,
+     "fixtures": 141,
+     "mean": 0.1435,
+     "lo": -0.135,
+     "hi": 0.4299
+    }
+   },
+   "mean_ev_claimed": 0.0796
+  },
+  "t1h|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 83,
+     "fixtures": 83,
+     "mean": -0.2069,
+     "lo": -0.5951,
+     "hi": 0.2313
+    },
+    "H1_JanJun": {
+     "n": 62,
+     "fixtures": 62,
+     "mean": -0.1624,
+     "lo": -0.6007,
+     "hi": 0.3333
+    },
+    "H2_JulOct12": {
+     "n": 21,
+     "fixtures": 21,
+     "mean": -0.3381,
+     "lo": -1.0,
+     "hi": 0.681
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 57,
+     "fixtures": 57,
+     "mean": 0.2693,
+     "lo": -0.2083,
+     "hi": 0.832
+    },
+    "H1_JanJun": {
+     "n": 49,
+     "fixtures": 49,
+     "mean": 0.1553,
+     "lo": -0.3316,
+     "hi": 0.7396
+    },
+    "H2_JulOct12": {
+     "n": 8,
+     "fixtures": 8,
+     "mean": 0.9675,
+     "lo": -0.5488,
+     "hi": 2.8215
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": -0.2583,
+     "lo": -1.0,
+     "hi": 0.4917
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": -0.2583,
+     "lo": -1.0,
+     "hi": 0.5
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 138,
+     "fixtures": 138,
+     "mean": -0.0387,
+     "lo": -0.3416,
+     "hi": 0.2854
+    },
+    "H1_JanJun": {
+     "n": 107,
+     "fixtures": 107,
+     "mean": -0.0087,
+     "lo": -0.3423,
+     "hi": 0.3968
+    },
+    "H2_JulOct12": {
+     "n": 31,
+     "fixtures": 31,
+     "mean": -0.1423,
+     "lo": -0.74,
+     "hi": 0.5752
+    }
+   },
+   "mean_ev_claimed": 0.1292
+  },
+  "t1h|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 54,
+     "fixtures": 54,
+     "mean": -0.155,
+     "lo": -0.6282,
+     "hi": 0.3926
+    },
+    "H1_JanJun": {
+     "n": 36,
+     "fixtures": 36,
+     "mean": 0.0592,
+     "lo": -0.5514,
+     "hi": 0.7378
+    },
+    "H2_JulOct12": {
+     "n": 18,
+     "fixtures": 18,
+     "mean": -0.5833,
+     "lo": -1.0,
+     "hi": 0.25
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 36,
+     "fixtures": 36,
+     "mean": 0.6508,
+     "lo": -0.0537,
+     "hi": 1.4462
+    },
+    "H1_JanJun": {
+     "n": 34,
+     "fixtures": 34,
+     "mean": 0.5215,
+     "lo": -0.1656,
+     "hi": 1.2663
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 2.85,
+     "lo": -1.0,
+     "hi": 6.7
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 87,
+     "fixtures": 87,
+     "mean": 0.093,
+     "lo": -0.3116,
+     "hi": 0.5537
+    },
+    "H1_JanJun": {
+     "n": 68,
+     "fixtures": 68,
+     "mean": 0.2851,
+     "lo": -0.1841,
+     "hi": 0.7996
+    },
+    "H2_JulOct12": {
+     "n": 19,
+     "fixtures": 19,
+     "mean": -0.5947,
+     "lo": -1.0,
+     "hi": 0.2158
+    }
+   },
+   "mean_ev_claimed": 0.1764
+  },
+  "close|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 684,
+     "fixtures": 684,
+     "mean": 0.0062,
+     "lo": -0.0985,
+     "hi": 0.1083
+    },
+    "H1_JanJun": {
+     "n": 492,
+     "fixtures": 492,
+     "mean": 0.0548,
+     "lo": -0.0665,
+     "hi": 0.1837
+    },
+    "H2_JulOct12": {
+     "n": 192,
+     "fixtures": 192,
+     "mean": -0.1184,
+     "lo": -0.2793,
+     "hi": 0.0509
+    },
+    "fam_ATP": {
+     "n": 226,
+     "fixtures": 226,
+     "mean": 0.0017,
+     "lo": -0.1755,
+     "hi": 0.1901
+    },
+    "fam_CHALLENGER": {
+     "n": 301,
+     "fixtures": 301,
+     "mean": -0.0173,
+     "lo": -0.1694,
+     "hi": 0.1346
+    },
+    "fam_WTA": {
+     "n": 157,
+     "fixtures": 157,
+     "mean": 0.0576,
+     "lo": -0.1524,
+     "hi": 0.3008
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 1092,
+     "fixtures": 1092,
+     "mean": 0.0965,
+     "lo": -0.0142,
+     "hi": 0.212
+    },
+    "H1_JanJun": {
+     "n": 872,
+     "fixtures": 872,
+     "mean": 0.1346,
+     "lo": 0.0096,
+     "hi": 0.2785
+    },
+    "H2_JulOct12": {
+     "n": 220,
+     "fixtures": 220,
+     "mean": -0.0546,
+     "lo": -0.2461,
+     "hi": 0.1577
+    },
+    "fam_ATP": {
+     "n": 362,
+     "fixtures": 362,
+     "mean": 0.2342,
+     "lo": 0.0014,
+     "hi": 0.5081
+    },
+    "fam_CHALLENGER": {
+     "n": 463,
+     "fixtures": 463,
+     "mean": 0.0425,
+     "lo": -0.0824,
+     "hi": 0.1799
+    },
+    "fam_WTA": {
+     "n": 267,
+     "fixtures": 267,
+     "mean": 0.0034,
+     "lo": -0.1649,
+     "hi": 0.2058
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 13,
+     "fixtures": 13,
+     "mean": -0.6285,
+     "lo": -1.0,
+     "hi": -0.2208
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 13,
+     "fixtures": 13,
+     "mean": -0.6285,
+     "lo": -1.0,
+     "hi": -0.1877
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 1585,
+     "fixtures": 1573,
+     "mean": 0.0459,
+     "lo": -0.0354,
+     "hi": 0.1375
+    },
+    "H1_JanJun": {
+     "n": 1209,
+     "fixtures": 1198,
+     "mean": 0.0887,
+     "lo": -0.0091,
+     "hi": 0.2044
+    },
+    "H2_JulOct12": {
+     "n": 376,
+     "fixtures": 375,
+     "mean": -0.0919,
+     "lo": -0.2175,
+     "hi": 0.0471
+    },
+    "fam_ATP": {
+     "n": 512,
+     "fixtures": 508,
+     "mean": 0.1237,
+     "lo": -0.0434,
+     "hi": 0.343
+    },
+    "fam_CHALLENGER": {
+     "n": 706,
+     "fixtures": 701,
+     "mean": 0.0225,
+     "lo": -0.0785,
+     "hi": 0.1265
+    },
+    "fam_WTA": {
+     "n": 367,
+     "fixtures": 364,
+     "mean": -0.0178,
+     "lo": -0.1604,
+     "hi": 0.1381
+    }
+   },
+   "mean_ev_claimed": 0.0498
+  },
+  "close|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 330,
+     "fixtures": 330,
+     "mean": -0.0222,
+     "lo": -0.1723,
+     "hi": 0.1368
+    },
+    "H1_JanJun": {
+     "n": 235,
+     "fixtures": 235,
+     "mean": 0.0232,
+     "lo": -0.1588,
+     "hi": 0.218
+    },
+    "H2_JulOct12": {
+     "n": 95,
+     "fixtures": 95,
+     "mean": -0.1345,
+     "lo": -0.3784,
+     "hi": 0.126
+    },
+    "fam_ATP": {
+     "n": 109,
+     "fixtures": 109,
+     "mean": -0.0324,
+     "lo": -0.2919,
+     "hi": 0.2251
+    },
+    "fam_CHALLENGER": {
+     "n": 151,
+     "fixtures": 151,
+     "mean": 0.0517,
+     "lo": -0.1833,
+     "hi": 0.3192
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 677,
+     "fixtures": 677,
+     "mean": 0.1388,
+     "lo": -0.013,
+     "hi": 0.3174
+    },
+    "H1_JanJun": {
+     "n": 550,
+     "fixtures": 550,
+     "mean": 0.1933,
+     "lo": 0.0152,
+     "hi": 0.4082
+    },
+    "H2_JulOct12": {
+     "n": 127,
+     "fixtures": 127,
+     "mean": -0.0972,
+     "lo": -0.3682,
+     "hi": 0.1913
+    },
+    "fam_ATP": {
+     "n": 228,
+     "fixtures": 228,
+     "mean": 0.3303,
+     "lo": -0.0048,
+     "hi": 0.8
+    },
+    "fam_CHALLENGER": {
+     "n": 295,
+     "fixtures": 295,
+     "mean": 0.0921,
+     "lo": -0.0725,
+     "hi": 0.2625
+    },
+    "fam_WTA": {
+     "n": 154,
+     "fixtures": 154,
+     "mean": -0.0551,
+     "lo": -0.3081,
+     "hi": 0.2142
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 918,
+     "fixtures": 915,
+     "mean": 0.0804,
+     "lo": -0.0382,
+     "hi": 0.2197
+    },
+    "H1_JanJun": {
+     "n": 714,
+     "fixtures": 711,
+     "mean": 0.1394,
+     "lo": -0.0123,
+     "hi": 0.3086
+    },
+    "H2_JulOct12": {
+     "n": 204,
+     "fixtures": 204,
+     "mean": -0.1261,
+     "lo": -0.3219,
+     "hi": 0.0891
+    },
+    "fam_ATP": {
+     "n": 303,
+     "fixtures": 303,
+     "mean": 0.2041,
+     "lo": -0.0732,
+     "hi": 0.5656
+    },
+    "fam_CHALLENGER": {
+     "n": 416,
+     "fixtures": 414,
+     "mean": 0.0732,
+     "lo": -0.0729,
+     "hi": 0.226
+    },
+    "fam_WTA": {
+     "n": 199,
+     "fixtures": 198,
+     "mean": -0.0931,
+     "lo": -0.3064,
+     "hi": 0.1292
+    }
+   },
+   "mean_ev_claimed": 0.0814
+  },
+  "close|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 167,
+     "fixtures": 167,
+     "mean": -0.0441,
+     "lo": -0.2811,
+     "hi": 0.1916
+    },
+    "H1_JanJun": {
+     "n": 119,
+     "fixtures": 119,
+     "mean": -0.03,
+     "lo": -0.3014,
+     "hi": 0.2677
+    },
+    "H2_JulOct12": {
+     "n": 48,
+     "fixtures": 48,
+     "mean": -0.0792,
+     "lo": -0.4446,
+     "hi": 0.3112
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 451,
+     "fixtures": 451,
+     "mean": 0.1135,
+     "lo": -0.0858,
+     "hi": 0.3585
+    },
+    "H1_JanJun": {
+     "n": 372,
+     "fixtures": 372,
+     "mean": 0.1709,
+     "lo": -0.0526,
+     "hi": 0.4701
+    },
+    "H2_JulOct12": {
+     "n": 79,
+     "fixtures": 79,
+     "mean": -0.157,
+     "lo": -0.5115,
+     "hi": 0.2603
+    },
+    "fam_ATP": {
+     "n": 150,
+     "fixtures": 150,
+     "mean": 0.3212,
+     "lo": -0.1542,
+     "hi": 0.9493
+    },
+    "fam_CHALLENGER": {
+     "n": 206,
+     "fixtures": 206,
+     "mean": 0.0934,
+     "lo": -0.1174,
+     "hi": 0.3115
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 581,
+     "fixtures": 580,
+     "mean": 0.0696,
+     "lo": -0.1131,
+     "hi": 0.2659
+    },
+    "H1_JanJun": {
+     "n": 462,
+     "fixtures": 461,
+     "mean": 0.1221,
+     "lo": -0.0733,
+     "hi": 0.3775
+    },
+    "H2_JulOct12": {
+     "n": 119,
+     "fixtures": 119,
+     "mean": -0.1343,
+     "lo": -0.4113,
+     "hi": 0.1521
+    },
+    "fam_ATP": {
+     "n": 192,
+     "fixtures": 192,
+     "mean": 0.1835,
+     "lo": -0.1942,
+     "hi": 0.7101
+    },
+    "fam_CHALLENGER": {
+     "n": 274,
+     "fixtures": 273,
+     "mean": 0.0824,
+     "lo": -0.1096,
+     "hi": 0.2862
+    },
+    "fam_WTA": {
+     "n": 115,
+     "fixtures": 115,
+     "mean": -0.1511,
+     "lo": -0.4264,
+     "hi": 0.1755
+    }
+   },
+   "mean_ev_claimed": 0.1147
+  },
+  "close|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 94,
+     "fixtures": 94,
+     "mean": -0.0079,
+     "lo": -0.3365,
+     "hi": 0.3415
+    },
+    "H1_JanJun": {
+     "n": 70,
+     "fixtures": 70,
+     "mean": 0.0897,
+     "lo": -0.304,
+     "hi": 0.5384
+    },
+    "H2_JulOct12": {
+     "n": 24,
+     "fixtures": 24,
+     "mean": -0.2925,
+     "lo": -0.755,
+     "hi": 0.2104
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 312,
+     "fixtures": 312,
+     "mean": 0.0953,
+     "lo": -0.1607,
+     "hi": 0.4391
+    },
+    "H1_JanJun": {
+     "n": 253,
+     "fixtures": 253,
+     "mean": 0.1341,
+     "lo": -0.1791,
+     "hi": 0.5388
+    },
+    "H2_JulOct12": {
+     "n": 59,
+     "fixtures": 59,
+     "mean": -0.0712,
+     "lo": -0.4951,
+     "hi": 0.4678
+    },
+    "fam_ATP": {
+     "n": 103,
+     "fixtures": 103,
+     "mean": 0.4007,
+     "lo": -0.2216,
+     "hi": 1.3567
+    },
+    "fam_CHALLENGER": {
+     "n": 145,
+     "fixtures": 145,
+     "mean": 0.0966,
+     "lo": -0.1735,
+     "hi": 0.3917
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 389,
+     "fixtures": 388,
+     "mean": 0.0688,
+     "lo": -0.1638,
+     "hi": 0.3676
+    },
+    "H1_JanJun": {
+     "n": 308,
+     "fixtures": 307,
+     "mean": 0.1168,
+     "lo": -0.166,
+     "hi": 0.4602
+    },
+    "H2_JulOct12": {
+     "n": 81,
+     "fixtures": 81,
+     "mean": -0.1138,
+     "lo": -0.4564,
+     "hi": 0.2907
+    },
+    "fam_ATP": {
+     "n": 127,
+     "fixtures": 127,
+     "mean": 0.2625,
+     "lo": -0.2786,
+     "hi": 1.0032
+    },
+    "fam_CHALLENGER": {
+     "n": 192,
+     "fixtures": 191,
+     "mean": 0.0929,
+     "lo": -0.15,
+     "hi": 0.3631
+    }
+   },
+   "mean_ev_claimed": 0.1491
+  }
+ },
+ "test1_baseline_all_sides": {
+  "close|bet365": {
+   "n": 202,
+   "fixtures": 101,
+   "mean": -0.0457,
+   "lo": -0.1407,
+   "hi": 0.0612
+  },
+  "close|betrivers": {
+   "n": 11470,
+   "fixtures": 5735,
+   "mean": -0.0786,
+   "lo": -0.0899,
+   "hi": -0.0672
+  },
+  "close|draftkings": {
+   "n": 11594,
+   "fixtures": 5797,
+   "mean": -0.0686,
+   "lo": -0.0812,
+   "hi": -0.0544
+  },
+  "t12h|bet365": {
+   "n": 168,
+   "fixtures": 84,
+   "mean": -0.0412,
+   "lo": -0.1456,
+   "hi": 0.0902
+  },
+  "t12h|betrivers": {
+   "n": 7588,
+   "fixtures": 3794,
+   "mean": -0.0649,
+   "lo": -0.0797,
+   "hi": -0.0502
+  },
+  "t12h|draftkings": {
+   "n": 8970,
+   "fixtures": 4485,
+   "mean": -0.0695,
+   "lo": -0.0834,
+   "hi": -0.0542
+  },
+  "t1h|bet365": {
+   "n": 198,
+   "fixtures": 99,
+   "mean": -0.0387,
+   "lo": -0.1409,
+   "hi": 0.0851
+  },
+  "t1h|betrivers": {
+   "n": 11232,
+   "fixtures": 5616,
+   "mean": -0.071,
+   "lo": -0.0828,
+   "hi": -0.0596
+  },
+  "t1h|draftkings": {
+   "n": 11334,
+   "fixtures": 5667,
+   "mean": -0.0705,
+   "lo": -0.0826,
+   "hi": -0.0569
+  },
+  "t24h|bet365": {
+   "n": 88,
+   "fixtures": 44,
+   "mean": 0.0071,
+   "lo": -0.1675,
+   "hi": 0.2204
+  },
+  "t24h|betrivers": {
+   "n": 3252,
+   "fixtures": 1626,
+   "mean": -0.0654,
+   "lo": -0.0892,
+   "hi": -0.0408
+  },
+  "t24h|draftkings": {
+   "n": 3522,
+   "fixtures": 1761,
+   "mean": -0.0697,
+   "lo": -0.093,
+   "hi": -0.044
+  },
+  "t6h|bet365": {
+   "n": 194,
+   "fixtures": 97,
+   "mean": -0.0452,
+   "lo": -0.1392,
+   "hi": 0.071
+  },
+  "t6h|betrivers": {
+   "n": 10504,
+   "fixtures": 5252,
+   "mean": -0.0714,
+   "lo": -0.0836,
+   "hi": -0.0591
+  },
+  "t6h|draftkings": {
+   "n": 10924,
+   "fixtures": 5462,
+   "mean": -0.0708,
+   "lo": -0.0833,
+   "hi": -0.0565
+  }
+ },
+ "test2_total_games": {
+  "t24h|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 34,
+     "fixtures": 34,
+     "mean": -0.0779,
+     "lo": -0.4209,
+     "hi": 0.2241
+    },
+    "H1_JanJun": {
+     "n": 25,
+     "fixtures": 25,
+     "mean": -0.1476,
+     "lo": -0.5316,
+     "hi": 0.2352
+    },
+    "H2_JulOct12": {
+     "n": 9,
+     "fixtures": 9,
+     "mean": 0.1156,
+     "lo": -0.5478,
+     "hi": 0.79
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 11,
+     "fixtures": 11,
+     "mean": 0.1364,
+     "lo": -0.4636,
+     "hi": 0.7228
+    },
+    "H1_JanJun": {
+     "n": 10,
+     "fixtures": 10,
+     "mean": 0.05,
+     "lo": -0.595,
+     "hi": 0.695
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.0,
+     "lo": 1.0,
+     "hi": 1.0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 45,
+     "fixtures": 45,
+     "mean": -0.0256,
+     "lo": -0.3119,
+     "hi": 0.2545
+    },
+    "H1_JanJun": {
+     "n": 35,
+     "fixtures": 35,
+     "mean": -0.0911,
+     "lo": -0.4226,
+     "hi": 0.2412
+    },
+    "H2_JulOct12": {
+     "n": 10,
+     "fixtures": 10,
+     "mean": 0.204,
+     "lo": -0.403,
+     "hi": 0.8061
+    }
+   },
+   "mean_ev_claimed": 0.0151
+  },
+  "t24h|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.01,
+     "lo": -1.0,
+     "hi": 1.02
+    },
+    "H1_JanJun": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -0.02,
+     "lo": -1.0,
+     "hi": 0.96
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.04,
+     "lo": -1.0,
+     "hi": 1.08
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.6125,
+     "lo": -0.475,
+     "hi": 1.2625
+    },
+    "H1_JanJun": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.6125,
+     "lo": -0.475,
+     "hi": 1.2625
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 8,
+     "fixtures": 8,
+     "mean": 0.3113,
+     "lo": -0.48,
+     "hi": 0.9138
+    },
+    "H1_JanJun": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": 0.4017,
+     "lo": -0.34,
+     "hi": 1.1433
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.04,
+     "lo": -1.0,
+     "hi": 1.08
+    }
+   },
+   "mean_ev_claimed": 0.0426
+  },
+  "t24h|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.08,
+     "lo": 1.08,
+     "hi": 1.08
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.08,
+     "lo": 1.08,
+     "hi": 1.08
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.175,
+     "lo": -1.0,
+     "hi": 1.35
+    },
+    "H1_JanJun": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.175,
+     "lo": -1.0,
+     "hi": 1.35
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": 0.4767,
+     "lo": -1.0,
+     "hi": 1.35
+    },
+    "H1_JanJun": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.175,
+     "lo": -1.0,
+     "hi": 1.35
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.08,
+     "lo": 1.08,
+     "hi": 1.08
+    }
+   },
+   "mean_ev_claimed": 0.0674
+  },
+  "t24h|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.35,
+     "lo": 1.35,
+     "hi": 1.35
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.35,
+     "lo": 1.35,
+     "hi": 1.35
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.35,
+     "lo": 1.35,
+     "hi": 1.35
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.35,
+     "lo": 1.35,
+     "hi": 1.35
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "mean_ev_claimed": 0.1077
+  },
+  "t12h|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 70,
+     "fixtures": 70,
+     "mean": -0.0957,
+     "lo": -0.3158,
+     "hi": 0.1353
+    },
+    "H1_JanJun": {
+     "n": 52,
+     "fixtures": 52,
+     "mean": -0.0919,
+     "lo": -0.3538,
+     "hi": 0.1727
+    },
+    "H2_JulOct12": {
+     "n": 18,
+     "fixtures": 18,
+     "mean": -0.1067,
+     "lo": -0.5544,
+     "hi": 0.3461
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 14,
+     "fixtures": 14,
+     "mean": -0.5821,
+     "lo": -1.0,
+     "hi": -0.15
+    },
+    "H1_JanJun": {
+     "n": 13,
+     "fixtures": 13,
+     "mean": -0.55,
+     "lo": -1.0,
+     "hi": -0.0808
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 0.97,
+     "lo": 0.97,
+     "hi": 0.97
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 0.97,
+     "lo": 0.97,
+     "hi": 0.97
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 85,
+     "fixtures": 85,
+     "mean": -0.1633,
+     "lo": -0.3688,
+     "hi": 0.044
+    },
+    "H1_JanJun": {
+     "n": 65,
+     "fixtures": 65,
+     "mean": -0.1835,
+     "lo": -0.422,
+     "hi": 0.0488
+    },
+    "H2_JulOct12": {
+     "n": 20,
+     "fixtures": 20,
+     "mean": -0.0975,
+     "lo": -0.5055,
+     "hi": 0.318
+    }
+   },
+   "mean_ev_claimed": 0.0147
+  },
+  "t12h|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 16,
+     "fixtures": 16,
+     "mean": -0.3631,
+     "lo": -0.7475,
+     "hi": 0.1462
+    },
+    "H1_JanJun": {
+     "n": 12,
+     "fixtures": 12,
+     "mean": -0.3233,
+     "lo": -0.8317,
+     "hi": 0.19
+    },
+    "H2_JulOct12": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": -0.4825,
+     "lo": -1.0,
+     "hi": 0.5525
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 7,
+     "fixtures": 7,
+     "mean": -0.45,
+     "lo": -1.0,
+     "hi": 0.1714
+    },
+    "H1_JanJun": {
+     "n": 7,
+     "fixtures": 7,
+     "mean": -0.45,
+     "lo": -1.0,
+     "hi": 0.1357
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 23,
+     "fixtures": 23,
+     "mean": -0.3896,
+     "lo": -0.7435,
+     "hi": -0.023
+    },
+    "H1_JanJun": {
+     "n": 19,
+     "fixtures": 19,
+     "mean": -0.37,
+     "lo": -0.7847,
+     "hi": 0.0542
+    },
+    "H2_JulOct12": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": -0.4825,
+     "lo": -1.0,
+     "hi": 0.5525
+    }
+   },
+   "mean_ev_claimed": 0.0325
+  },
+  "t12h|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -0.586,
+     "lo": -1.0,
+     "hi": 0.242
+    },
+    "H1_JanJun": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H2_JulOct12": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": -0.31,
+     "lo": -1.0,
+     "hi": 1.07
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -0.586,
+     "lo": -1.0,
+     "hi": 0.242
+    },
+    "H1_JanJun": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H2_JulOct12": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": -0.31,
+     "lo": -1.0,
+     "hi": 1.07
+    }
+   },
+   "mean_ev_claimed": 0.0464
+  },
+  "t12h|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "mean_ev_claimed": null
+  },
+  "t6h|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 80,
+     "fixtures": 80,
+     "mean": -0.1785,
+     "lo": -0.4022,
+     "hi": 0.0306
+    },
+    "H1_JanJun": {
+     "n": 57,
+     "fixtures": 57,
+     "mean": -0.1988,
+     "lo": -0.4426,
+     "hi": 0.0498
+    },
+    "H2_JulOct12": {
+     "n": 23,
+     "fixtures": 23,
+     "mean": -0.1283,
+     "lo": -0.5505,
+     "hi": 0.2896
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 21,
+     "fixtures": 21,
+     "mean": -0.35,
+     "lo": -0.7214,
+     "hi": 0.0333
+    },
+    "H1_JanJun": {
+     "n": 17,
+     "fixtures": 17,
+     "mean": -0.3029,
+     "lo": -0.7588,
+     "hi": 0.1735
+    },
+    "H2_JulOct12": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": -0.55,
+     "lo": -1.0,
+     "hi": 0.35
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 0.97,
+     "lo": 0.97,
+     "hi": 0.97
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 0.97,
+     "lo": 0.97,
+     "hi": 0.97
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 100,
+     "fixtures": 100,
+     "mean": -0.2059,
+     "lo": -0.3864,
+     "hi": -0.0217
+    },
+    "H1_JanJun": {
+     "n": 72,
+     "fixtures": 72,
+     "mean": -0.2279,
+     "lo": -0.4497,
+     "hi": -0.0073
+    },
+    "H2_JulOct12": {
+     "n": 28,
+     "fixtures": 28,
+     "mean": -0.1493,
+     "lo": -0.5072,
+     "hi": 0.2111
+    }
+   },
+   "mean_ev_claimed": 0.012
+  },
+  "t6h|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 14,
+     "fixtures": 14,
+     "mean": -0.2786,
+     "lo": -0.7164,
+     "hi": 0.2893
+    },
+    "H1_JanJun": {
+     "n": 9,
+     "fixtures": 9,
+     "mean": -0.5522,
+     "lo": -1.0,
+     "hi": 0.1144
+    },
+    "H2_JulOct12": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": 0.214,
+     "lo": -0.6,
+     "hi": 1.028
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 8,
+     "fixtures": 8,
+     "mean": 0.2313,
+     "lo": -0.4938,
+     "hi": 0.7752
+    },
+    "H1_JanJun": {
+     "n": 8,
+     "fixtures": 8,
+     "mean": 0.2313,
+     "lo": -0.4877,
+     "hi": 0.7875
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 22,
+     "fixtures": 22,
+     "mean": -0.0932,
+     "lo": -0.5391,
+     "hi": 0.3387
+    },
+    "H1_JanJun": {
+     "n": 17,
+     "fixtures": 17,
+     "mean": -0.1835,
+     "lo": -0.6435,
+     "hi": 0.3041
+    },
+    "H2_JulOct12": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": 0.214,
+     "lo": -0.6,
+     "hi": 1.03
+    }
+   },
+   "mean_ev_claimed": 0.0295
+  },
+  "t6h|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -0.025,
+     "lo": -1.0,
+     "hi": 0.95
+    },
+    "H1_JanJun": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -0.025,
+     "lo": -1.0,
+     "hi": 0.95
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": -0.35,
+     "lo": -1.0,
+     "hi": 0.95
+    },
+    "H1_JanJun": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": -0.35,
+     "lo": -1.0,
+     "hi": 0.95
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "mean_ev_claimed": 0.0465
+  },
+  "t6h|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "mean_ev_claimed": null
+  },
+  "t1h|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 68,
+     "fixtures": 68,
+     "mean": -0.265,
+     "lo": -0.5009,
+     "hi": -0.0313
+    },
+    "H1_JanJun": {
+     "n": 44,
+     "fixtures": 44,
+     "mean": -0.1825,
+     "lo": -0.4593,
+     "hi": 0.0943
+    },
+    "H2_JulOct12": {
+     "n": 24,
+     "fixtures": 24,
+     "mean": -0.4162,
+     "lo": -0.7517,
+     "hi": -0.0775
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 13,
+     "fixtures": 13,
+     "mean": -0.5569,
+     "lo": -1.0,
+     "hi": -0.0954
+    },
+    "H1_JanJun": {
+     "n": 12,
+     "fixtures": 12,
+     "mean": -0.52,
+     "lo": -1.0,
+     "hi": -0.02
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 0.97,
+     "lo": 0.97,
+     "hi": 0.97
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 0.97,
+     "lo": 0.97,
+     "hi": 0.97
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 81,
+     "fixtures": 81,
+     "mean": -0.2875,
+     "lo": -0.4885,
+     "hi": -0.0893
+    },
+    "H1_JanJun": {
+     "n": 56,
+     "fixtures": 56,
+     "mean": -0.2548,
+     "lo": -0.5043,
+     "hi": -0.0011
+    },
+    "H2_JulOct12": {
+     "n": 25,
+     "fixtures": 25,
+     "mean": -0.3608,
+     "lo": -0.684,
+     "hi": 0.0336
+    }
+   },
+   "mean_ev_claimed": 0.0112
+  },
+  "t1h|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 7,
+     "fixtures": 7,
+     "mean": -0.1186,
+     "lo": -0.7086,
+     "hi": 0.7571
+    },
+    "H1_JanJun": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -0.176,
+     "lo": -1.0,
+     "hi": 0.656
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.025,
+     "lo": -1.0,
+     "hi": 1.05
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -0.2,
+     "lo": -1.0,
+     "hi": 0.6
+    },
+    "H1_JanJun": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -0.2,
+     "lo": -1.0,
+     "hi": 0.6
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 12,
+     "fixtures": 12,
+     "mean": -0.1525,
+     "lo": -0.6633,
+     "hi": 0.365
+    },
+    "H1_JanJun": {
+     "n": 10,
+     "fixtures": 10,
+     "mean": -0.188,
+     "lo": -0.8,
+     "hi": 0.4241
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.025,
+     "lo": -1.0,
+     "hi": 1.05
+    }
+   },
+   "mean_ev_claimed": 0.0308
+  },
+  "t1h|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.08,
+     "lo": 1.08,
+     "hi": 1.08
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.08,
+     "lo": 1.08,
+     "hi": 1.08
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.08,
+     "lo": 1.08,
+     "hi": 1.08
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.08,
+     "lo": 1.08,
+     "hi": 1.08
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "mean_ev_claimed": 0.0685
+  },
+  "t1h|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.08,
+     "lo": 1.08,
+     "hi": 1.08
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.08,
+     "lo": 1.08,
+     "hi": 1.08
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.08,
+     "lo": 1.08,
+     "hi": 1.08
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.08,
+     "lo": 1.08,
+     "hi": 1.08
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "mean_ev_claimed": 0.0685
+  },
+  "close|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 38,
+     "fixtures": 38,
+     "mean": -0.2939,
+     "lo": -0.5861,
+     "hi": 0.0174
+    },
+    "H1_JanJun": {
+     "n": 26,
+     "fixtures": 26,
+     "mean": -0.275,
+     "lo": -0.6269,
+     "hi": 0.122
+    },
+    "H2_JulOct12": {
+     "n": 12,
+     "fixtures": 12,
+     "mean": -0.335,
+     "lo": -0.8375,
+     "hi": 0.1742
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 10,
+     "fixtures": 10,
+     "mean": -0.095,
+     "lo": -0.795,
+     "hi": 0.61
+    },
+    "H1_JanJun": {
+     "n": 8,
+     "fixtures": 8,
+     "mean": 0.1312,
+     "lo": -0.7438,
+     "hi": 0.9125
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 0.97,
+     "lo": 0.97,
+     "hi": 0.97
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 0.97,
+     "lo": 0.97,
+     "hi": 0.97
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 43,
+     "fixtures": 43,
+     "mean": -0.2319,
+     "lo": -0.5275,
+     "hi": 0.0805
+    },
+    "H1_JanJun": {
+     "n": 29,
+     "fixtures": 29,
+     "mean": -0.2041,
+     "lo": -0.5825,
+     "hi": 0.1725
+    },
+    "H2_JulOct12": {
+     "n": 14,
+     "fixtures": 14,
+     "mean": -0.2893,
+     "lo": -0.7229,
+     "hi": 0.2565
+    }
+   },
+   "mean_ev_claimed": 0.0344
+  },
+  "close|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 14,
+     "fixtures": 14,
+     "mean": -0.0507,
+     "lo": -0.5593,
+     "hi": 0.5231
+    },
+    "H1_JanJun": {
+     "n": 12,
+     "fixtures": 12,
+     "mean": -0.0658,
+     "lo": -0.6592,
+     "hi": 0.575
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.04,
+     "lo": -1.0,
+     "hi": 1.08
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 8,
+     "fixtures": 8,
+     "mean": 0.1312,
+     "lo": -0.7438,
+     "hi": 1.0
+    },
+    "H1_JanJun": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": 0.5083,
+     "lo": -0.3333,
+     "hi": 1.3417
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 17,
+     "fixtures": 17,
+     "mean": 0.0306,
+     "lo": -0.5124,
+     "hi": 0.5659
+    },
+    "H1_JanJun": {
+     "n": 14,
+     "fixtures": 14,
+     "mean": 0.1029,
+     "lo": -0.425,
+     "hi": 0.6814
+    },
+    "H2_JulOct12": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": -0.3067,
+     "lo": -1.0,
+     "hi": 1.08
+    }
+   },
+   "mean_ev_claimed": 0.0693
+  },
+  "close|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 9,
+     "fixtures": 9,
+     "mean": -0.5256,
+     "lo": -1.0,
+     "hi": 0.1822
+    },
+    "H1_JanJun": {
+     "n": 8,
+     "fixtures": 8,
+     "mean": -0.4662,
+     "lo": -1.0,
+     "hi": 0.3127
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": 0.4,
+     "lo": -0.61,
+     "hi": 1.4105
+    },
+    "H1_JanJun": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.75,
+     "lo": -0.4875,
+     "hi": 1.7375
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 13,
+     "fixtures": 13,
+     "mean": -0.1331,
+     "lo": -0.6885,
+     "hi": 0.4954
+    },
+    "H1_JanJun": {
+     "n": 11,
+     "fixtures": 11,
+     "mean": 0.0245,
+     "lo": -0.6273,
+     "hi": 0.7077
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "mean_ev_claimed": 0.0915
+  },
+  "close|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": 0.4,
+     "lo": -0.61,
+     "hi": 1.41
+    },
+    "H1_JanJun": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.75,
+     "lo": -0.4875,
+     "hi": 1.7375
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 9,
+     "fixtures": 9,
+     "mean": -0.2222,
+     "lo": -1.0,
+     "hi": 0.5446
+    },
+    "H1_JanJun": {
+     "n": 7,
+     "fixtures": 7,
+     "mean": -0.0,
+     "lo": -0.7214,
+     "hi": 0.8948
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "mean_ev_claimed": 0.1073
+  }
+ },
+ "test2_total_baseline": {
+  "close|bet365": {
+   "n": 70,
+   "fixtures": 35,
+   "mean": -0.078,
+   "lo": -0.088,
+   "hi": -0.0683
+  },
+  "close|betrivers": {
+   "n": 4254,
+   "fixtures": 2127,
+   "mean": -0.0734,
+   "lo": -0.075,
+   "hi": -0.0718
+  },
+  "close|draftkings": {
+   "n": 1966,
+   "fixtures": 983,
+   "mean": -0.0872,
+   "lo": -0.0896,
+   "hi": -0.0848
+  },
+  "t12h|bet365": {
+   "n": 60,
+   "fixtures": 30,
+   "mean": -0.0935,
+   "lo": -0.1013,
+   "hi": -0.0847
+  },
+  "t12h|betrivers": {
+   "n": 2754,
+   "fixtures": 1377,
+   "mean": -0.0641,
+   "lo": -0.0661,
+   "hi": -0.062
+  },
+  "t12h|draftkings": {
+   "n": 1438,
+   "fixtures": 719,
+   "mean": -0.087,
+   "lo": -0.0899,
+   "hi": -0.0841
+  },
+  "t1h|bet365": {
+   "n": 66,
+   "fixtures": 33,
+   "mean": -0.0956,
+   "lo": -0.1038,
+   "hi": -0.0864
+  },
+  "t1h|betrivers": {
+   "n": 4064,
+   "fixtures": 2032,
+   "mean": -0.0651,
+   "lo": -0.0666,
+   "hi": -0.0636
+  },
+  "t1h|draftkings": {
+   "n": 1774,
+   "fixtures": 887,
+   "mean": -0.0871,
+   "lo": -0.0894,
+   "hi": -0.085
+  },
+  "t24h|bet365": {
+   "n": 32,
+   "fixtures": 16,
+   "mean": -0.0856,
+   "lo": -0.0972,
+   "hi": -0.0719
+  },
+  "t24h|betrivers": {
+   "n": 1116,
+   "fixtures": 558,
+   "mean": -0.0637,
+   "lo": -0.067,
+   "hi": -0.0605
+  },
+  "t24h|draftkings": {
+   "n": 780,
+   "fixtures": 390,
+   "mean": -0.0873,
+   "lo": -0.0915,
+   "hi": -0.0829
+  },
+  "t6h|bet365": {
+   "n": 66,
+   "fixtures": 33,
+   "mean": -0.0956,
+   "lo": -0.1023,
+   "hi": -0.0874
+  },
+  "t6h|betrivers": {
+   "n": 3816,
+   "fixtures": 1908,
+   "mean": -0.065,
+   "lo": -0.0666,
+   "hi": -0.0634
+  },
+  "t6h|draftkings": {
+   "n": 1734,
+   "fixtures": 867,
+   "mean": -0.0866,
+   "lo": -0.089,
+   "hi": -0.0841
+  }
+ },
+ "test2_game_spread": {
+  "t24h|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 30,
+     "fixtures": 30,
+     "mean": -0.1553,
+     "lo": -0.488,
+     "hi": 0.1903
+    },
+    "H1_JanJun": {
+     "n": 20,
+     "fixtures": 20,
+     "mean": -0.019,
+     "lo": -0.4245,
+     "hi": 0.3975
+    },
+    "H2_JulOct12": {
+     "n": 10,
+     "fixtures": 10,
+     "mean": -0.428,
+     "lo": -1.0,
+     "hi": 0.149
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.93,
+     "lo": 0.86,
+     "hi": 1.0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.93,
+     "lo": 0.86,
+     "hi": 1.0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 31,
+     "fixtures": 31,
+     "mean": -0.1181,
+     "lo": -0.4845,
+     "hi": 0.2078
+    },
+    "H1_JanJun": {
+     "n": 20,
+     "fixtures": 20,
+     "mean": -0.019,
+     "lo": -0.426,
+     "hi": 0.4094
+    },
+    "H2_JulOct12": {
+     "n": 11,
+     "fixtures": 11,
+     "mean": -0.2982,
+     "lo": -0.8185,
+     "hi": 0.2436
+    }
+   },
+   "mean_ev_claimed": 0.0113
+  },
+  "t24h|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -0.224,
+     "lo": -1.0,
+     "hi": 0.568
+    },
+    "H1_JanJun": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": 0.2933,
+     "lo": -1.0,
+     "hi": 0.98
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -0.224,
+     "lo": -1.0,
+     "hi": 0.568
+    },
+    "H1_JanJun": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": 0.2933,
+     "lo": -1.0,
+     "hi": 0.98
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "mean_ev_claimed": 0.0273
+  },
+  "t24h|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "mean_ev_claimed": null
+  },
+  "t24h|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "mean_ev_claimed": null
+  },
+  "t12h|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 88,
+     "fixtures": 88,
+     "mean": 0.0616,
+     "lo": -0.1376,
+     "hi": 0.2587
+    },
+    "H1_JanJun": {
+     "n": 55,
+     "fixtures": 55,
+     "mean": 0.0882,
+     "lo": -0.1666,
+     "hi": 0.3424
+    },
+    "H2_JulOct12": {
+     "n": 33,
+     "fixtures": 33,
+     "mean": 0.0173,
+     "lo": -0.3325,
+     "hi": 0.3745
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 7,
+     "fixtures": 7,
+     "mean": 0.6529,
+     "lo": 0.0743,
+     "hi": 0.9914
+    },
+    "H1_JanJun": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": 0.914,
+     "lo": 0.808,
+     "hi": 1.02
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.0,
+     "lo": -1.0,
+     "hi": 1.0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.1,
+     "lo": 1.1,
+     "hi": 1.1
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.1,
+     "lo": 1.1,
+     "hi": 1.1
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 93,
+     "fixtures": 93,
+     "mean": 0.1087,
+     "lo": -0.0851,
+     "hi": 0.2957
+    },
+    "H1_JanJun": {
+     "n": 59,
+     "fixtures": 59,
+     "mean": 0.1424,
+     "lo": -0.1234,
+     "hi": 0.397
+    },
+    "H2_JulOct12": {
+     "n": 34,
+     "fixtures": 34,
+     "mean": 0.0503,
+     "lo": -0.2938,
+     "hi": 0.3618
+    }
+   },
+   "mean_ev_claimed": 0.0148
+  },
+  "t12h|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 17,
+     "fixtures": 17,
+     "mean": 0.4282,
+     "lo": -0.0324,
+     "hi": 0.8147
+    },
+    "H1_JanJun": {
+     "n": 11,
+     "fixtures": 11,
+     "mean": 0.4673,
+     "lo": -0.0855,
+     "hi": 0.9601
+    },
+    "H2_JulOct12": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": 0.3567,
+     "lo": -0.33,
+     "hi": 1.0433
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": 0.934,
+     "lo": 0.82,
+     "hi": 1.04
+    },
+    "H1_JanJun": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.9175,
+     "lo": 0.785,
+     "hi": 1.05
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.0,
+     "lo": 1.0,
+     "hi": 1.0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.1,
+     "lo": 1.1,
+     "hi": 1.1
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.1,
+     "lo": 1.1,
+     "hi": 1.1
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 23,
+     "fixtures": 23,
+     "mean": 0.5674,
+     "lo": 0.1995,
+     "hi": 0.8809
+    },
+    "H1_JanJun": {
+     "n": 15,
+     "fixtures": 15,
+     "mean": 0.5873,
+     "lo": 0.166,
+     "hi": 0.9574
+    },
+    "H2_JulOct12": {
+     "n": 8,
+     "fixtures": 8,
+     "mean": 0.53,
+     "lo": -0.2225,
+     "hi": 1.0525
+    }
+   },
+   "mean_ev_claimed": 0.0345
+  },
+  "t12h|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.53,
+     "lo": -0.495,
+     "hi": 1.065
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.08,
+     "lo": 1.08,
+     "hi": 1.08
+    },
+    "H2_JulOct12": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": 0.3467,
+     "lo": -1.0,
+     "hi": 1.02
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 0.83,
+     "lo": 0.83,
+     "hi": 0.83
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 0.83,
+     "lo": 0.83,
+     "hi": 0.83
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.1,
+     "lo": 1.1,
+     "hi": 1.1
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.1,
+     "lo": 1.1,
+     "hi": 1.1
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": 0.675,
+     "lo": -0.0083,
+     "hi": 1.0633
+    },
+    "H1_JanJun": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.955,
+     "lo": 0.83,
+     "hi": 1.08
+    },
+    "H2_JulOct12": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.535,
+     "lo": -0.495,
+     "hi": 1.08
+    }
+   },
+   "mean_ev_claimed": 0.054
+  },
+  "t12h|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.02,
+     "lo": 1.02,
+     "hi": 1.02
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.02,
+     "lo": 1.02,
+     "hi": 1.02
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 0.83,
+     "lo": 0.83,
+     "hi": 0.83
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 0.83,
+     "lo": 0.83,
+     "hi": 0.83
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.925,
+     "lo": 0.83,
+     "hi": 1.02
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 0.83,
+     "lo": 0.83,
+     "hi": 0.83
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": 1.02,
+     "lo": 1.02,
+     "hi": 1.02
+    }
+   },
+   "mean_ev_claimed": 0.0672
+  },
+  "t6h|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 127,
+     "fixtures": 127,
+     "mean": 0.0028,
+     "lo": -0.1693,
+     "hi": 0.1706
+    },
+    "H1_JanJun": {
+     "n": 83,
+     "fixtures": 83,
+     "mean": 0.0477,
+     "lo": -0.1652,
+     "hi": 0.2676
+    },
+    "H2_JulOct12": {
+     "n": 44,
+     "fixtures": 44,
+     "mean": -0.0818,
+     "lo": -0.3901,
+     "hi": 0.2244
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": 0.36,
+     "lo": -1.0,
+     "hi": 1.25
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 1.04,
+     "lo": 0.83,
+     "hi": 1.25
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 130,
+     "fixtures": 130,
+     "mean": 0.0111,
+     "lo": -0.1557,
+     "hi": 0.1815
+    },
+    "H1_JanJun": {
+     "n": 84,
+     "fixtures": 84,
+     "mean": 0.0352,
+     "lo": -0.176,
+     "hi": 0.2512
+    },
+    "H2_JulOct12": {
+     "n": 46,
+     "fixtures": 46,
+     "mean": -0.033,
+     "lo": -0.305,
+     "hi": 0.2565
+    }
+   },
+   "mean_ev_claimed": 0.0126
+  },
+  "t6h|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 27,
+     "fixtures": 27,
+     "mean": 0.247,
+     "lo": -0.133,
+     "hi": 0.6363
+    },
+    "H1_JanJun": {
+     "n": 15,
+     "fixtures": 15,
+     "mean": 0.438,
+     "lo": -0.132,
+     "hi": 0.9507
+    },
+    "H2_JulOct12": {
+     "n": 12,
+     "fixtures": 12,
+     "mean": 0.0083,
+     "lo": -0.5075,
+     "hi": 0.5359
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 27,
+     "fixtures": 27,
+     "mean": 0.247,
+     "lo": -0.1585,
+     "hi": 0.6289
+    },
+    "H1_JanJun": {
+     "n": 15,
+     "fixtures": 15,
+     "mean": 0.438,
+     "lo": -0.1167,
+     "hi": 0.892
+    },
+    "H2_JulOct12": {
+     "n": 12,
+     "fixtures": 12,
+     "mean": 0.0083,
+     "lo": -0.5058,
+     "hi": 0.5309
+    }
+   },
+   "mean_ev_claimed": 0.0312
+  },
+  "t6h|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 7,
+     "fixtures": 7,
+     "mean": 0.5029,
+     "lo": -0.1571,
+     "hi": 1.1329
+    },
+    "H1_JanJun": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.5925,
+     "lo": -0.48,
+     "hi": 1.2375
+    },
+    "H2_JulOct12": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": 0.3833,
+     "lo": -1.0,
+     "hi": 1.17
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 7,
+     "fixtures": 7,
+     "mean": 0.5029,
+     "lo": -0.37,
+     "hi": 1.1315
+    },
+    "H1_JanJun": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.5925,
+     "lo": -0.48,
+     "hi": 1.2375
+    },
+    "H2_JulOct12": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": 0.3833,
+     "lo": -1.0,
+     "hi": 1.17
+    }
+   },
+   "mean_ev_claimed": 0.0471
+  },
+  "t6h|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "mean_ev_claimed": 0.0622
+  },
+  "t1h|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 147,
+     "fixtures": 147,
+     "mean": -0.0303,
+     "lo": -0.1976,
+     "hi": 0.1287
+    },
+    "H1_JanJun": {
+     "n": 106,
+     "fixtures": 106,
+     "mean": 0.009,
+     "lo": -0.1816,
+     "hi": 0.1998
+    },
+    "H2_JulOct12": {
+     "n": 41,
+     "fixtures": 41,
+     "mean": -0.1317,
+     "lo": -0.4278,
+     "hi": 0.1646
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 8,
+     "fixtures": 8,
+     "mean": 0.05,
+     "lo": -0.7188,
+     "hi": 0.8312
+    },
+    "H1_JanJun": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": -0.3,
+     "lo": -1.0,
+     "hi": 1.1
+    },
+    "H2_JulOct12": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": 0.26,
+     "lo": -0.6,
+     "hi": 1.12
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 155,
+     "fixtures": 155,
+     "mean": -0.0261,
+     "lo": -0.1803,
+     "hi": 0.1274
+    },
+    "H1_JanJun": {
+     "n": 109,
+     "fixtures": 109,
+     "mean": 0.0005,
+     "lo": -0.1833,
+     "hi": 0.1866
+    },
+    "H2_JulOct12": {
+     "n": 46,
+     "fixtures": 46,
+     "mean": -0.0891,
+     "lo": -0.36,
+     "hi": 0.2068
+    }
+   },
+   "mean_ev_claimed": 0.0165
+  },
+  "t1h|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 34,
+     "fixtures": 34,
+     "mean": -0.1974,
+     "lo": -0.5174,
+     "hi": 0.1589
+    },
+    "H1_JanJun": {
+     "n": 24,
+     "fixtures": 24,
+     "mean": 0.0537,
+     "lo": -0.3871,
+     "hi": 0.4726
+    },
+    "H2_JulOct12": {
+     "n": 10,
+     "fixtures": 10,
+     "mean": -0.8,
+     "lo": -1.0,
+     "hi": -0.4
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": -0.3167,
+     "lo": -1.0,
+     "hi": 1.05
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": 0.025,
+     "lo": -1.0,
+     "hi": 1.05
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 37,
+     "fixtures": 37,
+     "mean": -0.207,
+     "lo": -0.4979,
+     "hi": 0.14
+    },
+    "H1_JanJun": {
+     "n": 25,
+     "fixtures": 25,
+     "mean": 0.0116,
+     "lo": -0.4104,
+     "hi": 0.422
+    },
+    "H2_JulOct12": {
+     "n": 12,
+     "fixtures": 12,
+     "mean": -0.6625,
+     "lo": -1.0,
+     "hi": -0.1583
+    }
+   },
+   "mean_ev_claimed": 0.0419
+  },
+  "t1h|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 16,
+     "fixtures": 16,
+     "mean": -0.1862,
+     "lo": -0.72,
+     "hi": 0.3601
+    },
+    "H1_JanJun": {
+     "n": 11,
+     "fixtures": 11,
+     "mean": 0.0018,
+     "lo": -0.6091,
+     "hi": 0.6218
+    },
+    "H2_JulOct12": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -0.6,
+     "lo": -1.0,
+     "hi": 0.2
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 17,
+     "fixtures": 17,
+     "mean": -0.2341,
+     "lo": -0.7459,
+     "hi": 0.2883
+    },
+    "H1_JanJun": {
+     "n": 12,
+     "fixtures": 12,
+     "mean": -0.0817,
+     "lo": -0.6417,
+     "hi": 0.4867
+    },
+    "H2_JulOct12": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -0.6,
+     "lo": -1.0,
+     "hi": 0.2
+    }
+   },
+   "mean_ev_claimed": 0.0564
+  },
+  "t1h|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": 0.42,
+     "lo": -1.0,
+     "hi": 1.14
+    },
+    "H1_JanJun": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": 0.42,
+     "lo": -1.0,
+     "hi": 1.14
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.065,
+     "lo": -1.0,
+     "hi": 1.13
+    },
+    "H1_JanJun": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.065,
+     "lo": -1.0,
+     "hi": 1.13
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "mean_ev_claimed": 0.0864
+  },
+  "close|ev>0.00": {
+   "betrivers": {
+    "all": {
+     "n": 159,
+     "fixtures": 159,
+     "mean": -0.1465,
+     "lo": -0.2983,
+     "hi": 0.0161
+    },
+    "H1_JanJun": {
+     "n": 124,
+     "fixtures": 124,
+     "mean": -0.1463,
+     "lo": -0.3226,
+     "hi": 0.0307
+    },
+    "H2_JulOct12": {
+     "n": 35,
+     "fixtures": 35,
+     "mean": -0.1474,
+     "lo": -0.4935,
+     "hi": 0.2111
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 31,
+     "fixtures": 31,
+     "mean": -0.2952,
+     "lo": -0.6161,
+     "hi": 0.0307
+    },
+    "H1_JanJun": {
+     "n": 14,
+     "fixtures": 14,
+     "mean": -0.0107,
+     "lo": -0.5714,
+     "hi": 0.5464
+    },
+    "H2_JulOct12": {
+     "n": 17,
+     "fixtures": 17,
+     "mean": -0.5294,
+     "lo": -0.8853,
+     "hi": -0.1706
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 183,
+     "fixtures": 182,
+     "mean": -0.1709,
+     "lo": -0.3113,
+     "hi": -0.0237
+    },
+    "H1_JanJun": {
+     "n": 133,
+     "fixtures": 132,
+     "mean": -0.1438,
+     "lo": -0.3081,
+     "hi": 0.0302
+    },
+    "H2_JulOct12": {
+     "n": 50,
+     "fixtures": 50,
+     "mean": -0.2432,
+     "lo": -0.5166,
+     "hi": 0.045
+    }
+   },
+   "mean_ev_claimed": 0.023
+  },
+  "close|ev>0.02": {
+   "betrivers": {
+    "all": {
+     "n": 65,
+     "fixtures": 65,
+     "mean": -0.2638,
+     "lo": -0.5031,
+     "hi": -0.0205
+    },
+    "H1_JanJun": {
+     "n": 49,
+     "fixtures": 49,
+     "mean": -0.2143,
+     "lo": -0.4686,
+     "hi": 0.0778
+    },
+    "H2_JulOct12": {
+     "n": 16,
+     "fixtures": 16,
+     "mean": -0.4156,
+     "lo": -0.875,
+     "hi": 0.1406
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 20,
+     "fixtures": 20,
+     "mean": -0.5,
+     "lo": -0.8975,
+     "hi": -0.1025
+    },
+    "H1_JanJun": {
+     "n": 7,
+     "fixtures": 7,
+     "mean": -0.15,
+     "lo": -0.7286,
+     "hi": 0.45
+    },
+    "H2_JulOct12": {
+     "n": 13,
+     "fixtures": 13,
+     "mean": -0.6885,
+     "lo": -1.0,
+     "hi": -0.2231
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 1,
+     "fixtures": 1,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 84,
+     "fixtures": 84,
+     "mean": -0.3113,
+     "lo": -0.5177,
+     "hi": -0.0971
+    },
+    "H1_JanJun": {
+     "n": 56,
+     "fixtures": 56,
+     "mean": -0.2063,
+     "lo": -0.462,
+     "hi": 0.0438
+    },
+    "H2_JulOct12": {
+     "n": 28,
+     "fixtures": 28,
+     "mean": -0.5214,
+     "lo": -0.8571,
+     "hi": -0.1304
+    }
+   },
+   "mean_ev_claimed": 0.0406
+  },
+  "close|ev>0.04": {
+   "betrivers": {
+    "all": {
+     "n": 27,
+     "fixtures": 27,
+     "mean": -0.0415,
+     "lo": -0.4674,
+     "hi": 0.3831
+    },
+    "H1_JanJun": {
+     "n": 21,
+     "fixtures": 21,
+     "mean": -0.0271,
+     "lo": -0.4243,
+     "hi": 0.4452
+    },
+    "H2_JulOct12": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": -0.0917,
+     "lo": -1.0,
+     "hi": 1.0583
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H2_JulOct12": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 33,
+     "fixtures": 33,
+     "mean": -0.2158,
+     "lo": -0.5721,
+     "hi": 0.1486
+    },
+    "H1_JanJun": {
+     "n": 24,
+     "fixtures": 24,
+     "mean": -0.1487,
+     "lo": -0.5746,
+     "hi": 0.2758
+    },
+    "H2_JulOct12": {
+     "n": 9,
+     "fixtures": 9,
+     "mean": -0.3944,
+     "lo": -1.0,
+     "hi": 0.4333
+    }
+   },
+   "mean_ev_claimed": 0.0616
+  },
+  "close|ev>0.06": {
+   "betrivers": {
+    "all": {
+     "n": 8,
+     "fixtures": 8,
+     "mean": 0.185,
+     "lo": -0.7438,
+     "hi": 1.1075
+    },
+    "H1_JanJun": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.0075,
+     "lo": -1.0,
+     "hi": 1.015
+    },
+    "H2_JulOct12": {
+     "n": 4,
+     "fixtures": 4,
+     "mean": 0.3625,
+     "lo": -1.0,
+     "hi": 1.725
+    }
+   },
+   "draftkings": {
+    "all": {
+     "n": 5,
+     "fixtures": 5,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H1_JanJun": {
+     "n": 3,
+     "fixtures": 3,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    },
+    "H2_JulOct12": {
+     "n": 2,
+     "fixtures": 2,
+     "mean": -1.0,
+     "lo": -1.0,
+     "hi": -1.0
+    }
+   },
+   "bet365": {
+    "all": {
+     "n": 0
+    },
+    "H1_JanJun": {
+     "n": 0
+    },
+    "H2_JulOct12": {
+     "n": 0
+    }
+   },
+   "best_of_books": {
+    "all": {
+     "n": 13,
+     "fixtures": 13,
+     "mean": -0.2708,
+     "lo": -0.8477,
+     "hi": 0.4123
+    },
+    "H1_JanJun": {
+     "n": 7,
+     "fixtures": 7,
+     "mean": -0.4243,
+     "lo": -1.0,
+     "hi": 0.1714
+    },
+    "H2_JulOct12": {
+     "n": 6,
+     "fixtures": 6,
+     "mean": -0.0917,
+     "lo": -1.0,
+     "hi": 1.0583
+    }
+   },
+   "mean_ev_claimed": 0.0795
+  }
+ },
+ "test2_spread_baseline": {
+  "close|bet365": {
+   "n": 64,
+   "fixtures": 32,
+   "mean": -0.0956,
+   "lo": -0.1063,
+   "hi": -0.0858
+  },
+  "close|betrivers": {
+   "n": 4412,
+   "fixtures": 2206,
+   "mean": -0.0715,
+   "lo": -0.0734,
+   "hi": -0.0695
+  },
+  "close|draftkings": {
+   "n": 1022,
+   "fixtures": 511,
+   "mean": -0.087,
+   "lo": -0.091,
+   "hi": -0.083
+  },
+  "t12h|bet365": {
+   "n": 44,
+   "fixtures": 22,
+   "mean": -0.1111,
+   "lo": -0.1286,
+   "hi": -0.0907
+  },
+  "t12h|betrivers": {
+   "n": 2768,
+   "fixtures": 1384,
+   "mean": -0.0613,
+   "lo": -0.0644,
+   "hi": -0.0584
+  },
+  "t12h|draftkings": {
+   "n": 802,
+   "fixtures": 401,
+   "mean": -0.0847,
+   "lo": -0.0905,
+   "hi": -0.0792
+  },
+  "t1h|bet365": {
+   "n": 50,
+   "fixtures": 25,
+   "mean": -0.1142,
+   "lo": -0.1262,
+   "hi": -0.1036
+  },
+  "t1h|betrivers": {
+   "n": 4060,
+   "fixtures": 2030,
+   "mean": -0.0643,
+   "lo": -0.0665,
+   "hi": -0.0623
+  },
+  "t1h|draftkings": {
+   "n": 968,
+   "fixtures": 484,
+   "mean": -0.0882,
+   "lo": -0.0925,
+   "hi": -0.0842
+  },
+  "t24h|bet365": {
+   "n": 18,
+   "fixtures": 9,
+   "mean": -0.1006,
+   "lo": -0.1372,
+   "hi": -0.0561
+  },
+  "t24h|betrivers": {
+   "n": 1216,
+   "fixtures": 608,
+   "mean": -0.0635,
+   "lo": -0.0683,
+   "hi": -0.0588
+  },
+  "t24h|draftkings": {
+   "n": 432,
+   "fixtures": 216,
+   "mean": -0.088,
+   "lo": -0.0961,
+   "hi": -0.0799
+  },
+  "t6h|bet365": {
+   "n": 48,
+   "fixtures": 24,
+   "mean": -0.1188,
+   "lo": -0.1313,
+   "hi": -0.1083
+  },
+  "t6h|betrivers": {
+   "n": 3772,
+   "fixtures": 1886,
+   "mean": -0.0631,
+   "lo": -0.0656,
+   "hi": -0.0606
+  },
+  "t6h|draftkings": {
+   "n": 942,
+   "fixtures": 471,
+   "mean": -0.0854,
+   "lo": -0.0905,
+   "hi": -0.0804
+  }
+ },
+ "test3_kalshi": {
+  "n_excluded_occurrence_cut": 62,
+  "fair_source_counts": {
+   "t12h|snapshot": 3
+  },
+  "fixtures": 3,
+  "date_range": [
+   "2026-09-01 08:06:56+00:00",
+   "2026-09-01 08:12:30+00:00"
+  ],
+  "t24h|edge>0.00": {
+   "all": {
+    "n": 0
+   },
+   "H1_JanJun": {
+    "n": 0
+   },
+   "H2_JulOct12": {
+    "n": 0
+   },
+   "mean_edge_claimed_c": null
+  },
+  "t24h|edge>0.02": {
+   "all": {
+    "n": 0
+   },
+   "H1_JanJun": {
+    "n": 0
+   },
+   "H2_JulOct12": {
+    "n": 0
+   },
+   "mean_edge_claimed_c": null
+  },
+  "t24h|edge>0.04": {
+   "all": {
+    "n": 0
+   },
+   "H1_JanJun": {
+    "n": 0
+   },
+   "H2_JulOct12": {
+    "n": 0
+   },
+   "mean_edge_claimed_c": null
+  },
+  "t12h|edge>0.00": {
+   "all": {
+    "n": 0
+   },
+   "H1_JanJun": {
+    "n": 0
+   },
+   "H2_JulOct12": {
+    "n": 0
+   },
+   "mean_edge_claimed_c": null
+  },
+  "t12h|edge>0.02": {
+   "all": {
+    "n": 0
+   },
+   "H1_JanJun": {
+    "n": 0
+   },
+   "H2_JulOct12": {
+    "n": 0
+   },
+   "mean_edge_claimed_c": null
+  },
+  "t12h|edge>0.04": {
+   "all": {
+    "n": 0
+   },
+   "H1_JanJun": {
+    "n": 0
+   },
+   "H2_JulOct12": {
+    "n": 0
+   },
+   "mean_edge_claimed_c": null
+  },
+  "t6h|edge>0.00": {
+   "all": {
+    "n": 0
+   },
+   "H1_JanJun": {
+    "n": 0
+   },
+   "H2_JulOct12": {
+    "n": 0
+   },
+   "mean_edge_claimed_c": null
+  },
+  "t6h|edge>0.02": {
+   "all": {
+    "n": 0
+   },
+   "H1_JanJun": {
+    "n": 0
+   },
+   "H2_JulOct12": {
+    "n": 0
+   },
+   "mean_edge_claimed_c": null
+  },
+  "t6h|edge>0.04": {
+   "all": {
+    "n": 0
+   },
+   "H1_JanJun": {
+    "n": 0
+   },
+   "H2_JulOct12": {
+    "n": 0
+   },
+   "mean_edge_claimed_c": null
+  },
+  "t1h|edge>0.00": {
+   "all": {
+    "n": 0
+   },
+   "H1_JanJun": {
+    "n": 0
+   },
+   "H2_JulOct12": {
+    "n": 0
+   },
+   "mean_edge_claimed_c": null
+  },
+  "t1h|edge>0.02": {
+   "all": {
+    "n": 0
+   },
+   "H1_JanJun": {
+    "n": 0
+   },
+   "H2_JulOct12": {
+    "n": 0
+   },
+   "mean_edge_claimed_c": null
+  },
+  "t1h|edge>0.04": {
+   "all": {
+    "n": 0
+   },
+   "H1_JanJun": {
+    "n": 0
+   },
+   "H2_JulOct12": {
+    "n": 0
+   },
+   "mean_edge_claimed_c": null
+  },
+  "convergence_to_kalshi_close": {
+   "t12h": {
+    "n_gap_ge_2c": 2,
+    "mean_gap_c": 22.89,
+    "mean_move_toward_pin_c": 22.5,
+    "share_closed_toward": 1.0,
+    "share_moved_away": 0.0,
+    "frac_gap_closed": 0.983
+   }
+  },
+  "logloss_kalshi_vs_pinnacle": {
+   "t12h": {
+    "n": 3,
+    "kalshi_mid": 0.7991,
+    "pinnacle": 0.7376
+   }
+  }
+ },
+ "test4_pinnacle_time": {
+  "open_vs_close": {
+   "n": 7158,
+   "ll_open": 0.6024,
+   "ll_close": 0.5968,
+   "diff_mean": 0.0055,
+   "diff_lo": 0.0033,
+   "diff_hi": 0.0078,
+   "mean_abs_move_pp": 3.21,
+   "ATP_diff": 0.0055,
+   "CHALLENGER_diff": 0.0054,
+   "WTA_diff": 0.006
+  },
+  "t24h_vs_close": {
+   "n": 2108,
+   "ll_t24h": 0.59,
+   "ll_close": 0.5893,
+   "diff_mean": 0.0007,
+   "diff_lo": -0.0019,
+   "diff_hi": 0.0033,
+   "mean_abs_move_pp": 2.03,
+   "ATP_diff": -0.001,
+   "CHALLENGER_diff": 0.0005,
+   "WTA_diff": 0.0029
+  },
+  "t12h_vs_close": {
+   "n": 5599,
+   "ll_t12h": 0.6019,
+   "ll_close": 0.601,
+   "diff_mean": 0.0008,
+   "diff_lo": -0.0006,
+   "diff_hi": 0.0023,
+   "mean_abs_move_pp": 1.77,
+   "ATP_diff": -0.0006,
+   "CHALLENGER_diff": 0.0008,
+   "WTA_diff": 0.003
+  },
+  "t6h_vs_close": {
+   "n": 6783,
+   "ll_t6h": 0.5993,
+   "ll_close": 0.5978,
+   "diff_mean": 0.0014,
+   "diff_lo": 0.0003,
+   "diff_hi": 0.0026,
+   "mean_abs_move_pp": 1.44,
+   "ATP_diff": 0.0006,
+   "CHALLENGER_diff": 0.0018,
+   "WTA_diff": 0.0018
+  },
+  "t1h_vs_close": {
+   "n": 7063,
+   "ll_t1h": 0.5977,
+   "ll_close": 0.5972,
+   "diff_mean": 0.0005,
+   "diff_lo": -0.0002,
+   "diff_hi": 0.0012,
+   "mean_abs_move_pp": 0.83,
+   "ATP_diff": -0.0003,
+   "CHALLENGER_diff": 0.0005,
+   "WTA_diff": 0.002
+  }
+ }
+}

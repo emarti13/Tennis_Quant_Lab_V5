@@ -1,0 +1,436 @@
+{
+ "version": "v2",
+ "manifest": {
+  "run_utc": "2026-10-31T14:09:46.441303+00:00",
+  "command": "python research_tests/point_dna/run_point_dna.py /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/mcp_data /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl /tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/point_dna/results_v2.json v2",
+  "git_commit": "9e439032a813dac1bf382b32067541714426fc14",
+  "uncommitted_changes": true,
+  "python": "3.13.16",
+  "packages": {
+   "pandas": "3.0.5",
+   "numpy": "2.5.3",
+   "scikit-learn": "1.9.1",
+   "lightgbm": "4.7.0",
+   "scipy": "1.18.1"
+  },
+  "seeds": {
+   "orientation": 20261031,
+   "bootstrap": 20261031
+  },
+  "inputs": {
+   "mcp": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/mcp_data",
+    "sha256": "e6fd0f1a6b081b72c49fb6aa18b7e83a601c2396101bef3cfa3de5e6b62f11ef"
+   },
+   "joined": {
+    "path": "/tmp/claude-0/-home-user-Tennis-Quant-Lab-V5/e0dd085e-632c-5c0c-9958-0049d27d7c48/scratchpad/kaggle_data/join/joined.pkl",
+    "sha256": "1888802164c3ff67906c3f818ca0762650bf8ba450f2d7ba03c318dbf31598bf"
+   }
+  }
+ },
+ "rows_by_year_level": {
+  "ATP main": {
+   "2014": 230,
+   "2015": 450,
+   "2016": 605,
+   "2017": 565,
+   "2018": 692,
+   "2019": 1105,
+   "2020": 537,
+   "2021": 1024,
+   "2022": 1093,
+   "2023": 1239,
+   "2024": 1776,
+   "2025": 1481
+  },
+  "Challenger": {
+   "2014": 0,
+   "2015": 1,
+   "2016": 1,
+   "2017": 2,
+   "2018": 4,
+   "2019": 3,
+   "2020": 24,
+   "2021": 35,
+   "2022": 30,
+   "2023": 72,
+   "2024": 123,
+   "2025": 102
+  },
+  "WTA main": {
+   "2014": 126,
+   "2015": 367,
+   "2016": 414,
+   "2017": 366,
+   "2018": 323,
+   "2019": 443,
+   "2020": 339,
+   "2021": 858,
+   "2022": 835,
+   "2023": 994,
+   "2024": 1301,
+   "2025": 1295
+  }
+ },
+ "results": {
+  "bf_close | PRIMARY 2021-25 main tours": {
+   "n": 11896,
+   "ll_market_raw": 0.60401,
+   "ll_M0": 0.60418,
+   "M1_minus_M0": [
+    0.00047,
+    -5e-05,
+    0.00098
+   ],
+   "M1gb_minus_M0": [
+    0.00541,
+    0.00372,
+    0.00716
+   ],
+   "M1_minus_M0_by_year": {
+    "2021": [
+     1882,
+     0.00052
+    ],
+    "2022": [
+     1928,
+     0.00089
+    ],
+    "2023": [
+     2233,
+     9e-05
+    ],
+    "2024": [
+     3077,
+     0.00114
+    ],
+    "2025": [
+     2776,
+     -0.00031
+    ]
+   }
+  },
+  "bf_close | all test years 2018-25, all levels": {
+   "n": 15728,
+   "ll_market_raw": 0.60733,
+   "ll_M0": 0.60748,
+   "M1_minus_M0": [
+    0.00029,
+    -0.00017,
+    0.00076
+   ],
+   "M1gb_minus_M0": [
+    0.00651,
+    0.00481,
+    0.0082
+   ],
+   "M1_minus_M0_by_year": {
+    "2018": [
+     1019,
+     0.0009
+    ],
+    "2019": [
+     1551,
+     -0.00012
+    ],
+    "2020": [
+     900,
+     -0.00162
+    ],
+    "2021": [
+     1917,
+     0.00049
+    ],
+    "2022": [
+     1958,
+     0.00099
+    ],
+    "2023": [
+     2305,
+     4e-05
+    ],
+    "2024": [
+     3200,
+     0.00112
+    ],
+    "2025": [
+     2878,
+     -0.00044
+    ]
+   }
+  },
+  "b365_open | PRIMARY 2021-25 main tours": {
+   "n": 11772,
+   "ll_market_raw": 0.61036,
+   "ll_M0": 0.61054,
+   "M1_minus_M0": [
+    0.0004,
+    -0.00022,
+    0.00102
+   ],
+   "M1gb_minus_M0": [
+    0.00396,
+    0.00222,
+    0.0058
+   ],
+   "M1_minus_M0_by_year": {
+    "2021": [
+     1853,
+     0.00053
+    ],
+    "2022": [
+     1893,
+     0.00079
+    ],
+    "2023": [
+     2215,
+     -8e-05
+    ],
+    "2024": [
+     3055,
+     0.00118
+    ],
+    "2025": [
+     2756,
+     -0.00042
+    ]
+   }
+  },
+  "b365_open | all test years 2018-25, all levels": {
+   "n": 15549,
+   "ll_market_raw": 0.61299,
+   "ll_M0": 0.61321,
+   "M1_minus_M0": [
+    0.00028,
+    -0.00027,
+    0.00081
+   ],
+   "M1gb_minus_M0": [
+    0.00537,
+    0.00351,
+    0.00714
+   ],
+   "M1_minus_M0_by_year": {
+    "2018": [
+     994,
+     0.00086
+    ],
+    "2019": [
+     1540,
+     0.00021
+    ],
+    "2020": [
+     890,
+     -0.00155
+    ],
+    "2021": [
+     1887,
+     0.00054
+    ],
+    "2022": [
+     1922,
+     0.00089
+    ],
+    "2023": [
+     2282,
+     -0.00014
+    ],
+    "2024": [
+     3177,
+     0.00115
+    ],
+    "2025": [
+     2857,
+     -0.00054
+    ]
+   }
+  },
+  "no market: DNA vs basic serve/return (all test rows)": {
+   "n": 15728,
+   "ll_basic": 0.66753,
+   "ll_dna": 0.66869,
+   "dna_minus_basic": [
+    0.00116,
+    0.00041,
+    0.00189
+   ],
+   "ll_bf_close": 0.60733
+  },
+  "b365 open->close move toward DNA's extra lean (test 2018-25, all levels)": {
+   "n": 15541,
+   "share_of_dna_lean_absorbed": [
+    0.0828,
+    0.0426,
+    0.1221
+   ],
+   "where_dna_shifts_3pts_or_more": {
+    "n": 708,
+    "move_toward_dna_pts": [
+     0.18,
+     -0.115,
+     0.465
+    ]
+   }
+  }
+ },
+ "betting_test_2018_25": {
+  "bf_close M1 edge>=0.03": {
+   "n": 431,
+   "roi": -0.0381,
+   "range": [
+    -0.1712,
+    0.1038
+   ]
+  },
+  "bf_close M1 edge>=0.05": {
+   "n": 100,
+   "roi": -0.1118,
+   "range": [
+    -0.3478,
+    0.1345
+   ]
+  },
+  "bf_close M1 edge>=0.08": {
+   "n": 40,
+   "roi": -0.0004,
+   "range": [
+    -0.3213,
+    0.3385
+   ]
+  },
+  "bf_close M1gb edge>=0.03": {
+   "n": 5838,
+   "roi": -0.0312,
+   "range": [
+    -0.0709,
+    0.0092
+   ]
+  },
+  "bf_close M1gb edge>=0.05": {
+   "n": 3246,
+   "roi": -0.0281,
+   "range": [
+    -0.0854,
+    0.0331
+   ]
+  },
+  "bf_close M1gb edge>=0.08": {
+   "n": 1254,
+   "roi": -0.0173,
+   "range": [
+    -0.1004,
+    0.0713
+   ]
+  },
+  "b365_open M1 edge>=0.03": {
+   "n": 164,
+   "roi": 0.0254,
+   "range": [
+    -0.1421,
+    0.2221
+   ]
+  },
+  "b365_open M1 edge>=0.05": {
+   "n": 79,
+   "roi": -0.1295,
+   "range": [
+    -0.3642,
+    0.1379
+   ]
+  },
+  "b365_open M1 edge>=0.08": {
+   "n": 45,
+   "roi": -0.074,
+   "range": [
+    -0.3663,
+    0.2482
+   ]
+  },
+  "b365_open M1gb edge>=0.03": {
+   "n": 3858,
+   "roi": -0.0336,
+   "range": [
+    -0.0732,
+    0.0071
+   ]
+  },
+  "b365_open M1gb edge>=0.05": {
+   "n": 2104,
+   "roi": -0.022,
+   "range": [
+    -0.0751,
+    0.0298
+   ]
+  },
+  "b365_open M1gb edge>=0.08": {
+   "n": 841,
+   "roi": -0.0362,
+   "range": [
+    -0.1192,
+    0.0533
+   ]
+  }
+ },
+ "coef_M1_bf_close": {
+  "mkt": 0.9849,
+  "d_unreturned": 0.0671,
+  "d_sv_won": -0.0553,
+  "d_ret_won": 0.024,
+  "x_rally": 0.0134,
+  "d_win_long": 0.0061,
+  "d_win_short": 0.0045,
+  "x_target": -0.0037,
+  "x_serve_vs_return2": 0.0023
+ },
+ "checks": {
+  "swap_source": {
+   "pass": true,
+   "columns_differing": [],
+   "labels_inverted": true,
+   "rows": 7933
+  },
+  "time_travel": {
+   "pass": true,
+   "checked": 200,
+   "mismatched_rows": 0,
+   "columns": []
+  },
+  "planted_edge": {
+   "pass": true,
+   "expected_improvement": 0.00636,
+   "found_delta": [
+    -0.00526,
+    -0.00726,
+    -0.00321
+   ],
+   "size": 0.25
+  },
+  "market_null": {
+   "pass": true,
+   "found_delta": [
+    -7e-05,
+    -0.00045,
+    0.00032
+   ]
+  },
+  "shuffled_null": {
+   "pass": true,
+   "model_minus_coin": [
+    0.00071,
+    0.00017,
+    0.00124
+   ]
+  },
+  "known_answers": {
+   "pass": true,
+   "market_log_loss": 0.60401,
+   "expected_range": [
+    0.57,
+    0.64
+   ],
+   "A_win_share": 0.5034
+  }
+ },
+ "alarms": [],
+ "checks_passed": true
+}
