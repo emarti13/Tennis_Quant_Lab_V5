@@ -47,7 +47,7 @@ BASE = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BASE))
 from scripts.paper_trade_kalshi import Kalshi  # noqa: E402
 
-SERIES = ("KXATPMATCH", "KXATPCHALLENGERMATCH", "KXWTAMATCH")
+SERIES = ("KXATPMATCH", "KXATPCHALLENGERMATCH", "KXWTAMATCH", "KXWTACHALLENGERMATCH")
 OUT_DIR = BASE / "market_history" / "kalshi" / "live_scores"
 WATCH_BEFORE_MIN = 10
 PREMATCH_EVERY_MIN = 5
