@@ -8,27 +8,30 @@ players' best bid / ask every 10 s) it fetches the match's public trades from Ka
 below, settles with Kalshi's results, and rewrites market_history/kalshi/registrations/
 inplay_maker_2026-11-19.csv (one row per market) and _summary.json.
 
-The rule, exactly as registered:
+The rule, exactly as registered (market-following maker; the user's points of 2026-11-19: the price moves with
+every point and often reverses within a game, and faster traders may see points before this feed):
 - Series: Challenger (KXATPCHALLENGERMATCH) and WTA 125 (KXWTACHALLENGERMATCH) match winners are scored
   (no maker fee). ATP and WTA match winners are replayed the same way and reported with the maker fee
   0.0175 x P x (1 - P) per contract, not scored.
-- Fair price: research_kit.inplay, serve probabilities solved from the last quote before the start (as
-  scripts/track_inplay_rules.py: serve level ATP 0.64, Challenger 0.62, WTA and WTA 125 0.56).
-- At every in-play row of the live log with a readable score and both markets quoted, on each of the two
-  markets: a bid at floor(100 x (fair - 0.02)) / 100 and an ask at ceil(100 x (fair + 0.02)) / 100, posted
-  only where it is strictly better than the market's best price on that side (so it is first in the
-  queue), only while the fair price is 5-95c, 10 contracts each, and only while the market's net
-  position stays within +-50 contracts. Quotes live from the row's time until the next row (at most
-  30 s); nothing is quoted after the last row or in a gap longer than 30 s.
+- Quotes, on each of the two markets, at an in-play row of the live log (every 10 s) when ALL hold:
+  both markets quoted; the market's spread is at least 3c; the point score is the same as at the
+  previous row (no quoting on the row where a new point appears); and the next point is calm: the
+  score-based fair price of the match (research_kit.inplay, serve probabilities from the last pre-match
+  quote as in scripts/track_inplay_rules.py) moves by at most 4 points between winning and losing it.
+  Then: a bid at the market's best bid + 1c and an ask at its best ask - 1c (first in the queue on
+  both sides), 10 contracts each, only while the market's net position stays within +-50 contracts.
+  Quotes live from the row's time until the next row (at most 30 s).
 - Fills: a public trade in that interval with the taker SELLING YES (taker_side "no") at a YES price at or
-  below our bid fills our bid; with the taker BUYING YES (taker_side "yes") at or above our ask fills our
-  ask; at our price, up to the trade's size and our remaining size.
+  below our bid fills our bid; with the taker BUYING YES at or above our ask fills our ask; at our price,
+  up to the trade's size and our remaining size.
 - Result: positions held to settlement (yes = 1, no = 0; anything else void).
-- Metric: P&L per match in cents per contract filled and in dollars; scored on Challenger and WTA 125.
+- Metric: P&L per match in dollars and cents per contract filled; scored on Challenger and WTA 125.
 - Pass: the 95% range of the mean P&L per match (2,000 resamples of matches, seed 20261119) wholly above
   zero with at least 300 scored matches with a fill; ends at 300 or 2027-06-30.
-- Reported: fills, the mark-out (mid 60 s after each fill minus the fill price, from our side), ATP / WTA
-  with the maker fee.
+- Reported: fills; the mark-out (mid 60 s after each fill minus the fill price, from our side); ATP / WTA
+  with the maker fee; FEED LAG: for each new point seen in the log (with the same score at the two rows
+  before it), the share of the price move (two rows before -> one row after) that happened between the
+  two rows BEFORE the point appears in this feed, i.e. the market moving before our score feed shows it.
 """
 from __future__ import annotations
 
@@ -54,6 +57,7 @@ from scripts.track_longshot_rule import API  # noqa: E402
 LIVE = BASE / "market_history" / "kalshi" / "live_scores"
 OUT = BASE / "market_history" / "kalshi" / "registrations"
 NAME = "inplay_maker_2026-11-19"
+MIN_SPREAD, MAX_SWING = 0.03, 0.04
 REGISTERED_DEFAULT = "2026-11-20T00:00:00Z"
 TOUR = {"KXATPMATCH": "ATP", "KXWTAMATCH": "WTA", "KXATPCHALLENGERMATCH": "CH", "KXWTACHALLENGERMATCH": "WTA"}
 SCORED = ("KXATPCHALLENGERMATCH", "KXWTACHALLENGERMATCH")
@@ -62,15 +66,40 @@ HALF_WIDTH, SIZE, MAX_POS, MAX_GAP_S, MARKOUT_S = 0.02, 10.0, 50.0, 30.0, 60.0
 MIN_MATCHES, WINDOW_END, SEED = 300, "2027-06-30", 20261119
 
 
-def quotes_for(fair: float, best_bid: float, best_ask: float, pos: float) -> tuple[float | None, float | None]:
-    """Our bid and ask on one market (None = not quoting that side)."""
-    if not 0.05 <= fair <= 0.95:
+def quotes_for(best_bid: float, best_ask: float, pos: float) -> tuple[float | None, float | None]:
+    """Our bid and ask on one market: 1c inside the market on both sides (None = not quoting that side)."""
+    if best_ask - best_bid < MIN_SPREAD - 1e-9:
         return None, None
-    bid = math.floor(round(100 * (fair - HALF_WIDTH), 6)) / 100
-    ask = math.ceil(round(100 * (fair + HALF_WIDTH), 6)) / 100
-    bid = bid if (0 < bid < best_ask and bid > best_bid and pos + SIZE <= MAX_POS) else None
-    ask = ask if (best_bid < ask < 1 and ask < best_ask and pos - SIZE >= -MAX_POS) else None
-    return bid, ask
+    bid, ask = round(best_bid + 0.01, 2), round(best_ask - 0.01, 2)
+    return (bid if pos + SIZE <= MAX_POS else None), (ask if pos - SIZE >= -MAX_POS else None)
+
+
+def next_point_swing(pa, pb, st, bo, ftb) -> float:
+    """How far the fair match price moves between winning and losing the next point."""
+    s1, s2, g1, g2, p1, p2, c1_srv = st
+    tb = g1 == 6 and g2 == 6
+
+    def after(win1: bool):
+        q1, q2 = (p1 + 1, p2) if win1 else (p1, p2 + 1)
+        if tb:
+            target = ftb if (s1 == s2 == (bo + 1) // 2 - 1) else 7
+            if (q1 >= target and q1 - q2 >= 2) or (q2 >= target and q2 - q1 >= 2):
+                return ip.p_match(pa, pb, (s1 + (q1 > q2), s2 + (q2 > q1)), (0, 0), (0, 0), not c1_srv, bo, ftb)
+            k = p1 + p2                                                 # index of the point just played
+            same = ip._tb_server_is_first(k) == ip._tb_server_is_first(k + 1)
+            srv_next = c1_srv if same else not c1_srv
+            return ip.p_match(pa, pb, (s1, s2), (g1, g2), (q1, q2), srv_next, bo, ftb)
+        sv, rv = (q1, q2) if c1_srv else (q2, q1)
+        if (sv >= 4 and sv - rv >= 2) or (rv >= 4 and rv - sv >= 2):        # game over: next game, other server
+            w1 = (sv > rv) == c1_srv
+            ng1, ng2 = g1 + w1, g2 + (not w1)
+            if (ng1 >= 6 and ng1 - ng2 >= 2) or ng1 == 7 or (ng2 >= 6 and ng2 - ng1 >= 2) or ng2 == 7:
+                return ip.p_match(pa, pb, (s1 + (ng1 > ng2), s2 + (ng2 > ng1)), (0, 0), (0, 0), not c1_srv, bo, ftb)
+            return ip.p_match(pa, pb, (s1, s2), (ng1, ng2), (0, 0), not c1_srv, bo, ftb)
+        if sv >= 3 and rv >= 3 and sv == rv:
+            q1 = q2 = 3
+        return ip.p_match(pa, pb, (s1, s2), (g1, g2), (q1, q2), c1_srv, bo, ftb)
+    return abs(after(True) - after(False))
 
 
 def fills_in(trades: pd.DataFrame, t0, t1, bid, ask, left_bid: float, left_ask: float) -> list[tuple]:
@@ -126,22 +155,36 @@ def replay(ev: str, m: pd.DataFrame, meta: dict, trades: dict) -> list[dict] | N
     tick = {1: str(rows[0].ticker_1), 2: str(rows[0].ticker_2)}
     pos, fills = {1: 0.0, 2: 0.0}, {1: [], 2: []}
     mids = {1: [], 2: []}
+    lag_pre, lag_all = [], []
+    prev_pts = None
     for i, r in enumerate(rows):
         if quotes_ok(r):
             for k in (1, 2):
                 mids[k].append((r.t, (float(getattr(r, f"bid_{k}")) + float(getattr(r, f"ask_{k}"))) / 2))
-        if i + 1 >= len(rows):
-            break
+        st = state(r, c1)
+        pts_now = None if st is None else st[:6]
+        new_point = prev_pts is not None and pts_now is not None and pts_now != prev_pts
+        # feed lag: did the price move BEFORE this feed showed the point? The move between the two rows
+        # before the point appears (in the direction of the whole move, two rows before -> one row after),
+        # as a share of the whole move. Score and quote are read together, so a feed as fast as the market
+        # shows ~0 here; a slower feed shows the market moving first.
+        if new_point and 1 < i < len(rows) - 1 and all(quotes_ok(q) for q in (rows[i - 2], rows[i - 1], r, rows[i + 1])) \
+                and state(rows[i - 2], c1) is not None and state(rows[i - 2], c1)[:6] == state(rows[i - 1], c1)[:6]:
+            m0, m1, m3 = p1_devig(rows[i - 2]), p1_devig(rows[i - 1]), p1_devig(rows[i + 1])
+            if abs(m3 - m0) >= 0.01:
+                lag_pre.append(np.sign(m3 - m0) * (m1 - m0))
+                lag_all.append(abs(m3 - m0))
+        calm_row = pts_now is not None and prev_pts is not None and pts_now == prev_pts
+        prev_pts = pts_now if pts_now is not None else prev_pts
+        if i + 1 >= len(rows) or not calm_row or not quotes_ok(r):
+            continue
         t0, t1 = r.t, rows[i + 1].t
         if (t1 - t0).total_seconds() > MAX_GAP_S:
             continue
-        st = state(r, c1)
-        if st is None or not quotes_ok(r):
+        if next_point_swing(pa, pb, st, bo, ftb) > MAX_SWING:
             continue
-        s1, s2, g1, g2, p1, p2, c1_srv = st
-        fair1 = ip.p_match(pa, pb, (s1, s2), (g1, g2), (p1, p2), c1_srv, bo, ftb)
-        for k, fair in ((1, fair1), (2, 1 - fair1)):
-            bid, ask = quotes_for(fair, float(getattr(r, f"bid_{k}")), float(getattr(r, f"ask_{k}")), pos[k])
+        for k in (1, 2):
+            bid, ask = quotes_for(float(getattr(r, f"bid_{k}")), float(getattr(r, f"ask_{k}")), pos[k])
             if bid is None and ask is None:
                 continue
             for side, price, q, t in fills_in(trades[tick[k]], t0, t1, bid, ask, SIZE, SIZE):
@@ -162,7 +205,10 @@ def replay(ev: str, m: pd.DataFrame, meta: dict, trades: dict) -> list[dict] | N
                     "fills": len(fills[k]), "contracts": round(contracts, 2), "end_position": round(pos[k], 2),
                     "cash": round(sum((-price * q if side == "buy" else price * q) for side, price, q, _ in fills[k]), 4),
                     "maker_fee": round(sum(MAKER_FEE.get(series, 0.0) * q * price * (1 - price) for _, price, q, _ in fills[k]), 4),
-                    "markout_60s": round(sum(mo), 4), "markout_contracts": round(mo_q, 2)})
+                    "markout_60s": round(sum(mo), 4), "markout_contracts": round(mo_q, 2),
+                    "lag_moved_before": round(float(np.sum(lag_pre)), 4) if k == 1 else 0.0,
+                    "lag_moved_total": round(float(np.sum(lag_all)), 4) if k == 1 else 0.0,
+                    "lag_points": len(lag_all) if k == 1 else 0})
     return out
 
 
@@ -202,6 +248,9 @@ def summary(d: pd.DataFrame) -> dict:
     if len(rep):
         out["reported, not scored (ATP / WTA, with maker fee)"] = {"matches": int(len(rep)), "dollars_per_match": round(float(rep["pnl"].mean()), 3),
                                                                   "cents_per_contract": round(100 * float(rep["pnl"].sum() / rep["contracts"].sum()), 3)}
+    if "lag_moved_total" in s and s["lag_moved_total"].sum() > 0:
+        out["feed lag: share of the price move made before this feed shows the point"] = round(float(s["lag_moved_before"].sum() / s["lag_moved_total"].sum()), 3)
+        out["feed lag points"] = int(s["lag_points"].sum())
     out["note"] = f"{out['settled']} scored matches" + (f"; {out['cents_per_contract']}c per contract" if "cents_per_contract" in out else "")
     return out
 
