@@ -333,6 +333,19 @@ def _read_log(path: Path, numeric: tuple[str, ...]) -> pd.DataFrame:
     return df
 
 
+def maker_fee_rate(api: Kalshi, series: str, cache: dict) -> float:
+    """Kalshi's maker fee rate for a series, from its public fee_type: "quadratic_with_maker_fees" charges
+    makers MAKER_FEE_RATE x P x (1 - P); "quadratic" charges takers only. Unknown or unreachable: the
+    maker fee is charged (cautious)."""
+    if series not in cache:
+        try:
+            ft = (api.get(f"/series/{series}").get("series") or {}).get("fee_type")
+        except (RuntimeError, requests.RequestException, ValueError):
+            ft = None
+        cache[series] = 0.0 if ft == "quadratic" else MAKER_FEE_RATE
+    return cache[series]
+
+
 def settle(api: Kalshi) -> pd.DataFrame:
     """Per market and setting: contracts, profit held to settlement, and marked at the last
     mid before the cutoff (with and without Kalshi's maker fee schedule)."""
@@ -340,7 +353,7 @@ def settle(api: Kalshi) -> pd.DataFrame:
     fills = (pd.concat([_read_log(p, ("trade_price", "trade_count", "price", "contracts")) for p in fill_files], ignore_index=True)
              if fill_files else pd.DataFrame(columns=FILL_COLS))
     snaps = pd.concat([_read_log(p, ("best_bid", "best_ask", "volume")) for p in sorted(PAPER_DIR.glob("snapshots_*.csv*"))], ignore_index=True)
-    rows = []
+    rows, fee_cache = [], {}
     for t, g in snaps.groupby("ticker"):
         m = api.get(f"/markets/{t}").get("market", {})
         result = m.get("result")
@@ -352,7 +365,9 @@ def settle(api: Kalshi) -> pd.DataFrame:
                    "start_utc": last["start_utc"], "contracts": float(f["contracts"].sum()),
                    # np.where, not .map: on pandas 3.1 mapping an empty text column stays text
                    "end_position": float((f["contracts"].to_numpy(float) * np.where(f["side"].to_numpy() == "buy", 1, -1)).sum())}
-            fee = float((MAKER_FEE_RATE * f["contracts"] * f["price"] * (1 - f["price"])).sum())
+            rate = maker_fee_rate(api, str(t).split("-", 1)[0], fee_cache)
+            row["maker_fee_rate"] = rate
+            fee = float((rate * f["contracts"] * f["price"] * (1 - f["price"])).sum())
             for name, value in (("held", {"yes": 1.0, "no": 0.0}.get(result)), ("marked", mark)):
                 if value is None:
                     row[name] = row[f"{name}_after_maker_fee"] = None
