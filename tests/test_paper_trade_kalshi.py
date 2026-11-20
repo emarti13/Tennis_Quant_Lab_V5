@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import pandas as pd
+import pytest
 
 import scripts.paper_trade_kalshi as pt
 
@@ -153,3 +154,33 @@ def test_settle_handles_a_market_with_no_fills_for_a_setting(tmp_path, monkeypat
     row = out[out["h"].astype(str) == "join"].iloc[0]
     assert row["end_position"] == 10.0 and row["held"] == 6.0
     assert out[out["h"].astype(str) == "0.03"].iloc[0]["contracts"] == 0.0
+
+
+def test_maker_fee_follows_the_series_fee_type(tmp_path, monkeypatch):
+    """Challenger match markets are fee_type "quadratic" (takers only): no maker fee is charged on them;
+    a series with maker fees, or one whose fee type cannot be read, is charged the maker fee."""
+    monkeypatch.setattr(pt, "PAPER_DIR", tmp_path)
+    fills = [{c: None for c in pt.FILL_COLS} | {"ticker": t, "event_ticker": "E" + t, "h": "join", "side": "buy",
+                                                  "price": 0.4, "contracts": 100.0, "trade_price": 0.4, "trade_count": 100.0}
+             for t in ("KXATPCHALLENGERMATCH-26NOV19AAABBB-AAA", "KXATPMATCH-26NOV19CCCDDD-CCC", "KXODD-1-X")]
+    pd.DataFrame(fills).to_csv(tmp_path / "fills_2026-11-19.csv", index=False)
+    pd.DataFrame([{"ticker": f["ticker"], "event_ticker": f["event_ticker"], "player": "p", "polled_utc": "2026-11-19T10:00:00+00:00",
+                   "start_utc": "2026-11-19T12:00:00+00:00", "best_bid": 0.4, "best_ask": 0.42, "volume": 1.0} for f in fills]
+                 ).to_csv(tmp_path / "snapshots_2026-11-19.csv", index=False)
+
+    class Api:
+        def get(self, path, params=None):
+            if path == "/series/KXATPCHALLENGERMATCH":
+                return {"series": {"fee_type": "quadratic"}}
+            if path == "/series/KXATPMATCH":
+                return {"series": {"fee_type": "quadratic_with_maker_fees"}}
+            if path.startswith("/series/"):
+                raise RuntimeError("unreachable")
+            return {"market": {"result": "yes"}}
+    out = pt.settle(Api())
+    j = out[out["h"].astype(str) == "join"].set_index("ticker")
+    ch, atp, odd = j.loc[fills[0]["ticker"]], j.loc[fills[1]["ticker"]], j.loc[fills[2]["ticker"]]
+    assert ch["maker_fee_rate"] == 0.0 and ch["held_after_maker_fee"] == ch["held"] == 60.0
+    fee = round(pt.MAKER_FEE_RATE * 100 * 0.4 * 0.6, 2)
+    assert atp["maker_fee_rate"] == pt.MAKER_FEE_RATE and atp["held_after_maker_fee"] == pytest.approx(60.0 - fee)
+    assert odd["maker_fee_rate"] == pt.MAKER_FEE_RATE                     # unknown fee type: charged (cautious)
