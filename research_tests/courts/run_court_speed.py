@@ -91,8 +91,9 @@ def main_flag(g: pd.DataFrame) -> pd.Series:
         if hit.any():
             flag.loc[x.index] = hit
         else:
-            top = names.value_counts().index[0]
-            flag.loc[x.index] = names == top
+            vc = names.dropna().value_counts()
+            if len(vc):
+                flag.loc[x.index] = names == vc.index[0]
     return flag
 
 
