@@ -1,0 +1,26 @@
+{
+ "registration": "docs/registrations/2026-11-19-inplay-maker.md",
+ "min_matches": 300,
+ "window_end": "2027-06-30",
+ "status": "running",
+ "settled": 24,
+ "dollars_per_match": -0.037,
+ "range_dollars_per_match": [
+  -3.112,
+  2.757
+ ],
+ "cents_per_contract": -0.062,
+ "range_cents": [
+  -5.143,
+  4.556
+ ],
+ "markout_60s_cents_per_contract": -0.829,
+ "reported, not scored (ATP / WTA, with maker fee)": {
+  "matches": 1,
+  "dollars_per_match": -3.045,
+  "cents_per_contract": -15.223
+ },
+ "feed lag: share of the price move made before this feed shows the point": 0.279,
+ "feed lag points": 4473,
+ "note": "24 scored matches; -0.062c per contract"
+}

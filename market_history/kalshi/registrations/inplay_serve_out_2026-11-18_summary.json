@@ -1,20 +1,20 @@
 {
  "registration": "docs/registrations/2026-11-18-inplay-rules.md",
  "rule": "serve_out",
- "decisions": 16,
+ "decisions": 27,
  "settled": 0,
  "min_matches": 300,
  "window_end": "2027-12-31",
  "status": "running",
  "reported, not scored": {
   "ATP": {
-   "n": 1,
+   "n": 2,
    "cents_per_contract": -3.21
   },
   "CH": {
-   "n": 15,
-   "cents_per_contract": -0.146
+   "n": 25,
+   "cents_per_contract": -2.686
   }
  },
- "note": "0 scored; other tours 16"
+ "note": "0 scored; other tours 27"
 }
