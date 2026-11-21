@@ -1,0 +1,149 @@
+{
+ "levels": {
+  "ATP Challenger|Clay": {
+   "level": 0.52,
+   "actual_mean_games": 22.555,
+   "n_fit": 1500
+  },
+  "ATP Challenger|Grass": {
+   "level": 0.5819,
+   "actual_mean_games": 24.339,
+   "n_fit": 401
+  },
+  "ATP Challenger|Hard": {
+   "level": 0.52,
+   "actual_mean_games": 22.922,
+   "n_fit": 1500
+  },
+  "ATP main|Clay": {
+   "level": 0.52,
+   "actual_mean_games": 25.002,
+   "n_fit": 1500
+  },
+  "ATP main|Grass": {
+   "level": 0.52,
+   "actual_mean_games": 29.704,
+   "n_fit": 1298
+  },
+  "ATP main|Hard": {
+   "level": 0.52,
+   "actual_mean_games": 26.219,
+   "n_fit": 1500
+  },
+  "WTA main|Clay": {
+   "level": 0.52,
+   "actual_mean_games": 21.767,
+   "n_fit": 1500
+  },
+  "WTA main|Grass": {
+   "level": 0.52,
+   "actual_mean_games": 22.516,
+   "n_fit": 1242
+  },
+  "WTA main|Hard": {
+   "level": 0.52,
+   "actual_mean_games": 21.773,
+   "n_fit": 1500
+  }
+ },
+ "matches": 88370,
+ "test_matches": 40683,
+ "by_level": {
+  "ATP Challenger": 19007,
+  "WTA main": 11852,
+  "ATP main": 9824
+ },
+ "results": {
+  "PRIMARY log loss (book + model) minus (book), 2022-25": [
+   -0.00011,
+   -0.00023,
+   1e-05
+  ],
+  "model term coefficient (fitted 2016-21; 0 = no information)": 0.1208,
+  "log loss, book alone / raw model alone, 2022-25": [
+   0.69242,
+   0.71182
+  ],
+  "mean line / model mean games / actual mean games, 2022-25": [
+   22.17,
+   24.23,
+   23.28
+  ],
+  "log loss difference, ATP main": [
+   -0.00022,
+   -0.00057,
+   0.00013,
+   9824
+  ],
+  "log loss difference, ATP Challenger": [
+   -0.00034,
+   -0.00048,
+   -0.0002,
+   19007
+  ],
+  "log loss difference, WTA main": [
+   0.00035,
+   0.00016,
+   0.00054,
+   11852
+  ],
+  "MONEY edge >= 3 pts at bet365 close, 2022-25": {
+   "n": 20845,
+   "roi": [
+    -0.0968,
+    -0.1087,
+    -0.0845
+   ],
+   "share_over": 0.99,
+   "by_level": {
+    "WTA main": 10533,
+    "ATP Challenger": 8613,
+    "ATP main": 1699
+   }
+  },
+  "MONEY edge >= 5 pts at bet365 close, 2022-25": {
+   "n": 14745,
+   "roi": [
+    -0.0938,
+    -0.1092,
+    -0.079
+   ],
+   "share_over": 0.993,
+   "by_level": {
+    "WTA main": 8822,
+    "ATP Challenger": 5058,
+    "ATP main": 865
+   }
+  },
+  "over rate minus book, by model-minus-book gap (pts), 2022-25": {
+   "(-1.0, -0.1]": [
+    83,
+    -4.98
+   ],
+   "(-0.1, -0.05]": [
+    358,
+    1.98
+   ],
+   "(-0.05, -0.02]": [
+    660,
+    -0.91
+   ],
+   "(-0.02, 0.02]": [
+    3663,
+    -2.15
+   ],
+   "(0.02, 0.05]": [
+    7776,
+    -2.39
+   ],
+   "(0.05, 0.1]": [
+    16356,
+    -1.82
+   ],
+   "(0.1, 1.0]": [
+    11787,
+    -0.75
+   ]
+  }
+ }
+}
