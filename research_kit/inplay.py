@@ -177,3 +177,60 @@ def solve_serve(p_pre: float, level: float, best_of: int = 3, final_set_tb: int 
         else:
             hi = mid
     return level + mid / 2, level - mid / 2
+
+
+# ----------------------------------------------------------------- total games (pre-match)
+def _set_games(pa: float, pb: float, a_serves: bool, tb_target: int) -> dict:
+    """{(a_won_set, games_in_set, a_serves_next_set): probability} from the start of a set."""
+    out: dict = {}
+    states = {(0, 0, a_serves): 1.0}
+    while states:
+        nxt: dict = {}
+        for (ga, gb, a_srv), pr in states.items():
+            if ga == 6 and gb == 6:
+                t = _tb(pa, pb, 0, 0, a_srv, tb_target)
+                k_next = not a_srv                                    # the tie-break's first receiver serves next
+                for won, q in ((True, t), (False, 1 - t)):
+                    key = (won, 13, k_next)
+                    out[key] = out.get(key, 0.0) + pr * q
+                continue
+            h = _game(pa, 0, 0) if a_srv else 1 - _game(pb, 0, 0)
+            for a_wins, q in ((True, h), (False, 1 - h)):
+                na, nb = ga + a_wins, gb + (not a_wins)
+                done_a = (na >= 6 and na - nb >= 2) or na == 7
+                done_b = (nb >= 6 and nb - na >= 2) or nb == 7
+                if done_a or done_b:
+                    key = (done_a, na + nb, not a_srv)
+                    out[key] = out.get(key, 0.0) + pr * q
+                else:
+                    k = (na, nb, not a_srv)
+                    nxt[k] = nxt.get(k, 0.0) + pr * q
+        states = nxt
+    return out
+
+
+def total_games_dist(pa: float, pb: float, best_of: int = 3, final_set_tb: int = 7) -> dict:
+    """{total games in the match (a tie-break counts as one game): probability}, first server unknown
+    (half each). Points independent, as p_match."""
+    pa, pb = round(pa, 10), round(pb, 10)
+    stw = (best_of + 1) // 2
+    dist: dict = {}
+    for first, w in ((True, 0.5), (False, 0.5)):
+        states = {(0, 0, first, 0): w}
+        while states:
+            nxt: dict = {}
+            for (sa, sb, a_srv, games), pr in states.items():
+                deciding = sa == sb == stw - 1
+                for (a_won, g, a_next), q in _set_games(pa, pb, a_srv, final_set_tb if deciding else 7).items():
+                    na, nb, tot = sa + a_won, sb + (not a_won), games + g
+                    if na == stw or nb == stw:
+                        dist[tot] = dist.get(tot, 0.0) + pr * q
+                    else:
+                        k = (na, nb, a_next, tot)
+                        nxt[k] = nxt.get(k, 0.0) + pr * q
+            states = nxt
+    return dist
+
+
+def p_over(dist: dict, line: float) -> float:
+    return float(sum(p for g, p in dist.items() if g > line))

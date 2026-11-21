@@ -66,3 +66,16 @@ def test_serve_level_lookup():
     assert ip.serve_level("ATP", "hard", True) == 0.6553
     assert ip.serve_level("WTA", "Clay", False) == ip.WTA_LEVEL
     assert ip.serve_level("CH", None, None) == 0.6165
+
+
+def test_total_games_distribution_is_a_distribution_and_consistent():
+    pa, pb = ip.solve_serve(0.7, 0.64)
+    d = ip.total_games_dist(pa, pb)
+    assert sum(d.values()) == pytest.approx(1.0, abs=1e-9)
+    assert min(d) == 12 and max(d) == 39                    # 6-0 6-0 to 7-6 6-7 7-6 (tie-break = 1 game)
+    even = ip.total_games_dist(0.64, 0.64)
+    mean = lambda x: sum(k * v for k, v in x.items())        # noqa: E731
+    assert mean(even) > mean(d)                              # lopsided matches are shorter
+    assert ip.p_over(even, 22.5) > ip.p_over(d, 22.5)
+    five = ip.total_games_dist(0.64, 0.64, best_of=5, final_set_tb=10)
+    assert sum(five.values()) == pytest.approx(1.0, abs=1e-9) and mean(five) > mean(even) + 8
