@@ -7332,7 +7332,7 @@
    }
   },
   "KXATPCHALLENGERMATCH-26NOV21FALHAZ": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "f61a0776-823c-46c0-ad43-d91c99fd9467",
     "start_date": "2026-11-22T01:40:00Z",
@@ -7372,7 +7372,7 @@
    }
   },
   "KXATPCHALLENGERMATCH-26NOV21IWAISO": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "aa2afe3e-6f1d-4406-9c0e-9465fe7c8fbf",
     "start_date": "2026-11-22T04:30:00Z",
@@ -7468,7 +7468,7 @@
    }
   },
   "KXATPCHALLENGERMATCH-26NOV21POLZHU": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "c8738a6e-3715-475a-8083-71172839de6b",
     "start_date": "2026-11-22T04:30:00Z",
@@ -7516,7 +7516,7 @@
    }
   },
   "KXATPCHALLENGERMATCH-26NOV21SUEHOE": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "e2340835-e5cf-4bf7-acb4-6700adc2fef4",
     "start_date": "2026-11-22T03:00:00Z",
@@ -7584,6 +7584,14 @@
    "milestone": {
     "id": "0ca054a4-4613-4fc1-a3b0-6948084e3345",
     "start_date": "2026-11-22T12:20:00Z",
+    "type": "tennis_tournament_singles"
+   }
+  },
+  "KXATPCHALLENGERMATCH-26NOV22BOLMAG": {
+   "finished": false,
+   "milestone": {
+    "id": "b74bce86-a7f8-4942-8459-1aeb6519d6c9",
+    "start_date": "2026-11-22T20:00:00Z",
     "type": "tennis_tournament_singles"
    }
   },
@@ -7851,6 +7859,14 @@
     "type": "tennis_tournament_singles"
    }
   },
+  "KXATPCHALLENGERMATCH-26NOV22PDASEY": {
+   "finished": false,
+   "milestone": {
+    "id": "40871b30-ab06-425f-8114-faa4856499a8",
+    "start_date": "2026-11-22T20:00:00Z",
+    "type": "tennis_tournament_singles"
+   }
+  },
   "KXATPCHALLENGERMATCH-26NOV22PETOKO": {
    "finished": false,
    "milestone": {
@@ -7880,6 +7896,14 @@
    "milestone": {
     "id": "e1beb106-e777-4152-8fcc-ab6be177f7e5",
     "start_date": "2026-11-22T10:20:00Z",
+    "type": "tennis_tournament_singles"
+   }
+  },
+  "KXATPCHALLENGERMATCH-26NOV22SLOFRA": {
+   "finished": false,
+   "milestone": {
+    "id": "c177034c-23ee-4458-ac1a-0ba08dc01771",
+    "start_date": "2026-11-22T20:00:00Z",
     "type": "tennis_tournament_singles"
    }
   },
@@ -10226,7 +10250,7 @@
     "start_date": "2026-11-22T07:20:00Z",
     "type": "tennis_tournament_singles"
    },
-   "not_started_checked_utc": "2026-11-22T07:17:02+00:00"
+   "not_started_checked_utc": "2026-11-22T08:13:16+00:00"
   },
   "KXWTAMATCH-26OCT30FERRAK": {
    "finished": true,
@@ -10421,5 +10445,5 @@
    }
   }
  },
- "last_prematch_utc": "2026-11-22T07:15:42+00:00"
+ "last_prematch_utc": "2026-11-22T08:10:56+00:00"
 }
