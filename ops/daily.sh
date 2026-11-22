@@ -98,6 +98,8 @@ daily_main() {
     || STATUS_ARGS+=(--note "in-play registration tracker failed: $(tail -1 /tmp/tql_reg4.txt)")
   $PY scripts/track_inplay_maker.py > /tmp/tql_reg5.txt 2>&1 \
     || STATUS_ARGS+=(--note "in-play maker tracker failed: $(tail -1 /tmp/tql_reg5.txt)")
+  $PY scripts/track_wall_rule.py > /tmp/tql_reg6.txt 2>&1 \
+    || STATUS_ARGS+=(--note "order-book wall tracker failed: $(tail -1 /tmp/tql_reg6.txt)")
 
   # 5. status, commit, push (retries with backoff)
   $PY ops/status.py --settle /tmp/tql_settle.txt "${STATUS_ARGS[@]}"
