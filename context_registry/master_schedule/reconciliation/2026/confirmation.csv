@@ -91,7 +91,7 @@ source_id,edition_key,confirmation,pairs_same_edition,pairs_best_other,best_othe
 3831@2026-09-13,CHALLENGER|2026-09-14|szczecin|szczecin,confirmed,31,0,,oddspapi
 3837@2026-08-09,CHALLENGER|2026-08-10|todi|todi,confirmed,31,0,,oddspapi
 3861@2026-10-18,CHALLENGER|2026-10-19|cali|cali,confirmed,31,2,CHALLENGER|2026-10-12|santa-cruz-de-la-sierra-2|santa-cruz-de-la-sierra,oddspapi
-3867@2026-11-15,CHALLENGER|2026-11-16|montevideo|montevideo,no_results,0,28,unmatched:2026-544@2026-11-16,oddspapi
+3867@2026-11-15,CHALLENGER|2026-11-16|montevideo|montevideo,no_results,0,30,unmatched:2026-544@2026-11-16,oddspapi
 3879@2026-06-28,CHALLENGER|2026-06-29|quito|quito,confirmed,31,3,CHALLENGER|2026-07-06|bogota|bogota,oddspapi
 3899@2026-09-13,CHALLENGER|2026-09-14|rennes|rennes,confirmed,31,2,CHALLENGER|2026-09-21|saint-tropez|saint-tropez,oddspapi
 3905@2026-09-13,CHALLENGER|2026-09-14|tiburon|tiburon,confirmed,27,1,CHALLENGER|2026-09-21|san-diego-2|san-diego,oddspapi
@@ -101,8 +101,8 @@ source_id,edition_key,confirmation,pairs_same_edition,pairs_best_other,best_othe
 3951@2026-11-08,CHALLENGER|2026-11-09|knoxville|knoxville,confirmed,29,3,unmatched:2026-6055@2026-11-02,oddspapi
 3963@2026-06-07,CHALLENGER|2026-06-08|bratislava|bratislava,confirmed,26,0,,oddspapi
 3969@2026-08-17,CHALLENGER|2026-08-17|cancun|cancun,confirmed,27,0,,oddspapi
-3975@2026-11-15,CHALLENGER|2026-11-16|champaign|champaign,confirmed,27,1,CHALLENGER|2026-11-09|knoxville|knoxville,oddspapi
-3987@2026-11-15,CHALLENGER|2026-11-16|helsinki|helsinki,confirmed,30,2,CHALLENGER|2026-11-09|orleans|orleans,oddspapi
+3975@2026-11-15,CHALLENGER|2026-11-16|champaign|champaign,confirmed,29,1,CHALLENGER|2026-11-09|knoxville|knoxville,oddspapi
+3987@2026-11-15,CHALLENGER|2026-11-16|helsinki|helsinki,confirmed,31,2,CHALLENGER|2026-11-09|orleans|orleans,oddspapi
 3999@2026-02-01,ATP|2026-02-02|open-occitanie|montpellier,confirmed,39,0,,oddspapi
 4083@2026-01-11,CHALLENGER|2026-01-12|buenos-aires-argentino|buenos-aires,confirmed,29,0,,oddspapi
 4149@2026-03-08,CHALLENGER|2026-03-09|santiago|santiago,confirmed,30,0,,oddspapi
@@ -134,6 +134,7 @@ source_id,edition_key,confirmation,pairs_same_edition,pairs_best_other,best_othe
 6151@2026-03-29,CHALLENGER|2026-03-30|sao-leopoldo|sao-leopoldo,confirmed,21,1,CHALLENGER|2026-03-23|sao-paulo|sao-paulo,oddspapi
 6491@2026-01-02,WTA|2026-01-05|brisbane-international|brisbane,confirmed,47,0,,oddspapi
 6497@2026-01-02,WTA|2026-01-05|asb-classic|auckland,confirmed,26,0,,oddspapi
+6707@2026-11-22,CHALLENGER|2026-11-23|florianopolis|florianopolis,no_results,0,0,,oddspapi
 7625@2026-06-06,WTA|2026-06-08|libema-open|s-hertogenbosch,confirmed,31,0,,oddspapi
 7631@2026-06-20,ATP|2026-06-22|lexus-eastbourne-open|eastbourne,confirmed,38,1,unmatched:2026-311@2026-06-15,oddspapi
 7793@2026-11-08,CHALLENGER|2026-11-09|lima|lima,no_results,0,30,unmatched:2026-6579@2026-11-09,oddspapi
@@ -143,6 +144,7 @@ source_id,edition_key,confirmation,pairs_same_edition,pairs_best_other,best_othe
 8285@2026-08-01,ATP|2026-08-02|national-bank-open|montreal,no_results,0,107,unmatched:2026-421@2026-08-02,oddspapi
 8363@2026-08-11,WTA|2026-08-10|cincinnati-open|cincinnati,confirmed,90,0,,oddspapi
 8843@2026-09-28,WTA|2026-09-28|china-open|beijing,confirmed,93,1,WTA|2026-09-21|korea-open|seoul,oddspapi
+9179@2026-11-22,CHALLENGER|2026-11-23|yokohama|yokohama,no_results,0,0,,oddspapi
 9461@2026-11-14,CHALLENGER|2026-11-16|sydney|sydney,no_results,0,30,unmatched:2026-2817@2026-11-16,oddspapi
 9641@2026-04-05,CHALLENGER|2026-04-06|mexico-city|mexico-city,confirmed,31,2,CHALLENGER|2026-03-30|san-luis-potosi|san-luis-potosi,oddspapi
 10253@2026-07-26,CHALLENGER|2026-07-27|liberec|liberec,confirmed,27,0,,oddspapi
@@ -159,7 +161,7 @@ source_id,edition_key,confirmation,pairs_same_edition,pairs_best_other,best_othe
 12051@2026-05-10,CHALLENGER|2026-05-11|cordoba|cordoba,confirmed,23,1,CHALLENGER|2026-05-04|santos|santos,oddspapi
 12057@2026-02-22,CHALLENGER|2026-02-23|pune|pune,confirmed,30,1,CHALLENGER|2026-02-16|new-delhi|new-delhi,oddspapi
 12255@2026-01-11,CHALLENGER|2026-01-12|glasgow|glasgow,confirmed,31,1,CHALLENGER|2026-01-05|nottingham-1|nottingham,oddspapi
-12291@2026-11-15,CHALLENGER|2026-11-16|drummondville|drummondville,confirmed,27,0,,oddspapi
+12291@2026-11-15,CHALLENGER|2026-11-16|drummondville|drummondville,confirmed,29,0,,oddspapi
 12315@2026-05-16,ATP|2026-05-17|gonet-geneva-open|geneva,confirmed,39,0,,oddspapi
 12333@2026-06-13,WTA|2026-06-15|lexus-nottingham-open|nottingham,confirmed,31,0,,oddspapi
 12429@2026-06-07,CHALLENGER|2026-06-08|ilkley|ilkley,confirmed,31,1,CHALLENGER|2026-06-01|birmingham|birmingham,oddspapi
@@ -170,7 +172,7 @@ source_id,edition_key,confirmation,pairs_same_edition,pairs_best_other,best_othe
 13125@2026-10-25,CHALLENGER|2026-10-26|brest|brest,confirmed,31,0,,oddspapi
 13131@2026-01-04,CHALLENGER|2026-01-05|bengaluru-1|bengaluru,confirmed,31,0,,oddspapi
 13161@2026-01-03,CHALLENGER|2026-01-05|canberra|canberra,confirmed,31,0,,oddspapi
-13167@2026-11-15,CHALLENGER|2026-11-16|kobe|kobe,no_results,0,29,unmatched:2026-7397@2026-11-16,oddspapi
+13167@2026-11-15,CHALLENGER|2026-11-16|kobe|kobe,no_results,0,31,unmatched:2026-7397@2026-11-16,oddspapi
 13365@2026-05-16,WTA|2026-05-18|grand-prix-son-altesse-royale-la-princesse-lalla-meryem|rabat,confirmed,31,0,,oddspapi
 13395@2026-07-26,ATP|2026-07-27|mifel-tennis-open-by-telcel-oppo|los-cabos,confirmed,37,0,,oddspapi
 13491@2026-04-19,CHALLENGER|2026-04-20|gwangju|gwangju,confirmed,31,1,CHALLENGER|2026-04-13|busan|busan,oddspapi
@@ -187,8 +189,9 @@ source_id,edition_key,confirmation,pairs_same_edition,pairs_best_other,best_othe
 18360@2026-08-30,CHALLENGER|2026-08-31|zhangjiagang|zhangjiagang,confirmed,31,1,CHALLENGER|2026-09-07|phan-thiet-3|phan-thiet,oddspapi
 20102@2026-09-20,CHALLENGER|2026-09-21|buenos-aires|buenos-aires,confirmed,31,1,unmatched:2026-2895@2026-09-28,oddspapi
 21208@2026-01-31,WTA125|2026-02-02|l-t-mumbai-open|mumbai,no_results,0,0,,oddspapi
-21406@2026-11-15,ATP|2026-11-15|nitto-atp-finals|turin,confirmed,12,0,,oddspapi
+21406@2026-11-15,ATP|2026-11-15|nitto-atp-finals|turin,confirmed,14,0,,oddspapi
 21422@2026-11-08,WTA|2026-11-09|wta-finals-indian-wells|indian-wells,confirmed,14,0,,oddspapi
+23221@2026-11-22,CHALLENGER|2026-11-23|playford|playford,no_results,0,0,,oddspapi
 23233@2026-02-15,CHALLENGER|2026-02-16|lille|lille,confirmed,31,0,,oddspapi
 24239@2026-10-04,CHALLENGER|2026-10-05|villena|villena,no_results,0,29,unmatched:2026-7909@2026-10-05,oddspapi
 24367@2026-10-04,CHALLENGER|2026-10-05|braga|braga,confirmed,31,2,CHALLENGER|2026-10-12|maia|maia,oddspapi
@@ -334,6 +337,7 @@ source_id,edition_key,confirmation,pairs_same_edition,pairs_best_other,best_othe
 47524@2026-03-09,WTA125|2026-03-09|austin-125|austin,no_results,0,0,,oddspapi
 47606@2026-11-08,CHALLENGER|2026-11-09|hersonissos-3|hersonissos,confirmed,30,0,,oddspapi
 47612@2026-06-21,CHALLENGER|2026-06-22|targu-mures|targu-mures,confirmed,31,1,CHALLENGER|2026-06-29|brasov|brasov,oddspapi
+47624@2026-11-22,CHALLENGER|2026-11-23|hersonissos-4|hersonissos,no_results,0,0,,oddspapi
 48269@2026-10-04,WTA125|2026-10-05|samsun-open|samsun,no_results,0,0,,oddspapi
 48375@2026-11-01,CHALLENGER|2026-11-02|costa-do-sauipe|costa-do-sauipe,confirmed,31,1,unmatched:2026-6579@2026-11-09,oddspapi
 48381@2026-11-08,CHALLENGER|2026-11-09|monastir-1|monastir,confirmed,31,0,,oddspapi
@@ -389,7 +393,8 @@ source_id,edition_key,confirmation,pairs_same_edition,pairs_best_other,best_othe
 51944@2026-09-06,WTA125|2026-09-07|atik-antalya-open|antalya,no_results,0,0,,oddspapi
 52022@2026-09-20,CHALLENGER|2026-09-21|genoa-park-tennis-training|genoa,confirmed,31,1,CHALLENGER|2026-09-28|bari|bari,oddspapi
 52078@2026-10-11,CHALLENGER|2026-10-12|san-gregorio-di-catania|san-gregorio-di-catania,confirmed,31,1,CHALLENGER|2026-10-05|palermo|palermo,oddspapi
-52106@2026-11-15,CHALLENGER|2026-11-16|metz|metz,confirmed,28,0,,oddspapi
+52100@2026-11-22,CHALLENGER|2026-11-23|monastir-2|monastir,no_results,0,0,,oddspapi
+52106@2026-11-15,CHALLENGER|2026-11-16|metz|metz,confirmed,30,0,,oddspapi
 52232@2026-09-20,WTA125|2026-09-21|ankara-open|ankara,no_results,0,0,,oddspapi
 52250@2026-09-26,WTA125|2026-09-28|adana-open|adana,no_results,0,0,,oddspapi
 52258@2026-10-11,WTA125|2026-10-12|lisboa-belem-open|lisbon,no_results,0,0,,oddspapi
@@ -548,7 +553,7 @@ source_id,edition_key,confirmation,pairs_same_edition,pairs_best_other,best_othe
 2026-3155@2026-10-12,CHALLENGER|2026-10-12|san-gregorio-di-catania|san-gregorio-di-catania,confirmed,31,1,CHALLENGER|2026-10-05|palermo|palermo,tennismylife
 2026-3159@2026-11-09,CHALLENGER|2026-11-09|monastir-1|monastir,confirmed,31,0,,tennismylife
 2026-316@2026-07-13,ATP|2026-07-13|nordea-open|bastad,confirmed,39,0,,tennismylife
-2026-3165@2026-11-16,CHALLENGER|2026-11-16|metz|metz,confirmed,28,0,,tennismylife
+2026-3165@2026-11-16,CHALLENGER|2026-11-16|metz|metz,confirmed,30,0,,tennismylife
 2026-3167@2026-07-27,CHALLENGER|2026-07-27|samsun|samsun,confirmed,26,1,CHALLENGER|2026-08-03|istanbul-enka|istanbul,tennismylife
 2026-3169@2026-08-03,CHALLENGER|2026-08-03|plovdiv-2|plovdiv,confirmed,26,0,,tennismylife
 2026-3171@2026-08-31,CHALLENGER|2026-08-31|plovdiv-3|plovdiv,confirmed,30,0,,tennismylife
@@ -614,13 +619,13 @@ source_id,edition_key,confirmation,pairs_same_edition,pairs_best_other,best_othe
 2026-580@2026-01-18,ATP|2026-01-18|australian-open|melbourne,confirmed,239,0,,tennismylife
 2026-586@2026-08-03,CHALLENGER|2026-08-03|lexington|lexington,confirmed,29,0,,tennismylife
 2026-600@2026-08-17,CHALLENGER|2026-08-17|prague|prague,confirmed,26,0,,tennismylife
-2026-605@2026-11-15,ATP|2026-11-15|nitto-atp-finals|turin,confirmed,12,0,,tennismylife
+2026-605@2026-11-15,ATP|2026-11-15|nitto-atp-finals|turin,confirmed,14,0,,tennismylife
 2026-609@2026-03-04,WTA|2026-03-02|bnp-paribas-open|indian-wells,confirmed,94,0,,tennismylife
 2026-6239@2026-01-26,CHALLENGER|2026-01-26|quimper|quimper,confirmed,30,0,,tennismylife
 2026-6242@2026-08-24,ATP|2026-08-23|winston-salem-open|winston-salem,confirmed,55,1,ATP|2026-08-31|us-open|new-york,tennismylife
 2026-6307@2026-04-06,CHALLENGER|2026-04-06|campinas|campinas,confirmed,31,1,CHALLENGER|2026-03-30|sao-leopoldo|sao-leopoldo,tennismylife
 2026-6313@2026-09-07,CHALLENGER|2026-09-07|shanghai|shanghai,confirmed,27,2,CHALLENGER|2026-09-14|guangzhou-huangpu|guangzhou,tennismylife
-2026-637@2026-11-16,CHALLENGER|2026-11-16|champaign|champaign,confirmed,27,3,CHALLENGER|2026-11-09|knoxville|knoxville,tennismylife
+2026-637@2026-11-16,CHALLENGER|2026-11-16|champaign|champaign,confirmed,29,3,CHALLENGER|2026-11-09|knoxville|knoxville,tennismylife
 2026-6795@2026-07-27,CHALLENGER|2026-07-27|liberec|liberec,confirmed,27,0,,tennismylife
 2026-692@2026-04-13,CHALLENGER|2026-04-13|tallahassee|tallahassee,confirmed,30,1,CHALLENGER|2026-04-06|sarasota|sarasota,tennismylife
 2026-6932@2026-02-16,ATP|2026-02-16|rio-open-presented-by-claro|rio-de-janeiro,confirmed,43,2,ATP|2026-02-23|bci-seguros-chile-open|santiago,tennismylife
@@ -635,7 +640,7 @@ source_id,edition_key,confirmation,pairs_same_edition,pairs_best_other,best_othe
 2026-7100@2026-02-23,CHALLENGER|2026-02-23|pune|pune,confirmed,30,1,CHALLENGER|2026-02-16|new-delhi|new-delhi,tennismylife
 2026-717@2026-03-30,ATP|2026-03-30|fayez-sarofim-co-u-s-men-s-clay-court-championship|houston,confirmed,28,0,,tennismylife
 2026-718@2026-02-15,WTA|2026-02-16|dubai-duty-free-tennis-championships|dubai,confirmed,55,0,,tennismylife
-2026-7235@2026-11-16,CHALLENGER|2026-11-16|drummondville|drummondville,confirmed,27,0,,tennismylife
+2026-7235@2026-11-16,CHALLENGER|2026-11-16|drummondville|drummondville,confirmed,29,0,,tennismylife
 2026-7288@2026-10-26,CHALLENGER|2026-10-26|seoul|seoul,confirmed,31,0,,tennismylife
 2026-7290@2026-07-20,ATP|2026-07-20|millennium-estoril-open|estoril,confirmed,38,0,,tennismylife
 2026-7316@2026-06-29,CHALLENGER|2026-06-29|cary|cary,confirmed,30,0,,tennismylife
@@ -679,7 +684,7 @@ source_id,edition_key,confirmation,pairs_same_edition,pairs_best_other,best_othe
 2026-8268@2026-03-23,CHALLENGER|2026-03-23|yokkaichi|yokkaichi,confirmed,31,1,CHALLENGER|2026-03-30|miyazaki|miyazaki,tennismylife
 2026-8281@2026-09-28,CHALLENGER|2026-09-28|columbus|columbus,confirmed,30,0,,tennismylife
 2026-8297@2026-08-10,CHALLENGER|2026-08-10|hamburg|hamburg,confirmed,31,0,,tennismylife
-2026-8310@2026-11-16,CHALLENGER|2026-11-16|helsinki|helsinki,confirmed,30,2,CHALLENGER|2026-11-09|orleans|orleans,tennismylife
+2026-8310@2026-11-16,CHALLENGER|2026-11-16|helsinki|helsinki,confirmed,31,2,CHALLENGER|2026-11-09|orleans|orleans,tennismylife
 2026-8312@2026-10-12,CHALLENGER|2026-10-12|maia|maia,confirmed,31,2,CHALLENGER|2026-10-05|braga|braga,tennismylife
 2026-8375@2026-04-06,CHALLENGER|2026-04-06|mexico-city|mexico-city,confirmed,31,2,CHALLENGER|2026-03-30|san-luis-potosi|san-luis-potosi,tennismylife
 2026-8386@2026-11-09,CHALLENGER|2026-11-09|matsuyama|matsuyama,confirmed,31,2,CHALLENGER|2026-11-16|kobe|kobe,tennismylife

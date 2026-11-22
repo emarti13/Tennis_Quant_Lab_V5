@@ -1,27 +1,42 @@
 {
-  "generated_utc": "2026-11-21T14:23:28+00:00",
-  "as_of": "2026-11-21",
+  "generated_utc": "2026-11-22T14:16:11+00:00",
+  "as_of": "2026-11-22",
   "season": 2026,
   "schedule_years": [
     2026
   ],
   "tournament_mappings": {
     "confirmed": 663,
-    "auto": 84,
-    "review": 17,
+    "auto": 89,
+    "review": 20,
     "user": 14,
     "rejected": 2
   },
   "oddspapi_players": {
     "confirmed": 1079,
-    "no_history": 911,
-    "auto": 630,
+    "no_history": 941,
+    "auto": 639,
     "placeholder": 30,
     "user": 15,
     "review": 8,
     "rejected": 5
   },
   "flags": [
+    {
+      "flag": "UPCOMING_UNMATCHED",
+      "detail": "WTA 125 Buenos Aires, Argentina Women Singles from 2026-11-22: unmatched",
+      "candidates": ""
+    },
+    {
+      "flag": "UPCOMING_UNMATCHED",
+      "detail": "ATP Challenger San Salvador, El Salvador Men Singles from 2026-11-22: unmatched",
+      "candidates": "Helsinki (Helsinki, 2026-11-16) | Metz (Metz, 2026-11-16) | Drummondville (Drummondville, 2026-11-16) | Kobe (Kobe, 2026-11-16) | Montevideo (Montevideo, 2026-11-16) | Sydney (Sydney, 2026-11-16) | Champaign (Champaign, 2026-11-16) | Florianopolis (Florianopolis, 2026-11-23) | Playford (Playford, 2026-11-23) | Yokohama (Yokohama, 2026-11-23) | Hersonissos 4 (Hersonissos, 2026-11-23) | Monastir 2 (Monastir, 2026-11-23)"
+    },
+    {
+      "flag": "UPCOMING_UNMATCHED",
+      "detail": "ATP Challenger Ankara, Turkiye Men Singles from 2026-11-22: unmatched",
+      "candidates": "Helsinki (Helsinki, 2026-11-16) | Metz (Metz, 2026-11-16) | Drummondville (Drummondville, 2026-11-16) | Kobe (Kobe, 2026-11-16) | Montevideo (Montevideo, 2026-11-16) | Sydney (Sydney, 2026-11-16) | Champaign (Champaign, 2026-11-16) | Florianopolis (Florianopolis, 2026-11-23) | Playford (Playford, 2026-11-23) | Yokohama (Yokohama, 2026-11-23) | Hersonissos 4 (Hersonissos, 2026-11-23) | Monastir 2 (Monastir, 2026-11-23)"
+    },
     {
       "flag": "REVIEW_OPEN",
       "detail": "tournament oddspapi 52454@2026-10-25 WTA 125K Curitiba, Brazil Women Singles: unmatched"
@@ -56,6 +71,18 @@
     },
     {
       "flag": "REVIEW_OPEN",
+      "detail": "tournament oddspapi 35028@2026-11-22 WTA 125 Buenos Aires, Argentina Women Singles: unmatched"
+    },
+    {
+      "flag": "REVIEW_OPEN",
+      "detail": "tournament oddspapi 53878@2026-11-22 ATP Challenger San Salvador, El Salvador Men Singles: unmatched; candidates: Helsinki (Helsinki, 2026-11-16) | Metz (Metz, 2026-11-16) | Drummondville (Drummondville, 2026-11-16) | Kobe (Kobe, 2026-11-16) | Montevideo (Montevideo, 2026-11-16) | Sydney (Sydney, 2026-11-16) | Champaign (Champaign, 2026-11-16) | Florianopolis (Florianopolis, 2026-11-23) | Playford (Playford, 2026-11-23) | Yokohama (Yokohama, 2026-11-23) | Hersonissos 4 (Hersonissos, 2026-11-23) | Monastir 2 (Monastir, 2026-11-23)"
+    },
+    {
+      "flag": "REVIEW_OPEN",
+      "detail": "tournament oddspapi 53974@2026-11-22 ATP Challenger Ankara, Turkiye Men Singles: unmatched; candidates: Helsinki (Helsinki, 2026-11-16) | Metz (Metz, 2026-11-16) | Drummondville (Drummondville, 2026-11-16) | Kobe (Kobe, 2026-11-16) | Montevideo (Montevideo, 2026-11-16) | Sydney (Sydney, 2026-11-16) | Champaign (Champaign, 2026-11-16) | Florianopolis (Florianopolis, 2026-11-23) | Playford (Playford, 2026-11-23) | Yokohama (Yokohama, 2026-11-23) | Hersonissos 4 (Hersonissos, 2026-11-23) | Monastir 2 (Monastir, 2026-11-23)"
+    },
+    {
+      "flag": "REVIEW_OPEN",
       "detail": "tournament tennismylife 2026-7742@2026-10-19 Del Monte Lisboa Belém Open: unmatched; candidates: Lisbon (Lisbon, 2026-10-19) | Cali (Cali, 2026-10-19) | Fort Worth (Fort Worth, 2026-10-19) | Guangzhou (Nansha) (Guangzhou, 2026-10-19) | Florence (Florence, 2026-10-19) | suggested by results: CHALLENGER|2026-10-19|lisbon|lisbon (29 shared matches)"
     },
     {
@@ -84,11 +111,11 @@
     },
     {
       "flag": "REVIEW_OPEN",
-      "detail": "tournament tennismylife 2026-544@2026-11-16 Uruguay Open: unmatched; candidates: Helsinki (Helsinki, 2026-11-16) | Metz (Metz, 2026-11-16) | Drummondville (Drummondville, 2026-11-16) | Kobe (Kobe, 2026-11-16) | Montevideo (Montevideo, 2026-11-16) | Sydney (Sydney, 2026-11-16) | Champaign (Champaign, 2026-11-16) | suggested by results: CHALLENGER|2026-11-16|montevideo|montevideo (28 shared matches)"
+      "detail": "tournament tennismylife 2026-544@2026-11-16 Uruguay Open: unmatched; candidates: Helsinki (Helsinki, 2026-11-16) | Metz (Metz, 2026-11-16) | Drummondville (Drummondville, 2026-11-16) | Kobe (Kobe, 2026-11-16) | Montevideo (Montevideo, 2026-11-16) | Sydney (Sydney, 2026-11-16) | Champaign (Champaign, 2026-11-16) | suggested by results: CHALLENGER|2026-11-16|montevideo|montevideo (30 shared matches)"
     },
     {
       "flag": "REVIEW_OPEN",
-      "detail": "tournament tennismylife 2026-7397@2026-11-16 Hyogo Noah Challenger: unmatched; candidates: Helsinki (Helsinki, 2026-11-16) | Metz (Metz, 2026-11-16) | Drummondville (Drummondville, 2026-11-16) | Kobe (Kobe, 2026-11-16) | Montevideo (Montevideo, 2026-11-16) | Sydney (Sydney, 2026-11-16) | Champaign (Champaign, 2026-11-16) | suggested by results: CHALLENGER|2026-11-16|kobe|kobe (29 shared matches)"
+      "detail": "tournament tennismylife 2026-7397@2026-11-16 Hyogo Noah Challenger: unmatched; candidates: Helsinki (Helsinki, 2026-11-16) | Metz (Metz, 2026-11-16) | Drummondville (Drummondville, 2026-11-16) | Kobe (Kobe, 2026-11-16) | Montevideo (Montevideo, 2026-11-16) | Sydney (Sydney, 2026-11-16) | Champaign (Champaign, 2026-11-16) | suggested by results: CHALLENGER|2026-11-16|kobe|kobe (31 shared matches)"
     },
     {
       "flag": "REVIEW_OPEN",
