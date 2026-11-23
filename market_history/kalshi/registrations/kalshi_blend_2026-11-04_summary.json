@@ -1,39 +1,39 @@
 {
  "registration": "docs/registrations/2026-11-04-kalshi-blend-at-open.md",
- "decisions": 540,
- "bets": 10,
- "settled": 10,
+ "decisions": 557,
+ "bets": 11,
+ "settled": 11,
  "min_matches": 300,
  "window_end": "2027-10-31",
  "counts": {
-  "no_quotes": 336,
-  "no_row_yet": 328,
-  "no_row": 14,
-  "decided": 27
+  "no_quotes": 335,
+  "no_row_yet": 350,
+  "no_row": 29,
+  "decided": 17
  },
  "metric": "CLV cents per contract (close mid of the backed player minus price and fee)",
- "cents_per_contract": -1.6,
+ "cents_per_contract": -1.359,
  "range_cents": [
-  -3.544,
-  -0.054
+  -2.98,
+  0.083
  ],
- "clv_hit": 0.7,
- "move_cents": 0.791,
- "results_settled": 10,
- "pnl_cents_per_contract": 1.696,
- "dollars_at_100_contracts": 16.96,
+ "clv_hit": 0.727,
+ "move_cents": 0.915,
+ "results_settled": 11,
+ "pnl_cents_per_contract": -5.045,
+ "dollars_at_100_contracts": -55.49,
  "by_series": {
   "KXATPMATCH": 6,
   "KXATPCHALLENGERMATCH": 3,
-  "KXWTAMATCH": 1
+  "KXWTAMATCH": 2
  },
  "status": "running",
  "edge split (report only)": {
-  "mean stretch pts": 1.053,
-  "mean signal pts": 5.682,
+  "mean stretch pts": 1.087,
+  "mean signal pts": 5.458,
   "bets that clear 3 pts on signals alone": 5,
   "their CLV cents per contract": -0.264,
-  "other bets' CLV cents per contract": -2.936
+  "other bets' CLV cents per contract": -2.272
  },
- "note": "P&L 1.696c on 10 settled; 5 of 10 clear on signals alone"
+ "note": "P&L -5.045c on 11 settled; 5 of 11 clear on signals alone"
 }
