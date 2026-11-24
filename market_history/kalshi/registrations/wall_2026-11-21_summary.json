@@ -1,22 +1,22 @@
 {
  "registration": "docs/registrations/2026-11-21-orderbook-wall.md",
- "bets": 12,
+ "bets": 23,
  "min_matches": 300,
  "window_end": "2027-06-30",
  "status": "running",
  "metric": "CLV cents per contract against the Kalshi close",
- "settled": 12,
- "cents_per_contract": -1.4,
+ "settled": 23,
+ "cents_per_contract": -1.154,
  "range_cents": [
-  -3.128,
-  1.23
+  -2.378,
+  0.256
  ],
- "beat_the_close": 0.417,
- "pnl_cents_per_contract": 26.182,
+ "beat_the_close": 0.478,
+ "pnl_cents_per_contract": 12.777,
  "by_series": {
-  "KXATPCHALLENGERMATCH": 10,
+  "KXATPCHALLENGERMATCH": 21,
   "KXATPGSPREAD": 1,
   "KXATPGTOTAL": 1
  },
- "note": "beat the close 0.417; P&L 26.182c"
+ "note": "beat the close 0.478; P&L 12.777c"
 }

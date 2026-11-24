@@ -8409,8 +8409,7 @@
     "id": "104310e4-0f8d-4c73-9ff5-05460bfa06e5",
     "start_date": "2026-11-23T13:45:00Z",
     "type": "tennis_tournament_singles"
-   },
-   "not_started_checked_utc": "2026-11-24T07:16:24+00:00"
+   }
   },
   "KXATPCHALLENGERMATCH-26NOV23GUTLEI": {
    "finished": true,
@@ -8469,7 +8468,7 @@
    }
   },
   "KXATPCHALLENGERMATCH-26NOV23JASZHU": {
-   "finished": false,
+   "finished": true,
    "milestone": {
     "id": "dfd73d65-4c48-4e8d-a267-071683e45665",
     "start_date": "2026-11-24T03:00:00Z",
@@ -8547,7 +8546,7 @@
     "start_date": "2026-11-24T04:30:00Z",
     "type": "tennis_tournament_singles"
    },
-   "not_started_checked_utc": "2026-11-24T07:17:04+00:00"
+   "not_started_checked_utc": "2026-11-24T08:22:49+00:00"
   },
   "KXATPCHALLENGERMATCH-26NOV23NEFPER": {
    "finished": true,
@@ -8918,6 +8917,14 @@
     "type": "tennis_tournament_singles"
    }
   },
+  "KXATPCHALLENGERMATCH-26NOV24FRAPOL": {
+   "finished": false,
+   "milestone": {
+    "id": "357f0063-e80a-4650-9043-22b685081042",
+    "start_date": "2026-11-24T19:30:00Z",
+    "type": "tennis_tournament_singles"
+   }
+  },
   "KXATPCHALLENGERMATCH-26NOV24FUEVAL": {
    "finished": false,
    "milestone": {
@@ -9235,6 +9242,14 @@
    "milestone": {
     "id": "8b7f4813-71f9-46a8-a027-4711d50ac0d1",
     "start_date": "2026-11-24T08:00:00Z",
+    "type": "tennis_tournament_singles"
+   }
+  },
+  "KXATPCHALLENGERMATCH-26NOV24WILALV": {
+   "finished": false,
+   "milestone": {
+    "id": "ec35bed0-6b8d-4bf2-91eb-32b953bf55eb",
+    "start_date": "2026-11-24T19:30:00Z",
     "type": "tennis_tournament_singles"
    }
   },
@@ -10640,6 +10655,14 @@
     "type": "tennis_tournament_singles"
    }
   },
+  "KXWTACHALLENGERMATCH-26NOV24HERCOS": {
+   "finished": false,
+   "milestone": {
+    "id": "770c92ea-cf0f-4ff4-b91a-d76279155717",
+    "start_date": "2026-11-24T19:10:00Z",
+    "type": "tennis_tournament_singles"
+   }
+  },
   "KXWTACHALLENGERMATCH-26NOV24KULERJ": {
    "finished": false,
    "milestone": {
@@ -10653,6 +10676,14 @@
    "milestone": {
     "id": "12675196-2824-447b-88a1-509150a1a9d1",
     "start_date": "2026-11-24T15:10:00Z",
+    "type": "tennis_tournament_singles"
+   }
+  },
+  "KXWTACHALLENGERMATCH-26NOV24PODROM": {
+   "finished": false,
+   "milestone": {
+    "id": "aa6304f2-76d6-4da9-adc6-631bf25a4b0c",
+    "start_date": "2026-11-24T19:10:00Z",
     "type": "tennis_tournament_singles"
    }
   },
@@ -11810,5 +11841,5 @@
    }
   }
  },
- "last_prematch_utc": "2026-11-24T07:13:54+00:00"
+ "last_prematch_utc": "2026-11-24T08:19:11+00:00"
 }
