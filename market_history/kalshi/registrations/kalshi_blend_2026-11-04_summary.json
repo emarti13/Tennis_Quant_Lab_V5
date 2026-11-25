@@ -1,15 +1,15 @@
 {
  "registration": "docs/registrations/2026-11-04-kalshi-blend-at-open.md",
- "decisions": 579,
+ "decisions": 629,
  "bets": 11,
  "settled": 11,
  "min_matches": 300,
  "window_end": "2027-10-31",
  "counts": {
-  "no_quotes": 344,
-  "no_row_yet": 372,
-  "no_row": 40,
-  "decided": 22
+  "no_quotes": 343,
+  "no_row_yet": 345,
+  "no_row": 5,
+  "decided": 50
  },
  "metric": "CLV cents per contract (close mid of the backed player minus price and fee)",
  "cents_per_contract": -1.359,
