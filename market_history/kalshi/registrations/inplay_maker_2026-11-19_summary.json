@@ -3,24 +3,24 @@
  "min_matches": 300,
  "window_end": "2027-06-30",
  "status": "running",
- "settled": 143,
- "dollars_per_match": -0.708,
+ "settled": 159,
+ "dollars_per_match": -1.041,
  "range_dollars_per_match": [
-  -1.918,
-  0.437
+  -2.193,
+  0.082
  ],
- "cents_per_contract": -1.126,
+ "cents_per_contract": -1.726,
  "range_cents": [
-  -3.051,
-  0.695
+  -3.638,
+  0.137
  ],
- "markout_60s_cents_per_contract": -0.795,
+ "markout_60s_cents_per_contract": -0.861,
  "reported, not scored (ATP / WTA, with maker fee)": {
   "matches": 2,
   "dollars_per_match": 0.956,
   "cents_per_contract": 6.372
  },
- "feed lag: share of the price move made before this feed shows the point": 0.323,
- "feed lag points": 25916,
- "note": "143 scored matches; -1.126c per contract"
+ "feed lag: share of the price move made before this feed shows the point": 0.322,
+ "feed lag points": 29057,
+ "note": "159 scored matches; -1.726c per contract"
 }
